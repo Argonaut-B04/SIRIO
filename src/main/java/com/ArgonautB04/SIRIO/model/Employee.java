@@ -1,5 +1,9 @@
 package com.ArgonautB04.SIRIO.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -46,6 +50,12 @@ public class Employee implements Serializable {
     @Size(max = 30)
     @Column(nullable = false)
     private String email;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "role", referencedColumnName = "id_role", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonIgnore
+    private Role role;
 
     public int getId_employee() {
         return id_employee;
@@ -101,5 +111,13 @@ public class Employee implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 }
