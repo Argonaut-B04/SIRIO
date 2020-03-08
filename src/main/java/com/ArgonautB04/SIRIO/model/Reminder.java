@@ -24,6 +24,12 @@ public class Reminder implements Serializable {
     private LocalDate tanggal_pengiriman;
 
     @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "rekomendasi", referencedColumnName = "id_rekomendasi", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonIgnore
+    private Rekomendasi rekomendasi;
+
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "pembuat", referencedColumnName = "id_employee", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
