@@ -24,10 +24,7 @@ public class StatusRencanaPemeriksaanRestServiceImpl implements StatusRencanaPem
     @Override
     public StatusRencanaPemeriksaan getById(int id_status) {
         Optional<StatusRencanaPemeriksaan> statusRencanaPemeriksaan = statusRencanaPemeriksaanRepo.findById(id_status);
-        if (statusRencanaPemeriksaan.isPresent()) {
-            return statusRencanaPemeriksaan.get();
-        } else {
-            throw new NoSuchElementException();
-        }
+        if (statusRencanaPemeriksaan.isPresent()) return statusRencanaPemeriksaan.get();
+        else throw new NoSuchElementException();
     }
 }

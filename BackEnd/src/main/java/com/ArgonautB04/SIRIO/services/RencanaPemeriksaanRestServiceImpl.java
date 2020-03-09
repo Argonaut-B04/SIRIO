@@ -24,11 +24,8 @@ public class RencanaPemeriksaanRestServiceImpl implements RencanaPemeriksaanRest
     @Override
     public RencanaPemeriksaan getById(int id_rencana_pemeriksaan) {
         Optional<RencanaPemeriksaan> rencanaPemeriksaan = rencanaPemeriksaanRepo.findById(id_rencana_pemeriksaan);
-        if (rencanaPemeriksaan.isPresent()) {
-            return rencanaPemeriksaan.get();
-        } else {
-            throw new NoSuchElementException();
-        }
+        if (rencanaPemeriksaan.isPresent()) return rencanaPemeriksaan.get();
+        else throw new NoSuchElementException();
     }
 
     @Override

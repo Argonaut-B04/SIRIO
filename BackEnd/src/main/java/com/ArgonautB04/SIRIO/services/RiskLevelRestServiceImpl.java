@@ -24,11 +24,8 @@ public class RiskLevelRestServiceImpl implements RiskLevelRestService {
     @Override
     public RiskLevel getById(int id_risk_level) {
         Optional<RiskLevel> riskLevel = riskLevelRepo.findById(id_risk_level);
-        if (riskLevel.isPresent()) {
-            return riskLevel.get();
-        } else {
-            throw new NoSuchElementException();
-        }
+        if (riskLevel.isPresent()) return riskLevel.get();
+        else throw new NoSuchElementException();
     }
 
     @Override

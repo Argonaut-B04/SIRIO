@@ -24,11 +24,8 @@ public class TemuanRisikoRestServiceImpl implements TemuanRisikoRestService {
     @Override
     public TemuanRisiko getById(int id_temuan_risiko) {
         Optional<TemuanRisiko> temuanRisiko = temuanRisikoRepo.findById(id_temuan_risiko);
-        if (temuanRisiko.isPresent()) {
-            return temuanRisiko.get();
-        } else {
-            throw new NoSuchElementException();
-        }
+        if (temuanRisiko.isPresent()) return temuanRisiko.get();
+        else throw new NoSuchElementException();
     }
 
     @Override

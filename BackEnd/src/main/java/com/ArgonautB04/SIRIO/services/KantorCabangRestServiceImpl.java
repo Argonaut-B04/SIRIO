@@ -24,11 +24,8 @@ public class KantorCabangRestServiceImpl implements KantorCabangRestService {
     @Override
     public KantorCabang getById(int id_kantor_cabang) {
         Optional<KantorCabang> kantorCabang = kantorCabangRepo.findById(id_kantor_cabang);
-        if (kantorCabang.isPresent()) {
-            return kantorCabang.get();
-        } else {
-            throw new NoSuchElementException();
-        }
+        if (kantorCabang.isPresent()) return kantorCabang.get();
+        else throw new NoSuchElementException();
     }
 
     @Override

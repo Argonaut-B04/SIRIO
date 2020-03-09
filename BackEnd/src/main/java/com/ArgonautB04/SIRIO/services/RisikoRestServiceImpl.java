@@ -24,11 +24,8 @@ public class RisikoRestServiceImpl implements RisikoRestService {
     @Override
     public Risiko getById(int id_risiko) {
         Optional<Risiko> risiko = risikoRepo.findById(id_risiko);
-        if (risiko.isPresent()) {
-            return risiko.get();
-        } else {
-            throw new NoSuchElementException();
-        }
+        if (risiko.isPresent()) return risiko.get();
+        else throw new NoSuchElementException();
     }
 
     @Override

@@ -24,11 +24,8 @@ public class ReminderRestServiceImpl implements ReminderRestService {
     @Override
     public Reminder getById(int id_reminder) {
         Optional<Reminder> reminder = reminderRepo.findById(id_reminder);
-        if (reminder.isPresent()) {
-            return reminder.get();
-        } else {
-            throw new NoSuchElementException();
-        }
+        if (reminder.isPresent()) return reminder.get();
+        else throw new NoSuchElementException();
     }
 
     @Override
