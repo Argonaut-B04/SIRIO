@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -26,6 +27,11 @@ public class KomponenPemeriksaanRestServiceImpl implements KomponenPemeriksaanRe
         Optional<KomponenPemeriksaan> komponenPemeriksaan = komponenPemeriksaanRepo.findById(id_komponen_pemeriksaan);
         if (komponenPemeriksaan.isPresent()) return komponenPemeriksaan.get();
         else throw new NoSuchElementException();
+    }
+
+    @Override
+    public List<KomponenPemeriksaan> getAll() {
+        return komponenPemeriksaanRepo.findAll();
     }
 
     @Override

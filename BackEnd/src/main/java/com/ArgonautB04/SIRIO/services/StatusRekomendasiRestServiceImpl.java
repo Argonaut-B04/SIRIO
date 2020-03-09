@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -26,5 +27,10 @@ public class StatusRekomendasiRestServiceImpl implements StatusRekomendasiRestSe
         Optional<StatusRekomendasi> statusRekomendasi = statusRekomendasiRepo.findById(id_status);
         if (statusRekomendasi.isPresent()) return statusRekomendasi.get();
         else throw new NoSuchElementException();
+    }
+
+    @Override
+    public List<StatusRekomendasi> getAll() {
+        return statusRekomendasiRepo.findAll();
     }
 }

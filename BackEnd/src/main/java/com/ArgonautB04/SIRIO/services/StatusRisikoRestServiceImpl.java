@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -26,5 +27,10 @@ public class StatusRisikoRestServiceImpl implements StatusRisikoRestService {
         Optional<StatusRisiko> statusRisiko = statusRisikoRepo.findById(id_status);
         if (statusRisiko.isPresent()) return statusRisiko.get();
         else throw new NoSuchElementException();
+    }
+
+    @Override
+    public List<StatusRisiko> getAll() {
+        return statusRisikoRepo.findAll();
     }
 }
