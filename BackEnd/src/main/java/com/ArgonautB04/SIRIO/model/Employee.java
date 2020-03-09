@@ -77,8 +77,8 @@ public class Employee implements Serializable {
         return status;
     }
 
-    public void setStatus(Status status) {
-        this.status = status;
+    public void setStatus(String statusString) {
+        this.status = Status.valueOf("statusString");
     }
 
     public String getUsername() {
