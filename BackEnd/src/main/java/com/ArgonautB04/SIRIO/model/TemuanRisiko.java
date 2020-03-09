@@ -33,4 +33,36 @@ public class TemuanRisiko implements Serializable {
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private Employee pembuat;
+
+    public int getId_temuan_risiko() {
+        return id_temuan_risiko;
+    }
+
+    public void setId_temuan_risiko(int id_temuan_risiko) {
+        this.id_temuan_risiko = id_temuan_risiko;
+    }
+
+    public String getKeterangan() {
+        return keterangan;
+    }
+
+    public void setKeterangan(String keterangan) {
+        this.keterangan = keterangan;
+    }
+
+    public KomponenPemeriksaan getKomponen_pemeriksaan() {
+        return komponen_pemeriksaan;
+    }
+
+    public void setKomponen_pemeriksaan(KomponenPemeriksaan komponen_pemeriksaan) {
+        this.komponen_pemeriksaan = komponen_pemeriksaan;
+    }
+
+    public Employee getPembuat() {
+        return pembuat;
+    }
+
+    public void setPembuat(Employee pembuat) {
+        this.pembuat = pembuat;
+    }
 }
