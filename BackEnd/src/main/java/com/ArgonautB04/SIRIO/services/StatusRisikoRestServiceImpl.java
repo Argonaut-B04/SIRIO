@@ -24,10 +24,7 @@ public class StatusRisikoRestServiceImpl implements StatusRisikoRestService {
     @Override
     public StatusRisiko getById(int id_status) {
         Optional<StatusRisiko> statusRisiko = statusRisikoRepo.findById(id_status);
-        if (statusRisiko.isPresent()) {
-            return statusRisiko.get();
-        } else {
-            throw new NoSuchElementException();
-        }
+        if (statusRisiko.isPresent()) return statusRisiko.get();
+        else throw new NoSuchElementException();
     }
 }

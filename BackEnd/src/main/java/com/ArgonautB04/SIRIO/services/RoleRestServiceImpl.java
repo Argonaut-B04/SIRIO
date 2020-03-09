@@ -24,11 +24,8 @@ public class RoleRestServiceImpl implements RoleRestService {
     @Override
     public Role getById(int id_role) {
         Optional<Role> role = roleRepo.findById(id_role);
-        if (role.isPresent()) {
-            return role.get();
-        } else {
-            throw new NoSuchElementException();
-        }
+        if (role.isPresent()) return role.get();
+        else throw new NoSuchElementException();
     }
 
     @Override

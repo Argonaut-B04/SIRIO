@@ -24,11 +24,8 @@ public class SOPRestServiceImpl implements SOPRestService {
     @Override
     public SOP getById(int id_sop) {
         Optional<SOP> sop = sopRepo.findById(id_sop);
-        if (sop.isPresent()) {
-            return sop.get();
-        } else {
-            throw new NoSuchElementException();
-        }
+        if (sop.isPresent()) return sop.get();
+        else throw new NoSuchElementException();
     }
 
     @Override

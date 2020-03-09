@@ -24,10 +24,7 @@ public class StatusRekomendasiRestServiceImpl implements StatusRekomendasiRestSe
     @Override
     public StatusRekomendasi getById(int id_status) {
         Optional<StatusRekomendasi> statusRekomendasi = statusRekomendasiRepo.findById(id_status);
-        if (statusRekomendasi.isPresent()) {
-            return statusRekomendasi.get();
-        } else {
-            throw new NoSuchElementException();
-        }
+        if (statusRekomendasi.isPresent()) return statusRekomendasi.get();
+        else throw new NoSuchElementException();
     }
 }

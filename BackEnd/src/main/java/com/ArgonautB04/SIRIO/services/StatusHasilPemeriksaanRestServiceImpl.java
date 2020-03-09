@@ -24,10 +24,7 @@ public class StatusHasilPemeriksaanRestServiceImpl implements StatusHasilPemerik
     @Override
     public StatusHasilPemeriksaan getById(int id_status) {
         Optional<StatusHasilPemeriksaan> statusHasilPemeriksaan = statusHasilPemeriksaanRepo.findById(id_status);
-        if (statusHasilPemeriksaan.isPresent()) {
-            return statusHasilPemeriksaan.get();
-        } else {
-            throw new NoSuchElementException();
-        }
+        if (statusHasilPemeriksaan.isPresent()) return statusHasilPemeriksaan.get();
+        else throw new NoSuchElementException();
     }
 }

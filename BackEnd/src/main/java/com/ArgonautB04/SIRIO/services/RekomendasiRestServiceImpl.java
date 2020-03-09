@@ -24,11 +24,8 @@ public class RekomendasiRestServiceImpl implements RekomendasiRestService {
     @Override
     public Rekomendasi getById(int id_rekomendasi) {
         Optional<Rekomendasi> rekomendasi = rekomendasiRepo.findById(id_rekomendasi);
-        if (rekomendasi.isPresent()) {
-            return rekomendasi.get();
-        } else {
-            throw new NoSuchElementException();
-        }
+        if (rekomendasi.isPresent()) return rekomendasi.get();
+        else throw new NoSuchElementException();
     }
 
     @Override

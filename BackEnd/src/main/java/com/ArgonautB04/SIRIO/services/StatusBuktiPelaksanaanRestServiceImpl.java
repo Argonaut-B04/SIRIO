@@ -24,10 +24,7 @@ public class StatusBuktiPelaksanaanRestServiceImpl implements StatusBuktiPelaksa
     @Override
     public StatusBuktiPelaksanaan getById(int id_status) {
         Optional<StatusBuktiPelaksanaan> statusBuktiPelaksanaan = statusBuktiPelaksanaanRepo.findById(id_status);
-        if (statusBuktiPelaksanaan.isPresent()) {
-            return statusBuktiPelaksanaan.get();
-        } else {
-            throw new NoSuchElementException();
-        }
+        if (statusBuktiPelaksanaan.isPresent()) return statusBuktiPelaksanaan.get();
+        else throw new NoSuchElementException();
     }
 }

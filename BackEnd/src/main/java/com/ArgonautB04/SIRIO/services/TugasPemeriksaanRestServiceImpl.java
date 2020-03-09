@@ -24,11 +24,8 @@ public class TugasPemeriksaanRestServiceImpl implements TugasPemeriksaanRestServ
     @Override
     public TugasPemeriksaan getById(int id_tugas_pemeriksaan) {
         Optional<TugasPemeriksaan> tugasPemeriksaan = tugasPemeriksaanRepo.findById(id_tugas_pemeriksaan);
-        if (tugasPemeriksaan.isPresent()) {
-            return tugasPemeriksaan.get();
-        } else {
-            throw new NoSuchElementException();
-        }
+        if (tugasPemeriksaan.isPresent()) return tugasPemeriksaan.get();
+        else throw new NoSuchElementException();
     }
 
     @Override

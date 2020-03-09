@@ -36,11 +36,8 @@ public class EmployeeRestServiceImpl implements EmployeeRestService {
     @Override
     public Employee getById(int id_employee) {
         Optional<Employee> employee = employeeRepo.findById(id_employee);
-        if (employee.isPresent()) {
-            return employee.get();
-        } else {
-            throw new NoSuchElementException();
-        }
+        if (employee.isPresent()) return employee.get();
+        else throw new NoSuchElementException();
     }
 
     @Override

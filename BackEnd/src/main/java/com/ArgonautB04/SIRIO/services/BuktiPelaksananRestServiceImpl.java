@@ -14,21 +14,18 @@ import java.util.Optional;
 public class BuktiPelaksananRestServiceImpl implements BuktiPelaksanaanRestService {
 
     @Autowired
-    private BuktiPelaksanaanRepo bukti_pelaksanaan_repo;
+    private BuktiPelaksanaanRepo buktiPelaksanaanRepo;
 
     @Override
     public BuktiPelaksanaan createBuktiPelaksanaan(BuktiPelaksanaan buktiPelaksanaan) {
-        return bukti_pelaksanaan_repo.save(buktiPelaksanaan);
+        return buktiPelaksanaanRepo.save(buktiPelaksanaan);
     }
 
     @Override
     public BuktiPelaksanaan getById(int id_bukti_pelaksanaan) {
-        Optional<BuktiPelaksanaan> bukti_pelaksanaan = bukti_pelaksanaan_repo.findById(id_bukti_pelaksanaan);
-        if (bukti_pelaksanaan.isPresent()) {
-            return bukti_pelaksanaan.get();
-        } else {
-            throw new NoSuchElementException();
-        }
+        Optional<BuktiPelaksanaan> buktiPelaksanaan = buktiPelaksanaanRepo.findById(id_bukti_pelaksanaan);
+        if (buktiPelaksanaan.isPresent()) return buktiPelaksanaan.get();
+        else throw new NoSuchElementException();
     }
 
     @Override
@@ -41,11 +38,11 @@ public class BuktiPelaksananRestServiceImpl implements BuktiPelaksanaanRestServi
         target.setPemeriksa(buktiPelaksanaan.getPemeriksa());
         target.setRekomendasi(buktiPelaksanaan.getRekomendasi());
         target.setStatus_bukti_pelaksanaan(buktiPelaksanaan.getStatus_bukti_pelaksanaan());
-        return bukti_pelaksanaan_repo.save(target);
+        return buktiPelaksanaanRepo.save(target);
     }
 
     @Override
     public void deleteBuktiPelaksanaan(int id_bukti_pelaksanaan) {
-        bukti_pelaksanaan_repo.deleteById(id_bukti_pelaksanaan);
+        buktiPelaksanaanRepo.deleteById(id_bukti_pelaksanaan);
     }
 }

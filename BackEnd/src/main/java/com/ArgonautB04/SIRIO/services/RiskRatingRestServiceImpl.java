@@ -24,11 +24,8 @@ public class RiskRatingRestServiceImpl implements RiskRatingRestService {
     @Override
     public RiskRating getById(int id_risk_rating) {
         Optional<RiskRating> riskRating = riskRatingRepo.findById(id_risk_rating);
-        if (riskRating.isPresent()) {
-            return riskRating.get();
-        } else {
-            throw new NoSuchElementException();
-        }
+        if (riskRating.isPresent()) return riskRating.get();
+        else throw new NoSuchElementException();
     }
 
     @Override

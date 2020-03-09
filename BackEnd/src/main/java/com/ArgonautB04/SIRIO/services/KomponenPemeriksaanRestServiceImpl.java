@@ -24,11 +24,8 @@ public class KomponenPemeriksaanRestServiceImpl implements KomponenPemeriksaanRe
     @Override
     public KomponenPemeriksaan getById(int id_komponen_pemeriksaan) {
         Optional<KomponenPemeriksaan> komponenPemeriksaan = komponenPemeriksaanRepo.findById(id_komponen_pemeriksaan);
-        if (komponenPemeriksaan.isPresent()) {
-            return komponenPemeriksaan.get();
-        } else {
-            throw new NoSuchElementException();
-        }
+        if (komponenPemeriksaan.isPresent()) return komponenPemeriksaan.get();
+        else throw new NoSuchElementException();
     }
 
     @Override

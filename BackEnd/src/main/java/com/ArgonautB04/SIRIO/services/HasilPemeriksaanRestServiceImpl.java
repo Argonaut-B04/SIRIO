@@ -24,11 +24,8 @@ public class HasilPemeriksaanRestServiceImpl implements HasilPemeriksaanRestServ
     @Override
     public HasilPemeriksaan getById(int id_hasil_pemeriksaan) {
         Optional<HasilPemeriksaan> hasilPemeriksaan = hasilPemeriksaanRepo.findById(id_hasil_pemeriksaan);
-        if (hasilPemeriksaan.isPresent()) {
-            return hasilPemeriksaan.get();
-        } else {
-            throw new NoSuchElementException();
-        }
+        if (hasilPemeriksaan.isPresent()) return hasilPemeriksaan.get();
+        else throw new NoSuchElementException();
     }
 
     @Override
