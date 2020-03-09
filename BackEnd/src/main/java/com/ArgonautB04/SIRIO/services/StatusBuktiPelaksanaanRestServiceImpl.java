@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -26,5 +27,10 @@ public class StatusBuktiPelaksanaanRestServiceImpl implements StatusBuktiPelaksa
         Optional<StatusBuktiPelaksanaan> statusBuktiPelaksanaan = statusBuktiPelaksanaanRepo.findById(id_status);
         if (statusBuktiPelaksanaan.isPresent()) return statusBuktiPelaksanaan.get();
         else throw new NoSuchElementException();
+    }
+
+    @Override
+    public List<StatusBuktiPelaksanaan> getAll() {
+        return statusBuktiPelaksanaanRepo.findAll();
     }
 }

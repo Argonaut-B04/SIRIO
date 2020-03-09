@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -26,6 +27,11 @@ public class RiskLevelRestServiceImpl implements RiskLevelRestService {
         Optional<RiskLevel> riskLevel = riskLevelRepo.findById(id_risk_level);
         if (riskLevel.isPresent()) return riskLevel.get();
         else throw new NoSuchElementException();
+    }
+
+    @Override
+    public List<RiskLevel> getAll() {
+        return riskLevelRepo.findAll();
     }
 
     @Override

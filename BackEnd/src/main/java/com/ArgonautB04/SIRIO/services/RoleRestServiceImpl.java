@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -26,6 +27,11 @@ public class RoleRestServiceImpl implements RoleRestService {
         Optional<Role> role = roleRepo.findById(id_role);
         if (role.isPresent()) return role.get();
         else throw new NoSuchElementException();
+    }
+
+    @Override
+    public List<Role> getAll() {
+        return roleRepo.findAll();
     }
 
     @Override

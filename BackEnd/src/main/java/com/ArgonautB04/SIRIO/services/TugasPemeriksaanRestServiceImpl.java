@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -26,6 +27,11 @@ public class TugasPemeriksaanRestServiceImpl implements TugasPemeriksaanRestServ
         Optional<TugasPemeriksaan> tugasPemeriksaan = tugasPemeriksaanRepo.findById(id_tugas_pemeriksaan);
         if (tugasPemeriksaan.isPresent()) return tugasPemeriksaan.get();
         else throw new NoSuchElementException();
+    }
+
+    @Override
+    public List<TugasPemeriksaan> getAll() {
+        return tugasPemeriksaanRepo.findAll();
     }
 
     @Override

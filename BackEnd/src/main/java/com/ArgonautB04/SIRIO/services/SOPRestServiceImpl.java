@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -26,6 +27,11 @@ public class SOPRestServiceImpl implements SOPRestService {
         Optional<SOP> sop = sopRepo.findById(id_sop);
         if (sop.isPresent()) return sop.get();
         else throw new NoSuchElementException();
+    }
+
+    @Override
+    public List<SOP> getAll() {
+        return sopRepo.findAll();
     }
 
     @Override

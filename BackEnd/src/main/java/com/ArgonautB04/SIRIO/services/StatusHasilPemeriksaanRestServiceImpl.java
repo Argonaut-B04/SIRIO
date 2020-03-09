@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -26,5 +27,10 @@ public class StatusHasilPemeriksaanRestServiceImpl implements StatusHasilPemerik
         Optional<StatusHasilPemeriksaan> statusHasilPemeriksaan = statusHasilPemeriksaanRepo.findById(id_status);
         if (statusHasilPemeriksaan.isPresent()) return statusHasilPemeriksaan.get();
         else throw new NoSuchElementException();
+    }
+
+    @Override
+    public List<StatusHasilPemeriksaan> getAll() {
+        return statusHasilPemeriksaanRepo.findAll();
     }
 }
