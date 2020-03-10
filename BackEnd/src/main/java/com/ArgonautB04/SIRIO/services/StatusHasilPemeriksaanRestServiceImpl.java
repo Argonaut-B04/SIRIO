@@ -1,7 +1,7 @@
 package com.ArgonautB04.SIRIO.services;
 
 import com.ArgonautB04.SIRIO.model.StatusHasilPemeriksaan;
-import com.ArgonautB04.SIRIO.repository.StatusHasilPemeriksaanRepo;
+import com.ArgonautB04.SIRIO.repository.StatusHasilPemeriksaanDB;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,22 +15,22 @@ import java.util.Optional;
 public class StatusHasilPemeriksaanRestServiceImpl implements StatusHasilPemeriksaanRestService {
 
     @Autowired
-    private StatusHasilPemeriksaanRepo statusHasilPemeriksaanRepo;
+    private StatusHasilPemeriksaanDB statusHasilPemeriksaanDB;
 
     @Override
     public StatusHasilPemeriksaan createStatusHasilPemeriksaan(StatusHasilPemeriksaan statusHasilPemeriksaan) {
-        return statusHasilPemeriksaanRepo.save(statusHasilPemeriksaan);
+        return statusHasilPemeriksaanDB.save(statusHasilPemeriksaan);
     }
 
     @Override
-    public StatusHasilPemeriksaan getById(int id_status) {
-        Optional<StatusHasilPemeriksaan> statusHasilPemeriksaan = statusHasilPemeriksaanRepo.findById(id_status);
+    public StatusHasilPemeriksaan getById(int idStatus) {
+        Optional<StatusHasilPemeriksaan> statusHasilPemeriksaan = statusHasilPemeriksaanDB.findById(idStatus);
         if (statusHasilPemeriksaan.isPresent()) return statusHasilPemeriksaan.get();
         else throw new NoSuchElementException();
     }
 
     @Override
     public List<StatusHasilPemeriksaan> getAll() {
-        return statusHasilPemeriksaanRepo.findAll();
+        return statusHasilPemeriksaanDB.findAll();
     }
 }

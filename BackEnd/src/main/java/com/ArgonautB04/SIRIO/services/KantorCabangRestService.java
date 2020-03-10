@@ -7,11 +7,11 @@ import java.util.List;
 public interface KantorCabangRestService {
     KantorCabang createKantorCabang(KantorCabang kantorCabang);
 
-    KantorCabang getById(int id_kantor_cabang);
+    KantorCabang getById(int idKantorCabang);
 
     List<KantorCabang> getAll();
 
-    KantorCabang updateKantorCabang(int id_kantor_cabang, KantorCabang kantorCabang);
+    KantorCabang updateKantorCabang(int idKantorCabang, KantorCabang kantorCabang);
 
-    void deleteKantorCabang(int id_kantor_cabang);
+    void deleteKantorCabang(int idKantorCabang);
 }

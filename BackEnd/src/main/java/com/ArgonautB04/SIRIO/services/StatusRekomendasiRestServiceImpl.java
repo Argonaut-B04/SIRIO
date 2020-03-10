@@ -1,7 +1,7 @@
 package com.ArgonautB04.SIRIO.services;
 
 import com.ArgonautB04.SIRIO.model.StatusRekomendasi;
-import com.ArgonautB04.SIRIO.repository.StatusRekomendasiRepo;
+import com.ArgonautB04.SIRIO.repository.StatusRekomendasiDB;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,22 +15,22 @@ import java.util.Optional;
 public class StatusRekomendasiRestServiceImpl implements StatusRekomendasiRestService {
 
     @Autowired
-    private StatusRekomendasiRepo statusRekomendasiRepo;
+    private StatusRekomendasiDB statusRekomendasiDB;
 
     @Override
     public StatusRekomendasi createStatusRekomendasi(StatusRekomendasi statusRekomendasi) {
-        return statusRekomendasiRepo.save(statusRekomendasi);
+        return statusRekomendasiDB.save(statusRekomendasi);
     }
 
     @Override
-    public StatusRekomendasi getById(int id_status) {
-        Optional<StatusRekomendasi> statusRekomendasi = statusRekomendasiRepo.findById(id_status);
+    public StatusRekomendasi getById(int idStatus) {
+        Optional<StatusRekomendasi> statusRekomendasi = statusRekomendasiDB.findById(idStatus);
         if (statusRekomendasi.isPresent()) return statusRekomendasi.get();
         else throw new NoSuchElementException();
     }
 
     @Override
     public List<StatusRekomendasi> getAll() {
-        return statusRekomendasiRepo.findAll();
+        return statusRekomendasiDB.findAll();
     }
 }

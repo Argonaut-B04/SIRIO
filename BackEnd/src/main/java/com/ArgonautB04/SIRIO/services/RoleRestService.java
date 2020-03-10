@@ -7,11 +7,11 @@ import java.util.List;
 public interface RoleRestService {
     Role createRole(Role role);
 
-    Role getById(int id_role);
+    Role getById(int idRole);
 
     List<Role> getAll();
 
-    Role updateRole(int id_role, Role role);
+    Role updateRole(int idRole, Role role);
 
-    void deleteRole(int id_role);
+    void deleteRole(int idRole);
 }

@@ -8,11 +8,11 @@ import java.util.List;
 public interface BuktiPelaksanaanRestService {
     BuktiPelaksanaan createBuktiPelaksanaan(BuktiPelaksanaan buktiPelaksanaan);
 
-    BuktiPelaksanaan getById(int id_bukti_pelaksanaan);
+    BuktiPelaksanaan getById(int idBuktiPelaksanaan);
 
     List<BuktiPelaksanaan> getAll();
 
-    BuktiPelaksanaan updateBuktiPelaksanaan(int id_bukti_pelaksanaan, BuktiPelaksanaan buktiPelaksanaan);
+    BuktiPelaksanaan updateBuktiPelaksanaan(int idBuktiPelaksanaan, BuktiPelaksanaan buktiPelaksanaan);
 
-    void deleteBuktiPelaksanaan(int id_bukti_pelaksanaan);
+    void deleteBuktiPelaksanaan(int idBuktiPelaksanaan);
 }

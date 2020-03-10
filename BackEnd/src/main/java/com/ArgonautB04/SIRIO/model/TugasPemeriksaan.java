@@ -11,71 +11,71 @@ import java.io.Serializable;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "Tugas_Pemeriksaan")
+@Table
 public class TugasPemeriksaan implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id_tugas;
+    private int idTugas;
 
     @NotNull
     @DateTimeFormat(pattern = "MM-dd-yyy")
     @Column(name = "tanggal_mulai", nullable = false)
-    private LocalDate tanggal_mulai;
+    private LocalDate tanggalMulai;
 
     @NotNull
     @DateTimeFormat(pattern = "MM-dd-yyy")
     @Column(name = "tanggal_selesai", nullable = false)
-    private LocalDate tanggal_selesai;
+    private LocalDate tanggalSelesai;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "kantor_cabang", referencedColumnName = "id_kantor", nullable = false)
+    @JoinColumn(name = "kantor_cabang", referencedColumnName = "idKantor", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
-    private KantorCabang kantor_cabang;
+    private KantorCabang kantorCabang;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "rencana_pemeriksaan", referencedColumnName = "id_rencana", nullable = false)
+    @JoinColumn(name = "rencana_pemeriksaan", referencedColumnName = "idRencana", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private RencanaPemeriksaan rencanaPemeriksaan;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "pelaksana", referencedColumnName = "id_employee", nullable = false)
+    @JoinColumn(name = "pelaksana", referencedColumnName = "idEmployee", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private Employee pelaksana;
 
-    public int getId_tugas() {
-        return id_tugas;
+    public int getIdTugas() {
+        return idTugas;
     }
 
-    public void setId_tugas(int id_tugas) {
-        this.id_tugas = id_tugas;
+    public void setIdTugas(int idTugas) {
+        this.idTugas = idTugas;
     }
 
-    public LocalDate getTanggal_mulai() {
-        return tanggal_mulai;
+    public LocalDate getTanggalMulai() {
+        return tanggalMulai;
     }
 
-    public void setTanggal_mulai(LocalDate tanggal_mulai) {
-        this.tanggal_mulai = tanggal_mulai;
+    public void setTanggalMulai(LocalDate tanggalMulai) {
+        this.tanggalMulai = tanggalMulai;
     }
 
-    public LocalDate getTanggal_selesai() {
-        return tanggal_selesai;
+    public LocalDate getTanggalSelesai() {
+        return tanggalSelesai;
     }
 
-    public void setTanggal_selesai(LocalDate tanggal_selesai) {
-        this.tanggal_selesai = tanggal_selesai;
+    public void setTanggalSelesai(LocalDate tanggalSelesai) {
+        this.tanggalSelesai = tanggalSelesai;
     }
 
-    public KantorCabang getKantor_cabang() {
-        return kantor_cabang;
+    public KantorCabang getKantorCabang() {
+        return kantorCabang;
     }
 
-    public void setKantor_cabang(KantorCabang kantor_cabang) {
-        this.kantor_cabang = kantor_cabang;
+    public void setKantorCabang(KantorCabang kantorCabang) {
+        this.kantorCabang = kantorCabang;
     }
 
     public RencanaPemeriksaan getRencanaPemeriksaan() {

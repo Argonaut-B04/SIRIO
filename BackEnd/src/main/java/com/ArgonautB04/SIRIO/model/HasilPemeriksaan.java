@@ -10,17 +10,17 @@ import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "Hasil_Pemeriksaan")
+@Table
 public class HasilPemeriksaan implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id_hasil_pemeriksaan;
+    private int idHasilPemeriksaan;
 
     @NotNull
     @Size(max = 50)
     @Column(nullable = false)
-    private String nama_hasil_pemeriksaan;
+    private String namaHasilPemeriksaan;
 
     @NotNull
     @Size(max = 125)
@@ -28,43 +28,43 @@ public class HasilPemeriksaan implements Serializable {
     private String feedback;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "status", referencedColumnName = "id_status_hasil", nullable = false)
+    @JoinColumn(name = "status", referencedColumnName = "idStatusHasil", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
-    private StatusHasilPemeriksaan status_hasil_pemeriksaan;
+    private StatusHasilPemeriksaan statusHasilPemeriksaan;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "tugas_pemeriksaan", referencedColumnName = "id_tugas", nullable = false)
+    @JoinColumn(name = "tugas_pemeriksaan", referencedColumnName = "idTugas", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
-    private TugasPemeriksaan tugas_pemeriksaan;
+    private TugasPemeriksaan tugasPemeriksaan;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "pembuat", referencedColumnName = "id_employee", nullable = false)
+    @JoinColumn(name = "pembuat", referencedColumnName = "idEmployee", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private Employee pembuat;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "pemeriksa", referencedColumnName = "id_employee", nullable = false)
+    @JoinColumn(name = "pemeriksa", referencedColumnName = "idEmployee", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private Employee pemeriksa;
 
-    public int getId_hasil_pemeriksaan() {
-        return id_hasil_pemeriksaan;
+    public int getIdHasilPemeriksaan() {
+        return idHasilPemeriksaan;
     }
 
-    public void setId_hasil_pemeriksaan(int id_hasil_pemeriksaan) {
-        this.id_hasil_pemeriksaan = id_hasil_pemeriksaan;
+    public void setIdHasilPemeriksaan(int idHasilPemeriksaan) {
+        this.idHasilPemeriksaan = idHasilPemeriksaan;
     }
 
-    public String getNama_hasil_pemeriksaan() {
-        return nama_hasil_pemeriksaan;
+    public String getNamaHasilPemeriksaan() {
+        return namaHasilPemeriksaan;
     }
 
-    public void setNama_hasil_pemeriksaan(String nama_hasil_pemeriksaan) {
-        this.nama_hasil_pemeriksaan = nama_hasil_pemeriksaan;
+    public void setNamaHasilPemeriksaan(String namaHasilPemeriksaan) {
+        this.namaHasilPemeriksaan = namaHasilPemeriksaan;
     }
 
     public String getFeedback() {
@@ -75,20 +75,20 @@ public class HasilPemeriksaan implements Serializable {
         this.feedback = feedback;
     }
 
-    public StatusHasilPemeriksaan getStatus_hasil_pemeriksaan() {
-        return status_hasil_pemeriksaan;
+    public StatusHasilPemeriksaan getStatusHasilPemeriksaan() {
+        return statusHasilPemeriksaan;
     }
 
-    public void setStatus_hasil_pemeriksaan(StatusHasilPemeriksaan status_hasil_pemeriksaan) {
-        this.status_hasil_pemeriksaan = status_hasil_pemeriksaan;
+    public void setStatusHasilPemeriksaan(StatusHasilPemeriksaan statusHasilPemeriksaan) {
+        this.statusHasilPemeriksaan = statusHasilPemeriksaan;
     }
 
-    public TugasPemeriksaan getTugas_pemeriksaan() {
-        return tugas_pemeriksaan;
+    public TugasPemeriksaan getTugasPemeriksaan() {
+        return tugasPemeriksaan;
     }
 
-    public void setTugas_pemeriksaan(TugasPemeriksaan tugas_pemeriksaan) {
-        this.tugas_pemeriksaan = tugas_pemeriksaan;
+    public void setTugasPemeriksaan(TugasPemeriksaan tugasPemeriksaan) {
+        this.tugasPemeriksaan = tugasPemeriksaan;
     }
 
     public Employee getPembuat() {

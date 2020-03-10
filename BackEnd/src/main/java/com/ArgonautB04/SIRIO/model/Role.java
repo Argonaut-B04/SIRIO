@@ -16,32 +16,32 @@ public class Role implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id_role;
+    private int idRole;
 
     @NotNull
     @Size(max = 20)
     @Column(nullable = false)
-    private String nama_role;
+    private String namaRole;
 
     @OneToMany(mappedBy = "role", fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonProperty
     private List<Employee> employeeList;
 
-    public int getId_role() {
-        return id_role;
+    public int getIdRole() {
+        return idRole;
     }
 
-    public void setId_role(int id_role) {
-        this.id_role = id_role;
+    public void setIdRole(int idRole) {
+        this.idRole = idRole;
     }
 
-    public String getNama_role() {
-        return nama_role;
+    public String getNamaRole() {
+        return namaRole;
     }
 
-    public void setNama_role(String nama_role) {
-        this.nama_role = nama_role;
+    public void setNamaRole(String namaRole) {
+        this.namaRole = namaRole;
     }
 
     public List<Employee> getEmployeeList() {

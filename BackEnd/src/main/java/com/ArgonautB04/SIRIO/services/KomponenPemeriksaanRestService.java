@@ -7,11 +7,11 @@ import java.util.List;
 public interface KomponenPemeriksaanRestService {
     KomponenPemeriksaan createKomponenPemeriksaan(KomponenPemeriksaan komponenPemeriksaan);
 
-    KomponenPemeriksaan getById(int id_komponen_pemeriksaan);
+    KomponenPemeriksaan getById(int idKomponenPemeriksaan);
 
     List<KomponenPemeriksaan> getAll();
 
-    KomponenPemeriksaan updateKomponenPemeriksaan(int id_komponen_pemeriksaan, KomponenPemeriksaan komponenPemeriksaan);
+    KomponenPemeriksaan updateKomponenPemeriksaan(int idKomponenPemeriksaan, KomponenPemeriksaan komponenPemeriksaan);
 
-    void deleteKomponenPemeriksaan(int id_komponen_pemeriksaan);
+    void deleteKomponenPemeriksaan(int idKomponenPemeriksaan);
 }

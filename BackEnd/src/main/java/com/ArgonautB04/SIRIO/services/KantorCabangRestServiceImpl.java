@@ -1,7 +1,7 @@
 package com.ArgonautB04.SIRIO.services;
 
 import com.ArgonautB04.SIRIO.model.KantorCabang;
-import com.ArgonautB04.SIRIO.repository.KantorCabangRepo;
+import com.ArgonautB04.SIRIO.repository.KantorCabangDB;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,40 +15,40 @@ import java.util.Optional;
 public class KantorCabangRestServiceImpl implements KantorCabangRestService {
 
     @Autowired
-    private KantorCabangRepo kantorCabangRepo;
+    private KantorCabangDB kantorCabangDB;
 
     @Override
     public KantorCabang createKantorCabang(KantorCabang kantorCabang) {
-        return kantorCabangRepo.save(kantorCabang);
+        return kantorCabangDB.save(kantorCabang);
     }
 
     @Override
-    public KantorCabang getById(int id_kantor_cabang) {
-        Optional<KantorCabang> kantorCabang = kantorCabangRepo.findById(id_kantor_cabang);
+    public KantorCabang getById(int idKantorCabang) {
+        Optional<KantorCabang> kantorCabang = kantorCabangDB.findById(idKantorCabang);
         if (kantorCabang.isPresent()) return kantorCabang.get();
         else throw new NoSuchElementException();
     }
 
     @Override
     public List<KantorCabang> getAll() {
-        return kantorCabangRepo.findAll();
+        return kantorCabangDB.findAll();
     }
 
     @Override
-    public KantorCabang updateKantorCabang(int id_kantor_cabang, KantorCabang kantorCabang) {
-        KantorCabang target = getById(id_kantor_cabang);
+    public KantorCabang updateKantorCabang(int idKantorCabang, KantorCabang kantorCabang) {
+        KantorCabang target = getById(idKantorCabang);
         target.setArea(kantorCabang.getArea());
-        target.setRisk_rating(kantorCabang.getRisk_rating());
+        target.setRiskRating(kantorCabang.getRiskRating());
         target.setRegional(kantorCabang.getRegional());
         target.setPemilik(kantorCabang.getPemilik());
         target.setPembuat(kantorCabang.getPembuat());
-        target.setNama_kantor(kantorCabang.getNama_kantor());
-        target.setJumlah_kunjungan_audit_risk(kantorCabang.getJumlah_kunjungan_audit_risk());
-        return kantorCabangRepo.save(target);
+        target.setNamaKantor(kantorCabang.getNamaKantor());
+        target.setKunjunganAuditRisk(kantorCabang.getKunjunganAuditRisk());
+        return kantorCabangDB.save(target);
     }
 
     @Override
-    public void deleteKantorCabang(int id_kantor_cabang) {
-        kantorCabangRepo.deleteById(id_kantor_cabang);
+    public void deleteKantorCabang(int idKantorCabang) {
+        kantorCabangDB.deleteById(idKantorCabang);
     }
 }

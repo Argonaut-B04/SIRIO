@@ -7,7 +7,7 @@ import java.util.List;
 public interface StatusHasilPemeriksaanRestService {
     StatusHasilPemeriksaan createStatusHasilPemeriksaan(StatusHasilPemeriksaan statusHasilPemeriksaan);
 
-    StatusHasilPemeriksaan getById(int id_status);
+    StatusHasilPemeriksaan getById(int idStatus);
 
     List<StatusHasilPemeriksaan> getAll();
 }

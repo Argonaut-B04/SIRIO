@@ -1,7 +1,7 @@
 package com.ArgonautB04.SIRIO.services;
 
 import com.ArgonautB04.SIRIO.model.KomponenPemeriksaan;
-import com.ArgonautB04.SIRIO.repository.KomponenPemeriksaanRepo;
+import com.ArgonautB04.SIRIO.repository.KomponenPemeriksaanDB;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,38 +15,38 @@ import java.util.Optional;
 public class KomponenPemeriksaanRestServiceImpl implements KomponenPemeriksaanRestService {
 
     @Autowired
-    private KomponenPemeriksaanRepo komponenPemeriksaanRepo;
+    private KomponenPemeriksaanDB komponenPemeriksaanDB;
 
     @Override
     public KomponenPemeriksaan createKomponenPemeriksaan(KomponenPemeriksaan komponenPemeriksaan) {
-        return komponenPemeriksaanRepo.save(komponenPemeriksaan);
+        return komponenPemeriksaanDB.save(komponenPemeriksaan);
     }
 
     @Override
-    public KomponenPemeriksaan getById(int id_komponen_pemeriksaan) {
-        Optional<KomponenPemeriksaan> komponenPemeriksaan = komponenPemeriksaanRepo.findById(id_komponen_pemeriksaan);
+    public KomponenPemeriksaan getById(int idKomponenPemeriksaan) {
+        Optional<KomponenPemeriksaan> komponenPemeriksaan = komponenPemeriksaanDB.findById(idKomponenPemeriksaan);
         if (komponenPemeriksaan.isPresent()) return komponenPemeriksaan.get();
         else throw new NoSuchElementException();
     }
 
     @Override
     public List<KomponenPemeriksaan> getAll() {
-        return komponenPemeriksaanRepo.findAll();
+        return komponenPemeriksaanDB.findAll();
     }
 
     @Override
-    public KomponenPemeriksaan updateKomponenPemeriksaan(int id_komponen_pemeriksaan, KomponenPemeriksaan komponenPemeriksaan) {
-        KomponenPemeriksaan target = getById(id_komponen_pemeriksaan);
-        target.setHasil_pemeriksaan(komponenPemeriksaan.getHasil_pemeriksaan());
-        target.setRisk_level(komponenPemeriksaan.getRisk_level());
+    public KomponenPemeriksaan updateKomponenPemeriksaan(int idKomponenPemeriksaan, KomponenPemeriksaan komponenPemeriksaan) {
+        KomponenPemeriksaan target = getById(idKomponenPemeriksaan);
+        target.setHasilPemeriksaan(komponenPemeriksaan.getHasilPemeriksaan());
+        target.setRiskLevel(komponenPemeriksaan.getRiskLevel());
         target.setRisiko(komponenPemeriksaan.getRisiko());
-        target.setKeterangan_sampel(komponenPemeriksaan.getKeterangan_sampel());
-        target.setJumlah_sampel(komponenPemeriksaan.getJumlah_sampel());
-        return komponenPemeriksaanRepo.save(target);
+        target.setKeteranganSampel(komponenPemeriksaan.getKeteranganSampel());
+        target.setJumlahSampel(komponenPemeriksaan.getJumlahSampel());
+        return komponenPemeriksaanDB.save(target);
     }
 
     @Override
-    public void deleteKomponenPemeriksaan(int id_komponen_pemeriksaan) {
-        komponenPemeriksaanRepo.deleteById(id_komponen_pemeriksaan);
+    public void deleteKomponenPemeriksaan(int idKomponenPemeriksaan) {
+        komponenPemeriksaanDB.deleteById(idKomponenPemeriksaan);
     }
 }

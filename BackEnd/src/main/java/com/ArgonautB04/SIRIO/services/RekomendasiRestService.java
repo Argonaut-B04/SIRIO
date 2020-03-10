@@ -7,11 +7,11 @@ import java.util.List;
 public interface RekomendasiRestService {
     Rekomendasi createRekomendasi(Rekomendasi rekomendasi);
 
-    Rekomendasi getById(int id_rekomendasi);
+    Rekomendasi getById(int idRekomendasi);
 
     List<Rekomendasi> getAll();
 
-    Rekomendasi updateRekomendasi(int id_rekomendasi, Rekomendasi rekomendasi);
+    Rekomendasi updateRekomendasi(int idRekomendasi, Rekomendasi rekomendasi);
 
-    void deleteRekomendasi(int id_rekomendasi);
+    void deleteRekomendasi(int idRekomendasi);
 }

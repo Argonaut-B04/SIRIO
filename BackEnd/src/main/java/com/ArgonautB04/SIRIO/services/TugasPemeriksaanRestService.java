@@ -7,11 +7,11 @@ import java.util.List;
 public interface TugasPemeriksaanRestService {
     TugasPemeriksaan createTugasPemeriksaan(TugasPemeriksaan tugasPemeriksaan);
 
-    TugasPemeriksaan getById(int id_tugas_pemeriksaan);
+    TugasPemeriksaan getById(int idTugasPemeriksaan);
 
     List<TugasPemeriksaan> getAll();
 
-    TugasPemeriksaan updateTugasPemeriksaan(int id_tugas_pemeriksaan, TugasPemeriksaan tugasPemeriksaan);
+    TugasPemeriksaan updateTugasPemeriksaan(int idTugasPemeriksaan, TugasPemeriksaan tugasPemeriksaan);
 
-    void deleteTugasPemeriksaan(int id_tugas_pemeriksaan);
+    void deleteTugasPemeriksaan(int idTugasPemeriksaan);
 }

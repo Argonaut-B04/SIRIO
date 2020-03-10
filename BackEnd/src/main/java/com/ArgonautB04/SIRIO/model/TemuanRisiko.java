@@ -10,12 +10,12 @@ import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "Temuan_Risiko")
+@Table
 public class TemuanRisiko implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id_temuan_risiko;
+    private int idTemuanRisiko;
 
     @NotNull
     @Size(max = 125)
@@ -23,23 +23,23 @@ public class TemuanRisiko implements Serializable {
     private String keterangan;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "komponen_pemeriksaan", referencedColumnName = "id_komponen_pemeriksaan", nullable = false)
+    @JoinColumn(name = "komponen_pemeriksaan", referencedColumnName = "idKomponenPemeriksaan", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
-    private KomponenPemeriksaan komponen_pemeriksaan;
+    private KomponenPemeriksaan komponenPemeriksaan;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "pembuat", referencedColumnName = "id_employee", nullable = false)
+    @JoinColumn(name = "pembuat", referencedColumnName = "idEmployee", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private Employee pembuat;
 
-    public int getId_temuan_risiko() {
-        return id_temuan_risiko;
+    public int getIdTemuanRisiko() {
+        return idTemuanRisiko;
     }
 
-    public void setId_temuan_risiko(int id_temuan_risiko) {
-        this.id_temuan_risiko = id_temuan_risiko;
+    public void setIdTemuanRisiko(int idTemuanRisiko) {
+        this.idTemuanRisiko = idTemuanRisiko;
     }
 
     public String getKeterangan() {
@@ -50,12 +50,12 @@ public class TemuanRisiko implements Serializable {
         this.keterangan = keterangan;
     }
 
-    public KomponenPemeriksaan getKomponen_pemeriksaan() {
-        return komponen_pemeriksaan;
+    public KomponenPemeriksaan getKomponenPemeriksaan() {
+        return komponenPemeriksaan;
     }
 
-    public void setKomponen_pemeriksaan(KomponenPemeriksaan komponen_pemeriksaan) {
-        this.komponen_pemeriksaan = komponen_pemeriksaan;
+    public void setKomponenPemeriksaan(KomponenPemeriksaan komponenPemeriksaan) {
+        this.komponenPemeriksaan = komponenPemeriksaan;
     }
 
     public Employee getPembuat() {

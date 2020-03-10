@@ -1,7 +1,7 @@
 package com.ArgonautB04.SIRIO.services;
 
 import com.ArgonautB04.SIRIO.model.SOP;
-import com.ArgonautB04.SIRIO.repository.SOPRepo;
+import com.ArgonautB04.SIRIO.repository.SOPDB;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,37 +15,37 @@ import java.util.Optional;
 public class SOPRestServiceImpl implements SOPRestService {
 
     @Autowired
-    private SOPRepo sopRepo;
+    private SOPDB SOPDB;
 
     @Override
     public SOP createSOP(SOP sop) {
-        return sopRepo.save(sop);
+        return SOPDB.save(sop);
     }
 
     @Override
-    public SOP getById(int id_sop) {
-        Optional<SOP> sop = sopRepo.findById(id_sop);
+    public SOP getById(int idSop) {
+        Optional<SOP> sop = SOPDB.findById(idSop);
         if (sop.isPresent()) return sop.get();
         else throw new NoSuchElementException();
     }
 
     @Override
     public List<SOP> getAll() {
-        return sopRepo.findAll();
+        return SOPDB.findAll();
     }
 
     @Override
-    public SOP updateSOP(int id_sop, SOP sop) {
-        SOP target = getById(id_sop);
+    public SOP updateSOP(int idSop, SOP sop) {
+        SOP target = getById(idSop);
         target.setPembuat(sop.getPembuat());
-        target.setLink_dokumen(sop.getLink_dokumen());
+        target.setLinkDokumen(sop.getLinkDokumen());
         target.setKategori(sop.getKategori());
         target.setJudul(sop.getJudul());
-        return sopRepo.save(target);
+        return SOPDB.save(target);
     }
 
     @Override
-    public void deleteSOP(int id_sop) {
-        sopRepo.deleteById(id_sop);
+    public void deleteSOP(int idSop) {
+        SOPDB.deleteById(idSop);
     }
 }

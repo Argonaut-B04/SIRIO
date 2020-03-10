@@ -1,7 +1,7 @@
 package com.ArgonautB04.SIRIO.services;
 
 import com.ArgonautB04.SIRIO.model.RiskRating;
-import com.ArgonautB04.SIRIO.repository.RiskRatingRepo;
+import com.ArgonautB04.SIRIO.repository.RiskRatingDB;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,38 +15,38 @@ import java.util.Optional;
 public class RiskRatingRestServiceImpl implements RiskRatingRestService {
 
     @Autowired
-    private RiskRatingRepo riskRatingRepo;
+    private RiskRatingDB riskRatingDB;
 
     @Override
     public RiskRating createRiskRating(RiskRating riskRating) {
-        return riskRatingRepo.save(riskRating);
+        return riskRatingDB.save(riskRating);
     }
 
     @Override
-    public RiskRating getById(int id_risk_rating) {
-        Optional<RiskRating> riskRating = riskRatingRepo.findById(id_risk_rating);
+    public RiskRating getById(int idRiskRating) {
+        Optional<RiskRating> riskRating = riskRatingDB.findById(idRiskRating);
         if (riskRating.isPresent()) return riskRating.get();
         else throw new NoSuchElementException();
     }
 
     @Override
     public List<RiskRating> getAll() {
-        return riskRatingRepo.findAll();
+        return riskRatingDB.findAll();
     }
 
     @Override
-    public RiskRating updateRiskRating(int id_risk_rating, RiskRating riskRating) {
-        RiskRating target = getById(id_risk_rating);
-        target.setSkor_minimal(riskRating.getSkor_minimal());
-        target.setSkor_maksimal(riskRating.getSkor_maksimal());
+    public RiskRating updateRiskRating(int idRiskRating, RiskRating riskRating) {
+        RiskRating target = getById(idRiskRating);
+        target.setSkorMinimal(riskRating.getSkorMinimal());
+        target.setSkorMaksimal(riskRating.getSkorMaksimal());
         target.setPengelola(riskRating.getPengelola());
-        target.setNama_rating(riskRating.getNama_rating());
-        target.setKeterangan_rating(riskRating.getKeterangan_rating());
-        return riskRatingRepo.save(target);
+        target.setNamaRating(riskRating.getNamaRating());
+        target.setKeteranganRating(riskRating.getKeteranganRating());
+        return riskRatingDB.save(target);
     }
 
     @Override
-    public void deleteRiskRating(int id_risk_rating) {
-        riskRatingRepo.deleteById(id_risk_rating);
+    public void deleteRiskRating(int idRiskRating) {
+        riskRatingDB.deleteById(idRiskRating);
     }
 }

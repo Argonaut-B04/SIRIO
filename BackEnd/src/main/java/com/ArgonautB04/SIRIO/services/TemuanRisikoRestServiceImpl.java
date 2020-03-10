@@ -1,7 +1,7 @@
 package com.ArgonautB04.SIRIO.services;
 
 import com.ArgonautB04.SIRIO.model.TemuanRisiko;
-import com.ArgonautB04.SIRIO.repository.TemuanRisikoRepo;
+import com.ArgonautB04.SIRIO.repository.TemuanRisikoDB;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,36 +15,36 @@ import java.util.Optional;
 public class TemuanRisikoRestServiceImpl implements TemuanRisikoRestService {
 
     @Autowired
-    private TemuanRisikoRepo temuanRisikoRepo;
+    private TemuanRisikoDB temuanRisikoDB;
 
     @Override
     public TemuanRisiko createTemuanRisiko(TemuanRisiko temuanRisiko) {
-        return temuanRisikoRepo.save(temuanRisiko);
+        return temuanRisikoDB.save(temuanRisiko);
     }
 
     @Override
-    public TemuanRisiko getById(int id_temuan_risiko) {
-        Optional<TemuanRisiko> temuanRisiko = temuanRisikoRepo.findById(id_temuan_risiko);
+    public TemuanRisiko getById(int idTemuanRisiko) {
+        Optional<TemuanRisiko> temuanRisiko = temuanRisikoDB.findById(idTemuanRisiko);
         if (temuanRisiko.isPresent()) return temuanRisiko.get();
         else throw new NoSuchElementException();
     }
 
     @Override
     public List<TemuanRisiko> getAll() {
-        return temuanRisikoRepo.findAll();
+        return temuanRisikoDB.findAll();
     }
 
     @Override
-    public TemuanRisiko updateTemuanRisiko(int id_temuan_risiko, TemuanRisiko temuanRisiko) {
-        TemuanRisiko target = getById(id_temuan_risiko);
+    public TemuanRisiko updateTemuanRisiko(int idTemuanRisiko, TemuanRisiko temuanRisiko) {
+        TemuanRisiko target = getById(idTemuanRisiko);
         target.setPembuat(temuanRisiko.getPembuat());
-        target.setKomponen_pemeriksaan(temuanRisiko.getKomponen_pemeriksaan());
+        target.setKomponenPemeriksaan(temuanRisiko.getKomponenPemeriksaan());
         target.setKeterangan(temuanRisiko.getKeterangan());
-        return temuanRisikoRepo.save(target);
+        return temuanRisikoDB.save(target);
     }
 
     @Override
-    public void deleteTemuanRisiko(int id_temuan_risiko) {
-        temuanRisikoRepo.deleteById(id_temuan_risiko);
+    public void deleteTemuanRisiko(int idTemuanRisiko) {
+        temuanRisikoDB.deleteById(idTemuanRisiko);
     }
 }

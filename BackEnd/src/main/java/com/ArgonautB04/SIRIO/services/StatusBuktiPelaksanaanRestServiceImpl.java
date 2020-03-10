@@ -1,7 +1,7 @@
 package com.ArgonautB04.SIRIO.services;
 
 import com.ArgonautB04.SIRIO.model.StatusBuktiPelaksanaan;
-import com.ArgonautB04.SIRIO.repository.StatusBuktiPelaksanaanRepo;
+import com.ArgonautB04.SIRIO.repository.StatusBuktiPelaksanaanDB;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,22 +15,22 @@ import java.util.Optional;
 public class StatusBuktiPelaksanaanRestServiceImpl implements StatusBuktiPelaksanaanRestService {
 
     @Autowired
-    private StatusBuktiPelaksanaanRepo statusBuktiPelaksanaanRepo;
+    private StatusBuktiPelaksanaanDB statusBuktiPelaksanaanDB;
 
     @Override
     public StatusBuktiPelaksanaan createStatusBuktiPelaksanaan(StatusBuktiPelaksanaan statusBuktiPelaksanaan) {
-        return statusBuktiPelaksanaanRepo.save(statusBuktiPelaksanaan);
+        return statusBuktiPelaksanaanDB.save(statusBuktiPelaksanaan);
     }
 
     @Override
-    public StatusBuktiPelaksanaan getById(int id_status) {
-        Optional<StatusBuktiPelaksanaan> statusBuktiPelaksanaan = statusBuktiPelaksanaanRepo.findById(id_status);
+    public StatusBuktiPelaksanaan getById(int idStatus) {
+        Optional<StatusBuktiPelaksanaan> statusBuktiPelaksanaan = statusBuktiPelaksanaanDB.findById(idStatus);
         if (statusBuktiPelaksanaan.isPresent()) return statusBuktiPelaksanaan.get();
         else throw new NoSuchElementException();
     }
 
     @Override
     public List<StatusBuktiPelaksanaan> getAll() {
-        return statusBuktiPelaksanaanRepo.findAll();
+        return statusBuktiPelaksanaanDB.findAll();
     }
 }

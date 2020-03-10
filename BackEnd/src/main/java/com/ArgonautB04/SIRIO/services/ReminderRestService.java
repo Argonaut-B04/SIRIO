@@ -7,11 +7,11 @@ import java.util.List;
 public interface ReminderRestService {
     Reminder createReminder(Reminder reminder);
 
-    Reminder getById(int id_reminder);
+    Reminder getById(int idReminder);
 
     List<Reminder> getAll();
 
-    Reminder updateReminder(int id_reminder, Reminder reminder);
+    Reminder updateReminder(int idReminder, Reminder reminder);
 
-    void deleteReminder(int id_reminder);
+    void deleteReminder(int idReminder);
 }

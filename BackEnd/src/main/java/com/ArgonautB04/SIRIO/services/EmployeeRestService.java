@@ -7,13 +7,13 @@ import java.util.List;
 public interface EmployeeRestService {
     Employee createEmployee(Employee employee);
 
-    Employee getById(int id_employee);
+    Employee getById(int idEmployee);
 
     List<Employee> getAll();
 
-    Employee updateEmployee(int id_employee, Employee employee);
+    Employee updateEmployee(int idEmployee, Employee employee);
 
-    void deactivateEmployee(int id_employee);
+    void deactivateEmployee(int idEmployee);
 
-    void activateEmployee(int id_employee);
+    void activateEmployee(int idEmployee);
 }

@@ -7,11 +7,11 @@ import java.util.List;
 public interface RencanaPemeriksaanRestService {
     RencanaPemeriksaan createRencanaPemeriksaan(RencanaPemeriksaan rencanaPemeriksaan);
 
-    RencanaPemeriksaan getById(int id_rencana_pemeriksaan);
+    RencanaPemeriksaan getById(int idRencanaPemeriksaan);
 
     List<RencanaPemeriksaan> getAll();
 
-    RencanaPemeriksaan updateRencanaPemeriksaan(int id_rencana_pemeriksaan, RencanaPemeriksaan rencanaPemeriksaan);
+    RencanaPemeriksaan updateRencanaPemeriksaan(int idRencanaPemeriksaan, RencanaPemeriksaan rencanaPemeriksaan);
 
-    void deleteRencanaPemeriksaan(int id_rencana_pemeriksaan);
+    void deleteRencanaPemeriksaan(int idRencanaPemeriksaan);
 }

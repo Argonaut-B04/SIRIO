@@ -10,17 +10,17 @@ import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "Kantor_Cabang")
+@Table
 public class KantorCabang implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id_kantor;
+    private int idKantor;
 
     @NotNull
     @Size(max = 25)
     @Column(nullable = false, unique = true)
-    private String nama_kantor;
+    private String namaKantor;
 
     @NotNull
     @Size(max = 125)
@@ -34,40 +34,40 @@ public class KantorCabang implements Serializable {
 
     @NotNull
     @Column(nullable = false)
-    private int jumlah_kunjungan_audit_risk;
+    private boolean kunjunganAuditRisk;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "risk_rating", referencedColumnName = "id_rating", nullable = false)
+    @JoinColumn(name = "risk_rating", referencedColumnName = "idRating", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
-    private RiskRating risk_rating;
+    private RiskRating riskRating;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "pemilik", referencedColumnName = "id_employee", nullable = false)
+    @JoinColumn(name = "pemilik", referencedColumnName = "idEmployee", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private Employee pemilik;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "pembuat", referencedColumnName = "id_employee", nullable = false)
+    @JoinColumn(name = "pembuat", referencedColumnName = "idEmployee", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private Employee pembuat;
 
-    public int getId_kantor() {
-        return id_kantor;
+    public int getIdKantor() {
+        return idKantor;
     }
 
-    public void setId_kantor(int id_kantor) {
-        this.id_kantor = id_kantor;
+    public void setIdKantor(int idKantor) {
+        this.idKantor = idKantor;
     }
 
-    public String getNama_kantor() {
-        return nama_kantor;
+    public String getNamaKantor() {
+        return namaKantor;
     }
 
-    public void setNama_kantor(String nama_kantor) {
-        this.nama_kantor = nama_kantor;
+    public void setNamaKantor(String namaKantor) {
+        this.namaKantor = namaKantor;
     }
 
     public String getRegional() {
@@ -86,20 +86,20 @@ public class KantorCabang implements Serializable {
         this.area = area;
     }
 
-    public int getJumlah_kunjungan_audit_risk() {
-        return jumlah_kunjungan_audit_risk;
+    public boolean getKunjunganAuditRisk() {
+        return kunjunganAuditRisk;
     }
 
-    public void setJumlah_kunjungan_audit_risk(int jumlah_kunjungan_audit_risk) {
-        this.jumlah_kunjungan_audit_risk = jumlah_kunjungan_audit_risk;
+    public void setKunjunganAuditRisk(boolean kunjunganAuditRisk) {
+        this.kunjunganAuditRisk = kunjunganAuditRisk;
     }
 
-    public RiskRating getRisk_rating() {
-        return risk_rating;
+    public RiskRating getRiskRating() {
+        return riskRating;
     }
 
-    public void setRisk_rating(RiskRating risk_rating) {
-        this.risk_rating = risk_rating;
+    public void setRiskRating(RiskRating riskRating) {
+        this.riskRating = riskRating;
     }
 
     public Employee getPemilik() {

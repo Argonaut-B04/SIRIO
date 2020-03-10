@@ -1,7 +1,7 @@
 package com.ArgonautB04.SIRIO.services;
 
 import com.ArgonautB04.SIRIO.model.RencanaPemeriksaan;
-import com.ArgonautB04.SIRIO.repository.RencanaPemeriksaanRepo;
+import com.ArgonautB04.SIRIO.repository.RencanaPemeriksaanDB;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,37 +15,37 @@ import java.util.Optional;
 public class RencanaPemeriksaanRestServiceImpl implements RencanaPemeriksaanRestService {
 
     @Autowired
-    private RencanaPemeriksaanRepo rencanaPemeriksaanRepo;
+    private RencanaPemeriksaanDB rencanaPemeriksaanDB;
 
     @Override
     public RencanaPemeriksaan createRencanaPemeriksaan(RencanaPemeriksaan rencanaPemeriksaan) {
-        return rencanaPemeriksaanRepo.save(rencanaPemeriksaan);
+        return rencanaPemeriksaanDB.save(rencanaPemeriksaan);
     }
 
     @Override
-    public RencanaPemeriksaan getById(int id_rencana_pemeriksaan) {
-        Optional<RencanaPemeriksaan> rencanaPemeriksaan = rencanaPemeriksaanRepo.findById(id_rencana_pemeriksaan);
+    public RencanaPemeriksaan getById(int idRencanaPemeriksaan) {
+        Optional<RencanaPemeriksaan> rencanaPemeriksaan = rencanaPemeriksaanDB.findById(idRencanaPemeriksaan);
         if (rencanaPemeriksaan.isPresent()) return rencanaPemeriksaan.get();
         else throw new NoSuchElementException();
     }
 
     @Override
     public List<RencanaPemeriksaan> getAll() {
-        return rencanaPemeriksaanRepo.findAll();
+        return rencanaPemeriksaanDB.findAll();
     }
 
     @Override
-    public RencanaPemeriksaan updateRencanaPemeriksaan(int id_rencana_pemeriksaan, RencanaPemeriksaan rencanaPemeriksaan) {
-        RencanaPemeriksaan target = getById(id_rencana_pemeriksaan);
-        target.setLink_majelis(rencanaPemeriksaan.getLink_majelis());
+    public RencanaPemeriksaan updateRencanaPemeriksaan(int idRencanaPemeriksaan, RencanaPemeriksaan rencanaPemeriksaan) {
+        RencanaPemeriksaan target = getById(idRencanaPemeriksaan);
+        target.setLinkMajelis(rencanaPemeriksaan.getLinkMajelis());
         target.setStatus(rencanaPemeriksaan.getStatus());
         target.setPembuat(rencanaPemeriksaan.getPembuat());
-        target.setNama_rencana(rencanaPemeriksaan.getNama_rencana());
-        return rencanaPemeriksaanRepo.save(target);
+        target.setNamaRencana(rencanaPemeriksaan.getNamaRencana());
+        return rencanaPemeriksaanDB.save(target);
     }
 
     @Override
-    public void deleteRencanaPemeriksaan(int id_rencana_pemeriksaan) {
-        rencanaPemeriksaanRepo.deleteById(id_rencana_pemeriksaan);
+    public void deleteRencanaPemeriksaan(int idRencanaPemeriksaan) {
+        rencanaPemeriksaanDB.deleteById(idRencanaPemeriksaan);
     }
 }

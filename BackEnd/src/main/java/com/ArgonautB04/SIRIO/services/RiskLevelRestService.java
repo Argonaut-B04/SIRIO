@@ -7,11 +7,11 @@ import java.util.List;
 public interface RiskLevelRestService {
     RiskLevel createRiskLevel(RiskLevel riskLevel);
 
-    RiskLevel getById(int id_risk_level);
+    RiskLevel getById(int idRiskLevel);
 
     List<RiskLevel> getAll();
 
-    RiskLevel updateRiskLevel(int id_risk_level, RiskLevel riskLevel);
+    RiskLevel updateRiskLevel(int idRiskLevel, RiskLevel riskLevel);
 
-    void deleteRiskLevel(int id_risk_level);
+    void deleteRiskLevel(int idRiskLevel);
 }

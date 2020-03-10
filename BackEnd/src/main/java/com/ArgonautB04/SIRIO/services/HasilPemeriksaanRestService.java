@@ -7,11 +7,11 @@ import java.util.List;
 public interface HasilPemeriksaanRestService {
     HasilPemeriksaan createHasilPemeriksaan(HasilPemeriksaan hasilPemeriksaan);
 
-    HasilPemeriksaan getById(int id_hasil_pemeriksaan);
+    HasilPemeriksaan getById(int idHasilPemeriksaan);
 
     List<HasilPemeriksaan> getAll();
 
-    HasilPemeriksaan updateHasilPemeriksaan(int id_hasil_pemeriksaan, HasilPemeriksaan hasilPemeriksaan);
+    HasilPemeriksaan updateHasilPemeriksaan(int idHasilPemeriksaan, HasilPemeriksaan hasilPemeriksaan);
 
-    void deleteHasilPemeriksaan(int id_hasil_pemeriksaan);
+    void deleteHasilPemeriksaan(int idHasilPemeriksaan);
 }
