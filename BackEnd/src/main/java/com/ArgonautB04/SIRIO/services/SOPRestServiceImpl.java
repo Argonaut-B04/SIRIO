@@ -18,7 +18,7 @@ public class SOPRestServiceImpl implements SOPRestService {
     private SOPDB SOPDB;
 
     @Override
-    public SOP createSOP(SOP sop) {
+    public SOP buatSOP(SOP sop) {
         return SOPDB.save(sop);
     }
 
@@ -35,7 +35,7 @@ public class SOPRestServiceImpl implements SOPRestService {
     }
 
     @Override
-    public SOP updateSOP(int idSop, SOP sop) {
+    public SOP ubahSOP(int idSop, SOP sop) {
         SOP target = getById(idSop);
         target.setPembuat(sop.getPembuat());
         target.setLinkDokumen(sop.getLinkDokumen());
@@ -45,7 +45,7 @@ public class SOPRestServiceImpl implements SOPRestService {
     }
 
     @Override
-    public void deleteSOP(int idSop) {
+    public void hapusSOP(int idSop) {
         SOPDB.deleteById(idSop);
     }
 }

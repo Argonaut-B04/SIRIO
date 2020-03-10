@@ -18,7 +18,7 @@ public class RisikoRestServiceImpl implements RisikoRestService {
     private RisikoDB risikoDB;
 
     @Override
-    public Risiko createRisiko(Risiko risiko) {
+    public Risiko buatRisiko(Risiko risiko) {
         return risikoDB.save(risiko);
     }
 
@@ -35,7 +35,7 @@ public class RisikoRestServiceImpl implements RisikoRestService {
     }
 
     @Override
-    public Risiko updateRisiko(int idRisiko, Risiko risiko) {
+    public Risiko ubahRisiko(int idRisiko, Risiko risiko) {
         Risiko target = getById(idRisiko);
         target.setChildList(risiko.getChildList());
         target.setStatusRisiko(risiko.getStatusRisiko());
@@ -48,7 +48,7 @@ public class RisikoRestServiceImpl implements RisikoRestService {
     }
 
     @Override
-    public void deleteRisiko(int idRisiko) {
+    public void hapusRisiko(int idRisiko) {
         risikoDB.deleteById(idRisiko);
     }
 }

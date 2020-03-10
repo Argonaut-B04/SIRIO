@@ -18,7 +18,7 @@ public class HasilPemeriksaanRestServiceImpl implements HasilPemeriksaanRestServ
     private HasilPemeriksaanDB hasilPemeriksaanDB;
 
     @Override
-    public HasilPemeriksaan createHasilPemeriksaan(HasilPemeriksaan hasilPemeriksaan) {
+    public HasilPemeriksaan buatHasilPemeriksaan(HasilPemeriksaan hasilPemeriksaan) {
         return hasilPemeriksaanDB.save(hasilPemeriksaan);
     }
 
@@ -35,7 +35,7 @@ public class HasilPemeriksaanRestServiceImpl implements HasilPemeriksaanRestServ
     }
 
     @Override
-    public HasilPemeriksaan updateHasilPemeriksaan(int idHasilPemeriksaan, HasilPemeriksaan hasilPemeriksaan) {
+    public HasilPemeriksaan buatHasilPemeriksaan(int idHasilPemeriksaan, HasilPemeriksaan hasilPemeriksaan) {
         HasilPemeriksaan target = getById(idHasilPemeriksaan);
         target.setFeedback(hasilPemeriksaan.getFeedback());
         target.setTugasPemeriksaan(hasilPemeriksaan.getTugasPemeriksaan());
@@ -47,7 +47,7 @@ public class HasilPemeriksaanRestServiceImpl implements HasilPemeriksaanRestServ
     }
 
     @Override
-    public void deleteHasilPemeriksaan(int idHasilPemeriksaan) {
+    public void hapusHasilPemeriksaan(int idHasilPemeriksaan) {
         hasilPemeriksaanDB.deleteById(idHasilPemeriksaan);
     }
 }

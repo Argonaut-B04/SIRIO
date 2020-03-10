@@ -18,7 +18,7 @@ public class RoleRestServiceImpl implements RoleRestService {
     private RoleDB roleDB;
 
     @Override
-    public Role createRole(Role role) {
+    public Role buatRole(Role role) {
         return roleDB.save(role);
     }
 
@@ -35,14 +35,14 @@ public class RoleRestServiceImpl implements RoleRestService {
     }
 
     @Override
-    public Role updateRole(int idRole, Role role) {
+    public Role ubahRole(int idRole, Role role) {
         Role target = getById(idRole);
         target.setNamaRole(role.getNamaRole());
         return roleDB.save(target);
     }
 
     @Override
-    public void deleteRole(int idRole) {
+    public void hapusRole(int idRole) {
         roleDB.deleteById(idRole);
     }
 }

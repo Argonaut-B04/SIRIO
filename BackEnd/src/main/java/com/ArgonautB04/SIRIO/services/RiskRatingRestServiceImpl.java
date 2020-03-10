@@ -18,7 +18,7 @@ public class RiskRatingRestServiceImpl implements RiskRatingRestService {
     private RiskRatingDB riskRatingDB;
 
     @Override
-    public RiskRating createRiskRating(RiskRating riskRating) {
+    public RiskRating buatRiskRating(RiskRating riskRating) {
         return riskRatingDB.save(riskRating);
     }
 
@@ -35,7 +35,7 @@ public class RiskRatingRestServiceImpl implements RiskRatingRestService {
     }
 
     @Override
-    public RiskRating updateRiskRating(int idRiskRating, RiskRating riskRating) {
+    public RiskRating ubahRiskRating(int idRiskRating, RiskRating riskRating) {
         RiskRating target = getById(idRiskRating);
         target.setSkorMinimal(riskRating.getSkorMinimal());
         target.setSkorMaksimal(riskRating.getSkorMaksimal());
@@ -46,7 +46,7 @@ public class RiskRatingRestServiceImpl implements RiskRatingRestService {
     }
 
     @Override
-    public void deleteRiskRating(int idRiskRating) {
+    public void hapusRiskRating(int idRiskRating) {
         riskRatingDB.deleteById(idRiskRating);
     }
 }

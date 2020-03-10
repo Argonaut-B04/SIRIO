@@ -18,7 +18,7 @@ public class ReminderRestServiceImpl implements ReminderRestService {
     private ReminderDB reminderDB;
 
     @Override
-    public Reminder createReminder(Reminder reminder) {
+    public Reminder buatReminder(Reminder reminder) {
         return reminderDB.save(reminder);
     }
 
@@ -35,7 +35,7 @@ public class ReminderRestServiceImpl implements ReminderRestService {
     }
 
     @Override
-    public Reminder updateReminder(int idReminder, Reminder reminder) {
+    public Reminder ubahReminder(int idReminder, Reminder reminder) {
         Reminder target = getById(idReminder);
         target.setPembuat(reminder.getPembuat());
         target.setTanggalPengiriman(reminder.getTanggalPengiriman());
@@ -43,7 +43,7 @@ public class ReminderRestServiceImpl implements ReminderRestService {
     }
 
     @Override
-    public void deleteReminder(int idReminder) {
+    public void hapusReminder(int idReminder) {
         reminderDB.deleteById(idReminder);
     }
 }

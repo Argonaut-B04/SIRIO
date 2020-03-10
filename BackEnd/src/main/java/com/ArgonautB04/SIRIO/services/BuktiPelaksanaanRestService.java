@@ -6,13 +6,13 @@ import java.awt.*;
 import java.util.List;
 
 public interface BuktiPelaksanaanRestService {
-    BuktiPelaksanaan createBuktiPelaksanaan(BuktiPelaksanaan buktiPelaksanaan);
+    BuktiPelaksanaan buatBuktiPelaksanaan(BuktiPelaksanaan buktiPelaksanaan);
 
     BuktiPelaksanaan getById(int idBuktiPelaksanaan);
 
     List<BuktiPelaksanaan> getAll();
 
-    BuktiPelaksanaan updateBuktiPelaksanaan(int idBuktiPelaksanaan, BuktiPelaksanaan buktiPelaksanaan);
+    BuktiPelaksanaan ubahBuktiPelaksanaan(int idBuktiPelaksanaan, BuktiPelaksanaan buktiPelaksanaan);
 
-    void deleteBuktiPelaksanaan(int idBuktiPelaksanaan);
+    void hapusBuktiPelaksanaan(int idBuktiPelaksanaan);
 }

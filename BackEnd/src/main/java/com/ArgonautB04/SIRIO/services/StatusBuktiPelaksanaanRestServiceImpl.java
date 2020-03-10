@@ -18,7 +18,7 @@ public class StatusBuktiPelaksanaanRestServiceImpl implements StatusBuktiPelaksa
     private StatusBuktiPelaksanaanDB statusBuktiPelaksanaanDB;
 
     @Override
-    public StatusBuktiPelaksanaan createStatusBuktiPelaksanaan(StatusBuktiPelaksanaan statusBuktiPelaksanaan) {
+    public StatusBuktiPelaksanaan buatStatusBuktiPelaksanaan(StatusBuktiPelaksanaan statusBuktiPelaksanaan) {
         return statusBuktiPelaksanaanDB.save(statusBuktiPelaksanaan);
     }
 

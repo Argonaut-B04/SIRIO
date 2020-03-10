@@ -5,7 +5,7 @@ import com.ArgonautB04.SIRIO.model.StatusHasilPemeriksaan;
 import java.util.List;
 
 public interface StatusHasilPemeriksaanRestService {
-    StatusHasilPemeriksaan createStatusHasilPemeriksaan(StatusHasilPemeriksaan statusHasilPemeriksaan);
+    StatusHasilPemeriksaan buatStatusHasilPemeriksaan(StatusHasilPemeriksaan statusHasilPemeriksaan);
 
     StatusHasilPemeriksaan getById(int idStatus);
 

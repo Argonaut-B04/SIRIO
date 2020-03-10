@@ -18,7 +18,7 @@ public class KantorCabangRestServiceImpl implements KantorCabangRestService {
     private KantorCabangDB kantorCabangDB;
 
     @Override
-    public KantorCabang createKantorCabang(KantorCabang kantorCabang) {
+    public KantorCabang buatKantorCabang(KantorCabang kantorCabang) {
         return kantorCabangDB.save(kantorCabang);
     }
 
@@ -35,7 +35,7 @@ public class KantorCabangRestServiceImpl implements KantorCabangRestService {
     }
 
     @Override
-    public KantorCabang updateKantorCabang(int idKantorCabang, KantorCabang kantorCabang) {
+    public KantorCabang ubahKantorCabang(int idKantorCabang, KantorCabang kantorCabang) {
         KantorCabang target = getById(idKantorCabang);
         target.setArea(kantorCabang.getArea());
         target.setRiskRating(kantorCabang.getRiskRating());
@@ -48,7 +48,7 @@ public class KantorCabangRestServiceImpl implements KantorCabangRestService {
     }
 
     @Override
-    public void deleteKantorCabang(int idKantorCabang) {
+    public void hapusKantorCabang(int idKantorCabang) {
         kantorCabangDB.deleteById(idKantorCabang);
     }
 }

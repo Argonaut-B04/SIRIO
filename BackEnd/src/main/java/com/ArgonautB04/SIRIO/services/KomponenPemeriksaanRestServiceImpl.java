@@ -18,7 +18,7 @@ public class KomponenPemeriksaanRestServiceImpl implements KomponenPemeriksaanRe
     private KomponenPemeriksaanDB komponenPemeriksaanDB;
 
     @Override
-    public KomponenPemeriksaan createKomponenPemeriksaan(KomponenPemeriksaan komponenPemeriksaan) {
+    public KomponenPemeriksaan buatKomponenPemeriksaan(KomponenPemeriksaan komponenPemeriksaan) {
         return komponenPemeriksaanDB.save(komponenPemeriksaan);
     }
 
@@ -35,7 +35,7 @@ public class KomponenPemeriksaanRestServiceImpl implements KomponenPemeriksaanRe
     }
 
     @Override
-    public KomponenPemeriksaan updateKomponenPemeriksaan(int idKomponenPemeriksaan, KomponenPemeriksaan komponenPemeriksaan) {
+    public KomponenPemeriksaan ubahKomponenPemeriksaan(int idKomponenPemeriksaan, KomponenPemeriksaan komponenPemeriksaan) {
         KomponenPemeriksaan target = getById(idKomponenPemeriksaan);
         target.setHasilPemeriksaan(komponenPemeriksaan.getHasilPemeriksaan());
         target.setRiskLevel(komponenPemeriksaan.getRiskLevel());
@@ -46,7 +46,7 @@ public class KomponenPemeriksaanRestServiceImpl implements KomponenPemeriksaanRe
     }
 
     @Override
-    public void deleteKomponenPemeriksaan(int idKomponenPemeriksaan) {
+    public void hapusKomponenPemeriksaan(int idKomponenPemeriksaan) {
         komponenPemeriksaanDB.deleteById(idKomponenPemeriksaan);
     }
 }

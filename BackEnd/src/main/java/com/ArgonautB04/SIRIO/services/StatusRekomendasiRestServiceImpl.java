@@ -18,7 +18,7 @@ public class StatusRekomendasiRestServiceImpl implements StatusRekomendasiRestSe
     private StatusRekomendasiDB statusRekomendasiDB;
 
     @Override
-    public StatusRekomendasi createStatusRekomendasi(StatusRekomendasi statusRekomendasi) {
+    public StatusRekomendasi buatStatusRekomendasi(StatusRekomendasi statusRekomendasi) {
         return statusRekomendasiDB.save(statusRekomendasi);
     }
 

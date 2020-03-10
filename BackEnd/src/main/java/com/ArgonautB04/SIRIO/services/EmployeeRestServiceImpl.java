@@ -18,12 +18,12 @@ public class EmployeeRestServiceImpl implements EmployeeRestService {
     private EmployeeDB employeeDb;
 
     @Override
-    public Employee createEmployee(Employee employee) {
+    public Employee buatEmployee(Employee employee) {
         return employeeDb.save(employee);
     }
 
     @Override
-    public Employee updateEmployee(int idEmployee, Employee employee) {
+    public Employee ubahEmployee(int idEmployee, Employee employee) {
         Employee target = getById(idEmployee);
         target.setEmail(employee.getEmail());
         target.setNama(employee.getNama());
@@ -47,13 +47,13 @@ public class EmployeeRestServiceImpl implements EmployeeRestService {
     }
 
     @Override
-    public void deactivateEmployee(int idEmployee) {
+    public void nonaktifkanEmployee(int idEmployee) {
         Employee employee = getById(idEmployee);
         employee.setStatus("NONAKTIF");
     }
 
     @Override
-    public void activateEmployee(int idEmployee) {
+    public void aktifkanEmployee(int idEmployee) {
         Employee employee = getById(idEmployee);
         employee.setStatus("AKTIF");
     }

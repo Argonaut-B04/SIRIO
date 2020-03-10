@@ -18,7 +18,7 @@ public class RencanaPemeriksaanRestServiceImpl implements RencanaPemeriksaanRest
     private RencanaPemeriksaanDB rencanaPemeriksaanDB;
 
     @Override
-    public RencanaPemeriksaan createRencanaPemeriksaan(RencanaPemeriksaan rencanaPemeriksaan) {
+    public RencanaPemeriksaan buatRencanaPemeriksaan(RencanaPemeriksaan rencanaPemeriksaan) {
         return rencanaPemeriksaanDB.save(rencanaPemeriksaan);
     }
 
@@ -35,7 +35,7 @@ public class RencanaPemeriksaanRestServiceImpl implements RencanaPemeriksaanRest
     }
 
     @Override
-    public RencanaPemeriksaan updateRencanaPemeriksaan(int idRencanaPemeriksaan, RencanaPemeriksaan rencanaPemeriksaan) {
+    public RencanaPemeriksaan ubahRencanaPemeriksaan(int idRencanaPemeriksaan, RencanaPemeriksaan rencanaPemeriksaan) {
         RencanaPemeriksaan target = getById(idRencanaPemeriksaan);
         target.setLinkMajelis(rencanaPemeriksaan.getLinkMajelis());
         target.setStatus(rencanaPemeriksaan.getStatus());
@@ -45,7 +45,7 @@ public class RencanaPemeriksaanRestServiceImpl implements RencanaPemeriksaanRest
     }
 
     @Override
-    public void deleteRencanaPemeriksaan(int idRencanaPemeriksaan) {
+    public void hapusRencanaPemeriksaan(int idRencanaPemeriksaan) {
         rencanaPemeriksaanDB.deleteById(idRencanaPemeriksaan);
     }
 }

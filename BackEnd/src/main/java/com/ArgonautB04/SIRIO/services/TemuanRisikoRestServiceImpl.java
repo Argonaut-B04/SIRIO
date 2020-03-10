@@ -18,7 +18,7 @@ public class TemuanRisikoRestServiceImpl implements TemuanRisikoRestService {
     private TemuanRisikoDB temuanRisikoDB;
 
     @Override
-    public TemuanRisiko createTemuanRisiko(TemuanRisiko temuanRisiko) {
+    public TemuanRisiko buatTemuanRisiko(TemuanRisiko temuanRisiko) {
         return temuanRisikoDB.save(temuanRisiko);
     }
 
@@ -35,7 +35,7 @@ public class TemuanRisikoRestServiceImpl implements TemuanRisikoRestService {
     }
 
     @Override
-    public TemuanRisiko updateTemuanRisiko(int idTemuanRisiko, TemuanRisiko temuanRisiko) {
+    public TemuanRisiko ubahTemuanRisiko(int idTemuanRisiko, TemuanRisiko temuanRisiko) {
         TemuanRisiko target = getById(idTemuanRisiko);
         target.setPembuat(temuanRisiko.getPembuat());
         target.setKomponenPemeriksaan(temuanRisiko.getKomponenPemeriksaan());
@@ -44,7 +44,7 @@ public class TemuanRisikoRestServiceImpl implements TemuanRisikoRestService {
     }
 
     @Override
-    public void deleteTemuanRisiko(int idTemuanRisiko) {
+    public void hapusTemuanRisiko(int idTemuanRisiko) {
         temuanRisikoDB.deleteById(idTemuanRisiko);
     }
 }

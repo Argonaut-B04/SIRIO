@@ -18,7 +18,7 @@ public class StatusRencanaPemeriksaanRestServiceImpl implements StatusRencanaPem
     private StatusRencanaPemeriksaanDB statusRencanaPemeriksaanDB;
 
     @Override
-    public StatusRencanaPemeriksaan createStatusRencanaPemeriksaan(StatusRencanaPemeriksaan statusRencanaPemeriksaan) {
+    public StatusRencanaPemeriksaan buatStatusRencanaPemeriksaan(StatusRencanaPemeriksaan statusRencanaPemeriksaan) {
         return statusRencanaPemeriksaanDB.save(statusRencanaPemeriksaan);
     }
 

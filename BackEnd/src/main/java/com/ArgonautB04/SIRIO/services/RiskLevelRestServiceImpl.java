@@ -18,7 +18,7 @@ public class RiskLevelRestServiceImpl implements RiskLevelRestService {
     private RiskLevelDB riskLevelDB;
 
     @Override
-    public RiskLevel createRiskLevel(RiskLevel riskLevel) {
+    public RiskLevel buatRiskLevel(RiskLevel riskLevel) {
         return riskLevelDB.save(riskLevel);
     }
 
@@ -35,7 +35,7 @@ public class RiskLevelRestServiceImpl implements RiskLevelRestService {
     }
 
     @Override
-    public RiskLevel updateRiskLevel(int idRiskLevel, RiskLevel riskLevel) {
+    public RiskLevel ubahRiskLevel(int idRiskLevel, RiskLevel riskLevel) {
         RiskLevel target = getById(idRiskLevel);
         target.setBobotLevel(riskLevel.getBobotLevel());
         target.setStatus(String.valueOf(riskLevel.getStatus()));
@@ -46,7 +46,7 @@ public class RiskLevelRestServiceImpl implements RiskLevelRestService {
     }
 
     @Override
-    public void deleteRiskLevel(int idRiskLevel) {
+    public void hapusRiskLevel(int idRiskLevel) {
         riskLevelDB.deleteById(idRiskLevel);
     }
 }

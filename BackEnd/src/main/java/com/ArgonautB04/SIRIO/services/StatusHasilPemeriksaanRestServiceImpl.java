@@ -18,7 +18,7 @@ public class StatusHasilPemeriksaanRestServiceImpl implements StatusHasilPemerik
     private StatusHasilPemeriksaanDB statusHasilPemeriksaanDB;
 
     @Override
-    public StatusHasilPemeriksaan createStatusHasilPemeriksaan(StatusHasilPemeriksaan statusHasilPemeriksaan) {
+    public StatusHasilPemeriksaan buatStatusHasilPemeriksaan(StatusHasilPemeriksaan statusHasilPemeriksaan) {
         return statusHasilPemeriksaanDB.save(statusHasilPemeriksaan);
     }
 

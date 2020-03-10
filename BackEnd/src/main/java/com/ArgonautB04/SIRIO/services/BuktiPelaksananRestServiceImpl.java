@@ -18,7 +18,7 @@ public class BuktiPelaksananRestServiceImpl implements BuktiPelaksanaanRestServi
     private BuktiPelaksanaanDB buktiPelaksanaanDB;
 
     @Override
-    public BuktiPelaksanaan createBuktiPelaksanaan(BuktiPelaksanaan buktiPelaksanaan) {
+    public BuktiPelaksanaan buatBuktiPelaksanaan(BuktiPelaksanaan buktiPelaksanaan) {
         return buktiPelaksanaanDB.save(buktiPelaksanaan);
     }
 
@@ -35,7 +35,7 @@ public class BuktiPelaksananRestServiceImpl implements BuktiPelaksanaanRestServi
     }
 
     @Override
-    public BuktiPelaksanaan updateBuktiPelaksanaan(int idBuktiPelaksanaan, BuktiPelaksanaan buktiPelaksanaan) {
+    public BuktiPelaksanaan ubahBuktiPelaksanaan(int idBuktiPelaksanaan, BuktiPelaksanaan buktiPelaksanaan) {
         BuktiPelaksanaan target = getById(idBuktiPelaksanaan);
         target.setFeedback(buktiPelaksanaan.getFeedback());
         target.setKeterangan(buktiPelaksanaan.getKeterangan());
@@ -48,7 +48,7 @@ public class BuktiPelaksananRestServiceImpl implements BuktiPelaksanaanRestServi
     }
 
     @Override
-    public void deleteBuktiPelaksanaan(int idBuktiPelaksanaan) {
+    public void hapusBuktiPelaksanaan(int idBuktiPelaksanaan) {
         buktiPelaksanaanDB.deleteById(idBuktiPelaksanaan);
     }
 }

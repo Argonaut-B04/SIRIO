@@ -18,7 +18,7 @@ public class TugasPemeriksaanRestServiceImpl implements TugasPemeriksaanRestServ
     private TugasPemeriksaanDB tugasPemeriksaanDB;
 
     @Override
-    public TugasPemeriksaan createTugasPemeriksaan(TugasPemeriksaan tugasPemeriksaan) {
+    public TugasPemeriksaan buatTugasPemeriksaan(TugasPemeriksaan tugasPemeriksaan) {
         return tugasPemeriksaanDB.save(tugasPemeriksaan);
     }
 
@@ -35,7 +35,7 @@ public class TugasPemeriksaanRestServiceImpl implements TugasPemeriksaanRestServ
     }
 
     @Override
-    public TugasPemeriksaan updateTugasPemeriksaan(int idTugasPemeriksaan, TugasPemeriksaan tugasPemeriksaan) {
+    public TugasPemeriksaan ubahTugasPemeriksaan(int idTugasPemeriksaan, TugasPemeriksaan tugasPemeriksaan) {
         TugasPemeriksaan target = getById(idTugasPemeriksaan);
         target.setTanggalSelesai(tugasPemeriksaan.getTanggalSelesai());
         target.setTanggalMulai(tugasPemeriksaan.getTanggalMulai());
@@ -46,7 +46,7 @@ public class TugasPemeriksaanRestServiceImpl implements TugasPemeriksaanRestServ
     }
 
     @Override
-    public void deleteTugasPemeriksaan(int idTugasPemeriksaan) {
+    public void hapusTugasPemeriksaan(int idTugasPemeriksaan) {
         tugasPemeriksaanDB.deleteById(idTugasPemeriksaan);
     }
 }

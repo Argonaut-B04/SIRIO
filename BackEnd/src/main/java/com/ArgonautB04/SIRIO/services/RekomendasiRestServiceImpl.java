@@ -18,7 +18,7 @@ public class RekomendasiRestServiceImpl implements RekomendasiRestService {
     private RekomendasiDB rekomendasiDB;
 
     @Override
-    public Rekomendasi createRekomendasi(Rekomendasi rekomendasi) {
+    public Rekomendasi buatRekomendasi(Rekomendasi rekomendasi) {
         return rekomendasiDB.save(rekomendasi);
     }
 
@@ -35,7 +35,7 @@ public class RekomendasiRestServiceImpl implements RekomendasiRestService {
     }
 
     @Override
-    public Rekomendasi updateRekomendasi(int idRekomendasi, Rekomendasi rekomendasi) {
+    public Rekomendasi ubahRekomendasi(int idRekomendasi, Rekomendasi rekomendasi) {
         Rekomendasi target = getById(idRekomendasi);
         target.setKeterangan(rekomendasi.getKeterangan());
         target.setTenggatWaktu(rekomendasi.getTenggatWaktu());
@@ -47,7 +47,7 @@ public class RekomendasiRestServiceImpl implements RekomendasiRestService {
     }
 
     @Override
-    public void deleteRekomendasi(int idRekomendasi) {
+    public void hapusRekomendasi(int idRekomendasi) {
         rekomendasiDB.deleteById(idRekomendasi);
     }
 }

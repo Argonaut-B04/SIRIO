@@ -18,7 +18,7 @@ public class StatusRisikoRestServiceImpl implements StatusRisikoRestService {
     private StatusRisikoDB statusRisikoDB;
 
     @Override
-    public StatusRisiko createStatusRisiko(StatusRisiko statusRisiko) {
+    public StatusRisiko buatStatusRisiko(StatusRisiko statusRisiko) {
         return statusRisikoDB.save(statusRisiko);
     }
 
