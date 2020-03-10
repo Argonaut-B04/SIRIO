@@ -10,57 +10,57 @@ import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "Rencana_Pemeriksaan")
+@Table
 public class RencanaPemeriksaan implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id_rencana;
+    private int idRencana;
 
     @NotNull
     @Size(max = 50)
     @Column(nullable = false, unique = true)
-    private String nama_rencana;
+    private String namaRencana;
 
     @NotNull
     @Size(max = 255)
     @Column(nullable = false)
-    private String link_majelis;
+    private String linkMajelis;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "status", referencedColumnName = "id_status_rencana", nullable = false)
+    @JoinColumn(name = "status", referencedColumnName = "idStatusRencana", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private StatusRencanaPemeriksaan status;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "pembuat", referencedColumnName = "id_employee", nullable = false)
+    @JoinColumn(name = "pembuat", referencedColumnName = "idEmployee", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private Employee pembuat;
 
-    public int getId_rencana() {
-        return id_rencana;
+    public int getIdRencana() {
+        return idRencana;
     }
 
-    public void setId_rencana(int id_rencana) {
-        this.id_rencana = id_rencana;
+    public void setIdRencana(int idRencana) {
+        this.idRencana = idRencana;
     }
 
-    public String getNama_rencana() {
-        return nama_rencana;
+    public String getNamaRencana() {
+        return namaRencana;
     }
 
-    public void setNama_rencana(String nama_rencana) {
-        this.nama_rencana = nama_rencana;
+    public void setNamaRencana(String namaRencana) {
+        this.namaRencana = namaRencana;
     }
 
-    public String getLink_majelis() {
-        return link_majelis;
+    public String getLinkMajelis() {
+        return linkMajelis;
     }
 
-    public void setLink_majelis(String link_majelis) {
-        this.link_majelis = link_majelis;
+    public void setLinkMajelis(String linkMajelis) {
+        this.linkMajelis = linkMajelis;
     }
 
     public StatusRencanaPemeriksaan getStatus() {

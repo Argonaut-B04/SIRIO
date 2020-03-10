@@ -15,7 +15,7 @@ public class SOP implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id_sop;
+    private int idSop;
 
     @NotNull
     @Size(max = 50)
@@ -30,20 +30,20 @@ public class SOP implements Serializable {
     @NotNull
     @Size(max = 255)
     @Column(nullable = false)
-    private String link_dokumen;
+    private String linkDokumen;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "pembuat", referencedColumnName = "id_employee", nullable = false)
+    @JoinColumn(name = "pembuat", referencedColumnName = "idEmployee", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private Employee pembuat;
 
-    public int getId_sop() {
-        return id_sop;
+    public int getIdSop() {
+        return idSop;
     }
 
-    public void setId_sop(int id_sop) {
-        this.id_sop = id_sop;
+    public void setIdSop(int idSop) {
+        this.idSop = idSop;
     }
 
     public String getJudul() {
@@ -62,12 +62,12 @@ public class SOP implements Serializable {
         this.kategori = kategori;
     }
 
-    public String getLink_dokumen() {
-        return link_dokumen;
+    public String getLinkDokumen() {
+        return linkDokumen;
     }
 
-    public void setLink_dokumen(String link_dokumen) {
-        this.link_dokumen = link_dokumen;
+    public void setLinkDokumen(String linkDokumen) {
+        this.linkDokumen = linkDokumen;
     }
 
     public Employee getPembuat() {

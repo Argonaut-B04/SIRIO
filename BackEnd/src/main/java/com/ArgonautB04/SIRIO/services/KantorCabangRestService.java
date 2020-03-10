@@ -5,13 +5,13 @@ import com.ArgonautB04.SIRIO.model.KantorCabang;
 import java.util.List;
 
 public interface KantorCabangRestService {
-    KantorCabang createKantorCabang(KantorCabang kantorCabang);
+    KantorCabang buatKantorCabang(KantorCabang kantorCabang);
 
-    KantorCabang getById(int id_kantor_cabang);
+    KantorCabang getById(int idKantorCabang);
 
     List<KantorCabang> getAll();
 
-    KantorCabang updateKantorCabang(int id_kantor_cabang, KantorCabang kantorCabang);
+    KantorCabang ubahKantorCabang(int idKantorCabang, KantorCabang kantorCabang);
 
-    void deleteKantorCabang(int id_kantor_cabang);
+    void hapusKantorCabang(int idKantorCabang);
 }

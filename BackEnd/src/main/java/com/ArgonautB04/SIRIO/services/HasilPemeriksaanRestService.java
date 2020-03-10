@@ -5,13 +5,13 @@ import com.ArgonautB04.SIRIO.model.HasilPemeriksaan;
 import java.util.List;
 
 public interface HasilPemeriksaanRestService {
-    HasilPemeriksaan createHasilPemeriksaan(HasilPemeriksaan hasilPemeriksaan);
+    HasilPemeriksaan buatHasilPemeriksaan(HasilPemeriksaan hasilPemeriksaan);
 
-    HasilPemeriksaan getById(int id_hasil_pemeriksaan);
+    HasilPemeriksaan getById(int idHasilPemeriksaan);
 
     List<HasilPemeriksaan> getAll();
 
-    HasilPemeriksaan updateHasilPemeriksaan(int id_hasil_pemeriksaan, HasilPemeriksaan hasilPemeriksaan);
+    HasilPemeriksaan buatHasilPemeriksaan(int idHasilPemeriksaan, HasilPemeriksaan hasilPemeriksaan);
 
-    void deleteHasilPemeriksaan(int id_hasil_pemeriksaan);
+    void hapusHasilPemeriksaan(int idHasilPemeriksaan);
 }

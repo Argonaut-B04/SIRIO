@@ -1,7 +1,7 @@
 package com.ArgonautB04.SIRIO.services;
 
 import com.ArgonautB04.SIRIO.model.Role;
-import com.ArgonautB04.SIRIO.repository.RoleRepo;
+import com.ArgonautB04.SIRIO.repository.RoleDB;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,34 +15,34 @@ import java.util.Optional;
 public class RoleRestServiceImpl implements RoleRestService {
 
     @Autowired
-    private RoleRepo roleRepo;
+    private RoleDB roleDB;
 
     @Override
-    public Role createRole(Role role) {
-        return roleRepo.save(role);
+    public Role buatRole(Role role) {
+        return roleDB.save(role);
     }
 
     @Override
-    public Role getById(int id_role) {
-        Optional<Role> role = roleRepo.findById(id_role);
+    public Role getById(int idRole) {
+        Optional<Role> role = roleDB.findById(idRole);
         if (role.isPresent()) return role.get();
         else throw new NoSuchElementException();
     }
 
     @Override
     public List<Role> getAll() {
-        return roleRepo.findAll();
+        return roleDB.findAll();
     }
 
     @Override
-    public Role updateRole(int id_role, Role role) {
-        Role target = getById(id_role);
-        target.setNama_role(role.getNama_role());
-        return roleRepo.save(target);
+    public Role ubahRole(int idRole, Role role) {
+        Role target = getById(idRole);
+        target.setNamaRole(role.getNamaRole());
+        return roleDB.save(target);
     }
 
     @Override
-    public void deleteRole(int id_role) {
-        roleRepo.deleteById(id_role);
+    public void hapusRole(int idRole) {
+        roleDB.deleteById(idRole);
     }
 }

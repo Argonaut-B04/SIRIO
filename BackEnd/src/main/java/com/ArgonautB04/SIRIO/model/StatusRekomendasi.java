@@ -6,44 +6,44 @@ import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "Status_Rekomendasi")
+@Table
 public class StatusRekomendasi implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id_status_rekomendasi;
+    private int idStatusRekomendasi;
 
     @NotNull
     @Size(max = 50)
     @Column(nullable = false)
-    private String nama_status;
+    private String namaStatus;
 
     @NotNull
     @Size(max = 125)
     @Column(nullable = false)
-    private String keterangan_status;
+    private String keteranganStatus;
 
-    public int getId_status_rekomendasi() {
-        return id_status_rekomendasi;
+    public int getIdStatusRekomendasi() {
+        return idStatusRekomendasi;
     }
 
-    public void setId_status_rekomendasi(int id_status_rekomendasi) {
-        this.id_status_rekomendasi = id_status_rekomendasi;
+    public void setIdStatusRekomendasi(int idStatusRekomendasi) {
+        this.idStatusRekomendasi = idStatusRekomendasi;
     }
 
-    public String getNama_status() {
-        return nama_status;
+    public String getNamaStatus() {
+        return namaStatus;
     }
 
-    public void setNama_status(String nama_status) {
-        this.nama_status = nama_status;
+    public void setNamaStatus(String namaStatus) {
+        this.namaStatus = namaStatus;
     }
 
-    public String getKeterangan_status() {
-        return keterangan_status;
+    public String getKeteranganStatus() {
+        return keteranganStatus;
     }
 
-    public void setKeterangan_status(String keterangan_status) {
-        this.keterangan_status = keterangan_status;
+    public void setKeteranganStatus(String keteranganStatus) {
+        this.keteranganStatus = keteranganStatus;
     }
 }

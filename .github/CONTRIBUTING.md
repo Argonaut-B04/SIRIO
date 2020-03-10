@@ -6,12 +6,11 @@ Ini guidelines, bukan aturan rules. Use your best judgment, and feel free to pro
 
 - Gunakan 4 spasi sebagai tab 
 > Kalau intellij, ini udah default. Jadi aman `ヾ(•ω• ')o` 
-- Untuk nama variabel dengan kelas bawaan Java (int, String, etc), gunakan underscore sebagai pemisah kata. 
-> `int` jumlah_mata_kita_saling_ketemu
-- Untuk nama variabel dengan kelas yang dibuat SIRIO (Rekomendasi, StatusReminder, etc) gunakan camelCase sebagai pemisah kata. 
+- Ayo kita gunakan camelCase sebagai pemisah kata dalam objek. 
 > `Reminder` reminderThatYouArePrecious
 - Untuk if-else, gunakan 1 line saja bila hanya terdapat 1 syntax dalam brace
 > if (`sirioKelar`) return `kuyMakanMakan`
+- Gunakan Bahasa Indonesia untuk semua metode
 - Comment. Please berikan komentar untuk kodingan yang cukup kompleks, yang menurut kamu bisa bikin orang pusing, mual - mual, diare, panas tinggi, sesak napas, sariawan, bibir pecah - pecah, minum adem sari.
 
 ## Commit

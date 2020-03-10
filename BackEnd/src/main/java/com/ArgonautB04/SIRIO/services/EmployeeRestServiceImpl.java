@@ -1,7 +1,7 @@
 package com.ArgonautB04.SIRIO.services;
 
 import com.ArgonautB04.SIRIO.model.Employee;
-import com.ArgonautB04.SIRIO.repository.EmployeeRepo;
+import com.ArgonautB04.SIRIO.repository.EmployeeDB;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,46 +15,46 @@ import java.util.Optional;
 public class EmployeeRestServiceImpl implements EmployeeRestService {
 
     @Autowired
-    private EmployeeRepo employeeRepo;
+    private EmployeeDB employeeDb;
 
     @Override
-    public Employee createEmployee(Employee employee) {
-        return employeeRepo.save(employee);
+    public Employee buatEmployee(Employee employee) {
+        return employeeDb.save(employee);
     }
 
     @Override
-    public Employee updateEmployee(int id_employee, Employee employee) {
-        Employee target = getById(id_employee);
+    public Employee ubahEmployee(int idEmployee, Employee employee) {
+        Employee target = getById(idEmployee);
         target.setEmail(employee.getEmail());
         target.setNama(employee.getNama());
-        target.setNo_hp(employee.getNo_hp());
+        target.setNoHp(employee.getNoHp());
         target.setPassword(employee.getPassword());
         target.setRole(employee.getRole());
         target.setUsername(employee.getUsername());
-        return employeeRepo.save(target);
+        return employeeDb.save(target);
     }
 
     @Override
-    public Employee getById(int id_employee) {
-        Optional<Employee> employee = employeeRepo.findById(id_employee);
+    public Employee getById(int idEmployee) {
+        Optional<Employee> employee = employeeDb.findById(idEmployee);
         if (employee.isPresent()) return employee.get();
         else throw new NoSuchElementException();
     }
 
     @Override
     public List<Employee> getAll() {
-        return employeeRepo.findAll();
+        return employeeDb.findAll();
     }
 
     @Override
-    public void deactivateEmployee(int id_employee) {
-        Employee employee = getById(id_employee);
+    public void nonaktifkanEmployee(int idEmployee) {
+        Employee employee = getById(idEmployee);
         employee.setStatus("NONAKTIF");
     }
 
     @Override
-    public void activateEmployee(int id_employee) {
-        Employee employee = getById(id_employee);
+    public void aktifkanEmployee(int idEmployee) {
+        Employee employee = getById(idEmployee);
         employee.setStatus("AKTIF");
     }
 }

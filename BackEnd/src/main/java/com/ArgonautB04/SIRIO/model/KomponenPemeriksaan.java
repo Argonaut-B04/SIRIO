@@ -10,62 +10,62 @@ import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "Komponen_Pemeriksaan")
+@Table
 public class KomponenPemeriksaan implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id_komponen_pemeriksaan;
+    private int idKomponenPemeriksaan;
 
     @NotNull
     @Column
-    private int jumlah_sampel;
+    private int jumlahSampel;
 
     @NotNull
     @Size(max = 125)
     @Column
-    private String keterangan_sampel;
+    private String keteranganSampel;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "risiko", referencedColumnName = "id_risiko", nullable = false)
+    @JoinColumn(name = "risiko", referencedColumnName = "idRisiko", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private Risiko risiko;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "hasil_pemeriksaan", referencedColumnName = "id_hasil_pemeriksaan", nullable = false)
+    @JoinColumn(name = "hasil_pemeriksaan", referencedColumnName = "idHasilPemeriksaan", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
-    private HasilPemeriksaan hasil_pemeriksaan;
+    private HasilPemeriksaan hasilPemeriksaan;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "risk_level", referencedColumnName = "id_level", nullable = false)
+    @JoinColumn(name = "risk_level", referencedColumnName = "idLevel", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
-    private RiskLevel risk_level;
+    private RiskLevel riskLevel;
 
-    public int getId_komponen_pemeriksaan() {
-        return id_komponen_pemeriksaan;
+    public int getIdKomponenPemeriksaan() {
+        return idKomponenPemeriksaan;
     }
 
-    public void setId_komponen_pemeriksaan(int id_komponen_pemeriksaan) {
-        this.id_komponen_pemeriksaan = id_komponen_pemeriksaan;
+    public void setIdKomponenPemeriksaan(int idKomponenPemeriksaan) {
+        this.idKomponenPemeriksaan = idKomponenPemeriksaan;
     }
 
-    public int getJumlah_sampel() {
-        return jumlah_sampel;
+    public int getJumlahSampel() {
+        return jumlahSampel;
     }
 
-    public void setJumlah_sampel(int jumlah_sampel) {
-        this.jumlah_sampel = jumlah_sampel;
+    public void setJumlahSampel(int jumlahSampel) {
+        this.jumlahSampel = jumlahSampel;
     }
 
-    public String getKeterangan_sampel() {
-        return keterangan_sampel;
+    public String getKeteranganSampel() {
+        return keteranganSampel;
     }
 
-    public void setKeterangan_sampel(String keterangan_sampel) {
-        this.keterangan_sampel = keterangan_sampel;
+    public void setKeteranganSampel(String keteranganSampel) {
+        this.keteranganSampel = keteranganSampel;
     }
 
     public Risiko getRisiko() {
@@ -76,19 +76,19 @@ public class KomponenPemeriksaan implements Serializable {
         this.risiko = risiko;
     }
 
-    public HasilPemeriksaan getHasil_pemeriksaan() {
-        return hasil_pemeriksaan;
+    public HasilPemeriksaan getHasilPemeriksaan() {
+        return hasilPemeriksaan;
     }
 
-    public void setHasil_pemeriksaan(HasilPemeriksaan hasil_pemeriksaan) {
-        this.hasil_pemeriksaan = hasil_pemeriksaan;
+    public void setHasilPemeriksaan(HasilPemeriksaan hasilPemeriksaan) {
+        this.hasilPemeriksaan = hasilPemeriksaan;
     }
 
-    public RiskLevel getRisk_level() {
-        return risk_level;
+    public RiskLevel getRiskLevel() {
+        return riskLevel;
     }
 
-    public void setRisk_level(RiskLevel risk_level) {
-        this.risk_level = risk_level;
+    public void setRiskLevel(RiskLevel riskLevel) {
+        this.riskLevel = riskLevel;
     }
 }

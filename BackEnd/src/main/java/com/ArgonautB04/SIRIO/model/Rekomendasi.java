@@ -17,7 +17,7 @@ public class Rekomendasi implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id_rekomendasi;
+    private int idRekomendasi;
 
     @NotNull
     @Size(max = 75)
@@ -30,32 +30,32 @@ public class Rekomendasi implements Serializable {
     private String keterangan;
 
     @DateTimeFormat(pattern = "MM-dd-yyyy")
-    private LocalDate tenggat_waktu;
+    private LocalDate tenggatWaktu;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "status", referencedColumnName = "id_status_rekomendasi", nullable = false)
+    @JoinColumn(name = "status", referencedColumnName = "idStatusRekomendasi", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
-    private StatusRekomendasi status_rekomendasi;
+    private StatusRekomendasi statusRekomendasi;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "komponen_pemeriksaan", referencedColumnName = "id_komponen_pemeriksaan", nullable = false)
+    @JoinColumn(name = "komponen_pemeriksaan", referencedColumnName = "idKomponenPemeriksaan", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
-    private KomponenPemeriksaan komponen_pemeriksaan;
+    private KomponenPemeriksaan komponenPemeriksaan;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "pembuat", referencedColumnName = "id_employee", nullable = false)
+    @JoinColumn(name = "pembuat", referencedColumnName = "idEmployee", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private Employee pembuat;
 
-    public int getId_rekomendasi() {
-        return id_rekomendasi;
+    public int getIdRekomendasi() {
+        return idRekomendasi;
     }
 
-    public void setId_rekomendasi(int id_rekomendasi) {
-        this.id_rekomendasi = id_rekomendasi;
+    public void setIdRekomendasi(int idRekomendasi) {
+        this.idRekomendasi = idRekomendasi;
     }
 
     public String getNama() {
@@ -74,28 +74,28 @@ public class Rekomendasi implements Serializable {
         this.keterangan = keterangan;
     }
 
-    public LocalDate getTenggat_waktu() {
-        return tenggat_waktu;
+    public LocalDate getTenggatWaktu() {
+        return tenggatWaktu;
     }
 
-    public void setTenggat_waktu(LocalDate tenggat_waktu) {
-        this.tenggat_waktu = tenggat_waktu;
+    public void setTenggatWaktu(LocalDate tenggatWaktu) {
+        this.tenggatWaktu = tenggatWaktu;
     }
 
-    public StatusRekomendasi getStatus_rekomendasi() {
-        return status_rekomendasi;
+    public StatusRekomendasi getStatusRekomendasi() {
+        return statusRekomendasi;
     }
 
-    public void setStatus_rekomendasi(StatusRekomendasi status_rekomendasi) {
-        this.status_rekomendasi = status_rekomendasi;
+    public void setStatusRekomendasi(StatusRekomendasi statusRekomendasi) {
+        this.statusRekomendasi = statusRekomendasi;
     }
 
-    public KomponenPemeriksaan getKomponen_pemeriksaan() {
-        return komponen_pemeriksaan;
+    public KomponenPemeriksaan getKomponenPemeriksaan() {
+        return komponenPemeriksaan;
     }
 
-    public void setKomponen_pemeriksaan(KomponenPemeriksaan komponen_pemeriksaan) {
-        this.komponen_pemeriksaan = komponen_pemeriksaan;
+    public void setKomponenPemeriksaan(KomponenPemeriksaan komponenPemeriksaan) {
+        this.komponenPemeriksaan = komponenPemeriksaan;
     }
 
     public Employee getPembuat() {

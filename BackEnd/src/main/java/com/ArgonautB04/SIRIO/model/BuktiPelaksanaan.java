@@ -10,12 +10,12 @@ import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "Bukti_Pelaksanaan")
+@Table
 public class BuktiPelaksanaan implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id_bukti_pelaksanaan;
+    private int idBuktiPelaksanaan;
 
     @Size(max = 255)
     @Column
@@ -32,35 +32,35 @@ public class BuktiPelaksanaan implements Serializable {
     private String feedback;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "status", referencedColumnName = "id_status_bukti", nullable = false)
+    @JoinColumn(name = "status", referencedColumnName = "idStatusBukti", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
-    private StatusBuktiPelaksanaan status_bukti_pelaksanaan;
+    private StatusBuktiPelaksanaan statusBuktiPelaksanaan;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "rekomendasi", referencedColumnName = "id_rekomendasi", nullable = false)
+    @JoinColumn(name = "rekomendasi", referencedColumnName = "idRekomendasi", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private Rekomendasi rekomendasi;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "pemeriksa", referencedColumnName = "id_employee", nullable = false)
+    @JoinColumn(name = "pemeriksa", referencedColumnName = "idEmployee", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private Employee pemeriksa;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "pembuat", referencedColumnName = "id_employee", nullable = false)
+    @JoinColumn(name = "pembuat", referencedColumnName = "idEmployee", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private Employee pembuat;
 
-    public int getId_bukti_pelaksanaan() {
-        return id_bukti_pelaksanaan;
+    public int getIdBuktiPelaksanaan() {
+        return idBuktiPelaksanaan;
     }
 
-    public void setId_bukti_pelaksanaan(int id_bukti_pelaksanaan) {
-        this.id_bukti_pelaksanaan = id_bukti_pelaksanaan;
+    public void setIdBuktiPelaksanaan(int idBuktiPelaksanaan) {
+        this.idBuktiPelaksanaan = idBuktiPelaksanaan;
     }
 
     public String getLampiran() {
@@ -87,12 +87,12 @@ public class BuktiPelaksanaan implements Serializable {
         this.feedback = feedback;
     }
 
-    public StatusBuktiPelaksanaan getStatus_bukti_pelaksanaan() {
-        return status_bukti_pelaksanaan;
+    public StatusBuktiPelaksanaan getStatusBuktiPelaksanaan() {
+        return statusBuktiPelaksanaan;
     }
 
-    public void setStatus_bukti_pelaksanaan(StatusBuktiPelaksanaan status_bukti_pelaksanaan) {
-        this.status_bukti_pelaksanaan = status_bukti_pelaksanaan;
+    public void setStatusBuktiPelaksanaan(StatusBuktiPelaksanaan statusBuktiPelaksanaan) {
+        this.statusBuktiPelaksanaan = statusBuktiPelaksanaan;
     }
 
     public Rekomendasi getRekomendasi() {

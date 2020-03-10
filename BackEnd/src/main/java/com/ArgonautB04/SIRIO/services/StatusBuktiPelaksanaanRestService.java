@@ -5,9 +5,9 @@ import com.ArgonautB04.SIRIO.model.StatusBuktiPelaksanaan;
 import java.util.List;
 
 public interface StatusBuktiPelaksanaanRestService {
-    StatusBuktiPelaksanaan createStatusBuktiPelaksanaan(StatusBuktiPelaksanaan statusBuktiPelaksanaan);
+    StatusBuktiPelaksanaan buatStatusBuktiPelaksanaan(StatusBuktiPelaksanaan statusBuktiPelaksanaan);
 
-    StatusBuktiPelaksanaan getById(int id_status);
+    StatusBuktiPelaksanaan getById(int idStatus);
 
     List<StatusBuktiPelaksanaan> getAll();
 }

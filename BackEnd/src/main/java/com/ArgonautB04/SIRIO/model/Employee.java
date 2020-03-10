@@ -19,7 +19,7 @@ public class Employee implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id_employee;
+    private int idEmployee;
 
     @NotNull
     @Size(max = 50)
@@ -44,7 +44,7 @@ public class Employee implements Serializable {
     @NotNull
     @Size(max = 20)
     @Column(nullable = false)
-    private String no_hp;
+    private String noHp;
 
     @NotNull
     @Size(max = 30)
@@ -52,17 +52,17 @@ public class Employee implements Serializable {
     private String email;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "role", referencedColumnName = "id_role", nullable = false)
+    @JoinColumn(name = "role", referencedColumnName = "idRole", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private Role role;
 
-    public int getId_employee() {
-        return id_employee;
+    public int getIdEmployee() {
+        return idEmployee;
     }
 
-    public void setId_employee(int id_employee) {
-        this.id_employee = id_employee;
+    public void setIdEmployee(int idEmployee) {
+        this.idEmployee = idEmployee;
     }
 
     public String getNama() {
@@ -78,7 +78,7 @@ public class Employee implements Serializable {
     }
 
     public void setStatus(String statusString) {
-        this.status = Status.valueOf("statusString");
+        this.status = Status.valueOf(statusString);
     }
 
     public String getUsername() {
@@ -97,12 +97,12 @@ public class Employee implements Serializable {
         this.password = password;
     }
 
-    public String getNo_hp() {
-        return no_hp;
+    public String getNoHp() {
+        return noHp;
     }
 
-    public void setNo_hp(String no_hp) {
-        this.no_hp = no_hp;
+    public void setNoHp(String noHp) {
+        this.noHp = noHp;
     }
 
     public String getEmail() {

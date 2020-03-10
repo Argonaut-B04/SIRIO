@@ -10,75 +10,75 @@ import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "Risk_Rating")
+@Table
 public class RiskRating implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id_rating;
+    private int idRating;
 
     @NotNull
     @Size(max = 25)
     @Column(nullable = false)
-    private String nama_rating;
+    private String namaRating;
 
     @NotNull
     @Column(nullable = false, scale = 3, precision = 6, unique = true)
-    private float skor_minimal;
+    private float skorMinimal;
 
     @NotNull
     @Column(nullable = false, scale = 3, precision = 6, unique = true)
-    private float skor_maksimal;
+    private float skorMaksimal;
 
     @NotNull
     @Size(max = 125)
     @Column(nullable = false)
-    private String keterangan_rating;
+    private String keteranganRating;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "pengelola", referencedColumnName = "id_employee", nullable = false)
+    @JoinColumn(name = "pengelola", referencedColumnName = "idEmployee", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private Employee pengelola;
 
-    public int getId_rating() {
-        return id_rating;
+    public int getIdRating() {
+        return idRating;
     }
 
-    public void setId_rating(int id_rating) {
-        this.id_rating = id_rating;
+    public void setIdRating(int idRating) {
+        this.idRating = idRating;
     }
 
-    public String getNama_rating() {
-        return nama_rating;
+    public String getNamaRating() {
+        return namaRating;
     }
 
-    public void setNama_rating(String nama_rating) {
-        this.nama_rating = nama_rating;
+    public void setNamaRating(String namaRating) {
+        this.namaRating = namaRating;
     }
 
-    public float getSkor_minimal() {
-        return skor_minimal;
+    public float getSkorMinimal() {
+        return skorMinimal;
     }
 
-    public void setSkor_minimal(float skor_minimal) {
-        this.skor_minimal = skor_minimal;
+    public void setSkorMinimal(float skorMinimal) {
+        this.skorMinimal = skorMinimal;
     }
 
-    public float getSkor_maksimal() {
-        return skor_maksimal;
+    public float getSkorMaksimal() {
+        return skorMaksimal;
     }
 
-    public void setSkor_maksimal(float skor_maksimal) {
-        this.skor_maksimal = skor_maksimal;
+    public void setSkorMaksimal(float skorMaksimal) {
+        this.skorMaksimal = skorMaksimal;
     }
 
-    public String getKeterangan_rating() {
-        return keterangan_rating;
+    public String getKeteranganRating() {
+        return keteranganRating;
     }
 
-    public void setKeterangan_rating(String keterangan_rating) {
-        this.keterangan_rating = keterangan_rating;
+    public void setKeteranganRating(String keteranganRating) {
+        this.keteranganRating = keteranganRating;
     }
 
     public Employee getPengelola() {

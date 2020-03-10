@@ -5,9 +5,9 @@ import com.ArgonautB04.SIRIO.model.StatusRekomendasi;
 import java.util.List;
 
 public interface StatusRekomendasiRestService {
-    StatusRekomendasi createStatusRekomendasi(StatusRekomendasi statusRekomendasi);
+    StatusRekomendasi buatStatusRekomendasi(StatusRekomendasi statusRekomendasi);
 
-    StatusRekomendasi getById(int id_status);
+    StatusRekomendasi getById(int idStatus);
 
     List<StatusRekomendasi> getAll();
 }

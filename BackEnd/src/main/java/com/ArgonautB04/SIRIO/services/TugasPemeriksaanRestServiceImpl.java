@@ -1,7 +1,7 @@
 package com.ArgonautB04.SIRIO.services;
 
 import com.ArgonautB04.SIRIO.model.TugasPemeriksaan;
-import com.ArgonautB04.SIRIO.repository.TugasPemeriksaanRepo;
+import com.ArgonautB04.SIRIO.repository.TugasPemeriksaanDB;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,38 +15,38 @@ import java.util.Optional;
 public class TugasPemeriksaanRestServiceImpl implements TugasPemeriksaanRestService {
 
     @Autowired
-    private TugasPemeriksaanRepo tugasPemeriksaanRepo;
+    private TugasPemeriksaanDB tugasPemeriksaanDB;
 
     @Override
-    public TugasPemeriksaan createTugasPemeriksaan(TugasPemeriksaan tugasPemeriksaan) {
-        return tugasPemeriksaanRepo.save(tugasPemeriksaan);
+    public TugasPemeriksaan buatTugasPemeriksaan(TugasPemeriksaan tugasPemeriksaan) {
+        return tugasPemeriksaanDB.save(tugasPemeriksaan);
     }
 
     @Override
-    public TugasPemeriksaan getById(int id_tugas_pemeriksaan) {
-        Optional<TugasPemeriksaan> tugasPemeriksaan = tugasPemeriksaanRepo.findById(id_tugas_pemeriksaan);
+    public TugasPemeriksaan getById(int idTugasPemeriksaan) {
+        Optional<TugasPemeriksaan> tugasPemeriksaan = tugasPemeriksaanDB.findById(idTugasPemeriksaan);
         if (tugasPemeriksaan.isPresent()) return tugasPemeriksaan.get();
         else throw new NoSuchElementException();
     }
 
     @Override
     public List<TugasPemeriksaan> getAll() {
-        return tugasPemeriksaanRepo.findAll();
+        return tugasPemeriksaanDB.findAll();
     }
 
     @Override
-    public TugasPemeriksaan updateTugasPemeriksaan(int id_tugas_pemeriksaan, TugasPemeriksaan tugasPemeriksaan) {
-        TugasPemeriksaan target = getById(id_tugas_pemeriksaan);
-        target.setTanggal_selesai(tugasPemeriksaan.getTanggal_selesai());
-        target.setTanggal_mulai(tugasPemeriksaan.getTanggal_mulai());
+    public TugasPemeriksaan ubahTugasPemeriksaan(int idTugasPemeriksaan, TugasPemeriksaan tugasPemeriksaan) {
+        TugasPemeriksaan target = getById(idTugasPemeriksaan);
+        target.setTanggalSelesai(tugasPemeriksaan.getTanggalSelesai());
+        target.setTanggalMulai(tugasPemeriksaan.getTanggalMulai());
         target.setRencanaPemeriksaan(tugasPemeriksaan.getRencanaPemeriksaan());
         target.setPelaksana(tugasPemeriksaan.getPelaksana());
-        target.setKantor_cabang(tugasPemeriksaan.getKantor_cabang());
-        return tugasPemeriksaanRepo.save(target);
+        target.setKantorCabang(tugasPemeriksaan.getKantorCabang());
+        return tugasPemeriksaanDB.save(target);
     }
 
     @Override
-    public void deleteTugasPemeriksaan(int id_tugas_pemeriksaan) {
-        tugasPemeriksaanRepo.deleteById(id_tugas_pemeriksaan);
+    public void hapusTugasPemeriksaan(int idTugasPemeriksaan) {
+        tugasPemeriksaanDB.deleteById(idTugasPemeriksaan);
     }
 }

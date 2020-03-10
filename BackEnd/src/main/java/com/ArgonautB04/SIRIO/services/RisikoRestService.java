@@ -5,13 +5,13 @@ import com.ArgonautB04.SIRIO.model.Risiko;
 import java.util.List;
 
 public interface RisikoRestService {
-    Risiko createRisiko(Risiko risiko);
+    Risiko buatRisiko(Risiko risiko);
 
-    Risiko getById(int id_risiko);
+    Risiko getById(int idRisiko);
 
     List<Risiko> getAll();
 
-    Risiko updateRisiko(int id_risiko, Risiko risiko);
+    Risiko ubahRisiko(int idRisiko, Risiko risiko);
 
-    void deleteRisiko(int id_risiko);
+    void hapusRisiko(int idRisiko);
 }

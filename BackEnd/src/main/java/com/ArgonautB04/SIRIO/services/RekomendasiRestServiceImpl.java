@@ -1,7 +1,7 @@
 package com.ArgonautB04.SIRIO.services;
 
 import com.ArgonautB04.SIRIO.model.Rekomendasi;
-import com.ArgonautB04.SIRIO.repository.RekomendasiRepo;
+import com.ArgonautB04.SIRIO.repository.RekomendasiDB;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,39 +15,39 @@ import java.util.Optional;
 public class RekomendasiRestServiceImpl implements RekomendasiRestService {
 
     @Autowired
-    private RekomendasiRepo rekomendasiRepo;
+    private RekomendasiDB rekomendasiDB;
 
     @Override
-    public Rekomendasi createRekomendasi(Rekomendasi rekomendasi) {
-        return rekomendasiRepo.save(rekomendasi);
+    public Rekomendasi buatRekomendasi(Rekomendasi rekomendasi) {
+        return rekomendasiDB.save(rekomendasi);
     }
 
     @Override
-    public Rekomendasi getById(int id_rekomendasi) {
-        Optional<Rekomendasi> rekomendasi = rekomendasiRepo.findById(id_rekomendasi);
+    public Rekomendasi getById(int idRekomendasi) {
+        Optional<Rekomendasi> rekomendasi = rekomendasiDB.findById(idRekomendasi);
         if (rekomendasi.isPresent()) return rekomendasi.get();
         else throw new NoSuchElementException();
     }
 
     @Override
     public List<Rekomendasi> getAll() {
-        return rekomendasiRepo.findAll();
+        return rekomendasiDB.findAll();
     }
 
     @Override
-    public Rekomendasi updateRekomendasi(int id_rekomendasi, Rekomendasi rekomendasi) {
-        Rekomendasi target = getById(id_rekomendasi);
+    public Rekomendasi ubahRekomendasi(int idRekomendasi, Rekomendasi rekomendasi) {
+        Rekomendasi target = getById(idRekomendasi);
         target.setKeterangan(rekomendasi.getKeterangan());
-        target.setTenggat_waktu(rekomendasi.getTenggat_waktu());
-        target.setStatus_rekomendasi(rekomendasi.getStatus_rekomendasi());
+        target.setTenggatWaktu(rekomendasi.getTenggatWaktu());
+        target.setStatusRekomendasi(rekomendasi.getStatusRekomendasi());
         target.setPembuat(rekomendasi.getPembuat());
         target.setNama(rekomendasi.getNama());
-        target.setKomponen_pemeriksaan(rekomendasi.getKomponen_pemeriksaan());
-        return rekomendasiRepo.save(target);
+        target.setKomponenPemeriksaan(rekomendasi.getKomponenPemeriksaan());
+        return rekomendasiDB.save(target);
     }
 
     @Override
-    public void deleteRekomendasi(int id_rekomendasi) {
-        rekomendasiRepo.deleteById(id_rekomendasi);
+    public void hapusRekomendasi(int idRekomendasi) {
+        rekomendasiDB.deleteById(idRekomendasi);
     }
 }

@@ -5,13 +5,13 @@ import com.ArgonautB04.SIRIO.model.TemuanRisiko;
 import java.util.List;
 
 public interface TemuanRisikoRestService {
-    TemuanRisiko createTemuanRisiko(TemuanRisiko temuanRisiko);
+    TemuanRisiko buatTemuanRisiko(TemuanRisiko temuanRisiko);
 
-    TemuanRisiko getById(int id_temuan_risiko);
+    TemuanRisiko getById(int idTemuanRisiko);
 
     List<TemuanRisiko> getAll();
 
-    TemuanRisiko updateTemuanRisiko(int id_temuan_risiko, TemuanRisiko temuanRisiko);
+    TemuanRisiko ubahTemuanRisiko(int idTemuanRisiko, TemuanRisiko temuanRisiko);
 
-    void deleteTemuanRisiko(int id_temuan_risiko);
+    void hapusTemuanRisiko(int idTemuanRisiko);
 }

@@ -16,39 +16,39 @@ public class Reminder implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id_reminder;
+    private int idReminder;
 
     @NotNull
     @DateTimeFormat(pattern = "MM-dd-yyyy")
     @Column(nullable = false)
-    private LocalDate tanggal_pengiriman;
+    private LocalDate tanggalPengiriman;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "rekomendasi", referencedColumnName = "id_rekomendasi", nullable = false)
+    @JoinColumn(name = "rekomendasi", referencedColumnName = "idRekomendasi", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private Rekomendasi rekomendasi;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "pembuat", referencedColumnName = "id_employee", nullable = false)
+    @JoinColumn(name = "pembuat", referencedColumnName = "idEmployee", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private Employee pembuat;
 
-    public int getId_reminder() {
-        return id_reminder;
+    public int getIdReminder() {
+        return idReminder;
     }
 
-    public void setId_reminder(int id_reminder) {
-        this.id_reminder = id_reminder;
+    public void setIdReminder(int idReminder) {
+        this.idReminder = idReminder;
     }
 
-    public LocalDate getTanggal_pengiriman() {
-        return tanggal_pengiriman;
+    public LocalDate getTanggalPengiriman() {
+        return tanggalPengiriman;
     }
 
-    public void setTanggal_pengiriman(LocalDate tanggal_pengiriman) {
-        this.tanggal_pengiriman = tanggal_pengiriman;
+    public void setTanggalPengiriman(LocalDate tanggalPengiriman) {
+        this.tanggalPengiriman = tanggalPengiriman;
     }
 
     public Employee getPembuat() {

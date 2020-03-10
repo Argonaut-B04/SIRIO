@@ -5,13 +5,13 @@ import com.ArgonautB04.SIRIO.model.TugasPemeriksaan;
 import java.util.List;
 
 public interface TugasPemeriksaanRestService {
-    TugasPemeriksaan createTugasPemeriksaan(TugasPemeriksaan tugasPemeriksaan);
+    TugasPemeriksaan buatTugasPemeriksaan(TugasPemeriksaan tugasPemeriksaan);
 
-    TugasPemeriksaan getById(int id_tugas_pemeriksaan);
+    TugasPemeriksaan getById(int idTugasPemeriksaan);
 
     List<TugasPemeriksaan> getAll();
 
-    TugasPemeriksaan updateTugasPemeriksaan(int id_tugas_pemeriksaan, TugasPemeriksaan tugasPemeriksaan);
+    TugasPemeriksaan ubahTugasPemeriksaan(int idTugasPemeriksaan, TugasPemeriksaan tugasPemeriksaan);
 
-    void deleteTugasPemeriksaan(int id_tugas_pemeriksaan);
+    void hapusTugasPemeriksaan(int idTugasPemeriksaan);
 }

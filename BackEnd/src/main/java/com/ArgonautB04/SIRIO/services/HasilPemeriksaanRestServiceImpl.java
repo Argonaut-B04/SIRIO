@@ -1,7 +1,7 @@
 package com.ArgonautB04.SIRIO.services;
 
 import com.ArgonautB04.SIRIO.model.HasilPemeriksaan;
-import com.ArgonautB04.SIRIO.repository.HasilPemeriksaanRepo;
+import com.ArgonautB04.SIRIO.repository.HasilPemeriksaanDB;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,39 +15,39 @@ import java.util.Optional;
 public class HasilPemeriksaanRestServiceImpl implements HasilPemeriksaanRestService {
 
     @Autowired
-    private HasilPemeriksaanRepo hasilPemeriksaanRepo;
+    private HasilPemeriksaanDB hasilPemeriksaanDB;
 
     @Override
-    public HasilPemeriksaan createHasilPemeriksaan(HasilPemeriksaan hasilPemeriksaan) {
-        return hasilPemeriksaanRepo.save(hasilPemeriksaan);
+    public HasilPemeriksaan buatHasilPemeriksaan(HasilPemeriksaan hasilPemeriksaan) {
+        return hasilPemeriksaanDB.save(hasilPemeriksaan);
     }
 
     @Override
-    public HasilPemeriksaan getById(int id_hasil_pemeriksaan) {
-        Optional<HasilPemeriksaan> hasilPemeriksaan = hasilPemeriksaanRepo.findById(id_hasil_pemeriksaan);
+    public HasilPemeriksaan getById(int idHasilPemeriksaan) {
+        Optional<HasilPemeriksaan> hasilPemeriksaan = hasilPemeriksaanDB.findById(idHasilPemeriksaan);
         if (hasilPemeriksaan.isPresent()) return hasilPemeriksaan.get();
         else throw new NoSuchElementException();
     }
 
     @Override
     public List<HasilPemeriksaan> getAll() {
-        return hasilPemeriksaanRepo.findAll();
+        return hasilPemeriksaanDB.findAll();
     }
 
     @Override
-    public HasilPemeriksaan updateHasilPemeriksaan(int id_hasil_pemeriksaan, HasilPemeriksaan hasilPemeriksaan) {
-        HasilPemeriksaan target = getById(id_hasil_pemeriksaan);
+    public HasilPemeriksaan buatHasilPemeriksaan(int idHasilPemeriksaan, HasilPemeriksaan hasilPemeriksaan) {
+        HasilPemeriksaan target = getById(idHasilPemeriksaan);
         target.setFeedback(hasilPemeriksaan.getFeedback());
-        target.setTugas_pemeriksaan(hasilPemeriksaan.getTugas_pemeriksaan());
-        target.setStatus_hasil_pemeriksaan(hasilPemeriksaan.getStatus_hasil_pemeriksaan());
+        target.setTugasPemeriksaan(hasilPemeriksaan.getTugasPemeriksaan());
+        target.setStatusHasilPemeriksaan(hasilPemeriksaan.getStatusHasilPemeriksaan());
         target.setPemeriksa(hasilPemeriksaan.getPemeriksa());
         target.setPembuat(hasilPemeriksaan.getPembuat());
-        target.setNama_hasil_pemeriksaan(hasilPemeriksaan.getNama_hasil_pemeriksaan());
-        return hasilPemeriksaanRepo.save(target);
+        target.setNamaHasilPemeriksaan(hasilPemeriksaan.getNamaHasilPemeriksaan());
+        return hasilPemeriksaanDB.save(target);
     }
 
     @Override
-    public void deleteHasilPemeriksaan(int id_hasil_pemeriksaan) {
-        hasilPemeriksaanRepo.deleteById(id_hasil_pemeriksaan);
+    public void hapusHasilPemeriksaan(int idHasilPemeriksaan) {
+        hasilPemeriksaanDB.deleteById(idHasilPemeriksaan);
     }
 }

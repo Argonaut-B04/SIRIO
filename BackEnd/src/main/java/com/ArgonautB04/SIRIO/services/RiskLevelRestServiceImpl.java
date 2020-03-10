@@ -1,7 +1,7 @@
 package com.ArgonautB04.SIRIO.services;
 
 import com.ArgonautB04.SIRIO.model.RiskLevel;
-import com.ArgonautB04.SIRIO.repository.RiskLevelRepo;
+import com.ArgonautB04.SIRIO.repository.RiskLevelDB;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,38 +15,38 @@ import java.util.Optional;
 public class RiskLevelRestServiceImpl implements RiskLevelRestService {
 
     @Autowired
-    private RiskLevelRepo riskLevelRepo;
+    private RiskLevelDB riskLevelDB;
 
     @Override
-    public RiskLevel createRiskLevel(RiskLevel riskLevel) {
-        return riskLevelRepo.save(riskLevel);
+    public RiskLevel buatRiskLevel(RiskLevel riskLevel) {
+        return riskLevelDB.save(riskLevel);
     }
 
     @Override
-    public RiskLevel getById(int id_risk_level) {
-        Optional<RiskLevel> riskLevel = riskLevelRepo.findById(id_risk_level);
+    public RiskLevel getById(int idRiskLevel) {
+        Optional<RiskLevel> riskLevel = riskLevelDB.findById(idRiskLevel);
         if (riskLevel.isPresent()) return riskLevel.get();
         else throw new NoSuchElementException();
     }
 
     @Override
     public List<RiskLevel> getAll() {
-        return riskLevelRepo.findAll();
+        return riskLevelDB.findAll();
     }
 
     @Override
-    public RiskLevel updateRiskLevel(int id_risk_level, RiskLevel riskLevel) {
-        RiskLevel target = getById(id_risk_level);
-        target.setBobot_level(riskLevel.getBobot_level());
-        target.setStatus(riskLevel.getStatus());
+    public RiskLevel ubahRiskLevel(int idRiskLevel, RiskLevel riskLevel) {
+        RiskLevel target = getById(idRiskLevel);
+        target.setBobotLevel(riskLevel.getBobotLevel());
+        target.setStatus(String.valueOf(riskLevel.getStatus()));
         target.setPengelola(riskLevel.getPengelola());
-        target.setNama_level(riskLevel.getNama_level());
-        target.setKeterangan_level(riskLevel.getKeterangan_level());
-        return riskLevelRepo.save(target);
+        target.setNamaLevel(riskLevel.getNamaLevel());
+        target.setKeteranganLevel(riskLevel.getKeteranganLevel());
+        return riskLevelDB.save(target);
     }
 
     @Override
-    public void deleteRiskLevel(int id_risk_level) {
-        riskLevelRepo.deleteById(id_risk_level);
+    public void hapusRiskLevel(int idRiskLevel) {
+        riskLevelDB.deleteById(idRiskLevel);
     }
 }

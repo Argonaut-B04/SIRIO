@@ -5,13 +5,13 @@ import com.ArgonautB04.SIRIO.model.RiskLevel;
 import java.util.List;
 
 public interface RiskLevelRestService {
-    RiskLevel createRiskLevel(RiskLevel riskLevel);
+    RiskLevel buatRiskLevel(RiskLevel riskLevel);
 
-    RiskLevel getById(int id_risk_level);
+    RiskLevel getById(int idRiskLevel);
 
     List<RiskLevel> getAll();
 
-    RiskLevel updateRiskLevel(int id_risk_level, RiskLevel riskLevel);
+    RiskLevel ubahRiskLevel(int idRiskLevel, RiskLevel riskLevel);
 
-    void deleteRiskLevel(int id_risk_level);
+    void hapusRiskLevel(int idRiskLevel);
 }

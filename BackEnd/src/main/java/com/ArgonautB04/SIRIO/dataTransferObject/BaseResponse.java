@@ -1,4 +1,4 @@
-package com.ArgonautB04.SIRIO.data_transfer_object;
+package com.ArgonautB04.SIRIO.dataTransferObject;
 
 /**
  * Kelas ini digunakan sebagai objek utama yang akan dikirim sebagai JsonResponse

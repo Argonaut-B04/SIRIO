@@ -1,7 +1,7 @@
 package com.ArgonautB04.SIRIO.services;
 
 import com.ArgonautB04.SIRIO.model.Reminder;
-import com.ArgonautB04.SIRIO.repository.ReminderRepo;
+import com.ArgonautB04.SIRIO.repository.ReminderDB;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,35 +15,35 @@ import java.util.Optional;
 public class ReminderRestServiceImpl implements ReminderRestService {
 
     @Autowired
-    private ReminderRepo reminderRepo;
+    private ReminderDB reminderDB;
 
     @Override
-    public Reminder createReminder(Reminder reminder) {
-        return reminderRepo.save(reminder);
+    public Reminder buatReminder(Reminder reminder) {
+        return reminderDB.save(reminder);
     }
 
     @Override
-    public Reminder getById(int id_reminder) {
-        Optional<Reminder> reminder = reminderRepo.findById(id_reminder);
+    public Reminder getById(int idReminder) {
+        Optional<Reminder> reminder = reminderDB.findById(idReminder);
         if (reminder.isPresent()) return reminder.get();
         else throw new NoSuchElementException();
     }
 
     @Override
     public List<Reminder> getAll() {
-        return reminderRepo.findAll();
+        return reminderDB.findAll();
     }
 
     @Override
-    public Reminder updateReminder(int id_reminder, Reminder reminder) {
-        Reminder target = getById(id_reminder);
+    public Reminder ubahReminder(int idReminder, Reminder reminder) {
+        Reminder target = getById(idReminder);
         target.setPembuat(reminder.getPembuat());
-        target.setTanggal_pengiriman(reminder.getTanggal_pengiriman());
-        return reminderRepo.save(target);
+        target.setTanggalPengiriman(reminder.getTanggalPengiriman());
+        return reminderDB.save(target);
     }
 
     @Override
-    public void deleteReminder(int id_reminder) {
-        reminderRepo.deleteById(id_reminder);
+    public void hapusReminder(int idReminder) {
+        reminderDB.deleteById(idReminder);
     }
 }

@@ -1,7 +1,7 @@
 package com.ArgonautB04.SIRIO.services;
 
 import com.ArgonautB04.SIRIO.model.Risiko;
-import com.ArgonautB04.SIRIO.repository.RisikoRepo;
+import com.ArgonautB04.SIRIO.repository.RisikoDB;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,40 +15,40 @@ import java.util.Optional;
 public class RisikoRestServiceImpl implements RisikoRestService {
 
     @Autowired
-    private RisikoRepo risikoRepo;
+    private RisikoDB risikoDB;
 
     @Override
-    public Risiko createRisiko(Risiko risiko) {
-        return risikoRepo.save(risiko);
+    public Risiko buatRisiko(Risiko risiko) {
+        return risikoDB.save(risiko);
     }
 
     @Override
-    public Risiko getById(int id_risiko) {
-        Optional<Risiko> risiko = risikoRepo.findById(id_risiko);
+    public Risiko getById(int idRisiko) {
+        Optional<Risiko> risiko = risikoDB.findById(idRisiko);
         if (risiko.isPresent()) return risiko.get();
         else throw new NoSuchElementException();
     }
 
     @Override
     public List<Risiko> getAll() {
-        return risikoRepo.findAll();
+        return risikoDB.findAll();
     }
 
     @Override
-    public Risiko updateRisiko(int id_risiko, Risiko risiko) {
-        Risiko target = getById(id_risiko);
+    public Risiko ubahRisiko(int idRisiko, Risiko risiko) {
+        Risiko target = getById(idRisiko);
         target.setChildList(risiko.getChildList());
-        target.setStatus_risiko(risiko.getStatus_risiko());
+        target.setStatusRisiko(risiko.getStatusRisiko());
         target.setSop(risiko.getSop());
-        target.setRisiko_kategori(risiko.getRisiko_kategori());
+        target.setRisikoKategori(risiko.getRisikoKategori());
         target.setParent(risiko.getParent());
-        target.setNama_risiko(risiko.getNama_risiko());
+        target.setNamaRisiko(risiko.getNamaRisiko());
         target.setIndikator(risiko.getIndikator());
-        return risikoRepo.save(target);
+        return risikoDB.save(target);
     }
 
     @Override
-    public void deleteRisiko(int id_risiko) {
-        risikoRepo.deleteById(id_risiko);
+    public void hapusRisiko(int idRisiko) {
+        risikoDB.deleteById(idRisiko);
     }
 }

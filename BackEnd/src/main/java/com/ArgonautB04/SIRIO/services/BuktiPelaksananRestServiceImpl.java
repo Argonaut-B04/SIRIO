@@ -1,7 +1,7 @@
 package com.ArgonautB04.SIRIO.services;
 
 import com.ArgonautB04.SIRIO.model.BuktiPelaksanaan;
-import com.ArgonautB04.SIRIO.repository.BuktiPelaksanaanRepo;
+import com.ArgonautB04.SIRIO.repository.BuktiPelaksanaanDB;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,40 +15,40 @@ import java.util.Optional;
 public class BuktiPelaksananRestServiceImpl implements BuktiPelaksanaanRestService {
 
     @Autowired
-    private BuktiPelaksanaanRepo buktiPelaksanaanRepo;
+    private BuktiPelaksanaanDB buktiPelaksanaanDB;
 
     @Override
-    public BuktiPelaksanaan createBuktiPelaksanaan(BuktiPelaksanaan buktiPelaksanaan) {
-        return buktiPelaksanaanRepo.save(buktiPelaksanaan);
+    public BuktiPelaksanaan buatBuktiPelaksanaan(BuktiPelaksanaan buktiPelaksanaan) {
+        return buktiPelaksanaanDB.save(buktiPelaksanaan);
     }
 
     @Override
-    public BuktiPelaksanaan getById(int id_bukti_pelaksanaan) {
-        Optional<BuktiPelaksanaan> buktiPelaksanaan = buktiPelaksanaanRepo.findById(id_bukti_pelaksanaan);
+    public BuktiPelaksanaan getById(int idBuktiPelaksanaan) {
+        Optional<BuktiPelaksanaan> buktiPelaksanaan = buktiPelaksanaanDB.findById(idBuktiPelaksanaan);
         if (buktiPelaksanaan.isPresent()) return buktiPelaksanaan.get();
         else throw new NoSuchElementException();
     }
 
     @Override
     public List<BuktiPelaksanaan> getAll() {
-        return buktiPelaksanaanRepo.findAll();
+        return buktiPelaksanaanDB.findAll();
     }
 
     @Override
-    public BuktiPelaksanaan updateBuktiPelaksanaan(int id_bukti_pelaksanaan, BuktiPelaksanaan buktiPelaksanaan) {
-        BuktiPelaksanaan target = getById(id_bukti_pelaksanaan);
+    public BuktiPelaksanaan ubahBuktiPelaksanaan(int idBuktiPelaksanaan, BuktiPelaksanaan buktiPelaksanaan) {
+        BuktiPelaksanaan target = getById(idBuktiPelaksanaan);
         target.setFeedback(buktiPelaksanaan.getFeedback());
         target.setKeterangan(buktiPelaksanaan.getKeterangan());
         target.setLampiran(buktiPelaksanaan.getLampiran());
         target.setPembuat(buktiPelaksanaan.getPembuat());
         target.setPemeriksa(buktiPelaksanaan.getPemeriksa());
         target.setRekomendasi(buktiPelaksanaan.getRekomendasi());
-        target.setStatus_bukti_pelaksanaan(buktiPelaksanaan.getStatus_bukti_pelaksanaan());
-        return buktiPelaksanaanRepo.save(target);
+        target.setStatusBuktiPelaksanaan(buktiPelaksanaan.getStatusBuktiPelaksanaan());
+        return buktiPelaksanaanDB.save(target);
     }
 
     @Override
-    public void deleteBuktiPelaksanaan(int id_bukti_pelaksanaan) {
-        buktiPelaksanaanRepo.deleteById(id_bukti_pelaksanaan);
+    public void hapusBuktiPelaksanaan(int idBuktiPelaksanaan) {
+        buktiPelaksanaanDB.deleteById(idBuktiPelaksanaan);
     }
 }
