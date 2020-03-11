@@ -1,11 +1,13 @@
 package com.ArgonautB04.SIRIO.services;
 
+import com.ArgonautB04.SIRIO.model.Rekomendasi;
 import com.ArgonautB04.SIRIO.model.Reminder;
 import com.ArgonautB04.SIRIO.repository.ReminderDB;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -35,15 +37,25 @@ public class ReminderRestServiceImpl implements ReminderRestService {
     }
 
     @Override
-    public Reminder ubahReminder(int idReminder, Reminder reminder) {
+    public Reminder ubahReminder(int idReminder, LocalDate tanggalReminder) {
         Reminder target = getById(idReminder);
-        target.setPembuat(reminder.getPembuat());
-        target.setTanggalPengiriman(reminder.getTanggalPengiriman());
+        target.setTanggalPengiriman(tanggalReminder);
         return reminderDB.save(target);
     }
 
     @Override
     public void hapusReminder(int idReminder) {
         reminderDB.deleteById(idReminder);
+    }
+
+    /**
+     * Mengambil seluruh reminder yang dimiliki rekomendasi spesifik
+     *
+     * @param idRekomendasi identifier rekomendasi
+     * @return daftar reminder yang dimiliki rekomendasi tersebut
+     */
+    @Override
+    public List<Reminder> getByRekomendasi(Rekomendasi rekomendasi) {
+        return reminderDB.findAllByRekomendasi(rekomendasi);
     }
 }

@@ -58,4 +58,12 @@ public class Reminder implements Serializable {
     public void setPembuat(Employee pembuat) {
         this.pembuat = pembuat;
     }
+
+    public Rekomendasi getRekomendasi() {
+        return rekomendasi;
+    }
+
+    public void setRekomendasi(Rekomendasi rekomendasi) {
+        this.rekomendasi = rekomendasi;
+    }
 }
