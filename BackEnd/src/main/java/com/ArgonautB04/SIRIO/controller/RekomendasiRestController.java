@@ -52,7 +52,7 @@ public class RekomendasiRestController {
     }
 
     /**
-     * Mengubah tenggat waktu untuk rekomendasi spesifik.
+     * Mengubah tenggat waktu untuk rekomendasi spesifik. (UNTESTED)
      *
      * @param idRekomendasi identifier rekomendasi yang akan diubah tenggat waktunya
      * @param tenggatWaktu  dalam format yyyy-MM-dd (format default html)
