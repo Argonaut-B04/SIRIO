@@ -1,0 +1,64 @@
+@import url('https://fonts.googleapis.com/css?family=Nunito:600,700&display=swap');
+thead {
+    color: white;
+    background-color: #7F3F98;
+}
+
+th {
+    font-family: 'Nunito', sans-serif;
+    font-style: normal;
+    font-size: 12px;
+}
+
+.draft {
+    color: #7F3F98;
+}
+
+.menungguPersetujuan {
+    color: #8E8E8E;
+}
+
+.ditolak {
+    color: rgba(255, 0, 0, 0.85);
+}
+
+.menungguPelaksanaan {
+    color: #5DBCD2;
+}
+
+.menungguTenggatWaktu {
+    color: #F2994A;
+}
+
+.dijalankan {
+    color: #6FCF97;
+}
+
+th:first-child {
+    font-family: 'Nunito', sans-serif;
+}
+
+tr {
+    font-family: Proxima Nova;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    height: 30px;
+}
+
+th,
+td {
+    padding: 0.6rem !important;
+    vertical-align: middle !important;
+    text-align: center;
+}
+
+h1 {
+    font-family: 'Nunito', sans-serif;
+    font-weight: bold;
+    font-size: 36px;
+}
+
+.sirio-pagination-button {
+    color: #7F3F98;
+}
