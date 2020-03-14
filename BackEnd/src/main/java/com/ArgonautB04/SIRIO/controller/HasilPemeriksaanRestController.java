@@ -66,4 +66,29 @@ public class HasilPemeriksaanRestController {
         }
         return response;
     }
+
+    /**
+     * Mengambil suatu hasil pemeriksaan
+     *
+     * @param idHasilPemeriksaan identifier hasil pemeriksaan
+     * @return detail hasil pemeriksaan
+     */
+    @GetMapping("/{idHasilPemeriksaan}")
+    private BaseResponse<HasilPemeriksaan> getHasilPemeriksaan(
+            @PathVariable("idHasilPemeriksaan") int idHasilPemeriksaan
+    ) {
+        BaseResponse<HasilPemeriksaan> response = new BaseResponse<>();
+        try {
+            HasilPemeriksaan result = hasilPemeriksaanRestService.getById(idHasilPemeriksaan);
+
+            response.setStatus(200);
+            response.setMessage("success");
+            response.setResult(result);
+        } catch (NoSuchElementException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Hasil Pemeriksaan dengan ID " + idHasilPemeriksaan + " tidak ditemukan!"
+            );
+        }
+        return response;
+    }
 }
