@@ -1,8 +1,8 @@
 package com.ArgonautB04.SIRIO.services;
 
 import com.ArgonautB04.SIRIO.model.Employee;
+import com.ArgonautB04.SIRIO.model.KantorCabang;
 import com.ArgonautB04.SIRIO.model.Rekomendasi;
-import com.ArgonautB04.SIRIO.model.Reminder;
 import com.ArgonautB04.SIRIO.repository.RekomendasiDB;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,6 +35,11 @@ public class RekomendasiRestServiceImpl implements RekomendasiRestService {
     @Override
     public List<Rekomendasi> getAll() {
         return rekomendasiDB.findAll();
+    }
+
+    @Override
+    public List<Rekomendasi> getByKantorCabang(KantorCabang kantorCabang) {
+        return rekomendasiDB.findAllByKantorCabangTujuan(kantorCabang);
     }
 
     @Override
