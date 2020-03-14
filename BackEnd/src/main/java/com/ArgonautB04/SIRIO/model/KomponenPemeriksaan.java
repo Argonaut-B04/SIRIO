@@ -5,7 +5,6 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 
@@ -15,13 +14,11 @@ public class KomponenPemeriksaan implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int idKomponenPemeriksaan;
+    private Integer idKomponenPemeriksaan;
 
-    @NotNull
     @Column
-    private int jumlahSampel;
+    private Integer jumlahSampel;
 
-    @NotNull
     @Size(max = 125)
     @Column
     private String keteranganSampel;
@@ -39,24 +36,24 @@ public class KomponenPemeriksaan implements Serializable {
     private HasilPemeriksaan hasilPemeriksaan;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "risk_level", referencedColumnName = "idLevel", nullable = false)
+    @JoinColumn(name = "risk_level", referencedColumnName = "idLevel")
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private RiskLevel riskLevel;
 
-    public int getIdKomponenPemeriksaan() {
+    public Integer getIdKomponenPemeriksaan() {
         return idKomponenPemeriksaan;
     }
 
-    public void setIdKomponenPemeriksaan(int idKomponenPemeriksaan) {
+    public void setIdKomponenPemeriksaan(Integer idKomponenPemeriksaan) {
         this.idKomponenPemeriksaan = idKomponenPemeriksaan;
     }
 
-    public int getJumlahSampel() {
+    public Integer getJumlahSampel() {
         return jumlahSampel;
     }
 
-    public void setJumlahSampel(int jumlahSampel) {
+    public void setJumlahSampel(Integer jumlahSampel) {
         this.jumlahSampel = jumlahSampel;
     }
 

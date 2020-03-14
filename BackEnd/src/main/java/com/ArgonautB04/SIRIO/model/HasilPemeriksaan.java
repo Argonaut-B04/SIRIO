@@ -5,7 +5,6 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 
@@ -15,16 +14,10 @@ public class HasilPemeriksaan implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int idHasilPemeriksaan;
+    private Integer idHasilPemeriksaan;
 
-    @NotNull
-    @Size(max = 50)
-    @Column(nullable = false)
-    private String namaHasilPemeriksaan;
-
-    @NotNull
     @Size(max = 125)
-    @Column(nullable = false)
+    @Column
     private String feedback;
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -46,25 +39,17 @@ public class HasilPemeriksaan implements Serializable {
     private Employee pembuat;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "pemeriksa", referencedColumnName = "idEmployee", nullable = false)
+    @JoinColumn(name = "pemeriksa", referencedColumnName = "idEmployee")
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private Employee pemeriksa;
 
-    public int getIdHasilPemeriksaan() {
+    public Integer getIdHasilPemeriksaan() {
         return idHasilPemeriksaan;
     }
 
-    public void setIdHasilPemeriksaan(int idHasilPemeriksaan) {
+    public void setIdHasilPemeriksaan(Integer idHasilPemeriksaan) {
         this.idHasilPemeriksaan = idHasilPemeriksaan;
-    }
-
-    public String getNamaHasilPemeriksaan() {
-        return namaHasilPemeriksaan;
-    }
-
-    public void setNamaHasilPemeriksaan(String namaHasilPemeriksaan) {
-        this.namaHasilPemeriksaan = namaHasilPemeriksaan;
     }
 
     public String getFeedback() {

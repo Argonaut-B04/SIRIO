@@ -1,5 +1,6 @@
 package com.ArgonautB04.SIRIO.services;
 
+import com.ArgonautB04.SIRIO.model.HasilPemeriksaan;
 import com.ArgonautB04.SIRIO.model.KomponenPemeriksaan;
 import com.ArgonautB04.SIRIO.repository.KomponenPemeriksaanDB;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,11 @@ public class KomponenPemeriksaanRestServiceImpl implements KomponenPemeriksaanRe
     @Override
     public List<KomponenPemeriksaan> getAll() {
         return komponenPemeriksaanDB.findAll();
+    }
+
+    @Override
+    public List<KomponenPemeriksaan> getByHasilPemeriksaan(HasilPemeriksaan hasilPemeriksaan) {
+        return komponenPemeriksaanDB.findAllByHasilPemeriksaan(hasilPemeriksaan);
     }
 
     @Override

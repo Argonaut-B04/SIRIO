@@ -48,7 +48,6 @@ public class HasilPemeriksaanRestServiceImpl implements HasilPemeriksaanRestServ
         target.setStatusHasilPemeriksaan(hasilPemeriksaan.getStatusHasilPemeriksaan());
         target.setPemeriksa(hasilPemeriksaan.getPemeriksa());
         target.setPembuat(hasilPemeriksaan.getPembuat());
-        target.setNamaHasilPemeriksaan(hasilPemeriksaan.getNamaHasilPemeriksaan());
         return hasilPemeriksaanDB.save(target);
     }
 
