@@ -58,7 +58,7 @@ public class RekomendasiRestController {
      * @param tenggatWaktu  dalam format yyyy-MM-dd (format default html)
      * @return objek rekomendasi yang telah diubah
      */
-    @PutMapping("/ubah/{idRekomendasi}")
+    @PutMapping("/tenggatWaktu/{idRekomendasi}")
     private BaseResponse<Rekomendasi> ubahTenggatWaktu(
             @PathVariable("idRekomendasi") int idRekomendasi,
             @RequestBody String tenggatWaktu
