@@ -4,6 +4,7 @@ import com.ArgonautB04.SIRIO.model.*;
 import com.ArgonautB04.SIRIO.rest.*;
 import com.ArgonautB04.SIRIO.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -114,11 +115,11 @@ public class HasilPemeriksaanRestController {
 
     /**
      * Menambah hasil pemeriksaan baru untuk tugas pemeriksaan spesifik
-     * @param hasilPemeriksaanDTO data transfer object untuk hasil pemeriksaan
+     * @param hasilPemeriksaanDTO data transfer object untuk hasil pemeriksaan yang akan ditambah
      * @return hasil pemeriksaan yang telah disimpan
      */
     @PostMapping(value = "/tambah", consumes = {"application/json"})
-    private BaseResponse<HasilPemeriksaan> tambahTugasPemeriksaan(
+    private BaseResponse<HasilPemeriksaan> tambahHasilPemeriksaan(
             @RequestBody HasilPemeriksaanDTO hasilPemeriksaanDTO
     ) {
         BaseResponse<HasilPemeriksaan> response = new BaseResponse<>();
@@ -192,11 +193,11 @@ public class HasilPemeriksaanRestController {
 
     /**
      * Mengubah  hasil pemeriksaan untuk tugas pemeriksaan spesifik
-     * @param hasilPemeriksaanDTO data transfer object untuk hasil pemeriksaan
+     * @param hasilPemeriksaanDTO data transfer object untuk hasil pemeriksaan yang akan diubah
      * @return hasil pemeriksaan yang telah disimpan perubahannya
      */
     @PutMapping(value = "/ubah", consumes = {"application/json"})
-    private BaseResponse<HasilPemeriksaan> ubahTugasPemeriksaan(
+    private BaseResponse<HasilPemeriksaan> ubahHasilPemeriksaan(
             @RequestBody HasilPemeriksaanDTO hasilPemeriksaanDTO
     ) {
         BaseResponse<HasilPemeriksaan> response = new BaseResponse<>();
@@ -283,6 +284,30 @@ public class HasilPemeriksaanRestController {
         response.setMessage("success");
         response.setResult(hasilPemeriksaan);
 
+        return response;
+    }
+
+    /**
+     * Menghapus reminder
+     *
+     * @param hasilPemeriksaanDTO data transfer object untuk hasil pemeriksaan yang akan dihapus
+     */
+    @DeleteMapping("/hapus")
+    private BaseResponse<String> hapusHasilPemeriksaan(
+            @RequestBody HasilPemeriksaanDTO hasilPemeriksaanDTO
+    ) {
+        BaseResponse<String> response = new BaseResponse<>();
+        try {
+            hasilPemeriksaanRestService.hapusHasilPemeriksaan(hasilPemeriksaanDTO.getId());
+
+            response.setStatus(200);
+            response.setMessage("success");
+            response.setResult("Reminder dengan id " + hasilPemeriksaanDTO.getId() + " terhapus!");
+        } catch (EmptyResultDataAccessException e) {
+            response.setStatus(404);
+            response.setMessage("not found");
+            response.setResult("Reminder dengan id " + hasilPemeriksaanDTO.getId() + " tidak dapat ditemukan");
+        }
         return response;
     }
 }
