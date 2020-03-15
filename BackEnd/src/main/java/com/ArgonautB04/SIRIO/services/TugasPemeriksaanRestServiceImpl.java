@@ -1,5 +1,6 @@
 package com.ArgonautB04.SIRIO.services;
 
+import com.ArgonautB04.SIRIO.model.Employee;
 import com.ArgonautB04.SIRIO.model.TugasPemeriksaan;
 import com.ArgonautB04.SIRIO.repository.TugasPemeriksaanDB;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,11 @@ public class TugasPemeriksaanRestServiceImpl implements TugasPemeriksaanRestServ
     @Override
     public List<TugasPemeriksaan> getAll() {
         return tugasPemeriksaanDB.findAll();
+    }
+
+    @Override
+    public List<TugasPemeriksaan> getByPelaksana(Employee pelaksana) {
+        return tugasPemeriksaanDB.findAllByPelaksana(pelaksana);
     }
 
     @Override
