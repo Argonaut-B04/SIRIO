@@ -1,6 +1,7 @@
 package com.ArgonautB04.SIRIO.services;
 
 import com.ArgonautB04.SIRIO.model.Employee;
+import com.ArgonautB04.SIRIO.model.KomponenPemeriksaan;
 import com.ArgonautB04.SIRIO.model.KantorCabang;
 import com.ArgonautB04.SIRIO.model.Rekomendasi;
 import com.ArgonautB04.SIRIO.repository.RekomendasiDB;
@@ -49,7 +50,7 @@ public class RekomendasiRestServiceImpl implements RekomendasiRestService {
         target.setTenggatWaktu(rekomendasi.getTenggatWaktu());
         target.setStatusRekomendasi(rekomendasi.getStatusRekomendasi());
         target.setPembuat(rekomendasi.getPembuat());
-        target.setNama(rekomendasi.getNama());
+//        target.setNama(rekomendasi.getNama());
         target.setKomponenPemeriksaan(rekomendasi.getKomponenPemeriksaan());
         return rekomendasiDB.save(target);
     }
@@ -69,5 +70,10 @@ public class RekomendasiRestServiceImpl implements RekomendasiRestService {
     @Override
     public List<Rekomendasi> getByPembuat(Employee pembuat) {
         return rekomendasiDB.findAllByPembuat(pembuat);
+    }
+
+    @Override
+    public List<Rekomendasi> getByKomponenPemeriksaan(KomponenPemeriksaan komponenPemeriksaan) {
+        return rekomendasiDB.findAllByKomponenPemeriksaan(komponenPemeriksaan);
     }
 }

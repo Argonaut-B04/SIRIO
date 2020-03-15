@@ -1,5 +1,6 @@
 package com.ArgonautB04.SIRIO.services;
 
+import com.ArgonautB04.SIRIO.model.KomponenPemeriksaan;
 import com.ArgonautB04.SIRIO.model.TemuanRisiko;
 import com.ArgonautB04.SIRIO.repository.TemuanRisikoDB;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,11 @@ public class TemuanRisikoRestServiceImpl implements TemuanRisikoRestService {
     @Override
     public List<TemuanRisiko> getAll() {
         return temuanRisikoDB.findAll();
+    }
+
+    @Override
+    public List<TemuanRisiko> getByKomponenPemeriksaan(KomponenPemeriksaan komponenPemeriksaan) {
+        return temuanRisikoDB.findAllByKomponenPemeriksaan(komponenPemeriksaan);
     }
 
     @Override

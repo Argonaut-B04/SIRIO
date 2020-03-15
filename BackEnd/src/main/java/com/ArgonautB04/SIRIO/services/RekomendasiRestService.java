@@ -1,6 +1,7 @@
 package com.ArgonautB04.SIRIO.services;
 
 import com.ArgonautB04.SIRIO.model.Employee;
+import com.ArgonautB04.SIRIO.model.KomponenPemeriksaan;
 import com.ArgonautB04.SIRIO.model.KantorCabang;
 import com.ArgonautB04.SIRIO.model.Rekomendasi;
 import com.ArgonautB04.SIRIO.model.Reminder;
@@ -16,6 +17,8 @@ public interface RekomendasiRestService {
 
     List<Rekomendasi> getAll();
 
+    List<Rekomendasi> getByKomponenPemeriksaan(KomponenPemeriksaan komponenPemeriksaan);
+  
     List<Rekomendasi> getByKantorCabang(KantorCabang kantorCabang);
 
     Rekomendasi ubahRekomendasi(int idRekomendasi, Rekomendasi rekomendasi);

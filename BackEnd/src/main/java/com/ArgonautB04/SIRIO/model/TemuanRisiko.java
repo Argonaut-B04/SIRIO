@@ -15,7 +15,7 @@ public class TemuanRisiko implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int idTemuanRisiko;
+    private Integer idTemuanRisiko;
 
     @NotNull
     @Size(max = 125)
@@ -34,11 +34,11 @@ public class TemuanRisiko implements Serializable {
     @JsonIgnore
     private Employee pembuat;
 
-    public int getIdTemuanRisiko() {
+    public Integer getIdTemuanRisiko() {
         return idTemuanRisiko;
     }
 
-    public void setIdTemuanRisiko(int idTemuanRisiko) {
+    public void setIdTemuanRisiko(Integer idTemuanRisiko) {
         this.idTemuanRisiko = idTemuanRisiko;
     }
 

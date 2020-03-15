@@ -17,12 +17,12 @@ public class Rekomendasi implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int idRekomendasi;
+    private Integer idRekomendasi;
 
-    @NotNull
-    @Size(max = 75)
-    @Column(nullable = false)
-    private String nama;
+//    @NotNull
+//    @Size(max = 75)
+//    @Column(nullable = false)
+//    private String nama;
 
     @NotNull
     @Size(max = 125)
@@ -60,17 +60,17 @@ public class Rekomendasi implements Serializable {
         return idRekomendasi;
     }
 
-    public void setIdRekomendasi(int idRekomendasi) {
+    public void setIdRekomendasi(Integer idRekomendasi) {
         this.idRekomendasi = idRekomendasi;
     }
 
-    public String getNama() {
-        return nama;
-    }
-
-    public void setNama(String nama) {
-        this.nama = nama;
-    }
+//    public String getNama() {
+//        return nama;
+//    }
+//
+//    public void setNama(String nama) {
+//        this.nama = nama;
+//    }
 
     public String getKeterangan() {
         return keterangan;

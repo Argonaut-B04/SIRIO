@@ -1,5 +1,6 @@
 package com.ArgonautB04.SIRIO.services;
 
+import com.ArgonautB04.SIRIO.model.Employee;
 import com.ArgonautB04.SIRIO.model.HasilPemeriksaan;
 import com.ArgonautB04.SIRIO.repository.HasilPemeriksaanDB;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,11 @@ public class HasilPemeriksaanRestServiceImpl implements HasilPemeriksaanRestServ
     }
 
     @Override
+    public List<HasilPemeriksaan> getByPembuat(Employee pembuat) {
+        return hasilPemeriksaanDB.findAllByPembuat(pembuat);
+    }
+
+    @Override
     public HasilPemeriksaan buatHasilPemeriksaan(int idHasilPemeriksaan, HasilPemeriksaan hasilPemeriksaan) {
         HasilPemeriksaan target = getById(idHasilPemeriksaan);
         target.setFeedback(hasilPemeriksaan.getFeedback());
@@ -42,7 +48,6 @@ public class HasilPemeriksaanRestServiceImpl implements HasilPemeriksaanRestServ
         target.setStatusHasilPemeriksaan(hasilPemeriksaan.getStatusHasilPemeriksaan());
         target.setPemeriksa(hasilPemeriksaan.getPemeriksa());
         target.setPembuat(hasilPemeriksaan.getPembuat());
-        target.setNamaHasilPemeriksaan(hasilPemeriksaan.getNamaHasilPemeriksaan());
         return hasilPemeriksaanDB.save(target);
     }
 
