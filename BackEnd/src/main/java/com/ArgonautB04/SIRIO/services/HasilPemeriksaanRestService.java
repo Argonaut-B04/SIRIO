@@ -2,6 +2,7 @@ package com.ArgonautB04.SIRIO.services;
 
 import com.ArgonautB04.SIRIO.model.Employee;
 import com.ArgonautB04.SIRIO.model.HasilPemeriksaan;
+import com.ArgonautB04.SIRIO.model.TugasPemeriksaan;
 
 import java.util.List;
 
@@ -13,6 +14,8 @@ public interface HasilPemeriksaanRestService {
     List<HasilPemeriksaan> getAll();
 
     List<HasilPemeriksaan> getByPembuat(Employee pembuat);
+
+    List<HasilPemeriksaan> getByDaftarTugasPemeriksaan(List<TugasPemeriksaan> tugasPemeriksaanList);
 
     HasilPemeriksaan buatHasilPemeriksaan(int idHasilPemeriksaan, HasilPemeriksaan hasilPemeriksaan);
 
