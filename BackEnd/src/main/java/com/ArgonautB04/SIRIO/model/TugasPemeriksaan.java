@@ -31,7 +31,7 @@ public class TugasPemeriksaan implements Serializable {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "kantor_cabang", referencedColumnName = "idKantor", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonIgnore
+//    @JsonIgnore
     private KantorCabang kantorCabang;
 
     @ManyToOne(fetch = FetchType.EAGER)
