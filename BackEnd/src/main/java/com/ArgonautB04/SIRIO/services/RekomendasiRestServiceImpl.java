@@ -38,10 +38,10 @@ public class RekomendasiRestServiceImpl implements RekomendasiRestService {
         return rekomendasiDB.findAll();
     }
 
-    @Override
-    public List<Rekomendasi> getByKantorCabang(KantorCabang kantorCabang) {
-        return rekomendasiDB.findAllByKantorCabangTujuan(kantorCabang);
-    }
+//    @Override
+//    public List<Rekomendasi> getByKantorCabang(KantorCabang kantorCabang) {
+//        return rekomendasiDB.findAllByKantorCabangTujuan(kantorCabang);
+//    }
 
     @Override
     public Rekomendasi ubahRekomendasi(int idRekomendasi, Rekomendasi rekomendasi) {
