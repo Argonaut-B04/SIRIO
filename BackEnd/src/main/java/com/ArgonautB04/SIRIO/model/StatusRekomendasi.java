@@ -22,6 +22,10 @@ public class StatusRekomendasi implements Serializable {
     @Column
     private String keteranganStatus;
 
+    @NotNull
+    @Column
+    private boolean dapatSetTenggatWaktu;
+
     public int getIdStatusRekomendasi() {
         return idStatusRekomendasi;
     }
@@ -44,5 +48,13 @@ public class StatusRekomendasi implements Serializable {
 
     public void setKeteranganStatus(String keteranganStatus) {
         this.keteranganStatus = keteranganStatus;
+    }
+
+    public boolean isDapatSetTenggatWaktu() {
+        return dapatSetTenggatWaktu;
+    }
+
+    public void setDapatSetTenggatWaktu(boolean dapatSetTenggatWaktu) {
+        this.dapatSetTenggatWaktu = dapatSetTenggatWaktu;
     }
 }

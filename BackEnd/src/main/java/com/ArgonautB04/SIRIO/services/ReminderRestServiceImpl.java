@@ -48,12 +48,6 @@ public class ReminderRestServiceImpl implements ReminderRestService {
         reminderDB.deleteById(idReminder);
     }
 
-    /**
-     * Mengambil seluruh reminder yang dimiliki rekomendasi spesifik
-     *
-     * @param idRekomendasi identifier rekomendasi
-     * @return daftar reminder yang dimiliki rekomendasi tersebut
-     */
     @Override
     public List<Reminder> getByRekomendasi(Rekomendasi rekomendasi) {
         return reminderDB.findAllByRekomendasi(rekomendasi);

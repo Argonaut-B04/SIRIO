@@ -94,30 +94,37 @@ public class DatabaseLoader implements CommandLineRunner {
     private void populasiStatusRekomendasi() {
         StatusRekomendasi draft = new StatusRekomendasi();
         draft.setNamaStatus("Draft");
+        draft.setDapatSetTenggatWaktu(false);
         statusRekomendasiDB.save(draft);
 
         StatusRekomendasi menungguPersetujuan = new StatusRekomendasi();
         menungguPersetujuan.setNamaStatus("Menunggu Persetujuan");
+        menungguPersetujuan.setDapatSetTenggatWaktu(false);
         statusRekomendasiDB.save(menungguPersetujuan);
 
         StatusRekomendasi ditolak = new StatusRekomendasi();
         ditolak.setNamaStatus("Ditolak");
+        ditolak.setDapatSetTenggatWaktu(false);
         statusRekomendasiDB.save(ditolak);
 
         StatusRekomendasi menungguPengaturanTenggatWaktu = new StatusRekomendasi();
         menungguPengaturanTenggatWaktu.setNamaStatus("Menunggu Pengaturan Tenggat Waktu");
+        menungguPengaturanTenggatWaktu.setDapatSetTenggatWaktu(true);
         statusRekomendasiDB.save(menungguPengaturanTenggatWaktu);
 
         StatusRekomendasi menungguPelaksanaan = new StatusRekomendasi();
         menungguPelaksanaan.setNamaStatus("Menunggu Pelaksanaan");
+        menungguPelaksanaan.setDapatSetTenggatWaktu(true);
         statusRekomendasiDB.save(menungguPelaksanaan);
 
         StatusRekomendasi sedangDilaksanakan = new StatusRekomendasi();
         sedangDilaksanakan.setNamaStatus("Sedang Dilaksanakan");
+        sedangDilaksanakan.setDapatSetTenggatWaktu(false);
         statusRekomendasiDB.save(sedangDilaksanakan);
 
         StatusRekomendasi selesai = new StatusRekomendasi();
         selesai.setNamaStatus("Selesai");
+        selesai.setDapatSetTenggatWaktu(false);
         statusRekomendasiDB.save(selesai);
     }
 }

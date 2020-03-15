@@ -14,6 +14,8 @@ public interface KomponenPemeriksaanRestService {
 
     List<KomponenPemeriksaan> getByHasilPemeriksaan(HasilPemeriksaan hasilPemeriksaan);
 
+    List<KomponenPemeriksaan> getByDaftarHasilPemeriksaan(List<HasilPemeriksaan> hasilPemeriksaanList);
+
     KomponenPemeriksaan ubahKomponenPemeriksaan(int idKomponenPemeriksaan, KomponenPemeriksaan komponenPemeriksaan);
 
     void hapusKomponenPemeriksaan(int idKomponenPemeriksaan);

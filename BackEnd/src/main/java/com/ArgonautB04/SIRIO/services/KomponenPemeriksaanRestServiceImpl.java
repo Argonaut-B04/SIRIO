@@ -41,6 +41,11 @@ public class KomponenPemeriksaanRestServiceImpl implements KomponenPemeriksaanRe
     }
 
     @Override
+    public List<KomponenPemeriksaan> getByDaftarHasilPemeriksaan(List<HasilPemeriksaan> hasilPemeriksaanList) {
+        return komponenPemeriksaanDB.findAllByHasilPemeriksaanIn(hasilPemeriksaanList);
+    }
+
+    @Override
     public KomponenPemeriksaan ubahKomponenPemeriksaan(int idKomponenPemeriksaan, KomponenPemeriksaan komponenPemeriksaan) {
         KomponenPemeriksaan target = getById(idKomponenPemeriksaan);
         target.setHasilPemeriksaan(komponenPemeriksaan.getHasilPemeriksaan());

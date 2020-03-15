@@ -2,6 +2,7 @@ package com.ArgonautB04.SIRIO.services;
 
 import com.ArgonautB04.SIRIO.model.Employee;
 import com.ArgonautB04.SIRIO.model.HasilPemeriksaan;
+import com.ArgonautB04.SIRIO.model.TugasPemeriksaan;
 import com.ArgonautB04.SIRIO.repository.HasilPemeriksaanDB;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,6 +39,11 @@ public class HasilPemeriksaanRestServiceImpl implements HasilPemeriksaanRestServ
     @Override
     public List<HasilPemeriksaan> getByPembuat(Employee pembuat) {
         return hasilPemeriksaanDB.findAllByPembuat(pembuat);
+    }
+
+    @Override
+    public List<HasilPemeriksaan> getByDaftarTugasPemeriksaan(List<TugasPemeriksaan> tugasPemeriksaanList) {
+        return hasilPemeriksaanDB.findAllByTugasPemeriksaanIn(tugasPemeriksaanList);
     }
 
     @Override
