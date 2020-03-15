@@ -50,6 +50,7 @@ public class HasilPemeriksaanRestController {
 
     /**
      * Mengambil seluruh hasil pemeriksaan
+     *
      * @return daftar hasil pemeriksaan
      */
     @GetMapping("/getAll")
@@ -115,6 +116,7 @@ public class HasilPemeriksaanRestController {
 
     /**
      * Menambah hasil pemeriksaan baru untuk tugas pemeriksaan spesifik
+     *
      * @param hasilPemeriksaanDTO data transfer object untuk hasil pemeriksaan yang akan ditambah
      * @return hasil pemeriksaan yang telah disimpan
      */
@@ -177,7 +179,7 @@ public class HasilPemeriksaanRestController {
                     Rekomendasi rekomendasi = new Rekomendasi();
                     rekomendasi.setKomponenPemeriksaan(komponenPemeriksaan);
                     rekomendasi.setKeterangan(rekomendasiData.getKeterangan());
-                    rekomendasi.setStatusRekomendasi(statusRekomendasiRestService.getById(rekomendasiData.getStatus()));
+                    rekomendasi.setStatusRekomendasi(statusRekomendasiRestService.getById(hasilPemeriksaanDTO.getStatus()));
                     Employee pembuatRekomendasi = employeeRestService.getById(rekomendasiData.getIdPembuat());
                     rekomendasi.setPembuat(pembuatRekomendasi);
                     rekomendasiRestService.buatRekomendasi(rekomendasi);
@@ -192,7 +194,8 @@ public class HasilPemeriksaanRestController {
     }
 
     /**
-     * Mengubah  hasil pemeriksaan untuk tugas pemeriksaan spesifik
+     * Mengubah  hasil pemeriksaan
+     *
      * @param hasilPemeriksaanDTO data transfer object untuk hasil pemeriksaan yang akan diubah
      * @return hasil pemeriksaan yang telah disimpan perubahannya
      */
@@ -259,14 +262,14 @@ public class HasilPemeriksaanRestController {
                         Rekomendasi rekomendasi = new Rekomendasi();
                         rekomendasi.setKomponenPemeriksaan(komponenPemeriksaan);
                         rekomendasi.setKeterangan(rekomendasiData.getKeterangan());
-                        rekomendasi.setStatusRekomendasi(statusRekomendasiRestService.getById(rekomendasiData.getStatus()));
+                        rekomendasi.setStatusRekomendasi(statusRekomendasiRestService.getById(hasilPemeriksaanDTO.getStatus()));
                         Employee pembuatRekomendasi = employeeRestService.getById(rekomendasiData.getIdPembuat());
                         rekomendasi.setPembuat(pembuatRekomendasi);
                         rekomendasiRestService.buatRekomendasi(rekomendasi);
                     } else {
                         Rekomendasi rekomendasi = rekomendasiRestService.getById(rekomendasiData.getId());
                         rekomendasi.setKeterangan(rekomendasiData.getKeterangan());
-                        rekomendasi.setStatusRekomendasi(statusRekomendasiRestService.getById(rekomendasiData.getStatus()));
+                        rekomendasi.setStatusRekomendasi(statusRekomendasiRestService.getById(hasilPemeriksaanDTO.getStatus()));
                         rekomendasiRestService.ubahRekomendasi(rekomendasiData.getId(), rekomendasi);
                         daftarRekomendasiTerdaftar.add(rekomendasiData.getId());
                     }
@@ -288,7 +291,7 @@ public class HasilPemeriksaanRestController {
     }
 
     /**
-     * Menghapus reminder
+     * Menghapus hasil pemeriksaan
      *
      * @param hasilPemeriksaanDTO data transfer object untuk hasil pemeriksaan yang akan dihapus
      */
@@ -307,6 +310,54 @@ public class HasilPemeriksaanRestController {
             response.setStatus(404);
             response.setMessage("not found");
             response.setResult("Reminder dengan id " + hasilPemeriksaanDTO.getId() + " tidak dapat ditemukan");
+        }
+        return response;
+    }
+
+    /**
+     * Menyetujui atai menolak hasil pemeriksaan
+     *
+     * @param persetujuanHasilPemeriksaanDTO data transfer object untuk persetujuan hasil pemeriksaan
+     */
+    @PutMapping(value = "/persetujuan", consumes = {"application/json"})
+    private BaseResponse<String> persetujuanHasilPemeriksaan(
+            @RequestBody PersetujuanHasilPemeriksaanDTO persetujuanHasilPemeriksaanDTO
+    ) {
+        BaseResponse<String> response = new BaseResponse<>();
+        try {
+            HasilPemeriksaan hasilPemeriksaanTemp = hasilPemeriksaanRestService.getById(
+                    persetujuanHasilPemeriksaanDTO.getIdHasilPemeriksaan());
+            hasilPemeriksaanTemp.setStatusHasilPemeriksaan(statusHasilPemeriksaanRestService.getById(
+                    persetujuanHasilPemeriksaanDTO.getStatus()));
+            hasilPemeriksaanTemp.setPemeriksa(employeeRestService.getById(
+                    persetujuanHasilPemeriksaanDTO.getIdPemeriksa()));
+            hasilPemeriksaanTemp.setFeedback(persetujuanHasilPemeriksaanDTO.getFeedback());
+            HasilPemeriksaan hasilPemeriksaan = hasilPemeriksaanRestService.buatHasilPemeriksaan(
+                    persetujuanHasilPemeriksaanDTO.getIdHasilPemeriksaan(), hasilPemeriksaanTemp);
+
+            for (KomponenPemeriksaan komponenPemeriksaan:
+                    komponenPemeriksaanRestService.getByHasilPemeriksaan(hasilPemeriksaan)) {
+                for (Rekomendasi rekomendasi: rekomendasiRestService.getByKomponenPemeriksaan(komponenPemeriksaan)) {
+                    rekomendasi.setStatusRekomendasi(statusRekomendasiRestService.getById(
+                            persetujuanHasilPemeriksaanDTO.getStatus()));
+                    rekomendasiRestService.ubahRekomendasi(rekomendasi.getIdRekomendasi(), rekomendasi);
+                }
+            }
+
+            if (persetujuanHasilPemeriksaanDTO.getStatus() == 3) {
+                response.setResult("Hasil Pemeriksaan dengan id " +
+                        persetujuanHasilPemeriksaanDTO.getIdHasilPemeriksaan() + " ditolak!");
+            } else {
+                response.setResult("Hasil Pemeriksaan dengan id " +
+                        persetujuanHasilPemeriksaanDTO.getIdHasilPemeriksaan() + " disetujui!");
+            }
+            response.setStatus(200);
+            response.setMessage("success");
+        } catch (EmptyResultDataAccessException e) {
+            response.setStatus(404);
+            response.setMessage("not found");
+            response.setResult("Hasil Pemeriksaan dengan id " +
+                    persetujuanHasilPemeriksaanDTO.getIdHasilPemeriksaan() + " tidak dapat ditemukan");
         }
         return response;
     }

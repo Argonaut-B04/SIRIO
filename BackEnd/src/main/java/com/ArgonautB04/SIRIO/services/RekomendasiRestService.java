@@ -19,7 +19,7 @@ public interface RekomendasiRestService {
 
     List<Rekomendasi> getByKomponenPemeriksaan(KomponenPemeriksaan komponenPemeriksaan);
   
-    List<Rekomendasi> getByKantorCabang(KantorCabang kantorCabang);
+//    List<Rekomendasi> getByKantorCabang(KantorCabang kantorCabang);
 
     Rekomendasi ubahRekomendasi(int idRekomendasi, Rekomendasi rekomendasi);
 
