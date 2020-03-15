@@ -2,11 +2,11 @@ package com.ArgonautB04.SIRIO.services;
 
 import com.ArgonautB04.SIRIO.model.Employee;
 import com.ArgonautB04.SIRIO.model.KomponenPemeriksaan;
-import com.ArgonautB04.SIRIO.model.KantorCabang;
 import com.ArgonautB04.SIRIO.model.Rekomendasi;
 import com.ArgonautB04.SIRIO.repository.RekomendasiDB;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.MethodNotAllowedException;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
@@ -38,11 +38,6 @@ public class RekomendasiRestServiceImpl implements RekomendasiRestService {
         return rekomendasiDB.findAll();
     }
 
-//    @Override
-//    public List<Rekomendasi> getByKantorCabang(KantorCabang kantorCabang) {
-//        return rekomendasiDB.findAllByKantorCabangTujuan(kantorCabang);
-//    }
-
     @Override
     public Rekomendasi ubahRekomendasi(int idRekomendasi, Rekomendasi rekomendasi) {
         Rekomendasi target = getById(idRekomendasi);
@@ -61,10 +56,12 @@ public class RekomendasiRestServiceImpl implements RekomendasiRestService {
     }
 
     @Override
-    public Rekomendasi ubahTenggatWaktu(int idRekomendasi, LocalDate tenggatWaktuLocalDate) {
+    public Rekomendasi ubahTenggatWaktu(int idRekomendasi, LocalDate tenggatWaktuLocalDate) throws IllegalAccessError {
         Rekomendasi target = getById(idRekomendasi);
-        target.setTenggatWaktu(tenggatWaktuLocalDate);
-        return rekomendasiDB.save(target);
+        if (target.getStatusRekomendasi().isDapatSetTenggatWaktu()) {
+            target.setTenggatWaktu(tenggatWaktuLocalDate);
+            return rekomendasiDB.save(target);
+        } else throw new IllegalAccessError();
     }
 
     @Override
@@ -75,5 +72,10 @@ public class RekomendasiRestServiceImpl implements RekomendasiRestService {
     @Override
     public List<Rekomendasi> getByKomponenPemeriksaan(KomponenPemeriksaan komponenPemeriksaan) {
         return rekomendasiDB.findAllByKomponenPemeriksaan(komponenPemeriksaan);
+    }
+
+    @Override
+    public List<Rekomendasi> getByDaftarKomponenPemeriksaan(List<KomponenPemeriksaan> komponenPemeriksaanList) {
+        return rekomendasiDB.findAllByKomponenPemeriksaanIn(komponenPemeriksaanList);
     }
 }

@@ -19,11 +19,6 @@ public class Rekomendasi implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idRekomendasi;
 
-//    @NotNull
-//    @Size(max = 75)
-//    @Column(nullable = false)
-//    private String nama;
-
     @NotNull
     @Size(max = 125)
     @Column(nullable = false)
@@ -50,12 +45,6 @@ public class Rekomendasi implements Serializable {
     @JsonIgnore
     private Employee pembuat;
 
-//    @ManyToOne(fetch = FetchType.EAGER)
-//    @JoinColumn(name = "tujuan", referencedColumnName = "idKantor", nullable = false)
-//    @OnDelete(action = OnDeleteAction.CASCADE)
-//    @JsonIgnore
-//    private KantorCabang kantorCabangTujuan;
-
     public Integer getIdRekomendasi() {
         return idRekomendasi;
     }
@@ -63,15 +52,6 @@ public class Rekomendasi implements Serializable {
     public void setIdRekomendasi(Integer idRekomendasi) {
         this.idRekomendasi = idRekomendasi;
     }
-
-
-//    public String getNama() {
-//        return nama;
-//    }
-//
-//    public void setNama(String nama) {
-//        this.nama = nama;
-//    }
 
     public String getKeterangan() {
         return keterangan;
@@ -112,12 +92,4 @@ public class Rekomendasi implements Serializable {
     public void setPembuat(Employee pembuat) {
         this.pembuat = pembuat;
     }
-
-//    public KantorCabang getKantorCabangTujuan() {
-//        return kantorCabangTujuan;
-//    }
-//
-//    public void setKantorCabangTujuan(KantorCabang kantorCabangTujuan) {
-//        this.kantorCabangTujuan = kantorCabangTujuan;
-//    }
 }

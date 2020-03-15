@@ -5,6 +5,7 @@ import com.ArgonautB04.SIRIO.model.KomponenPemeriksaan;
 import com.ArgonautB04.SIRIO.model.KantorCabang;
 import com.ArgonautB04.SIRIO.model.Rekomendasi;
 import com.ArgonautB04.SIRIO.model.Reminder;
+import org.springframework.web.server.MethodNotAllowedException;
 
 import java.time.LocalDate;
 import java.util.Date;
@@ -19,13 +20,13 @@ public interface RekomendasiRestService {
 
     List<Rekomendasi> getByKomponenPemeriksaan(KomponenPemeriksaan komponenPemeriksaan);
   
-//    List<Rekomendasi> getByKantorCabang(KantorCabang kantorCabang);
+    List<Rekomendasi> getByDaftarKomponenPemeriksaan(List<KomponenPemeriksaan> komponenPemeriksaanList);
 
     Rekomendasi ubahRekomendasi(int idRekomendasi, Rekomendasi rekomendasi);
 
     void hapusRekomendasi(int idRekomendasi);
 
-    Rekomendasi ubahTenggatWaktu(int idRekomendasi, LocalDate tenggatWaktuLocalDate);
+    Rekomendasi ubahTenggatWaktu(int idRekomendasi, LocalDate tenggatWaktuLocalDate) throws IllegalAccessError;
 
     List<Rekomendasi> getByPembuat(Employee pembuat);
 }
