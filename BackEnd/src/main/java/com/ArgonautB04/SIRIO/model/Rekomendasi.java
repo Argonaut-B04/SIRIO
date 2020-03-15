@@ -50,7 +50,13 @@ public class Rekomendasi implements Serializable {
     @JsonIgnore
     private Employee pembuat;
 
-    public Integer getIdRekomendasi() {
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "tujuan", referencedColumnName = "idKantor", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonIgnore
+    private KantorCabang kantorCabangTujuan;
+
+    public int getIdRekomendasi() {
         return idRekomendasi;
     }
 
@@ -104,5 +110,13 @@ public class Rekomendasi implements Serializable {
 
     public void setPembuat(Employee pembuat) {
         this.pembuat = pembuat;
+    }
+
+    public KantorCabang getKantorCabangTujuan() {
+        return kantorCabangTujuan;
+    }
+
+    public void setKantorCabangTujuan(KantorCabang kantorCabangTujuan) {
+        this.kantorCabangTujuan = kantorCabangTujuan;
     }
 }

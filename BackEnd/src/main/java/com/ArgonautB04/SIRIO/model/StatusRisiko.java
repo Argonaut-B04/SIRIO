@@ -18,9 +18,8 @@ public class StatusRisiko implements Serializable {
     @Column(nullable = false)
     private String namaStatus;
 
-    @NotNull
     @Size(max = 125)
-    @Column(nullable = false)
+    @Column
     private String keteranganStatus;
 
     public int getIdStatusRisiko() {
