@@ -1,0 +1,14 @@
+.mainContent {
+    margin-left: 250px;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    padding-top: 30px;
+}
+
+.pageContent {
+    padding-left: 50px;
+    padding-right: 50px;
+    height: 100%;
+}

@@ -2,15 +2,12 @@ import React from "react";
 import classes from './SideNav.module.css';
 
 class SideNav extends React.Component {
-    constructor(props) {
-        super(props);
-    }
 
     render() {
         return (
             <div className={classes.sidebar}>
                 <div className={classes.logo}>
-                    <img src={process.env.PUBLIC_URL + '/logo.png'} className={classes.logoImage} />
+                    <img src={process.env.PUBLIC_URL + '/logo.png'} className={classes.logoImage} alt="SIRIO Logo" />
                     <h1 className={classes.logoName}>SIRIO</h1>
                 </div>
                 <h4 className={classes.logoDesc}>
