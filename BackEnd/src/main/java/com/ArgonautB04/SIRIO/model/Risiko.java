@@ -32,7 +32,7 @@ public class Risiko implements Serializable {
     @NotNull
     @Size(max = 25)
     @Column(nullable = false)
-    private String indikator;
+    private String komponen;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "status", referencedColumnName = "idStatusRisiko", nullable = false)
@@ -81,12 +81,12 @@ public class Risiko implements Serializable {
         this.risikoKategori = risikoKategori;
     }
 
-    public String getIndikator() {
-        return indikator;
+    public String getKomponen() {
+        return komponen;
     }
 
-    public void setIndikator(String indikator) {
-        this.indikator = indikator;
+    public void setKomponen(String indikator) {
+        this.komponen = indikator;
     }
 
     public StatusRisiko getStatusRisiko() {

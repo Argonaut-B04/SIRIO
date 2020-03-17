@@ -43,7 +43,7 @@ public class RisikoRestServiceImpl implements RisikoRestService {
         target.setRisikoKategori(risiko.getRisikoKategori());
         target.setParent(risiko.getParent());
         target.setNamaRisiko(risiko.getNamaRisiko());
-        target.setIndikator(risiko.getIndikator());
+        target.setKomponen(risiko.getKomponen());
         return risikoDB.save(target);
     }
 
