@@ -3,7 +3,7 @@
     border: solid #7F3F98 1.5px;
     background-color: white;
     font-family: Proxima Nova;
-    height: 30px;
+    min-height: 30px;
     border-radius: 6px;
 }
 
@@ -12,8 +12,25 @@
     border: solid #7F3F98 1.5px;
     background-color: #7F3F98;
     font-family: Proxima Nova;
-    height: 30px;
+    min-height: 30px;
     border-radius: 6px;
+}
+
+.hyperlink {
+    color: blue;
+    border: none;
+    background-color: transparent;
+    font-family: Proxima Nova;
+    min-height: 30px;
+}
+
+.unchangeable {
+    border: none;
+    background-color: transparent;
+    font-family: Proxima Nova;
+    min-height: 30px;
+    color: #7F3F98;
+    pointer-events: none;
 }
 
 .buttonTitle {

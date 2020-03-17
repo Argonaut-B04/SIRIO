@@ -11,9 +11,15 @@ export default class TableButton extends React.Component {
         if (this.props.recommended) {
             theClass = classes.recommendedBtn
         }
+        if (this.props.hyperlinkMode) {
+            theClass = classes.hyperlink
+        }
+        if (this.props.unchangeable) {
+            theClass = classes.unchangeable
+        }
         return (
             <button
-                onClick={() => window.location.href = this.props.link}
+                onClick={this.props.onClick}
                 className={theClass}
                 recommended={this.props.recommended}
             >
