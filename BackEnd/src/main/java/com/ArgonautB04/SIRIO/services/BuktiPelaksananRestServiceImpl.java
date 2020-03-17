@@ -1,6 +1,7 @@
 package com.ArgonautB04.SIRIO.services;
 
 import com.ArgonautB04.SIRIO.model.BuktiPelaksanaan;
+import com.ArgonautB04.SIRIO.model.Employee;
 import com.ArgonautB04.SIRIO.repository.BuktiPelaksanaanDB;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -48,7 +49,7 @@ public class BuktiPelaksananRestServiceImpl implements BuktiPelaksanaanRestServi
     }
 
     @Override
-    public void hapusBuktiPelaksanaan(int idBuktiPelaksanaan) {
-        buktiPelaksanaanDB.deleteById(idBuktiPelaksanaan);
+    public List<BuktiPelaksanaan> getByPembuat(Employee pembuat) {
+        return buktiPelaksanaanDB.findAllByPembuat(pembuat);
     }
 }
