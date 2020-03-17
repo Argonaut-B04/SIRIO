@@ -7,6 +7,7 @@ import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
 import overlayFactory from 'react-bootstrap-table2-overlay';
 import TableButton from '../../Button/TableButton';
 import classes from './TabelRekomendasi.module.css';
+import DatePickerButton from '../../Button/DatePickerButton';
 
 export default class TabelRekomendasi extends React.Component {
     indication() {
@@ -50,25 +51,36 @@ export default class TabelRekomendasi extends React.Component {
         )
     }
 
-    getButtons(cell, row) {
-        const status = row.statusRekomendasi;
-        const recommended = status === "Menunggu Pengaturan Tenggat Waktu";
-        const reminderEnable = status === "Menunggu Pelaksanaan" || status === "Sedang Dijalankan";
+    getButtonsFirst(cell, row) {
         return (
-            <div className="d-flex align-items-center justify-content-around">
-                <TableButton link="http://google.com">
-                    Hasil Pemeriksaan
-                </TableButton>
-
-                <TableButton link="http://google.com" disabled={!recommended} recommended={recommended}>
-                    Tenggat Waktu
-                </TableButton>
-                <TableButton link="http://google.com" disabled={!reminderEnable}>
-                    Reminder
-                </TableButton>
-            </div>
+            <TableButton onClick={() => window.location.href = "http://www.google.com"}>
+                Hasil Pemeriksaan
+            </TableButton>
         )
     }
+
+    getButtonsSecond(cell, row) {
+        const status = row.statusRekomendasi;
+        const tenggatWaktu = row.tenggatWaktu;
+        const tenggatWaktuExist = tenggatWaktu !== "";
+        const recommended = status === "Menunggu Pengaturan Tenggat Waktu";
+        const hyperlinkMode = status === "Menunggu Pelaksanaan" && tenggatWaktuExist;
+        const unchangeable = status === "Sedang Dijalankan" && tenggatWaktuExist;
+        return (
+            <DatePickerButton disabled={!recommended} recommended={recommended} hyperlinkMode={hyperlinkMode} unchangeable={unchangeable} tenggatWaktu={tenggatWaktuExist ? tenggatWaktu : "Tenggat Waktu"} />
+        )
+    }
+
+    getButtonsThird(cell, row) {
+        const status = row.statusRekomendasi;
+        const reminderEnable = status === "Menunggu Pelaksanaan" || status === "Sedang Dijalankan";
+        return (
+            <TableButton disabled={!reminderEnable}>
+                Reminder
+            </TableButton>
+        )
+    }
+
 
     columns = [{
         dataField: '',
@@ -107,27 +119,49 @@ export default class TabelRekomendasi extends React.Component {
         text: '',
         headerClasses: classes.colheader,
         classes: classes.rowItem,
-        formatter: this.getButtons
+        style: () => {
+            return { textAlign: 'center' }
+        },
+        formatter: this.getButtonsFirst
+    }, {
+        dataField: 'id',
+        text: '',
+        headerClasses: classes.colheader,
+        classes: classes.rowItem,
+        style: () => {
+            return { textAlign: 'center' }
+        },
+        formatter: this.getButtonsSecond
+    }, {
+        dataField: 'id',
+        text: '',
+        headerClasses: classes.colheader,
+        classes: classes.rowItem,
+        style: () => {
+            return { textAlign: 'center' }
+        },
+        formatter: this.getButtonsThird
     }];
 
     products = [
-        { "id": 10, "namaRekomendasi": "Nathan", "statusRekomendasi": "Menunggu Pengaturan Tenggat Waktu" },
-        { "id": 1, "namaRekomendasi": "Nathan1", "statusRekomendasi": "Ditolak" },
-        { "id": 2, "namaRekomendasi": "Nathan1", "statusRekomendasi": "Sedang Dijalankan" },
-        { "id": 3, "namaRekomendasi": "Nathan1", "statusRekomendasi": "Menunggu Persetujuan" },
-        { "id": 4, "namaRekomendasi": "Nathan1", "statusRekomendasi": "Menunggu Pelaksanaan" },
-        { "id": 5, "namaRekomendasi": "Nathan1", "statusRekomendasi": "Sedang Dijalankan" },
-        { "id": 6, "namaRekomendasi": "Nathan1", "statusRekomendasi": "Draft" },
-        { "id": 7, "namaRekomendasi": "Nathan1", "statusRekomendasi": "Draft" },
-        { "id": 8, "namaRekomendasi": "Nathan1", "statusRekomendasi": "Draft" },
-        { "id": 9, "namaRekomendasi": "Nathan1", "statusRekomendasi": "Draft" },
-        { "id": 11, "namaRekomendasi": "Nathan1", "statusRekomendasi": "Draft" },
-        { "id": 12, "namaRekomendasi": "Nathan1", "statusRekomendasi": "Draft" },
-        { "id": 13, "namaRekomendasi": "Nathan1", "statusRekomendasi": "Draft" },
-        { "id": 14, "namaRekomendasi": "Nathan1", "statusRekomendasi": "Draft" },
-        { "id": 25, "namaRekomendasi": "Nathan2", "statusRekomendasi": "Draft" },
-        { "id": 16, "namaRekomendasi": "Nathan1", "statusRekomendasi": "Draft" },
+        { "tenggatWaktu": "", "id": 10, "namaRekomendasi": "Nathan", "statusRekomendasi": "Menunggu Pengaturan Tenggat Waktu" },
+        { "tenggatWaktu": "", "id": 1, "namaRekomendasi": "Nathan1", "statusRekomendasi": "Ditolak" },
+        { "tenggatWaktu": "", "id": 2, "namaRekomendasi": "Nathan1", "statusRekomendasi": "Sedang Dijalankan" },
+        { "tenggatWaktu": "", "id": 3, "namaRekomendasi": "Nathan1", "statusRekomendasi": "Menunggu Persetujuan" },
+        { "tenggatWaktu": "10-10-2000", "id": 4, "namaRekomendasi": "Nathan1", "statusRekomendasi": "Menunggu Pelaksanaan" },
+        { "tenggatWaktu": "10-10-2000", "id": 5, "namaRekomendasi": "Nathan1", "statusRekomendasi": "Sedang Dijalankan" },
+        { "tenggatWaktu": "", "id": 6, "namaRekomendasi": "Nathan1", "statusRekomendasi": "Draft" },
+        { "tenggatWaktu": "", "id": 7, "namaRekomendasi": "Nathan1", "statusRekomendasi": "Draft" },
+        { "tenggatWaktu": "", "id": 8, "namaRekomendasi": "Nathan1", "statusRekomendasi": "Draft" },
+        { "tenggatWaktu": "", "id": 9, "namaRekomendasi": "Nathan1", "statusRekomendasi": "Draft" },
+        { "tenggatWaktu": "", "id": 11, "namaRekomendasi": "Nathan1", "statusRekomendasi": "Draft" },
+        { "tenggatWaktu": "", "id": 12, "namaRekomendasi": "Nathan1", "statusRekomendasi": "Draft" },
+        { "tenggatWaktu": "", "id": 13, "namaRekomendasi": "Nathan1", "statusRekomendasi": "Draft" },
+        { "tenggatWaktu": "", "id": 14, "namaRekomendasi": "Nathan1", "statusRekomendasi": "Draft" },
+        { "tenggatWaktu": "", "id": 25, "namaRekomendasi": "Nathan2", "statusRekomendasi": "Draft" },
+        { "tenggatWaktu": "", "id": 16, "namaRekomendasi": "Nathan1", "statusRekomendasi": "Draft" },
     ]
+
 
     defaultSorted = [{
         dataField: 'id',
