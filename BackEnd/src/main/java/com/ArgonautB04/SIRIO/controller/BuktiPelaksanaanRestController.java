@@ -129,32 +129,32 @@ public class BuktiPelaksanaanRestController {
         return response;
     }
 
-//    /**
-//     * Mengubah bukti pelaksanaan
-//     *
-//     * @param buktiPelaksanaanDTO data transfer object untuk bukti pelaksanaan yang akan diubah
-//     * @return bukti pelaksanaan yang telah disimpan
-//     */
-//    @PutMapping(value = "/ubah", consumes = {"application/json"})
-//    private BaseResponse<BuktiPelaksanaan> ubahBuktiPelaksanaan(
-//            @RequestBody BuktiPelaksanaanDTO buktiPelaksanaanDTO
-//    ) {
-//        BaseResponse<BuktiPelaksanaan> response = new BaseResponse<>();
-//        try {
-//            BuktiPelaksanaan buktiPelaksanaanTemp = buktiPelaksanaanRestService.getById(buktiPelaksanaanDTO.getId());
-//            buktiPelaksanaanTemp.setStatusBuktiPelaksanaan(
-//                    statusBuktiPelaksanaanRestService.getById(buktiPelaksanaanDTO.getStatus()));
-//            BuktiPelaksanaan buktiPelaksanaan =
-//                    buktiPelaksanaanRestService.ubahBuktiPelaksanaan(buktiPelaksanaanDTO.getId(), buktiPelaksanaanTemp);
-//
-//            response.setStatus(200);
-//            response.setMessage("success");
-//            response.setResult(buktiPelaksanaan);
-//        } catch (NoSuchElementException e) {
-//            throw new ResponseStatusException(
-//                    HttpStatus.NOT_FOUND, "Bukti Pelaksanaan dengan ID " + buktiPelaksanaanDTO.getId() + " tidak ditemukan!"
-//            );
-//        }
-//        return response;
-//    }
+    /**
+     * Mengubah bukti pelaksanaan
+     *
+     * @param buktiPelaksanaanDTO data transfer object untuk bukti pelaksanaan yang akan diubah
+     * @return bukti pelaksanaan yang telah disimpan
+     */
+    @PutMapping(value = "/ubah", consumes = {"application/json"})
+    private BaseResponse<BuktiPelaksanaan> ubahBuktiPelaksanaan(
+            @RequestBody BuktiPelaksanaanDTO buktiPelaksanaanDTO
+    ) {
+        BaseResponse<BuktiPelaksanaan> response = new BaseResponse<>();
+        try {
+            BuktiPelaksanaan buktiPelaksanaanTemp = buktiPelaksanaanRestService.getById(buktiPelaksanaanDTO.getId());
+            buktiPelaksanaanTemp.setStatusBuktiPelaksanaan(
+                    statusBuktiPelaksanaanRestService.getById(1));
+            BuktiPelaksanaan buktiPelaksanaan =
+                    buktiPelaksanaanRestService.ubahBuktiPelaksanaan(buktiPelaksanaanDTO.getId(), buktiPelaksanaanTemp);
+
+            response.setStatus(200);
+            response.setMessage("success");
+            response.setResult(buktiPelaksanaan);
+        } catch (NoSuchElementException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Bukti Pelaksanaan dengan ID " + buktiPelaksanaanDTO.getId() + " tidak ditemukan!"
+            );
+        }
+        return response;
+    }
 }
