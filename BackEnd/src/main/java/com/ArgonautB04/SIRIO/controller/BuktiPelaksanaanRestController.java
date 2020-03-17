@@ -98,7 +98,7 @@ public class BuktiPelaksanaanRestController {
         BuktiPelaksanaan buktiPelaksanaanTemp = new BuktiPelaksanaan();
 
         buktiPelaksanaanTemp.setStatusBuktiPelaksanaan(
-                statusBuktiPelaksanaanRestService.getById(buktiPelaksanaanDTO.getStatus()));
+                statusBuktiPelaksanaanRestService.getById(1));
         buktiPelaksanaanTemp.setKeterangan(buktiPelaksanaanDTO.getKeterangan());
         buktiPelaksanaanTemp.setLampiran(buktiPelaksanaanDTO.getLampiran());
 

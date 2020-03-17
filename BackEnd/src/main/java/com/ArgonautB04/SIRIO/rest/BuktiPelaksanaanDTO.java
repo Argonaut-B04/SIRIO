@@ -2,7 +2,6 @@ package com.ArgonautB04.SIRIO.rest;
 
 public class BuktiPelaksanaanDTO {
     private Integer id;
-    private Integer status;
     private String keterangan;
     private String lampiran;
     private Integer idPembuat;
@@ -14,14 +13,6 @@ public class BuktiPelaksanaanDTO {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public Integer getStatus() {
-        return status;
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
     }
 
     public String getKeterangan() {
