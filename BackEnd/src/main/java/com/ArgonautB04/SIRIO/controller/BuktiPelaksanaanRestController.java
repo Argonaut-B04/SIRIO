@@ -132,13 +132,11 @@ public class BuktiPelaksanaanRestController {
 //    /**
 //     * Mengubah bukti pelaksanaan
 //     *
-//     * @param idBuktiPelaksanaan  identifier bukti pelaksanaan
 //     * @param buktiPelaksanaanDTO data transfer object untuk bukti pelaksanaan yang akan diubah
 //     * @return bukti pelaksanaan yang telah disimpan
 //     */
-//    @PutMapping(value = "/ubah/{idBuktiPelaksanaan}", consumes = {"application/json"})
+//    @PutMapping(value = "/ubah", consumes = {"application/json"})
 //    private BaseResponse<BuktiPelaksanaan> ubahBuktiPelaksanaan(
-//            @PathVariable("idBuktiPelaksanaan") int idBuktiPelaksanaan,
 //            @RequestBody BuktiPelaksanaanDTO buktiPelaksanaanDTO
 //    ) {
 //        BaseResponse<BuktiPelaksanaan> response = new BaseResponse<>();
@@ -146,14 +144,15 @@ public class BuktiPelaksanaanRestController {
 //            BuktiPelaksanaan buktiPelaksanaanTemp = buktiPelaksanaanRestService.getById(buktiPelaksanaanDTO.getId());
 //            buktiPelaksanaanTemp.setStatusBuktiPelaksanaan(
 //                    statusBuktiPelaksanaanRestService.getById(buktiPelaksanaanDTO.getStatus()));
-//            BuktiPelaksanaan buktiPelaksanaan = buktiPelaksanaanRestService.ubahBuktiPelaksanaan(idBuktiPelaksanaan, buktiPelaksanaanTemp);
+//            BuktiPelaksanaan buktiPelaksanaan =
+//                    buktiPelaksanaanRestService.ubahBuktiPelaksanaan(buktiPelaksanaanDTO.getId(), buktiPelaksanaanTemp);
 //
 //            response.setStatus(200);
 //            response.setMessage("success");
 //            response.setResult(buktiPelaksanaan);
 //        } catch (NoSuchElementException e) {
 //            throw new ResponseStatusException(
-//                    HttpStatus.NOT_FOUND, "Bukti Pelaksanaan dengan ID " + idBuktiPelaksanaan + " tidak ditemukan!"
+//                    HttpStatus.NOT_FOUND, "Bukti Pelaksanaan dengan ID " + buktiPelaksanaanDTO.getId() + " tidak ditemukan!"
 //            );
 //        }
 //        return response;

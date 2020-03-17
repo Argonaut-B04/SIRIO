@@ -17,8 +17,9 @@ public class BuktiPelaksanaan implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idBuktiPelaksanaan;
 
+    @NotNull
     @Size(max = 255)
-    @Column
+    @Column(nullable = false)
     private String lampiran;
 
     @NotNull
@@ -26,9 +27,8 @@ public class BuktiPelaksanaan implements Serializable {
     @Column(nullable = false)
     private String keterangan;
 
-    @NotNull
     @Size(max = 125)
-    @Column(nullable = false)
+    @Column
     private String feedback;
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -44,7 +44,7 @@ public class BuktiPelaksanaan implements Serializable {
     private Rekomendasi rekomendasi;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "pemeriksa", referencedColumnName = "idEmployee", nullable = false)
+    @JoinColumn(name = "pemeriksa", referencedColumnName = "idEmployee")
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private Employee pemeriksa;
