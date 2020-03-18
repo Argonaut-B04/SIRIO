@@ -47,14 +47,16 @@ public class EmployeeRestServiceImpl implements EmployeeRestService {
     }
 
     @Override
-    public void nonaktifkanEmployee(int idEmployee) {
+    public Employee nonaktifkanEmployee(int idEmployee) {
         Employee employee = getById(idEmployee);
-        employee.setStatus("NONAKTIF");
+        employee.setStatus(Employee.Status.NONAKTIF);
+        return employee;
     }
 
     @Override
-    public void aktifkanEmployee(int idEmployee) {
+    public Employee aktifkanEmployee(int idEmployee) {
         Employee employee = getById(idEmployee);
-        employee.setStatus("AKTIF");
+        employee.setStatus(Employee.Status.AKTIF);
+        return employee;
     }
 }
