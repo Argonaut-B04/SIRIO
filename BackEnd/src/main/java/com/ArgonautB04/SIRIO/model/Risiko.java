@@ -15,6 +15,10 @@ import java.util.List;
 @Table
 public class Risiko implements Serializable {
 
+    enum Status {
+        AKTIF, NONAKTIF
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idRisiko;
@@ -34,11 +38,10 @@ public class Risiko implements Serializable {
     @Column(nullable = false)
     private String komponen;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "status", referencedColumnName = "idStatusRisiko", nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonIgnore
-    private StatusRisiko statusRisiko;
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 10)
+    private Status status;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "parent", referencedColumnName = "idRisiko", nullable = true)
@@ -89,12 +92,12 @@ public class Risiko implements Serializable {
         this.komponen = indikator;
     }
 
-    public StatusRisiko getStatusRisiko() {
-        return statusRisiko;
+    public Status getStatus() {
+        return status;
     }
 
-    public void setStatusRisiko(StatusRisiko statusRisiko) {
-        this.statusRisiko = statusRisiko;
+    public void setStatus(Status status) {
+        this.status = status;
     }
 
     public Risiko getParent() {
