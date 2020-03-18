@@ -14,4 +14,8 @@ public interface RisikoRestService {
     Risiko ubahRisiko(int idRisiko, Risiko risiko);
 
     void hapusRisiko(int idRisiko);
+
+    Risiko nonaktifkanRisiko(int idRisiko);
+
+    Risiko aktifkanRisiko(int idRisiko);
 }

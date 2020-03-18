@@ -15,7 +15,7 @@ import java.util.List;
 @Table
 public class Risiko implements Serializable {
 
-    enum Status {
+    public static enum Status {
         AKTIF, NONAKTIF
     }
 
