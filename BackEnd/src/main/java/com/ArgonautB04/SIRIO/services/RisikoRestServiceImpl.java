@@ -38,7 +38,6 @@ public class RisikoRestServiceImpl implements RisikoRestService {
     public Risiko ubahRisiko(int idRisiko, Risiko risiko) {
         Risiko target = getById(idRisiko);
         target.setChildList(risiko.getChildList());
-        target.setStatusRisiko(risiko.getStatusRisiko());
         target.setSop(risiko.getSop());
         target.setRisikoKategori(risiko.getRisikoKategori());
         target.setParent(risiko.getParent());
@@ -50,5 +49,19 @@ public class RisikoRestServiceImpl implements RisikoRestService {
     @Override
     public void hapusRisiko(int idRisiko) {
         risikoDB.deleteById(idRisiko);
+    }
+
+    @Override
+    public Risiko nonaktifkanRisiko(int idRisiko) {
+        Risiko target = getById(idRisiko);
+        target.setStatus(Risiko.Status.NONAKTIF);
+        return risikoDB.save(target);
+    }
+
+    @Override
+    public Risiko aktifkanRisiko(int idRisiko) {
+        Risiko target = getById(idRisiko);
+        target.setStatus(Risiko.Status.AKTIF);
+        return risikoDB.save(target);
     }
 }
