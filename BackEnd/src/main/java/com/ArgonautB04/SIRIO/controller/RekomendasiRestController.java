@@ -2,12 +2,12 @@ package com.ArgonautB04.SIRIO.controller;
 
 import com.ArgonautB04.SIRIO.model.*;
 import com.ArgonautB04.SIRIO.rest.BaseResponse;
+import com.ArgonautB04.SIRIO.rest.RekomendasiDTO;
 import com.ArgonautB04.SIRIO.rest.Settings;
 import com.ArgonautB04.SIRIO.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.MethodNotAllowedException;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
@@ -95,18 +95,16 @@ public class RekomendasiRestController {
     /**
      * Mengubah tenggat waktu untuk rekomendasi spesifik. (UNTESTED)
      *
-     * @param idRekomendasi identifier rekomendasi yang akan diubah tenggat waktunya
-     * @param tenggatWaktu  dalam format yyyy-MM-dd (format default html)
      * @return objek rekomendasi yang telah diubah
      */
-    @PutMapping("/tenggatWaktu/{idRekomendasi}")
+    @PutMapping("/tenggatWaktu")
     private BaseResponse<Rekomendasi> ubahTenggatWaktu(
-            @PathVariable("idRekomendasi") int idRekomendasi,
-            @RequestBody String tenggatWaktu
+            @RequestBody RekomendasiDTO rekomendasiDTO
     ) {
         BaseResponse<Rekomendasi> response = new BaseResponse<>();
+        Integer idRekomendasi = rekomendasiDTO.getId();
         try {
-            LocalDate tenggatWaktuLocalDate = Settings.stringToLocalDate(tenggatWaktu);
+            LocalDate tenggatWaktuLocalDate = Settings.stringToLocalDate(rekomendasiDTO.getTenggatWaktu());
             Rekomendasi result = rekomendasiRestService.ubahTenggatWaktu(idRekomendasi, tenggatWaktuLocalDate);
 
             response.setStatus(200);

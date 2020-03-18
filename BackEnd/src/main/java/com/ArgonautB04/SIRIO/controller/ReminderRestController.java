@@ -4,6 +4,7 @@ import com.ArgonautB04.SIRIO.model.Employee;
 import com.ArgonautB04.SIRIO.model.Rekomendasi;
 import com.ArgonautB04.SIRIO.model.Reminder;
 import com.ArgonautB04.SIRIO.rest.BaseResponse;
+import com.ArgonautB04.SIRIO.rest.RekomendasiDTO;
 import com.ArgonautB04.SIRIO.rest.ReminderDTO;
 import com.ArgonautB04.SIRIO.rest.Settings;
 import com.ArgonautB04.SIRIO.services.EmployeeRestService;
@@ -35,14 +36,15 @@ public class ReminderRestController {
     /**
      * Mengambil seluruh reminder yang terhubung dengan rekomendasi spesifik
      *
-     * @param idRekomendasi identifier rekomendasi
+     * @param rekomendasiDTO data transfer object untuk rekomendasi
      * @return daftar reminder yang terhubung dengan rekomendasi tersebut
      */
-    @GetMapping("/getAll/{idRekomendasi}")
+    @GetMapping("/getListByRekomendasi")
     private BaseResponse<List<Reminder>> getAllReminderUntukRekomendasi(
-            @PathVariable("idRekomendasi") int idRekomendasi
+            @RequestBody RekomendasiDTO rekomendasiDTO
     ) {
         BaseResponse<List<Reminder>> response = new BaseResponse<>();
+        Integer idRekomendasi = rekomendasiDTO.getId();
         try {
             Rekomendasi rekomendasi = rekomendasiRestService.getById(idRekomendasi);
             List<Reminder> result = reminderRestService.getByRekomendasi(rekomendasi);
@@ -61,16 +63,16 @@ public class ReminderRestController {
     /**
      * Menambah reminder baru untuk rekomendasi spesifik
      *
-     * @param idRekomendasi identifier rekomendasi yang akan ditambah remindernya
-     * @param reminderDTO   data transfer object untuk reminder
+     * @param rekomendasiDTO data transfer object untuk rekomendasi yang memuat informasi reminderDTO
      * @return reminder yang telah disimpan
      */
-    @PostMapping(value = "/tambah/{idRekomendasi}", consumes = {"application/json"})
+    @PostMapping(value = "/tambah", consumes = {"application/json"})
     private BaseResponse<Reminder> tambahReminder(
-            @PathVariable("idRekomendasi") int idRekomendasi,
-            @RequestBody ReminderDTO reminderDTO
+            @RequestBody RekomendasiDTO rekomendasiDTO
     ) {
         BaseResponse<Reminder> response = new BaseResponse<>();
+        Integer idRekomendasi = rekomendasiDTO.getId();
+        ReminderDTO reminderDTO = rekomendasiDTO.getReminderDTO();
         try {
             Reminder reminder = new Reminder();
 
@@ -99,16 +101,15 @@ public class ReminderRestController {
     /**
      * Mengubah tanggal reminder
      *
-     * @param idReminder  identifier reminder
      * @param reminderDTO data transfer object untuk reminder
      * @return reminder yang telah disimpan
      */
-    @PutMapping(value = "/ubah/{idReminder}", consumes = {"application/json"})
+    @PutMapping(value = "/ubah", consumes = {"application/json"})
     private BaseResponse<Reminder> ubahTanggalReminder(
-            @PathVariable("idReminder") int idReminder,
             @RequestBody ReminderDTO reminderDTO
     ) {
         BaseResponse<Reminder> response = new BaseResponse<>();
+        Integer idReminder = reminderDTO.getId();
         try {
             LocalDate tanggalReminderLocalDate = Settings.stringToLocalDate(reminderDTO.getTanggal());
             Reminder result = reminderRestService.ubahReminder(idReminder, tanggalReminderLocalDate);
@@ -127,13 +128,14 @@ public class ReminderRestController {
     /**
      * Menghapus reminder
      *
-     * @param idReminder identifier reminder yang akan dihapus
+     * @param reminderDTO data transfer object untuk reminder
      */
-    @DeleteMapping("/hapus/{idReminder}")
+    @DeleteMapping("/hapus")
     private BaseResponse<String> hapusReminder(
-            @PathVariable("idReminder") int idReminder
+            @RequestBody ReminderDTO reminderDTO
     ) {
         BaseResponse<String> response = new BaseResponse<>();
+        int idReminder = reminderDTO.getId();
         try {
             reminderRestService.hapusReminder(idReminder);
 
