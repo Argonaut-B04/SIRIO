@@ -13,7 +13,7 @@ public interface EmployeeRestService {
 
     Employee ubahEmployee(int idEmployee, Employee employee);
 
-    void nonaktifkanEmployee(int idEmployee);
+    Employee nonaktifkanEmployee(int idEmployee);
 
-    void aktifkanEmployee(int idEmployee);
+    Employee aktifkanEmployee(int idEmployee);
 }

@@ -1,6 +1,7 @@
 package com.ArgonautB04.SIRIO.services;
 
 import com.ArgonautB04.SIRIO.model.BuktiPelaksanaan;
+import com.ArgonautB04.SIRIO.model.Employee;
 
 import java.awt.*;
 import java.util.List;
@@ -14,5 +15,5 @@ public interface BuktiPelaksanaanRestService {
 
     BuktiPelaksanaan ubahBuktiPelaksanaan(int idBuktiPelaksanaan, BuktiPelaksanaan buktiPelaksanaan);
 
-    void hapusBuktiPelaksanaan(int idBuktiPelaksanaan);
+    List<BuktiPelaksanaan> getByPembuat(Employee pembuat);
 }
