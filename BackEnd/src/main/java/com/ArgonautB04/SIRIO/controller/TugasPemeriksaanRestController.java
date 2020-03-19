@@ -57,6 +57,33 @@ public class TugasPemeriksaanRestController {
     }
 
     /**
+     * Mengambil seluruh tugas pemeriksaan yang terhubung dengan kantor cabang tersebut
+     *
+     * @param idKantorCabang identifier pelaksanan
+     *
+     * @return daftar tugas pemeriksaan yang terhubung dengan kantor cabang tersebut
+     */
+    @GetMapping("/getAll/{idKantorCabang}")
+    private BaseResponse<List<TugasPemeriksaan>> getAllTugasPemeriksaanUntukKantorCabang(
+            @PathVariable("idKantorCabang") int idKantorCabang
+    ) {
+        BaseResponse<List<TugasPemeriksaan>> response = new BaseResponse<>();
+        try {
+            KantorCabang kantorCabang = kantorCabangRestService.getById(idKantorCabang);
+            List<TugasPemeriksaan> result = tugasPemeriksaanRestService.getByKantorCabang(kantorCabang);
+
+            response.setStatus(200);
+            response.setMessage("success");
+            response.setResult(result);
+        } catch (NoSuchElementException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Kantor Cabang dengan ID " + idKantorCabang + " tidak ditemukan!"
+            );
+        }
+        return response;
+    }
+
+    /**
      * Mengambil suatu tugas pemeriksaan
      *
      * @param idTugasPemeriksaan identifier tugas pemeriksaan
