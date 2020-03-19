@@ -5,6 +5,7 @@ public class PersetujuanBuktiPelaksanaanDTO {
     private Integer idBuktiPelaksanaan;
     private Integer status;
     private String feedback;
+    private Integer idRekomendasi;
 
     public Integer getIdPemeriksa() {
         return idPemeriksa;
@@ -36,5 +37,13 @@ public class PersetujuanBuktiPelaksanaanDTO {
 
     public void setFeedback(String feedback) {
         this.feedback = feedback;
+    }
+
+    public Integer getIdRekomendasi() {
+        return idRekomendasi;
+    }
+
+    public void setIdRekomendasi(Integer idRekomendasi) {
+        this.idRekomendasi = idRekomendasi;
     }
 }
