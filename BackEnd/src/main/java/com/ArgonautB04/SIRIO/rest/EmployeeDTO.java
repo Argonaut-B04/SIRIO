@@ -1,0 +1,15 @@
+package com.ArgonautB04.SIRIO.rest;
+
+public class EmployeeDTO {
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    private Integer id;
+
+
+}
