@@ -5,9 +5,9 @@ import paginationFactory from 'react-bootstrap-table2-paginator';
 import 'react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.min.css';
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
 import overlayFactory from 'react-bootstrap-table2-overlay';
-import TableButton from '../../Button/TableButton';
+import SirioButton from '../../Button/SirioButton';
+import SirioDatePickerButton from '../../Button/SirioDatePickerButton';
 import classes from './TabelRekomendasi.module.css';
-import DatePickerButton from '../../Button/DatePickerButton';
 
 export default class TabelRekomendasi extends React.Component {
     indication() {
@@ -53,9 +53,12 @@ export default class TabelRekomendasi extends React.Component {
 
     getButtonsFirst(cell, row) {
         return (
-            <TableButton onClick={() => window.location.href = "http://www.google.com"}>
+            <SirioButton
+                purple
+                onClick={() => window.location.href = "http://www.google.com"}
+            >
                 Hasil Pemeriksaan
-            </TableButton>
+            </SirioButton>
         )
     }
 
@@ -64,10 +67,18 @@ export default class TabelRekomendasi extends React.Component {
         const tenggatWaktu = row.tenggatWaktu;
         const tenggatWaktuExist = tenggatWaktu !== "";
         const recommended = status === "Menunggu Pengaturan Tenggat Waktu";
-        const hyperlinkMode = status === "Menunggu Pelaksanaan" && tenggatWaktuExist;
-        const unchangeable = status === "Sedang Dijalankan" && tenggatWaktuExist;
+        const hyperlink = status === "Menunggu Pelaksanaan" && tenggatWaktuExist;
+        const text = status === "Sedang Dijalankan" && tenggatWaktuExist;
         return (
-            <DatePickerButton disabled={!recommended} recommended={recommended} hyperlinkMode={hyperlinkMode} unchangeable={unchangeable} tenggatWaktu={tenggatWaktuExist ? tenggatWaktu : "Tenggat Waktu"} />
+            <SirioDatePickerButton
+                purple
+                disabled={!recommended}
+                recommended={recommended}
+                hyperlink={hyperlink}
+                text={text}
+            >
+                {tenggatWaktuExist ? tenggatWaktu : "Tenggat Waktu"}
+            </SirioDatePickerButton>
         )
     }
 
@@ -75,9 +86,12 @@ export default class TabelRekomendasi extends React.Component {
         const status = row.statusRekomendasi;
         const reminderEnable = status === "Menunggu Pelaksanaan" || status === "Sedang Dijalankan";
         return (
-            <TableButton disabled={!reminderEnable}>
+            <SirioButton
+                purple
+                disabled={!reminderEnable}
+            >
                 Reminder
-            </TableButton>
+            </SirioButton>
         )
     }
 
