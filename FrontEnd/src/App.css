@@ -50,6 +50,10 @@ label {
     color: #8E8E8E;
 }
 
+input:focus {
+    border: solid #7F3F98 2px !important;
+}
+
 .sirio-btn-blue-recommended {
     background: #5DBCD2;
     border-radius: 6px;
