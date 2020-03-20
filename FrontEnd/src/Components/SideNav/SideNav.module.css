@@ -8,32 +8,10 @@
     overflow-y: auto;
 }
 
-.logo {
-    height: 50px;
-    width: calc(105px + 1.5rem);
-    position: relative;
-    margin-bottom: 5px;
-    padding: 1.5rem;
-}
-
-.logoImage {
-    position: absolute;
-    right: 0;
-    height: 28px;
-}
-
-.logoName {
-    position: absolute;
-    font-size: 35px;
-    color: white;
-    top: calc(1.5rem + 5px);
-}
-
-.logoDesc {
-    font-family: Nunito;
-    color: #5DBCD2;
-    font-size: 20px;
-    padding: 1.5rem;
+.loginModeSideBar {
+    background-image: url("/sidePattern.png");
+    height: 100vh;
+    width: 50vw;
 }
 
 .identity {
