@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import classes from "./LoginForm.module.css";
+import SirioButton from "../Button/SirioButton";
 
 class LoginForm extends Component {
 
@@ -60,11 +61,16 @@ class LoginForm extends Component {
                         <input className="form-control" type="password" name="password" placeholder="Masukan 8 karakter atau lebih" value={this.state.password} onChange={this.handleChange} />
                     </fieldset>
                     <fieldset className="w-100 text-right">
-                        <button className="btn sirio-btn-blue-recommended" onClick={this.loginClicked}>
-                            Login
-                    </button>
+                        <SirioButton
+                            blue
+                            recommended
+                            onClick={this.loginClicked}
+                        >
+                            <h4 className="m-0">
+                                Login
+                            </h4>
+                        </SirioButton>
                     </fieldset>
-
                 </div>
             </div>
         );
