@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @RestController
@@ -108,6 +109,21 @@ public class EmployeeRestController {
         response.setStatus(200);
         response.setMessage("success");
         response.setResult(employeeRestService.nonaktifkanEmployee(employeeDTO.getId()));
+        return response;
+    }
+
+    /**
+     * Mengambil seluruh employee
+     *
+     * @return daftar hasil employee
+     */
+    @GetMapping("/getAll")
+    private BaseResponse<List<Employee>> getAllEmployee() {
+        BaseResponse<List<Employee>> response = new BaseResponse<>();
+        List<Employee> result = employeeRestService.getAll();
+        response.setStatus(200);
+        response.setMessage("success");
+        response.setResult(result);
         return response;
     }
 
