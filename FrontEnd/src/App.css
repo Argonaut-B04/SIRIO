@@ -50,15 +50,6 @@ label {
     color: #8E8E8E;
 }
 
-.sirio-btn-blue-recommended {
-    background: #5DBCD2;
-    border-radius: 6px;
-    width: 150px;
-    height: 35px;
-    font-family: Nunito;
-    font-style: normal;
-    font-weight: 600;
-    font-size: 18px;
-    line-height: 18px;
-    color: white;
+input:focus {
+    border: solid #7F3F98 2px !important;
 }
