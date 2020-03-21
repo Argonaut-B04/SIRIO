@@ -1,12 +1,21 @@
 package com.ArgonautB04.SIRIO.rest;
 
 public class EmployeeDTO {
+    private Integer id;
     private String nama;
     private String username;
     private String password;
     private String noHp;
     private String email;
     private Integer idRole;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public String getNama() {
         return nama;

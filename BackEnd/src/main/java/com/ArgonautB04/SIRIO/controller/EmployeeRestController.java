@@ -8,10 +8,7 @@ import com.ArgonautB04.SIRIO.services.EmployeeRestService;
 import com.ArgonautB04.SIRIO.services.RoleRestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.NoSuchElementException;
@@ -57,6 +54,38 @@ public class EmployeeRestController {
         response.setStatus(200);
         response.setMessage("success");
         response.setResult(employeeRestService.buatEmployee(employee));
+        return response;
+    }
+
+    /**
+     * Mengubah employee
+     *
+     * @param employeeDTO data transfer object untuk employee yang akan diubah
+     * @return employee yang telah diperbarui
+     */
+    @PutMapping(value = "/ubah", consumes = {"application/json"})
+    private BaseResponse<Employee> ubahEmployee(
+            @RequestBody EmployeeDTO employeeDTO
+    ) {
+        BaseResponse<Employee> response = new BaseResponse<>();
+        Employee employee = employeeRestService.getById(employeeDTO.getId());
+        employee.setNama(employeeDTO.getNama());
+        employee.setEmail(employeeDTO.getEmail());
+        employee.setNama(employeeDTO.getNama());
+        employee.setNoHp(employeeDTO.getNoHp());
+
+        try {
+            Role role = roleRestService.getById(employeeDTO.getIdRole());
+            employee.setRole(role);
+        } catch (NoSuchElementException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Role dengan ID " + employeeDTO.getIdRole() + " tidak ditemukan!"
+            );
+        }
+
+        response.setStatus(200);
+        response.setMessage("success");
+        response.setResult(employeeRestService.ubahEmployee(employeeDTO.getId(), employee));
         return response;
     }
 
