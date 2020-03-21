@@ -127,4 +127,29 @@ public class EmployeeRestController {
         return response;
     }
 
+    /**
+     * Mengambil suatu employee
+     *
+     * @param idEmployee identifier employee
+     * @return detail employee
+     */
+    @GetMapping("/{idEmployee}")
+    private BaseResponse<Employee> getHasilPemeriksaan(
+            @PathVariable("idEmployee") int idEmployee
+    ) {
+        BaseResponse<Employee> response = new BaseResponse<>();
+        try {
+            Employee result = employeeRestService.getById(idEmployee);
+
+            response.setStatus(200);
+            response.setMessage("success");
+            response.setResult(result);
+        } catch (NoSuchElementException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Employee dengan ID " + idEmployee + " tidak ditemukan!"
+            );
+        }
+        return response;
+    }
+
 }
