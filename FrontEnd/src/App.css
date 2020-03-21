@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css?family=Nunito:600,700&display=swap');
 h1 {
     font-family: Nunito;
     font-style: normal;
@@ -52,4 +53,12 @@ label {
 
 input:focus {
     border: solid #7F3F98 2px !important;
+}
+
+tr {
+    font-family: Proxima Nova;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    height: 30px;
 }
