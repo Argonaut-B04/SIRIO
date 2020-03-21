@@ -71,4 +71,9 @@ public class EmployeeRestServiceImpl implements EmployeeRestService {
         employee.setStatus(Employee.Status.AKTIF);
         return employee;
     }
+
+    @Override
+    public void hapusEmployee(int idEmployee) {
+        employeeDb.deleteById(idEmployee);
+    }
 }

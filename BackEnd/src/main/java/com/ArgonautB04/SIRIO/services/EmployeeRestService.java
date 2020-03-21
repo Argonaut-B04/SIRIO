@@ -19,4 +19,6 @@ public interface EmployeeRestService {
     Employee nonaktifkanEmployee(int idEmployee);
 
     Employee aktifkanEmployee(int idEmployee);
+
+    void hapusEmployee(int idEmployee);
 }

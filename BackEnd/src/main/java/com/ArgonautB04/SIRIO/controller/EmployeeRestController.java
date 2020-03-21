@@ -7,6 +7,7 @@ import com.ArgonautB04.SIRIO.rest.EmployeeDTO;
 import com.ArgonautB04.SIRIO.services.EmployeeRestService;
 import com.ArgonautB04.SIRIO.services.RoleRestService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -152,4 +153,27 @@ public class EmployeeRestController {
         return response;
     }
 
+    /**
+     * Menghapus employee
+     *
+     * @param employeeDTO data transfer object untuk employee yang akan dihapus
+     */
+    @DeleteMapping("/hapus")
+    private BaseResponse<String> hapusEmployee(
+            @RequestBody EmployeeDTO employeeDTO
+    ) {
+        BaseResponse<String> response = new BaseResponse<>();
+        try {
+            employeeRestService.hapusEmployee(employeeDTO.getId());
+
+            response.setStatus(200);
+            response.setMessage("success");
+            response.setResult("Employee dengan id " + employeeDTO.getId() + " terhapus!");
+        } catch (EmptyResultDataAccessException e) {
+            response.setStatus(404);
+            response.setMessage("not found");
+            response.setResult("Employee dengan id " + employeeDTO.getId() + " tidak dapat ditemukan");
+        }
+        return response;
+    }
 }
