@@ -34,6 +34,11 @@ public class EmployeeRestController {
             @RequestBody EmployeeDTO employeeDTO
     ) {
         BaseResponse<Employee> response = new BaseResponse<>();
+        if (employeeRestService.getByUsername(employeeDTO.getUsername()).isPresent())
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT, "Username " + employeeDTO.getUsername() + " sudah ada pada database!"
+            );
+
         Employee employee = new Employee();
         employee.setStatus(Employee.Status.AKTIF);
         employee.setEmail(employeeDTO.getEmail());
@@ -88,5 +93,7 @@ public class EmployeeRestController {
         response.setResult(employeeRestService.ubahEmployee(employeeDTO.getId(), employee));
         return response;
     }
+
+
 
 }
