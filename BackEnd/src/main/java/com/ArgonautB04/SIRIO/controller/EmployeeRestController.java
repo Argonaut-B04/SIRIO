@@ -94,6 +94,21 @@ public class EmployeeRestController {
         return response;
     }
 
-
+    /**
+     * Nonaktivasi employee
+     *
+     * @param employeeDTO data transfer object untuk employee yang akan dinonaktifkan
+     * @return employee yang telah dinonaktifkan
+     */
+    @PutMapping(value = "/nonaktif", consumes = {"application/json"})
+    private BaseResponse<Employee> nonaktifEmployee(
+            @RequestBody EmployeeDTO employeeDTO
+    ) {
+        BaseResponse<Employee> response = new BaseResponse<>();
+        response.setStatus(200);
+        response.setMessage("success");
+        response.setResult(employeeRestService.nonaktifkanEmployee(employeeDTO.getId()));
+        return response;
+    }
 
 }
