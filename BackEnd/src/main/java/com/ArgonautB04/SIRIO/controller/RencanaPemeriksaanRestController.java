@@ -190,8 +190,8 @@ public class RencanaPemeriksaanRestController {
             response.setResult("Rencana pemeriksaan id " + rencanaPemeriksaanDTO.getId() + " tidak dapat ditemukan");
         }
 
-       /* Tidak dapat dihapus jika rencana sudah dijalankan
-        if(rencanaPemeriksaanDTO.getStatus() == 2){
+       /* Tidak dapat dihapus jika rencana sudah dijalankanr
+        if(rencanaPemeriksaanDTO.getStatus() == 3){
             response.setStatus(500);
             response.setMessage("error");
             response.setResult("Rencana pemeriksaan dengan id " + rencanaPemeriksaanDTO.getId() + " tidak dapat dihapus!");
