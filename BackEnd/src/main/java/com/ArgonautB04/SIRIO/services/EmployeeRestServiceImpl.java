@@ -59,11 +59,6 @@ public class EmployeeRestServiceImpl implements EmployeeRestService {
     }
 
     @Override
-    public Employee getByUsername(String username) {
-        return employeeDb.findByUsername(username);
-    }
-
-    @Override
     public Employee nonaktifkanEmployee(int idEmployee) {
         Employee employee = getById(idEmployee);
         employee.setStatus(Employee.Status.NONAKTIF);

@@ -14,8 +14,6 @@ public interface EmployeeRestService {
 
     List<Employee> getAll();
 
-    Employee getByUsername(String username);
-
     Employee ubahEmployee(int idEmployee, Employee employee);
 
     Employee nonaktifkanEmployee(int idEmployee);

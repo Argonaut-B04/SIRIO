@@ -32,7 +32,8 @@ class LoginForm extends Component {
             .executeBasicAuthenticationService(this.state.username, this.state.password)
             .then(
                 (response) => {
-                    AuthenticationService.registerSuccessfulLogin(this.state.username, this.state.password, response.data.result.role);
+                    console.log(response);
+                    AuthenticationService.registerSuccessfulLogin(this.state.username, this.state.password, response.data.result.role.namaRole);
                     this.props.history.push("/");
                 }
             )
