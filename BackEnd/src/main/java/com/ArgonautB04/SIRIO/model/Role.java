@@ -20,7 +20,7 @@ public class Role implements Serializable {
     private int idRole;
 
     @NotNull
-    @Size(max = 20)
+    @Size(max = 50)
     @Column(nullable = false)
     private String namaRole;
 
