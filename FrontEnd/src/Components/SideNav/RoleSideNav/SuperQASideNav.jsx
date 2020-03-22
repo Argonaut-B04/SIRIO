@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import SideNavFramework from '../SideNavFramework';
 
-export default class QAOfficerSideNav extends Component {
+export default class SuperQASideNav extends Component {
     render() {
         return (
             <SideNavFramework
