@@ -1,6 +1,7 @@
 package com.ArgonautB04.SIRIO.services;
 
 import com.ArgonautB04.SIRIO.model.RencanaPemeriksaan;
+import com.ArgonautB04.SIRIO.model.Employee;
 import com.ArgonautB04.SIRIO.repository.RencanaPemeriksaanDB;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,6 +28,11 @@ public class RencanaPemeriksaanRestServiceImpl implements RencanaPemeriksaanRest
         Optional<RencanaPemeriksaan> rencanaPemeriksaan = rencanaPemeriksaanDB.findById(idRencanaPemeriksaan);
         if (rencanaPemeriksaan.isPresent()) return rencanaPemeriksaan.get();
         else throw new NoSuchElementException();
+    }
+
+    @Override
+    public List<RencanaPemeriksaan> getByPembuat(Employee pembuat) {
+        return rencanaPemeriksaanDB.findAllByPembuat(pembuat);
     }
 
     @Override
