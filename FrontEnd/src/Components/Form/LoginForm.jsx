@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import classes from "./LoginForm.module.css";
 import SirioButton from "../Button/SirioButton";
+import AuthenticationService from "../../Services/AuthenticationService";
 
 class LoginForm extends Component {
 
@@ -27,23 +28,21 @@ class LoginForm extends Component {
     }
 
     loginClicked() {
-        console.log("login button clicked, not implemented");
-        // AuthenticationService
-        //     .executeBasicAuthenticationService(this.state.username, this.state.password)
-        //     .then(
-        //         () => {
-        //             AuthenticationService.registerSuccessfulLogin(this.state.username, this.state.password);
-        //             this.props.history.push(`/courses`);
-        //         }
-        //     )
-        //     .catch(
-        //         () => {
-        //             this.setState({
-        //                 showSuccessMessage: false,
-        //                 hasLoginFailed: true
-        //             })
-        //         }
-        //     )
+        AuthenticationService
+            .executeBasicAuthenticationService(this.state.username, this.state.password)
+            .then(
+                (response) => {
+                    AuthenticationService.registerSuccessfulLogin(this.state.username, this.state.password, response.data.result.role);
+                    this.props.history.push("/");
+                }
+            )
+            .catch(
+                () => {
+                    this.setState({
+                        hasLoginFailed: true
+                    })
+                }
+            )
     }
 
     render() {
@@ -66,9 +65,7 @@ class LoginForm extends Component {
                             recommended
                             onClick={this.loginClicked}
                         >
-                            <h4 className="m-0">
-                                Login
-                            </h4>
+                            Login
                         </SirioButton>
                     </fieldset>
                 </div>

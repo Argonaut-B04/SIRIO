@@ -11,7 +11,7 @@ export default class Login extends React.Component {
                 <div className="flex-grow-1 p-5">
                     <div className="p-5">
                         <LogoTag dark />
-                        <LoginForm />
+                        <LoginForm history={this.props.history} />
                     </div>
                 </div>
             </div>
