@@ -1,13 +1,8 @@
 package com.ArgonautB04.SIRIO.rest;
 
-import com.ArgonautB04.SIRIO.model.StatusBuktiPelaksanaan;
-import com.ArgonautB04.SIRIO.model.StatusHasilPemeriksaan;
-import com.ArgonautB04.SIRIO.model.StatusRekomendasi;
-import com.ArgonautB04.SIRIO.model.StatusRencanaPemeriksaan;
-import com.ArgonautB04.SIRIO.repository.StatusBuktiPelaksanaanDB;
-import com.ArgonautB04.SIRIO.repository.StatusHasilPemeriksaanDB;
-import com.ArgonautB04.SIRIO.repository.StatusRekomendasiDB;
-import com.ArgonautB04.SIRIO.repository.StatusRencanaPemeriksaanDB;
+import com.ArgonautB04.SIRIO.model.*;
+import com.ArgonautB04.SIRIO.repository.*;
+import com.ArgonautB04.SIRIO.services.EmployeeRestService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -18,12 +13,16 @@ public class DatabaseLoader implements CommandLineRunner {
     private final StatusHasilPemeriksaanDB statusHasilPemeriksaanDB;
     private final StatusRencanaPemeriksaanDB statusRencanaPemeriksaanDB;
     private final StatusRekomendasiDB statusRekomendasiDB;
+    private final EmployeeRestService employeeRestService;
+    private final RoleDB roleDB;
 
-    public DatabaseLoader(StatusBuktiPelaksanaanDB statusBuktiPelaksanaanDB, StatusHasilPemeriksaanDB statusHasilPemeriksaanDB, StatusRencanaPemeriksaanDB statusRencanaPemeriksaanDB, StatusRekomendasiDB statusRekomendasiDB) {
+    public DatabaseLoader(StatusBuktiPelaksanaanDB statusBuktiPelaksanaanDB, StatusHasilPemeriksaanDB statusHasilPemeriksaanDB, StatusRencanaPemeriksaanDB statusRencanaPemeriksaanDB, StatusRisikoDB statusRisikoDB, StatusRekomendasiDB statusRekomendasiDB, EmployeeRestService employeeRestService, RoleDB roleDB) {
         this.statusBuktiPelaksanaanDB = statusBuktiPelaksanaanDB;
         this.statusHasilPemeriksaanDB = statusHasilPemeriksaanDB;
         this.statusRencanaPemeriksaanDB = statusRencanaPemeriksaanDB;
         this.statusRekomendasiDB = statusRekomendasiDB;
+        this.employeeRestService = employeeRestService;
+        this.roleDB = roleDB;
     }
 
     @Override
@@ -32,6 +31,23 @@ public class DatabaseLoader implements CommandLineRunner {
         if (statusRencanaPemeriksaanDB.findAll().isEmpty()) populasiStatusRencanaPemeriksaan();
         if (statusHasilPemeriksaanDB.findAll().isEmpty()) populasiStatusHasilPemeriksaan();
         if (statusRekomendasiDB.findAll().isEmpty()) populasiStatusRekomendasi();
+        if (employeeRestService.getAll().isEmpty()) populasiEmployeedanRole();
+    }
+
+    private void populasiEmployeedanRole() {
+        Role roleAdmin = new Role();
+        roleAdmin.setNamaRole("admin");
+        roleDB.save(roleAdmin);
+
+        Employee admin = new Employee();
+        admin.setEmail("admin@admin.com");
+        admin.setNama("admin");
+        admin.setUsername("admin");
+        admin.setStatus(Employee.Status.AKTIF);
+        admin.setPassword("admin");
+        admin.setRole(roleAdmin);
+        admin.setNoHp("123");
+        employeeRestService.buatEmployee(admin);
     }
 
     private void populasiStatusBuktiPelaksanaan() {
