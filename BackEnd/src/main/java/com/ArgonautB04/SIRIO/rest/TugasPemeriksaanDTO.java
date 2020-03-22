@@ -2,7 +2,6 @@ package com.ArgonautB04.SIRIO.rest;
 
 public class TugasPemeriksaanDTO {
     private Integer id;
-    private Integer idRencanaPemeriksaan;
     private String tanggalMulai;
     private String tanggalSelesai;
     private Integer idQA;
@@ -30,14 +29,6 @@ public class TugasPemeriksaanDTO {
 
     public void setTanggalSelesai(String tanggalSelesai) {
         this.tanggalSelesai = tanggalSelesai;
-    }
-
-    public Integer getIdRencanaPemeriksaan() {
-        return idRencanaPemeriksaan;
-    }
-
-    public void setIdRencanaPemeriksaan(Integer idRencanaPemeriksaan) {
-        this.idRencanaPemeriksaan = idRencanaPemeriksaan;
     }
 
     public Integer getIdQA() {

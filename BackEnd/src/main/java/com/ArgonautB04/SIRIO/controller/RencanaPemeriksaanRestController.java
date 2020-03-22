@@ -125,16 +125,20 @@ public class RencanaPemeriksaanRestController {
 
         for (TugasPemeriksaanDTO tugasPemeriksaanDTO: rencanaPemeriksaanDTO.getDaftarTugasPemeriksaan()){
             TugasPemeriksaan tugasPemeriksaanTemp = new TugasPemeriksaan();
+
+            tugasPemeriksaanTemp.setRencanaPemeriksaan(rencanaPemeriksaan);
             tugasPemeriksaanTemp.setKantorCabang(kantorCabangRestService.getById(tugasPemeriksaanDTO.getKantorCabang()));
             tugasPemeriksaanTemp.setPelaksana(employeeRestService.getById(tugasPemeriksaanDTO.getIdQA()));
 
             LocalDate tanggalMulaiLocalDate = Settings.stringToLocalDate(tugasPemeriksaanDTO.getTanggalMulai());
-            tugasPemeriksaanTemp.setTanggalMulai(tanggalMulaiLocalDate);
-
             LocalDate tanggalSelesaiLocalDate = Settings.stringToLocalDate(tugasPemeriksaanDTO.getTanggalSelesai());
-            tugasPemeriksaanTemp.setTanggalSelesai(tanggalSelesaiLocalDate);
 
-            TugasPemeriksaan tugasPemeriksaan = tugasPemeriksaanRestService.buatTugasPemeriksaan(tugasPemeriksaanTemp);
+            if (tanggalMulaiLocalDate.compareTo(tanggalSelesaiLocalDate) < 0) {
+                tugasPemeriksaanTemp.setTanggalMulai(tanggalMulaiLocalDate);
+                tugasPemeriksaanTemp.setTanggalSelesai(tanggalSelesaiLocalDate);
+            }
+
+            tugasPemeriksaanRestService.buatTugasPemeriksaan(tugasPemeriksaanTemp);
         }
 
         response.setStatus(200);
@@ -155,18 +159,43 @@ public class RencanaPemeriksaanRestController {
             @RequestBody RencanaPemeriksaanDTO rencanaPemeriksaanDTO
     ) {
         BaseResponse<RencanaPemeriksaan> response = new BaseResponse<>();
-        RencanaPemeriksaan rencanaPemeriksaanTemp = rencanaPemeriksaanRestService.getById(rencanaPemeriksaanDTO.getId());
-        rencanaPemeriksaanTemp.setStatus(statusRencanaPemeriksaanRestService.getById(rencanaPemeriksaanDTO.getStatus()));
-        for (TugasPemeriksaanDTO tugasPemeriksaanDTO: rencanaPemeriksaanDTO.getDaftarTugasPemeriksaan()){
-            TugasPemeriksaan tugasPemeriksaanTemp = tugasPemeriksaanRestService.getById(tugasPemeriksaanDTO.getId());
-            TugasPemeriksaan tugasPemeriksaan = tugasPemeriksaanRestService.ubahTugasPemeriksaan(tugasPemeriksaanDTO.getId(), tugasPemeriksaanTemp);
+
+        try {
+            RencanaPemeriksaan rencanaPemeriksaanTemp = rencanaPemeriksaanRestService.getById(rencanaPemeriksaanDTO.getId());
+
+            rencanaPemeriksaanTemp.setStatus(statusRencanaPemeriksaanRestService.getById(rencanaPemeriksaanDTO.getStatus()));
+            rencanaPemeriksaanTemp.setNamaRencana(rencanaPemeriksaanDTO.getNamaRencana());
+            rencanaPemeriksaanTemp.setLinkMajelis(rencanaPemeriksaanDTO.getLinkMajelis());
+            rencanaPemeriksaanTemp.setPembuat(employeeRestService.getById(rencanaPemeriksaanDTO.getIdPembuat()));
+
+            RencanaPemeriksaan rencanaPemeriksaan = rencanaPemeriksaanRestService.ubahRencanaPemeriksaan(rencanaPemeriksaanDTO.getId(), rencanaPemeriksaanTemp);
+
+            for (TugasPemeriksaanDTO tugasPemeriksaanDTO : rencanaPemeriksaanDTO.getDaftarTugasPemeriksaan()) {
+                TugasPemeriksaan tugasPemeriksaanTemp = tugasPemeriksaanRestService.getById(tugasPemeriksaanDTO.getId());
+
+                tugasPemeriksaanTemp.setRencanaPemeriksaan(rencanaPemeriksaan);
+                tugasPemeriksaanTemp.setKantorCabang(kantorCabangRestService.getById(tugasPemeriksaanDTO.getKantorCabang()));
+                tugasPemeriksaanTemp.setPelaksana(employeeRestService.getById(tugasPemeriksaanDTO.getIdQA()));
+
+                LocalDate tanggalMulaiLocalDate = Settings.stringToLocalDate(tugasPemeriksaanDTO.getTanggalMulai());
+                LocalDate tanggalSelesaiLocalDate = Settings.stringToLocalDate(tugasPemeriksaanDTO.getTanggalSelesai());
+
+                if (tanggalMulaiLocalDate.compareTo(tanggalSelesaiLocalDate) < 0) {
+                    tugasPemeriksaanTemp.setTanggalMulai(tanggalMulaiLocalDate);
+                    tugasPemeriksaanTemp.setTanggalSelesai(tanggalSelesaiLocalDate);
+                }
+
+                tugasPemeriksaanRestService.ubahTugasPemeriksaan(tugasPemeriksaanDTO.getId(), tugasPemeriksaanTemp);
+            }
+
+            response.setStatus(200);
+            response.setMessage("success");
+            response.setResult(rencanaPemeriksaan);
+        }catch (NoSuchElementException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Rencana Pemeriksaan dengan ID " + rencanaPemeriksaanDTO.getId() + " tidak ditemukan!"
+            );
         }
-
-        RencanaPemeriksaan rencanaPemeriksaan = rencanaPemeriksaanRestService.ubahRencanaPemeriksaan(rencanaPemeriksaanDTO.getId(), rencanaPemeriksaanTemp);
-
-        response.setStatus(200);
-        response.setMessage("success");
-        response.setResult(rencanaPemeriksaan);
 
         return response;
     }
@@ -190,18 +219,17 @@ public class RencanaPemeriksaanRestController {
             response.setResult("Rencana pemeriksaan id " + rencanaPemeriksaanDTO.getId() + " tidak dapat ditemukan");
         }
 
-       /* Tidak dapat dihapus jika rencana sudah dijalankan
-        if(rencanaPemeriksaanDTO.getStatus() == 2){
+        //Tidak dapat dihapus jika rencana sudah dijalankan
+        if(rencanaPemeriksaanDTO.getStatus() > 1){
             response.setStatus(500);
             response.setMessage("error");
             response.setResult("Rencana pemeriksaan dengan id " + rencanaPemeriksaanDTO.getId() + " tidak dapat dihapus!");
+        }else {
+            rencanaPemeriksaanRestService.hapusRencanaPemeriksaan(rencanaPemeriksaanDTO.getId());
+            response.setStatus(200);
+            response.setMessage("success");
+            response.setResult("Rencana pemeriksaan dengan id " + rencanaPemeriksaanDTO.getId() + " terhapus!");
         }
-        */
-
-        rencanaPemeriksaanRestService.hapusRencanaPemeriksaan(rencanaPemeriksaanDTO.getId());
-        response.setStatus(200);
-        response.setMessage("success");
-        response.setResult("Rencana pemeriksaan dengan id " + rencanaPemeriksaanDTO.getId() + " terhapus!");
 
         return response;
     }
