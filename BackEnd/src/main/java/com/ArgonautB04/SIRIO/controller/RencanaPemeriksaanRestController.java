@@ -179,7 +179,7 @@ public class RencanaPemeriksaanRestController {
                 LocalDate tanggalMulaiLocalDate = Settings.stringToLocalDate(tugasPemeriksaanDTO.getTanggalMulai());
                 LocalDate tanggalSelesaiLocalDate = Settings.stringToLocalDate(tugasPemeriksaanDTO.getTanggalSelesai());
 
-                if (tanggalMulaiLocalDate.compareTo(tanggalSelesaiLocalDate) > 0) {
+                if (tanggalMulaiLocalDate.compareTo(tanggalSelesaiLocalDate) < 0) {
                     tugasPemeriksaanTemp.setTanggalMulai(tanggalMulaiLocalDate);
                     tugasPemeriksaanTemp.setTanggalSelesai(tanggalSelesaiLocalDate);
                 }
