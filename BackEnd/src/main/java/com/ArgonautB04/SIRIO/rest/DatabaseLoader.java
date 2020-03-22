@@ -3,6 +3,7 @@ package com.ArgonautB04.SIRIO.rest;
 import com.ArgonautB04.SIRIO.model.*;
 import com.ArgonautB04.SIRIO.repository.*;
 import com.ArgonautB04.SIRIO.services.EmployeeRestService;
+import org.hibernate.dialect.DB2Dialect;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -38,6 +39,30 @@ public class DatabaseLoader implements CommandLineRunner {
         Role roleAdmin = new Role();
         roleAdmin.setNamaRole("admin");
         roleDB.save(roleAdmin);
+
+        Role roleAdministrator = new Role();
+        roleAdministrator.setNamaRole("Administrator");
+        roleDB.save(roleAdministrator);
+
+        Role roleSupervisor = new Role();
+        roleSupervisor.setNamaRole("Supervisor");
+        roleDB.save(roleSupervisor);
+
+        Role roleManajer = new Role();
+        roleManajer.setNamaRole("Manajer Operational Risk");
+        roleDB.save(roleManajer);
+
+        Role roleLead = new Role();
+        roleLead.setNamaRole("QA Lead Operational Risk");
+        roleDB.save(roleLead);
+
+        Role roleOfficer = new Role();
+        roleOfficer.setNamaRole("QA Officer Operational Risk");
+        roleDB.save(roleOfficer);
+
+        Role roleBM = new Role();
+        roleBM.setNamaRole("Branch Manager");
+        roleDB.save(roleBM);
 
         Employee admin = new Employee();
         admin.setEmail("admin@admin.com");
