@@ -40,14 +40,18 @@ export default class SirioButton extends React.Component {
 
         fullClass = [fullClass, borderRadius].join(' ');
 
+        if (this.props.classes) {
+            fullClass = [fullClass, this.props.classes].join(' ');
+        }
+
         return (
             <button
                 onClick={this.props.onClick}
                 className={fullClass}
             >
-                <h6 className={classes.buttonTitle}>
+                <h5 className={classes.buttonTitle}>
                     {this.props.children}
-                </h6>
+                </h5>
             </button>
         )
     }

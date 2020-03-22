@@ -43,7 +43,7 @@ public class KantorCabangRestServiceImpl implements KantorCabangRestService {
         target.setPemilik(kantorCabang.getPemilik());
         target.setPembuat(kantorCabang.getPembuat());
         target.setNamaKantor(kantorCabang.getNamaKantor());
-        target.setKunjunganAuditRisk(kantorCabang.getKunjunganAuditRisk());
+        target.setKunjunganAudit(kantorCabang.getKunjunganAudit());
         return kantorCabangDB.save(target);
     }
 

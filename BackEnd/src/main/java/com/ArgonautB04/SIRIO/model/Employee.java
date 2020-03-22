@@ -19,7 +19,7 @@ public class Employee implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int idEmployee;
+    private Integer idEmployee;
 
     @NotNull
     @Size(max = 50)
@@ -41,9 +41,8 @@ public class Employee implements Serializable {
     @Column(nullable = false)
     private String password;
 
-    @NotNull
     @Size(max = 20)
-    @Column(nullable = false)
+    @Column
     private String noHp;
 
     @NotNull
@@ -54,14 +53,13 @@ public class Employee implements Serializable {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role", referencedColumnName = "idRole", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonIgnore
     private Role role;
 
-    public int getIdEmployee() {
+    public Integer getIdEmployee() {
         return idEmployee;
     }
 
-    public void setIdEmployee(int idEmployee) {
+    public void setIdEmployee(Integer idEmployee) {
         this.idEmployee = idEmployee;
     }
 

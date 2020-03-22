@@ -159,6 +159,7 @@ public class RencanaPemeriksaanRestController {
             @RequestBody RencanaPemeriksaanDTO rencanaPemeriksaanDTO
     ) {
         BaseResponse<RencanaPemeriksaan> response = new BaseResponse<>();
+
         try {
             RencanaPemeriksaan rencanaPemeriksaanTemp = rencanaPemeriksaanRestService.getById(rencanaPemeriksaanDTO.getId());
 

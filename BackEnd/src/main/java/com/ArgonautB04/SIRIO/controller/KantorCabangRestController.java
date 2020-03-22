@@ -4,6 +4,7 @@ import com.ArgonautB04.SIRIO.model.*;
 import com.ArgonautB04.SIRIO.rest.*;
 import com.ArgonautB04.SIRIO.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -20,6 +21,9 @@ public class KantorCabangRestController {
 
     @Autowired
     private EmployeeRestService employeeRestService;
+
+    @Autowired
+    private RiskRatingRestService riskRatingRestService;
 
     /**
      * Mengambil seluruh kantor cabang
