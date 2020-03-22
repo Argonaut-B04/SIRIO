@@ -13,7 +13,7 @@ public class RisikoDTO {
     private String komponen;
     private int status;
     private int parent;
-    private List<RisikoDTO> child;
+    private List<Risiko> child;
     private int sop;
 
     public int getId() {
@@ -64,11 +64,11 @@ public class RisikoDTO {
         this.parent = parent;
     }
 
-    public List<RisikoDTO> getChild() {
+    public List<Risiko> getChild() {
         return child;
     }
 
-    public void setChild(List<RisikoDTO> child) {
+    public void setChild(List<Risiko> child) {
         this.child = child;
     }
 

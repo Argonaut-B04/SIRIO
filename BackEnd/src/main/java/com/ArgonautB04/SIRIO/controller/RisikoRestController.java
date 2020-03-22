@@ -1,25 +1,17 @@
 package com.ArgonautB04.SIRIO.controller;
 
-import com.ArgonautB04.SIRIO.model.Employee;
-import com.ArgonautB04.SIRIO.model.HasilPemeriksaan;
 import com.ArgonautB04.SIRIO.model.Risiko;
-import com.ArgonautB04.SIRIO.model.SOP;
 import com.ArgonautB04.SIRIO.rest.BaseResponse;
-import com.ArgonautB04.SIRIO.rest.HasilPemeriksaanDTO;
 import com.ArgonautB04.SIRIO.rest.RisikoDTO;
+import com.ArgonautB04.SIRIO.services.KomponenPemeriksaanRestService;
 import com.ArgonautB04.SIRIO.services.RisikoRestService;
 import com.ArgonautB04.SIRIO.services.SOPRestService;
-import com.ArgonautB04.SIRIO.services.StatusRisikoRestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -31,7 +23,7 @@ public class RisikoRestController {
     private RisikoRestService risikoRestService;
 
     @Autowired
-    private StatusRisikoRestService statusRisikoRestService;
+    private KomponenPemeriksaanRestService komponenPemeriksaanRestService;
 
     @Autowired
     private SOPRestService sopRestService;
@@ -47,13 +39,13 @@ public class RisikoRestController {
     ) {
         BaseResponse<Risiko> response = new BaseResponse<>();
         Risiko risikoTemp = new Risiko();
-        List<Risiko> childTemp = new ArrayList<>();
-        risikoTemp.setChildList(childTemp);
-        risikoTemp.setStatusRisiko(
-                statusRisikoRestService.getById(risikoDTO.getStatus()));
+        risikoTemp.setChildList(risikoDTO.getChild());
+        risikoRestService.aktifkanRisiko(risikoTemp.getIdRisiko());
         risikoTemp.setSop(sopRestService.getById(risikoDTO.getSop()));
         risikoTemp.setKomponen(risikoDTO.getKomponen());
         risikoTemp.setRisikoKategori(risikoDTO.getKategori());
+        risikoTemp.setNamaRisiko(risikoDTO.getNama());
+        risikoTemp.setParent(risikoRestService.getById(risikoDTO.getId()));
 
 //        try {
 //            SOP sop = sopRestService.getById(sopDTO.getId());
@@ -98,11 +90,14 @@ public class RisikoRestController {
      * @param risikoDTO data transfer object untuk risiko yang akan dihapus
      * @return risiko dengan idRisiko tersebut dihapus dari db
      */
-    @DeleteMapping(value = "/{idRisiko}")
+    @DeleteMapping(value = "/hapus")
     private BaseResponse<String> hapusRisiko(@RequestBody RisikoDTO risikoDTO
     ) {
         BaseResponse<String> response = new BaseResponse<>();
         try {
+            if (komponenPemeriksaanRestService.getByRisiko(risikoRestService.getById(risikoDTO.getId())) != null) {
+                throw new Exception();
+            }
             risikoRestService.hapusRisiko(risikoDTO.getId());
 
             response.setStatus(200);
@@ -112,6 +107,10 @@ public class RisikoRestController {
             response.setStatus(404);
             response.setMessage("not found");
             response.setResult("Risiko dengan id " + risikoDTO.getId() + " tidak dapat ditemukan");
+        } catch (Exception e) {
+            response.setStatus(403);
+            response.setMessage("failed");
+            response.setResult("Risiko dengan id " + risikoDTO.getId() + " tidak dapat dihapus");
         }
         return response;
     }
@@ -127,8 +126,6 @@ public class RisikoRestController {
     ) {
         BaseResponse<Risiko> response = new BaseResponse<>();
         Risiko risikoTemp = risikoRestService.getById(risikoDTO.getId());
-        risikoTemp.setStatusRisiko(
-                statusRisikoRestService.getById(risikoDTO.getStatus()));
         Risiko result = risikoRestService.ubahRisiko(risikoTemp.getIdRisiko(), risikoTemp);
 
         response.setStatus(200);

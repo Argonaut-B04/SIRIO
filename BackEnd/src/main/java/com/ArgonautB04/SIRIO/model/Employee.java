@@ -13,7 +13,7 @@ import java.io.Serializable;
 @Table
 public class Employee implements Serializable {
 
-    enum Status {
+    public static enum Status {
         AKTIF, NONAKTIF
     }
 
@@ -77,8 +77,8 @@ public class Employee implements Serializable {
         return status;
     }
 
-    public void setStatus(String statusString) {
-        this.status = Status.valueOf(statusString);
+    public void setStatus(Status status) {
+        this.status = status;
     }
 
     public String getUsername() {

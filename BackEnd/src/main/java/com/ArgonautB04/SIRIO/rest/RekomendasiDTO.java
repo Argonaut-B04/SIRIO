@@ -6,6 +6,15 @@ public class RekomendasiDTO {
     private String keterangan;
     private String tenggatWaktu;
     private String durasi;
+    private ReminderDTO reminderDTO;
+
+    public ReminderDTO getReminderDTO() {
+        return reminderDTO;
+    }
+
+    public void setReminderDTO(ReminderDTO reminderDTO) {
+        this.reminderDTO = reminderDTO;
+    }
 
     public Integer getId() {
         return id;

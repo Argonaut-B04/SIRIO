@@ -1,15 +1,18 @@
 import React from "react";
-import {Link} from "react-router-dom";
+import {
+    Link
+} from 'react-router-dom'
 
-const MainPage = () => {
-    return (
-        <div>
-            <h3>Welcome to SIRIO</h3>
-            <small>Main Page</small>
-            <br></br>
-            <Link to="/rekomendasi" className="btn btn-primary">Tabel Rekomendasi</Link>
-        </div>
-    );
-};
-
-export default MainPage;
+export default class MainPage extends React.Component {
+    render() {
+        return (
+            <div>
+                <h3>Welcome to SIRIO</h3>
+                <small>Main Page</small>
+                <br></br>
+                <Link to="/rekomendasi" className="btn btn-primary">Tabel Rekomendasi</Link>
+                <Link to="/login" className="btn btn-primary">Login</Link>
+            </div>
+        )
+    }
+}
