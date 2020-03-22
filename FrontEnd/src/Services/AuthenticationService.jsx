@@ -16,7 +16,6 @@ class AuthenticationService {
     }
 
     createBasicAuthToken(username, password) {
-        console.log('Basic ' + window.btoa(username + ":" + password));
         return 'Basic ' + window.btoa(username + ":" + password);
     }
 

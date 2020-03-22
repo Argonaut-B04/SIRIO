@@ -53,11 +53,35 @@ class LoginForm extends Component {
                     {this.state.hasLoginFailed && <div className="alert alert-warning">Invalid Credentials</div>}
                     <fieldset className="form-group">
                         <label>Username</label>
-                        <input className="form-control" type="text" name="username" placeholder="Username" value={this.state.username} onChange={this.handleChange} />
+                        <input
+                            className="form-control"
+                            type="text"
+                            name="username"
+                            placeholder="Username"
+                            value={this.state.username}
+                            onChange={this.handleChange}
+                            onKeyPress={(event) => {
+                                if (event.key === "Enter") {
+                                    this.loginClicked();
+                                }
+                            }}
+                        />
                     </fieldset>
                     <fieldset className="form-group">
                         <label>Password</label>
-                        <input className="form-control" type="password" name="password" placeholder="Masukan 8 karakter atau lebih" value={this.state.password} onChange={this.handleChange} />
+                        <input
+                            className="form-control"
+                            type="password"
+                            name="password"
+                            placeholder="Masukan 8 karakter atau lebih"
+                            value={this.state.password}
+                            onChange={this.handleChange}
+                            onKeyPress={(event) => {
+                                if (event.key === "Enter") {
+                                    this.loginClicked();
+                                }
+                            }}
+                        />
                     </fieldset>
                     <fieldset className="w-100 text-right">
                         <SirioButton
