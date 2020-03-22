@@ -11,10 +11,17 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-
 import java.util.List;
 import java.util.NoSuchElementException;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
+import java.security.Principal;
+
+@CrossOrigin(origins = {"http://localhost:3000"})
 @RestController
 @RequestMapping("/api/v1/Employee")
 public class EmployeeRestController {
@@ -24,6 +31,7 @@ public class EmployeeRestController {
 
     @Autowired
     private RoleRestService roleRestService;
+
 
     /**
      * Menambah employee baru
@@ -174,6 +182,22 @@ public class EmployeeRestController {
             response.setMessage("not found");
             response.setResult("Employee dengan id " + employeeDTO.getId() + " tidak dapat ditemukan");
         }
+
+    @GetMapping("/login")
+    public BaseResponse<Employee> authenticate(Principal principal, ModelMap model) {
+        BaseResponse<Employee> response = new BaseResponse<>();
+
+        Employee employee = employeeRestService.getByUsername(principal.getName());
+        Employee target = new Employee();
+        target.setIdEmployee(employee.getIdEmployee());
+        target.setUsername(employee.getUsername());
+        target.setRole(
+                employee.getRole().getNamaRole()
+        );
+
+        response.setStatus(200);
+        response.setMessage("success");
+        response.setResult(target);
         return response;
     }
 }
