@@ -31,7 +31,7 @@ export default class TabelRekomendasi extends React.Component {
                 purple
                 onClick={() => window.location.href = "http://www.google.com"}
             >
-                Tambah Bukti
+                Detail Bukti
             </SirioButton>
         )
     }
@@ -59,23 +59,13 @@ export default class TabelRekomendasi extends React.Component {
         }
 
     }, {
-        dataField: 'tenggatWaktuRekomendasi',
-        text: 'TENGGAT WAKTU',
+        dataField: 'namaKantorCabang',
+        text: 'KANTOR CABANG',
         sort: true,
         classes: classes.rowItem,
         headerClasses: classes.colheader,
         headerStyle: (colum, colIndex) => {
             return { width: "20%", textAlign: 'left' };
-        }
-        
-    }, {
-        dataField: 'durasiRekomendasi',
-        text: 'DURASI',
-        sort: true,
-        classes: classes.rowItem,
-        headerClasses: classes.colheader,
-        headerStyle: (colum, colIndex) => {
-            return { width: "15%", textAlign: 'left' };
         }
         
     }, {
@@ -86,7 +76,7 @@ export default class TabelRekomendasi extends React.Component {
         formatter: this.statusFormatter,
         headerClasses: classes.colheader,
         headerStyle: (colum, colIndex) => {
-            return { width: "10%", textAlign: 'left' };
+            return { width: "15%", textAlign: 'left' };
         }
     }, {
         dataField: 'id',
@@ -100,22 +90,22 @@ export default class TabelRekomendasi extends React.Component {
     }];
 
     data = [
-        { "tenggatWaktu": "", "id": 10, "keteranganRekomendasi": "Keterangan", "statusBukti": "Menunggu Persetujuan" },
-        { "tenggatWaktu": "", "id": 1, "keteranganRekomendasi": "Keterangan", "statusBukti": "Ditolak" },
-        { "tenggatWaktu": "", "id": 2, "keteranganRekomendasi": "Keterangan", "statusBukti": "Disetujui" },
-        { "tenggatWaktu": "", "id": 3, "keteranganRekomendasi": "Keterangan", "statusBukti": "Menunggu Persetujuan" },
-        { "tenggatWaktu": "10/10/2000", "id": 4, "keteranganRekomendasi": "Keterangan", "statusBukti": "Menunggu Persetujuan" },
-        { "tenggatWaktu": "10/10/2000", "id": 5, "keteranganRekomendasi": "Keterangan", "statusBukti": "Menunggu Persetujuan" },
-        { "tenggatWaktu": "", "id": 6, "keteranganRekomendasi": "Keterangan", "statusBukti": "Menunggu Persetujuan" },
-        { "tenggatWaktu": "", "id": 7, "keteranganRekomendasi": "Keterangan", "statusBukti": "Menunggu Persetujuan" },
-        { "tenggatWaktu": "", "id": 8, "keteranganRekomendasi": "Keterangan", "statusBukti": "Menunggu Persetujuan" },
-        { "tenggatWaktu": "", "id": 9, "keteranganRekomendasi": "Keterangan", "statusBukti": "Menunggu Persetujuan" },
-        { "tenggatWaktu": "", "id": 11, "keteranganRekomendasi": "Keterangan", "statusBukti": "Menunggu Persetujuan" },
-        { "tenggatWaktu": "", "id": 12, "keteranganRekomendasi": "Keterangan", "statusBukti": "Menunggu Persetujuan" },
-        { "tenggatWaktu": "", "id": 13, "keteranganRekomendasi": "Keterangan", "statusBukti": "Menunggu Persetujuan" },
-        { "tenggatWaktu": "", "id": 14, "keteranganRekomendasi": "Keterangan", "statusBukti": "Menunggu Persetujuan" },
-        { "tenggatWaktu": "", "id": 25, "keteranganRekomendasi": "Nathan2", "statusBukti": "Menunggu Persetujuan" },
-        { "tenggatWaktu": "", "id": 16, "keteranganRekomendasi": "Keterangan", "statusBukti": "Menunggu Persetujuan" },
+        { "tenggatWaktu": "", "id": 10, "keteranganRekomendasi": "Keterangan", "namaKantorCabang": "Kantor Cabang Depok", "statusBukti": "Menunggu Persetujuan" },
+        { "tenggatWaktu": "", "id": 1, "keteranganRekomendasi": "Keterangan", "namaKantorCabang": "Kantor Cabang Depok", "statusBukti": "Ditolak" },
+        { "tenggatWaktu": "", "id": 2, "keteranganRekomendasi": "Keterangan", "namaKantorCabang": "Kantor Cabang Depok", "statusBukti": "Disetujui" },
+        { "tenggatWaktu": "", "id": 3, "keteranganRekomendasi": "Keterangan", "namaKantorCabang": "Kantor Cabang Depok", "statusBukti": "Menunggu Persetujuan" },
+        { "tenggatWaktu": "10/10/2000", "id": 4, "keteranganRekomendasi": "Keterangan", "namaKantorCabang": "Kantor Cabang Depok", "statusBukti": "Menunggu Persetujuan" },
+        { "tenggatWaktu": "10/10/2000", "id": 5, "keteranganRekomendasi": "Keterangan", "namaKantorCabang": "Kantor Cabang Depok" },
+        { "tenggatWaktu": "", "id": 6, "keteranganRekomendasi": "Keterangan", "namaKantorCabang": "Kantor Cabang Depok", "statusBukti": "Menunggu Persetujuan" },
+        { "tenggatWaktu": "", "id": 7, "keteranganRekomendasi": "Keterangan", "namaKantorCabang": "Kantor Cabang Depok", "statusBukti": "Menunggu Persetujuan" },
+        { "tenggatWaktu": "", "id": 8, "keteranganRekomendasi": "Keterangan", "namaKantorCabang": "Kantor Cabang Depok", "statusBukti": "Menunggu Persetujuan" },
+        { "tenggatWaktu": "", "id": 9, "keteranganRekomendasi": "Keterangan", "namaKantorCabang": "Kantor Cabang Depok", "statusBukti": "Menunggu Persetujuan" },
+        { "tenggatWaktu": "", "id": 11, "keteranganRekomendasi": "Keterangan", "namaKantorCabang": "Kantor Cabang Depok", "statusBukti": "Menunggu Persetujuan" },
+        { "tenggatWaktu": "", "id": 12, "keteranganRekomendasi": "Keterangan", "namaKantorCabang": "Kantor Cabang Depok", "statusBukti": "Menunggu Persetujuan" },
+        { "tenggatWaktu": "", "id": 13, "keteranganRekomendasi": "Keterangan", "namaKantorCabang": "Kantor Cabang Depok", "statusBukti": "Menunggu Persetujuan" },
+        { "tenggatWaktu": "", "id": 14, "keteranganRekomendasi": "Keterangan", "namaKantorCabang": "Kantor Cabang Depok", "statusBukti": "Menunggu Persetujuan" },
+        { "tenggatWaktu": "", "id": 25, "keteranganRekomendasi": "Nathan2", "namaKantorCabang": "Kantor Cabang Depok", "statusBukti": "Menunggu Persetujuan" },
+        { "tenggatWaktu": "", "id": 16, "keteranganRekomendasi": "Keterangan", "namaKantorCabang": "Kantor Cabang Depok", "statusBukti": "Menunggu Persetujuan" },
     ]
 
     defaultSorted = [{
@@ -126,7 +116,7 @@ export default class TabelRekomendasi extends React.Component {
     render() {
         return (
             <SirioTable
-                title="Daftar Rekomendasi"
+                title="Daftar Bukti Pelaksanaan Rekomendasi"
                 data={this.data}
                 id='id'
                 columnsDefinition={this.columns}
