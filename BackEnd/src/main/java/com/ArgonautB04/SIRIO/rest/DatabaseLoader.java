@@ -3,7 +3,6 @@ package com.ArgonautB04.SIRIO.rest;
 import com.ArgonautB04.SIRIO.model.*;
 import com.ArgonautB04.SIRIO.repository.*;
 import com.ArgonautB04.SIRIO.services.EmployeeRestService;
-import org.hibernate.dialect.DB2Dialect;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
