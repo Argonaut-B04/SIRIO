@@ -49,13 +49,13 @@ public class EmployeeRestServiceImpl implements EmployeeRestService {
     }
 
     @Override
-    public List<Employee> getAll() {
-        return employeeDb.findAll();
+    public Optional<Employee> getByUsername(String username) {
+        return employeeDb.findByUsername(username);
     }
 
     @Override
-    public Employee getByUsername(String username) {
-        return employeeDb.findByUsername(username);
+    public List<Employee> getAll() {
+        return employeeDb.findAll();
     }
 
     @Override
@@ -70,5 +70,10 @@ public class EmployeeRestServiceImpl implements EmployeeRestService {
         Employee employee = getById(idEmployee);
         employee.setStatus(Employee.Status.AKTIF);
         return employee;
+    }
+
+    @Override
+    public void hapusEmployee(int idEmployee) {
+        employeeDb.deleteById(idEmployee);
     }
 }

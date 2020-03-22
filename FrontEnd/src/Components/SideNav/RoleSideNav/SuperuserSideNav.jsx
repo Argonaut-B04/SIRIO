@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import SideNavFramework from '../SideNavFramework';
 
-export default class QAOfficerSideNav extends Component {
+export default class SuperuserSideNav extends Component {
     render() {
         return (
             <SideNavFramework
@@ -9,7 +9,22 @@ export default class QAOfficerSideNav extends Component {
                     [
                         {
                             link: "#",
-                            title: "Halaman Utama",
+                            title: "Dashboard Employee",
+                            active: false
+                        },
+                        {
+                            link: "#",
+                            title: "Dashboard Kantor Cabang",
+                            active: false
+                        },
+                        {
+                            link: "#",
+                            title: "Pengguna",
+                            active: false
+                        },
+                        {
+                            link: "#",
+                            title: "Kantor Cabang",
                             active: false
                         },
                         {
@@ -30,11 +45,6 @@ export default class QAOfficerSideNav extends Component {
                         {
                             link: "#",
                             title: "Bukti Rekomendasi",
-                            active: false
-                        },
-                        {
-                            link: "#",
-                            title: "Dashboard",
                             active: false
                         }
                     ]

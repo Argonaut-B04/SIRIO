@@ -305,11 +305,11 @@ public class HasilPemeriksaanRestController {
 
             response.setStatus(200);
             response.setMessage("success");
-            response.setResult("Reminder dengan id " + hasilPemeriksaanDTO.getId() + " terhapus!");
+            response.setResult("Hasil pemeriksaan dengan id " + hasilPemeriksaanDTO.getId() + " terhapus!");
         } catch (EmptyResultDataAccessException e) {
             response.setStatus(404);
             response.setMessage("not found");
-            response.setResult("Reminder dengan id " + hasilPemeriksaanDTO.getId() + " tidak dapat ditemukan");
+            response.setResult("Hasil pemeriksaan dengan id " + hasilPemeriksaanDTO.getId() + " tidak dapat ditemukan");
         }
         return response;
     }
