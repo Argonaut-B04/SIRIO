@@ -78,14 +78,6 @@ a {
 }
 
 .footerButton {
-    color: white;
-    border: solid 1px #5DBCD2;
-    background-color: #5DBCD2;
-    border-radius: 15px;
     width: 60%;
     height: 40px;
-    font-size: 18px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
 }
