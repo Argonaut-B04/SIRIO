@@ -59,8 +59,8 @@ export default class TabelRekomendasi extends React.Component {
         }
 
     }, {
-        dataField: 'Rekomendasi',
-        text: 'KETERANGAN',
+        dataField: 'tenggatWaktuRekomendasi',
+        text: 'TENGGAT WAKTU',
         sort: true,
         classes: classes.rowItem,
         headerClasses: classes.colheader,
@@ -100,22 +100,22 @@ export default class TabelRekomendasi extends React.Component {
     }];
 
     data = [
-        { "id": 10, "keteranganRekomendasi": "Keterangan", "statusBukti": "Menunggu Persetujuan" },
-        { "id": 1, "keteranganRekomendasi": "Keterangan", "statusBukti": "Ditolak" },
-        { "id": 2, "keteranganRekomendasi": "Keterangan", "statusBukti": "Disetujui" },
-        { "id": 3, "keteranganRekomendasi": "Keterangan", "statusBukti": "Menunggu Persetujuan" },
-        { "": "10/10/2000", "id": 4, "keteranganRekomendasi": "Keterangan", "statusBukti": "Menunggu Persetujuan" },
-        { "": "10/10/2000", "id": 5, "keteranganRekomendasi": "Keterangan", "statusBukti": "Sedang Persetujuan" },
-        { "id": 6, "keteranganRekomendasi": "Keterangan", "statusBukti": "Menunggu Persetujuan" },
-        { "id": 7, "keteranganRekomendasi": "Keterangan", "statusBukti": "Menunggu Persetujuan" },
-        { "id": 8, "keteranganRekomendasi": "Keterangan", "statusBukti": "Menunggu Persetujuan" },
-        { "id": 9, "keteranganRekomendasi": "Keterangan", "statusBukti": "Menunggu Persetujuan" },
-        { "id": 11, "keteranganRekomendasi": "Keterangan", "statusBukti": "Menunggu Persetujuan" },
-        { "id": 12, "keteranganRekomendasi": "Keterangan", "statusBukti": "Menunggu Persetujuan" },
-        { "id": 13, "keteranganRekomendasi": "Keterangan", "statusBukti": "Menunggu Persetujuan" },
-        { "id": 14, "keteranganRekomendasi": "Keterangan", "statusBukti": "Menunggu Persetujuan" },
-        { "id": 25, "keteranganRekomendasi": "Keterangan2", "statusBukti": "Menunggu Persetujuan" },
-        { "id": 16, "keteranganRekomendasi": "Keterangan", "statusBukti": "Menunggu Persetujuan" },
+        { "id": 10, "keteranganRekomendasi": "Keterangan", "tenggatWaktuRekomendasi": "01/02/2020", "durasiRekomendasi": "10 Hari", "statusBukti": "Menunggu Persetujuan" },
+        { "id": 1, "keteranganRekomendasi": "Keterangan", "tenggatWaktuRekomendasi": "01/02/2020", "durasiRekomendasi": "10 Hari", "statusBukti": "Ditolak" },
+        { "id": 2, "keteranganRekomendasi": "Keterangan", "tenggatWaktuRekomendasi": "01/02/2020", "durasiRekomendasi": "10 Hari", "statusBukti": "Disetujui" },
+        { "id": 3, "keteranganRekomendasi": "Keterangan", "tenggatWaktuRekomendasi": "01/02/2020", "durasiRekomendasi": "10 Hari", "statusBukti": "Menunggu Persetujuan" },
+        { "id": 4, "keteranganRekomendasi": "Keterangan", "tenggatWaktuRekomendasi": "01/02/2020", "durasiRekomendasi": "10 Hari", "statusBukti": "Menunggu Persetujuan" },
+        { "id": 5, "keteranganRekomendasi": "Keterangan", "tenggatWaktuRekomendasi": "01/02/2020", "durasiRekomendasi": "10 Hari", "statusBukti": "Sedang Persetujuan" },
+        { "id": 6, "keteranganRekomendasi": "Keterangan", "tenggatWaktuRekomendasi": "01/02/2020", "durasiRekomendasi": "10 Hari", "statusBukti": "Menunggu Persetujuan" },
+        { "id": 7, "keteranganRekomendasi": "Keterangan", "tenggatWaktuRekomendasi": "01/02/2020", "durasiRekomendasi": "10 Hari", "statusBukti": "Menunggu Persetujuan" },
+        { "id": 8, "keteranganRekomendasi": "Keterangan", "tenggatWaktuRekomendasi": "01/02/2020", "durasiRekomendasi": "10 Hari", "statusBukti": "Menunggu Persetujuan" },
+        { "id": 9, "keteranganRekomendasi": "Keterangan", "tenggatWaktuRekomendasi": "01/02/2020", "durasiRekomendasi": "10 Hari", "statusBukti": "Menunggu Persetujuan" },
+        { "id": 11, "keteranganRekomendasi": "Keterangan", "tenggatWaktuRekomendasi": "01/02/2020", "durasiRekomendasi": "10 Hari", "statusBukti": "Menunggu Persetujuan" },
+        { "id": 12, "keteranganRekomendasi": "Keterangan", "tenggatWaktuRekomendasi": "01/02/2020", "durasiRekomendasi": "10 Hari", "statusBukti": "Menunggu Persetujuan" },
+        { "id": 13, "keteranganRekomendasi": "Keterangan", "tenggatWaktuRekomendasi": "01/02/2020", "durasiRekomendasi": "10 Hari", "statusBukti": "Menunggu Persetujuan" },
+        { "id": 14, "keteranganRekomendasi": "Keterangan", "tenggatWaktuRekomendasi": "01/02/2020", "durasiRekomendasi": "10 Hari", "statusBukti": "Menunggu Persetujuan" },
+        { "id": 25, "keteranganRekomendasi": "Keterangan", "tenggatWaktuRekomendasi": "01/02/2020", "durasiRekomendasi": "10 Hari", "statusBukti": "Menunggu Persetujuan" },
+        { "id": 16, "keteranganRekomendasi": "Keterangan", "tenggatWaktuRekomendasi": "01/02/2020", "durasiRekomendasi": "10 Hari", "statusBukti": "Menunggu Persetujuan" },
     ]
 
     defaultSorted = [{
