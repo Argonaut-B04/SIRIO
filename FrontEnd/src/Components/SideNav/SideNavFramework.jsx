@@ -37,7 +37,7 @@ export default class SideNavFramework extends React.Component {
                             recommended
                             circular
                             classes={classes.footerButton}
-                            onClick={() => window.location.href='/logout'}
+                            onClick={() => window.location.href = '/logout'}
                         >
                             Logout
                             </SirioButton>
