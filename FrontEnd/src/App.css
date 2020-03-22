@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css?family=Nunito:600,700&display=swap');
 h1 {
     font-family: Nunito;
     font-style: normal;
@@ -50,15 +51,14 @@ label {
     color: #8E8E8E;
 }
 
-.sirio-btn-blue-recommended {
-    background: #5DBCD2;
-    border-radius: 6px;
-    width: 150px;
-    height: 35px;
-    font-family: Nunito;
+input:focus {
+    border: solid #7F3F98 2px !important;
+}
+
+tr {
+    font-family: Proxima Nova;
     font-style: normal;
-    font-weight: 600;
-    font-size: 18px;
-    line-height: 18px;
-    color: white;
+    font-weight: normal;
+    font-size: 14px;
+    height: 30px;
 }

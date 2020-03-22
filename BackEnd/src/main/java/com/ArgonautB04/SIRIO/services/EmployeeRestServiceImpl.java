@@ -3,6 +3,7 @@ package com.ArgonautB04.SIRIO.services;
 import com.ArgonautB04.SIRIO.model.Employee;
 import com.ArgonautB04.SIRIO.repository.EmployeeDB;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -19,7 +20,13 @@ public class EmployeeRestServiceImpl implements EmployeeRestService {
 
     @Override
     public Employee buatEmployee(Employee employee) {
+        employee.setPassword(encrypt(employee.getPassword()));
         return employeeDb.save(employee);
+    }
+
+    private String encrypt(String password) {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        return passwordEncoder.encode(password);
     }
 
     @Override
@@ -44,6 +51,11 @@ public class EmployeeRestServiceImpl implements EmployeeRestService {
     @Override
     public List<Employee> getAll() {
         return employeeDb.findAll();
+    }
+
+    @Override
+    public Employee getByUsername(String username) {
+        return employeeDb.findByUsername(username);
     }
 
     @Override

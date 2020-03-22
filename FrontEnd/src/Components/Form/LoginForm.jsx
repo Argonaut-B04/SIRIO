@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import classes from "./LoginForm.module.css";
+import SirioButton from "../Button/SirioButton";
+import AuthenticationService from "../../Services/AuthenticationService";
 
 class LoginForm extends Component {
 
@@ -26,23 +28,21 @@ class LoginForm extends Component {
     }
 
     loginClicked() {
-        console.log("login button clicked, not implemented");
-        // AuthenticationService
-        //     .executeBasicAuthenticationService(this.state.username, this.state.password)
-        //     .then(
-        //         () => {
-        //             AuthenticationService.registerSuccessfulLogin(this.state.username, this.state.password);
-        //             this.props.history.push(`/courses`);
-        //         }
-        //     )
-        //     .catch(
-        //         () => {
-        //             this.setState({
-        //                 showSuccessMessage: false,
-        //                 hasLoginFailed: true
-        //             })
-        //         }
-        //     )
+        AuthenticationService
+            .executeBasicAuthenticationService(this.state.username, this.state.password)
+            .then(
+                (response) => {
+                    AuthenticationService.registerSuccessfulLogin(this.state.username, this.state.password, response.data.result.role);
+                    this.props.history.push("/");
+                }
+            )
+            .catch(
+                () => {
+                    this.setState({
+                        hasLoginFailed: true
+                    })
+                }
+            )
     }
 
     render() {
@@ -53,18 +53,45 @@ class LoginForm extends Component {
                     {this.state.hasLoginFailed && <div className="alert alert-warning">Invalid Credentials</div>}
                     <fieldset className="form-group">
                         <label>Username</label>
-                        <input className="form-control" type="text" name="username" placeholder="Username" value={this.state.username} onChange={this.handleChange} />
+                        <input
+                            className="form-control"
+                            type="text"
+                            name="username"
+                            placeholder="Username"
+                            value={this.state.username}
+                            onChange={this.handleChange}
+                            onKeyPress={(event) => {
+                                if (event.key === "Enter") {
+                                    this.loginClicked();
+                                }
+                            }}
+                        />
                     </fieldset>
                     <fieldset className="form-group">
                         <label>Password</label>
-                        <input className="form-control" type="password" name="password" placeholder="Masukan 8 karakter atau lebih" value={this.state.password} onChange={this.handleChange} />
+                        <input
+                            className="form-control"
+                            type="password"
+                            name="password"
+                            placeholder="Masukan 8 karakter atau lebih"
+                            value={this.state.password}
+                            onChange={this.handleChange}
+                            onKeyPress={(event) => {
+                                if (event.key === "Enter") {
+                                    this.loginClicked();
+                                }
+                            }}
+                        />
                     </fieldset>
                     <fieldset className="w-100 text-right">
-                        <button className="btn sirio-btn-blue-recommended" onClick={this.loginClicked}>
+                        <SirioButton
+                            blue
+                            recommended
+                            onClick={this.loginClicked}
+                        >
                             Login
-                    </button>
+                        </SirioButton>
                     </fieldset>
-
                 </div>
             </div>
         );
