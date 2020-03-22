@@ -8,6 +8,8 @@ public class KantorCabangDTO {
     private Integer idPembuat;
     private Integer idPemilik;
     private Integer kunjunganAuditRisk;
+    private String area;
+    private String regional;
 
     public Integer getIdPemilik() {
         return idPemilik;
@@ -64,7 +66,5 @@ public class KantorCabangDTO {
     public void setNamaKantorCabang(String namaKantorCabang) {
         this.namaKantorCabang = namaKantorCabang;
     }
-
-
 
 }
