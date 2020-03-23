@@ -40,6 +40,7 @@ public class KantorCabangRestController {
         return response;
     }
 
+
     /**
      * Mengambil suatu kantor cabang
      *
@@ -81,24 +82,19 @@ public class KantorCabangRestController {
         try {
             Employee pembuat = employeeRestService.getById(kantorCabangDTO.getIdPembuat());
             kantorCabangTemp.setPembuat(pembuat);
+            Employee pemilik = employeeRestService.getById(kantorCabangDTO.getIdPemilik());
+            kantorCabangTemp.setPemilik(pemilik);
         } catch (NoSuchElementException e) {
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND, "Employee dengan ID " + kantorCabangDTO.getIdPembuat() + " tidak ditemukan!"
             );
         }
 
-        try {
-            Employee pemilik = employeeRestService.getById(kantorCabangDTO.getIdPemilik());
-            kantorCabangTemp.setPemilik(pemilik);
-        } catch (NoSuchElementException e) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Employee dengan ID " + kantorCabangDTO.getIdPemilik() + " tidak ditemukan!"
-            );
-        }
-
         kantorCabangTemp.setArea(kantorCabangDTO.getArea());
         kantorCabangTemp.setNamaKantor(kantorCabangDTO.getNamaKantorCabang());
         kantorCabangTemp.setRegional(kantorCabangDTO.getRegional());
+        kantorCabangTemp.setKunjunganAudit(kantorCabangDTO.isKunjunganAudit());
+        kantorCabangTemp.setRiskRating(riskRatingRestService.getById(kantorCabangDTO.getIdRiskRating()));
 
         KantorCabang kantorCabang = kantorCabangRestService.buatKantorCabang(kantorCabangTemp);
 
@@ -108,5 +104,77 @@ public class KantorCabangRestController {
 
         return response;
 
+    }
+
+    /**
+     * Mengubah kantor cabang
+     *
+     * @param kantorCabangDTO data transfer object untuk kantor cabang yang akan diubah
+     * @return kantor cabang yang telah disimpan perubahannya
+     */
+    @PutMapping(value = "/ubah", consumes = {"application/json"})
+    private BaseResponse<KantorCabang> ubahKantorCabang(
+            @RequestBody KantorCabangDTO kantorCabangDTO
+    ) {
+        BaseResponse<KantorCabang> response = new BaseResponse<>();
+
+        try{
+            kantorCabangRestService.getById(kantorCabangDTO.getId());
+        }catch (NoSuchElementException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Kantor Cabang dengan ID " + kantorCabangDTO.getId() + " tidak ditemukan!"
+            );
+        }
+
+        KantorCabang kantorCabangTemp = kantorCabangRestService.getById(kantorCabangDTO.getId());
+
+        try {
+            Employee pembuat = employeeRestService.getById(kantorCabangDTO.getIdPembuat());
+            kantorCabangTemp.setPembuat(pembuat);
+            Employee pemilik = employeeRestService.getById(kantorCabangDTO.getIdPemilik());
+            kantorCabangTemp.setPemilik(pemilik);
+        } catch (NoSuchElementException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Employee dengan ID " + kantorCabangDTO.getIdPembuat() + " tidak ditemukan!"
+            );
+        }
+
+        kantorCabangTemp.setArea(kantorCabangDTO.getArea());
+        kantorCabangTemp.setNamaKantor(kantorCabangDTO.getNamaKantorCabang());
+        kantorCabangTemp.setRegional(kantorCabangDTO.getRegional());
+        kantorCabangTemp.setKunjunganAudit(kantorCabangDTO.isKunjunganAudit());
+        kantorCabangTemp.setRiskRating(riskRatingRestService.getById(kantorCabangDTO.getIdRiskRating()));
+
+        KantorCabang kantorCabang = kantorCabangRestService.ubahKantorCabang(kantorCabangDTO.getId(), kantorCabangTemp);
+
+        response.setStatus(200);
+        response.setMessage("success");
+        response.setResult(kantorCabang);
+
+        return response;
+
+    }
+
+    /**
+     * Menghapus kantor cabang
+     *
+     * @param kantorCabangDTO data transfer object untuk tugas pemeriksaan yang akan dihapus
+     */
+    @DeleteMapping("/hapus")
+    private BaseResponse<String> hapusKantorCabang(
+            @RequestBody KantorCabangDTO kantorCabangDTO
+    ) {
+        BaseResponse<String> response = new BaseResponse<>();
+        try {
+            kantorCabangRestService.hapusKantorCabang(kantorCabangDTO.getId());
+            response.setStatus(200);
+            response.setMessage("success");
+            response.setResult("Kantor cabang dengan id " + kantorCabangDTO.getId() + " terhapus!");
+        } catch (EmptyResultDataAccessException e) {
+            response.setStatus(404);
+            response.setMessage("not found");
+            response.setResult("Kantor cabang dengan id " + kantorCabangDTO.getId() + " tidak dapat ditemukan");
+        }
+        return response;
     }
 }

@@ -1,15 +1,30 @@
 package com.ArgonautB04.SIRIO.rest;
 
-import javax.persistence.criteria.CriteriaBuilder;
-
 public class KantorCabangDTO {
     private Integer id;
     private String namaKantorCabang;
     private Integer idPembuat;
     private Integer idPemilik;
-    private Integer kunjunganAuditRisk;
-    private String area;
+    private Integer idRiskRating;
     private String regional;
+    private String area;
+    private boolean kunjunganAudit;
+
+    public Integer getIdRiskRating() {
+        return idRiskRating;
+    }
+
+    public void setIdRiskRating(Integer idRiskRating) {
+        this.idRiskRating = idRiskRating;
+    }
+
+    public boolean isKunjunganAudit() {
+        return kunjunganAudit;
+    }
+
+    public void setKunjunganAudit(boolean kunjunganAudit) {
+        this.kunjunganAudit = kunjunganAudit;
+    }
 
     public Integer getIdPemilik() {
         return idPemilik;
@@ -33,14 +48,6 @@ public class KantorCabangDTO {
 
     public void setArea(String area) {
         this.area = area;
-    }
-
-    public Integer getKunjunganAuditRisk() {
-        return kunjunganAuditRisk;
-    }
-
-    public void setKunjunganAuditRisk(Integer kunjunganAuditRisk) {
-        this.kunjunganAuditRisk = kunjunganAuditRisk;
     }
 
     public Integer getIdPembuat() {
