@@ -1,6 +1,7 @@
 package com.ArgonautB04.SIRIO.services;
 
 import com.ArgonautB04.SIRIO.model.Risiko;
+import com.ArgonautB04.SIRIO.rest.RisikoDTO;
 
 import java.util.List;
 
@@ -18,4 +19,6 @@ public interface RisikoRestService {
     Risiko nonaktifkanRisiko(int idRisiko);
 
     Risiko aktifkanRisiko(int idRisiko);
+
+    Risiko transformasidto(Risiko risiko, RisikoDTO risikoDTO);
 }

@@ -1,6 +1,7 @@
 package com.ArgonautB04.SIRIO.controller;
 
 import com.ArgonautB04.SIRIO.model.Risiko;
+import com.ArgonautB04.SIRIO.model.SOP;
 import com.ArgonautB04.SIRIO.rest.BaseResponse;
 import com.ArgonautB04.SIRIO.rest.RisikoDTO;
 import com.ArgonautB04.SIRIO.services.KomponenPemeriksaanRestService;
@@ -39,22 +40,24 @@ public class RisikoRestController {
     ) {
         BaseResponse<Risiko> response = new BaseResponse<>();
         Risiko risikoTemp = new Risiko();
-        risikoTemp.setChildList(risikoDTO.getChild());
-        risikoRestService.aktifkanRisiko(risikoTemp.getIdRisiko());
-        risikoTemp.setSop(sopRestService.getById(risikoDTO.getSop()));
-        risikoTemp.setKomponen(risikoDTO.getKomponen());
-        risikoTemp.setRisikoKategori(risikoDTO.getKategori());
-        risikoTemp.setNamaRisiko(risikoDTO.getNama());
-        risikoTemp.setParent(risikoRestService.getById(risikoDTO.getId()));
-
+//        risikoTemp.setChildList(risikoDTO.getChild());
+//        risikoTemp.setKomponen(risikoDTO.getKomponen());
+//        risikoTemp.setRisikoKategori(risikoDTO.getKategori());
+//        risikoTemp.setNamaRisiko(risikoDTO.getNama());
+//        if (risikoDTO.getParent() != 0) {
+//            risikoTemp.setParent(risikoRestService.getById(risikoDTO.getId()));
+//        } else {
+//            risikoTemp.setParent(null);
+//        }
 //        try {
-//            SOP sop = sopRestService.getById(sopDTO.getId());
+//            SOP sop = sopRestService.getById(risikoDTO.getSop());
 //            risikoTemp.setSop(sop);
 //        } catch (NoSuchElementException e) {
 //            throw new ResponseStatusException(
-//                    HttpStatus.NOT_FOUND, "SOP dengan ID " + sopDTO.getId() + " tidak ditemukan!"
+//                    HttpStatus.NOT_FOUND, "SOP dengan ID " + risikoDTO.getSop() + " tidak ditemukan!"
 //            );
 //        }
+        risikoTemp= risikoRestService.transformasidto(risikoTemp, risikoDTO);
 
         Risiko risiko = risikoRestService.buatRisiko(risikoTemp);
         response.setStatus(200);
@@ -126,6 +129,7 @@ public class RisikoRestController {
     ) {
         BaseResponse<Risiko> response = new BaseResponse<>();
         Risiko risikoTemp = risikoRestService.getById(risikoDTO.getId());
+        risikoTemp = risikoRestService.transformasidto(risikoTemp, risikoDTO);
         Risiko result = risikoRestService.ubahRisiko(risikoTemp.getIdRisiko(), risikoTemp);
 
         response.setStatus(200);

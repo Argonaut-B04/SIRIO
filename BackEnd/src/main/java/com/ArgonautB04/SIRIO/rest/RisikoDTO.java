@@ -11,7 +11,6 @@ public class RisikoDTO {
     private String nama;
     private String kategori;
     private String komponen;
-    private int status;
     private int parent;
     private List<Risiko> child;
     private int sop;
@@ -46,14 +45,6 @@ public class RisikoDTO {
 
     public void setKomponen(String komponen) {
         this.komponen = komponen;
-    }
-
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
     }
 
     public int getParent() {
