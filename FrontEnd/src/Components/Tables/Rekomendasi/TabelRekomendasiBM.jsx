@@ -1,7 +1,6 @@
 import React from 'react';
 import SirioButton from '../../Button/SirioButton';
-import SirioDatePickerButton from '../../Button/SirioDatePickerButton';
-import classes from './TabelRekomendasi.module.css';
+import classes from './TabelRekomendasiBM.module.css';
 import SirioTable from '../SirioTable';
 
 export default class TabelRekomendasi extends React.Component {
@@ -44,7 +43,7 @@ export default class TabelRekomendasi extends React.Component {
         classes: classes.rowNumber,
         headerClasses: classes.colheader,
         headerStyle: (colum, colIndex) => {
-            return { width: "50px", textAlign: 'center' };
+            return { width: "60px", textAlign: 'center' };
         },
         formatter: this.rowNumber
 
@@ -75,7 +74,7 @@ export default class TabelRekomendasi extends React.Component {
         classes: classes.rowItem,
         headerClasses: classes.colheader,
         headerStyle: (colum, colIndex) => {
-            return { width: "15%", textAlign: 'left' };
+            return { width: "12%", textAlign: 'left' };
         }
         
     }, {
@@ -86,7 +85,7 @@ export default class TabelRekomendasi extends React.Component {
         formatter: this.statusFormatter,
         headerClasses: classes.colheader,
         headerStyle: (colum, colIndex) => {
-            return { width: "10%", textAlign: 'left' };
+            return { width: "20%", textAlign: 'left' };
         }
     }, {
         dataField: 'id',
@@ -105,7 +104,7 @@ export default class TabelRekomendasi extends React.Component {
         { "id": 2, "keteranganRekomendasi": "Keterangan", "tenggatWaktuRekomendasi": "01/02/2020", "durasiRekomendasi": "10 Hari", "statusBukti": "Disetujui" },
         { "id": 3, "keteranganRekomendasi": "Keterangan", "tenggatWaktuRekomendasi": "01/02/2020", "durasiRekomendasi": "10 Hari", "statusBukti": "Menunggu Persetujuan" },
         { "id": 4, "keteranganRekomendasi": "Keterangan", "tenggatWaktuRekomendasi": "01/02/2020", "durasiRekomendasi": "10 Hari", "statusBukti": "Menunggu Persetujuan" },
-        { "id": 5, "keteranganRekomendasi": "Keterangan", "tenggatWaktuRekomendasi": "01/02/2020", "durasiRekomendasi": "10 Hari", "statusBukti": "Sedang Persetujuan" },
+        { "id": 5, "keteranganRekomendasi": "Keterangan", "tenggatWaktuRekomendasi": "01/02/2020", "durasiRekomendasi": "10 Hari", "statusBukti": "Menunggu Persetujuan" },
         { "id": 6, "keteranganRekomendasi": "Keterangan", "tenggatWaktuRekomendasi": "01/02/2020", "durasiRekomendasi": "10 Hari", "statusBukti": "Menunggu Persetujuan" },
         { "id": 7, "keteranganRekomendasi": "Keterangan", "tenggatWaktuRekomendasi": "01/02/2020", "durasiRekomendasi": "10 Hari", "statusBukti": "Menunggu Persetujuan" },
         { "id": 8, "keteranganRekomendasi": "Keterangan", "tenggatWaktuRekomendasi": "01/02/2020", "durasiRekomendasi": "10 Hari", "statusBukti": "Menunggu Persetujuan" },
