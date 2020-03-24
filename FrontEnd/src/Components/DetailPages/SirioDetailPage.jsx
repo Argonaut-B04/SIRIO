@@ -24,13 +24,14 @@ class SirioDetailPage extends Component {
                                 <div>
                                     <BootstrapTable
                                         {...props.baseProps}
-                                        ref={n => this.node = n}
+                                        //ref={n => this.node = n}
                                         bordered={ false }
                                     />
                                     <br></br>
                                     <SirioButton
                                         purple
                                         onClick={() => window.location.href = "/"}
+                                        className={classes.buttons}
                                     >
                                         Ubah Bukti
                                     </SirioButton>

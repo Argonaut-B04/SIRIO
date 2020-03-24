@@ -8,6 +8,7 @@ export default class TabelRekomendasi extends React.Component {
     columns = [{
         dataField: 'informasi',
         classes: classes.rowItem,
+        headerClasses: classes.colheader,
         headerStyle: (colum, colIndex) => {
             return { width: "5%", textAlign: 'left' };
         }
@@ -15,6 +16,7 @@ export default class TabelRekomendasi extends React.Component {
     }, {
         dataField: 'isiInformasi',
         classes: classes.rowItem,
+        headerClasses: classes.colheader,
         headerStyle: (colum, colIndex) => {
             return { width: "20%", textAlign: 'left' };
         }
