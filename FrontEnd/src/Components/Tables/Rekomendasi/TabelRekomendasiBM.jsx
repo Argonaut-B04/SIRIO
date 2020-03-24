@@ -28,9 +28,9 @@ export default class TabelRekomendasi extends React.Component {
         return (
             <SirioButton
                 purple
-                onClick={() => window.location.href = "http://www.google.com"}
+                onClick={() => window.location.href = "/bm/rekomendasi/detail-bukti"}
             >
-                Tambah Bukti
+                Detail Bukti
             </SirioButton>
         )
     }

@@ -1,0 +1,10 @@
+.rowNumber {
+    vertical-align: middle !important;
+    text-align: center;
+}
+
+.rowItem {
+    padding: 0.3rem !important;
+    vertical-align: middle !important;
+    height: 50px;
+}
