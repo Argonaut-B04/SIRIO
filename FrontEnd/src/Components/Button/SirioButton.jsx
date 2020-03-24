@@ -49,9 +49,9 @@ export default class SirioButton extends React.Component {
                 onClick={this.props.onClick}
                 className={fullClass}
             >
-                <h6 className={classes.buttonTitle}>
+                <h5 className={classes.buttonTitle}>
                     {this.props.children}
-                </h6>
+                </h5>
             </button>
         )
     }
