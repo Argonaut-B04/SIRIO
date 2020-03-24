@@ -19,24 +19,24 @@ export default class ManagerOperationalSideNav extends Component {
                         },
                         {
                             link: "#",
-                            title: "Konfigurasi Registrasi Risiko",
-                            active: false
+                            title: "Konfigurasi",
+                            active: false,
+                            dropdown: [
+                                {
+                                    label: "Konfigurasi Risk Rating",
+                                    value: "#"
+                                }, {
+                                    label: "Konfigurasi Registrasi Risiko",
+                                    value: "#"
+                                }, {
+                                    label: "Konfigurasi Risk Level",
+                                    value: "#"
+                                }, {
+                                    label: "Konfigurasi SOP",
+                                    value: "#"
+                                }
+                            ]
                         },
-                        {
-                            link: "#",
-                            title: "Konfigurasi Risk Level",
-                            active: false
-                        },
-                        {
-                            link: "#",
-                            title: "Konfigurasi Risk Rating",
-                            active: false
-                        },
-                        {
-                            link: "#",
-                            title: "Konfigurasi SOP",
-                            active: false
-                        }
                     ]
                 }
             />
