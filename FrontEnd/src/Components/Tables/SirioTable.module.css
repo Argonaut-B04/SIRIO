@@ -1,7 +1,13 @@
 .title {
     font-weight: bold;
-    padding-bottom: 1rem;
-    padding-left: 1rem;
+}
+
+.headerWrapper {
+    padding: 0 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
 }
 
 .toolkitWrapper {
