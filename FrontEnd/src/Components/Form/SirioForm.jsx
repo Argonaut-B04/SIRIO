@@ -3,6 +3,16 @@ import SirioField from './SirioFormComponent/SirioField';
 import SirioButton from "../../Components/Button/SirioButton";
 import classes from "./SirioForm.module.css";
 
+/**
+ * Komponen form untuk Sirio secara umum
+ * 
+ * Props yang tersedia:
+ * - title              : String, Judul Form
+ * - headerButton       : Komponen, yang akan ditampilkan di sisi sebelah kanan title
+ * - inputDefinition    : List of JSON, definisi dari tiap field. See also SirioField.
+ * - onSubmit           : Function, fungsi yang akan dijalankan ketika user submit form. 
+ * - submitButton       : Komponen, button submit. Jika tidak disediakan, akan menggunakan tombol default
+ */
 class SirioForm extends Component {
 
     render() {
@@ -32,7 +42,7 @@ class SirioForm extends Component {
                                 purple
                             >
                                 Submit
-                    </SirioButton>
+                            </SirioButton>
                         </div>
                     }
                 </form>

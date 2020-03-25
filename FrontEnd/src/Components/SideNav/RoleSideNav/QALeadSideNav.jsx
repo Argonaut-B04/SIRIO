@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import SideNavFramework from '../SideNavFramework';
 
+/**
+ * Komponen SideNav untuk QA Lead
+ */
 export default class QALeadSideNav extends Component {
     render() {
         return (

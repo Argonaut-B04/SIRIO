@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import SideNavFramework from '../SideNavFramework';
 
+/**
+ * Komponen SideNav untuk Manager Operational
+ */
 export default class ManagerOperationalSideNav extends Component {
     render() {
         return (

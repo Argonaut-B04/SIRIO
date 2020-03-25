@@ -6,26 +6,46 @@ import SirioDropdown from "../Dropdown/SirioDropdown";
 import SirioDropdownItem from "../Dropdown/SirioDropdownItem";
 import AuthenticationService from "../../Services/AuthenticationService";
 
-
+/**
+ * Komponen Side Nav secara General
+ * 
+ * Props yang tersedia:
+ * - classes                : cssClass, kelas custom untuk SideNav
+ * - links                  : list of JSON, kumpulan informasi objek navigasi
+ * - links.title            : String, nama item navigasi
+ * - links.link             : String, url tujuan navigasi
+ * - links.dropdown         : List of Json, kumpulan informasi objek dropdown navigasi
+ * - links.dropdown.title   : String, nama item navigasi dalam dropdown
+ * - links.dropdown.link    : String, url tujuan navigasi dalam dropdown
+ */
 export default class SideNavFramework extends React.Component {
 
+    constructor(props) {
+        super(props);
+
+        // Mendapatkan informasi username dan role dari Authentication Service
+        this.state = {
+            username: AuthenticationService.getUsername(),
+            role: AuthenticationService.getRole()
+        }
+    }
+
+    // Fungsi untuk melakukan navigasi
     onSelect(event) {
         window.location.href = event.value;
     }
 
+    // Fungsi untuk render SideNav
     render() {
-        let username = AuthenticationService.getUsername();
-        let role = AuthenticationService.getRole();
-
         return (
             <div className={this.props.classes ? [this.props.classes, classes.sidebar].join(' ') : classes.sidebar}>
                 <LogoTag light />
                 <div className={classes.identity}>
                     <h3 className={classes.username}>
-                        {username}
+                        {this.state.username}
                     </h3>
                     <p className={classes.role}>
-                        {role}
+                        {this.state.role}
                     </p>
                 </div>
                 <div className={classes.navigationContainer}>

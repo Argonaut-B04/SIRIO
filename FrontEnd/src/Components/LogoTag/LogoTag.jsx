@@ -1,6 +1,12 @@
 import React from 'react';
 import classes from './LogoTag.module.css';
 
+/**
+ * Komponen Logo dan Tag dari Sirio
+ * 
+ * Props yang tersedia:
+ * - light              : boolean, mengubah warna teks tag gelap / terang
+ */
 export default class LogoTag extends React.Component {
     render() {
         return (

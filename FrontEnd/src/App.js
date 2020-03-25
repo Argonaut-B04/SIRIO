@@ -17,6 +17,9 @@ import Logout from "./pages/logout";
 import FormDemo from "./pages/formPage";
 import './App.css';
 
+/**
+ * Router utama yang memetakan url ke controller
+ */
 class App extends React.Component {
   render() {
     return (
