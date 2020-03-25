@@ -1,6 +1,7 @@
 package com.ArgonautB04.SIRIO.services;
 
 import com.ArgonautB04.SIRIO.model.RencanaPemeriksaan;
+import com.ArgonautB04.SIRIO.model.Employee;
 
 import java.util.List;
 
@@ -14,4 +15,6 @@ public interface RencanaPemeriksaanRestService {
     RencanaPemeriksaan ubahRencanaPemeriksaan(int idRencanaPemeriksaan, RencanaPemeriksaan rencanaPemeriksaan);
 
     void hapusRencanaPemeriksaan(int idRencanaPemeriksaan);
+
+    List<RencanaPemeriksaan> getByPembuat(Employee pembuat);
 }

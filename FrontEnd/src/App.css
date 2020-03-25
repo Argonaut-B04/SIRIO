@@ -1,4 +1,13 @@
 @import url('https://fonts.googleapis.com/css?family=Nunito:600,700&display=swap');
+a {
+    color: white;
+    text-decoration: none;
+}
+
+a:hover {
+    color: unset;
+}
+
 h1 {
     font-family: Nunito;
     font-style: normal;

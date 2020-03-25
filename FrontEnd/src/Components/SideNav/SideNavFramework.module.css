@@ -6,6 +6,7 @@
     flex-direction: column;
     position: fixed;
     overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .loginModeSideBar {
@@ -53,9 +54,12 @@ a {
     font-size: 16px;
     line-height: 24px;
     color: white;
-    padding-left: 1.5rem;
+    padding: 0 1.5rem;
     display: flex;
     align-items: center;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
 }
 
 .clickableNavigation.active {
@@ -64,6 +68,28 @@ a {
 
 .clickableNavigation:hover {
     background-color: rgba(93, 188, 210, 30%);
+}
+
+.dropdownMenu {
+    position: relative !important;
+    width: 75% !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    border: none !important;
+    background-color: #7F3F98 !important;
+    max-height: none !important;
+    overflow-y: unset !important;
+}
+
+.dropdownItem {
+    color: white !important;
+    font-family: Nunito;
+    padding: 0.5rem 1.5rem;
+    cursor: pointer;
+}
+
+.dropdownItem:hover {
+    background-color: #A665BF !important;
 }
 
 .sideFooter {

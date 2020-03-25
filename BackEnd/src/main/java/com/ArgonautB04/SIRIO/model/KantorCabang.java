@@ -34,7 +34,7 @@ public class KantorCabang implements Serializable {
 
     @NotNull
     @Column(nullable = false)
-    private boolean kunjunganAuditRisk;
+    private boolean kunjunganAudit;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "risk_rating", referencedColumnName = "idRating", nullable = false)
@@ -86,12 +86,12 @@ public class KantorCabang implements Serializable {
         this.area = area;
     }
 
-    public boolean getKunjunganAuditRisk() {
-        return kunjunganAuditRisk;
+    public boolean getKunjunganAudit() {
+        return kunjunganAudit;
     }
 
-    public void setKunjunganAuditRisk(boolean kunjunganAuditRisk) {
-        this.kunjunganAuditRisk = kunjunganAuditRisk;
+    public void setKunjunganAudit(boolean kunjunganAuditRisk) {
+        this.kunjunganAudit = kunjunganAuditRisk;
     }
 
     public RiskRating getRiskRating() {

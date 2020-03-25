@@ -1,5 +1,6 @@
 package com.ArgonautB04.SIRIO.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -19,13 +20,13 @@ public class Role implements Serializable {
     private int idRole;
 
     @NotNull
-    @Size(max = 20)
+    @Size(max = 50)
     @Column(nullable = false)
     private String namaRole;
 
     @OneToMany(mappedBy = "role", fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonProperty
+    @JsonIgnore
     private List<Employee> employeeList;
 
     public int getIdRole() {

@@ -2,6 +2,7 @@ package com.ArgonautB04.SIRIO.services;
 
 import com.ArgonautB04.SIRIO.model.HasilPemeriksaan;
 import com.ArgonautB04.SIRIO.model.KomponenPemeriksaan;
+import com.ArgonautB04.SIRIO.model.Risiko;
 import com.ArgonautB04.SIRIO.repository.KomponenPemeriksaanDB;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -59,5 +60,10 @@ public class KomponenPemeriksaanRestServiceImpl implements KomponenPemeriksaanRe
     @Override
     public void hapusKomponenPemeriksaan(int idKomponenPemeriksaan) {
         komponenPemeriksaanDB.deleteById(idKomponenPemeriksaan);
+    }
+
+    @Override
+    public KomponenPemeriksaan getByRisiko(Risiko risiko) {
+        return komponenPemeriksaanDB.findAllByRisiko(risiko);
     }
 }

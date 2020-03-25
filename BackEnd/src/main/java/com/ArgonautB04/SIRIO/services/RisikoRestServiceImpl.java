@@ -1,9 +1,13 @@
 package com.ArgonautB04.SIRIO.services;
 
 import com.ArgonautB04.SIRIO.model.Risiko;
+import com.ArgonautB04.SIRIO.model.SOP;
 import com.ArgonautB04.SIRIO.repository.RisikoDB;
+import com.ArgonautB04.SIRIO.rest.RisikoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -17,8 +21,12 @@ public class RisikoRestServiceImpl implements RisikoRestService {
     @Autowired
     private RisikoDB risikoDB;
 
+    @Autowired
+    private SOPRestService sopRestService;
+
     @Override
     public Risiko buatRisiko(Risiko risiko) {
+        risiko.setStatus(Risiko.Status.AKTIF);
         return risikoDB.save(risiko);
     }
 
@@ -64,4 +72,27 @@ public class RisikoRestServiceImpl implements RisikoRestService {
         target.setStatus(Risiko.Status.AKTIF);
         return risikoDB.save(target);
     }
+
+    @Override
+    public Risiko transformasidto(Risiko risiko, RisikoDTO risikoDTO) {
+        risiko.setChildList(risikoDTO.getChild());
+        risiko.setKomponen(risikoDTO.getKomponen());
+        risiko.setRisikoKategori(risikoDTO.getKategori());
+        risiko.setNamaRisiko(risikoDTO.getNama());
+        if (risikoDTO.getParent() != 0) {
+            risiko.setParent(getById(risikoDTO.getId()));
+        } else {
+            risiko.setParent(null);
+        }
+        try {
+            SOP sop = sopRestService.getById(risikoDTO.getSop());
+            risiko.setSop(sop);
+        } catch (NoSuchElementException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "SOP dengan ID " + risikoDTO.getSop() + " tidak ditemukan!"
+            );
+        }
+        return risiko;
+    }
+
 }
