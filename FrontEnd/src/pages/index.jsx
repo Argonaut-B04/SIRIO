@@ -23,6 +23,7 @@ export default class MainPage extends React.Component {
                 <Link to="/rekomendasi" className="btn btn-primary">Tabel Rekomendasi</Link>
                 <Link to="/bm/rekomendasi" className="btn btn-primary">Rekomendasi BM</Link>
                 <Link to="/bukti-pelaksanaan" className="btn btn-primary">Tabel Bukti</Link>
+                <Link to="/Form" className="btn btn-primary">Demo Form</Link>
                 <Link to="/login" className="btn btn-primary">Login</Link>
                 <Link to="/logout" className="btn btn-primary">Logout</Link>
                 <br />

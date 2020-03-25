@@ -14,6 +14,7 @@ import DaftarBuktiPelaksanaan from "./pages/DaftarBuktiPelaksanaan";
 import NotFound from "./pages/error";
 import Login from "./pages/login";
 import Logout from "./pages/logout";
+import FormDemo from "./pages/formPage";
 import './App.css';
 
 class App extends React.Component {
@@ -29,6 +30,7 @@ class App extends React.Component {
             <Route exact path="/bukti-pelaksanaan" component={DaftarBuktiPelaksanaan} />
             <Route exact path="/login" component={Login} />
             <Route exact path="/logout" component={Logout} />
+            <Route exact path="/Form" component={FormDemo} />
             <Route exact path="/404" component={NotFound} />
             <Redirect to="/404" />
           </Switch>
