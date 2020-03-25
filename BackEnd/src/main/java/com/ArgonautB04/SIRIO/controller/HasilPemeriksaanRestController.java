@@ -6,9 +6,11 @@ import com.ArgonautB04.SIRIO.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.security.Principal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -48,6 +50,9 @@ public class HasilPemeriksaanRestController {
     @Autowired
     private StatusRekomendasiRestService statusRekomendasiRestService;
 
+    @Autowired
+    private RoleRestService roleRestService;
+
     /**
      * Mengambil seluruh hasil pemeriksaan
      *
@@ -86,6 +91,44 @@ public class HasilPemeriksaanRestController {
                     HttpStatus.NOT_FOUND, "Employee dengan ID " + idPembuat + " tidak ditemukan!"
             );
         }
+        return response;
+    }
+
+    /**
+     * Mengambil tabel daftar hasil pemeriksaan
+     *
+     * @return tabel daftar hasil pemeriksaan
+     */
+    @GetMapping("/getTabelHasilPemeriksaan")
+    private BaseResponse<List<TabelHasilPemeriksaanDTO>> getTabelHasilPemeriksaan(
+            Principal principal, ModelMap model
+    ) {
+        BaseResponse<List<TabelHasilPemeriksaanDTO>> response = new BaseResponse<>();
+        Employee employee = employeeRestService.getByUsername(principal.getName()).get();
+
+        List<HasilPemeriksaan> daftarHasilPemeriksaan = employee.getRole() == roleRestService.getById(6) ?
+                hasilPemeriksaanRestService.getByPembuat(employee) : hasilPemeriksaanRestService.getAll();
+
+        List<TabelHasilPemeriksaanDTO> result = new ArrayList<>();
+        for (HasilPemeriksaan hasilPemeriksaan: daftarHasilPemeriksaan) {
+            TabelHasilPemeriksaanDTO tabelHasilPemeriksaanDTO = new TabelHasilPemeriksaanDTO();
+            tabelHasilPemeriksaanDTO.setId(hasilPemeriksaan.getIdHasilPemeriksaan());
+            tabelHasilPemeriksaanDTO.setIdTugasPemeriksaan(hasilPemeriksaan.getTugasPemeriksaan().getIdTugas());
+            tabelHasilPemeriksaanDTO.setKantorCabang(hasilPemeriksaan.getTugasPemeriksaan().getKantorCabang().getNamaKantor());
+            tabelHasilPemeriksaanDTO.setStatus(hasilPemeriksaan.getStatusHasilPemeriksaan().getNamaStatus());
+            List<Rekomendasi> daftarRekomendasi = rekomendasiRestService.getByDaftarKomponenPemeriksaan(
+                    komponenPemeriksaanRestService.getByHasilPemeriksaan(hasilPemeriksaan));
+            tabelHasilPemeriksaanDTO.setSiapDijalankan(true);
+            for (Rekomendasi rekomendasi: daftarRekomendasi) {
+                if (rekomendasi.getStatusRekomendasi() != statusRekomendasiRestService.getById(5))
+                    tabelHasilPemeriksaanDTO.setSiapDijalankan(false);
+            }
+            result.add(tabelHasilPemeriksaanDTO);
+        }
+        response.setStatus(200);
+        response.setMessage("success");
+        response.setResult(result);
+
         return response;
     }
 
