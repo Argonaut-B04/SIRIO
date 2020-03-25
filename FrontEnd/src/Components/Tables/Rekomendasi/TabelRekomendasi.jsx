@@ -55,17 +55,45 @@ export default class TabelRekomendasi extends React.Component {
         const recommended = status === "Menunggu Pengaturan Tenggat Waktu";
         const hyperlink = status === "Menunggu Pelaksanaan" && tenggatWaktuExist;
         const text = status === "Sedang Dijalankan" && tenggatWaktuExist;
-        return (
-            <SirioDatePickerButton
-                purple
-                disabled={!recommended}
-                recommended={recommended}
-                hyperlink={hyperlink}
-                text={text}
-            >
-                {tenggatWaktuExist ? tenggatWaktu : "Tenggat Waktu"}
-            </SirioDatePickerButton>
-        )
+
+        const disabled = !recommended;
+        if (recommended) {
+            return (
+                <SirioDatePickerButton
+                    purple
+                    recommended
+                >
+                    Tenggat Waktu
+                </SirioDatePickerButton>
+            )
+        } else if (hyperlink) {
+            return (
+                <SirioDatePickerButton
+                    purple
+                    hyperlink
+                >
+                    {tenggatWaktuExist ? tenggatWaktu : "Tenggat Waktu"}
+                </SirioDatePickerButton>
+            )
+        } else if (text) {
+            return (
+                <SirioButton
+                    purple
+                    text
+                >
+                    {tenggatWaktu}
+                </SirioButton>
+            )
+        } else if (disabled) {
+            return (
+                <SirioButton
+                    purple
+                    disabled
+                >
+                    Tenggat Waktu
+                </SirioButton>
+            )
+        }
     }
 
     getButtonsThird(cell, row) {
@@ -115,7 +143,7 @@ export default class TabelRekomendasi extends React.Component {
             return { width: "20%", textAlign: 'left' };
         }
     }, {
-        dataField: 'id',
+        dataField: 'noData 1',
         text: '',
         headerClasses: classes.colheader,
         classes: classes.rowItem,
@@ -124,7 +152,7 @@ export default class TabelRekomendasi extends React.Component {
         },
         formatter: this.getButtonsFirst
     }, {
-        dataField: 'id',
+        dataField: 'noData 2',
         text: '',
         headerClasses: classes.colheader,
         classes: classes.rowItem,
@@ -133,7 +161,7 @@ export default class TabelRekomendasi extends React.Component {
         },
         formatter: this.getButtonsSecond
     }, {
-        dataField: 'id',
+        dataField: 'noData 3',
         text: '',
         headerClasses: classes.colheader,
         classes: classes.rowItem,
@@ -144,8 +172,7 @@ export default class TabelRekomendasi extends React.Component {
     }];
 
     data = [
-        { "tenggatWaktu": "", "id": 10, "keteranganRekomendasi": "Nathan", "statusRekomendasi": "Menunggu Pengaturan Tenggat Waktu" },
-        { "tenggatWaktu": "", "id": 1, "keteranganRekomendasi": "Nathan1", "statusRekomendasi": "Ditolak" },
+        { "tenggatWaktu": "", "id": 1, "keteranganRekomendasi": "Nathan", "statusRekomendasi": "Menunggu Pengaturan Tenggat Waktu" },
         { "tenggatWaktu": "", "id": 2, "keteranganRekomendasi": "Nathan1", "statusRekomendasi": "Sedang Dijalankan" },
         { "tenggatWaktu": "", "id": 3, "keteranganRekomendasi": "Nathan1", "statusRekomendasi": "Menunggu Persetujuan" },
         { "tenggatWaktu": "10/10/2000", "id": 4, "keteranganRekomendasi": "Nathan1", "statusRekomendasi": "Menunggu Pelaksanaan" },
@@ -154,6 +181,7 @@ export default class TabelRekomendasi extends React.Component {
         { "tenggatWaktu": "", "id": 7, "keteranganRekomendasi": "Nathan1", "statusRekomendasi": "Draft" },
         { "tenggatWaktu": "", "id": 8, "keteranganRekomendasi": "Nathan1", "statusRekomendasi": "Draft" },
         { "tenggatWaktu": "", "id": 9, "keteranganRekomendasi": "Nathan1", "statusRekomendasi": "Draft" },
+        { "tenggatWaktu": "", "id": 10, "keteranganRekomendasi": "Nathan1", "statusRekomendasi": "Ditolak" },
         { "tenggatWaktu": "", "id": 11, "keteranganRekomendasi": "Nathan1", "statusRekomendasi": "Draft" },
         { "tenggatWaktu": "", "id": 12, "keteranganRekomendasi": "Nathan1", "statusRekomendasi": "Draft" },
         { "tenggatWaktu": "", "id": 13, "keteranganRekomendasi": "Nathan1", "statusRekomendasi": "Draft" },
