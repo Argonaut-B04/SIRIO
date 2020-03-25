@@ -62,7 +62,12 @@ class SirioTable extends Component {
         const { SearchBar } = Search;
         return (
             <div>
-                <h1 className={classes.title}>{this.props.title}</h1>
+                <div className={classes.headerWrapper}>
+                    <h1 className={classes.title}>
+                        {this.props.title}
+                    </h1>
+                    {this.props.headerButton}
+                </div>
                 <div className={classes.toolkitWrapper}>
                     <ToolkitProvider
                         bootstrap4

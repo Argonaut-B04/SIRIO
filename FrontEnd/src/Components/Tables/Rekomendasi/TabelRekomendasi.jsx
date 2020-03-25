@@ -195,6 +195,14 @@ export default class TabelRekomendasi extends React.Component {
         order: 'asc'
     }];
 
+    headerButton() {
+        return (
+            <SirioButton purple>
+                Header Button
+            </SirioButton>
+        )
+    }
+
     render() {
         return (
             <SirioTable
@@ -203,6 +211,7 @@ export default class TabelRekomendasi extends React.Component {
                 id='id'
                 columnsDefinition={this.columns}
                 includeSearchBar
+                headerButton={this.headerButton()}
             />
         );
     }
