@@ -1,0 +1,19 @@
+.formWrapper {
+    padding: 1rem;
+    border: 1px solid #8E8E8E;
+    box-sizing: border-box;
+    border-radius: 6px;
+}
+
+.formWrapper>*>* {
+    padding: 5px;
+    margin: 10px 0px;
+}
+
+.headerWrapper {
+    padding: 0 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}

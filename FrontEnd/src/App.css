@@ -1,4 +1,8 @@
 @import url('https://fonts.googleapis.com/css?family=Nunito:600,700&display=swap');
+* {
+    transition: 0.2s ease-in-out;
+}
+
 a {
     color: white;
     text-decoration: none;
@@ -61,7 +65,7 @@ label {
 }
 
 input:focus {
-    border: solid #7F3F98 2px !important;
+    border: solid #7F3F98 1.5px;
 }
 
 tr {
