@@ -23,17 +23,17 @@ export default class ManagerOperationalSideNav extends Component {
                             active: false,
                             dropdown: [
                                 {
-                                    label: "Konfigurasi Risk Rating",
-                                    value: "#"
+                                    title: "Risk Rating",
+                                    link: "#"
                                 }, {
-                                    label: "Konfigurasi Registrasi Risiko",
-                                    value: "#"
+                                    title: "Registrasi Risiko",
+                                    link: "#"
                                 }, {
-                                    label: "Konfigurasi Risk Level",
-                                    value: "#"
+                                    title: "Risk Level",
+                                    link: "#"
                                 }, {
-                                    label: "Konfigurasi SOP",
-                                    value: "#"
+                                    title: "SOP",
+                                    link: "#"
                                 }
                             ]
                         },

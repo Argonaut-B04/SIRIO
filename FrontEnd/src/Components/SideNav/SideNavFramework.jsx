@@ -2,9 +2,9 @@ import React from "react";
 import classes from './SideNavFramework.module.css';
 import LogoTag from "../LogoTag/LogoTag";
 import SirioButton from "../Button/SirioButton";
+import SirioDropdown from "../Dropdown/SirioDropdown";
+import SirioDropdownItem from "../Dropdown/SirioDropdownItem";
 import AuthenticationService from "../../Services/AuthenticationService";
-import Dropdown from 'react-dropdown';
-import 'react-dropdown/style.css';
 
 
 export default class SideNavFramework extends React.Component {
@@ -32,21 +32,28 @@ export default class SideNavFramework extends React.Component {
                     {this.props.links.map((menu, i) =>
 
                         menu.dropdown ?
-                            <div key={i}>
-                                <Dropdown
-                                    controlClassName={classes.clickableNavigation}
-                                    menuClassName={classes.dropdownMenu}
-                                    options={menu.dropdown}
-                                    onChange={this.onSelect}
-                                    placeholder={menu.title} />
-                            </div>
+                            <SirioDropdown
+                                headerClass={classes.clickableNavigation}
+                                headerTitle={menu.title}
+                                activeClass={classes.active}
+                                menuClass={classes.dropdownMenu}
+                            >
+                                {menu.dropdown.map((item, i) =>
+                                    <SirioDropdownItem
+                                        classes={classes.dropdownItem}
+                                        onClick={(object) => window.location.href = object}
+                                        clickArgument={item.link}
+                                    >
+                                        {item.title}
+                                    </SirioDropdownItem>
+                                )}
+                            </SirioDropdown>
                             :
                             <a href={menu.link} key={i}>
                                 <div className={menu.active ? [classes.clickableNavigation, classes.active].join(' ') : classes.clickableNavigation}>
                                     {menu.title}
                                 </div>
                             </a>
-
                     )}
 
                 </div>
