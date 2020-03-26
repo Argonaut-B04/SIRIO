@@ -12,7 +12,8 @@ export default class TheForm extends React.Component {
 
         this.state = {
             nama: "bambang",
-            umur: 18
+            umur: 18,
+            jenisKelamin: "Pria"
         }
 
         this.handleChange = this.handleChange.bind(this);
@@ -58,6 +59,21 @@ export default class TheForm extends React.Component {
                     name: "umur",
                     value: this.state.umur,
                     placeholder: "masukan umur bambang"
+                }, {
+                    label: "Jenis Kelamin",
+                    handleChange: this.handleChange,
+                    type: "select",
+                    name: "jenisKelamin",
+                    value: this.state.jenisKelamin,
+                    optionList: [
+                        {
+                            name: "Pria",
+                            value: "Pria"
+                        }, {
+                            name: "Wanita",
+                            value: "Wanita"
+                        }
+                    ]
                 }
             ]
         )

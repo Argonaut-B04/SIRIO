@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import classes from "./SirioField.module.css";
+import SirioSelect from '../../Dropdown/SirioSelect';
 
 /**
  * Komponen field untuk SirioForm
@@ -23,6 +24,38 @@ export default class SirioField extends Component {
                         {this.props.label}
                     </label>
                     {this.props.customInput}
+                </fieldset>
+            )
+        } else if (this.props.type === "select") {
+            return (
+                <fieldset>
+                    <label className={classes.label}>
+                        {this.props.label}
+                    </label>
+                    <SirioSelect
+                        name={this.props.name}
+                        value={this.props.value}
+                        handleChange={this.props.handleChange}
+                        optionList={this.props.optionList}
+                    />
+                </fieldset>
+            )
+        } else if (this.props.type === "textarea") {
+            return (
+                <fieldset>
+                    <label className={classes.label}>
+                        {this.props.label}
+                    </label>
+                    <textarea
+                        type={this.props.type}
+
+                        name={this.props.name}
+                        value={this.props.value}
+                        onChange={this.props.handleChange}
+
+                        placeholder={this.props.placeholder}
+                        className={classes.input}
+                    />
                 </fieldset>
             )
         }
