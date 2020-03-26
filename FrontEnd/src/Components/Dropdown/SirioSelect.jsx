@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import classes from "./SirioSelect.module.css";
+import Select from "react-select";
 
 /**
  * Komponen select dropdown untuk Sirio Form
@@ -11,18 +12,38 @@ import classes from "./SirioSelect.module.css";
  * - options            : List of JSON, berisi value dan name dari tiap option
  */
 export default class SirioSelect extends Component {
+
+    customStyles = {
+        control: base => ({
+            ...base,
+            border: "none",
+            margin: 0,
+            boxShadow: 'none'   
+        }),
+        valueContainer: base => ({
+            ...base,
+            padding: 0
+        }),
+        option: (base, state) => ({
+            ...base,
+            padding: "0.5rem",
+            fontFamily: "Nunito",
+            color: state.isFocused ? "black" : "rgba(127, 63, 152, 0.9)",
+            backgroundColor: "white",
+            borderRadius: "20px"
+        })
+    }
+
     render() {
         return (
-            <select
-                value={this.props.value}
-                onChange={this.props.handleChange}
-                name={this.props.name}
+            <Select
+                value={this.props.options.filter(option => option.value === this.props.value)}
+                onChange={event => this.props.handleChange(this.props.name, event)}
+                components={{ IndicatorSeparator:() => null }}
+                options={this.props.options}
                 className={classes.select}
-            >
-                {this.props.optionList.map((option, i) =>
-                    <option key={i} value={option.value}>{option.name}</option>
-                )}
-            </select>
+                styles={this.customStyles}
+            />
         );
     }
 }

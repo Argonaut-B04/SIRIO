@@ -6,11 +6,16 @@
     line-height: 24px;
     color: black;
     min-width: 200px;
-    border: 1.5px solid #c4c4c4;
+    border: 1.5px solid #7F3F98;
     box-sizing: border-box;
     border-radius: 6px;
+    text-align: middle;
 }
 
 .select:focus {
     outline: none !important;
+}
+
+.option {
+    margin: 2.5rem;
 }
