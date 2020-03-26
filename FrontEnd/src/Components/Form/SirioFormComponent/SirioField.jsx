@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import classes from "./SirioField.module.css";
 import SirioSelect from '../../Dropdown/SirioSelect';
+import TextareaAutosize from 'react-textarea-autosize';
 
 /**
  * Komponen field untuk SirioForm
@@ -46,15 +47,15 @@ export default class SirioField extends Component {
                     <label className={classes.label}>
                         {this.props.label}
                     </label>
-                    <textarea
-                        type={this.props.type}
-
+                    <TextareaAutosize
                         name={this.props.name}
                         value={this.props.value}
                         onChange={this.props.handleChange}
 
                         placeholder={this.props.placeholder}
                         className={classes.input}
+                        minRows={3}
+                        maxRows={6}
                     />
                 </fieldset>
             )
