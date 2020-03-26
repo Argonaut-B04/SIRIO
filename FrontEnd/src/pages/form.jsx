@@ -13,7 +13,8 @@ export default class TheForm extends React.Component {
         this.state = {
             nama: "bambang",
             umur: 18,
-            jenisKelamin: "Pria"
+            jenisKelamin: "Pria",
+            manusia: true
         }
 
         this.handleChange = this.handleChange.bind(this);
@@ -24,12 +25,21 @@ export default class TheForm extends React.Component {
     // Fungsi untuk mengubah state ketika isi dari input diubah
     // Fungsi ini wajib ada jika membuat form
     handleChange(event) {
-        this.setState(
-            {
-                [event.target.name]
-                    : event.target.value
-            }
-        )
+        if (typeof event.target.checked === "boolean") {
+            this.setState(
+                {
+                    [event.target.name]
+                        : event.target.checked
+                }
+            )
+        } else {
+            this.setState(
+                {
+                    [event.target.name]
+                        : event.target.value
+                }
+            )
+        }
     }
 
     // Fungsi untuk mengubah state ketika isi dropdown diubah
@@ -89,6 +99,12 @@ export default class TheForm extends React.Component {
                             value: "gak tau apa"
                         }
                     ]
+                }, {
+                    label: "Manusia?",
+                    handleChange: this.handleChange,
+                    type: "checkbox",
+                    name: "manusia",
+                    value: this.state.manusia,
                 }
             ]
         )

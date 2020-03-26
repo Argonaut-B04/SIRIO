@@ -59,10 +59,29 @@ export default class SirioField extends Component {
                     />
                 </fieldset>
             )
+        } else if (this.props.type === "checkbox") {
+            return (
+                <fieldset>
+                    <label className={classes.label} type={this.props.type}>
+                        {this.props.label}
+                    </label>
+                    <input
+                        type={this.props.type}
+
+                        name={this.props.name}
+                        defaultChecked={this.props.value}
+                        value={this.defaultChecked ? true : false}
+                        onChange={this.props.handleChange}
+
+                        className={classes.input}
+                    />
+                    <span class="checkmark"></span>
+                </fieldset>
+            );
         }
         return (
             <fieldset>
-                <label className={classes.label}>
+                <label className={classes.label} type={this.props.type}>
                     {this.props.label}
                 </label>
                 <input
