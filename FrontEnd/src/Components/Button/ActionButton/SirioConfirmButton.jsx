@@ -4,6 +4,15 @@ import SirioButton from "../SirioButton";
 import "bootstrap/dist/css/bootstrap.min.css";
 import classes from "./ActionButton.module.css";
 
+/**
+ * Komponen untuk Button yang membuka Popup berupa Konfirmasi
+ * 
+ * Props yang tersedia:
+ * - Seluruh Props SirioButton
+ * - modalTitle         : String, judul modal
+ * - onConfirm          : Function, dijalankan ketika tombol konfirmasi ditekan
+ * - customConfirmText  : String, Opsional untuk mengganti kata "konfirmasi" pada tombol konfirmasi
+ */
 export default class SirioWarningButton extends React.Component {
 
     constructor(props, context) {
@@ -15,7 +24,6 @@ export default class SirioWarningButton extends React.Component {
 
         this.handleShow = this.handleShow.bind(this);
         this.handleClose = this.handleClose.bind(this);
-
     }
 
     handleClose() {
