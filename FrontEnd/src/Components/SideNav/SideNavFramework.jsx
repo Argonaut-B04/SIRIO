@@ -53,6 +53,7 @@ export default class SideNavFramework extends React.Component {
 
                         menu.dropdown ?
                             <SirioDropdown
+                                key={i}
                                 headerClass={classes.clickableNavigation}
                                 headerTitle={menu.title}
                                 activeClass={classes.active}
@@ -60,6 +61,7 @@ export default class SideNavFramework extends React.Component {
                             >
                                 {menu.dropdown.map((item, i) =>
                                     <SirioDropdownItem
+                                        key={i}
                                         classes={classes.dropdownItem}
                                         onClick={(object) => window.location.href = object}
                                         clickArgument={item.link}
