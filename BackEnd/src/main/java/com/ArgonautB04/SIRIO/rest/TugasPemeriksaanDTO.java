@@ -6,6 +6,15 @@ public class TugasPemeriksaanDTO {
     private String tanggalSelesai;
     private Integer idQA;
     private Integer kantorCabang;
+    private String namaKantorCabang;
+
+    public String getNamaKantorCabang() {
+        return namaKantorCabang;
+    }
+
+    public void setNamaKantorCabang(String namaKantorCabang) {
+        this.namaKantorCabang = namaKantorCabang;
+    }
 
     public Integer getId() {
         return id;

@@ -47,6 +47,11 @@ public class HasilPemeriksaanRestServiceImpl implements HasilPemeriksaanRestServ
     }
 
     @Override
+    public Optional<HasilPemeriksaan> getByTugasPemeriksaan(TugasPemeriksaan tugasPemeriksaan) {
+        return hasilPemeriksaanDB.findByTugasPemeriksaan(tugasPemeriksaan);
+    }
+
+    @Override
     public HasilPemeriksaan buatHasilPemeriksaan(int idHasilPemeriksaan, HasilPemeriksaan hasilPemeriksaan) {
         HasilPemeriksaan target = getById(idHasilPemeriksaan);
         target.setFeedback(hasilPemeriksaan.getFeedback());

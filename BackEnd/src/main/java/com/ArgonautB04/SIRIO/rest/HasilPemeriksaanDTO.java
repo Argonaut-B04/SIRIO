@@ -9,14 +9,21 @@ import java.util.List;
 public class HasilPemeriksaanDTO {
     private Integer idStatus;
     private Integer id;
-    private Integer idTugasPemeriksaan;
     private List<KomponenPemeriksaanDTO> daftarKomponenPemeriksaan;
-    private String kantorCabang;
+    private TugasPemeriksaanDTO tugasPemeriksaan;
     private String namaStatus;
     private String namaPembuat;
     private String namaPemeriksa;
     private String usernamePembuat;
     private Boolean siapDijalankan;
+
+    public TugasPemeriksaanDTO getTugasPemeriksaan() {
+        return tugasPemeriksaan;
+    }
+
+    public void setTugasPemeriksaan(TugasPemeriksaanDTO tugasPemeriksaan) {
+        this.tugasPemeriksaan = tugasPemeriksaan;
+    }
 
     public String getUsernamePembuat() {
         return usernamePembuat;
@@ -58,14 +65,6 @@ public class HasilPemeriksaanDTO {
         this.siapDijalankan = siapDijalankan;
     }
 
-    public String getKantorCabang() {
-        return kantorCabang;
-    }
-
-    public void setKantorCabang(String kantorCabang) {
-        this.kantorCabang = kantorCabang;
-    }
-
     public String getNamaStatus() {
         return namaStatus;
     }
@@ -80,14 +79,6 @@ public class HasilPemeriksaanDTO {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public Integer getIdTugasPemeriksaan() {
-        return idTugasPemeriksaan;
-    }
-
-    public void setIdTugasPemeriksaan(Integer idTugasPemeriksaan) {
-        this.idTugasPemeriksaan = idTugasPemeriksaan;
     }
 
     public List<KomponenPemeriksaanDTO> getDaftarKomponenPemeriksaan() {

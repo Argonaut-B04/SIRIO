@@ -113,8 +113,10 @@ public class HasilPemeriksaanRestController {
         for (HasilPemeriksaan hasilPemeriksaan: daftarHasilPemeriksaan) {
             HasilPemeriksaanDTO hasilPemeriksaanDTO = new HasilPemeriksaanDTO();
             hasilPemeriksaanDTO.setId(hasilPemeriksaan.getIdHasilPemeriksaan());
-            hasilPemeriksaanDTO.setIdTugasPemeriksaan(hasilPemeriksaan.getTugasPemeriksaan().getIdTugas());
-            hasilPemeriksaanDTO.setKantorCabang(hasilPemeriksaan.getTugasPemeriksaan().getKantorCabang().getNamaKantor());
+            hasilPemeriksaanDTO.setTugasPemeriksaan(new TugasPemeriksaanDTO());
+            hasilPemeriksaanDTO.getTugasPemeriksaan().setId(hasilPemeriksaan.getTugasPemeriksaan().getIdTugas());
+            hasilPemeriksaanDTO.getTugasPemeriksaan().setNamaKantorCabang(
+                    hasilPemeriksaan.getTugasPemeriksaan().getKantorCabang().getNamaKantor());
             hasilPemeriksaanDTO.setNamaStatus(hasilPemeriksaan.getStatusHasilPemeriksaan().getNamaStatus());
             List<Rekomendasi> daftarRekomendasi = rekomendasiRestService.getByDaftarKomponenPemeriksaan(
                     komponenPemeriksaanRestService.getByHasilPemeriksaan(hasilPemeriksaan));
@@ -148,13 +150,17 @@ public class HasilPemeriksaanRestController {
             HasilPemeriksaanDTO result = new HasilPemeriksaanDTO();
             result.setId(hasilPemeriksaan.getIdHasilPemeriksaan());
             result.setIdStatus(hasilPemeriksaan.getStatusHasilPemeriksaan().getIdStatusHasil());
-            result.setIdTugasPemeriksaan(hasilPemeriksaan.getTugasPemeriksaan().getIdTugas());
+            result.setTugasPemeriksaan(new TugasPemeriksaanDTO());
+            result.getTugasPemeriksaan().setId(hasilPemeriksaan.getTugasPemeriksaan().getIdTugas());
+            result.getTugasPemeriksaan().setIdQA(hasilPemeriksaan.getTugasPemeriksaan().getPelaksana().getIdEmployee());
+            result.getTugasPemeriksaan().setNamaKantorCabang(
+                    hasilPemeriksaan.getTugasPemeriksaan().getKantorCabang().getNamaKantor());
             result.setNamaStatus(hasilPemeriksaan.getStatusHasilPemeriksaan().getNamaStatus());
             result.setNamaPembuat(hasilPemeriksaan.getPembuat().getNama());
             result.setUsernamePembuat(hasilPemeriksaan.getPembuat().getUsername());
             if (hasilPemeriksaan.getPemeriksa() != null) result.setNamaPemeriksa(hasilPemeriksaan.getPemeriksa().getNama());
 
-            List<KomponenPemeriksaanDTO> daftarKomponenPemeriksaanDTO = new ArrayList<>();
+            result.setDaftarKomponenPemeriksaan(new ArrayList<>());
             for (KomponenPemeriksaan komponenPemeriksaan:
                     komponenPemeriksaanRestService.getByHasilPemeriksaan(hasilPemeriksaan)) {
                 KomponenPemeriksaanDTO komponenPemeriksaanDTO = new KomponenPemeriksaanDTO();
@@ -163,25 +169,23 @@ public class HasilPemeriksaanRestController {
                 komponenPemeriksaanDTO.setJumlahSampel(komponenPemeriksaan.getJumlahSampel());
                 komponenPemeriksaanDTO.setKeteranganSampel(komponenPemeriksaan.getKeteranganSampel());
 
-                RisikoDTO risikoDTO = new RisikoDTO();
-                risikoDTO.setId(komponenPemeriksaan.getRisiko().getIdRisiko());
-                risikoDTO.setKomponen(komponenPemeriksaan.getRisiko().getKomponen());
-                risikoDTO.setNama(komponenPemeriksaan.getRisiko().getNamaRisiko());
-                risikoDTO.setNamaSop(komponenPemeriksaan.getRisiko().getSop().getJudul());
-                risikoDTO.setLinkSop(komponenPemeriksaan.getRisiko().getSop().getLinkDokumen());
+                komponenPemeriksaanDTO.setRisiko(new RisikoDTO());
+                komponenPemeriksaanDTO.getRisiko().setId(komponenPemeriksaan.getRisiko().getIdRisiko());
+                komponenPemeriksaanDTO.getRisiko().setKomponen(komponenPemeriksaan.getRisiko().getKomponen());
+                komponenPemeriksaanDTO.getRisiko().setNama(komponenPemeriksaan.getRisiko().getNamaRisiko());
+                komponenPemeriksaanDTO.getRisiko().setNamaSop(komponenPemeriksaan.getRisiko().getSop().getJudul());
+                komponenPemeriksaanDTO.getRisiko().setLinkSop(komponenPemeriksaan.getRisiko().getSop().getLinkDokumen());
                 if(komponenPemeriksaan.getRisiko().getParent() != null) {
-                    risikoDTO.setParent(komponenPemeriksaan.getRisiko().getParent().getIdRisiko());
+                    komponenPemeriksaanDTO.getRisiko().setParent(komponenPemeriksaan.getRisiko().getParent().getIdRisiko());
                     if(komponenPemeriksaan.getRisiko().getParent().getParent() != null)
-                        risikoDTO.setGrantParent(komponenPemeriksaan.getRisiko().getParent().getParent().getIdRisiko());
+                        komponenPemeriksaanDTO.getRisiko().setGrantParent(komponenPemeriksaan.getRisiko().getParent().getParent().getIdRisiko());
                 }
-                komponenPemeriksaanDTO.setRisiko(risikoDTO);
                 komponenPemeriksaanDTO.setDaftarRekomendasiTerdaftar(
                         rekomendasiRestService.getByKomponenPemeriksaan(komponenPemeriksaan));
                 komponenPemeriksaanDTO.setDaftarTemuanRisikoTerdaftar(
                         temuanRisikoRestService.getByKomponenPemeriksaan(komponenPemeriksaan));
-                daftarKomponenPemeriksaanDTO.add(komponenPemeriksaanDTO);
+                result.getDaftarKomponenPemeriksaan().add(komponenPemeriksaanDTO);
             }
-            result.setDaftarKomponenPemeriksaan(daftarKomponenPemeriksaanDTO);
 
             response.setStatus(200);
             response.setMessage("success");
@@ -202,28 +206,50 @@ public class HasilPemeriksaanRestController {
      */
     @PostMapping(value = "/tambah", consumes = {"application/json"})
     private BaseResponse<HasilPemeriksaan> tambahHasilPemeriksaan(
-            @RequestBody HasilPemeriksaanDTO hasilPemeriksaanDTO
+            @RequestBody HasilPemeriksaanDTO hasilPemeriksaanDTO,
+            Principal principal, ModelMap model
     ) {
         BaseResponse<HasilPemeriksaan> response = new BaseResponse<>();
+
+        Employee employee = employeeRestService.getByUsername(principal.getName()).get();
+        if (employee != employeeRestService.getById(hasilPemeriksaanDTO.getTugasPemeriksaan().getIdQA()) &&
+                employee.getRole() == roleRestService.getById(6))
+            throw new ResponseStatusException(
+                    HttpStatus.FORBIDDEN, "Employee dengan ID " + employee.getIdEmployee() +
+                    " tidak ditugaskan untuk membuat hasil pemeriksaan ini!"
+            );
+
         HasilPemeriksaan hasilPemeriksaanTemp = new HasilPemeriksaan();
-        hasilPemeriksaanTemp.setStatusHasilPemeriksaan(
-                statusHasilPemeriksaanRestService.getById(hasilPemeriksaanDTO.getIdStatus()));
 
         try {
-            Employee pembuat = employeeRestService.getById(hasilPemeriksaanDTO.getIdPembuat());
-            hasilPemeriksaanTemp.setPembuat(pembuat);
+            StatusHasilPemeriksaan statusHasilPemeriksaan =
+                    statusHasilPemeriksaanRestService.getById(hasilPemeriksaanDTO.getIdStatus());
+            if (statusHasilPemeriksaan != statusHasilPemeriksaanRestService.getById(1) ||
+                    statusHasilPemeriksaan != statusHasilPemeriksaanRestService.getById(2))
+                throw new ResponseStatusException(
+                        HttpStatus.FORBIDDEN, "Status tidak diperbolehkan!"
+                );
+            hasilPemeriksaanTemp.setStatusHasilPemeriksaan(statusHasilPemeriksaan);
         } catch (NoSuchElementException e) {
             throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Employee dengan ID " + hasilPemeriksaanDTO.getIdPembuat() + " tidak ditemukan!"
+                    HttpStatus.NOT_FOUND, "Status Hasil Pemeriksaan tidak ditemukan!"
             );
         }
 
+        hasilPemeriksaanTemp.setPembuat(employee);
+
         try {
-            TugasPemeriksaan tugasPemeriksaan = tugasPemeriksaanRestService.getById(hasilPemeriksaanDTO.getIdTugasPemeriksaan());
+            TugasPemeriksaan tugasPemeriksaan = tugasPemeriksaanRestService.getById(
+                    hasilPemeriksaanDTO.getTugasPemeriksaan().getId());
+            if (hasilPemeriksaanRestService.getByTugasPemeriksaan(tugasPemeriksaan).isPresent())
+                throw new ResponseStatusException(
+                        HttpStatus.CONFLICT, "Hasil pemeriksaan untuk tugas pemeriksaan dengan ID " +
+                        tugasPemeriksaan.getIdTugas() + "sudah tersimpan pada database!"
+                );
             hasilPemeriksaanTemp.setTugasPemeriksaan(tugasPemeriksaan);
-        } catch (NoSuchElementException e) {
+        } catch (NoSuchElementException | NullPointerException e) {
             throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Tugas Pemeriksaan dengan ID " + hasilPemeriksaanDTO.getIdTugasPemeriksaan() + " tidak ditemukan!"
+                    HttpStatus.NOT_FOUND, "Tugas Pemeriksaan tidak ditemukan!"
             );
         }
         HasilPemeriksaan hasilPemeriksaan = hasilPemeriksaanRestService.buatHasilPemeriksaan(hasilPemeriksaanTemp);
@@ -231,38 +257,75 @@ public class HasilPemeriksaanRestController {
         for (KomponenPemeriksaanDTO komponenPemeriksaanData: hasilPemeriksaanDTO.getDaftarKomponenPemeriksaan()) {
             KomponenPemeriksaan komponenPemeriksaanTemp = new KomponenPemeriksaan();
             komponenPemeriksaanTemp.setHasilPemeriksaan(hasilPemeriksaan);
-            komponenPemeriksaanTemp.setRisiko(risikoRestService.getById(komponenPemeriksaanData.getIdRisiko()));
-            if (komponenPemeriksaanData.getIdRiskLevel() != null) {
-                komponenPemeriksaanTemp.setRiskLevel(riskLevelRestService.getById(komponenPemeriksaanData.getIdRiskLevel()));
+            try {
+                komponenPemeriksaanTemp.setRisiko(risikoRestService.getById(komponenPemeriksaanData.getRisiko().getId()));
+            } catch (NoSuchElementException | NullPointerException e) {
+                hasilPemeriksaanRestService.hapusHasilPemeriksaan(hasilPemeriksaan.getIdHasilPemeriksaan());
+                throw new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Risiko tidak ditemukan!"
+                );
             }
+
+            if (komponenPemeriksaanData.getIdRiskLevel() != null) {
+                try {
+                    komponenPemeriksaanTemp.setRiskLevel(riskLevelRestService.getById(komponenPemeriksaanData.getIdRiskLevel()));
+                } catch (NoSuchElementException | NullPointerException e) {
+                    hasilPemeriksaanRestService.hapusHasilPemeriksaan(hasilPemeriksaan.getIdHasilPemeriksaan());
+                    throw new ResponseStatusException(
+                            HttpStatus.NOT_FOUND, "Risk Level tidak ditemukan!"
+                    );
+                }
+            } else if (hasilPemeriksaanDTO.getIdStatus() == 2) {
+                hasilPemeriksaanRestService.hapusHasilPemeriksaan(hasilPemeriksaan.getIdHasilPemeriksaan());
+                throw new ResponseStatusException(
+                        HttpStatus.METHOD_NOT_ALLOWED, "Risk Level perlu diisi untuk pengajuan persetujuan Hasil Pemeriksaan!"
+                );
+            }
+
             if (komponenPemeriksaanData.getJumlahSampel() != null) {
                 komponenPemeriksaanTemp.setJumlahSampel(komponenPemeriksaanData.getJumlahSampel());
+            } else if (hasilPemeriksaanDTO.getIdStatus() == 2) {
+                hasilPemeriksaanRestService.hapusHasilPemeriksaan(hasilPemeriksaan.getIdHasilPemeriksaan());
+                throw new ResponseStatusException(
+                        HttpStatus.METHOD_NOT_ALLOWED, "Jumlah sampel perlu diisi untuk pengajuan persetujuan Hasil Pemeriksaan!"
+                );
             }
+
             if (komponenPemeriksaanData.getKeteranganSampel() != null) {
                 komponenPemeriksaanTemp.setKeteranganSampel(komponenPemeriksaanData.getKeteranganSampel());
+            } else if (hasilPemeriksaanDTO.getIdStatus() == 2) {
+                hasilPemeriksaanRestService.hapusHasilPemeriksaan(hasilPemeriksaan.getIdHasilPemeriksaan());
+                throw new ResponseStatusException(
+                        HttpStatus.METHOD_NOT_ALLOWED, "Keterangan sampel perlu diisi untuk pengajuan persetujuan Hasil Pemeriksaan!"
+                );
             }
+
             KomponenPemeriksaan komponenPemeriksaan =
                     komponenPemeriksaanRestService.buatKomponenPemeriksaan(komponenPemeriksaanTemp);
 
-            if(komponenPemeriksaanData.getDaftarTemuanRisiko() != null)
+            if(komponenPemeriksaanData.getDaftarTemuanRisiko() != null &&
+                    !komponenPemeriksaanData.getDaftarTemuanRisiko().isEmpty())
                 for (TemuanRisikoDTO temuanRisikoData: komponenPemeriksaanData.getDaftarTemuanRisiko()) {
-                    TemuanRisiko temuanRisiko = new TemuanRisiko();
-                    temuanRisiko.setKomponenPemeriksaan(komponenPemeriksaan);
-                    temuanRisiko.setKeterangan(temuanRisikoData.getKeterangan());
-                    Employee pembuatTemuan = employeeRestService.getById(temuanRisikoData.getIdPembuat());
-                    temuanRisiko.setPembuat(pembuatTemuan);
-                    temuanRisikoRestService.buatTemuanRisiko(temuanRisiko);
+                    if (temuanRisikoData.getKeterangan() != null && !temuanRisikoData.getKeterangan().equals("")) {
+                        TemuanRisiko temuanRisiko = new TemuanRisiko();
+                        temuanRisiko.setKomponenPemeriksaan(komponenPemeriksaan);
+                        temuanRisiko.setKeterangan(temuanRisikoData.getKeterangan());
+                        temuanRisiko.setPembuat(employee);
+                        temuanRisikoRestService.buatTemuanRisiko(temuanRisiko);
+                    }
                 }
 
-            if (komponenPemeriksaanData.getDaftarRekomendasi() != null)
+            if (komponenPemeriksaanData.getDaftarRekomendasi() != null &&
+                    !komponenPemeriksaanData.getDaftarRekomendasi().isEmpty())
                 for (RekomendasiDTO rekomendasiData: komponenPemeriksaanData.getDaftarRekomendasi()) {
-                    Rekomendasi rekomendasi = new Rekomendasi();
-                    rekomendasi.setKomponenPemeriksaan(komponenPemeriksaan);
-                    rekomendasi.setKeterangan(rekomendasiData.getKeterangan());
-                    rekomendasi.setStatusRekomendasi(statusRekomendasiRestService.getById(hasilPemeriksaanDTO.getIdStatus()));
-                    Employee pembuatRekomendasi = employeeRestService.getById(rekomendasiData.getIdPembuat());
-                    rekomendasi.setPembuat(pembuatRekomendasi);
-                    rekomendasiRestService.buatRekomendasi(rekomendasi);
+                    if (rekomendasiData.getKeterangan() != null && !rekomendasiData.getKeterangan().equals("")) {
+                        Rekomendasi rekomendasi = new Rekomendasi();
+                        rekomendasi.setKomponenPemeriksaan(komponenPemeriksaan);
+                        rekomendasi.setKeterangan(rekomendasiData.getKeterangan());
+                        rekomendasi.setStatusRekomendasi(statusRekomendasiRestService.getById(hasilPemeriksaanDTO.getIdStatus()));
+                        rekomendasi.setPembuat(employee);
+                        rekomendasiRestService.buatRekomendasi(rekomendasi);
+                    }
                 }
         }
 
