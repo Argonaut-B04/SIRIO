@@ -2,7 +2,14 @@ import React, { Component } from 'react';
 import classes from './SirioMainLayout.module.css';
 import SirioSideNav from "../Components/SideNav/SirioSideNav";
 
-class SirioMainLayout extends Component {
+/**
+ * Kelas yang akan digunakan untuk menampilkan layout utama halaman Sirio
+ * 
+ * Komponen included:
+ * - Side Navigation
+ * - Lokasi konten halaman
+ */
+export default class SirioMainLayout extends Component {
     render() {
         return (
             <>
@@ -16,5 +23,3 @@ class SirioMainLayout extends Component {
         );
     }
 }
-
-export default SirioMainLayout;

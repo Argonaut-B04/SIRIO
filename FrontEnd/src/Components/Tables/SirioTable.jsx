@@ -7,18 +7,35 @@ import classes from './SirioTable.module.css';
 import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css"
 import 'react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.min.css';
 
-class SirioTable extends Component {
+/**
+ * Kelas komponen tabel untuk Sirio secara umum
+ * 
+ * Props yang tersedia  :
+ * - title              : String, Judul tabel
+ * - headerButton       : Komponen, Akan ditampilkan di sisi kanan title
+ * - id                 : String, parameter json 'id' dari data
+ * - data               : JSON, data yang akan ditampilkan berdasarkan definisi columns
+ * - columns            : List of JSON, definisi mengenai apa yang harus ditampilkan pada kolom tersebut. Referensi: react-bootstra-table2 columns playground
+ * - includeSearchBar   : Boolean, switch untuk menampilkan searchbar atau tidak
+ */
+export default class SirioTable extends Component {
 
+    // Fungsi untuk menampilkan hasil return jika tidak ada data yang ditampilkan pada tabel
     indication() {
         return "No Data in Table"
     }
 
+    // Fungsi untuk menampilkan informasi jumlah entry tabel
+    // TODO: Ubah menjadi sesuai dengan desain
     customTotal = (from, to, size) => (
         <span className="react-bootstrap-table-pagination-total text-secondary ml-5">
             Show {from} to {to} of {size} entries
         </span>
     );
 
+    // Fungsi untuk menampilkan nomor baris pada tabel
+    // (BUGGED, NOT FIXED)
+    // TODO: Perbaiki
     pageButtonRenderer = ({
         page,
         active,
@@ -37,6 +54,7 @@ class SirioTable extends Component {
         );
     };
 
+    // Definisi kustomisasi Pagination
     pagination = paginationFactory({
         sizePerPage: 10,
         prePageText: "Previous",
@@ -46,6 +64,7 @@ class SirioTable extends Component {
         // pageButtonRenderer: this.pageButtonRenderer
     })
 
+    // Overlay adalah animasi singkat yang ditampilkan pada tabel ketika isi tabel sedang dirender
     overlay = overlayFactory({
         spinner: true,
         styles: {
@@ -58,6 +77,7 @@ class SirioTable extends Component {
         }
     })
 
+    // Fungsi render SirioTable
     render() {
         const { SearchBar } = Search;
         return (
@@ -109,6 +129,4 @@ class SirioTable extends Component {
             </div>
         );
     }
-
 };
-export default SirioTable;

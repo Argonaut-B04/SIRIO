@@ -1,6 +1,15 @@
 import React from 'react';
 import classes from './SirioButton.module.css';
 
+/**
+ * Komponen Button untuk Sirio secara Umum
+ * 
+ * Props yang tersedia:
+ * - purple / blue
+ * - recommended / hyperlink / text / disabled
+ * - circular (optional)
+ * - classes                : cssClass, kelas tambahan untuk SirioButton
+ */
 export default class SirioButton extends React.Component {
 
     render() {

@@ -4,6 +4,17 @@ import SirioButton from "../SirioButton";
 import "bootstrap/dist/css/bootstrap.min.css";
 import classes from "./ActionButton.module.css";
 
+/**
+ * Komponen untuk Button yang membuka Popup berupa Warning
+ * 
+ * Props yang tersedia:
+ * - Seluruh Props SirioButton
+ * - modalTitle         : String, judul modal
+ * - modalDesc          : String, deskripsi yang akan ditampilkan dalam modal
+ * - onConfirm          : Function, dijalankan ketika tombol lanjutkan ditekan
+ * - customConfirmText  : String, Opsional untuk mengganti kata "lanjutkan" pada tombol lanjutkan
+ * - customCancelText   : String, Opsional untuk mengganti kata "Kembali" pada tombol pembatalan
+ */
 export default class SirioWarningButton extends React.Component {
 
     constructor(props, context) {

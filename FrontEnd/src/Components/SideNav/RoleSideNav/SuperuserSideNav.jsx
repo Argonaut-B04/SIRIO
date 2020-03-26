@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import SideNavFramework from '../SideNavFramework';
 
+/**
+ * Komponen SideNav untuk Superuser
+ */
 export default class SuperuserSideNav extends Component {
     render() {
         return (
@@ -46,7 +49,27 @@ export default class SuperuserSideNav extends Component {
                             link: "#",
                             title: "Bukti Rekomendasi",
                             active: false
-                        }
+                        },
+                        {
+                            link: "#",
+                            title: "Konfigurasi",
+                            active: false,
+                            dropdown: [
+                                {
+                                    title: "Risk Rating",
+                                    link: "#"
+                                }, {
+                                    title: "Registrasi Risiko",
+                                    link: "#"
+                                }, {
+                                    title: "Risk Level",
+                                    link: "#"
+                                }, {
+                                    title: "SOP",
+                                    link: "#"
+                                }
+                            ]
+                        },
                     ]
                 }
             />

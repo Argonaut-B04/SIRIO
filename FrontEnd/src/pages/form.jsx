@@ -1,8 +1,12 @@
-import React, { Component } from 'react';
+import React from 'react';
 import SirioForm from '../Components/Form/SirioForm';
 
-class TheForm extends Component {
+/**
+ * Kelas untuk membuat form demo
+ */
+export default class TheForm extends React.Component {
 
+    // Masukan user disimpan kedalam state sebelum dikirim ke backend
     constructor(props) {
         super(props);
 
@@ -15,6 +19,8 @@ class TheForm extends Component {
         this.inputDefinition = this.inputDefinition.bind(this);
     }
 
+    // Fungsi untuk mengubah state ketika isi dari input diubah
+    // Fungsi ini wajib ada jika membuat form
     handleChange(event) {
         this.setState(
             {
@@ -24,11 +30,17 @@ class TheForm extends Component {
         )
     }
 
+    // Fungsi yang akan dijalankan ketika user submit
+    // Umumnya akan digunakan untuk memanggil service komunikasi ke backend
     handleSubmit(event) {
         alert("submited");
+        // event.preventDefault wajib ada
         event.preventDefault();
     }
 
+    // Fungsi yang akan mengembalikan definisi tiap field pada form
+    // Setiap objek {} pada List [] akan menjadi 1 field
+    // untuk informasi lebih lengkap, cek SirioForm
     inputDefinition() {
         return (
             [
@@ -51,6 +63,7 @@ class TheForm extends Component {
         )
     }
 
+    // Fungsi render SirioForm
     render() {
         return (
             <SirioForm
@@ -61,5 +74,3 @@ class TheForm extends Component {
         );
     }
 }
-
-export default TheForm;
