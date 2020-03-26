@@ -100,30 +100,30 @@ public class HasilPemeriksaanRestController {
      * @return tabel daftar hasil pemeriksaan
      */
     @GetMapping("/getTabelHasilPemeriksaan")
-    private BaseResponse<List<TabelHasilPemeriksaanDTO>> getTabelHasilPemeriksaan(
+    private BaseResponse<List<HasilPemeriksaanDTO>> getTabelHasilPemeriksaan(
             Principal principal, ModelMap model
     ) {
-        BaseResponse<List<TabelHasilPemeriksaanDTO>> response = new BaseResponse<>();
+        BaseResponse<List<HasilPemeriksaanDTO>> response = new BaseResponse<>();
         Employee employee = employeeRestService.getByUsername(principal.getName()).get();
 
         List<HasilPemeriksaan> daftarHasilPemeriksaan = employee.getRole() == roleRestService.getById(6) ?
                 hasilPemeriksaanRestService.getByPembuat(employee) : hasilPemeriksaanRestService.getAll();
 
-        List<TabelHasilPemeriksaanDTO> result = new ArrayList<>();
+        List<HasilPemeriksaanDTO> result = new ArrayList<>();
         for (HasilPemeriksaan hasilPemeriksaan: daftarHasilPemeriksaan) {
-            TabelHasilPemeriksaanDTO tabelHasilPemeriksaanDTO = new TabelHasilPemeriksaanDTO();
-            tabelHasilPemeriksaanDTO.setId(hasilPemeriksaan.getIdHasilPemeriksaan());
-            tabelHasilPemeriksaanDTO.setIdTugasPemeriksaan(hasilPemeriksaan.getTugasPemeriksaan().getIdTugas());
-            tabelHasilPemeriksaanDTO.setKantorCabang(hasilPemeriksaan.getTugasPemeriksaan().getKantorCabang().getNamaKantor());
-            tabelHasilPemeriksaanDTO.setStatus(hasilPemeriksaan.getStatusHasilPemeriksaan().getNamaStatus());
+            HasilPemeriksaanDTO hasilPemeriksaanDTO = new HasilPemeriksaanDTO();
+            hasilPemeriksaanDTO.setId(hasilPemeriksaan.getIdHasilPemeriksaan());
+            hasilPemeriksaanDTO.setIdTugasPemeriksaan(hasilPemeriksaan.getTugasPemeriksaan().getIdTugas());
+            hasilPemeriksaanDTO.setKantorCabang(hasilPemeriksaan.getTugasPemeriksaan().getKantorCabang().getNamaKantor());
+            hasilPemeriksaanDTO.setNamaStatus(hasilPemeriksaan.getStatusHasilPemeriksaan().getNamaStatus());
             List<Rekomendasi> daftarRekomendasi = rekomendasiRestService.getByDaftarKomponenPemeriksaan(
                     komponenPemeriksaanRestService.getByHasilPemeriksaan(hasilPemeriksaan));
-            tabelHasilPemeriksaanDTO.setSiapDijalankan(true);
+            hasilPemeriksaanDTO.setSiapDijalankan(true);
             for (Rekomendasi rekomendasi: daftarRekomendasi) {
                 if (rekomendasi.getStatusRekomendasi() != statusRekomendasiRestService.getById(5))
-                    tabelHasilPemeriksaanDTO.setSiapDijalankan(false);
+                    hasilPemeriksaanDTO.setSiapDijalankan(false);
             }
-            result.add(tabelHasilPemeriksaanDTO);
+            result.add(hasilPemeriksaanDTO);
         }
         response.setStatus(200);
         response.setMessage("success");
@@ -139,12 +139,49 @@ public class HasilPemeriksaanRestController {
      * @return detail hasil pemeriksaan
      */
     @GetMapping("/{idHasilPemeriksaan}")
-    private BaseResponse<HasilPemeriksaan> getHasilPemeriksaan(
+    private BaseResponse<HasilPemeriksaanDTO> getDetailHasilPemeriksaan(
             @PathVariable("idHasilPemeriksaan") int idHasilPemeriksaan
     ) {
-        BaseResponse<HasilPemeriksaan> response = new BaseResponse<>();
+        BaseResponse<HasilPemeriksaanDTO> response = new BaseResponse<>();
         try {
-            HasilPemeriksaan result = hasilPemeriksaanRestService.getById(idHasilPemeriksaan);
+            HasilPemeriksaan hasilPemeriksaan = hasilPemeriksaanRestService.getById(idHasilPemeriksaan);
+            HasilPemeriksaanDTO result = new HasilPemeriksaanDTO();
+            result.setId(hasilPemeriksaan.getIdHasilPemeriksaan());
+            result.setIdStatus(hasilPemeriksaan.getStatusHasilPemeriksaan().getIdStatusHasil());
+            result.setIdTugasPemeriksaan(hasilPemeriksaan.getTugasPemeriksaan().getIdTugas());
+            result.setNamaStatus(hasilPemeriksaan.getStatusHasilPemeriksaan().getNamaStatus());
+            result.setNamaPembuat(hasilPemeriksaan.getPembuat().getNama());
+            result.setUsernamePembuat(hasilPemeriksaan.getPembuat().getUsername());
+            if (hasilPemeriksaan.getPemeriksa() != null) result.setNamaPemeriksa(hasilPemeriksaan.getPemeriksa().getNama());
+
+            List<KomponenPemeriksaanDTO> daftarKomponenPemeriksaanDTO = new ArrayList<>();
+            for (KomponenPemeriksaan komponenPemeriksaan:
+                    komponenPemeriksaanRestService.getByHasilPemeriksaan(hasilPemeriksaan)) {
+                KomponenPemeriksaanDTO komponenPemeriksaanDTO = new KomponenPemeriksaanDTO();
+                komponenPemeriksaanDTO.setId(komponenPemeriksaan.getIdKomponenPemeriksaan());
+                komponenPemeriksaanDTO.setIdRiskLevel(komponenPemeriksaan.getRiskLevel().getIdLevel());
+                komponenPemeriksaanDTO.setJumlahSampel(komponenPemeriksaan.getJumlahSampel());
+                komponenPemeriksaanDTO.setKeteranganSampel(komponenPemeriksaan.getKeteranganSampel());
+
+                RisikoDTO risikoDTO = new RisikoDTO();
+                risikoDTO.setId(komponenPemeriksaan.getRisiko().getIdRisiko());
+                risikoDTO.setKomponen(komponenPemeriksaan.getRisiko().getKomponen());
+                risikoDTO.setNama(komponenPemeriksaan.getRisiko().getNamaRisiko());
+                risikoDTO.setNamaSop(komponenPemeriksaan.getRisiko().getSop().getJudul());
+                risikoDTO.setLinkSop(komponenPemeriksaan.getRisiko().getSop().getLinkDokumen());
+                if(komponenPemeriksaan.getRisiko().getParent() != null) {
+                    risikoDTO.setParent(komponenPemeriksaan.getRisiko().getParent().getIdRisiko());
+                    if(komponenPemeriksaan.getRisiko().getParent().getParent() != null)
+                        risikoDTO.setGrantParent(komponenPemeriksaan.getRisiko().getParent().getParent().getIdRisiko());
+                }
+                komponenPemeriksaanDTO.setRisiko(risikoDTO);
+                komponenPemeriksaanDTO.setDaftarRekomendasiTerdaftar(
+                        rekomendasiRestService.getByKomponenPemeriksaan(komponenPemeriksaan));
+                komponenPemeriksaanDTO.setDaftarTemuanRisikoTerdaftar(
+                        temuanRisikoRestService.getByKomponenPemeriksaan(komponenPemeriksaan));
+                daftarKomponenPemeriksaanDTO.add(komponenPemeriksaanDTO);
+            }
+            result.setDaftarKomponenPemeriksaan(daftarKomponenPemeriksaanDTO);
 
             response.setStatus(200);
             response.setMessage("success");
@@ -170,7 +207,7 @@ public class HasilPemeriksaanRestController {
         BaseResponse<HasilPemeriksaan> response = new BaseResponse<>();
         HasilPemeriksaan hasilPemeriksaanTemp = new HasilPemeriksaan();
         hasilPemeriksaanTemp.setStatusHasilPemeriksaan(
-                statusHasilPemeriksaanRestService.getById(hasilPemeriksaanDTO.getStatus()));
+                statusHasilPemeriksaanRestService.getById(hasilPemeriksaanDTO.getIdStatus()));
 
         try {
             Employee pembuat = employeeRestService.getById(hasilPemeriksaanDTO.getIdPembuat());
@@ -222,7 +259,7 @@ public class HasilPemeriksaanRestController {
                     Rekomendasi rekomendasi = new Rekomendasi();
                     rekomendasi.setKomponenPemeriksaan(komponenPemeriksaan);
                     rekomendasi.setKeterangan(rekomendasiData.getKeterangan());
-                    rekomendasi.setStatusRekomendasi(statusRekomendasiRestService.getById(hasilPemeriksaanDTO.getStatus()));
+                    rekomendasi.setStatusRekomendasi(statusRekomendasiRestService.getById(hasilPemeriksaanDTO.getIdStatus()));
                     Employee pembuatRekomendasi = employeeRestService.getById(rekomendasiData.getIdPembuat());
                     rekomendasi.setPembuat(pembuatRekomendasi);
                     rekomendasiRestService.buatRekomendasi(rekomendasi);
@@ -249,7 +286,7 @@ public class HasilPemeriksaanRestController {
         BaseResponse<HasilPemeriksaan> response = new BaseResponse<>();
         HasilPemeriksaan hasilPemeriksaanTemp = hasilPemeriksaanRestService.getById(hasilPemeriksaanDTO.getId());
         hasilPemeriksaanTemp.setStatusHasilPemeriksaan(
-                statusHasilPemeriksaanRestService.getById(hasilPemeriksaanDTO.getStatus()));
+                statusHasilPemeriksaanRestService.getById(hasilPemeriksaanDTO.getIdStatus()));
         HasilPemeriksaan hasilPemeriksaan =
                 hasilPemeriksaanRestService.buatHasilPemeriksaan(hasilPemeriksaanDTO.getId(), hasilPemeriksaanTemp);
 
@@ -305,14 +342,14 @@ public class HasilPemeriksaanRestController {
                         Rekomendasi rekomendasi = new Rekomendasi();
                         rekomendasi.setKomponenPemeriksaan(komponenPemeriksaan);
                         rekomendasi.setKeterangan(rekomendasiData.getKeterangan());
-                        rekomendasi.setStatusRekomendasi(statusRekomendasiRestService.getById(hasilPemeriksaanDTO.getStatus()));
+                        rekomendasi.setStatusRekomendasi(statusRekomendasiRestService.getById(hasilPemeriksaanDTO.getIdStatus()));
                         Employee pembuatRekomendasi = employeeRestService.getById(rekomendasiData.getIdPembuat());
                         rekomendasi.setPembuat(pembuatRekomendasi);
                         rekomendasiRestService.buatRekomendasi(rekomendasi);
                     } else {
                         Rekomendasi rekomendasi = rekomendasiRestService.getById(rekomendasiData.getId());
                         rekomendasi.setKeterangan(rekomendasiData.getKeterangan());
-                        rekomendasi.setStatusRekomendasi(statusRekomendasiRestService.getById(hasilPemeriksaanDTO.getStatus()));
+                        rekomendasi.setStatusRekomendasi(statusRekomendasiRestService.getById(hasilPemeriksaanDTO.getIdStatus()));
                         rekomendasiRestService.ubahRekomendasi(rekomendasiData.getId(), rekomendasi);
                         daftarRekomendasiTerdaftar.add(rekomendasiData.getId());
                     }
