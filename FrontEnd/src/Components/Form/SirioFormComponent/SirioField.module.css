@@ -1,0 +1,26 @@
+.label {
+    font-family: Proxima Nova;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 20px;
+    line-height: 24px;
+    color: black;
+    min-width: 200px;
+}
+
+.input {
+    font-family: Proxima Nova;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 20px;
+    line-height: 24px;
+    color: black;
+    width: calc(100% - 200px);
+    border: 1.5px solid #c4c4c4;
+    box-sizing: border-box;
+    border-radius: 6px;
+}
+
+.input:focus {
+    outline: none !important;
+}

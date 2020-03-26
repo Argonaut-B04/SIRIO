@@ -8,11 +8,17 @@ import {
 } from "react-router-dom";
 import MainPage from "./pages";
 import DaftarRekomendasi from "./pages/DaftarRekomendasi";
-import DaftarRencanaPemeriksaan from './pages/DaftarRencanaPemeriksaan';
-import DaftarKantorCabang from './pages/DaftarKantorCabang';
+import DaftarRencanaPemeriksaan from './pages/Manager/DaftarRencanaPemeriksaan';
+import DetailRencana from "./pages/Manager/DetailRencanaPemeriksaan";
+import DaftarKantorCabang from './pages/Administrator/DaftarKantorCabang';
+import DetailKantorCabang from "./pages/Administrator/DetailKantorCabang";
+import DaftarRekomendasiBM from "./pages/BranchManager/DaftarRekomendasi";
+import DetailBuktiBM from "./pages/BranchManager/DetailBuktiPelaksanaan";
+import DaftarBuktiPelaksanaan from "./pages/DaftarBuktiPelaksanaan";
 import NotFound from "./pages/error";
 import Login from "./pages/login";
 import Logout from "./pages/logout";
+import FormDemo from "./pages/formPage";
 import './App.css';
 
 
@@ -24,10 +30,16 @@ class App extends React.Component {
           <Switch>
             <Route exact path="/" component={MainPage} />
             <Route exact path="/rekomendasi" component={DaftarRekomendasi} />
-            <Route exact path="/rencanaPemeriksaan" component={DaftarRencanaPemeriksaan} />
-            <Route exact path="/kantorCabang" component={DaftarKantorCabang} />
+            <Route exact path="/manager/rencanaPemeriksaan" component={DaftarRencanaPemeriksaan} />
+            <Route exact path="/manager/rencanaPemeriksaan/detail-rencana" component={DetailRencana} />
+            <Route exact path="/administrator/kantorCabang" component={DaftarKantorCabang} />
+            <Route exact path="/administrator/kantorCabang/detail-kantorCabang" component={DetailKantorCabang} />
+            <Route exact path="/bm/rekomendasi" component={DaftarRekomendasiBM} />
+            <Route exact path="/bm/rekomendasi/detail-bukti" component={DetailBuktiBM} />
+            <Route exact path="/bukti-pelaksanaan" component={DaftarBuktiPelaksanaan} />
             <Route exact path="/login" component={Login} />
             <Route exact path="/logout" component={Logout} />
+            <Route exact path="/Form" component={FormDemo} />
             <Route exact path="/404" component={NotFound} />
             <Redirect to="/404" />
           </Switch>

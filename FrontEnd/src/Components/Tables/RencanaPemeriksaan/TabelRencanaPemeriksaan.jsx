@@ -1,6 +1,6 @@
 import React from 'react';
 import SirioButton from '../../Button/SirioButton';
-import classes from './TabelRencanaPemeriksaan.css';
+import classes from './TabelRencanaPemeriksaan.module.css';
 import SirioTable from '../SirioTable';
 
 export default class TabelRencanaPemeriksaan extends React.Component {
@@ -28,6 +28,7 @@ export default class TabelRencanaPemeriksaan extends React.Component {
         return (
             <SirioButton
                 purple
+                onClick={() => window.location.href = "/manager/rencanaPemeriksaan/detail-rencana"}
             >
                 Detail
             </SirioButton>

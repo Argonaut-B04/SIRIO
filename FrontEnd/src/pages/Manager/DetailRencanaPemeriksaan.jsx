@@ -1,12 +1,12 @@
 import React from "react";
-import TabelRencanaPemeriksaan from "../Components/Tables/RencanaPemeriksaan/TabelRencanaPemeriksaan";
-import SirioMainLayout from "../Layout/SirioMainLayout";
+import DetailRencana from "../../Components/DetailPages/RencanaPemeriksaan/DetailRencana";
+import SirioMainLayout from "../../Layout/SirioMainLayout";
 
 export default class DaftarRencanaPemeriksaan extends React.Component {
     render() {
         return (
             <SirioMainLayout>
-                <TabelRencanaPemeriksaan />
+                <DetailRencana />
             </SirioMainLayout>
         );
     }

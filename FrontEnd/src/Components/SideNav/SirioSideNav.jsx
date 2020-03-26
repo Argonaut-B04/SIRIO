@@ -30,7 +30,7 @@ class SirioSideNav extends React.Component {
             case "Supervisor":
                 return <SupervisorSideNav {...this.props} />
             default:
-                return <QAOfficerSideNav {...this.props} />
+                return <ManagerOperationalSideNav {...this.props} />
         }
     }
 }
