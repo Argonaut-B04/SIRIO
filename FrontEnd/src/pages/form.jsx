@@ -18,6 +18,7 @@ export default class TheForm extends React.Component {
 
         this.handleChange = this.handleChange.bind(this);
         this.inputDefinition = this.inputDefinition.bind(this);
+        this.handleSelectChange = this.handleSelectChange.bind(this);
     }
 
     // Fungsi untuk mengubah state ketika isi dari input diubah
@@ -27,6 +28,17 @@ export default class TheForm extends React.Component {
             {
                 [event.target.name]
                     : event.target.value
+            }
+        )
+    }
+
+    // Fungsi untuk mengubah state ketika isi dropdown diubah
+    // Fungsi unu wajib ada jika membuat field tipe select
+    handleSelectChange(name, event) {
+        this.setState(
+            {
+                [name]
+                    : event.value
             }
         )
     }
@@ -61,17 +73,20 @@ export default class TheForm extends React.Component {
                     placeholder: "masukan umur bambang"
                 }, {
                     label: "Jenis Kelamin",
-                    handleChange: this.handleChange,
+                    handleChange: this.handleSelectChange,
                     type: "select",
                     name: "jenisKelamin",
                     value: this.state.jenisKelamin,
                     optionList: [
                         {
-                            name: "Pria",
+                            label: "Pria",
                             value: "Pria"
                         }, {
-                            name: "Wanita",
+                            label: "Wanita",
                             value: "Wanita"
+                        }, {
+                            label: "Gak tau apa",
+                            value: "gak tau apa"
                         }
                     ]
                 }

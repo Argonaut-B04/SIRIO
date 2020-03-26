@@ -37,7 +37,7 @@ export default class SirioField extends Component {
                         name={this.props.name}
                         value={this.props.value}
                         handleChange={this.props.handleChange}
-                        optionList={this.props.optionList}
+                        options={this.props.optionList}
                     />
                 </fieldset>
             )
