@@ -48,7 +48,7 @@ export default class TheForm extends React.Component {
                 {
                     label: "Nama Bambang",
                     handleChange: this.handleChange,
-                    type: "text",
+                    type: "textarea",
                     name: "nama",
                     value: this.state.nama,
                     placeholder: "masukan nama bambang"
