@@ -531,20 +531,41 @@ public class HasilPemeriksaanRestController {
      */
     @DeleteMapping("/hapus")
     private BaseResponse<String> hapusHasilPemeriksaan(
-            @RequestBody HasilPemeriksaanDTO hasilPemeriksaanDTO
+            @RequestBody HasilPemeriksaanDTO hasilPemeriksaanDTO,
+            Principal principal, ModelMap model
     ) {
         BaseResponse<String> response = new BaseResponse<>();
-        try {
-            hasilPemeriksaanRestService.hapusHasilPemeriksaan(hasilPemeriksaanDTO.getId());
 
-            response.setStatus(200);
-            response.setMessage("success");
-            response.setResult("Hasil pemeriksaan dengan id " + hasilPemeriksaanDTO.getId() + " terhapus!");
-        } catch (EmptyResultDataAccessException e) {
-            response.setStatus(404);
-            response.setMessage("not found");
-            response.setResult("Hasil pemeriksaan dengan id " + hasilPemeriksaanDTO.getId() + " tidak dapat ditemukan");
+        Employee employee = employeeRestService.getByUsername(principal.getName()).get();
+        if (employee != employeeRestService.getById(hasilPemeriksaanDTO.getTugasPemeriksaan().getIdQA()) &&
+                employee.getRole() == roleRestService.getById(6))
+            throw new ResponseStatusException(
+                    HttpStatus.FORBIDDEN, "Employee dengan ID " + employee.getIdEmployee() +
+                    " tidak ditugaskan untuk menghapus hasil pemeriksaan ini!"
+            );
+
+        HasilPemeriksaan hasilPemeriksaan;
+
+        try {
+            hasilPemeriksaan = hasilPemeriksaanRestService.getById(hasilPemeriksaanDTO.getId());
+        } catch (NoSuchElementException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Hasil Pemeriksaan tidak ditemukan!"
+            );
         }
+
+        if (hasilPemeriksaan.getStatusHasilPemeriksaan().getIdStatusHasil() != 1 &&
+                hasilPemeriksaan.getStatusHasilPemeriksaan().getIdStatusHasil() != 2 &&
+                hasilPemeriksaan.getStatusHasilPemeriksaan().getIdStatusHasil() != 3)
+            throw new ResponseStatusException(
+                    HttpStatus.FORBIDDEN, "Hasil Pemeriksaan tidak boleh dihapus!"
+            );
+
+        hasilPemeriksaanRestService.hapusHasilPemeriksaan(hasilPemeriksaan.getIdHasilPemeriksaan());
+
+        response.setStatus(200);
+        response.setMessage("success");
+        response.setResult("Hasil pemeriksaan dengan id " + hasilPemeriksaanDTO.getId() + " terhapus!");
         return response;
     }
 
