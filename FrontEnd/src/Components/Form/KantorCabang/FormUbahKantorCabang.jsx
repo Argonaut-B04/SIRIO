@@ -1,17 +1,17 @@
 import React from 'react';
-import SirioForm from '../Components/Form/SirioForm';
+import SirioForm from '../../Form/SirioForm';
 
 /**
  * Kelas untuk membuat form demo
  */
-export default class TheForm extends React.Component {
+export default class FormUbahKantorCabang extends React.Component {
 
     // Masukan user disimpan kedalam state sebelum dikirim ke backend
     constructor(props) {
         super(props);
 
         this.state = {
-            nama: "bambang",
+            nama: "Kantor Cabang 1",
             umur: 18
         }
 
@@ -45,20 +45,35 @@ export default class TheForm extends React.Component {
         return (
             [
                 {
-                    label: "Nama Bambang",
+                    label: "Nama Point",
                     handleChange: this.handleChange,
                     type: "text",
                     name: "nama",
                     value: this.state.nama,
-                    placeholder: "masukan nama bambang"
+                    placeholder: "Masukan nama point"
                 }, {
-                    label: "Umur Bambang",
+                    label: "Branch Manger",
+                    handleChange: this.handleChange,
+                    type: "text",
+                    name: "bm",
+                    value: this.state.umur,
+                    placeholder: "masukan umur bambang"
+                },{
+                    label: "Area",
+                    handleChange: this.handleChange,
+                    type: "number",
+                    name: "umur",
+                    value: this.state.umur,
+                    placeholder: "masukan umur bambang"
+                },{
+                    label: "Regional",
                     handleChange: this.handleChange,
                     type: "number",
                     name: "umur",
                     value: this.state.umur,
                     placeholder: "masukan umur bambang"
                 }
+
             ]
         )
     }
@@ -67,7 +82,7 @@ export default class TheForm extends React.Component {
     render() {
         return (
             <SirioForm
-                title="Demo Form"
+                title="Form Tambah Kantor Cabang"
                 inputDefinition={this.inputDefinition()}
                 onSubmit={this.handleSubmit}
             />

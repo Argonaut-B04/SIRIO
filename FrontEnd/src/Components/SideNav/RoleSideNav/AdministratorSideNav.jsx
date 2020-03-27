@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import SideNavFramework from '../SideNavFramework';
 
+/**
+ * Komponen SideNav untuk Administrator
+ */
 export default class AdministratorSideNav extends Component {
     render() {
         return (

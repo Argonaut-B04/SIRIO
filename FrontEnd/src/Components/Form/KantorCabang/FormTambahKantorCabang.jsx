@@ -1,13 +1,17 @@
-import React, { Component } from 'react';
-import SirioForm from '../Components/Form/SirioForm';
+import React from 'react';
+import SirioForm from '../../Form/SirioForm';
 
-class FormTambahKantorCabang extends Component {
+/**
+ * Kelas untuk membuat form demo
+ */
+export default class FormTambahKantorCabang extends React.Component {
 
+    // Masukan user disimpan kedalam state sebelum dikirim ke backend
     constructor(props) {
         super(props);
 
         this.state = {
-            nama: "bambang",
+            nama: "Kantor Cabang 1",
             umur: 18
         }
 
@@ -15,6 +19,8 @@ class FormTambahKantorCabang extends Component {
         this.inputDefinition = this.inputDefinition.bind(this);
     }
 
+    // Fungsi untuk mengubah state ketika isi dari input diubah
+    // Fungsi ini wajib ada jika membuat form
     handleChange(event) {
         this.setState(
             {
@@ -24,42 +30,62 @@ class FormTambahKantorCabang extends Component {
         )
     }
 
+    // Fungsi yang akan dijalankan ketika user submit
+    // Umumnya akan digunakan untuk memanggil service komunikasi ke backend
     handleSubmit(event) {
         alert("submited");
+        // event.preventDefault wajib ada
         event.preventDefault();
     }
 
+    // Fungsi yang akan mengembalikan definisi tiap field pada form
+    // Setiap objek {} pada List [] akan menjadi 1 field
+    // untuk informasi lebih lengkap, cek SirioForm
     inputDefinition() {
         return (
             [
                 {
-                    label: "Nama Bambang",
+                    label: "Nama Point",
                     handleChange: this.handleChange,
                     type: "text",
                     name: "nama",
                     value: this.state.nama,
-                    placeholder: "masukan nama bambang"
+                    placeholder: "Masukan nama point"
                 }, {
-                    label: "Umur Bambang",
+                    label: "Branch Manger",
+                    handleChange: this.handleChange,
+                    type: "text",
+                    name: "bm",
+                    value: this.state.umur,
+                    placeholder: "masukan umur bambang"
+                },{
+                    label: "Area",
+                    handleChange: this.handleChange,
+                    type: "number",
+                    name: "umur",
+                    value: this.state.umur,
+                    placeholder: "masukan umur bambang"
+                },{
+                    label: "Regional",
                     handleChange: this.handleChange,
                     type: "number",
                     name: "umur",
                     value: this.state.umur,
                     placeholder: "masukan umur bambang"
                 }
+
             ]
         )
     }
 
+    // Fungsi render SirioForm
     render() {
         return (
             <SirioForm
-                title="Form Tambah Kantor Cabang" 
+                title="Form Tambah Kantor Cabang"
                 inputDefinition={this.inputDefinition()}
                 onSubmit={this.handleSubmit}
             />
         );
     }
 }
-
-export default TheForm;

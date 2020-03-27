@@ -1,8 +1,18 @@
 import React, { Component } from 'react';
 import AuthenticationService from "../Services/AuthenticationService";
-import { Redirect } from "react-router-dom"; 
+import { Redirect } from "react-router-dom";
 
-class Logout extends Component {
+/** 
+ * Controller untuk Logout
+ * 
+ * Trigger: akses /logout
+ * 
+ * Mekanisme:
+ * - Memanggil fungsi Logout dari Authentication Service
+ * - Redirect ke halaman utama
+ */
+export default class Logout extends Component {
+
     constructor(props) {
         super(props);
         AuthenticationService.logout();
@@ -13,5 +23,3 @@ class Logout extends Component {
         );
     }
 }
-
-export default Logout;

@@ -1,18 +1,20 @@
 import React from 'react';
-import SirioForm from '../Components/Form/SirioForm';
+import SirioForm from '../SirioForm';
 
 /**
  * Kelas untuk membuat form demo
  */
-export default class TheForm extends React.Component {
+export default class FormTambahKantorCabang extends React.Component {
 
     // Masukan user disimpan kedalam state sebelum dikirim ke backend
     constructor(props) {
         super(props);
 
         this.state = {
-            nama: "bambang",
-            umur: 18
+            nama: "Kantor Cabang 1",
+            mulai: 12/12/2020,
+            selesai: 19/12/2020,
+            qa: "Billa"
         }
 
         this.handleChange = this.handleChange.bind(this);
@@ -45,20 +47,35 @@ export default class TheForm extends React.Component {
         return (
             [
                 {
-                    label: "Nama Bambang",
+                    label: "Kantor Cabang*",
                     handleChange: this.handleChange,
                     type: "text",
                     name: "nama",
                     value: this.state.nama,
-                    placeholder: "masukan nama bambang"
+                    placeholder: "Masukan nama point"
                 }, {
-                    label: "Umur Bambang",
+                    label: "QA Officer*",
                     handleChange: this.handleChange,
-                    type: "number",
-                    name: "umur",
-                    value: this.state.umur,
-                    placeholder: "masukan umur bambang"
+                    type: "text",
+                    name: "bm",
+                    value: this.state.qa,
+                    placeholder: "Masukan nama QA Officer"
+                },{
+                    label: "Tanggal Mulai*",
+                    handleChange: this.handleChange,
+                    type: "text",
+                    name: "tanggalMulai",
+                    value: this.state.mulai,
+                    placeholder: "Masukan tanggal mulai"
+                },{
+                    label: "Tanggal Selesai*",
+                    handleChange: this.handleChange,
+                    type: "text",
+                    name: "tanggalSelesai",
+                    value: this.state.selesai,
+                    placeholder: "Masukan tanggal mulai"
                 }
+
             ]
         )
     }
@@ -67,7 +84,7 @@ export default class TheForm extends React.Component {
     render() {
         return (
             <SirioForm
-                title="Demo Form"
+                title="Form Tambah Rencana Pemeriksaan"
                 inputDefinition={this.inputDefinition()}
                 onSubmit={this.handleSubmit}
             />

@@ -1,12 +1,20 @@
 import React, { Component } from 'react';
 import classes from "./SirioField.module.css";
 
-class SirioField extends Component {
+/**
+ * Komponen field untuk SirioForm
+ * 
+ * Props yang tersedia:
+ * - label              : String, judul field
+ * - customInput        : Komponen, jika ingin menggunakan selain input tag
+ * - type               : String, tipe input tag
+ * - name               : String, nama state yang akan dikaitkan dengan field ini
+ * - value              : String, nilai dari name
+ * - onChange           : Function, fungsi yang akan dijalankan ketika field diubah
+ * - placeholder        : String, placeholder dari input tag
+ */
+export default class SirioField extends Component {
 
-    // constructor(props) {
-    //     super(props);
-
-    // }
 
     render() {
         if (this.props.customInput) {
@@ -38,5 +46,3 @@ class SirioField extends Component {
         );
     }
 }
-
-export default SirioField;

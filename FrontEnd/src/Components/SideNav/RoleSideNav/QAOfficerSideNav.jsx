@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import SideNavFramework from '../SideNavFramework';
 
+/**
+ * Komponen SideNav untuk QA Officer
+ */
 export default class QAOfficerSideNav extends Component {
     render() {
         return (

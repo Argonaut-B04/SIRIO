@@ -10,8 +10,12 @@ import MainPage from "./pages";
 import DaftarRekomendasi from "./pages/DaftarRekomendasi";
 import DaftarRencanaPemeriksaan from './pages/Manager/DaftarRencanaPemeriksaan';
 import DetailRencana from "./pages/Manager/DetailRencanaPemeriksaan";
+import FormTambahRencanaPemeriksaan from "./pages/Manager/FormTambahRencanaPemeriksaan";
+
 import DaftarKantorCabang from './pages/Administrator/DaftarKantorCabang';
 import DetailKantorCabang from "./pages/Administrator/DetailKantorCabang";
+import FormTambahKantorCabang from "./pages/Administrator/FormTambahKantorCabang";
+
 import DaftarRekomendasiBM from "./pages/BranchManager/DaftarRekomendasi";
 import DetailBuktiBM from "./pages/BranchManager/DetailBuktiPelaksanaan";
 import DaftarBuktiPelaksanaan from "./pages/DaftarBuktiPelaksanaan";
@@ -21,6 +25,9 @@ import Logout from "./pages/logout";
 import FormDemo from "./pages/formPage";
 import './App.css';
 
+/**
+ * Router utama yang memetakan url ke controller
+ */
 
 class App extends React.Component {
   render() {
@@ -32,6 +39,9 @@ class App extends React.Component {
             <Route exact path="/rekomendasi" component={DaftarRekomendasi} />
             <Route exact path="/manager/rencanaPemeriksaan" component={DaftarRencanaPemeriksaan} />
             <Route exact path="/manager/rencanaPemeriksaan/detail-rencana" component={DetailRencana} />
+            <Route exact path="/manager/rencanaPemeriksaan/form-tambahRencanaPemeriksaan" component={FormTambahRencanaPemeriksaan} />
+            
+            <Route exact path="/administrator/kantorCabang/form-tambahKantorCabang" component={FormTambahKantorCabang} />
             <Route exact path="/administrator/kantorCabang" component={DaftarKantorCabang} />
             <Route exact path="/administrator/kantorCabang/detail-kantorCabang" component={DetailKantorCabang} />
             <Route exact path="/bm/rekomendasi" component={DaftarRekomendasiBM} />

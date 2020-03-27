@@ -23,17 +23,39 @@ export default class TabelRencanaPemeriksaan extends React.Component {
 
     data = [
         { "informasi": "Kantor Cabang", "isiInformasi": "Kantor Cabang Ciawi" },
-        { "informasi": "Lampiran:", "isiInformasi": "https://drive.google.com/drive/folders/1SvB_2W4BjD8rxVQR1-dDbA63-4Zx-hoN" },
-        ]
+        { "informasi": "QA Officer:", "isiInformasi": "Rudi" },
+        { "informasi": "Tanggal Mulai:", "isiInformasi": "12/12/2020" },
+        { "informasi": "Tanggal Selesai:", "isiInformasi": "19/12/2020" },
+
+    ]
+
+
+    data1 = [
+        { "informasi": "Kantor Cabang", "isiInformasi": "Kantor Cabang Ciawi" },
+        { "informasi": "QA Officer:", "isiInformasi": "Lala" },
+        { "informasi": "Tanggal Mulai:", "isiInformasi": "20/12/2020" },
+        { "informasi": "Tanggal Selesai:", "isiInformasi": "27/12/2020" },
+
+    ]
 
     render() {
         return (
-            <SirioDetailPage
-                title="Detail Rencana Pemeriksaan"
-                data={this.data}
-                id='id'
-                columnsDefinition={this.columns}
-            />
+            <div>
+                <SirioDetailPage
+                    title="Detail Rencana Pemeriksaan"
+                    data={this.data}
+                    id='id'
+                    columnsDefinition={this.columns}
+                />
+
+                <SirioDetailPage
+                    title="Detail Rencana Pemeriksaan"
+                    data={this.data1}
+                    id='id'
+                    columnsDefinition={this.columns}
+                />
+            </div>
+            
         );
     }
 } 

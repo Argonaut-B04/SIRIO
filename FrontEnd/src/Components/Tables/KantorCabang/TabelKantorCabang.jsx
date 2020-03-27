@@ -104,7 +104,10 @@ export default class TabelKantorCabang extends React.Component {
 
     headerButton() {
         return (
-            <SirioButton purple>
+            <SirioButton 
+                purple
+                onClick={() => window.location.href = "/administrator/kantorCabang/form-tambahKantorCabang"}
+            >
                 Tambah Kantor Cabang
             </SirioButton>
         )

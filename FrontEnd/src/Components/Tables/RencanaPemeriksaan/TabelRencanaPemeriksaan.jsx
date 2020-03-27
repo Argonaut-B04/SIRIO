@@ -117,7 +117,11 @@ export default class TabelRencanaPemeriksaan extends React.Component {
 
     headerButton() {
         return (
-            <SirioButton purple>
+            <SirioButton 
+                purple
+                onClick={() => window.location.href = "/manager/rencanaPemeriksaan/form-tambahRencanaPemeriksaan"}
+            >
+
                 Tambah Rencana
             </SirioButton>
         )

@@ -3,11 +3,16 @@ import classes from "./LoginForm.module.css";
 import SirioButton from "../Button/SirioButton";
 import AuthenticationService from "../../Services/AuthenticationService";
 
-class LoginForm extends Component {
+/**
+ * Komponen independen Form Login
+ * TODO: refactor menggunakan form tag
+ */
+export default class LoginForm extends Component {
 
     constructor(props) {
         super(props);
 
+        // informasi username dan password di input field 
         this.state = {
             username: '',
             password: '',
@@ -18,6 +23,7 @@ class LoginForm extends Component {
         this.loginClicked = this.loginClicked.bind(this);
     }
 
+    // Fungsi yang mengikat input field dengan state
     handleChange(event) {
         this.setState(
             {
@@ -27,6 +33,8 @@ class LoginForm extends Component {
         )
     }
 
+    // Fungsi ketika user klik tombol submit
+    // Komunikasi dengan SirioBackend melalui AuthenticationService
     loginClicked() {
         AuthenticationService
             .executeBasicAuthenticationService(this.state.username, this.state.password)
@@ -98,5 +106,3 @@ class LoginForm extends Component {
         );
     }
 }
-
-export default LoginForm;

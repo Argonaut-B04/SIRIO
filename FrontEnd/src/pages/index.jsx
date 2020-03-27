@@ -7,28 +7,49 @@ import SirioMessageButton from "../Components/Button/ActionButton/SirioMessageBu
 import SirioWarningButton from "../Components/Button/ActionButton/SirioWarningButton";
 import SirioConfirmButton from "../Components/Button/ActionButton/SirioConfirmButton";
 
+/**
+ * Controller untuk menampilkan halaman utama
+ */
 export default class MainPage extends React.Component {
+
+    constructor(props) {
+        super(props);
+
+        // Mengambil username dan role dari AuthenticationService
+        this.state = {
+            username: AuthenticationService.getUsername(),
+            role: AuthenticationService.getRole()
+        }
+    }
     render() {
-        let username = AuthenticationService.getUsername();
-        let role = AuthenticationService.getRole();
-
         return (
-
             <div>
                 <h3>Welcome to SIRIO</h3>
-                {username && <h4>Username: {username}</h4>}
-                {role && <h4>Role: {role}</h4>}
+
+                {/* Contoh cara menampilkan username dan role */}
+                {this.state.username && <h4>Username: {this.state.username}</h4>}
+                {this.state.role && <h4>Role: {this.state.role}</h4>}
+
                 <small>Main Page</small>
-                <br></br>
+                <br />
+
+                {/* Contoh cara menampilkan tombol redirect */}
+                {/* Alternatif lain: href="/tujuan" */}
                 <Link to="/rekomendasi" className="btn btn-primary">Tabel Rekomendasi</Link>
                 <Link to="/manager/rencanaPemeriksaan" className="btn btn-primary">Tabel Rencana Pemeriksaan</Link>
                 <Link to="/administrator/kantorCabang" className="btn btn-primary">Tabel Kantor Cabang</Link>
                 <Link to="/bm/rekomendasi" className="btn btn-primary">Rekomendasi BM</Link>
+                <br />
                 <Link to="/bukti-pelaksanaan" className="btn btn-primary">Tabel Bukti</Link>
+                <br />
                 <Link to="/Form" className="btn btn-primary">Demo Form</Link>
+                <br />
                 <Link to="/login" className="btn btn-primary">Login</Link>
+                <br />
                 <Link to="/logout" className="btn btn-primary">Logout</Link>
                 <br />
+
+                {/* Contoh button yang mengeluarkan popup berupa message */}
                 <SirioMessageButton
                     purple
                     circular
@@ -39,6 +60,8 @@ export default class MainPage extends React.Component {
                     test popup pesan berhasil
                 </SirioMessageButton>
                 <br />
+
+                {/* Contoh button yang mengeluarkan popup berupa warning */}
                 <SirioWarningButton
                     purple
                     circular
@@ -51,6 +74,8 @@ export default class MainPage extends React.Component {
                     Test Popup Warning
                 </SirioWarningButton>
                 <br />
+
+                {/* Contoh button yang mengeluarkan popup konfirmasi */}
                 <SirioConfirmButton
                     purple
                     circular
