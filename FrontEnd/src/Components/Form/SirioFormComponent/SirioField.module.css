@@ -21,6 +21,23 @@
     border-radius: 6px;
 }
 
+.input[type="checkbox"] {
+    width: unset;
+    vertical-align: middle;
+    width: 20px;
+    height: 20px;
+    border-radius: 5px;
+    border: 2px solid #555;
+}
+
+.label[type="checkbox"] {
+    vertical-align: middle;
+}
+
+.checkmark {
+    background-color: tomato;
+}
+
 .input:focus {
     outline: none !important;
 }
