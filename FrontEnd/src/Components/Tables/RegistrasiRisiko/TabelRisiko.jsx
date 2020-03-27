@@ -9,7 +9,7 @@ export default class TabelRisiko extends React.Component {
         return (
             <SirioButton
                 purple
-                onClick={() => window.location.href = "http://www.google.com"}
+                onClick={() => window.location.href = "/registrasi-risiko/detail/1"}
             >
                 Detail
             </SirioButton>

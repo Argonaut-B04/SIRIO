@@ -41,7 +41,7 @@ export default class MainPage extends React.Component {
                 <br />
                 <Link to="/bukti-pelaksanaan" className="btn btn-primary">Tabel Bukti</Link>
                 <br />
-                <Link to="/mor/registrasi-risiko" className="btn btn-primary">Registrasi Risiko</Link>
+                <Link to="/registrasi-risiko" className="btn btn-primary">Registrasi Risiko</Link>
                 <br />
                 <Link to="/Form" className="btn btn-primary">Demo Form</Link>
                 <br />
