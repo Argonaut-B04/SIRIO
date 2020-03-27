@@ -4,6 +4,7 @@ import com.ArgonautB04.SIRIO.model.Employee;
 import com.ArgonautB04.SIRIO.model.HasilPemeriksaan;
 import com.ArgonautB04.SIRIO.model.TugasPemeriksaan;
 import com.ArgonautB04.SIRIO.repository.HasilPemeriksaanDB;
+import com.ArgonautB04.SIRIO.repository.StatusHasilPemeriksaanDB;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,9 @@ public class HasilPemeriksaanRestServiceImpl implements HasilPemeriksaanRestServ
 
     @Autowired
     private HasilPemeriksaanDB hasilPemeriksaanDB;
+
+    @Autowired
+    private StatusHasilPemeriksaanDB statusHasilPemeriksaanDB;
 
     @Override
     public HasilPemeriksaan buatHasilPemeriksaan(HasilPemeriksaan hasilPemeriksaan) {
@@ -59,6 +63,13 @@ public class HasilPemeriksaanRestServiceImpl implements HasilPemeriksaanRestServ
         target.setStatusHasilPemeriksaan(hasilPemeriksaan.getStatusHasilPemeriksaan());
         target.setPemeriksa(hasilPemeriksaan.getPemeriksa());
         target.setPembuat(hasilPemeriksaan.getPembuat());
+        return hasilPemeriksaanDB.save(target);
+    }
+
+    @Override
+    public HasilPemeriksaan ubahStatus(int idHasilPemeriksaan, int idStatus) {
+        HasilPemeriksaan target = getById(idHasilPemeriksaan);
+        target.setStatusHasilPemeriksaan(statusHasilPemeriksaanDB.findById(idStatus).get());
         return hasilPemeriksaanDB.save(target);
     }
 

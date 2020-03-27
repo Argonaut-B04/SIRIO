@@ -22,5 +22,7 @@ public interface HasilPemeriksaanRestService {
 
     HasilPemeriksaan buatHasilPemeriksaan(int idHasilPemeriksaan, HasilPemeriksaan hasilPemeriksaan);
 
+    HasilPemeriksaan ubahStatus(int idHasilPemeriksaan, int idStatus);
+
     void hapusHasilPemeriksaan(int idHasilPemeriksaan);
 }
