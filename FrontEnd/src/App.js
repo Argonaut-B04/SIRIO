@@ -16,6 +16,7 @@ import Login from "./pages/login";
 import Logout from "./pages/logout";
 import FormDemo from "./pages/formPage";
 import './App.css';
+import RegistrasiRisiko from './pages/ManagerOR/RegistrasiRisiko';
 
 /**
  * Router utama yang memetakan url ke controller
@@ -31,6 +32,7 @@ class App extends React.Component {
             <Route exact path="/bm/rekomendasi" component={DaftarRekomendasiBM} />
             <Route exact path="/bm/rekomendasi/detail-bukti" component={DetailBuktiBM} />
             <Route exact path="/bukti-pelaksanaan" component={DaftarBuktiPelaksanaan} />
+            <Route exact path="/mor/registrasi-risiko" component={RegistrasiRisiko} />
             <Route exact path="/login" component={Login} />
             <Route exact path="/logout" component={Logout} />
             <Route exact path="/Form" component={FormDemo} />
