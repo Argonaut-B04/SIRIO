@@ -1,5 +1,6 @@
 import React from 'react';
 import SirioForm from '../../Form/SirioForm';
+import SirioButton from '../../Button/SirioButton';
 
 /**
  * Kelas untuk membuat form demo
@@ -11,12 +12,15 @@ export default class FormTambahKantorCabang extends React.Component {
         super(props);
 
         this.state = {
-            nama: "Kantor Cabang 1",
-            umur: 18
+            kc: "kantor cabang 1",
+            bm: "Billa",
+            area: "area 1",
+            regional: "regional 1"
         }
 
         this.handleChange = this.handleChange.bind(this);
         this.inputDefinition = this.inputDefinition.bind(this);
+        this.handleSelectChange = this.handleSelectChange.bind(this);
     }
 
     // Fungsi untuk mengubah state ketika isi dari input diubah
@@ -26,6 +30,17 @@ export default class FormTambahKantorCabang extends React.Component {
             {
                 [event.target.name]
                     : event.target.value
+            }
+        )
+    }
+
+    // Fungsi untuk mengubah state ketika isi dropdown diubah
+    // Fungsi unu wajib ada jika membuat field tipe select
+    handleSelectChange(name, event) {
+        this.setState(
+            {
+                [name]
+                    : event.value
             }
         )
     }
@@ -45,36 +60,87 @@ export default class FormTambahKantorCabang extends React.Component {
         return (
             [
                 {
-                    label: "Nama Point",
+                    label: "Nama Point*",
                     handleChange: this.handleChange,
                     type: "text",
-                    name: "nama",
-                    value: this.state.nama,
+                    name: "kc",
+                    value: this.state.kc,
                     placeholder: "Masukan nama point"
                 }, {
-                    label: "Branch Manger",
-                    handleChange: this.handleChange,
-                    type: "text",
+                    label: "Branch Manger*",
+                    handleChange: this.handleSelectChange,
+                    type: "select",
                     name: "bm",
-                    value: this.state.umur,
-                    placeholder: "masukan umur bambang"
+                    value: this.state.bm,
+                    optionList: [
+                        {
+                            label: "Billa",
+                            value: "Billa"
+                        }, {
+                            label: "kana",
+                            value: "kana"
+                        }, {
+                            label: "tora",
+                            value: "tora"
+                        }
+                    ]
                 },{
-                    label: "Area",
-                    handleChange: this.handleChange,
-                    type: "number",
-                    name: "umur",
-                    value: this.state.umur,
-                    placeholder: "masukan umur bambang"
+                    label: "Area*",
+                    handleChange: this.handleSelectChange,
+                    type: "select",
+                    name: "area",
+                    value: this.state.area,
+                    optionList: [
+                        {
+                            label: "area 1",
+                            value: "area 1"
+                        }, {
+                            label: "area 2",
+                            value: "area 2"
+                        }, {
+                            label: "area 3",
+                            value: "area 3"
+                        }
+                    ]
                 },{
-                    label: "Regional",
-                    handleChange: this.handleChange,
-                    type: "number",
-                    name: "umur",
-                    value: this.state.umur,
-                    placeholder: "masukan umur bambang"
+                    label: "Regional*",
+                    handleChange: this.handleSelectChange,
+                    type: "select",
+                    name: "regional",
+                    value: this.state.regional,
+                    optionList: [
+                        {
+                            label: "regional 1",
+                            value: "regional 1"
+                        }, {
+                            label: "regional 2",
+                            value: "regional 2"
+                        }, {
+                            label: "regional 3",
+                            value: "regional 3"
+                        }
+                    ]
                 }
 
             ]
+        )
+    }
+
+    submitButton(){
+        return(
+            <div className="w-100 text-right">
+                <SirioButton
+                    purple
+                >
+                    Simpan
+                </SirioButton>
+                <p> </p>
+                <SirioButton
+                    purple
+                >
+                   Batal
+                </SirioButton>
+            </div>
         )
     }
 
@@ -85,6 +151,7 @@ export default class FormTambahKantorCabang extends React.Component {
                 title="Form Tambah Kantor Cabang"
                 inputDefinition={this.inputDefinition()}
                 onSubmit={this.handleSubmit}
+                submitButton={this.submitButton()}
             />
         );
     }
