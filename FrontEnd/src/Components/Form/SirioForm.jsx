@@ -34,6 +34,7 @@ class SirioForm extends Component {
                             name={field.name}
                             value={field.value}
                             placeholder={field.placeholder}
+                            optionList={field.optionList}
                         />
                     )}
                     {this.props.submitButton ? this.props.submitButton :

@@ -12,11 +12,13 @@ export default class TheForm extends React.Component {
 
         this.state = {
             nama: "bambang",
-            umur: 18
+            umur: 18,
+            jenisKelamin: "Pria"
         }
 
         this.handleChange = this.handleChange.bind(this);
         this.inputDefinition = this.inputDefinition.bind(this);
+        this.handleSelectChange = this.handleSelectChange.bind(this);
     }
 
     // Fungsi untuk mengubah state ketika isi dari input diubah
@@ -26,6 +28,17 @@ export default class TheForm extends React.Component {
             {
                 [event.target.name]
                     : event.target.value
+            }
+        )
+    }
+
+    // Fungsi untuk mengubah state ketika isi dropdown diubah
+    // Fungsi unu wajib ada jika membuat field tipe select
+    handleSelectChange(name, event) {
+        this.setState(
+            {
+                [name]
+                    : event.value
             }
         )
     }
@@ -47,7 +60,7 @@ export default class TheForm extends React.Component {
                 {
                     label: "Nama Bambang",
                     handleChange: this.handleChange,
-                    type: "text",
+                    type: "textarea",
                     name: "nama",
                     value: this.state.nama,
                     placeholder: "masukan nama bambang"
@@ -58,6 +71,24 @@ export default class TheForm extends React.Component {
                     name: "umur",
                     value: this.state.umur,
                     placeholder: "masukan umur bambang"
+                }, {
+                    label: "Jenis Kelamin",
+                    handleChange: this.handleSelectChange,
+                    type: "select",
+                    name: "jenisKelamin",
+                    value: this.state.jenisKelamin,
+                    optionList: [
+                        {
+                            label: "Pria",
+                            value: "Pria"
+                        }, {
+                            label: "Wanita",
+                            value: "Wanita"
+                        }, {
+                            label: "Gak tau apa",
+                            value: "gak tau apa"
+                        }
+                    ]
                 }
             ]
         )

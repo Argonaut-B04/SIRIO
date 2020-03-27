@@ -8,6 +8,8 @@
 .formWrapper>*>* {
     padding: 5px;
     margin: 10px 0px;
+    display: inline-block;
+    vertical-align: top;
 }
 
 .headerWrapper {
