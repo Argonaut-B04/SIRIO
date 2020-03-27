@@ -42,7 +42,7 @@ export default class LoginForm extends Component {
                 (response) => {
                     console.log(response);
                     AuthenticationService.registerSuccessfulLogin(this.state.username, this.state.password, response.data.result.role.namaRole);
-                    this.props.history.push("/");
+                    window.location.href="/";
                 }
             )
             .catch(

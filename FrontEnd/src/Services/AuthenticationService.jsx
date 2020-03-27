@@ -2,7 +2,7 @@
 import axios from 'axios';
 
 // Variabel setting backend
-const API_URL = 'http://localhost:8080/api/v1/';
+const API_URL = 'http://localhost:8080/api/v1';
 const USERNAME_NAME_SESSION_ATTRIBUTE_NAME = "SirioInSession";
 const ROLE_NAME_SESSION_ATTRIBUTE_NAME = "SirioRoleInSession";
 
