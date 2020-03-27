@@ -1,10 +1,10 @@
 import React from 'react';
-import SirioForm from '../Components/Form/SirioForm';
+import SirioForm from '../SirioForm';
 
 /**
  * Kelas untuk membuat form demo
  */
-export default class TheForm extends React.Component {
+export default class DemoForm extends React.Component {
 
     // Masukan user disimpan kedalam state sebelum dikirim ke backend
     constructor(props) {
