@@ -223,7 +223,7 @@ public class HasilPemeriksaanRestController {
         try {
             StatusHasilPemeriksaan statusHasilPemeriksaan =
                     statusHasilPemeriksaanRestService.getById(hasilPemeriksaanDTO.getIdStatus());
-            if (statusHasilPemeriksaan != statusHasilPemeriksaanRestService.getById(1) ||
+            if (statusHasilPemeriksaan != statusHasilPemeriksaanRestService.getById(1) &&
                     statusHasilPemeriksaan != statusHasilPemeriksaanRestService.getById(2))
                 throw new ResponseStatusException(
                         HttpStatus.FORBIDDEN, "Status tidak diperbolehkan!"
@@ -353,8 +353,8 @@ public class HasilPemeriksaanRestController {
         try {
             StatusHasilPemeriksaan statusHasilPemeriksaan =
                     statusHasilPemeriksaanRestService.getById(hasilPemeriksaanDTO.getIdStatus());
-            if (statusHasilPemeriksaan != statusHasilPemeriksaanRestService.getById(1) ||
-                    statusHasilPemeriksaan != statusHasilPemeriksaanRestService.getById(2) ||
+            if (statusHasilPemeriksaan != statusHasilPemeriksaanRestService.getById(1) &&
+                    statusHasilPemeriksaan != statusHasilPemeriksaanRestService.getById(2) &&
                     statusHasilPemeriksaan != statusHasilPemeriksaanRestService.getById(3))
                 throw new ResponseStatusException(
                         HttpStatus.FORBIDDEN, "Status tidak diperbolehkan!"
@@ -576,44 +576,69 @@ public class HasilPemeriksaanRestController {
      */
     @PutMapping(value = "/persetujuan", consumes = {"application/json"})
     private BaseResponse<String> persetujuanHasilPemeriksaan(
-            @RequestBody PersetujuanHasilPemeriksaanDTO persetujuanHasilPemeriksaanDTO
+            @RequestBody PersetujuanHasilPemeriksaanDTO persetujuanHasilPemeriksaanDTO,
+            Principal principal, ModelMap model
     ) {
         BaseResponse<String> response = new BaseResponse<>();
+
+        Employee employee = employeeRestService.getByUsername(principal.getName()).get();
+
+        HasilPemeriksaan hasilPemeriksaanTemp;
         try {
-            HasilPemeriksaan hasilPemeriksaanTemp = hasilPemeriksaanRestService.getById(
-                    persetujuanHasilPemeriksaanDTO.getIdHasilPemeriksaan());
-            hasilPemeriksaanTemp.setStatusHasilPemeriksaan(statusHasilPemeriksaanRestService.getById(
-                    persetujuanHasilPemeriksaanDTO.getStatus()));
-            hasilPemeriksaanTemp.setPemeriksa(employeeRestService.getById(
-                    persetujuanHasilPemeriksaanDTO.getIdPemeriksa()));
-            hasilPemeriksaanTemp.setFeedback(persetujuanHasilPemeriksaanDTO.getFeedback());
-            HasilPemeriksaan hasilPemeriksaan = hasilPemeriksaanRestService.buatHasilPemeriksaan(
-                    persetujuanHasilPemeriksaanDTO.getIdHasilPemeriksaan(), hasilPemeriksaanTemp);
-
-            for (KomponenPemeriksaan komponenPemeriksaan:
-                    komponenPemeriksaanRestService.getByHasilPemeriksaan(hasilPemeriksaan)) {
-                for (Rekomendasi rekomendasi: rekomendasiRestService.getByKomponenPemeriksaan(komponenPemeriksaan)) {
-                    rekomendasi.setStatusRekomendasi(statusRekomendasiRestService.getById(
-                            persetujuanHasilPemeriksaanDTO.getStatus()));
-                    rekomendasiRestService.ubahRekomendasi(rekomendasi.getIdRekomendasi(), rekomendasi);
-                }
-            }
-
-            if (persetujuanHasilPemeriksaanDTO.getStatus() == 3) {
-                response.setResult("Hasil Pemeriksaan dengan id " +
-                        persetujuanHasilPemeriksaanDTO.getIdHasilPemeriksaan() + " ditolak!");
-            } else {
-                response.setResult("Hasil Pemeriksaan dengan id " +
-                        persetujuanHasilPemeriksaanDTO.getIdHasilPemeriksaan() + " disetujui!");
-            }
-            response.setStatus(200);
-            response.setMessage("success");
-        } catch (EmptyResultDataAccessException e) {
-            response.setStatus(404);
-            response.setMessage("not found");
-            response.setResult("Hasil Pemeriksaan dengan id " +
-                    persetujuanHasilPemeriksaanDTO.getIdHasilPemeriksaan() + " tidak dapat ditemukan");
+            hasilPemeriksaanTemp = hasilPemeriksaanRestService.getById(persetujuanHasilPemeriksaanDTO.getId());
+        } catch (NoSuchElementException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Hasil Pemeriksaan tidak ditemukan!"
+            );
         }
+
+        try {
+            StatusHasilPemeriksaan statusHasilPemeriksaan = statusHasilPemeriksaanRestService.getById(
+                    persetujuanHasilPemeriksaanDTO.getStatus());
+            if (hasilPemeriksaanTemp.getStatusHasilPemeriksaan().getIdStatusHasil() != 2 ||
+                    (statusHasilPemeriksaan != statusHasilPemeriksaanRestService.getById(3) &&
+                    statusHasilPemeriksaan != statusHasilPemeriksaanRestService.getById(4)))
+                throw new ResponseStatusException(
+                        HttpStatus.FORBIDDEN, "Pengajuan persetujuan tidak diperbolehkan!"
+                );
+            hasilPemeriksaanTemp.setStatusHasilPemeriksaan(statusHasilPemeriksaan);
+        } catch (NoSuchElementException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Status Hasil Pemeriksaan tidak ditemukan!"
+            );
+        }
+
+        if (persetujuanHasilPemeriksaanDTO.getStatus() == 3 && (persetujuanHasilPemeriksaanDTO.getFeedback() == null ||
+                persetujuanHasilPemeriksaanDTO.getFeedback().equals("")))
+            throw new ResponseStatusException(
+                    HttpStatus.FORBIDDEN, "Feedback perlu diisi untuk penolakan Hasil Pemeriksaan!"
+            );
+
+
+        hasilPemeriksaanTemp.setPemeriksa(employee);
+        hasilPemeriksaanTemp.setFeedback(persetujuanHasilPemeriksaanDTO.getFeedback());
+        HasilPemeriksaan hasilPemeriksaan = hasilPemeriksaanRestService.buatHasilPemeriksaan(
+                persetujuanHasilPemeriksaanDTO.getId(), hasilPemeriksaanTemp);
+
+        for (KomponenPemeriksaan komponenPemeriksaan:
+                komponenPemeriksaanRestService.getByHasilPemeriksaan(hasilPemeriksaan)) {
+            for (Rekomendasi rekomendasi: rekomendasiRestService.getByKomponenPemeriksaan(komponenPemeriksaan)) {
+                rekomendasi.setStatusRekomendasi(statusRekomendasiRestService.getById(
+                        persetujuanHasilPemeriksaanDTO.getStatus()));
+                rekomendasiRestService.ubahRekomendasi(rekomendasi.getIdRekomendasi(), rekomendasi);
+            }
+        }
+
+        if (persetujuanHasilPemeriksaanDTO.getStatus() == 3) {
+            response.setResult("Hasil Pemeriksaan dengan id " +
+                    persetujuanHasilPemeriksaanDTO.getId() + " ditolak!");
+        } else {
+            response.setResult("Hasil Pemeriksaan dengan id " +
+                    persetujuanHasilPemeriksaanDTO.getId() + " disetujui!");
+        }
+        response.setStatus(200);
+        response.setMessage("success");
+
         return response;
     }
 }
