@@ -5,6 +5,28 @@ import SirioDetailPage2Buttons from '../SirioDetailPage2Buttons';
 
 export default class RegistrasiRisiko extends React.Component {
 
+    getButtons(cell,row) {
+        return (
+            <div>
+                <SirioButton 
+                    classes="mx-2"
+                    purple recommended
+                    onClick={() => window.location.href = "/"}
+                    className={classes.buttons}
+                >
+                    Ubah
+                </SirioButton>
+                <SirioButton
+                    purple
+                    onClick={() => window.location.href = "/"}
+                    className={classes.buttons}
+                >
+                    Hapus
+                </SirioButton>
+            </div>
+        )
+    }
+
     columns = [{
         dataField: 'key',
         classes: classes.rowItem,

@@ -27,22 +27,6 @@ class SirioDetailPage extends Component {
                                         //ref={n => this.node = n}
                                         bordered={ false }
                                     />
-                                    <br></br>
-                                    <SirioButton 
-                                        classes="mx-2"
-                                        purple recommended
-                                        onClick={() => window.location.href = "/"}
-                                        className={classes.buttons}
-                                    >
-                                        Ubah
-                                    </SirioButton>
-                                    <SirioButton
-                                        purple
-                                        onClick={() => window.location.href = "/"}
-                                        className={classes.buttons}
-                                    >
-                                        Hapus
-                                    </SirioButton>
                                 </div>
                             )
                         }
