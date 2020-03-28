@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -39,7 +40,7 @@ public class ReminderRestController {
      * @param rekomendasiDTO data transfer object untuk rekomendasi
      * @return daftar reminder yang terhubung dengan rekomendasi tersebut
      */
-    @GetMapping("/getListByRekomendasi")
+    @PostMapping("/getByRekomendasi")
     private BaseResponse<List<Reminder>> getAllReminderUntukRekomendasi(
             @RequestBody RekomendasiDTO rekomendasiDTO
     ) {
@@ -56,6 +57,10 @@ public class ReminderRestController {
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND, "Rekomendasi dengan ID " + idRekomendasi + " tidak ditemukan!"
             );
+        } catch (NullPointerException e) {
+            response.setStatus(200);
+            response.setMessage("success");
+            response.setResult(new ArrayList<>());
         }
         return response;
     }
@@ -130,7 +135,7 @@ public class ReminderRestController {
      *
      * @param reminderDTO data transfer object untuk reminder
      */
-    @DeleteMapping("/hapus")
+    @PostMapping("/hapus")
     private BaseResponse<String> hapusReminder(
             @RequestBody ReminderDTO reminderDTO
     ) {

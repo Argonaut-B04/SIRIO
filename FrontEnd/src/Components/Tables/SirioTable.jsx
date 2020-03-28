@@ -94,6 +94,7 @@ export default class SirioTable extends Component {
                         keyField={this.props.id}
                         data={this.props.data}
                         columns={this.props.columnsDefinition}
+                        defaultSorted={this.props.defaultSorted}
                         search
                     >
                         {
@@ -117,7 +118,6 @@ export default class SirioTable extends Component {
                                         hover
                                         condensed
                                         noDataIndication={this.indication}
-                                        defaultSorted={this.defaultSorted}
                                         pagination={this.pagination}
                                         overlay={this.overlay}
                                         classes="table-responsive-lg"

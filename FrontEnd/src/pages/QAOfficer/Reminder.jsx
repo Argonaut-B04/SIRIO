@@ -1,25 +1,16 @@
-import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
+import React from "react";
+import TabelReminder from "../../Components/Tables/Reminder/TabelReminder";
+import SirioMainLayout from "../../Layout/SirioMainLayout";
 
-class Reminder extends Component {
-
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            idRekomendasi: this.props.location.state ? this.props.location.state.id : null,
-            directAccess: this.props.location.state ? true : false
-        }
-    }
-
+/**
+ * Controller yang menampilkan halaman daftar rekomendasi
+ */
+export default class Reminder extends React.Component {
     render() {
         return (
-            <div>
-                {!this.state.directAccess && <h1>You cant access this page directly</h1>}
-                {this.state.idRekomendasi}
-            </div>
+            <SirioMainLayout>
+                <TabelReminder />
+            </SirioMainLayout>
         );
     }
-}
-
-export default withRouter(Reminder);
+};

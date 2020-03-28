@@ -232,7 +232,8 @@ export default class TabelRekomendasi extends React.Component {
             <NavLink to={{
                 pathname: "/rekomendasi/reminder",
                 state: {
-                    id: row.id
+                    id: row.id,
+                    keterangan: row.keterangan
                 }
             }}>
                 <SirioButton

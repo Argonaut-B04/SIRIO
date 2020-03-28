@@ -1,23 +1,21 @@
 import React from 'react';
 import SirioButton from '../../Button/SirioButton';
 import SirioDatePickerButton from '../../Button/SirioDatePickerButton';
+import ReminderService from '../../../Services/ReminderService';
 import SirioTable from '../SirioTable';
-import RekomendasiService from '../../../Services/RekomendasiService';
-import { NavLink } from 'react-router-dom';
-import classes from './TabelRekomendasi.module.css';
+import { withRouter } from 'react-router-dom';
+import classes from '../Rekomendasi/TabelRekomendasi.module.css';
 
 /**
- * Kelas untuk membuat komponen tabel rekomendasi
+ * Kelas untuk membuat komponen tabel reminder
  */
-export default class TabelReminder extends React.Component {
+class TabelReminder extends React.Component {
 
     constructor(props) {
         super(props);
 
         this.state = {
             rowList: [],
-            idRekomendasi: this.props.location.state ? this.props.location.state.id : null,
-            directAccess: this.props.location.state ? true : false
         }
 
         this.renderRows = this.renderRows.bind(this);
@@ -29,17 +27,21 @@ export default class TabelReminder extends React.Component {
 
     // TBI
     async renderRows() {
-        // const response = await RekomendasiService.getRekomendasiByLoggedInUser();
+        const response = await ReminderService.getByIdRekomendasi({
+            id: this.props.location.state.id
+        });
 
-        // var fetchedRows = [];
-        // response.data.result.map((entry, i) => {
-        //     entry.no = i + 1;
-        //     return fetchedRows.push(entry);
-        // })
+        console.log(response.data.result);
 
-        // this.setState({
-        //     rowList: fetchedRows
-        // })
+        var fetchedRows = [];
+        response.data.result.map((entry, i) => {
+            entry.no = i + 1;
+            return fetchedRows.push(entry);
+        })
+
+        this.setState({
+            rowList: fetchedRows
+        })
     }
 
     /**
@@ -63,15 +65,15 @@ export default class TabelReminder extends React.Component {
             return { width: "50px", textAlign: 'center' };
         },
     }, {
-        dataField: 'tanggal',
+        dataField: 'tanggalPengiriman',
         text: 'TANGGAL',
         sort: true,
         classes: classes.rowItem,
         headerClasses: classes.colheader,
         headerStyle: (colum, colIndex) => {
             return { width: "25%", textAlign: 'left' };
-        }
-
+        },
+        formatter: this.formatDate
     }, {
         dataField: 'noData 1',
         text: '',
@@ -92,16 +94,37 @@ export default class TabelReminder extends React.Component {
         formatter: this.getButtonsSecond
     }];
 
-    static tambah(date) {
+    formatDate(cell) {
+        const date = cell[2];
+        var month = cell[1];
+        const year = cell[0]
+
+        var monthName = ["Januari", "Februari", "Maret", "April", "Mei", "Juni",
+            "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+
+        month = monthName[month - 1];
+
+        return date + " " + month + " " + year;
+    }
+
+    /**
+     * Tambah, ubah, dan hapus jangan direct access ke backend, tapi simpan perubahan di cache
+     * @param {} date 
+     */
+    static async tambah(date) {
 
     }
 
-    static ubah(date, id) {
+    static async ubah(date, id) {
 
     }
 
-    static hapus(id) {
+    static async hapus(id) {
+        // const response = await ReminderService.delete({
+        //     id: id
+        // });
 
+        // console.log(response);
     }
 
     // Formatter untuk render button pertama
@@ -121,18 +144,12 @@ export default class TabelReminder extends React.Component {
         return (
             <SirioButton
                 red
-                onClick={(id) => TabelReminder.hapus(id)}
+                onClick={() => TabelReminder.hapus(row.idReminder)}
             >
                 Hapus
             </SirioButton>
         );
     }
-
-    // Kolom yang akan di sort secara default
-    defaultSorted = [{
-        dataField: 'no',
-        order: 'asc'
-    }];
 
     // Fungsi untuk mendapatkan tombol di sisi kanan title
     headerButton() {
@@ -151,13 +168,15 @@ export default class TabelReminder extends React.Component {
     render() {
         return (
             <SirioTable
-                title="Daftar Rekomendasi"
+                title={"Daftar Reminder untuk Rekomendasi " + this.props.location.state.keterangan}
                 data={this.state.rowList}
-                id='id'
+                id='idReminder'
                 columnsDefinition={this.columns}
                 includeSearchBar
                 headerButton={this.headerButton()}
             />
         );
     }
-} 
+}
+
+export default withRouter(TabelReminder);
