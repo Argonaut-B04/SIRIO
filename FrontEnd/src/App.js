@@ -7,7 +7,7 @@ import {
   Redirect
 } from "react-router-dom";
 import MainPage from "./pages";
-import DaftarRekomendasi from "./pages/DaftarRekomendasi";
+import DaftarRekomendasi from "./pages/QAOfficer/DaftarRekomendasi";
 import DaftarRekomendasiBM from "./pages/BranchManager/DaftarRekomendasi";
 import DetailBuktiBM from "./pages/BranchManager/DetailBuktiPelaksanaan";
 import DaftarBuktiPelaksanaan from "./pages/DaftarBuktiPelaksanaan";

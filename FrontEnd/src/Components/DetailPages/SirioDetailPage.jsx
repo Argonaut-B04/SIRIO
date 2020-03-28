@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import BootstrapTable from "react-bootstrap-table-next";
-import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
+import ToolkitProvider from 'react-bootstrap-table2-toolkit';
 import classes from './SirioDetailPage.module.css';
 import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css"
 import 'react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.min.css';

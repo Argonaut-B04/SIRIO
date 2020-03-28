@@ -1,5 +1,4 @@
 import React from 'react';
-import SirioButton from '../../Button/SirioButton';
 import classes from './DetailBukti.module.css';
 import SirioDetailPage from '../SirioDetailPage';
 

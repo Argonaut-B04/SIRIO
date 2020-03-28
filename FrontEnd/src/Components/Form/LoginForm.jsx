@@ -40,9 +40,8 @@ export default class LoginForm extends Component {
             .executeBasicAuthenticationService(this.state.username, this.state.password)
             .then(
                 (response) => {
-                    console.log(response);
                     AuthenticationService.registerSuccessfulLogin(this.state.username, this.state.password, response.data.result.role.namaRole);
-                    window.location.href="/";
+                    window.location.href = "/";
                 }
             )
             .catch(
@@ -52,6 +51,7 @@ export default class LoginForm extends Component {
                     })
                 }
             )
+
     }
 
     render() {

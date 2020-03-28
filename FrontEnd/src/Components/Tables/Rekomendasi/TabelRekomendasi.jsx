@@ -3,11 +3,20 @@ import SirioButton from '../../Button/SirioButton';
 import SirioDatePickerButton from '../../Button/SirioDatePickerButton';
 import classes from './TabelRekomendasi.module.css';
 import SirioTable from '../SirioTable';
+import RekomendasiService from '../../../Services/RekomendasiService';
 
 /**
  * Kelas untuk membuat komponen tabel rekomendasi
  */
 export default class TabelRekomendasi extends React.Component {
+
+    constructor(props) {
+        super(props);
+        RekomendasiService
+            .getRekomendasiByLoggedInUser()
+            .then((result) => console.log(result))
+            .catch((e) => console.log(e));
+    }
 
     // Data demo yang akan ditampilkan
     data = [
