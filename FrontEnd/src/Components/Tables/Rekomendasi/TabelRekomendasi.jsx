@@ -1,9 +1,10 @@
 import React from 'react';
 import SirioButton from '../../Button/SirioButton';
 import SirioDatePickerButton from '../../Button/SirioDatePickerButton';
-import classes from './TabelRekomendasi.module.css';
 import SirioTable from '../SirioTable';
 import RekomendasiService from '../../../Services/RekomendasiService';
+import { NavLink } from 'react-router-dom';
+import classes from './TabelRekomendasi.module.css';
 
 /**
  * Kelas untuk membuat komponen tabel rekomendasi
@@ -228,12 +229,19 @@ export default class TabelRekomendasi extends React.Component {
         const reminderEnable = status === "Menunggu Pelaksanaan" || status === "Sedang Dijalankan";
 
         return (
-            <SirioButton
-                purple
-                disabled={!reminderEnable}
-            >
-                Reminder
+            <NavLink to={{
+                pathname: "/rekomendasi/reminder",
+                state: {
+                    id: row.id
+                }
+            }}>
+                <SirioButton
+                    purple
+                    disabled={!reminderEnable}
+                >
+                    Reminder
             </SirioButton>
+            </NavLink>
         )
     }
 

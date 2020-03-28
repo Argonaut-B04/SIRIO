@@ -9,7 +9,6 @@ export default class AuthorizedRoute extends Component {
                 <Route {...this.props} />
             )
         } else {
-            console.log(this.props.path)
             return (
                 <Redirect to={{
                     pathname: "/login",
