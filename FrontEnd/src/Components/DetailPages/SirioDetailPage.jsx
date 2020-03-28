@@ -4,7 +4,6 @@ import ToolkitProvider from 'react-bootstrap-table2-toolkit';
 import classes from './SirioDetailPage.module.css';
 import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css"
 import 'react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.min.css';
-import SirioButton from '../Button/SirioButton';
 
 class SirioDetailPage extends Component {
 
@@ -24,21 +23,18 @@ class SirioDetailPage extends Component {
                                 <div>
                                     <BootstrapTable
                                         {...props.baseProps}
-                                        //ref={n => this.node = n}
                                         bordered={ false }
                                     />
-                                    <br></br>
-                                    <SirioButton
-                                        purple
-                                        onClick={() => window.location.href = "/"}
-                                        className={classes.buttons}
-                                    >
-                                        Ubah Bukti
-                                    </SirioButton>
+                                    
                                 </div>
                             )
                         }
                     </ToolkitProvider>
+                    <br></br>
+                    <div className={classes.headerWrapper}>
+                        <br></br>
+                        {this.props.subButton}
+                    </div>
                 </div>
             </div>
         );
