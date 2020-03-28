@@ -18,6 +18,16 @@
     min-width: 100px;
 }
 
+.red {
+    --main-color: #FF0000;
+    color: var(--main-color);
+    border: solid var(--main-color) 1.5px;
+    background-color: transparent;
+    font-family: Proxima Nova;
+    min-height: 30px;
+    min-width: 100px;
+}
+
 .recommended {
     color: white;
     background-color: var(--main-color);

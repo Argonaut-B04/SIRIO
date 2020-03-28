@@ -18,6 +18,8 @@ export default class SirioButton extends React.Component {
             color = classes.purple;
         } else if (this.props.blue) {
             color = classes.blue;
+        } else if (this.props.red) {
+            color = classes.red;
         }
 
         let style;
