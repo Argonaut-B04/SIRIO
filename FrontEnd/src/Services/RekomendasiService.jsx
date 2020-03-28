@@ -12,6 +12,10 @@ class RekomendasiService {
     async getRekomendasiByLoggedInUser() {
         return this.axiosInstance.get(SirioAxiosBase.BASEURL + `/Rekomendasi/getAll`);
     }
+
+    async setTenggatWaktu(data) {
+        return this.axiosInstance.post(SirioAxiosBase.BASEURL + `/Rekomendasi/tenggatWaktu`, data)
+    }
 }
 
 export default new RekomendasiService();
