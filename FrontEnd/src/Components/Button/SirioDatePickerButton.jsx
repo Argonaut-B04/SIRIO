@@ -9,21 +9,27 @@ export default class SirioDatePickerButton extends React.Component {
         super(props);
 
         this.state = {
-            startDate: null
+            selectedDate: null,
+            idTarget: null
         };
+
+        this.handleChange = this.handleChange.bind(this);
     }
 
-    handleChange = date => {
+    handleChange(date, id) {
         this.setState({
-            startDate: date
+            selectedDate: date
         });
     };
 
     render() {
         return (
             <DatePicker
-                selected={this.state.startDate}
-                onChange={this.handleChange}
+                selected={this.state.selectedDate}
+                onChange={date => {
+                    this.handleChange(date, this.props.id);
+                    this.props.handleChange(date, this.props.id);
+                }}
                 customInput={<SirioDatePickerCustomInput {...this.props} />}
             />
         );

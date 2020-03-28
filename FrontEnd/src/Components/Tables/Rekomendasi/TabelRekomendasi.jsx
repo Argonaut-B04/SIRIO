@@ -12,10 +12,23 @@ export default class TabelRekomendasi extends React.Component {
 
     constructor(props) {
         super(props);
-        RekomendasiService
-            .getRekomendasiByLoggedInUser()
-            .then((result) => console.log(result))
-            .catch((e) => console.log(e));
+
+        this.state = {
+            rowList: []
+        }
+
+    }
+
+    componentDidMount() {
+        this.renderRows();
+    }
+
+    async renderRows() {
+        // const fetchedRekomendasi = [];
+        const response = await RekomendasiService.getRekomendasiByLoggedInUser();
+        this.setState({
+            rowList: response
+        })
     }
 
     // Data demo yang akan ditampilkan
@@ -49,7 +62,6 @@ export default class TabelRekomendasi extends React.Component {
      * - headerStyle        : style, untuk styling header
      * - formatter          : function, untuk manipulasi isi kolom
      */
-
     columns = [{
         dataField: '',
         isDummyField: true,
@@ -155,6 +167,24 @@ export default class TabelRekomendasi extends React.Component {
         )
     }
 
+    static aturTenggatWaktu(date, id) {
+        // yyyy-MM-dd
+        let month = (date.getMonth() + 1);
+        if (month < 10) {
+            month = "0" + month;
+        }
+        let simpleDate = date.getDate();
+        if (simpleDate < 10) {
+            simpleDate = "0" + simpleDate;
+        }
+        let formattedDate = date.getFullYear() + "-" + month + "-" + simpleDate;
+        RekomendasiService.setTenggatWaktu({
+            id: id,
+            tenggatWaktu: formattedDate
+        }).then(response => console.log(response));
+        //TODO: render ulang
+    }
+
     // Formatter untuk render button kedua
     getButtonsSecond(cell, row) {
         const status = row.statusRekomendasi;
@@ -170,6 +200,8 @@ export default class TabelRekomendasi extends React.Component {
                 <SirioDatePickerButton
                     purple
                     recommended
+                    id={row.id}
+                    handleChange={(date, id) => TabelRekomendasi.aturTenggatWaktu(date, id)}
                 >
                     Tenggat Waktu
                 </SirioDatePickerButton>
@@ -179,6 +211,8 @@ export default class TabelRekomendasi extends React.Component {
                 <SirioDatePickerButton
                     purple
                     hyperlink
+                    id={row.id}
+                    handleChange={(date, id) => TabelRekomendasi.aturTenggatWaktu(date, id)}
                 >
                     {tenggatWaktuExist ? tenggatWaktu : "Tenggat Waktu"}
                 </SirioDatePickerButton>
