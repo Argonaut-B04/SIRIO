@@ -12,6 +12,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -48,8 +49,8 @@ public class RekomendasiRestController {
      * @return daftar rekomendasi yang terhubung dengan pembuat tersebut
      */
     @GetMapping("/getAll")
-    private BaseResponse<List<Rekomendasi>> getAllRekomendasiUntukLoggedInUser(Principal principal) {
-        BaseResponse<List<Rekomendasi>> response = new BaseResponse<>();
+    private BaseResponse<List<RekomendasiDTO>> getAllRekomendasiUntukLoggedInUser(Principal principal) {
+        BaseResponse<List<RekomendasiDTO>> response = new BaseResponse<>();
         try {
             Optional<Employee> employeeTarget = employeeRestService.getByUsername(principal.getName());
             Employee employee;
@@ -59,10 +60,19 @@ public class RekomendasiRestController {
                 throw new NoSuchElementException();
             }
             List<Rekomendasi> result = rekomendasiRestService.getByPembuat(employee);
+            List<RekomendasiDTO> resultDTO = new ArrayList<>();
+            for (Rekomendasi rekomedasi:result) {
+                RekomendasiDTO rekomendasiDTO = new RekomendasiDTO();
+                rekomendasiDTO.setId(rekomedasi.getIdRekomendasi());
+                rekomendasiDTO.setKeterangan(rekomedasi.getKeterangan());
+                rekomendasiDTO.setTenggatWaktu(rekomedasi.getTenggatWaktu().toString());
+                rekomendasiDTO.setStatus(rekomedasi.getStatusRekomendasi().getNamaStatus());
+                resultDTO.add(rekomendasiDTO);
+            }
 
             response.setStatus(200);
             response.setMessage("success");
-            response.setResult(result);
+            response.setResult(resultDTO);
         } catch (NoSuchElementException e) {
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND, "Akun anda tidak terdaftar atau tidak ditemukan!"

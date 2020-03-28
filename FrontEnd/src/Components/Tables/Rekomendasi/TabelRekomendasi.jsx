@@ -1,9 +1,10 @@
 import React from 'react';
 import SirioButton from '../../Button/SirioButton';
 import SirioDatePickerButton from '../../Button/SirioDatePickerButton';
-import classes from './TabelRekomendasi.module.css';
 import SirioTable from '../SirioTable';
 import RekomendasiService from '../../../Services/RekomendasiService';
+import { NavLink } from 'react-router-dom';
+import classes from './TabelRekomendasi.module.css';
 
 /**
  * Kelas untuk membuat komponen tabel rekomendasi
@@ -17,6 +18,7 @@ export default class TabelRekomendasi extends React.Component {
             rowList: []
         }
 
+        this.renderRows = this.renderRows.bind(this);
     }
 
     componentDidMount() {
@@ -24,32 +26,18 @@ export default class TabelRekomendasi extends React.Component {
     }
 
     async renderRows() {
-        // const fetchedRekomendasi = [];
         const response = await RekomendasiService.getRekomendasiByLoggedInUser();
+
+        var fetchedRows = [];
+        response.data.result.map((entry, i) => {
+            entry.no = i + 1;
+            return fetchedRows.push(entry);
+        })
+
         this.setState({
-            rowList: response
+            rowList: fetchedRows
         })
     }
-
-    // Data demo yang akan ditampilkan
-    data = [
-        { "tenggatWaktu": "", "id": 1, "keteranganRekomendasi": "Nathan", "statusRekomendasi": "Menunggu Pengaturan Tenggat Waktu" },
-        { "tenggatWaktu": "", "id": 2, "keteranganRekomendasi": "Nathan1", "statusRekomendasi": "Sedang Dijalankan" },
-        { "tenggatWaktu": "", "id": 3, "keteranganRekomendasi": "Nathan1", "statusRekomendasi": "Menunggu Persetujuan" },
-        { "tenggatWaktu": "10/10/2000", "id": 4, "keteranganRekomendasi": "Nathan1", "statusRekomendasi": "Menunggu Pelaksanaan" },
-        { "tenggatWaktu": "10/10/2000", "id": 5, "keteranganRekomendasi": "Nathan1", "statusRekomendasi": "Sedang Dijalankan" },
-        { "tenggatWaktu": "", "id": 6, "keteranganRekomendasi": "Nathan1", "statusRekomendasi": "Draft" },
-        { "tenggatWaktu": "", "id": 7, "keteranganRekomendasi": "Nathan1", "statusRekomendasi": "Draft" },
-        { "tenggatWaktu": "", "id": 8, "keteranganRekomendasi": "Nathan1", "statusRekomendasi": "Draft" },
-        { "tenggatWaktu": "", "id": 9, "keteranganRekomendasi": "Nathan1", "statusRekomendasi": "Draft" },
-        { "tenggatWaktu": "", "id": 10, "keteranganRekomendasi": "Nathan1", "statusRekomendasi": "Ditolak" },
-        { "tenggatWaktu": "", "id": 11, "keteranganRekomendasi": "Nathan1", "statusRekomendasi": "Draft" },
-        { "tenggatWaktu": "", "id": 12, "keteranganRekomendasi": "Nathan1", "statusRekomendasi": "Draft" },
-        { "tenggatWaktu": "", "id": 13, "keteranganRekomendasi": "Nathan1", "statusRekomendasi": "Draft" },
-        { "tenggatWaktu": "", "id": 14, "keteranganRekomendasi": "Nathan1", "statusRekomendasi": "Draft" },
-        { "tenggatWaktu": "", "id": 25, "keteranganRekomendasi": "Nathan2", "statusRekomendasi": "Draft" },
-        { "tenggatWaktu": "", "id": 16, "keteranganRekomendasi": "Nathan1", "statusRekomendasi": "Draft" },
-    ]
 
     /**
      * Definisi Kolom
@@ -63,8 +51,7 @@ export default class TabelRekomendasi extends React.Component {
      * - formatter          : function, untuk manipulasi isi kolom
      */
     columns = [{
-        dataField: '',
-        isDummyField: true,
+        dataField: 'no',
         text: 'NO',
         sort: true,
         classes: classes.rowNumber,
@@ -72,10 +59,8 @@ export default class TabelRekomendasi extends React.Component {
         headerStyle: (colum, colIndex) => {
             return { width: "50px", textAlign: 'center' };
         },
-        formatter: this.rowNumber
-
     }, {
-        dataField: 'keteranganRekomendasi',
+        dataField: 'keterangan',
         text: 'KETERANGAN',
         sort: true,
         classes: classes.rowItem,
@@ -85,7 +70,7 @@ export default class TabelRekomendasi extends React.Component {
         }
 
     }, {
-        dataField: 'statusRekomendasi',
+        dataField: 'status',
         text: 'STATUS',
         sort: true,
         classes: classes.rowItem,
@@ -187,7 +172,7 @@ export default class TabelRekomendasi extends React.Component {
 
     // Formatter untuk render button kedua
     getButtonsSecond(cell, row) {
-        const status = row.statusRekomendasi;
+        const status = row.status;
         const tenggatWaktu = row.tenggatWaktu;
         const tenggatWaktuExist = tenggatWaktu !== "";
         const recommended = status === "Menunggu Pengaturan Tenggat Waktu";
@@ -240,16 +225,24 @@ export default class TabelRekomendasi extends React.Component {
 
     // Formatter untuk render button ketiga
     getButtonsThird(cell, row) {
-        const status = row.statusRekomendasi;
+        const status = row.status;
         const reminderEnable = status === "Menunggu Pelaksanaan" || status === "Sedang Dijalankan";
 
         return (
-            <SirioButton
-                purple
-                disabled={!reminderEnable}
-            >
-                Reminder
+            <NavLink to={{
+                pathname: "/rekomendasi/reminder",
+                state: {
+                    id: row.id,
+                    keterangan: row.keterangan
+                }
+            }}>
+                <SirioButton
+                    purple
+                    disabled={!reminderEnable}
+                >
+                    Reminder
             </SirioButton>
+            </NavLink>
         )
     }
 
@@ -273,7 +266,7 @@ export default class TabelRekomendasi extends React.Component {
         return (
             <SirioTable
                 title="Daftar Rekomendasi"
-                data={this.data}
+                data={this.state.rowList}
                 id='id'
                 columnsDefinition={this.columns}
                 includeSearchBar

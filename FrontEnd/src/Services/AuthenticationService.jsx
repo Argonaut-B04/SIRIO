@@ -56,11 +56,21 @@ class AuthenticationService {
         return sessionStorage.getItem(SirioAxiosBase.ROLE_NAME_SESSION_ATTRIBUTE_NAME);
     }
 
+    /**
+     * Fungsi untuk mengambil logintoken
+     */
     getToken() {
         return sessionStorage.getItem(SirioAxiosBase.TOKEN_SESSION_ATTRIBUTE_NAME);
     }
 
     /**
+     * Fungsi untuk cek apakah user sudah login (username, role, dan token) valid
+     */
+    isLoggedIn() {
+        return (this.getUsername() && this.getRole() && this.getToken);
+    }
+
+    /**x
     * Fungsi untuk logout
     * 
     * cara menggunakan:

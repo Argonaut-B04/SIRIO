@@ -6,6 +6,7 @@ public class RekomendasiDTO {
     private String keterangan;
     private String tenggatWaktu;
     private String durasi;
+    private String status;
     private ReminderDTO reminderDTO;
 
     public ReminderDTO getReminderDTO() {
@@ -54,5 +55,13 @@ public class RekomendasiDTO {
 
     public void setDurasi(String durasi) {
         this.durasi = durasi;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }
