@@ -10,7 +10,7 @@ import MainPage from "./pages";
 import DaftarRekomendasi from "./pages/QAOfficer/DaftarRekomendasi";
 import DaftarRekomendasiBM from "./pages/BranchManager/DaftarRekomendasi";
 import DetailBuktiBM from "./pages/BranchManager/DetailBuktiPelaksanaan";
-import DaftarBuktiPelaksanaan from "./pages/DaftarBuktiPelaksanaan";
+import DaftarBuktiPelaksanaan from "./pages/QAOfficer/DaftarBuktiPelaksanaan";
 import NotFound from "./pages/error";
 import Login from "./pages/login";
 import Logout from "./pages/logout";
