@@ -26,7 +26,7 @@ export default class SideNavFramework extends React.Component {
         // Mendapatkan informasi username dan role dari Authentication Service
         this.state = {
             username: AuthenticationService.getUsername(),
-            role: AuthenticationService.getRole()
+            role: AuthenticationService.getRole(),
         }
     }
 

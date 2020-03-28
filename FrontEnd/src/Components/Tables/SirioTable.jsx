@@ -120,6 +120,7 @@ export default class SirioTable extends Component {
                                         defaultSorted={this.defaultSorted}
                                         pagination={this.pagination}
                                         overlay={this.overlay}
+                                        classes="table-responsive-lg"
                                     />
                                 </div>
                             )
