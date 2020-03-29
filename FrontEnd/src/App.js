@@ -10,8 +10,11 @@ import MainPage from "./pages";
 import DaftarRekomendasi from "./pages/QAOfficer/DaftarRekomendasi";
 import Reminder from "./pages/QAOfficer/Reminder";
 import DaftarRekomendasiBM from "./pages/BranchManager/DaftarRekomendasi";
+import FormBuktiBM from "./pages/BranchManager/FormBuktiPelaksanaan";
 import DetailBuktiBM from "./pages/BranchManager/DetailBuktiPelaksanaan";
-import DaftarBuktiPelaksanaan from "./pages/DaftarBuktiPelaksanaan";
+import DaftarBuktiPelaksanaan from "./pages/QAOfficer/DaftarBuktiPelaksanaan";
+import DetailPersetujuanBukti from "./pages/QAOfficer/DetailPersetujuanBukti";
+import FormFeedbackBukti from "./pages/QAOfficer/FormFeedbackBukti";
 import NotFound from "./pages/error";
 import Login from "./pages/login";
 import Logout from "./pages/logout";
@@ -34,8 +37,11 @@ class App extends React.Component {
             <AuthorizedRoute exact path="/rekomendasi" component={DaftarRekomendasi} />
             <AuthorizedRoute exact path="/rekomendasi/reminder" component={Reminder} />
             <Route exact path="/bm/rekomendasi" component={DaftarRekomendasiBM} />
+            <Route exact path="/bm/bukti-pelaksanaan/tambah" component={FormBuktiBM} />
             <Route exact path="/bm/rekomendasi/detail-bukti" component={DetailBuktiBM} />
             <Route exact path="/bukti-pelaksanaan" component={DaftarBuktiPelaksanaan} />
+            <Route exact path="/bukti-pelaksanaan/detail-persetujuan" component={DetailPersetujuanBukti} />
+            <Route exact path="/bukti-pelaksanaan/tolak-bukti" component={FormFeedbackBukti} />
             <Route exact path="/registrasi-risiko" component={RegistrasiRisiko} />
             <Route exact path="/registrasi-risiko/detail/1" component={DetailRisiko} />
             <Route exact path="/login" component={Login} />

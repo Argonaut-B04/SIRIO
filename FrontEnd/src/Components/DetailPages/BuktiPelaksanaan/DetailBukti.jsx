@@ -1,8 +1,9 @@
 import React from 'react';
 import classes from './DetailBukti.module.css';
 import SirioDetailPage from '../SirioDetailPage';
+import SirioButton from '../../Button/SirioButton';
 
-export default class TabelRekomendasi extends React.Component {
+export default class DetailBukti extends React.Component {
 
     columns = [{
         dataField: 'informasi',
@@ -22,9 +23,23 @@ export default class TabelRekomendasi extends React.Component {
     }];
 
     data = [
-        { "informasi": "Keterangan:", "isiInformasi": "Keterangan bukti rekomendasi tesss" },
-        { "informasi": "Lampiran:", "isiInformasi": "https://drive.google.com/drive/folders/1SvB_2W4BjD8rxVQR1-dDbA63-4Zx-hoN" },
-        ]
+        { "informasi": "Keterangan :", "isiInformasi": "Keterangan bukti rekomendasi tesss" },
+        { "informasi": "Lampiran :", "isiInformasi": "https://drive.google.com/drive/folders/1SvB_2W4BjD8rxVQR1-dDbA63-4Zx-hoN" },
+    ]
+
+    subButton() {
+        return (
+            <div>
+                <SirioButton purple
+                    classes="mx-2 my-2"
+                    onClick={() => window.location.href = "/bm/bukti-pelaksanaan/tambah"}
+                >
+                    Ubah Bukti
+                </SirioButton>
+                
+            </div>
+        )
+    }
 
     render() {
         return (
@@ -33,6 +48,7 @@ export default class TabelRekomendasi extends React.Component {
                 data={this.data}
                 id='id'
                 columnsDefinition={this.columns}
+                subButton={this.subButton()}
             />
         );
     }

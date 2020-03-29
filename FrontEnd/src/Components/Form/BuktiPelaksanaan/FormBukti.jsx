@@ -2,25 +2,19 @@ import React from 'react';
 import SirioForm from '../SirioForm';
 import SirioButton from '../../Button/SirioButton';
 
-/**
- * Kelas untuk membuat form demo
- */
-export default class DemoForm extends React.Component {
+export default class FormBukti extends React.Component {
 
     // Masukan user disimpan kedalam state sebelum dikirim ke backend
     constructor(props) {
         super(props);
 
         this.state = {
-            nama: "bambang",
-            umur: 18,
-            jenisKelamin: "Pria",
-            manusia: true
+            keterangan: "",
+            lampiran: "",
         }
 
         this.handleChange = this.handleChange.bind(this);
         this.inputDefinition = this.inputDefinition.bind(this);
-        this.handleSelectChange = this.handleSelectChange.bind(this);
     }
 
     // Fungsi untuk mengubah state ketika isi dari input diubah
@@ -43,17 +37,6 @@ export default class DemoForm extends React.Component {
         }
     }
 
-    // Fungsi untuk mengubah state ketika isi dropdown diubah
-    // Fungsi unu wajib ada jika membuat field tipe select
-    handleSelectChange(name, event) {
-        this.setState(
-            {
-                [name]
-                    : event.value
-            }
-        )
-    }
-
     // Fungsi yang akan dijalankan ketika user submit
     // Umumnya akan digunakan untuk memanggil service komunikasi ke backend
     handleSubmit(event) {
@@ -69,43 +52,19 @@ export default class DemoForm extends React.Component {
         return (
             [
                 {
-                    label: "Nama Bambang",
+                    label: "Keterangan*",
                     handleChange: this.handleChange,
                     type: "textarea",
-                    name: "nama",
-                    value: this.state.nama,
-                    placeholder: "masukan nama bambang"
+                    name: "keterangan",
+                    value: this.state.keterangan,
+                    placeholder: "Masukan keterangan bukti"
                 }, {
-                    label: "Umur Bambang",
+                    label: "Lampiran*",
                     handleChange: this.handleChange,
-                    type: "number",
-                    name: "umur",
-                    value: this.state.umur,
-                    placeholder: "masukan umur bambang"
-                }, {
-                    label: "Jenis Kelamin",
-                    handleChange: this.handleSelectChange,
-                    type: "select",
-                    name: "jenisKelamin",
-                    value: this.state.jenisKelamin,
-                    optionList: [
-                        {
-                            label: "Pria",
-                            value: "Pria"
-                        }, {
-                            label: "Wanita",
-                            value: "Wanita"
-                        }, {
-                            label: "Gak tau apa",
-                            value: "gak tau apa"
-                        }
-                    ]
-                }, {
-                    label: "Manusia?",
-                    handleChange: this.handleChange,
-                    type: "checkbox",
-                    name: "manusia",
-                    value: this.state.manusia,
+                    type: "textarea",
+                    name: "lampiran",
+                    value: this.state.lampiran,
+                    placeholder: "Masukan lampiran bukti"
                 }
             ]
         )
@@ -116,11 +75,11 @@ export default class DemoForm extends React.Component {
             <div>
                 <SirioButton purple recommended
                     classes="mx-2"
-                    onClick={() => window.location.href = "http://www.google.com"}>
+                    onClick={() => window.location.href = "/bm/rekomendasi"}>
                     Simpan
                 </SirioButton>
                 <SirioButton purple
-                    onClick={() => window.location.href = "http://www.google.com"}>
+                    onClick={() => window.location.href = "/bm/rekomendasi"}>
                     Batal
                 </SirioButton>
             </div>
@@ -131,7 +90,7 @@ export default class DemoForm extends React.Component {
     render() {
         return (
             <SirioForm
-                title="Demo Form"
+                title="Form Pengajuan Bukti Pelaksanaan Rekomendasi"
                 inputDefinition={this.inputDefinition()}
                 onSubmit={this.handleSubmit}
                 submitButton={this.submitButton()}

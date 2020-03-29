@@ -1,12 +1,12 @@
 import React from 'react';
-import classes from './DetailRisiko.module.css';
+import classes from './DetailBukti.module.css';
 import SirioDetailPage from '../SirioDetailPage';
 import SirioButton from '../../Button/SirioButton';
 
-export default class RegistrasiRisiko extends React.Component {
+export default class DetailPersetujuanBukti extends React.Component {
 
     columns = [{
-        dataField: 'key',
+        dataField: 'informasi',
         classes: classes.rowItem,
         headerClasses: classes.colheader,
         headerStyle: (colum, colIndex) => {
@@ -14,7 +14,7 @@ export default class RegistrasiRisiko extends React.Component {
         }
 
     }, {
-        dataField: 'value',
+        dataField: 'isiInformasi',
         classes: classes.rowItem,
         headerClasses: classes.colheader,
         headerStyle: (colum, colIndex) => {
@@ -23,23 +23,22 @@ export default class RegistrasiRisiko extends React.Component {
     }];
 
     data = [
-        { "key": "Nama Risiko :", "value": "Risiko 1" },
-        { "key": "Kategori Risiko :", "value": "Kategori 1" },
-        { "key": "Parent :", "value": "-" },
-        { "key": "Referensi SOP :", "value": "SOP 1" },
-        { "key": "Komponen Risiko :", "value": "Komponen Risiko 1" },
-    ]
+        { "informasi": "Keterangan :", "isiInformasi": "Keterangan bukti rekomendasi tesss" },
+        { "informasi": "Lampiran :", "isiInformasi": "https://drive.google.com/drive/folders/1SvB_2W4BjD8rxVQR1-dDbA63-4Zx-hoN" },
+        ]
 
     subButton() {
         return (
             <div>
-                <SirioButton purple
-                    classes="mx-2 my-2"
-                    onClick={() => window.location.href = "/bm/bukti-pelaksanaan/tambah"}
-                >
-                    Ubah Bukti
+                <SirioButton purple recommended
+                    classes="mx-2"
+                    onClick={() => window.location.href = "http://www.google.com"}>
+                    Setujui
                 </SirioButton>
-                
+                <SirioButton purple
+                    onClick={() => window.location.href = "/bukti-pelaksanaan/tolak-bukti"}>
+                    Tolak
+                </SirioButton>
             </div>
         )
     }
@@ -47,10 +46,11 @@ export default class RegistrasiRisiko extends React.Component {
     render() {
         return (
             <SirioDetailPage
-                title="Detail Risiko"
+                title="Bukti Pelaksanaan Rekomendasi"
                 data={this.data}
                 id='id'
                 columnsDefinition={this.columns}
+                subButton={this.subButton()}
             />
         );
     }
