@@ -25,7 +25,7 @@ export default class DetailBukti extends React.Component {
     data = [
         { "informasi": "Keterangan :", "isiInformasi": "Keterangan bukti rekomendasi tesss" },
         { "informasi": "Lampiran :", "isiInformasi": "https://drive.google.com/drive/folders/1SvB_2W4BjD8rxVQR1-dDbA63-4Zx-hoN" },
-        ]
+    ]
 
     subButton() {
         return (

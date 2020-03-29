@@ -1,10 +1,33 @@
 import React from 'react';
-import SirioForm from '../SirioForm';
+import SirioFormWithDetail from '../SirioFormWithDetail';
 import SirioButton from '../../Button/SirioButton';
+import classes from '../../DetailPages/BuktiPelaksanaan/DetailBukti.module.css';
 
 export default class FormFeedbackBukti extends React.Component {
 
-    // Masukan user disimpan kedalam state sebelum dikirim ke backend
+    columns = [{
+        dataField: 'informasi',
+        classes: classes.rowItem,
+        headerClasses: classes.colheader,
+        headerStyle: (colum, colIndex) => {
+            return { width: "5%", textAlign: 'left' };
+        }
+
+    }, {
+        dataField: 'isiInformasi',
+        classes: classes.rowItem,
+        headerClasses: classes.colheader,
+        headerStyle: (colum, colIndex) => {
+            return { width: "20%", textAlign: 'left' };
+        }
+    }];
+
+    data = [
+        { "informasi": "Keterangan :", "isiInformasi": "Keterangan bukti rekomendasi tesss" },
+        { "informasi": "Lampiran :", "isiInformasi": "https://drive.google.com/drive/folders/1SvB_2W4BjD8rxVQR1-dDbA63-4Zx-hoN" },
+    ]
+
+    // Form Feedback
     constructor(props) {
         super(props);
 
@@ -16,8 +39,6 @@ export default class FormFeedbackBukti extends React.Component {
         this.inputDefinition = this.inputDefinition.bind(this);
     }
 
-    // Fungsi untuk mengubah state ketika isi dari input diubah
-    // Fungsi ini wajib ada jika membuat form
     handleChange(event) {
         if (typeof event.target.checked === "boolean") {
             this.setState(
@@ -36,22 +57,16 @@ export default class FormFeedbackBukti extends React.Component {
         }
     }
 
-    // Fungsi yang akan dijalankan ketika user submit
-    // Umumnya akan digunakan untuk memanggil service komunikasi ke backend
     handleSubmit(event) {
         alert("submited");
-        // event.preventDefault wajib ada
         event.preventDefault();
     }
 
-    // Fungsi yang akan mengembalikan definisi tiap field pada form
-    // Setiap objek {} pada List [] akan menjadi 1 field
-    // untuk informasi lebih lengkap, cek SirioForm
     inputDefinition() {
         return (
             [
                 {
-                    label: "Feedback",
+                    label: "Feedback :",
                     handleChange: this.handleChange,
                     type: "textarea",
                     name: "feedback",
@@ -78,15 +93,17 @@ export default class FormFeedbackBukti extends React.Component {
         )
     }
 
-    // Fungsi render SirioForm
     render() {
         return (
-            <SirioForm
-                title="Form Pengajuan Bukti Pelaksanaan Rekomendasi"
+            <SirioFormWithDetail
+                title="Form Feedback Penolakan Bukti"
+                data={this.data}
+                id='id'
+                columnsDefinition={this.columns}
                 inputDefinition={this.inputDefinition()}
                 onSubmit={this.handleSubmit}
                 submitButton={this.submitButton()}
             />
         );
     }
-}
+} 

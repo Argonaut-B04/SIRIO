@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import SirioField from './SirioFormComponent/SirioField';
-import SirioButton from "../../Components/Button/SirioButton";
 import classes from "./SirioForm.module.css";
 
 /**
