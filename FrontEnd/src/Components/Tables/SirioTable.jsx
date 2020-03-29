@@ -83,9 +83,9 @@ export default class SirioTable extends Component {
         return (
             <div>
                 <div className={classes.headerWrapper}>
-                    <h1 className={classes.title}>
+                    <h2 className={classes.title}>
                         {this.props.title}
-                    </h1>
+                    </h2>
                     {this.props.headerButton}
                 </div>
                 <div className={classes.toolkitWrapper}>
