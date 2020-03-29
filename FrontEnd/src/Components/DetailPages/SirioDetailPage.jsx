@@ -10,7 +10,11 @@ class SirioDetailPage extends Component {
     render() {       
         return ( 
             <div>
-                <h1 className={classes.title}>{this.props.title}</h1>
+                <div className={classes.headerWrapper}>
+                    <h2 className={classes.title}>
+                        {this.props.title}
+                    </h2>
+                </div>
                 <div className={classes.toolkitWrapper}>
                     <ToolkitProvider
                         bootstrap4
