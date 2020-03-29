@@ -1,5 +1,6 @@
 import React from 'react';
 import SirioForm from '../SirioForm';
+import SirioButton from '../../Button/SirioButton';
 
 /**
  * Kelas untuk membuat form demo
@@ -110,6 +111,22 @@ export default class DemoForm extends React.Component {
         )
     }
 
+    submitButton() {
+        return (
+            <div>
+                <SirioButton purple recommended
+                    classes="mx-2"
+                    onClick={() => window.location.href = "http://www.google.com"}>
+                    Simpan
+                </SirioButton>
+                <SirioButton purple
+                    onClick={() => window.location.href = "http://www.google.com"}>
+                    Batal
+                </SirioButton>
+            </div>
+        )
+    }
+
     // Fungsi render SirioForm
     render() {
         return (
@@ -117,6 +134,7 @@ export default class DemoForm extends React.Component {
                 title="Demo Form"
                 inputDefinition={this.inputDefinition()}
                 onSubmit={this.handleSubmit}
+                submitButton={this.submitButton()}
             />
         );
     }

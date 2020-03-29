@@ -1,8 +1,8 @@
 .label {
-    font-family: Proxima Nova;
+    font-family: Nunito;
     font-style: normal;
     font-weight: normal;
-    font-size: 20px;
+    font-size: 16px;
     line-height: 24px;
     color: black;
     min-width: 200px;
@@ -12,7 +12,7 @@
     font-family: Proxima Nova;
     font-style: normal;
     font-weight: normal;
-    font-size: 20px;
+    font-size: 16px;
     line-height: 24px;
     color: black;
     width: calc(100% - 200px);

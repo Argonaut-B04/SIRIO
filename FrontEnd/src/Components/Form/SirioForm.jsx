@@ -19,9 +19,9 @@ class SirioForm extends Component {
         return (
             <>
                 <div className={classes.headerWrapper}>
-                    <h1 className={classes.title}>
+                    <h2 className={classes.title}>
                         {this.props.title}
-                    </h1>
+                    </h2>
                     {this.props.headerButton}
                 </div>
                 <form className={classes.formWrapper} onSubmit={this.props.onSubmit}>
@@ -37,15 +37,10 @@ class SirioForm extends Component {
                             optionList={field.optionList}
                         />
                     )}
-                    {this.props.submitButton ? this.props.submitButton :
-                        <div className="w-100 text-right">
-                            <SirioButton
-                                purple
-                            >
-                                Submit
-                            </SirioButton>
-                        </div>
-                    }
+                    <div className="w-100 text-right">
+                        <br></br>
+                        {this.props.submitButton}
+                    </div>
                 </form>
             </>
         );
