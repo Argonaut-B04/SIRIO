@@ -20,6 +20,18 @@ import 'react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.m
  */
 export default class SirioTable extends Component {
 
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            pageNum: 1,
+            pageSize: 10
+        }
+
+        this.renderRowNumber = this.renderRowNumber.bind(this);
+        this.numberFormatter = this.numberFormatter.bind(this);
+    }
+
     // Fungsi untuk menampilkan hasil return jika tidak ada data yang ditampilkan pada tabel
     indication() {
         return "No Data in Table"
@@ -33,9 +45,6 @@ export default class SirioTable extends Component {
         </span>
     );
 
-    // Fungsi untuk menampilkan nomor baris pada tabel
-    // (BUGGED, NOT FIXED)
-    // TODO: Perbaiki
     pageButtonRenderer = ({
         page,
         active,
@@ -55,14 +64,17 @@ export default class SirioTable extends Component {
     };
 
     // Definisi kustomisasi Pagination
-    pagination = paginationFactory({
-        sizePerPage: 10,
-        prePageText: "Previous",
-        nextPageText: "Next",
-        showTotal: true,
-        paginationTotalRenderer: this.customTotal,
-        // pageButtonRenderer: this.pageButtonRenderer
-    })
+    pagination =
+        paginationFactory({
+            sizePerPage: 10,
+            prePageText: "Previous",
+            nextPageText: "Next",
+            showTotal: true,
+            paginationTotalRenderer: this.customTotal,
+            onPageChange: (page, sizePerPage) => {
+                this.renderRowNumber(page, sizePerPage)
+            }
+        })
 
     // Overlay adalah animasi singkat yang ditampilkan pada tabel ketika isi tabel sedang dirender
     overlay = overlayFactory({
@@ -77,9 +89,33 @@ export default class SirioTable extends Component {
         }
     })
 
+    renderRowNumber(pageNum, pageSize) {
+        this.setState({
+            pageNum: pageNum,
+            pageSize: pageSize
+        })
+    }
+
+    numberFormatter(enumObject) {
+        return (this.state.pageNum - 1) * this.state.pageSize + (enumObject + 1);
+    }
+
+    columns = [{
+        dataField: 'no',
+        text: 'NO',
+        sort: true,
+        classes: classes.rowNumber,
+        headerClasses: classes.colheader,
+        headerStyle: (colum, colIndex) => {
+            return { width: "50px", textAlign: 'center' };
+        },
+        formatter: (cell, row, enumObject, index) => this.numberFormatter(enumObject),
+    }]
+
     // Fungsi render SirioTable
     render() {
         const { SearchBar } = Search;
+        const columnsDefinition = this.columns.concat(this.props.columnsDefinition);
         return (
             <div>
                 <div className={classes.headerWrapper}>
@@ -93,7 +129,7 @@ export default class SirioTable extends Component {
                         bootstrap4
                         keyField={this.props.id}
                         data={this.props.data}
-                        columns={this.props.columnsDefinition}
+                        columns={columnsDefinition}
                         defaultSorted={this.props.defaultSorted}
                         search={{
                             searchFormatted: true

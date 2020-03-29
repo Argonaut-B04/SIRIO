@@ -16,6 +16,7 @@ class TabelReminder extends React.Component {
 
         this.state = {
             rowList: [],
+            
         }
 
         this.renderRows = this.renderRows.bind(this);
@@ -38,7 +39,7 @@ class TabelReminder extends React.Component {
 
         var fetchedRows = [];
         response.data.result.map((entry, i) => {
-            entry.no = i + 1;
+            // entry.no = i + 1;
             return fetchedRows.push(entry);
         })
 
@@ -48,15 +49,6 @@ class TabelReminder extends React.Component {
     }
 
     columns = [{
-        dataField: 'no',
-        text: 'NO',
-        sort: true,
-        classes: classes.rowNumber,
-        headerClasses: classes.colheader,
-        headerStyle: (colum, colIndex) => {
-            return { width: "50px", textAlign: 'center' };
-        },
-    }, {
         dataField: 'tanggalPengiriman',
         text: 'TANGGAL',
         sort: true,
@@ -171,8 +163,6 @@ class TabelReminder extends React.Component {
             idReminder: id
         })
 
-        console.log(changedRow);
-
         this.setState({
             rowList: changedRow
         })
@@ -232,7 +222,6 @@ class TabelReminder extends React.Component {
 
     // Fungsi render Tabel rekomendasi
     render() {
-        console.log(this.state);
         return (
             <SirioTable
                 title={"Daftar Reminder untuk Rekomendasi " + this.props.location.state.keterangan}
