@@ -31,9 +31,11 @@ export default class TabelRekomendasi extends React.Component {
         return (
             <div>
                 <SirioButton purple
-                onClick={() => window.location.href = "http://www.google.com"}>
+                    classes="mx-2 my-2"
+                    onClick={() => window.location.href = "http://www.google.com"}>
                     Ubah Bukti
-                </SirioButton> 
+                </SirioButton>
+                
             </div>
         )
     }

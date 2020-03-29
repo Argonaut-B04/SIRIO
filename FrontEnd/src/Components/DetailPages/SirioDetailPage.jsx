@@ -31,8 +31,7 @@ class SirioDetailPage extends Component {
                         }
                     </ToolkitProvider>
                     <br></br>
-                    <div className={classes.headerWrapper}>
-                        <br></br>
+                    <div className="w-100 text-right">
                         {this.props.subButton}
                     </div>
                 </div>
