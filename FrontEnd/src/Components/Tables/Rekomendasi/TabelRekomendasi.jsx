@@ -241,7 +241,7 @@ export default class TabelRekomendasi extends React.Component {
                     disabled={!reminderEnable}
                 >
                     Reminder
-            </SirioButton>
+                </SirioButton>
             </NavLink>
         )
     }

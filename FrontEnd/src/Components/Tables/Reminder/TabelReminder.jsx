@@ -19,19 +19,22 @@ class TabelReminder extends React.Component {
         }
 
         this.renderRows = this.renderRows.bind(this);
+        this.hapus = this.hapus.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     componentDidMount() {
         this.renderRows();
     }
 
-    // TBI
+    handleSubmit() {
+        ReminderService.submitChanges(this.state.rowList);
+    }
+
     async renderRows() {
         const response = await ReminderService.getByIdRekomendasi({
             id: this.props.location.state.id
         });
-
-        console.log(response.data.result);
 
         var fetchedRows = [];
         response.data.result.map((entry, i) => {
@@ -44,17 +47,6 @@ class TabelReminder extends React.Component {
         })
     }
 
-    /**
-     * Definisi Kolom
-     * - dataField          : String, parameter JSON yang akan ditampilkan. isi dengan apa saja jika tidak ingin menampilkan langsung.
-     * - isDummyField       : boolean, gunakan true jika tidak ingin menampilkan String dari JSON langsung
-     * - text               : String, judul kolom
-     * - Sort               : boolean, mengaktifkan fungsi sort berdasarkan kolom ini
-     * - classes            : cssClass, untuk assign kelas tiap cell pada kolom
-     * - headerClass        : cssClass, untuk assign kelas header
-     * - headerStyle        : style, untuk styling header
-     * - formatter          : function, untuk manipulasi isi kolom
-     */
     columns = [{
         dataField: 'no',
         text: 'NO',
@@ -71,7 +63,7 @@ class TabelReminder extends React.Component {
         classes: classes.rowItem,
         headerClasses: classes.colheader,
         headerStyle: (colum, colIndex) => {
-            return { width: "25%", textAlign: 'left' };
+            return { width: "200px", textAlign: 'left' };
         },
         formatter: this.formatDate
     }, {
@@ -79,19 +71,25 @@ class TabelReminder extends React.Component {
         text: '',
         headerClasses: classes.colheader,
         classes: classes.rowItem,
+        headerStyle: () => {
+            return { width: "200px" }
+        },
         style: () => {
             return { textAlign: 'center' }
         },
-        formatter: this.getButtonsFirst
+        formatter: (cell, row) => this.getButtonsFirst(cell, row)
     }, {
         dataField: 'noData 2',
         text: '',
         headerClasses: classes.colheader,
         classes: classes.rowItem,
+        headerStyle: () => {
+            return { width: "200px" }
+        },
         style: () => {
             return { textAlign: 'center' }
         },
-        formatter: this.getButtonsSecond
+        formatter: (cell, row) => this.getButtonsSecond(cell, row)
     }];
 
     formatDate(cell) {
@@ -107,35 +105,89 @@ class TabelReminder extends React.Component {
         return date + " " + month + " " + year;
     }
 
-    /**
-     * Tambah, ubah, dan hapus jangan direct access ke backend, tapi simpan perubahan di cache
-     * @param {} date 
-     */
-    static async tambah(date) {
-
+    insertItem(array, action) {
+        return [
+            ...array.slice(),
+            action
+        ]
     }
 
-    static async ubah(date, id) {
+    async tambah(date, id) {
 
+        const newDate = [(date.getFullYear()), date.getMonth(), date.getDate()];
+
+        const originalRow = this.state.rowList;
+
+        const changedRow = this.insertItem(originalRow, {
+            idReminder: Math.floor(Math.random() * 100) + 100,
+            tanggalPengiriman: newDate
+        })
+
+        this.setState({
+            rowList: changedRow
+        })
     }
 
-    static async hapus(id) {
-        // const response = await ReminderService.delete({
-        //     id: id
-        // });
+    changeItem(array, action) {
+        return array.map(row => {
+            if (row.idReminder === action.idReminder) {
+                action.no = row.no;
+                return action;
+            }
+            return row;
+        })
+    }
 
-        // console.log(response);
+    async ubah(date, id) {
+
+        const changedDate = [(date.getFullYear()), date.getMonth(), date.getDate()];
+
+        const originalRow = this.state.rowList;
+
+        const changedRow = this.changeItem(originalRow, {
+            idReminder: id,
+            tanggalPengiriman: changedDate,
+        })
+
+        this.setState({
+            rowList: changedRow
+        })
+    }
+
+    deleteItem(array, action) {
+        const toReturn = []
+        for (var row in array) {
+            if (array[row].idReminder !== action.idReminder) {
+                toReturn.push(array[row]);
+            }
+        }
+        return toReturn;
+    }
+
+    async hapus(id) {
+        const originalRow = this.state.rowList;
+
+        const changedRow = this.deleteItem(originalRow, {
+            idReminder: id
+        })
+
+        console.log(changedRow);
+
+        this.setState({
+            rowList: changedRow
+        })
     }
 
     // Formatter untuk render button pertama
     getButtonsFirst(cell, row) {
         return (
-            <SirioButton
+            <SirioDatePickerButton
                 purple
-                onClick={(date, id) => TabelReminder.ubah(date, id)}
+                id={row.idReminder}
+                handleChange={(date, id) => this.ubah(date, id)}
             >
                 Ubah
-            </SirioButton>
+            </SirioDatePickerButton>
         )
     }
 
@@ -144,7 +196,7 @@ class TabelReminder extends React.Component {
         return (
             <SirioButton
                 red
-                onClick={() => TabelReminder.hapus(row.idReminder)}
+                onClick={() => this.hapus(row.idReminder)}
             >
                 Hapus
             </SirioButton>
@@ -154,18 +206,33 @@ class TabelReminder extends React.Component {
     // Fungsi untuk mendapatkan tombol di sisi kanan title
     headerButton() {
         return (
-            <SirioButton
+            <SirioDatePickerButton
                 purple
                 recommended
-                onClick={(date) => TabelReminder.tambah(date)}
+                unchangedContent
+                handleChange={(date, id) => this.tambah(date, id)}
             >
                 Tambah
-            </SirioButton>
+            </SirioDatePickerButton>
+        )
+    }
+
+    footerContent() {
+        return (
+            <div>
+                <SirioButton purple classes="m-1" onClick={this.handleSubmit}>
+                    Simpan
+                </SirioButton>
+                <SirioButton red classes="m-1">
+                    Batal
+                </SirioButton>
+            </div>
         )
     }
 
     // Fungsi render Tabel rekomendasi
     render() {
+        console.log(this.state);
         return (
             <SirioTable
                 title={"Daftar Reminder untuk Rekomendasi " + this.props.location.state.keterangan}
@@ -174,6 +241,7 @@ class TabelReminder extends React.Component {
                 columnsDefinition={this.columns}
                 includeSearchBar
                 headerButton={this.headerButton()}
+                footerContent={this.footerContent()}
             />
         );
     }

@@ -95,7 +95,9 @@ export default class SirioTable extends Component {
                         data={this.props.data}
                         columns={this.props.columnsDefinition}
                         defaultSorted={this.props.defaultSorted}
-                        search
+                        search={{
+                            searchFormatted: true
+                        }}
                     >
                         {
                             props => (
@@ -126,6 +128,13 @@ export default class SirioTable extends Component {
                             )
                         }
                     </ToolkitProvider>
+                    {this.props.footerContent ?
+                        <div className={classes.footerWrapper}>
+                            {this.props.footerContent}
+                        </div>
+                        :
+                        null
+                    }
                 </div>
             </div>
         );
