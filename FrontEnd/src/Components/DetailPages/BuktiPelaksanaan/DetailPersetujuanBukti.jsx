@@ -3,7 +3,7 @@ import classes from './DetailBukti.module.css';
 import SirioDetailPage from '../SirioDetailPage';
 import SirioButton from '../../Button/SirioButton';
 
-export default class DetailBukti extends React.Component {
+export default class DetailPersetujuanBukti extends React.Component {
 
     columns = [{
         dataField: 'informasi',
@@ -30,13 +30,15 @@ export default class DetailBukti extends React.Component {
     subButton() {
         return (
             <div>
-                <SirioButton purple
-                    classes="mx-2 my-2"
-                    onClick={() => window.location.href = "/bm/bukti-pelaksanaan/tambah"}
-                >
-                    Ubah Bukti
+                <SirioButton purple recommended
+                    classes="mx-2"
+                    onClick={() => window.location.href = "http://www.google.com"}>
+                    Setujui
                 </SirioButton>
-                
+                <SirioButton purple
+                    onClick={() => window.location.href = "/bukti-pelaksanaan/tolak-bukti"}>
+                    Tolak
+                </SirioButton>
             </div>
         )
     }
