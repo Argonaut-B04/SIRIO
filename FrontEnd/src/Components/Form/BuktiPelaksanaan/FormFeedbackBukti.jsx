@@ -82,11 +82,11 @@ export default class FormFeedbackBukti extends React.Component {
             <div>
                 <SirioButton purple recommended
                     classes="mx-2"
-                    onClick={() => window.location.href = "http://www.google.com"}>
+                    onClick={() => window.location.href = "/bukti-pelaksanaan/detail-persetujuan"}>
                     Simpan
                 </SirioButton>
                 <SirioButton purple
-                    onClick={() => window.location.href = "http://www.google.com"}>
+                    onClick={() => window.location.href = "/bukti-pelaksanaan/detail-persetujuan"}>
                     Batal
                 </SirioButton>
             </div>

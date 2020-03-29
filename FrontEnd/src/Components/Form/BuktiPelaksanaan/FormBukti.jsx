@@ -75,11 +75,11 @@ export default class FormBukti extends React.Component {
             <div>
                 <SirioButton purple recommended
                     classes="mx-2"
-                    onClick={() => window.location.href = "http://www.google.com"}>
+                    onClick={() => window.location.href = "/bm/rekomendasi"}>
                     Simpan
                 </SirioButton>
                 <SirioButton purple
-                    onClick={() => window.location.href = "http://www.google.com"}>
+                    onClick={() => window.location.href = "/bm/rekomendasi"}>
                     Batal
                 </SirioButton>
             </div>

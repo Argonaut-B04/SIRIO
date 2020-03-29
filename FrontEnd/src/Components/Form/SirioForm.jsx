@@ -21,7 +21,6 @@ class SirioForm extends Component {
                     <h2 className={classes.title}>
                         {this.props.title}
                     </h2>
-                    {this.props.headerButton}
                 </div>
                 <form className={classes.formWrapper} onSubmit={this.props.onSubmit}>
                     {this.props.inputDefinition.map((field, i) =>
