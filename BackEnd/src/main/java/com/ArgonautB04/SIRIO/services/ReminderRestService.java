@@ -1,9 +1,8 @@
 package com.ArgonautB04.SIRIO.services;
 
-import com.ArgonautB04.SIRIO.model.Rekomendasi;
 import com.ArgonautB04.SIRIO.model.Reminder;
 
-import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 public interface ReminderRestService {
@@ -13,9 +12,9 @@ public interface ReminderRestService {
 
     List<Reminder> getAll();
 
-    Reminder ubahReminder(int idReminder, LocalDate tanggalReminder);
+    Reminder ubahReminder(int idReminder, Date tanggalReminder);
 
     void hapusReminder(int idReminder);
 
-    List<Reminder> getByRekomendasi(Rekomendasi rekomendasi);
+    Boolean isExistById(int idReminder);
 }
