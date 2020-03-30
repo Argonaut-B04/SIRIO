@@ -25,6 +25,12 @@ export default class SirioWarningButton extends React.Component {
         this.handleShow = this.handleShow.bind(this);
         this.handleClose = this.handleClose.bind(this);
     }
+    
+    componentDidMount() {
+        if (this.props.show) {
+            this.handleShow();
+        }
+    }
 
     handleClose() {
         this.setState({ show: false });
@@ -35,6 +41,20 @@ export default class SirioWarningButton extends React.Component {
     }
 
     render() {
+        var onConfirm;
+
+        if (this.props.onConfirm) {
+            if (this.props.closeOnConfirm) {
+                onConfirm = () => {
+                    this.handleClose();
+                    this.props.onConfirm();
+                }
+            } else {
+                onConfirm = this.props.onConfirm;
+            }
+        } else {
+            onConfirm = this.handleClose;
+        }
         return (
             <>
                 <SirioButton
@@ -59,7 +79,7 @@ export default class SirioWarningButton extends React.Component {
                                 purple
                                 recommended
                                 circular
-                                onClick={this.props.onConfirm ? this.props.onConfirm : this.handleClose}
+                                onClick={onConfirm}
                                 classes={classes.modalButton}
                             >
                                 {this.props.customConfirmText ? this.props.customConfirmText : "Konfirmasi"}
