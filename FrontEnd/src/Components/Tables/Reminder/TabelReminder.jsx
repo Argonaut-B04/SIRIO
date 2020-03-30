@@ -8,6 +8,7 @@ import classes from '../Rekomendasi/TabelRekomendasi.module.css';
 import SirioConfirmButton from '../../Button/ActionButton/SirioConfirmButton';
 import SirioMessageButton from '../../Button/ActionButton/SirioMessageButton';
 import SirioWarningButton from '../../Button/ActionButton/SirioWarningButton';
+import SirioAxiosBase from '../../../Services/SirioAxiosBase';
 
 /**
  * Kelas untuk membuat komponen tabel reminder
@@ -67,7 +68,7 @@ class TabelReminder extends React.Component {
         headerStyle: (colum, colIndex) => {
             return { width: "200px", textAlign: 'left' };
         },
-        formatter: this.formatDate
+        formatter: SirioAxiosBase.formatDate
     }, {
         dataField: 'noData 1',
         text: '',
@@ -93,19 +94,6 @@ class TabelReminder extends React.Component {
         },
         formatter: (cell, row) => this.getButtonsSecond(cell, row)
     }];
-
-    formatDate(cell) {
-        const date = cell[2];
-        var month = cell[1];
-        const year = cell[0]
-
-        var monthName = ["Januari", "Februari", "Maret", "April", "Mei", "Juni",
-            "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
-
-        month = monthName[month - 1];
-
-        return date + " " + month + " " + year;
-    }
 
     insertItem(array, action) {
         return [
@@ -142,8 +130,7 @@ class TabelReminder extends React.Component {
 
     async ubah(date, id) {
 
-        const changedDate = [(date.getFullYear()), date.getMonth(), date.getDate()];
-
+        const changedDate = [(date.getFullYear()), (date.getMonth() + 1), date.getDate()];
         const originalRow = this.state.rowList;
 
         const changedRow = this.changeItem(originalRow, {
