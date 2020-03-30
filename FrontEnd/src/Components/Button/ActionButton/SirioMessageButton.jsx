@@ -27,6 +27,12 @@ export default class SirioMessageButton extends React.Component {
 
     }
 
+    componentDidMount() {
+        if (this.props.show) {
+            this.handleShow();
+        }
+    }
+
     handleClose() {
         this.setState({ show: false });
     }

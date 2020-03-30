@@ -10,6 +10,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table
@@ -21,11 +23,11 @@ public class Rekomendasi implements Serializable {
 
     @NotNull
     @Size(max = 125)
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String keterangan;
 
     @DateTimeFormat(pattern = "MM-dd-yyyy")
-    private LocalDate tenggatWaktu;
+    private Date tenggatWaktu;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "status", referencedColumnName = "idStatusRekomendasi", nullable = false)
@@ -34,16 +36,20 @@ public class Rekomendasi implements Serializable {
     private StatusRekomendasi statusRekomendasi;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "komponen_pemeriksaan", referencedColumnName = "idKomponenPemeriksaan", nullable = false)
+    @JoinColumn(name = "komponen_pemeriksaan", referencedColumnName = "idKomponenPemeriksaan", nullable = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private KomponenPemeriksaan komponenPemeriksaan;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "pembuat", referencedColumnName = "idEmployee", nullable = false)
+    @JoinColumn(name = "pembuat", referencedColumnName = "idEmployee", nullable = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private Employee pembuat;
+
+    @OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY, orphanRemoval = true)
+    @JoinColumn(name = "idRekomendasi")
+    private List<Reminder> daftarReminder;
 
     public Integer getIdRekomendasi() {
         return idRekomendasi;
@@ -61,11 +67,11 @@ public class Rekomendasi implements Serializable {
         this.keterangan = keterangan;
     }
 
-    public LocalDate getTenggatWaktu() {
+    public Date getTenggatWaktu() {
         return tenggatWaktu;
     }
 
-    public void setTenggatWaktu(LocalDate tenggatWaktu) {
+    public void setTenggatWaktu(Date tenggatWaktu) {
         this.tenggatWaktu = tenggatWaktu;
     }
 
@@ -91,5 +97,14 @@ public class Rekomendasi implements Serializable {
 
     public void setPembuat(Employee pembuat) {
         this.pembuat = pembuat;
+    }
+
+    public List<Reminder> getDaftarReminder() {
+        return daftarReminder;
+    }
+
+    public void setDaftarReminder(List<Reminder> daftarReminder) {
+        this.daftarReminder.retainAll(daftarReminder);
+        this.daftarReminder.addAll(daftarReminder);
     }
 }

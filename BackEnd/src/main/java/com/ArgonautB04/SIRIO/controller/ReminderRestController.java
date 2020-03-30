@@ -11,15 +11,15 @@ import com.ArgonautB04.SIRIO.services.EmployeeRestService;
 import com.ArgonautB04.SIRIO.services.RekomendasiRestService;
 import com.ArgonautB04.SIRIO.services.ReminderRestService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.security.Principal;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/v1/Reminder")
@@ -41,18 +41,30 @@ public class ReminderRestController {
      * @return daftar reminder yang terhubung dengan rekomendasi tersebut
      */
     @PostMapping("/getByRekomendasi")
-    private BaseResponse<List<Reminder>> getAllReminderUntukRekomendasi(
+    private BaseResponse<List<ReminderDTO>> getAllReminderUntukRekomendasi(
             @RequestBody RekomendasiDTO rekomendasiDTO
     ) {
-        BaseResponse<List<Reminder>> response = new BaseResponse<>();
+        BaseResponse<List<ReminderDTO>> response = new BaseResponse<>();
         Integer idRekomendasi = rekomendasiDTO.getId();
         try {
             Rekomendasi rekomendasi = rekomendasiRestService.getById(idRekomendasi);
-            List<Reminder> result = reminderRestService.getByRekomendasi(rekomendasi);
+            List<Reminder> result = rekomendasi.getDaftarReminder();
+            List<ReminderDTO> resultDTO = new ArrayList<>();
+            for (Reminder reminder : result) {
+                ReminderDTO instance = new ReminderDTO();
+                instance.setIdPembuat(reminder.getPembuat().getIdEmployee());
+                instance.setIdReminder(reminder.getIdReminder());
+                instance.setTanggalPengiriman(
+                        Settings.convertToLocalDateViaInstant(
+                                reminder.getTanggalPengiriman()
+                        )
+                );
+                resultDTO.add(instance);
+            }
 
             response.setStatus(200);
             response.setMessage("success");
-            response.setResult(result);
+            response.setResult(resultDTO);
         } catch (NoSuchElementException e) {
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND, "Rekomendasi dengan ID " + idRekomendasi + " tidak ditemukan!"
@@ -66,91 +78,74 @@ public class ReminderRestController {
     }
 
     /**
-     * Menambah reminder baru untuk rekomendasi spesifik
+     * Konfigurasi reminder secara batch untuk reminder terpilih
      *
      * @param rekomendasiDTO data transfer object untuk rekomendasi yang memuat informasi reminderDTO
      * @return reminder yang telah disimpan
      */
-    @PostMapping(value = "/tambah", consumes = {"application/json"})
-    private BaseResponse<Reminder> tambahReminder(
-            @RequestBody RekomendasiDTO rekomendasiDTO
+    @PostMapping(value = "/konfigurasi", consumes = {"application/json"})
+    private BaseResponse<List<ReminderDTO>> tambahReminder(
+            @RequestBody RekomendasiDTO rekomendasiDTO,
+            Principal principal
     ) {
-        BaseResponse<Reminder> response = new BaseResponse<>();
+        BaseResponse<List<ReminderDTO>> response = new BaseResponse<>();
         Integer idRekomendasi = rekomendasiDTO.getId();
-        ReminderDTO reminderDTO = rekomendasiDTO.getReminderDTO();
+        Optional<Employee> employeeTarget = employeeRestService.getByUsername(principal.getName());
+        Employee employee;
         try {
-            Reminder reminder = new Reminder();
+            if (employeeTarget.isPresent()) {
+                employee = employeeTarget.get();
+            } else {
+                throw new NoSuchElementException();
+            }
+        } catch (NoSuchElementException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Akun anda tidak terdaftar atau tidak ditemukan!"
+            );
+        }
 
-            LocalDate tanggalReminderLocalDate = Settings.stringToLocalDate(reminderDTO.getTanggal());
-            reminder.setTanggalPengiriman(tanggalReminderLocalDate);
-
+        try {
             Rekomendasi rekomendasi = rekomendasiRestService.getById(idRekomendasi);
-            reminder.setRekomendasi(rekomendasi);
+            List<Reminder> daftarReminderBaru = new ArrayList<>();
+            List<ReminderDTO> daftarReminderDTOBaru = new ArrayList<>();
 
-            Employee pembuat = employeeRestService.getById(reminderDTO.getIdPembuat());
-            reminder.setPembuat(pembuat);
+            for (ReminderDTO reminder : rekomendasiDTO.getReminder()) {
+                Date tanggalDate = Settings.convertToDateViaInstant(
+                        reminder.getTanggalPengiriman()
+                );
+                if (reminderRestService.isExistById(reminder.getIdReminder())) {
+                    Reminder reminderTarget = reminderRestService.ubahReminder(
+                            reminder.getIdReminder(),
+                            tanggalDate
+                    );
+                    ReminderDTO newReminder = new ReminderDTO();
+                    newReminder.setIdReminder(reminderTarget.getIdReminder());
+                    newReminder.setTanggalPengiriman(reminder.getTanggalPengiriman());
 
-            reminder = reminderRestService.buatReminder(reminder);
+                    daftarReminderDTOBaru.add(newReminder);
+                    daftarReminderBaru.add(reminderTarget);
+                } else {
+                    Reminder newReminder = new Reminder();
+                    newReminder.setPembuat(employee);
+                    newReminder.setTanggalPengiriman(tanggalDate);
+                    newReminder = reminderRestService.buatReminder(newReminder);
+
+                    reminder.setIdReminder(newReminder.getIdReminder());
+                    daftarReminderDTOBaru.add(reminder);
+                    daftarReminderBaru.add(newReminder);
+                }
+            }
+
+            rekomendasi.setDaftarReminder(daftarReminderBaru);
+            rekomendasiRestService.ubahRekomendasi(idRekomendasi, rekomendasi);
 
             response.setStatus(200);
             response.setMessage("success");
-            response.setResult(reminder);
+            response.setResult(daftarReminderDTOBaru);
         } catch (NoSuchElementException e) {
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND, "Rekomendasi dengan ID " + idRekomendasi + " tidak ditemukan!"
             );
-        }
-        return response;
-    }
-
-    /**
-     * Mengubah tanggal reminder
-     *
-     * @param reminderDTO data transfer object untuk reminder
-     * @return reminder yang telah disimpan
-     */
-    @PutMapping(value = "/ubah", consumes = {"application/json"})
-    private BaseResponse<Reminder> ubahTanggalReminder(
-            @RequestBody ReminderDTO reminderDTO
-    ) {
-        BaseResponse<Reminder> response = new BaseResponse<>();
-        Integer idReminder = reminderDTO.getId();
-        try {
-            LocalDate tanggalReminderLocalDate = Settings.stringToLocalDate(reminderDTO.getTanggal());
-            Reminder result = reminderRestService.ubahReminder(idReminder, tanggalReminderLocalDate);
-
-            response.setStatus(200);
-            response.setMessage("success");
-            response.setResult(result);
-        } catch (NoSuchElementException e) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Reminder dengan ID " + idReminder + " tidak ditemukan!"
-            );
-        }
-        return response;
-    }
-
-    /**
-     * Menghapus reminder
-     *
-     * @param reminderDTO data transfer object untuk reminder
-     */
-    @PostMapping("/hapus")
-    private BaseResponse<String> hapusReminder(
-            @RequestBody ReminderDTO reminderDTO
-    ) {
-        BaseResponse<String> response = new BaseResponse<>();
-        int idReminder = reminderDTO.getId();
-        try {
-            reminderRestService.hapusReminder(idReminder);
-
-            response.setStatus(200);
-            response.setMessage("success");
-            response.setResult("Reminder dengan id " + idReminder + " terhapus!");
-        } catch (EmptyResultDataAccessException e) {
-            response.setStatus(404);
-            response.setMessage("not found");
-            response.setResult("Reminder dengan id " + idReminder + " tidak dapat ditemukan");
         }
         return response;
     }

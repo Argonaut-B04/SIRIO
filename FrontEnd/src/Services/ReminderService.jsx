@@ -13,8 +13,13 @@ class ReminderService {
         return this.axiosInstance.post(SirioAxiosBase.BASEURL + `/Reminder/getByRekomendasi`, data);
     }
 
-    async delete(data) {
-        return this.axiosInstance.post(SirioAxiosBase.BASEURL + `/Reminder/hapus`, data)
+    async submitChanges(idRekomendasi, data) {
+        const dataToPass = {
+            id: idRekomendasi,
+            reminder: data
+        }
+
+        return this.axiosInstance.post(SirioAxiosBase.BASEURL + '/Reminder/konfigurasi', dataToPass)
     }
 }
 

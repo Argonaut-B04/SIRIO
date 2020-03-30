@@ -5,6 +5,7 @@ import SirioTable from '../SirioTable';
 import RekomendasiService from '../../../Services/RekomendasiService';
 import { NavLink } from 'react-router-dom';
 import classes from './TabelRekomendasi.module.css';
+import SirioAxiosBase from '../../../Services/SirioAxiosBase';
 
 /**
  * Kelas untuk membuat komponen tabel rekomendasi
@@ -28,14 +29,8 @@ export default class TabelRekomendasi extends React.Component {
     async renderRows() {
         const response = await RekomendasiService.getRekomendasiByLoggedInUser();
 
-        var fetchedRows = [];
-        response.data.result.map((entry, i) => {
-            entry.no = i + 1;
-            return fetchedRows.push(entry);
-        })
-
         this.setState({
-            rowList: fetchedRows
+            rowList: response.data.result
         })
     }
 
@@ -50,63 +45,54 @@ export default class TabelRekomendasi extends React.Component {
      * - headerStyle        : style, untuk styling header
      * - formatter          : function, untuk manipulasi isi kolom
      */
-    columns = [{
-        dataField: 'no',
-        text: 'NO',
-        sort: true,
-        classes: classes.rowNumber,
-        headerClasses: classes.colheader,
-        headerStyle: (colum, colIndex) => {
-            return { width: "50px", textAlign: 'center' };
-        },
-    }, {
-        dataField: 'keterangan',
-        text: 'KETERANGAN',
-        sort: true,
-        classes: classes.rowItem,
-        headerClasses: classes.colheader,
-        headerStyle: (colum, colIndex) => {
-            return { width: "25%", textAlign: 'left' };
-        }
-
-    }, {
-        dataField: 'status',
-        text: 'STATUS',
-        sort: true,
-        classes: classes.rowItem,
-        formatter: this.statusFormatter,
-        headerClasses: classes.colheader,
-        headerStyle: (colum, colIndex) => {
-            return { width: "20%", textAlign: 'left' };
-        }
-    }, {
-        dataField: 'noData 1',
-        text: '',
-        headerClasses: classes.colheader,
-        classes: classes.rowItem,
-        style: () => {
-            return { textAlign: 'center' }
-        },
-        formatter: this.getButtonsFirst
-    }, {
-        dataField: 'noData 2',
-        text: '',
-        headerClasses: classes.colheader,
-        classes: classes.rowItem,
-        style: () => {
-            return { textAlign: 'center' }
-        },
-        formatter: this.getButtonsSecond
-    }, {
-        dataField: 'noData 3',
-        text: '',
-        headerClasses: classes.colheader,
-        classes: classes.rowItem,
-        style: () => {
-            return { textAlign: 'center' }
-        },
-        formatter: this.getButtonsThird
-    }];
+    columns = [
+        {
+            dataField: 'keterangan',
+            text: 'KETERANGAN',
+            sort: true,
+            classes: classes.rowItem,
+            headerClasses: classes.colheader,
+            headerStyle: (colum, colIndex) => {
+                return { width: "25%", textAlign: 'left' };
+            }
+        }, {
+            dataField: 'status',
+            text: 'STATUS',
+            sort: true,
+            classes: classes.rowItem,
+            formatter: this.statusFormatter,
+            headerClasses: classes.colheader,
+            headerStyle: (colum, colIndex) => {
+                return { width: "20%", textAlign: 'left' };
+            }
+        }, {
+            dataField: 'noData 1',
+            text: '',
+            headerClasses: classes.colheader,
+            classes: classes.rowItem,
+            style: () => {
+                return { textAlign: 'center' }
+            },
+            formatter: this.getButtonsFirst
+        }, {
+            dataField: 'noData 2',
+            text: '',
+            headerClasses: classes.colheader,
+            classes: classes.rowItem,
+            style: () => {
+                return { textAlign: 'center' }
+            },
+            formatter: this.getButtonsSecond
+        }, {
+            dataField: 'noData 3',
+            text: '',
+            headerClasses: classes.colheader,
+            classes: classes.rowItem,
+            style: () => {
+                return { textAlign: 'center' }
+            },
+            formatter: this.getButtonsThird
+        }];
 
     // Formatter untuk kolom status
     statusFormatter(cell) {
@@ -154,20 +140,20 @@ export default class TabelRekomendasi extends React.Component {
 
     static aturTenggatWaktu(date, id) {
         // yyyy-MM-dd
-        let month = (date.getMonth() + 1);
-        if (month < 10) {
-            month = "0" + month;
-        }
-        let simpleDate = date.getDate();
-        if (simpleDate < 10) {
-            simpleDate = "0" + simpleDate;
-        }
-        let formattedDate = date.getFullYear() + "-" + month + "-" + simpleDate;
+        // let month = (date.getMonth() + 1);
+        // if (month < 10) {
+        //     month = "0" + month;
+        // }
+        // let simpleDate = date.getDate();
+        // if (simpleDate < 10) {
+        //     simpleDate = "0" + simpleDate;
+        // }
+        // let formattedDate = date.getFullYear() + "-" + month + "-" + simpleDate;
+        const newDate = [(date.getFullYear()), (date.getMonth() + 1), date.getDate()];
         RekomendasiService.setTenggatWaktu({
             id: id,
-            tenggatWaktu: formattedDate
+            tenggatWaktuDate: newDate
         }).then(response => console.log(response));
-        //TODO: render ulang
     }
 
     // Formatter untuk render button kedua
@@ -199,7 +185,7 @@ export default class TabelRekomendasi extends React.Component {
                     id={row.id}
                     handleChange={(date, id) => TabelRekomendasi.aturTenggatWaktu(date, id)}
                 >
-                    {tenggatWaktuExist ? tenggatWaktu : "Tenggat Waktu"}
+                    {SirioAxiosBase.formatDateFromString(tenggatWaktu)}
                 </SirioDatePickerButton>
             )
         } else if (text) {
@@ -208,7 +194,7 @@ export default class TabelRekomendasi extends React.Component {
                     purple
                     text
                 >
-                    {tenggatWaktu}
+                    {SirioAxiosBase.formatDateFromString(tenggatWaktu)}
                 </SirioButton>
             )
         } else if (disabled) {
@@ -241,7 +227,7 @@ export default class TabelRekomendasi extends React.Component {
                     disabled={!reminderEnable}
                 >
                     Reminder
-            </SirioButton>
+                </SirioButton>
             </NavLink>
         )
     }

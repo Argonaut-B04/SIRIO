@@ -11,13 +11,14 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
+import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
-@CrossOrigin(origins="*")
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/v1/Rekomendasi")
 public class RekomendasiRestController {
@@ -61,7 +62,7 @@ public class RekomendasiRestController {
             }
             List<Rekomendasi> result = rekomendasiRestService.getByPembuat(employee);
             List<RekomendasiDTO> resultDTO = new ArrayList<>();
-            for (Rekomendasi rekomedasi:result) {
+            for (Rekomendasi rekomedasi : result) {
                 RekomendasiDTO rekomendasiDTO = new RekomendasiDTO();
                 rekomendasiDTO.setId(rekomedasi.getIdRekomendasi());
                 rekomendasiDTO.setKeterangan(rekomedasi.getKeterangan());
@@ -123,8 +124,10 @@ public class RekomendasiRestController {
         BaseResponse<Rekomendasi> response = new BaseResponse<>();
         Integer idRekomendasi = rekomendasiDTO.getId();
         try {
-            LocalDate tenggatWaktuLocalDate = Settings.stringToLocalDate(rekomendasiDTO.getTenggatWaktu());
-            Rekomendasi result = rekomendasiRestService.ubahTenggatWaktu(idRekomendasi, tenggatWaktuLocalDate);
+            Rekomendasi result = rekomendasiRestService.ubahTenggatWaktu(
+                    idRekomendasi,
+                    Settings.convertToDateViaInstant(rekomendasiDTO.getTenggatWaktuDate())
+            );
 
             response.setStatus(200);
             response.setMessage("success");

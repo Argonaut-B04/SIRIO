@@ -9,5 +9,4 @@ import java.util.List;
 
 @Repository
 public interface ReminderDB extends JpaRepository<Reminder, Integer> {
-    List<Reminder> findAllByRekomendasi(Rekomendasi rekomendasi);
 }
