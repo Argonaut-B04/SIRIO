@@ -63,6 +63,10 @@ public class DatabaseLoader implements CommandLineRunner {
         roleBM.setNamaRole("Branch Manager");
         roleDB.save(roleBM);
 
+        Role roleSuperOfficer = new Role();
+        roleSuperOfficer.setNamaRole("Super QA Officer Operational Risk");
+        roleDB.save(roleSuperOfficer);
+
         Employee admin = new Employee();
         admin.setEmail("admin@admin.com");
         admin.setNama("admin");
