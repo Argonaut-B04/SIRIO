@@ -1,12 +1,16 @@
-import axios from 'axios';
+// Axios digunakan untuk call API ke backend
+import axios from "axios";
+import SirioAxiosBase from "./SirioAxiosBase";
 
-const API_URL = 'http://localhost:8080/api/v1/Employee';
-const USERNAME_NAME_SESSION_ATTRIBUTE_NAME = "SirioInSession";
-const ROLE_NAME_SESSION_ATTRIBUTE_NAME = "SirioRoleInSession";
-
+// Kelas ini fokus untuk authentikasi
 class AuthenticationService {
+
+    // Fungsi untuk login
     executeBasicAuthenticationService(username, password) {
-        return axios.get(`${API_URL}/login`,
+
+        // Menggunakan Axios untuk memanggil API Login
+        // Header berisi informasi token username dan password
+        return axios.get(SirioAxiosBase.BASEURL + "/Employee/login",
             {
                 headers: {
                     authorization: this.createBasicAuthToken(username, password)
@@ -15,47 +19,67 @@ class AuthenticationService {
         )
     }
 
+    // Fungsi untuk membuat token userame dan password
+    // Formatnya sudah fix, Basic + username dan password yang dienkripsi bit64
     createBasicAuthToken(username, password) {
         return 'Basic ' + window.btoa(username + ":" + password);
     }
 
+    // Simpan informasi username dan role user yang sudah login kedalam sessionstorage
     registerSuccessfulLogin(username, password, role) {
-        sessionStorage.setItem(USERNAME_NAME_SESSION_ATTRIBUTE_NAME, username);
-        sessionStorage.setItem(ROLE_NAME_SESSION_ATTRIBUTE_NAME, role);
-        this.setupAxiosInterceptors(this.createBasicAuthToken(username, password));
+        sessionStorage.setItem(SirioAxiosBase.USERNAME_NAME_SESSION_ATTRIBUTE_NAME, username);
+        sessionStorage.setItem(SirioAxiosBase.ROLE_NAME_SESSION_ATTRIBUTE_NAME, role);
+        const token = this.createBasicAuthToken(username, password);
+        sessionStorage.setItem(SirioAxiosBase.TOKEN_SESSION_ATTRIBUTE_NAME, token)
     }
 
-    setupAxiosInterceptors(token) {
-        axios
-            .interceptors
-            .request
-            .use(
-                (config) => {
-                    if (this.isUserLoggedIn()) {
-                        config.headers.authorization = token
-                    };
-                    return config;
-                }
-            )
-    }
-
-    isUserLoggedIn() {
-        let user = sessionStorage.getItem(USERNAME_NAME_SESSION_ATTRIBUTE_NAME);
-        if (user == null) return '';
-        return user;
-    }
+    /**
+     * Fungsi untuk mengambil username user yang sedang login
+     * 
+     * cara menggunakan: 
+     * - Import AuthenticationService from ...
+     * - AuthenticationService.getUsername();
+     */
 
     getUsername() {
-        return sessionStorage.getItem(USERNAME_NAME_SESSION_ATTRIBUTE_NAME);
+        return sessionStorage.getItem(SirioAxiosBase.USERNAME_NAME_SESSION_ATTRIBUTE_NAME);
     }
 
+    /**
+    * Fungsi untuk mengambil role user yang sedang login
+    * 
+    * cara menggunakan: 
+    * - Import AuthenticationService from ...
+    * - AuthenticationService.getUsername();
+    */
     getRole() {
-        return sessionStorage.getItem(ROLE_NAME_SESSION_ATTRIBUTE_NAME);
+        return sessionStorage.getItem(SirioAxiosBase.ROLE_NAME_SESSION_ATTRIBUTE_NAME);
     }
 
+    /**
+     * Fungsi untuk mengambil logintoken
+     */
+    getToken() {
+        return sessionStorage.getItem(SirioAxiosBase.TOKEN_SESSION_ATTRIBUTE_NAME);
+    }
+
+    /**
+     * Fungsi untuk cek apakah user sudah login (username, role, dan token) valid
+     */
+    isLoggedIn() {
+        return (this.getUsername() && this.getRole() && this.getToken);
+    }
+
+    /**x
+    * Fungsi untuk logout
+    * 
+    * cara menggunakan:
+    * - window.location.href="/logout"
+    */
     logout() {
-        sessionStorage.removeItem(USERNAME_NAME_SESSION_ATTRIBUTE_NAME);
-        sessionStorage.removeItem(ROLE_NAME_SESSION_ATTRIBUTE_NAME);
+        sessionStorage.removeItem(SirioAxiosBase.USERNAME_NAME_SESSION_ATTRIBUTE_NAME);
+        sessionStorage.removeItem(SirioAxiosBase.ROLE_NAME_SESSION_ATTRIBUTE_NAME);
+        sessionStorage.removeItem(SirioAxiosBase.TOKEN_SESSION_ATTRIBUTE_NAME);
     }
 }
 

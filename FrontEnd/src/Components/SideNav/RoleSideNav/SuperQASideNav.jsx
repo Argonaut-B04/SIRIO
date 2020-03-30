@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import SideNavFramework from '../SideNavFramework';
 
+/**
+ * Komponen SideNav untuk Super QA
+ */
 export default class SuperQASideNav extends Component {
     render() {
         return (

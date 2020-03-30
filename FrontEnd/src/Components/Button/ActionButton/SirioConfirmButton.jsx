@@ -4,6 +4,15 @@ import SirioButton from "../SirioButton";
 import "bootstrap/dist/css/bootstrap.min.css";
 import classes from "./ActionButton.module.css";
 
+/**
+ * Komponen untuk Button yang membuka Popup berupa Konfirmasi
+ * 
+ * Props yang tersedia:
+ * - Seluruh Props SirioButton
+ * - modalTitle         : String, judul modal
+ * - onConfirm          : Function, dijalankan ketika tombol konfirmasi ditekan
+ * - customConfirmText  : String, Opsional untuk mengganti kata "konfirmasi" pada tombol konfirmasi
+ */
 export default class SirioWarningButton extends React.Component {
 
     constructor(props, context) {
@@ -15,7 +24,12 @@ export default class SirioWarningButton extends React.Component {
 
         this.handleShow = this.handleShow.bind(this);
         this.handleClose = this.handleClose.bind(this);
-
+    }
+    
+    componentDidMount() {
+        if (this.props.show) {
+            this.handleShow();
+        }
     }
 
     handleClose() {
@@ -27,6 +41,20 @@ export default class SirioWarningButton extends React.Component {
     }
 
     render() {
+        var onConfirm;
+
+        if (this.props.onConfirm) {
+            if (this.props.closeOnConfirm) {
+                onConfirm = () => {
+                    this.handleClose();
+                    this.props.onConfirm();
+                }
+            } else {
+                onConfirm = this.props.onConfirm;
+            }
+        } else {
+            onConfirm = this.handleClose;
+        }
         return (
             <>
                 <SirioButton
@@ -51,7 +79,7 @@ export default class SirioWarningButton extends React.Component {
                                 purple
                                 recommended
                                 circular
-                                onClick={this.props.onConfirm ? this.props.onConfirm : this.handleClose}
+                                onClick={onConfirm}
                                 classes={classes.modalButton}
                             >
                                 {this.props.customConfirmText ? this.props.customConfirmText : "Konfirmasi"}

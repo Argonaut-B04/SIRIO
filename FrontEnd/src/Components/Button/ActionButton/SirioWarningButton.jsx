@@ -4,6 +4,17 @@ import SirioButton from "../SirioButton";
 import "bootstrap/dist/css/bootstrap.min.css";
 import classes from "./ActionButton.module.css";
 
+/**
+ * Komponen untuk Button yang membuka Popup berupa Warning
+ * 
+ * Props yang tersedia:
+ * - Seluruh Props SirioButton
+ * - modalTitle         : String, judul modal
+ * - modalDesc          : String, deskripsi yang akan ditampilkan dalam modal
+ * - onConfirm          : Function, dijalankan ketika tombol lanjutkan ditekan
+ * - customConfirmText  : String, Opsional untuk mengganti kata "lanjutkan" pada tombol lanjutkan
+ * - customCancelText   : String, Opsional untuk mengganti kata "Kembali" pada tombol pembatalan
+ */
 export default class SirioWarningButton extends React.Component {
 
     constructor(props, context) {
@@ -16,6 +27,12 @@ export default class SirioWarningButton extends React.Component {
         this.handleShow = this.handleShow.bind(this);
         this.handleClose = this.handleClose.bind(this);
 
+    }
+
+    componentDidMount() {
+        if (this.props.show) {
+            this.handleShow();
+        }
     }
 
     handleClose() {
@@ -42,9 +59,7 @@ export default class SirioWarningButton extends React.Component {
                     onHide={this.handleClose}
                     centered>
                     <Modal.Body className="d-flex justify-content-center align-items-center flex-column py-5">
-                        <object type="image/svg+xml" data={process.env.PUBLIC_URL + '/trashbin.svg'}>
-                            Sirio: trashbin Image
-                        </object>
+                        <img src={process.env.PUBLIC_URL + '/trashbin.svg'} width="200px" alt="trashbin" />
 
                         <div className="text-center p-3 w-75">
                             <h2 >{this.props.modalTitle}</h2>

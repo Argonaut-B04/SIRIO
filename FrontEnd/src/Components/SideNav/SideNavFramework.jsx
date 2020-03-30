@@ -2,33 +2,82 @@ import React from "react";
 import classes from './SideNavFramework.module.css';
 import LogoTag from "../LogoTag/LogoTag";
 import SirioButton from "../Button/SirioButton";
+import SirioDropdown from "../Dropdown/SirioDropdown";
+import SirioDropdownItem from "../Dropdown/SirioDropdownItem";
 import AuthenticationService from "../../Services/AuthenticationService";
 
+/**
+ * Komponen Side Nav secara General
+ * 
+ * Props yang tersedia:
+ * - classes                : cssClass, kelas custom untuk SideNav
+ * - links                  : list of JSON, kumpulan informasi objek navigasi
+ * - links.title            : String, nama item navigasi
+ * - links.link             : String, url tujuan navigasi
+ * - links.dropdown         : List of Json, kumpulan informasi objek dropdown navigasi
+ * - links.dropdown.title   : String, nama item navigasi dalam dropdown
+ * - links.dropdown.link    : String, url tujuan navigasi dalam dropdown
+ */
 export default class SideNavFramework extends React.Component {
 
-    render() {
-        let username = AuthenticationService.getUsername();
-        let role = AuthenticationService.getRole();
+    constructor(props) {
+        super(props);
 
+        // Mendapatkan informasi username dan role dari Authentication Service
+        this.state = {
+            username: AuthenticationService.getUsername(),
+            role: AuthenticationService.getRole(),
+        }
+    }
+
+    // Fungsi untuk melakukan navigasi
+    onSelect(event) {
+        window.location.href = event.value;
+    }
+
+    // Fungsi untuk render SideNav
+    render() {
         return (
             <div className={this.props.classes ? [this.props.classes, classes.sidebar].join(' ') : classes.sidebar}>
                 <LogoTag light />
                 <div className={classes.identity}>
                     <h3 className={classes.username}>
-                        {username}
+                        {this.state.username}
                     </h3>
                     <p className={classes.role}>
-                        {role}
+                        {this.state.role}
                     </p>
                 </div>
                 <div className={classes.navigationContainer}>
-                    {this.props.links.map((menu) =>
-                        <a href={menu.link}>
-                            <div className={menu.active ? [classes.clickableNavigation, classes.active].join(' ') : classes.clickableNavigation}>
-                                {menu.title}
-                            </div>
-                        </a>
+                    {this.props.links.map((menu, i) =>
+
+                        menu.dropdown ?
+                            <SirioDropdown
+                                key={i}
+                                headerClass={classes.clickableNavigation}
+                                headerTitle={menu.title}
+                                activeClass={classes.active}
+                                menuClass={classes.dropdownMenu}
+                            >
+                                {menu.dropdown.map((item, i) =>
+                                    <SirioDropdownItem
+                                        key={i}
+                                        classes={classes.dropdownItem}
+                                        onClick={(object) => window.location.href = object}
+                                        clickArgument={item.link}
+                                    >
+                                        {item.title}
+                                    </SirioDropdownItem>
+                                )}
+                            </SirioDropdown>
+                            :
+                            <a href={menu.link} key={i}>
+                                <div className={menu.active ? [classes.clickableNavigation, classes.active].join(' ') : classes.clickableNavigation}>
+                                    {menu.title}
+                                </div>
+                            </a>
                     )}
+
                 </div>
                 <div className={classes.sideFooter}>
                     <div className={classes.footerButtonContainer}>

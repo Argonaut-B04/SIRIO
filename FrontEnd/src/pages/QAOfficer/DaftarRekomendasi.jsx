@@ -1,7 +1,10 @@
 import React from "react";
-import TableRekomendasi from "../Components/Tables/Rekomendasi/TabelRekomendasi";
-import SirioMainLayout from "../Layout/SirioMainLayout";
+import TableRekomendasi from "../../Components/Tables/Rekomendasi/TabelRekomendasi";
+import SirioMainLayout from "../../Layout/SirioMainLayout";
 
+/**
+ * Controller yang menampilkan halaman daftar rekomendasi
+ */
 export default class DaftarRekomendasi extends React.Component {
     render() {
         return (

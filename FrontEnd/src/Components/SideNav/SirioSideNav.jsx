@@ -8,15 +8,26 @@ import BranchManagerSideNav from "./RoleSideNav/BranchManagerSideNav";
 import QALeadSideNav from "./RoleSideNav/QALeadSideNav";
 import SupervisorSideNav from "./RoleSideNav/SupervisorSideNav";
 
-class SirioSideNav extends React.Component {
+/**
+ * Komponen _Switcher_ yang akan menampilkan SideNav berdasarkan Role
+ */
+export default class SirioSideNav extends React.Component {
 
+    constructor(props) {
+        super(props);
+
+        // Mengambil informasi role dari AuthenticationService
+        this.state = {
+            role: AuthenticationService.getRole()
+        }
+    }
+
+    // Render SideNav sesuai role
     render() {
         if (this.props.loginMode) {
             return <LoginSideNav />
         }
-
-        let role = AuthenticationService.getRole();
-        switch (role) {
+        switch (this.state.role) {
             case "Manajer Operational Risk":
                 return <ManagerOperationalSideNav {...this.props} />
             case "Administrator":
@@ -30,8 +41,7 @@ class SirioSideNav extends React.Component {
             case "Supervisor":
                 return <SupervisorSideNav {...this.props} />
             default:
-                return <QAOfficerSideNav {...this.props} />
+                return <ManagerOperationalSideNav {...this.props} />
         }
     }
 }
-export default SirioSideNav;

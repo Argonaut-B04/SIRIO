@@ -3,6 +3,9 @@ import SirioSideNav from "../Components/SideNav/SirioSideNav";
 import LoginForm from "../Components/Form/LoginForm";
 import LogoTag from "../Components/LogoTag/LogoTag";
 
+/**
+ * Controller untuk menampilkan halaman login
+ */
 export default class Login extends React.Component {
     render() {
         return (

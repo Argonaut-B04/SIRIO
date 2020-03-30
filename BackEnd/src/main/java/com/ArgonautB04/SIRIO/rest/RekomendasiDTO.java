@@ -1,18 +1,24 @@
 package com.ArgonautB04.SIRIO.rest;
 
+import java.time.LocalDate;
+import java.util.Date;
+import java.util.List;
+
 public class RekomendasiDTO {
     private Integer id;
     private Integer idPembuat;
     private String keterangan;
     private String tenggatWaktu;
+    private LocalDate tenggatWaktuDate;
     private String durasi;
-    private ReminderDTO reminderDTO;
+    private String status;
+    private List<ReminderDTO> reminderDTO;
 
-    public ReminderDTO getReminderDTO() {
+    public List<ReminderDTO> getReminder() {
         return reminderDTO;
     }
 
-    public void setReminderDTO(ReminderDTO reminderDTO) {
+    public void setReminder(List<ReminderDTO> reminderDTO) {
         this.reminderDTO = reminderDTO;
     }
 
@@ -55,4 +61,22 @@ public class RekomendasiDTO {
     public void setDurasi(String durasi) {
         this.durasi = durasi;
     }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public LocalDate getTenggatWaktuDate() {
+        return tenggatWaktuDate;
+    }
+
+    public void setTenggatWaktuDate(LocalDate tenggatWaktuDate) {
+        this.tenggatWaktuDate = tenggatWaktuDate;
+    }
+
+
 }

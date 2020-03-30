@@ -2,22 +2,45 @@ import React, { Component } from 'react';
 import classes from "./LoginForm.module.css";
 import SirioButton from "../Button/SirioButton";
 import AuthenticationService from "../../Services/AuthenticationService";
+import { withRouter } from 'react-router-dom';
 
+/**
+ * Komponen independen Form Login
+ * TODO: refactor menggunakan form tag
+ */
 class LoginForm extends Component {
 
     constructor(props) {
         super(props);
 
+        // informasi username dan password di input field 
         this.state = {
             username: '',
             password: '',
             hasLoginFailed: false,
+            source: null,
+            target: null
         }
 
         this.handleChange = this.handleChange.bind(this);
         this.loginClicked = this.loginClicked.bind(this);
+        this.loadSource = this.loadSource.bind(this);
     }
 
+    componentDidMount() {
+        this.loadSource();
+    }
+
+    loadSource() {
+        if (this.props.location.state) {
+            this.setState({
+                source: this.props.location.state.source,
+                target: this.props.location.state.goto
+            })
+        }
+    }
+
+    // Fungsi yang mengikat input field dengan state
     handleChange(event) {
         this.setState(
             {
@@ -27,14 +50,19 @@ class LoginForm extends Component {
         )
     }
 
+    // Fungsi ketika user klik tombol submit
+    // Komunikasi dengan SirioBackend melalui AuthenticationService
     loginClicked() {
         AuthenticationService
             .executeBasicAuthenticationService(this.state.username, this.state.password)
             .then(
                 (response) => {
-                    console.log(response);
                     AuthenticationService.registerSuccessfulLogin(this.state.username, this.state.password, response.data.result.role.namaRole);
-                    this.props.history.push("/");
+                    if (this.state.target) {
+                        window.location.href = this.state.target;
+                    } else {
+                        window.location.href = "/";
+                    }
                 }
             )
             .catch(
@@ -44,6 +72,7 @@ class LoginForm extends Component {
                     })
                 }
             )
+
     }
 
     render() {
@@ -51,6 +80,7 @@ class LoginForm extends Component {
             <div className={classes.loginFormContainer}>
                 <h2>Selamat datang kembali!</h2>
                 <div>
+                    {this.state.source === 401 && <div className="alert alert-warning">You need to login first</div>}
                     {this.state.hasLoginFailed && <div className="alert alert-warning">Invalid Credentials</div>}
                     <fieldset className="form-group">
                         <label>Username</label>
@@ -99,4 +129,4 @@ class LoginForm extends Component {
     }
 }
 
-export default LoginForm;
+export default withRouter(LoginForm);
