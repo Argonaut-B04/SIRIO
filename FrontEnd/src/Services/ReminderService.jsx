@@ -15,8 +15,8 @@ class ReminderService {
 
     async submitChanges(idRekomendasi, data) {
         const dataToPass = {
-            idRekomendasi: idRekomendasi,
-            daftarReminder: data
+            id: idRekomendasi,
+            reminder: data
         }
 
         return this.axiosInstance.post(SirioAxiosBase.BASEURL + '/Reminder/konfigurasi', dataToPass)

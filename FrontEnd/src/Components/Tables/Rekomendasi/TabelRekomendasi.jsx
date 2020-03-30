@@ -50,63 +50,55 @@ export default class TabelRekomendasi extends React.Component {
      * - headerStyle        : style, untuk styling header
      * - formatter          : function, untuk manipulasi isi kolom
      */
-    columns = [{
-        dataField: 'no',
-        text: 'NO',
-        sort: true,
-        classes: classes.rowNumber,
-        headerClasses: classes.colheader,
-        headerStyle: (colum, colIndex) => {
-            return { width: "50px", textAlign: 'center' };
-        },
-    }, {
-        dataField: 'keterangan',
-        text: 'KETERANGAN',
-        sort: true,
-        classes: classes.rowItem,
-        headerClasses: classes.colheader,
-        headerStyle: (colum, colIndex) => {
-            return { width: "25%", textAlign: 'left' };
-        }
+    columns = [
+        {
+            dataField: 'keterangan',
+            text: 'KETERANGAN',
+            sort: true,
+            classes: classes.rowItem,
+            headerClasses: classes.colheader,
+            headerStyle: (colum, colIndex) => {
+                return { width: "25%", textAlign: 'left' };
+            }
 
-    }, {
-        dataField: 'status',
-        text: 'STATUS',
-        sort: true,
-        classes: classes.rowItem,
-        formatter: this.statusFormatter,
-        headerClasses: classes.colheader,
-        headerStyle: (colum, colIndex) => {
-            return { width: "20%", textAlign: 'left' };
-        }
-    }, {
-        dataField: 'noData 1',
-        text: '',
-        headerClasses: classes.colheader,
-        classes: classes.rowItem,
-        style: () => {
-            return { textAlign: 'center' }
-        },
-        formatter: this.getButtonsFirst
-    }, {
-        dataField: 'noData 2',
-        text: '',
-        headerClasses: classes.colheader,
-        classes: classes.rowItem,
-        style: () => {
-            return { textAlign: 'center' }
-        },
-        formatter: this.getButtonsSecond
-    }, {
-        dataField: 'noData 3',
-        text: '',
-        headerClasses: classes.colheader,
-        classes: classes.rowItem,
-        style: () => {
-            return { textAlign: 'center' }
-        },
-        formatter: this.getButtonsThird
-    }];
+        }, {
+            dataField: 'status',
+            text: 'STATUS',
+            sort: true,
+            classes: classes.rowItem,
+            formatter: this.statusFormatter,
+            headerClasses: classes.colheader,
+            headerStyle: (colum, colIndex) => {
+                return { width: "20%", textAlign: 'left' };
+            }
+        }, {
+            dataField: 'noData 1',
+            text: '',
+            headerClasses: classes.colheader,
+            classes: classes.rowItem,
+            style: () => {
+                return { textAlign: 'center' }
+            },
+            formatter: this.getButtonsFirst
+        }, {
+            dataField: 'noData 2',
+            text: '',
+            headerClasses: classes.colheader,
+            classes: classes.rowItem,
+            style: () => {
+                return { textAlign: 'center' }
+            },
+            formatter: this.getButtonsSecond
+        }, {
+            dataField: 'noData 3',
+            text: '',
+            headerClasses: classes.colheader,
+            classes: classes.rowItem,
+            style: () => {
+                return { textAlign: 'center' }
+            },
+            formatter: this.getButtonsThird
+        }];
 
     // Formatter untuk kolom status
     statusFormatter(cell) {

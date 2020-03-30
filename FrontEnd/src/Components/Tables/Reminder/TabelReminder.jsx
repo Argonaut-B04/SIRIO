@@ -5,6 +5,9 @@ import ReminderService from '../../../Services/ReminderService';
 import SirioTable from '../SirioTable';
 import { withRouter } from 'react-router-dom';
 import classes from '../Rekomendasi/TabelRekomendasi.module.css';
+import SirioConfirmButton from '../../Button/ActionButton/SirioConfirmButton';
+import SirioMessageButton from '../../Button/ActionButton/SirioMessageButton';
+import SirioWarningButton from '../../Button/ActionButton/SirioWarningButton';
 
 /**
  * Kelas untuk membuat komponen tabel reminder
@@ -16,20 +19,33 @@ class TabelReminder extends React.Component {
 
         this.state = {
             rowList: [],
-            
+            changeComplete: false
         }
 
         this.renderRows = this.renderRows.bind(this);
         this.hapus = this.hapus.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.endNotification = this.endNotification.bind(this);
     }
 
     componentDidMount() {
         this.renderRows();
     }
 
+    endNotification() {
+        this.setState({
+            changeComplete: false
+        })
+    }
+
     handleSubmit() {
-        ReminderService.submitChanges(this.state.rowList);
+        ReminderService.submitChanges(this.props.location.state.id, this.state.rowList)
+            .then(() => {
+                this.renderRows()
+                this.setState({
+                    changeComplete: true
+                })
+            });
     }
 
     async renderRows() {
@@ -37,14 +53,8 @@ class TabelReminder extends React.Component {
             id: this.props.location.state.id
         });
 
-        var fetchedRows = [];
-        response.data.result.map((entry, i) => {
-            // entry.no = i + 1;
-            return fetchedRows.push(entry);
-        })
-
         this.setState({
-            rowList: fetchedRows
+            rowList: response.data.result
         })
     }
 
@@ -106,7 +116,7 @@ class TabelReminder extends React.Component {
 
     async tambah(date, id) {
 
-        const newDate = [(date.getFullYear()), date.getMonth(), date.getDate()];
+        const newDate = [(date.getFullYear()), (date.getMonth() + 1), date.getDate()];
 
         const originalRow = this.state.rowList;
 
@@ -201,6 +211,7 @@ class TabelReminder extends React.Component {
                 recommended
                 unchangedContent
                 handleChange={(date, id) => this.tambah(date, id)}
+                popper="top-end"
             >
                 Tambah
             </SirioDatePickerButton>
@@ -210,12 +221,27 @@ class TabelReminder extends React.Component {
     footerContent() {
         return (
             <div>
-                <SirioButton purple classes="m-1" onClick={this.handleSubmit}>
+                <SirioConfirmButton
+                    purple
+                    classes="m-1"
+                    modalTitle="Anda akan menyimpan perubahan pada tabel reminder"
+                    onConfirm={this.handleSubmit}
+                    customConfirmText="Konfirmasi"
+                    customCancelText="Batal"
+                    closeOnConfirm
+                >
                     Simpan
-                </SirioButton>
-                <SirioButton red classes="m-1">
+                </SirioConfirmButton>
+                <SirioWarningButton
+                    red
+                    modalTitle="Konfirmasi Pembatalan"
+                    modalDesc="Seluruh perubahan reminder yang belum tersimpan akan dihapus. Konfirmasi?"
+                    onConfirm={() => window.location.href = "/rekomendasi"}
+                    customConfirmText="Konfirmasi"
+                    customCancelText="Kembali"
+                >
                     Batal
-                </SirioButton>
+                </SirioWarningButton>
             </div>
         )
     }
@@ -223,15 +249,26 @@ class TabelReminder extends React.Component {
     // Fungsi render Tabel rekomendasi
     render() {
         return (
-            <SirioTable
-                title={"Daftar Reminder untuk Rekomendasi " + this.props.location.state.keterangan}
-                data={this.state.rowList}
-                id='idReminder'
-                columnsDefinition={this.columns}
-                includeSearchBar
-                headerButton={this.headerButton()}
-                footerContent={this.footerContent()}
-            />
+            <>
+                <SirioTable
+                    title={"Daftar Reminder untuk Rekomendasi " + this.props.location.state.keterangan}
+                    data={this.state.rowList}
+                    id='idReminder'
+                    columnsDefinition={this.columns}
+                    includeSearchBar
+                    headerButton={this.headerButton()}
+                    footerContent={this.footerContent()}
+                />
+                {this.state.changeComplete &&
+                    <SirioMessageButton
+                        show
+                        classes="d-none"
+                        modalTitle="Perubahan Reminder Telah Disimpan"
+                        customConfirmText="Kembali"
+                        onClick={this.endNotification}
+                    />
+                }
+            </>
         );
     }
 }
