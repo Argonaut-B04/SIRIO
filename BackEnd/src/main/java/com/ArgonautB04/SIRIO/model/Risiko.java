@@ -31,7 +31,7 @@ public class Risiko implements Serializable {
     @NotNull
     @Size(max = 50)
     @Column(nullable = false)
-    private String risikoKategori;
+    private Integer risikoKategori;
 
     @NotNull
     @Size(max = 25)
@@ -76,11 +76,11 @@ public class Risiko implements Serializable {
         this.namaRisiko = namaRisiko;
     }
 
-    public String getRisikoKategori() {
+    public Integer getRisikoKategori() {
         return risikoKategori;
     }
 
-    public void setRisikoKategori(String risikoKategori) {
+    public void setRisikoKategori(Integer risikoKategori) {
         this.risikoKategori = risikoKategori;
     }
 

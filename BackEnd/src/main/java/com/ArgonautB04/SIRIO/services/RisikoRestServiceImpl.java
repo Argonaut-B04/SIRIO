@@ -95,4 +95,9 @@ public class RisikoRestServiceImpl implements RisikoRestService {
         return risiko;
     }
 
+    @Override
+    public List<Risiko> getByKategori(Integer kategori) {
+        return risikoDB.findAllByRisikoKategori(kategori);
+    }
+
 }

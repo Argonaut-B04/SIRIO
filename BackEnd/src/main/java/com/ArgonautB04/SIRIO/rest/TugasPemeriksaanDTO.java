@@ -7,6 +7,15 @@ public class TugasPemeriksaanDTO {
     private Integer idQA;
     private Integer kantorCabang;
     private String namaKantorCabang;
+    private String namaQA;
+
+    public String getNamaQA() {
+        return namaQA;
+    }
+
+    public void setNamaQA(String namaQA) {
+        this.namaQA = namaQA;
+    }
 
     public String getNamaKantorCabang() {
         return namaKantorCabang;

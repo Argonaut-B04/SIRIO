@@ -4,7 +4,6 @@ import com.ArgonautB04.SIRIO.model.*;
 import com.ArgonautB04.SIRIO.rest.*;
 import com.ArgonautB04.SIRIO.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
@@ -152,6 +151,7 @@ public class HasilPemeriksaanRestController {
             result.setTugasPemeriksaan(new TugasPemeriksaanDTO());
             result.getTugasPemeriksaan().setId(hasilPemeriksaan.getTugasPemeriksaan().getIdTugas());
             result.getTugasPemeriksaan().setIdQA(hasilPemeriksaan.getTugasPemeriksaan().getPelaksana().getIdEmployee());
+            result.getTugasPemeriksaan().setNamaQA(hasilPemeriksaan.getTugasPemeriksaan().getPelaksana().getNama());
             result.getTugasPemeriksaan().setNamaKantorCabang(
                     hasilPemeriksaan.getTugasPemeriksaan().getKantorCabang().getNamaKantor());
             result.setNamaStatus(hasilPemeriksaan.getStatusHasilPemeriksaan().getNamaStatus());
