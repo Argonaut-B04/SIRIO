@@ -1,12 +1,12 @@
 import React from 'react';
-import classes from './DetailBukti.module.css';
+import classes from './DetailRisiko.module.css';
 import SirioDetailPage from '../SirioDetailPage';
 import SirioButton from '../../Button/SirioButton';
 
-export default class DetailBukti extends React.Component {
+export default class RegistrasiRisiko extends React.Component {
 
     columns = [{
-        dataField: 'informasi',
+        dataField: 'key',
         classes: classes.rowItem,
         headerClasses: classes.colheader,
         headerStyle: (colum, colIndex) => {
@@ -14,7 +14,7 @@ export default class DetailBukti extends React.Component {
         }
 
     }, {
-        dataField: 'isiInformasi',
+        dataField: 'value',
         classes: classes.rowItem,
         headerClasses: classes.colheader,
         headerStyle: (colum, colIndex) => {
@@ -23,8 +23,11 @@ export default class DetailBukti extends React.Component {
     }];
 
     data = [
-        { "informasi": "Keterangan :", "isiInformasi": "Keterangan bukti rekomendasi tesss" },
-        { "informasi": "Lampiran :", "isiInformasi": "https://drive.google.com/drive/folders/1SvB_2W4BjD8rxVQR1-dDbA63-4Zx-hoN" },
+        { "key": "Nama Risiko :", "value": "Risiko 1" },
+        { "key": "Kategori Risiko :", "value": "Kategori 1" },
+        { "key": "Parent :", "value": "-" },
+        { "key": "Referensi SOP :", "value": "SOP 1" },
+        { "key": "Komponen Risiko :", "value": "Komponen Risiko 1" },
     ]
 
     subButton() {
@@ -44,11 +47,10 @@ export default class DetailBukti extends React.Component {
     render() {
         return (
             <SirioDetailPage
-                title="Bukti Pelaksanaan Rekomendasi"
+                title="Detail Risiko"
                 data={this.data}
                 id='id'
                 columnsDefinition={this.columns}
-                subButton={this.subButton()}
             />
         );
     }

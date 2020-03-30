@@ -26,8 +26,8 @@ export default class TabelBuktiPelaksanaan extends React.Component {
 
     getButtons(cell, row) {
         return (
-            <SirioButton
-                purple
+            <SirioButton purple
+                onClick={() => window.location.href = "/bukti-pelaksanaan/detail-persetujuan"}
             >
                 Detail Bukti
             </SirioButton>

@@ -1,12 +1,12 @@
 import React from "react";
-import DetailBuktiBM from "../../Components/DetailPages/BuktiPelaksanaan/DetailBukti";
+import FormFeedback from "../../Components/Form/BuktiPelaksanaan/FormFeedbackBukti";
 import SirioMainLayout from "../../Layout/SirioMainLayout";
 
-export default class DetailBuktiPelaksanaan extends React.Component {
+export default class FormFeedbackBukti extends React.Component {
     render() {
         return (
             <SirioMainLayout>
-                <DetailBuktiBM />
+                <FormFeedback />
             </SirioMainLayout>
         );
     }
