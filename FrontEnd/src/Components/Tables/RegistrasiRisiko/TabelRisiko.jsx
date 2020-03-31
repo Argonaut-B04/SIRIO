@@ -77,7 +77,7 @@ export default class TabelRisiko extends React.Component {
         return (
             <div>
                 <SirioButton purple recommended classes="mx-2"
-                onClick={() => window.location.href = "http://www.google.com"}>
+                onClick={() => window.location.href = "/registrasi-risiko/tambah"}>
                     Tambah Risiko
                 </SirioButton>
                 <SirioButton purple
