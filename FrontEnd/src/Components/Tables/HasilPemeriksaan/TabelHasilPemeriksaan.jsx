@@ -4,7 +4,6 @@ import classes from './TabelHasilPemeriksaan.module.css';
 import SirioTable from '../SirioTable';
 import HasilPemeriksaanService from '../../../Services/HasilPemeriksaanService';
 import { NavLink } from 'react-router-dom';
-import SirioAxiosBase from '../../../Services/SirioAxiosBase';
 
 export default class TabelHasilPemeriksaan extends React.Component {
 
@@ -86,23 +85,12 @@ export default class TabelHasilPemeriksaan extends React.Component {
 
     namaHasilPemeriksaanFormatter(cell, row) {
         return 'Kantor Cabang ' + row.tugasPemeriksaan.namaKantorCabang +
-            ', untuk Tugas Pemeriksaan #' + row.tugasPemeriksaan.id;
+            ', Tugas Pemeriksaan #' + row.tugasPemeriksaan.id;
     }
 
 
     columns = [
         {
-            dataField: '',
-            isDummyField: true,
-            text: 'NO',
-            sort: true,
-            classes: classes.rowNumber,
-            formatter: this.rowNumber,
-            headerClasses: classes.colheader,
-            headerStyle: (colum, colIndex) => {
-                return { width: "50px", textAlign: 'center' };
-            }
-        }, {
             dataField: '',
             isDummyField: true,
             text: 'HASIL PEMERIKSAAN',

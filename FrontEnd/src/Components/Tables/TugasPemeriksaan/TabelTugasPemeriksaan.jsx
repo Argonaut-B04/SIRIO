@@ -3,8 +3,8 @@ import SirioButton from '../../Button/SirioButton';
 import classes from './TabelTugasPemeriksaan.module.css';
 import SirioTable from '../SirioTable';
 import TugasPemeriksaanService from '../../../Services/TugasPemeriksaanService';
+import AuthenticationService from '../../../Services/AuthenticationService';
 import { NavLink } from 'react-router-dom';
-import SirioAxiosBase from '../../../Services/SirioAxiosBase';
 
 export default class TabelTugasPemeriksaan extends React.Component {
 
@@ -12,6 +12,7 @@ export default class TabelTugasPemeriksaan extends React.Component {
         super(props);
 
         this.state = {
+            role: AuthenticationService.getRole(),
             rowList: []
         }
 
@@ -32,7 +33,6 @@ export default class TabelTugasPemeriksaan extends React.Component {
 
     getButtonsFirst(cell, row) {
         const idHasilPemeriksaan = row.idHasilPemeriksaan;
-        const status = row.namaStatus;
         const terdapatHasil = idHasilPemeriksaan !== null;
         if (terdapatHasil) {
             return (
@@ -68,29 +68,23 @@ export default class TabelTugasPemeriksaan extends React.Component {
     }
 
     namaTugasPemeriksaanFormatter(cell, row) {
-        return 'Kantor Cabang ' + row.namaKantorCabang +
-            ', untuk QA ' + row.namaQA;
+        switch (this.state.role) {
+            case "QA Officer Operational Risk":
+                return 'Kantor Cabang ' + row.namaKantorCabang;
+            default:
+                return 'Kantor Cabang ' + row.namaKantorCabang +
+                    ', QA ' + row.namaQA;
+        }
     }
 
     columns = [
         {
             dataField: '',
             isDummyField: true,
-            text: 'NO',
-            sort: true,
-            classes: classes.rowNumber,
-            formatter: this.rowNumber,
-            headerClasses: classes.colheader,
-            headerStyle: (colum, colIndex) => {
-                return { width: "50px", textAlign: 'center' };
-            }
-        }, {
-            dataField: '',
-            isDummyField: true,
             text: 'TUGAS PEMERIKSAAN',
             sort: true,
             classes: classes.rowItem,
-            formatter: this.namaTugasPemeriksaanFormatter,
+            formatter: (cell,  row) => this.namaTugasPemeriksaanFormatter(cell, row),
             headerClasses: classes.colheader,
             headerStyle: (colum, colIndex) => {
                 return { width: "25%", textAlign: 'left' };
