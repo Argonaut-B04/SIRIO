@@ -75,6 +75,7 @@ public class DatabaseLoader implements CommandLineRunner {
         admin.setPassword("admin");
         admin.setRole(roleAdmin);
         admin.setNoHp("123");
+        admin.setJabatan("QA Officer Operational Risk");
         employeeRestService.buatEmployee(admin);
     }
 

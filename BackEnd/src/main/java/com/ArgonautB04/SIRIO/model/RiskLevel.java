@@ -42,7 +42,7 @@ public class RiskLevel implements Serializable {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "pengelola", referencedColumnName = "idEmployee", nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @OnDelete(action = OnDeleteAction.NO_ACTION)
     @JsonIgnore
     private Employee pengelola;
 
