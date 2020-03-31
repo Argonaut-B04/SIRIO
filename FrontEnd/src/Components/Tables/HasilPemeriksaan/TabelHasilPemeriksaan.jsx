@@ -2,8 +2,33 @@ import React from 'react';
 import SirioButton from '../../Button/SirioButton';
 import classes from './TabelHasilPemeriksaan.module.css';
 import SirioTable from '../SirioTable';
+import HasilPemeriksaanService from '../../../Services/HasilPemeriksaanService';
+import { NavLink } from 'react-router-dom';
+import SirioAxiosBase from '../../../Services/SirioAxiosBase';
 
 export default class TabelHasilPemeriksaan extends React.Component {
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            rowList: []
+        }
+
+        this.renderRows = this.renderRows.bind(this);
+    }
+
+    componentDidMount() {
+        this.renderRows();
+    }
+
+    async renderRows() {
+        const response = await HasilPemeriksaanService.getHasilPemeriksaanByLoggedInUser();
+
+        this.setState({
+            rowList: response.data.result
+        })
+    }
 
     statusFormatter(cell) {
         switch (cell) {
@@ -29,9 +54,9 @@ export default class TabelHasilPemeriksaan extends React.Component {
     }
 
     getButtonsFirst(cell, row) {
-        const menjalankanRekomendasi = row.menjalankanRekomendasi;
-        const status = row.statusHasilPemeriksaan;
-        const jalankan = (menjalankanRekomendasi === 1 && status === "Menunggu Pelaksanaan");
+        const siapDijalankan = row.siapDijalankan;
+        const status = row.namaStatus;
+        const jalankan = (siapDijalankan === 1 && status === "Menunggu Pelaksanaan");
         return (
             <SirioButton
                 purple
@@ -44,81 +69,79 @@ export default class TabelHasilPemeriksaan extends React.Component {
 
     getButtonsSecond(cell, row) {
         return (
-            <SirioButton purple>
-                Detail Hasil
-            </SirioButton>
+            <NavLink to={{
+                pathname: "/hasil-pemeriksaan/detail",
+                state: {
+                    id: row.id,
+                }
+            }}>
+                <SirioButton
+                    purple
+                >
+                    Detail Hasil
+                </SirioButton>
+            </NavLink>
         )
     }
 
-    getNamaHasilPemeriksaan(cell, row) {
-        return 'Hasil Pemeriksaan Kantor Cabang ' + row.kantorCabang + ' untuk Tugas Pemeriksaan #' + row.idTugasPemeriksaan;
+    namaHasilPemeriksaanFormatter(cell, row) {
+        return 'Kantor Cabang ' + row.tugasPemeriksaan.namaKantorCabang +
+            ', untuk Tugas Pemeriksaan #' + row.tugasPemeriksaan.id;
     }
 
 
-    columns = [{
-        dataField: '',
-        isDummyField: true,
-        text: 'NO',
-        sort: true,
-        classes: classes.rowNumber,
-        headerClasses: classes.colheader,
-        headerStyle: (colum, colIndex) => {
-            return { width: "50px", textAlign: 'center' };
-        },
-        formatter: this.rowNumber
-
-    }, {
-        dataField: "",
-        text: 'HASIL PEMERIKSAAN',
-        sort: true,
-        classes: classes.rowItem,
-        headerClasses: classes.colheader,
-        headerStyle: (colum, colIndex) => {
-            return { width: "25%", textAlign: 'left' };
-        },
-        formatter: this.getNamaHasilPemeriksaan
-
-    }, {
-        dataField: 'statusHasilPemeriksaan',
-        text: 'STATUS',
-        sort: true,
-        classes: classes.rowItem,
-        formatter: this.statusFormatter,
-        headerClasses: classes.colheader,
-        headerStyle: (colum, colIndex) => {
-            return { width: "20%", textAlign: 'left' };
-        }
-    }, {
-        dataField: 'id',
-        text: '',
-        headerClasses: classes.colheader,
-        classes: classes.rowItem,
-        style: () => {
-            return { textAlign: 'center' }
-        },
-        formatter: this.getButtonsFirst
-    }, {
-        dataField: 'id',
-        text: '',
-        headerClasses: classes.colheader,
-        classes: classes.rowItem,
-        style: () => {
-            return { textAlign: 'center' }
-        },
-        formatter: this.getButtonsSecond
-    }];
-
-    data = [
-        { "id": 1, "kantorCabang": "Pekalongan", "statusHasilPemeriksaan": "Draft", "idTugasPemeriksaan": 1, "menjalankanRekomendasi": 0},
-        { "id": 2, "kantorCabang": "Pekalongan", "statusHasilPemeriksaan": "Ditolak", "idTugasPemeriksaan": 2, "menjalankanRekomendasi": 0},
-        { "id": 3, "kantorCabang": "Pekalongan", "statusHasilPemeriksaan": "Menunggu Persetujuan", "idTugasPemeriksaan": 3, "menjalankanRekomendasi": 0},
-        { "id": 4, "kantorCabang": "Pekalongan", "statusHasilPemeriksaan": "Menunggu Persetujuan", "idTugasPemeriksaan": 4, "menjalankanRekomendasi": 0},
-        { "id": 5, "kantorCabang": "Jakarta", "statusHasilPemeriksaan": "Menunggu Pelaksanaan", "idTugasPemeriksaan": 5, "menjalankanRekomendasi": 0},
-        { "id": 6, "kantorCabang": "Bandung", "statusHasilPemeriksaan": "Menunggu Pelaksanaan", "idTugasPemeriksaan": 6, "menjalankanRekomendasi": 0},
-        { "id": 7, "kantorCabang": "Bandung", "statusHasilPemeriksaan": "Selesai", "idTugasPemeriksaan": 7, "menjalankanRekomendasi": 0},
-        { "id": 8, "kantorCabang": "Bandung", "statusHasilPemeriksaan": "Selesai", "idTugasPemeriksaan": 8, "menjalankanRekomendasi": 0},
-        { "id": 9, "kantorCabang": "Bandung", "statusHasilPemeriksaan": "Draft", "idTugasPemeriksaan": 9, "menjalankanRekomendasi": 1},
-    ];
+    columns = [
+        {
+            dataField: '',
+            isDummyField: true,
+            text: 'NO',
+            sort: true,
+            classes: classes.rowNumber,
+            formatter: this.rowNumber,
+            headerClasses: classes.colheader,
+            headerStyle: (colum, colIndex) => {
+                return { width: "50px", textAlign: 'center' };
+            }
+        }, {
+            dataField: '',
+            isDummyField: true,
+            text: 'HASIL PEMERIKSAAN',
+            sort: true,
+            classes: classes.rowItem,
+            formatter: this.namaHasilPemeriksaanFormatter,
+            headerClasses: classes.colheader,
+            headerStyle: (colum, colIndex) => {
+                return { width: "25%", textAlign: 'left' };
+            }
+        }, {
+            dataField: 'statusHasilPemeriksaan',
+            text: 'STATUS',
+            sort: true,
+            classes: classes.rowItem,
+            formatter: this.statusFormatter,
+            headerClasses: classes.colheader,
+            headerStyle: (colum, colIndex) => {
+                return { width: "20%", textAlign: 'left' };
+            }
+        }, {
+            dataField: 'noData 1',
+            text: '',
+            headerClasses: classes.colheader,
+            classes: classes.rowItem,
+            formatter: this.getButtonsFirst,
+            style: () => {
+                return { textAlign: 'center' }
+            }
+        }, {
+            dataField: 'noData 2',
+            text: '',
+            headerClasses: classes.colheader,
+            classes: classes.rowItem,
+            formatter: this.getButtonsSecond,
+            style: () => {
+                return { textAlign: 'center' }
+            }
+        }];
 
     defaultSorted = [{
         dataField: 'id',
@@ -129,7 +152,7 @@ export default class TabelHasilPemeriksaan extends React.Component {
         return (
             <SirioTable
                 title="Daftar Hasil Pemeriksaan"
-                data={this.data}
+                data={this.state.rowList}
                 id='id'
                 columnsDefinition={this.columns}
                 includeSearchBar
