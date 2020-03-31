@@ -33,6 +33,7 @@ class SirioForm extends Component {
                             value={field.value}
                             placeholder={field.placeholder}
                             optionList={field.optionList}
+                            customInput={field.customInput}
                         />
                     )}
                     <div className="w-100 text-right">
