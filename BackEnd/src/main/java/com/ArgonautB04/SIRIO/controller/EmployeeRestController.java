@@ -181,7 +181,7 @@ public class EmployeeRestController {
     }
 
     @GetMapping("/login")
-    public BaseResponse<Employee> authenticate(Principal principal, ModelMap model) {
+    public BaseResponse<Employee> authenticate(Principal principal) {
         BaseResponse<Employee> response = new BaseResponse<>();
         Employee target = employeeRestService.getByUsername(principal.getName()).get();
 

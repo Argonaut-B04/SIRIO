@@ -29,6 +29,12 @@ export default class SirioWarningButton extends React.Component {
 
     }
 
+    componentDidMount() {
+        if (this.props.show) {
+            this.handleShow();
+        }
+    }
+
     handleClose() {
         this.setState({ show: false });
     }
@@ -53,9 +59,7 @@ export default class SirioWarningButton extends React.Component {
                     onHide={this.handleClose}
                     centered>
                     <Modal.Body className="d-flex justify-content-center align-items-center flex-column py-5">
-                        <object type="image/svg+xml" data={process.env.PUBLIC_URL + '/trashbin.svg'}>
-                            Sirio: trashbin Image
-                        </object>
+                        <img src={process.env.PUBLIC_URL + '/trashbin.svg'} width="200px" alt="trashbin" />
 
                         <div className="text-center p-3 w-75">
                             <h2 >{this.props.modalTitle}</h2>

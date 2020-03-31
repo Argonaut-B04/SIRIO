@@ -10,10 +10,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.security.Principal;
+import java.text.ParseException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/v1/Rekomendasi")
 public class RekomendasiRestController {
@@ -37,26 +42,41 @@ public class RekomendasiRestController {
     private KantorCabangRestService kantorCabangRestService;
 
     /**
-     * Mengambil seluruh rekomendasi yang terhubung dengan pembuat
+     * Mengambil seluruh rekomendasi yang terhubung dengan user yang sedang login
+     * <p>
+     * Changelog:
+     * - Mengubah filter id pembuat dengan filter logged in user
      *
-     * @param idPembuat identifier pembuat
      * @return daftar rekomendasi yang terhubung dengan pembuat tersebut
      */
-    @GetMapping("/getAllByPembuat/{idPembuat}")
-    private BaseResponse<List<Rekomendasi>> getAllRekomendasiUntukPembuat(
-            @PathVariable("idPembuat") int idPembuat
-    ) {
-        BaseResponse<List<Rekomendasi>> response = new BaseResponse<>();
+    @GetMapping("/getAll")
+    private BaseResponse<List<RekomendasiDTO>> getAllRekomendasiUntukLoggedInUser(Principal principal) {
+        BaseResponse<List<RekomendasiDTO>> response = new BaseResponse<>();
         try {
-            Employee pembuat = employeeRestService.getById(idPembuat);
-            List<Rekomendasi> result = rekomendasiRestService.getByPembuat(pembuat);
+            Optional<Employee> employeeTarget = employeeRestService.getByUsername(principal.getName());
+            Employee employee;
+            if (employeeTarget.isPresent()) {
+                employee = employeeTarget.get();
+            } else {
+                throw new NoSuchElementException();
+            }
+            List<Rekomendasi> result = rekomendasiRestService.getByPembuat(employee);
+            List<RekomendasiDTO> resultDTO = new ArrayList<>();
+            for (Rekomendasi rekomedasi : result) {
+                RekomendasiDTO rekomendasiDTO = new RekomendasiDTO();
+                rekomendasiDTO.setId(rekomedasi.getIdRekomendasi());
+                rekomendasiDTO.setKeterangan(rekomedasi.getKeterangan());
+                rekomendasiDTO.setTenggatWaktu(rekomedasi.getTenggatWaktu().toString());
+                rekomendasiDTO.setStatus(rekomedasi.getStatusRekomendasi().getNamaStatus());
+                resultDTO.add(rekomendasiDTO);
+            }
 
             response.setStatus(200);
             response.setMessage("success");
-            response.setResult(result);
+            response.setResult(resultDTO);
         } catch (NoSuchElementException e) {
             throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Employee dengan ID " + idPembuat + " tidak ditemukan!"
+                    HttpStatus.NOT_FOUND, "Akun anda tidak terdaftar atau tidak ditemukan!"
             );
         }
         return response;
@@ -97,15 +117,17 @@ public class RekomendasiRestController {
      *
      * @return objek rekomendasi yang telah diubah
      */
-    @PutMapping("/tenggatWaktu")
+    @PostMapping("/tenggatWaktu")
     private BaseResponse<Rekomendasi> ubahTenggatWaktu(
             @RequestBody RekomendasiDTO rekomendasiDTO
     ) {
         BaseResponse<Rekomendasi> response = new BaseResponse<>();
         Integer idRekomendasi = rekomendasiDTO.getId();
         try {
-            LocalDate tenggatWaktuLocalDate = Settings.stringToLocalDate(rekomendasiDTO.getTenggatWaktu());
-            Rekomendasi result = rekomendasiRestService.ubahTenggatWaktu(idRekomendasi, tenggatWaktuLocalDate);
+            Rekomendasi result = rekomendasiRestService.ubahTenggatWaktu(
+                    idRekomendasi,
+                    Settings.convertToDateViaInstant(rekomendasiDTO.getTenggatWaktuDate())
+            );
 
             response.setStatus(200);
             response.setMessage("success");

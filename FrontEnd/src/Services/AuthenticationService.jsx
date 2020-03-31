@@ -1,13 +1,6 @@
 // Axios digunakan untuk call API ke backend
-import axios from 'axios';
-
-// Variabel setting backend
-const API_URL = 'http://localhost:8080/api/v1/';
-const USERNAME_NAME_SESSION_ATTRIBUTE_NAME = "SirioInSession";
-const ROLE_NAME_SESSION_ATTRIBUTE_NAME = "SirioRoleInSession";
-
-// Ini url utama yang akan dijalankan pada service ini
-const URL = API_URL + '/Employee';
+import axios from "axios";
+import SirioAxiosBase from "./SirioAxiosBase";
 
 // Kelas ini fokus untuk authentikasi
 class AuthenticationService {
@@ -17,7 +10,7 @@ class AuthenticationService {
 
         // Menggunakan Axios untuk memanggil API Login
         // Header berisi informasi token username dan password
-        return axios.get(`${URL}/login`,
+        return axios.get(SirioAxiosBase.BASEURL + "/Employee/login",
             {
                 headers: {
                     authorization: this.createBasicAuthToken(username, password)
@@ -34,37 +27,10 @@ class AuthenticationService {
 
     // Simpan informasi username dan role user yang sudah login kedalam sessionstorage
     registerSuccessfulLogin(username, password, role) {
-        sessionStorage.setItem(USERNAME_NAME_SESSION_ATTRIBUTE_NAME, username);
-        sessionStorage.setItem(ROLE_NAME_SESSION_ATTRIBUTE_NAME, role);
-        this.setupAxiosInterceptors(this.createBasicAuthToken(username, password));
-    }
-
-    // Fungsi interceptor axios, agar headers nya tidak perlu ditulis lagi jika sudah login
-    setupAxiosInterceptors(token) {
-        axios
-            .interceptors
-            .request
-            .use(
-                (config) => {
-                    if (this.isUserLoggedIn()) {
-                        config.headers.authorization = token
-                    };
-                    return config;
-                }
-            )
-    }
-
-    /**
-     * Fungsi untuk mengambil username user yang sedang login
-     * 
-     * cara menggunakan: 
-     * - Import AuthenticationService from ...
-     * - AuthenticationService.isUserLoggedIn();
-     */
-    isUserLoggedIn() {
-        let user = sessionStorage.getItem(USERNAME_NAME_SESSION_ATTRIBUTE_NAME);
-        if (user == null) return '';
-        return user;
+        sessionStorage.setItem(SirioAxiosBase.USERNAME_NAME_SESSION_ATTRIBUTE_NAME, username);
+        sessionStorage.setItem(SirioAxiosBase.ROLE_NAME_SESSION_ATTRIBUTE_NAME, role);
+        const token = this.createBasicAuthToken(username, password);
+        sessionStorage.setItem(SirioAxiosBase.TOKEN_SESSION_ATTRIBUTE_NAME, token)
     }
 
     /**
@@ -76,7 +42,7 @@ class AuthenticationService {
      */
 
     getUsername() {
-        return sessionStorage.getItem(USERNAME_NAME_SESSION_ATTRIBUTE_NAME);
+        return sessionStorage.getItem(SirioAxiosBase.USERNAME_NAME_SESSION_ATTRIBUTE_NAME);
     }
 
     /**
@@ -87,18 +53,33 @@ class AuthenticationService {
     * - AuthenticationService.getUsername();
     */
     getRole() {
-        return sessionStorage.getItem(ROLE_NAME_SESSION_ATTRIBUTE_NAME);
+        return sessionStorage.getItem(SirioAxiosBase.ROLE_NAME_SESSION_ATTRIBUTE_NAME);
     }
 
     /**
+     * Fungsi untuk mengambil logintoken
+     */
+    getToken() {
+        return sessionStorage.getItem(SirioAxiosBase.TOKEN_SESSION_ATTRIBUTE_NAME);
+    }
+
+    /**
+     * Fungsi untuk cek apakah user sudah login (username, role, dan token) valid
+     */
+    isLoggedIn() {
+        return (this.getUsername() && this.getRole() && this.getToken);
+    }
+
+    /**x
     * Fungsi untuk logout
     * 
     * cara menggunakan:
     * - window.location.href="/logout"
     */
     logout() {
-        sessionStorage.removeItem(USERNAME_NAME_SESSION_ATTRIBUTE_NAME);
-        sessionStorage.removeItem(ROLE_NAME_SESSION_ATTRIBUTE_NAME);
+        sessionStorage.removeItem(SirioAxiosBase.USERNAME_NAME_SESSION_ATTRIBUTE_NAME);
+        sessionStorage.removeItem(SirioAxiosBase.ROLE_NAME_SESSION_ATTRIBUTE_NAME);
+        sessionStorage.removeItem(SirioAxiosBase.TOKEN_SESSION_ATTRIBUTE_NAME);
     }
 }
 

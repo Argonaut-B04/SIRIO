@@ -7,6 +7,7 @@ import {
   Redirect
 } from "react-router-dom";
 import MainPage from "./pages";
+<<<<<<< HEAD
 import DaftarRekomendasi from "./pages/DaftarRekomendasi";
 import DaftarRencanaPemeriksaan from './pages/Manager/DaftarRencanaPemeriksaan';
 import DetailRencana from "./pages/Manager/DetailRencanaPemeriksaan";
@@ -16,14 +17,25 @@ import DaftarKantorCabang from './pages/Administrator/DaftarKantorCabang';
 import DetailKantorCabang from "./pages/Administrator/DetailKantorCabang";
 import FormTambahKantorCabang from "./pages/Administrator/FormTambahKantorCabang";
 
+=======
+import DaftarHasilPemeriksaan from "./pages/DaftarHasilPemeriksaan";
+import DaftarRekomendasi from "./pages/QAOfficer/DaftarRekomendasi";
+import Reminder from "./pages/QAOfficer/Reminder";
+>>>>>>> 0a6ecfb4fc118d73c2b1a1b02ace30603a3332ea
 import DaftarRekomendasiBM from "./pages/BranchManager/DaftarRekomendasi";
+import FormBuktiBM from "./pages/BranchManager/FormBuktiPelaksanaan";
 import DetailBuktiBM from "./pages/BranchManager/DetailBuktiPelaksanaan";
-import DaftarBuktiPelaksanaan from "./pages/DaftarBuktiPelaksanaan";
+import DaftarBuktiPelaksanaan from "./pages/QAOfficer/DaftarBuktiPelaksanaan";
+import DetailPersetujuanBukti from "./pages/QAOfficer/DetailPersetujuanBukti";
+import FormFeedbackBukti from "./pages/QAOfficer/FormFeedbackBukti";
 import NotFound from "./pages/error";
 import Login from "./pages/login";
 import Logout from "./pages/logout";
 import FormDemo from "./pages/formPage";
+import AuthorizedRoute from './Components/Route/AuthorizedRoute';
 import './App.css';
+import RegistrasiRisiko from './pages/ManagerOR/RegistrasiRisiko';
+import DetailRisiko from './pages/ManagerOR/DetailRisiko';
 
 /**
  * Router utama yang memetakan url ke controller
@@ -37,6 +49,7 @@ class App extends React.Component {
           <Switch>
             <Route exact path="/" component={MainPage} />
             <Route exact path="/rekomendasi" component={DaftarRekomendasi} />
+<<<<<<< HEAD
             <Route exact path="/manager/rencanaPemeriksaan" component={DaftarRencanaPemeriksaan} />
             <Route exact path="/manager/rencanaPemeriksaan/detail-rencana" component={DetailRencana} />
             <Route exact path="/manager/rencanaPemeriksaan/form-tambahRencanaPemeriksaan" component={FormTambahRencanaPemeriksaan} />
@@ -44,9 +57,19 @@ class App extends React.Component {
             <Route exact path="/administrator/kantorCabang/form-tambahKantorCabang" component={FormTambahKantorCabang} />
             <Route exact path="/administrator/kantorCabang" component={DaftarKantorCabang} />
             <Route exact path="/administrator/kantorCabang/detail-kantorCabang" component={DetailKantorCabang} />
+=======
+            <Route exact path="/hasil-pemeriksaan" component={DaftarHasilPemeriksaan} />
+            <AuthorizedRoute exact path="/rekomendasi" component={DaftarRekomendasi} />
+            <AuthorizedRoute exact path="/rekomendasi/reminder" component={Reminder} />
+>>>>>>> 0a6ecfb4fc118d73c2b1a1b02ace30603a3332ea
             <Route exact path="/bm/rekomendasi" component={DaftarRekomendasiBM} />
+            <Route exact path="/bm/bukti-pelaksanaan/tambah" component={FormBuktiBM} />
             <Route exact path="/bm/rekomendasi/detail-bukti" component={DetailBuktiBM} />
             <Route exact path="/bukti-pelaksanaan" component={DaftarBuktiPelaksanaan} />
+            <Route exact path="/bukti-pelaksanaan/detail-persetujuan" component={DetailPersetujuanBukti} />
+            <Route exact path="/bukti-pelaksanaan/tolak-bukti" component={FormFeedbackBukti} />
+            <Route exact path="/registrasi-risiko" component={RegistrasiRisiko} />
+            <Route exact path="/registrasi-risiko/detail/1" component={DetailRisiko} />
             <Route exact path="/login" component={Login} />
             <Route exact path="/logout" component={Logout} />
             <Route exact path="/Form" component={FormDemo} />

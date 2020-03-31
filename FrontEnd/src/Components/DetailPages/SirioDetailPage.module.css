@@ -1,16 +1,19 @@
 .title {
     font-weight: bold;
-    padding-bottom: 1rem;
-    padding-left: 1rem;
+}
+
+.headerWrapper {
+    /* padding: 0 1rem; */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    margin-top: 2rem;
 }
 
 .toolkitWrapper {
     border: solid #E0E0E0 2px;
     border-radius: 10px;
     padding: 1rem;
-    margin-bottom: 2rem;
-}
-
-.buttons {
-    margin-right: 200px;
+    margin-bottom: 5rem;
 }

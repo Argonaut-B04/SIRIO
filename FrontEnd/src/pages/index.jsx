@@ -21,6 +21,7 @@ export default class MainPage extends React.Component {
             role: AuthenticationService.getRole()
         }
     }
+
     render() {
         return (
             <div>
@@ -41,6 +42,8 @@ export default class MainPage extends React.Component {
                 <Link to="/bm/rekomendasi" className="btn btn-primary">Rekomendasi BM</Link>
                 <br />
                 <Link to="/bukti-pelaksanaan" className="btn btn-primary">Tabel Bukti</Link>
+                <br />
+                <Link to="/registrasi-risiko" className="btn btn-primary">Registrasi Risiko</Link>
                 <br />
                 <Link to="/Form" className="btn btn-primary">Demo Form</Link>
                 <br />

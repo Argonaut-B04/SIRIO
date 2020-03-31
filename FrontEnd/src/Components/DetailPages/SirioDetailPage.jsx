@@ -1,17 +1,20 @@
 import React, { Component } from 'react';
 import BootstrapTable from "react-bootstrap-table-next";
-import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
+import ToolkitProvider from 'react-bootstrap-table2-toolkit';
 import classes from './SirioDetailPage.module.css';
 import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css"
 import 'react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.min.css';
-import SirioButton from '../Button/SirioButton';
 
 class SirioDetailPage extends Component {
 
     render() {       
         return ( 
             <div>
-                <h1 className={classes.title}>{this.props.title}</h1>
+                <div className={classes.headerWrapper}>
+                    <h2 className={classes.title}>
+                        {this.props.title}
+                    </h2>
+                </div>
                 <div className={classes.toolkitWrapper}>
                     <ToolkitProvider
                         bootstrap4
@@ -24,21 +27,17 @@ class SirioDetailPage extends Component {
                                 <div>
                                     <BootstrapTable
                                         {...props.baseProps}
-                                        //ref={n => this.node = n}
                                         bordered={ false }
                                     />
-                                    <br></br>
-                                    <SirioButton
-                                        purple
-                                        onClick={() => window.location.href = "/"}
-                                        className={classes.buttons}
-                                    >
-                                        Ubah Bukti
-                                    </SirioButton>
+                                    
                                 </div>
                             )
                         }
                     </ToolkitProvider>
+                    <br></br>
+                    <div className="w-100 text-right">
+                        {this.props.subButton}
+                    </div>
                 </div>
             </div>
         );

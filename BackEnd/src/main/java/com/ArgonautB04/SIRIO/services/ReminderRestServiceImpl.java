@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -37,7 +38,7 @@ public class ReminderRestServiceImpl implements ReminderRestService {
     }
 
     @Override
-    public Reminder ubahReminder(int idReminder, LocalDate tanggalReminder) {
+    public Reminder ubahReminder(int idReminder, Date tanggalReminder) {
         Reminder target = getById(idReminder);
         target.setTanggalPengiriman(tanggalReminder);
         return reminderDB.save(target);
@@ -49,7 +50,7 @@ public class ReminderRestServiceImpl implements ReminderRestService {
     }
 
     @Override
-    public List<Reminder> getByRekomendasi(Rekomendasi rekomendasi) {
-        return reminderDB.findAllByRekomendasi(rekomendasi);
+    public Boolean isExistById(int idReminder) {
+        return reminderDB.findById(idReminder).isPresent();
     }
 }

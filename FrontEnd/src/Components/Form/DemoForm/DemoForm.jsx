@@ -1,10 +1,11 @@
 import React from 'react';
-import SirioForm from '../Components/Form/SirioForm';
+import SirioForm from '../SirioForm';
+import SirioButton from '../../Button/SirioButton';
 
 /**
  * Kelas untuk membuat form demo
  */
-export default class TheForm extends React.Component {
+export default class DemoForm extends React.Component {
 
     // Masukan user disimpan kedalam state sebelum dikirim ke backend
     constructor(props) {
@@ -13,7 +14,8 @@ export default class TheForm extends React.Component {
         this.state = {
             nama: "bambang",
             umur: 18,
-            jenisKelamin: "Pria"
+            jenisKelamin: "Pria",
+            manusia: true
         }
 
         this.handleChange = this.handleChange.bind(this);
@@ -24,12 +26,21 @@ export default class TheForm extends React.Component {
     // Fungsi untuk mengubah state ketika isi dari input diubah
     // Fungsi ini wajib ada jika membuat form
     handleChange(event) {
-        this.setState(
-            {
-                [event.target.name]
-                    : event.target.value
-            }
-        )
+        if (typeof event.target.checked === "boolean") {
+            this.setState(
+                {
+                    [event.target.name]
+                        : event.target.checked
+                }
+            )
+        } else {
+            this.setState(
+                {
+                    [event.target.name]
+                        : event.target.value
+                }
+            )
+        }
     }
 
     // Fungsi untuk mengubah state ketika isi dropdown diubah
@@ -89,8 +100,30 @@ export default class TheForm extends React.Component {
                             value: "gak tau apa"
                         }
                     ]
+                }, {
+                    label: "Manusia?",
+                    handleChange: this.handleChange,
+                    type: "checkbox",
+                    name: "manusia",
+                    value: this.state.manusia,
                 }
             ]
+        )
+    }
+
+    submitButton() {
+        return (
+            <div>
+                <SirioButton purple recommended
+                    classes="mx-2"
+                    onClick={() => window.location.href = "http://www.google.com"}>
+                    Simpan
+                </SirioButton>
+                <SirioButton purple
+                    onClick={() => window.location.href = "http://www.google.com"}>
+                    Batal
+                </SirioButton>
+            </div>
         )
     }
 
@@ -101,6 +134,7 @@ export default class TheForm extends React.Component {
                 title="Demo Form"
                 inputDefinition={this.inputDefinition()}
                 onSubmit={this.handleSubmit}
+                submitButton={this.submitButton()}
             />
         );
     }

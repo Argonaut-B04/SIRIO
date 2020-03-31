@@ -2,7 +2,7 @@ package com.ArgonautB04.SIRIO.rest;
 
 public class PersetujuanHasilPemeriksaanDTO {
     private Integer idPemeriksa;
-    private Integer idHasilPemeriksaan;
+    private Integer id;
     private Integer status;
     private String feedback;
 
@@ -14,12 +14,12 @@ public class PersetujuanHasilPemeriksaanDTO {
         this.idPemeriksa = idPemeriksa;
     }
 
-    public Integer getIdHasilPemeriksaan() {
-        return idHasilPemeriksaan;
+    public Integer getId() {
+        return id;
     }
 
-    public void setIdHasilPemeriksaan(Integer idHasilPemeriksaan) {
-        this.idHasilPemeriksaan = idHasilPemeriksaan;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public Integer getStatus() {
