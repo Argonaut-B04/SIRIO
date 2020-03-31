@@ -17,17 +17,6 @@ export default class TabelRisiko extends React.Component {
     }
 
     columns = [{
-        dataField: 'number',
-        isDummyField: true,
-        text: 'NO',
-        sort: true,
-        classes: classes.rowNumber,
-        headerClasses: classes.colheader,
-        headerStyle: (colum, colIndex) => {
-            return { width: "60px", textAlign: 'center' };
-        },
-        formatter: this.rowNumber
-    }, {
         dataField: 'namaRisiko',
         text: 'NAMA',
         sort: true,
