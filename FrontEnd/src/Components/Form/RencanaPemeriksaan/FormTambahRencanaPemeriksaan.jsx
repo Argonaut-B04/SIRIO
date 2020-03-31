@@ -55,6 +55,18 @@ export default class FormTambahKantorCabang extends React.Component {
         event.preventDefault();
     }
 
+    handleAdd = () => {
+        const _fields = [...fields];
+        _fields.push({ kantorCabang: '', QA: '', tanggalMulai:'', tanggalSelesai:'' });
+        setFields(_fields);
+    }
+
+    handleRemove = (i) => {
+        const _fields = [...fields];
+        _fields.splice(i, 1);
+        setFields(_fields);
+    }
+
     // Fungsi yang akan mengembalikan definisi tiap field pada form
     // Setiap objek {} pada List [] akan menjadi 1 field
     // untuk informasi lebih lengkap, cek SirioForm
@@ -147,16 +159,36 @@ export default class FormTambahKantorCabang extends React.Component {
         )
     }
 
+    removeButton(){
+        {fields.map((field, i) => {
+            return (
+                <SirioButton
+                    purple
+                    onClick={() => handleRemove(i)}
+                >
+                Hapus
+                </SirioButton>
+            )
+        })}
+    }
+
     // Fungsi render SirioForm
     render() {
         return (
-            <SirioForm
-                title="Form Tambah Rencana Pemeriksaan"
-                inputDefinition={this.inputDefinition()}
-                onSubmit={this.handleSubmit}
-                submitButton={this.submitButton()}
-                cancelButton={this.cancelButton()}
-            />
+            <div>
+                <SirioForm
+                    title="Form Tambah Rencana Pemeriksaan"
+                    inputDefinition={this.inputDefinition()}
+                    onSubmit={this.handleSubmit}
+                    submitButton={this.submitButton()}
+                    cancelButton={this.cancelButton()}
+                    removeButton={this.removeButton()}
+                />
+                <div className="btn-wrapper">
+                    <button type="button" onClick={handleAdd} className="btn-add">+</button>
+                </div>
+            </div>
+           
         );
     }
 }
