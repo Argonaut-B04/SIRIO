@@ -1,6 +1,6 @@
 .formWrapper {
     padding: 1rem;
-    border: 1px solid #8E8E8E;
+    border: 2px solid #E0E0E0;
     box-sizing: border-box;
     border-radius: 6px;
 }
@@ -13,9 +13,10 @@
 }
 
 .headerWrapper {
-    padding: 0 1rem;
+    /* padding: 0 1rem; */
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 0.5rem;
+    margin-bottom: 1.5rem;
+    margin-top: 2rem;
 }

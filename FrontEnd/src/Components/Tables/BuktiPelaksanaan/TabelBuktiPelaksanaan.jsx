@@ -1,6 +1,5 @@
 import React from 'react';
 import SirioButton from '../../Button/SirioButton';
-import SirioDatePickerButton from '../../Button/SirioDatePickerButton';
 import classes from '../Rekomendasi/TabelRekomendasi.module.css';
 import SirioTable from '../SirioTable';
 
@@ -27,8 +26,8 @@ export default class TabelBuktiPelaksanaan extends React.Component {
 
     getButtons(cell, row) {
         return (
-            <SirioButton
-                purple
+            <SirioButton purple
+                onClick={() => window.location.href = "/bukti-pelaksanaan/detail-persetujuan"}
             >
                 Detail Bukti
             </SirioButton>

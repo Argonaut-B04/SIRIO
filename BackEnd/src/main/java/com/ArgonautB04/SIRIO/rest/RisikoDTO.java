@@ -12,8 +12,35 @@ public class RisikoDTO {
     private String kategori;
     private String komponen;
     private int parent;
+    private int grantParent;
     private List<Risiko> child;
     private int sop;
+    private String namaSop;
+    private String linkSop;
+
+    public int getGrantParent() {
+        return grantParent;
+    }
+
+    public void setGrantParent(int grantParent) {
+        this.grantParent = grantParent;
+    }
+
+    public String getNamaSop() {
+        return namaSop;
+    }
+
+    public void setNamaSop(String namaSop) {
+        this.namaSop = namaSop;
+    }
+
+    public String getLinkSop() {
+        return linkSop;
+    }
+
+    public void setLinkSop(String linkSop) {
+        this.linkSop = linkSop;
+    }
 
     public int getId() {
         return id;

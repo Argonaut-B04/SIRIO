@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import SirioField from './SirioFormComponent/SirioField';
-import SirioButton from "../../Components/Button/SirioButton";
 import classes from "./SirioForm.module.css";
 
 /**
@@ -19,10 +18,9 @@ class SirioForm extends Component {
         return (
             <>
                 <div className={classes.headerWrapper}>
-                    <h1 className={classes.title}>
+                    <h2 className={classes.title}>
                         {this.props.title}
-                    </h1>
-                    {this.props.headerButton}
+                    </h2>
                 </div>
                 <form className={classes.formWrapper} onSubmit={this.props.onSubmit}>
                     {this.props.inputDefinition.map((field, i) =>
@@ -37,15 +35,10 @@ class SirioForm extends Component {
                             optionList={field.optionList}
                         />
                     )}
-                    {this.props.submitButton ? this.props.submitButton :
-                        <div className="w-100 text-right">
-                            <SirioButton
-                                purple
-                            >
-                                Submit
-                            </SirioButton>
-                        </div>
-                    }
+                    <div className="w-100 text-right">
+                        <br></br>
+                        {this.props.submitButton}
+                    </div>
                 </form>
             </>
         );

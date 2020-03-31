@@ -1,6 +1,7 @@
 import React from "react";
 import DatePicker from "react-datepicker";
 import SirioDatePickerCustomInput from "./SirioDatePickerCustomInput";
+import classes from "./SirioDatePickerButton.module.css";
 import "react-datepicker/dist/react-datepicker.css";
 
 export default class SirioDatePickerButton extends React.Component {
@@ -9,21 +10,30 @@ export default class SirioDatePickerButton extends React.Component {
         super(props);
 
         this.state = {
-            startDate: null
+            selectedDate: null,
+            idTarget: null
         };
+
+        this.handleChange = this.handleChange.bind(this);
     }
 
-    handleChange = date => {
+    handleChange(date, id) {
         this.setState({
-            startDate: date
+            selectedDate: date
         });
     };
 
     render() {
         return (
             <DatePicker
-                selected={this.state.startDate}
-                onChange={this.handleChange}
+                selected={this.state.selectedDate}
+                onChange={date => {
+                    this.handleChange(date, this.props.id);
+                    this.props.handleChange(date, this.props.id);
+                }}
+                popperClassName={classes.panel}
+                popperPlacement={this.props.popper}
+                dateFormat="yyyy-MM-dd"
                 customInput={<SirioDatePickerCustomInput {...this.props} />}
             />
         );

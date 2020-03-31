@@ -9,6 +9,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Date;
 
 @Entity
 @Table
@@ -21,13 +22,7 @@ public class Reminder implements Serializable {
     @NotNull
     @DateTimeFormat(pattern = "MM-dd-yyyy")
     @Column(nullable = false)
-    private LocalDate tanggalPengiriman;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "rekomendasi", referencedColumnName = "idRekomendasi", nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonIgnore
-    private Rekomendasi rekomendasi;
+    private Date tanggalPengiriman;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "pembuat", referencedColumnName = "idEmployee", nullable = false)
@@ -43,11 +38,11 @@ public class Reminder implements Serializable {
         this.idReminder = idReminder;
     }
 
-    public LocalDate getTanggalPengiriman() {
+    public Date getTanggalPengiriman() {
         return tanggalPengiriman;
     }
 
-    public void setTanggalPengiriman(LocalDate tanggalPengiriman) {
+    public void setTanggalPengiriman(Date tanggalPengiriman) {
         this.tanggalPengiriman = tanggalPengiriman;
     }
 
@@ -57,13 +52,5 @@ public class Reminder implements Serializable {
 
     public void setPembuat(Employee pembuat) {
         this.pembuat = pembuat;
-    }
-
-    public Rekomendasi getRekomendasi() {
-        return rekomendasi;
-    }
-
-    public void setRekomendasi(Rekomendasi rekomendasi) {
-        this.rekomendasi = rekomendasi;
     }
 }

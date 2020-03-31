@@ -21,6 +21,7 @@ export default class MainPage extends React.Component {
             role: AuthenticationService.getRole()
         }
     }
+
     render() {
         return (
             <div>

@@ -8,10 +8,13 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface HasilPemeriksaanDB extends JpaRepository<HasilPemeriksaan, Integer> {
     List<HasilPemeriksaan> findAllByPembuat(Employee pembuat);
 
     List<HasilPemeriksaan> findAllByTugasPemeriksaanIn(Collection<TugasPemeriksaan> tugasPemeriksaan);
+
+    Optional<HasilPemeriksaan> findByTugasPemeriksaan(TugasPemeriksaan tugasPemeriksaan);
 }

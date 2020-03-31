@@ -10,6 +10,7 @@ import org.springframework.web.server.MethodNotAllowedException;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -56,10 +57,10 @@ public class RekomendasiRestServiceImpl implements RekomendasiRestService {
     }
 
     @Override
-    public Rekomendasi ubahTenggatWaktu(int idRekomendasi, LocalDate tenggatWaktuLocalDate) throws IllegalAccessError {
+    public Rekomendasi ubahTenggatWaktu(int idRekomendasi, Date tenggatWaktuDate) throws IllegalAccessError {
         Rekomendasi target = getById(idRekomendasi);
         if (target.getStatusRekomendasi().isDapatSetTenggatWaktu()) {
-            target.setTenggatWaktu(tenggatWaktuLocalDate);
+            target.setTenggatWaktu(tenggatWaktuDate);
             return rekomendasiDB.save(target);
         } else throw new IllegalAccessError();
     }

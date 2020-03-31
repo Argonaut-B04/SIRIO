@@ -26,7 +26,7 @@ public interface RekomendasiRestService {
 
     void hapusRekomendasi(int idRekomendasi);
 
-    Rekomendasi ubahTenggatWaktu(int idRekomendasi, LocalDate tenggatWaktuLocalDate) throws IllegalAccessError;
+    Rekomendasi ubahTenggatWaktu(int idRekomendasi, Date tenggatWaktuDate) throws IllegalAccessError;
 
     List<Rekomendasi> getByPembuat(Employee pembuat);
 }

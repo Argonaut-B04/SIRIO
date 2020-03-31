@@ -1,15 +1,44 @@
 package com.ArgonautB04.SIRIO.rest;
 
+import com.ArgonautB04.SIRIO.model.Rekomendasi;
+import com.ArgonautB04.SIRIO.model.TemuanRisiko;
+
 import java.util.List;
 
 public class KomponenPemeriksaanDTO {
     private Integer id;
     private Integer idRiskLevel;
-    private Integer idRisiko;
     private Integer jumlahSampel;
     private String keteranganSampel;
     private List<TemuanRisikoDTO> daftarTemuanRisiko;
     private List<RekomendasiDTO> daftarRekomendasi;
+    private List<TemuanRisiko> daftarTemuanRisikoTerdaftar;
+    private List<Rekomendasi> daftarRekomendasiTerdaftar;
+    private RisikoDTO risiko;
+
+    public List<TemuanRisiko> getDaftarTemuanRisikoTerdaftar() {
+        return daftarTemuanRisikoTerdaftar;
+    }
+
+    public void setDaftarTemuanRisikoTerdaftar(List<TemuanRisiko> daftarTemuanRisikoTerdaftar) {
+        this.daftarTemuanRisikoTerdaftar = daftarTemuanRisikoTerdaftar;
+    }
+
+    public List<Rekomendasi> getDaftarRekomendasiTerdaftar() {
+        return daftarRekomendasiTerdaftar;
+    }
+
+    public void setDaftarRekomendasiTerdaftar(List<Rekomendasi> daftarRekomendasiTerdaftar) {
+        this.daftarRekomendasiTerdaftar = daftarRekomendasiTerdaftar;
+    }
+
+    public RisikoDTO getRisiko() {
+        return risiko;
+    }
+
+    public void setRisiko(RisikoDTO risiko) {
+        this.risiko = risiko;
+    }
 
     public Integer getId() {
         return id;
@@ -25,14 +54,6 @@ public class KomponenPemeriksaanDTO {
 
     public void setIdRiskLevel(Integer idRiskLevel) {
         this.idRiskLevel = idRiskLevel;
-    }
-
-    public Integer getIdRisiko() {
-        return idRisiko;
-    }
-
-    public void setIdRisiko(Integer idRisiko) {
-        this.idRisiko = idRisiko;
     }
 
     public Integer getJumlahSampel() {
