@@ -1,11 +1,11 @@
 import React from 'react';
-import SirioButton from '../../Button/SirioButton';
 import classes from './DetailRisiko.module.css';
-import SirioDetailPage2Buttons from '../SirioDetailPage2Buttons';
+import SirioDetailPage from '../SirioDetailPage';
+import SirioButton from '../../Button/SirioButton';
 
 export default class RegistrasiRisiko extends React.Component {
 
-    getButtons(cell,row) {
+    subButton() {
         return (
             <div>
                 <SirioButton 
@@ -50,16 +50,16 @@ export default class RegistrasiRisiko extends React.Component {
         { "key": "Parent :", "value": "-" },
         { "key": "Referensi SOP :", "value": "SOP 1" },
         { "key": "Komponen Risiko :", "value": "Komponen Risiko 1" },
-
-        ]
+    ]
 
     render() {
         return (
-            <SirioDetailPage2Buttons
+            <SirioDetailPage
                 title="Detail Risiko"
                 data={this.data}
                 id='id'
                 columnsDefinition={this.columns}
+                subButton={this.subButton()}
             />
         );
     }
