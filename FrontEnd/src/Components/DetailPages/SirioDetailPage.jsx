@@ -11,6 +11,9 @@ class SirioDetailPage extends Component {
         return ( 
             <div>
                 <div className={classes.headerWrapper}>
+                    <a href= {'/' + this.props.link}>
+                        <img src={process.env.PUBLIC_URL + '/backLogo.png'} className={classes.logoImage} alt="Back Logo" />
+                    </a>
                     <h2 className={classes.title}>
                         {this.props.title}
                     </h2>

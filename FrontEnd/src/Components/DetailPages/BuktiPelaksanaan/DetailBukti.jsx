@@ -49,6 +49,7 @@ export default class DetailBukti extends React.Component {
                 id='id'
                 columnsDefinition={this.columns}
                 subButton={this.subButton()}
+                link="bukti-pelaksanaan"
             />
         );
     }

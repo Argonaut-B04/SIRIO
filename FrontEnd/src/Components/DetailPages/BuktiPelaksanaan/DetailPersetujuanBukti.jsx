@@ -51,6 +51,7 @@ export default class DetailPersetujuanBukti extends React.Component {
                 id='id'
                 columnsDefinition={this.columns}
                 subButton={this.subButton()}
+                link="bm/rekomendasi"
             />
         );
     }

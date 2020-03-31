@@ -60,6 +60,7 @@ export default class RegistrasiRisiko extends React.Component {
                 id='id'
                 columnsDefinition={this.columns}
                 subButton={this.subButton()}
+                link="registrasi-risiko"
             />
         );
     }
