@@ -13,8 +13,10 @@ public class RekomendasiDTO {
     private String durasi;
     private String status;
     private String statusBukti;
-    private List<ReminderDTO> reminderDTO;
 
+    private String namaKantorCabang;
+
+    private List<ReminderDTO> reminderDTO;
     public List<ReminderDTO> getReminder() {
         return reminderDTO;
     }
@@ -77,6 +79,14 @@ public class RekomendasiDTO {
 
     public void setStatusBukti(String statusBukti) {
         this.statusBukti = statusBukti;
+    }
+
+    public String getNamaKantorCabang() {
+        return namaKantorCabang;
+    }
+
+    public void setNamaKantorCabang(String namaKantorCabang) {
+        this.namaKantorCabang = namaKantorCabang;
     }
 
     public LocalDate getTenggatWaktuDate() {

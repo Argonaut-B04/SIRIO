@@ -92,12 +92,18 @@ public class RekomendasiRestController {
                 }
             } else {
                 List<Rekomendasi> result = rekomendasiRestService.getByPembuat(employee);
-                for (Rekomendasi rekomedasi : result) {
+                for (Rekomendasi rekomendasi : result) {
                     RekomendasiDTO rekomendasiDTO = new RekomendasiDTO();
-                    rekomendasiDTO.setId(rekomedasi.getIdRekomendasi());
-                    rekomendasiDTO.setKeterangan(rekomedasi.getKeterangan());
-                    rekomendasiDTO.setTenggatWaktu(rekomedasi.getTenggatWaktu().toString());
-                    rekomendasiDTO.setStatus(rekomedasi.getStatusRekomendasi().getNamaStatus());
+                    rekomendasiDTO.setId(rekomendasi.getIdRekomendasi());
+                    rekomendasiDTO.setKeterangan(rekomendasi.getKeterangan());
+                    rekomendasiDTO.setTenggatWaktu(rekomendasi.getTenggatWaktu().toString());
+                    rekomendasiDTO.setStatus(rekomendasi.getStatusRekomendasi().getNamaStatus());
+                    List<BuktiPelaksanaan> buktiList = buktiPelaksanaanRestService.getByDaftarRekomendasi(result);
+                    for (BuktiPelaksanaan buktiPelaksanaan : buktiList) {
+                        rekomendasiDTO.setStatusBukti(buktiPelaksanaan.getStatusBuktiPelaksanaan().getNamaStatus());
+                    }
+                    rekomendasiDTO.setNamaKantorCabang(rekomendasi.getKomponenPemeriksaan().getHasilPemeriksaan()
+                            .getTugasPemeriksaan().getKantorCabang().getNamaKantor());
                     resultDTO.add(rekomendasiDTO);
                 }
             }

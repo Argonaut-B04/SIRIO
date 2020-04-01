@@ -4,7 +4,6 @@ import SirioTable from '../SirioTable';
 import RekomendasiService from '../../../Services/RekomendasiService';
 import { NavLink } from 'react-router-dom';
 import classes from './TabelRekomendasiBM.module.css';
-import SirioAxiosBase from '../../../Services/SirioAxiosBase';
 
 export default class TabelRekomendasi extends React.Component {
 
