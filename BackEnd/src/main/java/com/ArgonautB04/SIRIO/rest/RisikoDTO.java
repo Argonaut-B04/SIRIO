@@ -1,28 +1,26 @@
 package com.ArgonautB04.SIRIO.rest;
 
 import com.ArgonautB04.SIRIO.model.Risiko;
-import com.ArgonautB04.SIRIO.model.SOP;
-import com.ArgonautB04.SIRIO.model.StatusRisiko;
 
 import java.util.List;
 
 public class RisikoDTO {
-    private int id;
+    private Integer id;
     private String nama;
-    private String kategori;
+    private Integer kategori;
     private String komponen;
-    private int parent;
-    private int grantParent;
+    private Integer parent;
+    private Integer grantParent;
     private List<Risiko> child;
-    private int sop;
+    private Integer sop;
     private String namaSop;
     private String linkSop;
 
-    public int getGrantParent() {
+    public Integer getGrantParent() {
         return grantParent;
     }
 
-    public void setGrantParent(int grantParent) {
+    public void setGrantParent(Integer grantParent) {
         this.grantParent = grantParent;
     }
 
@@ -42,11 +40,11 @@ public class RisikoDTO {
         this.linkSop = linkSop;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -58,11 +56,11 @@ public class RisikoDTO {
         this.nama = nama;
     }
 
-    public String getKategori() {
+    public Integer getKategori() {
         return kategori;
     }
 
-    public void setKategori(String kategori) {
+    public void setKategori(Integer kategori) {
         this.kategori = kategori;
     }
 
@@ -74,11 +72,11 @@ public class RisikoDTO {
         this.komponen = komponen;
     }
 
-    public int getParent() {
+    public Integer getParent() {
         return parent;
     }
 
-    public void setParent(int parent) {
+    public void setParent(Integer parent) {
         this.parent = parent;
     }
 
@@ -90,11 +88,11 @@ public class RisikoDTO {
         this.child = child;
     }
 
-    public int getSop() {
+    public Integer getSop() {
         return sop;
     }
 
-    public void setSop(int sop) {
+    public void setSop(Integer sop) {
         this.sop = sop;
     }
 }

@@ -7,7 +7,8 @@ import {
   Redirect
 } from "react-router-dom";
 import MainPage from "./pages";
-import DaftarHasilPemeriksaan from "./pages/DaftarHasilPemeriksaan";
+import DaftarHasilPemeriksaan from "./pages/QAOfficer/DaftarHasilPemeriksaan";
+import DaftarTugasPemeriksaan from "./pages/QAOfficer/DaftarTugasPemeriksaan";
 import DaftarRekomendasi from "./pages/QAOfficer/DaftarRekomendasi";
 import Reminder from "./pages/QAOfficer/Reminder";
 import DaftarRekomendasiBM from "./pages/BranchManager/DaftarRekomendasi";
@@ -37,8 +38,8 @@ class App extends React.Component {
         <Router>
           <Switch>
             <Route exact path="/" component={MainPage} />
-            <Route exact path="/rekomendasi" component={DaftarRekomendasi} />
             <Route exact path="/hasil-pemeriksaan" component={DaftarHasilPemeriksaan} />
+            <Route exact path="/tugas-pemeriksaan" component={DaftarTugasPemeriksaan} />
             <AuthorizedRoute exact path="/rekomendasi" component={DaftarRekomendasi} />
             <AuthorizedRoute exact path="/rekomendasi/reminder" component={Reminder} />
             <Route exact path="/bm/rekomendasi" component={DaftarRekomendasiBM} />

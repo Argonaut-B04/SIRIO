@@ -3,7 +3,6 @@
 }
 
 .headerWrapper {
-    /* padding: 0 1rem; */
     display: flex;
     align-items: center;
     margin-bottom: 1.5rem;
@@ -23,4 +22,11 @@
     margin-bottom: 0.5rem !important;
     margin-right: 1rem !important;
     height: 28px;
+}
+
+.rowItem {
+    padding: 0.5rem !important;
+    vertical-align: middle !important;
+    height: 50px;
+    font-size: 16px !important;
 }
