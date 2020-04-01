@@ -3,7 +3,6 @@ import SirioForm from '../SirioForm';
 import SirioButton from '../../Button/SirioButton';
 import EmployeeService from '../../../Services/EmployeeService';
 import RoleService from '../../../Services/RoleService';
-import { Redirect } from 'react-router-dom';
 
 export default class EmployeeFormTambah extends React.Component {
 
@@ -68,6 +67,7 @@ export default class EmployeeFormTambah extends React.Component {
     }
     
     handleSubmit(event) {
+        event.preventDefault();
         const employee = {
             username: this.state.username,
             password: this.state.password,
@@ -78,15 +78,7 @@ export default class EmployeeFormTambah extends React.Component {
             noHp: this.state.noHp
         }
         EmployeeService.submitChanges(employee)
-            .then(() => {
-                return (
-                    <Redirect to={{
-                        pathname: "/employee"
-                    }}>
-                    </Redirect>
-                )
-            });
-        event.preventDefault();
+            .then(() => window.location.href = "/employee");
     }
 
     // Fungsi yang akan mengembalikan definisi tiap field pada form
@@ -153,7 +145,7 @@ export default class EmployeeFormTambah extends React.Component {
             <div>
                 <SirioButton purple recommended
                              classes="mx-1"
-                             onClick={() => this.handleSubmit()}>
+                             onClick={(event)  => this.handleSubmit(event)}>
                     Simpan
                 </SirioButton>
                 <SirioButton purple
