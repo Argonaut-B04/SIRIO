@@ -53,14 +53,21 @@ export default class TabelRekomendasi extends React.Component {
         const tambah = status === "";
         const detail = status === "Menunggu Persetujuan" || status === "Disetujui" || status === "Ditolak";
 
+        console.log(row)
         if (tambah) {
             return (
-                <SirioButton
-                    purple
-                    onClick={() => window.location.href = "/bm/bukti-pelaksanaan/tambah"}
-                >
-                    Tambah Bukti
-                </SirioButton>
+                <NavLink to={{
+                    pathname: "/bm/bukti-pelaksanaan/tambah",
+                    state: {
+                        idRekomendasi: row.idRekomendasi
+                    }
+                }}>
+                    <SirioButton
+                        purple
+                    >
+                        Tambah Bukti
+                    </SirioButton>
+                </NavLink>
             )
         } else if (detail) {
             return (

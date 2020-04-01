@@ -13,12 +13,15 @@ import com.ArgonautB04.SIRIO.services.StatusBuktiPelaksanaanRestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/v1/BuktiPelaksanaan")
 public class BuktiPelaksanaanRestController {
@@ -109,40 +112,32 @@ public class BuktiPelaksanaanRestController {
      */
     @PostMapping(value = "/tambah", consumes = {"application/json"})
     private BaseResponse<BuktiPelaksanaan> tambahBuktiPelaksanaan(
-            @RequestBody BuktiPelaksanaanDTO buktiPelaksanaanDTO
+            @RequestBody BuktiPelaksanaanDTO buktiPelaksanaanDTO,
+            Principal principal, ModelMap model
     ) {
         BaseResponse<BuktiPelaksanaan> response = new BaseResponse<>();
+        Employee employee = employeeRestService.getByUsername(principal.getName()).get();
         BuktiPelaksanaan buktiPelaksanaanTemp = new BuktiPelaksanaan();
 
         buktiPelaksanaanTemp.setStatusBuktiPelaksanaan(
                 statusBuktiPelaksanaanRestService.getById(1));
         buktiPelaksanaanTemp.setKeterangan(buktiPelaksanaanDTO.getKeterangan());
         buktiPelaksanaanTemp.setLampiran(buktiPelaksanaanDTO.getLampiran());
-
-        try {
-            Employee pembuat = employeeRestService.getById(buktiPelaksanaanDTO.getIdPembuat());
-            buktiPelaksanaanTemp.setPembuat(pembuat);
-        } catch (NoSuchElementException e) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Employee dengan ID " + buktiPelaksanaanDTO.getIdPembuat() + " tidak ditemukan!"
-            );
-        }
-
-        try {
+        buktiPelaksanaanTemp.setPembuat(employee);
+        /*try {
             Rekomendasi rekomendasi = rekomendasiRestService.getById(buktiPelaksanaanDTO.getIdRekomendasi());
             buktiPelaksanaanTemp.setRekomendasi(rekomendasi);
         } catch (NoSuchElementException e) {
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND, "Rekomendasi dengan ID " + buktiPelaksanaanDTO.getIdRekomendasi() + " tidak ditemukan!"
             );
-        }
-
+        }*/
+        Rekomendasi rekomendasi = rekomendasiRestService.getById(buktiPelaksanaanDTO.getIdRekomendasi());
+        buktiPelaksanaanTemp.setRekomendasi(rekomendasi);
         BuktiPelaksanaan buktiPelaksanaan = buktiPelaksanaanRestService.buatBuktiPelaksanaan(buktiPelaksanaanTemp);
-
         response.setStatus(200);
         response.setMessage("success");
         response.setResult(buktiPelaksanaan);
-
         return response;
     }
 

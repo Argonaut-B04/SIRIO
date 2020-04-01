@@ -13,9 +13,7 @@ public class RekomendasiDTO {
     private String durasi;
     private String status;
     private String statusBukti;
-
     private String namaKantorCabang;
-
     private List<ReminderDTO> reminderDTO;
     public List<ReminderDTO> getReminder() {
         return reminderDTO;
