@@ -12,6 +12,10 @@ class KantorCabangService {
     async getKantorCabangByLoggedInUser() {
         return this.axiosInstance.get(SirioAxiosBase.BASEURL + `/KantorCabang/getAll`);
     }
+
+    async getKantorCabangDetail() {
+        return this.axiosInstance.get(SirioAxiosBase.BASEURL + `/KantorCabang/1`);
+    }
 }
 
 export default new KantorCabangService();

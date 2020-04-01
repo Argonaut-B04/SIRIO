@@ -80,12 +80,36 @@ public class KantorCabangRestController {
      * @return detail kantor cabang
      */
     @GetMapping("/{idKantorCabang}")
-    private BaseResponse<KantorCabang> getKantorCabang(
+//    private BaseResponse<KantorCabang> getKantorCabang(
+//            @PathVariable("idKantorCabang") int idKantorCabang
+//    ) {
+//        BaseResponse<KantorCabang> response = new BaseResponse<>();
+//        try {
+//            KantorCabang result = kantorCabangRestService.getById(idKantorCabang);
+//
+//            response.setStatus(200);
+//            response.setMessage("success");
+//            response.setResult(result);
+//        } catch (NoSuchElementException e) {
+//            throw new ResponseStatusException(
+//                    HttpStatus.NOT_FOUND, "Kantor cabang dengan ID " + idKantorCabang + " tidak ditemukan!"
+//            );
+//        }
+//        return response;
+//    }
+
+    private BaseResponse<KantorCabangDTO> getKantorCabang(
             @PathVariable("idKantorCabang") int idKantorCabang
     ) {
-        BaseResponse<KantorCabang> response = new BaseResponse<>();
+        BaseResponse<KantorCabangDTO> response = new BaseResponse<>();
         try {
-            KantorCabang result = kantorCabangRestService.getById(idKantorCabang);
+            KantorCabang kantorCabang = kantorCabangRestService.getById(idKantorCabang);
+            KantorCabangDTO result = new KantorCabangDTO();
+            result.setId(kantorCabang.getIdKantor());
+            result.setArea(kantorCabang.getArea());
+            result.setRegional(kantorCabang.getRegional());
+            result.setIdPemilik(kantorCabang.getPemilik().getIdEmployee());
+            result.setKunjunganAudit(kantorCabang.getKunjunganAudit());
 
             response.setStatus(200);
             response.setMessage("success");

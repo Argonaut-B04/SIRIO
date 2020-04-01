@@ -4,7 +4,7 @@ import SirioDetailPage from '../SirioDetailPage';
 import SirioButton from '../../Button/SirioButton';
 
 export default class TabelKantorCabang extends React.Component {
-
+    
     columns = [{
         dataField: 'informasi',
         classes: classes.rowItem,

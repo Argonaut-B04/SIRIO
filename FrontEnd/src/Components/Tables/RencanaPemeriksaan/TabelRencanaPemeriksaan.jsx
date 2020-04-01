@@ -58,18 +58,6 @@ export default class TabelRencanaPemeriksaan extends React.Component {
     }
 
     columns = [{
-        dataField: '',
-        isDummyField: true,
-        text: 'NO',
-        sort: true,
-        classes: classes.rowNumber,
-        headerClasses: classes.colheader,
-        headerStyle: (colum, colIndex) => {
-            return { width: "50px", textAlign: 'center' };
-        },
-        formatter: this.rowNumber
-
-    }, {
         dataField: 'namaRencana',
         text: 'NAMA RENCANA',
         sort: true,

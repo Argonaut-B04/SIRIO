@@ -3,6 +3,7 @@ import SirioButton from '../../Button/SirioButton';
 import classes from './TabelKantorCabang.module.css';
 import SirioTable from '../SirioTable';
 import KantorCabangService from '../../../Services/KantorCabangService';
+import { NavLink } from 'react-router-dom';
 
 /**
  * Kelas untuk membuat komponen tabel kantor cabang
@@ -25,7 +26,6 @@ export default class TabelKantorCabang extends React.Component {
 
     async renderRows() {
         const response = await KantorCabangService.getKantorCabangByLoggedInUser();
-        console.log(response)
         this.setState({
             rowList: response.data.result
         })
@@ -95,15 +95,32 @@ export default class TabelKantorCabang extends React.Component {
     }
 
     getButtonsFirst(cell, row) {
+        // return (
+        //     <SirioButton
+        //         purple
+        //         onClick={() => window.location.href = "/administrator/kantorCabang/detail-kantorCabang"}
+        //     >
+        //         Detail
+        //     </SirioButton>
+        // )
         return (
-            <SirioButton
-                purple
-                onClick={() => window.location.href = "/administrator/kantorCabang/detail-kantorCabang"}
-            >
-                Detail
-            </SirioButton>
+            <NavLink to={{
+                pathname: "/kantorCabang/detail-kantorCabang",
+                state: {
+                    id: row.idEmployee,
+                }
+            }}>
+                <SirioButton
+                    purple
+                >
+                    Detail
+                </SirioButton>
+            </NavLink>
         )
     }
+
+    
+
 
     render() {
         return (

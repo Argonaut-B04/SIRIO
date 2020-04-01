@@ -50,7 +50,7 @@ public class RencanaPemeriksaanRestController {
      * @return daftar rencana pemeriksaan yang terhubung dengan pembuat tersebut
      */
     @GetMapping("/getAll")
-    private BaseResponse<List<RencanaPemeriksaanDTO>> getAllRencanaPemeriksaan((Principal principal) {
+    private BaseResponse<List<RencanaPemeriksaanDTO>> getAllRencanaPemeriksaan(Principal principal) {
         BaseResponse<List<RencanaPemeriksaanDTO>> response = new BaseResponse<>();
 
         try {
@@ -67,6 +67,8 @@ public class RencanaPemeriksaanRestController {
                 RencanaPemeriksaanDTO rencanaPemeriksaanDTO = new RencanaPemeriksaanDTO();
                 rencanaPemeriksaanDTO.setId(rencanaPemeriksaan.getIdRencana());
                 rencanaPemeriksaanDTO.setStatus(rencanaPemeriksaan.getStatus().getIdStatusRencana());
+                rencanaPemeriksaanDTO.setNamaRencana(rencanaPemeriksaan.getNamaRencana());
+
                 resultDTO.add(rencanaPemeriksaanDTO);
             }
 
