@@ -7,11 +7,13 @@ class SirioDetailPage extends Component {
     render() {
         return (
             <div>
-                <div className={classes.headerWrapper}>
-                    <h2 className={classes.title}>
-                        {this.props.title}
-                    </h2>
-                </div>
+                {this.props.title &&
+                    <div className={classes.headerWrapper}>
+                        <h2 className={classes.title}>
+                            {this.props.title}
+                        </h2>
+                    </div>
+                }
                 <div className={classes.toolkitWrapper}>
                     <Table responsive>
                         <tbody>

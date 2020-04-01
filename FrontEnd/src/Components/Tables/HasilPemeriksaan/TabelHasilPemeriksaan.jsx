@@ -102,7 +102,7 @@ export default class TabelHasilPemeriksaan extends React.Component {
                 return { width: "25%", textAlign: 'left' };
             }
         }, {
-            dataField: 'statusHasilPemeriksaan',
+            dataField: 'namaStatus',
             text: 'STATUS',
             sort: true,
             classes: classes.rowItem,
