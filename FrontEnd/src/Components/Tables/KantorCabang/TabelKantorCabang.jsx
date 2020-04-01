@@ -2,42 +2,36 @@ import React from 'react';
 import SirioButton from '../../Button/SirioButton';
 import classes from './TabelKantorCabang.module.css';
 import SirioTable from '../SirioTable';
+import KantorCabangService from '../../../Services/KantorCabangService';
 
+/**
+ * Kelas untuk membuat komponen tabel kantor cabang
+ */
 export default class TabelKantorCabang extends React.Component {
 
-    getButtonsFirst(cell, row) {
-        return (
-            <SirioButton
-                purple
-                onClick={() => window.location.href = "/administrator/kantorCabang/detail-kantorCabang"}
-            >
-                Detail
-            </SirioButton>
-        )
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            rowList: []
+        }
+
+        this.renderRows = this.renderRows.bind(this);
+    }
+
+    componentDidMount() {
+        this.renderRows();
+    }
+
+    async renderRows() {
+        const response = await KantorCabangService.getKantorCabangByLoggedInUser();
+        console.log(response)
+        this.setState({
+            rowList: response.data.result
+        })
     }
 
     columns = [{
-        dataField: '',
-        isDummyField: true,
-        text: 'NO',
-        sort: true,
-        classes: classes.rowNumber,
-        headerClasses: classes.colheader,
-        headerStyle: (colum, colIndex) => {
-            return { width: "50px", textAlign: 'center' };
-        },
-        formatter: this.rowNumber
-
-    }, {
-        dataField: 'namaPoint',
-        text: 'NAMA POINT',
-        sort: true,
-        classes: classes.rowItem,
-        headerClasses: classes.colheader,
-        headerStyle: (colum, colIndex) => {
-            return { width: "15%", textAlign: 'left' };
-        }
-    }, {
         dataField: 'bm',
         text: 'BRANCH MANAGER',
         sort: true,
@@ -65,8 +59,8 @@ export default class TabelKantorCabang extends React.Component {
             return { width: "15%", textAlign: 'left' };
         }
     }, {
-        dataField: 'jumlahKunjungan',
-        text: 'JUMLAH KUNJUNGAN',
+        dataField: 'kunjunganAudit',
+        text: 'KUNJUNGAN AUDIT',
         sort: true,
         classes: classes.rowItem,
         headerClasses: classes.colheader,
@@ -84,19 +78,6 @@ export default class TabelKantorCabang extends React.Component {
         formatter: this.getButtonsFirst
     }];
 
-    data = [
-        { "id": "1", "namaPoint": "Kantor A", "bm": "nabilla",  "area": "Area 1", "regional": "regional 1", "jumlahKunjungan": "1"},
-        { "id": "2", "namaPoint": "Kantor A", "bm": "nabilla",  "area": "Area 1", "regional": "regional 1", "jumlahKunjungan": "1"},
-        { "id": "3", "namaPoint": "Kantor A", "bm": "nabilla",  "area": "Area 1", "regional": "regional 1", "jumlahKunjungan": "1"},
-        { "id": "4", "namaPoint": "Kantor A", "bm": "nabilla",  "area": "Area 1", "regional": "regional 1", "jumlahKunjungan": "1"},
-        {  "id": "5", "namaPoint": "Kantor A", "bm": "nabilla",  "area": "Area 1", "regional": "regional 1", "jumlahKunjungan": "1"},
-        { "id": "6", "namaPoint": "Kantor A", "bm": "nabilla",  "area": "Area 1", "regional": "regional 1", "jumlahKunjungan": "1"},
-        {  "id": "7", "namaPoint": "Kantor A", "bm": "nabilla",  "area": "Area 1", "regional": "regional 1", "jumlahKunjungan": "1"},
-        {  "id": "8", "namaPoint": "Kantor A", "bm": "nabilla",  "area": "Area 1", "regional": "regional 1", "jumlahKunjungan": "1"}
-       
-        
-    ]
-
     defaultSorted = [{
         dataField: 'id',
         order: 'asc'
@@ -113,12 +94,22 @@ export default class TabelKantorCabang extends React.Component {
         )
     }
 
+    getButtonsFirst(cell, row) {
+        return (
+            <SirioButton
+                purple
+                onClick={() => window.location.href = "/administrator/kantorCabang/detail-kantorCabang"}
+            >
+                Detail
+            </SirioButton>
+        )
+    }
+
     render() {
         return (
-        
             <SirioTable
                 title="Daftar Kantor Cabang"
-                data={this.data}
+                data={this.state.rowList}
                 id='id'
                 columnsDefinition={this.columns}
                 includeSearchBar

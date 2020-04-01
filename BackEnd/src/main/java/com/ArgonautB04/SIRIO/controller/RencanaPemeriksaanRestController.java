@@ -14,9 +14,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.security.Principal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/RencanaPemeriksaan")
@@ -37,20 +40,47 @@ public class RencanaPemeriksaanRestController {
     @Autowired
     private KantorCabangRestService kantorCabangRestService;
 
+
     /**
-     * Mengambil seluruh rencana pemeriksaan
+     * Mengambil seluruh rencana pemeriksaan yang terhubung dengan user yang sedang login
+     * <p>
+     * Changelog:
+     * - Mengubah filter id pembuat dengan filter logged in user
      *
-     * @return daftar rencana pemeriksaan
+     * @return daftar rencana pemeriksaan yang terhubung dengan pembuat tersebut
      */
     @GetMapping("/getAll")
-    private BaseResponse<List<RencanaPemeriksaan>> getAllRencanaPemeriksaan() {
-        BaseResponse<List<RencanaPemeriksaan>> response = new BaseResponse<>();
-        List<RencanaPemeriksaan> result = rencanaPemeriksaanRestService.getAll();
-        response.setStatus(200);
-        response.setMessage("success");
-        response.setResult(result);
+    private BaseResponse<List<RencanaPemeriksaanDTO>> getAllRencanaPemeriksaan((Principal principal) {
+        BaseResponse<List<RencanaPemeriksaanDTO>> response = new BaseResponse<>();
+
+        try {
+            Optional<Employee> employeeTarget = employeeRestService.getByUsername(principal.getName());
+            Employee employee;
+            if (employeeTarget.isPresent()) {
+                employee = employeeTarget.get();
+            } else {
+                throw new NoSuchElementException();
+            }
+            List<RencanaPemeriksaan> result = rencanaPemeriksaanRestService.getByPembuat(employee);
+            List<RencanaPemeriksaanDTO> resultDTO = new ArrayList<>();
+            for (RencanaPemeriksaan rencanaPemeriksaan : result) {
+                RencanaPemeriksaanDTO rencanaPemeriksaanDTO = new RencanaPemeriksaanDTO();
+                rencanaPemeriksaanDTO.setId(rencanaPemeriksaan.getIdRencana());
+                rencanaPemeriksaanDTO.setStatus(rencanaPemeriksaan.getStatus().getIdStatusRencana());
+                resultDTO.add(rencanaPemeriksaanDTO);
+            }
+
+            response.setStatus(200);
+            response.setMessage("success");
+            response.setResult(resultDTO);
+        } catch (NoSuchElementException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Akun anda tidak terdaftar atau tidak ditemukan!"
+            );
+        }
         return response;
     }
+
 
     /**
      * Mengambil seluruh rencana pemeriksaan yang terhubung dengan pembuat

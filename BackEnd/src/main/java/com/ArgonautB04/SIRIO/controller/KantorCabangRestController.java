@@ -9,9 +9,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/v1/KantorCabang")
 public class KantorCabangRestController {
@@ -26,17 +30,45 @@ public class KantorCabangRestController {
     private RiskRatingRestService riskRatingRestService;
 
     /**
-     * Mengambil seluruh kantor cabang
+     * Mengambil seluruh kantor cabang yang terhubung dengan user yang sedang login
+     * <p>
+     * Changelog:
+     * - Mengubah filter id pembuat dengan filter logged in user
      *
-     * @return daftar kantor cabang
+     * @return daftar kantor cabang yang terhubung dengan pembuat tersebut
      */
     @GetMapping("/getAll")
-    private BaseResponse<List<KantorCabang>> getAllKantorCabang() {
-        BaseResponse<List<KantorCabang>> response = new BaseResponse<>();
-        List<KantorCabang> result = kantorCabangRestService.getAll();
-        response.setStatus(200);
-        response.setMessage("success");
-        response.setResult(result);
+    private BaseResponse<List<KantorCabangDTO>> getAllKantorCabang(Principal principal) {
+        BaseResponse<List<KantorCabangDTO>> response = new BaseResponse<>();
+
+        try {
+            Optional<Employee> employeeTarget = employeeRestService.getByUsername(principal.getName());
+            Employee employee;
+            if (employeeTarget.isPresent()) {
+                employee = employeeTarget.get();
+            } else {
+                throw new NoSuchElementException();
+            }
+            List<KantorCabang> result = kantorCabangRestService.getByPembuat(employee);
+            List<KantorCabangDTO> resultDTO = new ArrayList<>();
+            for (KantorCabang kantorCabang : result) {
+                KantorCabangDTO kantorCabangDTO = new KantorCabangDTO();
+                kantorCabangDTO.setId(kantorCabang.getIdKantor());
+                kantorCabangDTO.setArea(kantorCabang.getArea());
+                kantorCabangDTO.setRegional(kantorCabang.getRegional());
+                kantorCabangDTO.setIdPemilik(kantorCabang.getPemilik().getIdEmployee());
+                kantorCabangDTO.setKunjunganAudit(kantorCabang.getKunjunganAudit());
+                resultDTO.add(kantorCabangDTO);
+            }
+
+            response.setStatus(200);
+            response.setMessage("success");
+            response.setResult(resultDTO);
+        } catch (NoSuchElementException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Akun anda tidak terdaftar atau tidak ditemukan!"
+            );
+        }
         return response;
     }
 

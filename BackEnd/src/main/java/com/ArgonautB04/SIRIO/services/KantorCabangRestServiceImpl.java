@@ -1,5 +1,6 @@
 package com.ArgonautB04.SIRIO.services;
 
+import com.ArgonautB04.SIRIO.model.Employee;
 import com.ArgonautB04.SIRIO.model.KantorCabang;
 import com.ArgonautB04.SIRIO.repository.KantorCabangDB;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,5 +51,10 @@ public class KantorCabangRestServiceImpl implements KantorCabangRestService {
     @Override
     public void hapusKantorCabang(int idKantorCabang) {
         kantorCabangDB.deleteById(idKantorCabang);
+    }
+
+    @Override
+    public List<KantorCabang> getByPembuat(Employee pembuat){
+        return kantorCabangDB.findAllByPembuat(pembuat);
     }
 }

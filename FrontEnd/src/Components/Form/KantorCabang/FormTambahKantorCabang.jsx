@@ -126,19 +126,17 @@ export default class FormTambahKantorCabang extends React.Component {
         )
     }
 
-    submitButton(){
-        return(
-            <div className="w-100 text-right">
-                <SirioButton
-                    purple
-                >
+    submitButton() {
+        return (
+            <div>
+                <SirioButton purple recommended
+                    classes="mx-2"
+                    onClick={() => window.location.href = "http://www.google.com"}>
                     Simpan
                 </SirioButton>
-                <p> </p>
-                <SirioButton
-                    purple
-                >
-                   Batal
+                <SirioButton purple
+                    onClick={() => window.location.href = "http://www.google.com"}>
+                    Batal
                 </SirioButton>
             </div>
         )

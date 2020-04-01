@@ -2,8 +2,30 @@ import React from 'react';
 import SirioButton from '../../Button/SirioButton';
 import classes from './TabelRencanaPemeriksaan.module.css';
 import SirioTable from '../SirioTable';
+import RencanaPemeriksaanService from '../../../Services/RencanaPemeriksaanService';
 
 export default class TabelRencanaPemeriksaan extends React.Component {
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            rowList: []
+        }
+
+        this.renderRows = this.renderRows.bind(this);
+    }
+
+    componentDidMount() {
+        this.renderRows();
+    }
+
+    async renderRows() {
+        const response = await RencanaPemeriksaanService.getRencanaPemeriksaanByLoggedInUser();
+        this.setState({
+            rowList: response.data.result
+        })
+    }
 
     statusFormatter(cell) {
         switch (cell) {
@@ -95,21 +117,6 @@ export default class TabelRencanaPemeriksaan extends React.Component {
         formatter: this.getButtonsFirst
     }];
 
-    data = [
-        {  "id": "1", "namaRencana": "Rencana Pemeriksaan 4", "tahun": "2020",  "bulan": "Januari", "statusRencanaPemeriksaan": "Sedang Dijalankan"},
-        {  "id": "2", "namaRencana": "Rencana Pemeriksaan 4", "tahun": "2020",  "bulan": "Januari", "statusRencanaPemeriksaan": "Draft"},
-        {  "id": "3", "namaRencana": "Rencana Pemeriksaan 4", "tahun": "2020",  "bulan": "Januari", "statusRencanaPemeriksaan": "Selesai"},
-        {  "id": "4", "namaRencana": "Rencana Pemeriksaan 4", "tahun": "2020",  "bulan": "Januari", "statusRencanaPemeriksaan": "Sedang Dijalankan"},
-        {  "id": "5", "namaRencana": "Rencana Pemeriksaan 4", "tahun": "2020",  "bulan": "Januari", "statusRencanaPemeriksaan": "Sedang Dijalankan"},
-        {  "id": "6", "namaRencana": "Rencana Pemeriksaan 4", "tahun": "2020",  "bulan": "Januari", "statusRencanaPemeriksaan": "Sedang Dijalankan"},
-        {  "id": "7", "namaRencana": "Rencana Pemeriksaan 4", "tahun": "2020",  "bulan": "Januari", "statusRencanaPemeriksaan": "Sedang Dijalankan"},
-        {  "id": "8", "namaRencana": "Rencana Pemeriksaan 4", "tahun": "2020",  "bulan": "Januari", "statusRencanaPemeriksaan": "Sedang Dijalankan"},
-        {  "id": "9", "namaRencana": "Rencana Pemeriksaan 4", "tahun": "2020",  "bulan": "Januari", "statusRencanaPemeriksaan": "Sedang Dijalankan"},
-        {  "id": "10", "namaRencana": "Rencana Pemeriksaan 4", "tahun": "2020",  "bulan": "Januari", "statusRencanaPemeriksaan": "Sedang Dijalankan"},
-        {  "id": "11", "namaRencana": "Rencana Pemeriksaan 4", "tahun": "2020",  "bulan": "Januari", "statusRencanaPemeriksaan": "Sedang Dijalankan"},
-        
-    ]
-
     defaultSorted = [{
         dataField: 'id',
         order: 'asc'
@@ -131,7 +138,7 @@ export default class TabelRencanaPemeriksaan extends React.Component {
         return (
             <SirioTable
                 title="Daftar Rencana Pemeriksaan"
-                data={this.data}
+                data={this.state.rowList}
                 id='id'
                 columnsDefinition={this.columns}
                 includeSearchBar
