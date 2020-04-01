@@ -41,7 +41,7 @@ export default class SirioSelect extends Component {
                 onChange={event => this.props.handleChange(this.props.name, event)}
                 components={{ IndicatorSeparator:() => null }}
                 options={this.props.options}
-                className={classes.select}
+                className={this.props.className ? [this.props.className, classes.select].join(" ") : classes.select}
                 styles={this.customStyles}
             />
         );

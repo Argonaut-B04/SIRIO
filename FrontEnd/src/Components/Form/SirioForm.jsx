@@ -18,9 +18,19 @@ class SirioForm extends Component {
         return (
             <>
                 <div className={classes.headerWrapper}>
-                    <h2 className={classes.title}>
-                        {this.props.title}
-                    </h2>
+                    <div className="row">
+                        <h2 className={classes.title}>
+                            {this.props.title}
+                        </h2>
+                    </div>
+                    <div className="row">
+                        {this.props.betweenTitleSubtitle}
+                    </div>
+                    <div className="row">
+                        <h5 className={classes.subtitle}>
+                            {this.props.subtitle}
+                        </h5>
+                    </div>
                 </div>
                 <form className={classes.formWrapper} onSubmit={this.props.onSubmit}>
                     {this.props.inputDefinition.map((field, i) =>
@@ -33,6 +43,7 @@ class SirioForm extends Component {
                             value={field.value}
                             placeholder={field.placeholder}
                             optionList={field.optionList}
+                            classes={field.classes}
                             customInput={field.customInput}
                         />
                     )}
