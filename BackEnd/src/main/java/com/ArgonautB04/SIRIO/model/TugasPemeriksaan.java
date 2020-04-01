@@ -40,7 +40,7 @@ public class TugasPemeriksaan implements Serializable {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "pelaksana", referencedColumnName = "idEmployee", nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @OnDelete(action = OnDeleteAction.NO_ACTION)
     private Employee pelaksana;
 
     public int getIdTugas() {

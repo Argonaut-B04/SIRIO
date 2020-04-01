@@ -1,0 +1,19 @@
+.colheader {
+    color: white;
+    background-color: #7F3F98;
+    font-family: 'Nunito', sans-serif;
+    padding: 0.6rem !important;
+    vertical-align: middle !important;
+    text-align: center;
+}
+
+.rowNumber {
+    vertical-align: middle !important;
+    text-align: center;
+}
+
+.rowItem {
+    padding: 0.3rem !important;
+    vertical-align: middle !important;
+    height: 50px;
+}

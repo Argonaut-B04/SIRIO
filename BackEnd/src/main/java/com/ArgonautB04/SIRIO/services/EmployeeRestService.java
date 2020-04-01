@@ -1,6 +1,7 @@
 package com.ArgonautB04.SIRIO.services;
 
 import com.ArgonautB04.SIRIO.model.Employee;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,5 +21,5 @@ public interface EmployeeRestService {
 
     Employee aktifkanEmployee(int idEmployee);
 
-    void hapusEmployee(int idEmployee);
+    void hapusEmployee(int idEmployee) throws DataIntegrityViolationException;
 }
