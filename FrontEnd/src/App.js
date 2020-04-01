@@ -25,6 +25,7 @@ import './App.css';
 import RegistrasiRisiko from './pages/ManagerOR/RegistrasiRisiko';
 import DetailRisiko from './pages/ManagerOR/DetailRisiko';
 import FormRisiko from './pages/ManagerOR/FormRisiko';
+import HierarkiRisiko from './pages/ManagerOR/HierarkiRisiko';
 
 /**
  * Router utama yang memetakan url ke controller
@@ -49,6 +50,7 @@ class App extends React.Component {
             <Route exact path="/registrasi-risiko" component={RegistrasiRisiko} />
             <Route exact path="/registrasi-risiko/detail/1" component={DetailRisiko} />
             <Route exact path="/registrasi-risiko/tambah" component={FormRisiko} />
+            <Route exact path="/registrasi-risiko/ubah-hierarki" component={HierarkiRisiko} />
             <Route exact path="/login" component={Login} />
             <Route exact path="/logout" component={Logout} />
             <Route exact path="/Form" component={FormDemo} />

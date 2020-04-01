@@ -1,17 +1,17 @@
 import React from 'react';
 import SirioButton from '../../Button/SirioButton';
-import classes from '../Rekomendasi/TabelRekomendasi.module.css';
-import SirioTable from '../SirioTable';
+import classes from '../../Tables/RegistrasiRisiko/TabelRisiko.module.css';
+import SirioTable from '../../Tables/SirioTable';
 
-export default class TabelRisiko extends React.Component {
+export default class FormHierarkiRisiko extends React.Component {
 
     getButtons(cell, row) {
         return (
             <SirioButton
                 purple
-                onClick={() => window.location.href = "/registrasi-risiko/detail/1"}
+                onClick={() => window.location.href = "/registrasi-risiko/ubah-hierarki/ubah"}
             >
-                Detail
+                Ubah Hierarki
             </SirioButton>
         )
     }

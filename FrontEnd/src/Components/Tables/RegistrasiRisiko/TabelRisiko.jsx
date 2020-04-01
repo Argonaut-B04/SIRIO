@@ -1,6 +1,6 @@
 import React from 'react';
 import SirioButton from '../../Button/SirioButton';
-import classes from '../Rekomendasi/TabelRekomendasi.module.css';
+import classes from '../RegistrasiRisiko/TabelRisiko.module.css';
 import SirioTable from '../SirioTable';
 
 export default class TabelRisiko extends React.Component {
@@ -81,7 +81,7 @@ export default class TabelRisiko extends React.Component {
                     Tambah Risiko
                 </SirioButton>
                 <SirioButton purple
-                onClick={() => window.location.href = "http://www.google.com"}>
+                onClick={() => window.location.href = "/registrasi-risiko/ubah-hierarki"}>
                     Ubah Semua Hierarki
                 </SirioButton> 
             </div>
