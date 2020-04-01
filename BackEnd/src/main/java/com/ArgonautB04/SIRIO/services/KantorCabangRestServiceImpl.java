@@ -1,5 +1,6 @@
 package com.ArgonautB04.SIRIO.services;
 
+import com.ArgonautB04.SIRIO.model.Employee;
 import com.ArgonautB04.SIRIO.model.KantorCabang;
 import com.ArgonautB04.SIRIO.repository.KantorCabangDB;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,11 @@ public class KantorCabangRestServiceImpl implements KantorCabangRestService {
         Optional<KantorCabang> kantorCabang = kantorCabangDB.findById(idKantorCabang);
         if (kantorCabang.isPresent()) return kantorCabang.get();
         else throw new NoSuchElementException();
+    }
+
+    @Override
+    public KantorCabang getByPemilik(Employee pemilik) {
+        return kantorCabangDB.findAllByPemilik(pemilik);
     }
 
     @Override
