@@ -10,4 +10,6 @@ public interface StatusRekomendasiRestService {
     StatusRekomendasi getById(int idStatus);
 
     List<StatusRekomendasi> getAll();
+
+    StatusRekomendasi getByNamaStatus(String namaStatus);
 }
