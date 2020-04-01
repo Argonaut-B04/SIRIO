@@ -6,12 +6,16 @@ import com.ArgonautB04.SIRIO.services.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/TugasPemeriksaan")
@@ -28,6 +32,12 @@ public class TugasPemeriksaanRestController {
 
     @Autowired
     private KantorCabangRestService kantorCabangRestService;
+
+    @Autowired
+    private RoleRestService roleRestService;
+
+    @Autowired
+    private HasilPemeriksaanRestService hasilPemeriksaanRestService;
 
     /**
      * Mengambil seluruh tugas pemeriksaan yang terhubung dengan suatu rencana pemeriksaan
@@ -57,29 +67,37 @@ public class TugasPemeriksaanRestController {
     }
 
     /**
-     * Mengambil seluruh tugas pemeriksaan yang terhubung dengan pelaksana tugas tersebut
+     * Mengambil seluruh tugas pemeriksaan berdasarkan role employee
      *
-     * @param idPelaksana identifier pelaksanan
-     *
-     * @return daftar tugas pemeriksaan yang terhubung dengan pelaksana tersebut
+     * @return daftar tugas pemeriksaan yang terhubung dengan employee tersebut
      */
-    @GetMapping("/getByPelaksana/{idPelaksana}")
-    private BaseResponse<List<TugasPemeriksaan>> getAllTugasPemeriksaanUntukPelaksana(
-            @PathVariable("idPelaksana") int idPelaksana
+    @GetMapping("/getByEmployee")
+    private BaseResponse<List<TugasPemeriksaanDTO>> getAllTugasPemeriksaanUntukEmployee(
+            Principal principal, ModelMap model
     ) {
-        BaseResponse<List<TugasPemeriksaan>> response = new BaseResponse<>();
-        try {
-            Employee pelaksana = employeeRestService.getById(idPelaksana);
-            List<TugasPemeriksaan> result = tugasPemeriksaanRestService.getByPelaksana(pelaksana);
+        BaseResponse<List<TugasPemeriksaanDTO>> response = new BaseResponse<>();
+        Employee employee = employeeRestService.getByUsername(principal.getName()).get();
 
-            response.setStatus(200);
-            response.setMessage("success");
-            response.setResult(result);
-        } catch (NoSuchElementException e) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Employee dengan ID " + idPelaksana + " tidak ditemukan!"
-            );
+        List<TugasPemeriksaan> daftarTugasPemeriksaan = employee.getRole() == roleRestService.getById(6) ?
+                tugasPemeriksaanRestService.getByPelaksana(employee) : tugasPemeriksaanRestService.getAll();
+
+        List<TugasPemeriksaanDTO> result = new ArrayList<>();
+        for (TugasPemeriksaan tugasPemeriksaan: daftarTugasPemeriksaan) {
+            TugasPemeriksaanDTO tugasPemeriksaanDTO = new TugasPemeriksaanDTO();
+            tugasPemeriksaanDTO.setId(tugasPemeriksaan.getIdTugas());
+            tugasPemeriksaanDTO.setTanggalMulai(tugasPemeriksaan.getTanggalMulai().toString());
+            tugasPemeriksaanDTO.setTanggalSelesai(tugasPemeriksaan.getTanggalSelesai().toString());
+            tugasPemeriksaanDTO.setIdQA(tugasPemeriksaan.getPelaksana().getIdEmployee());
+            tugasPemeriksaanDTO.setNamaQA(tugasPemeriksaan.getPelaksana().getNama());
+            tugasPemeriksaanDTO.setNamaKantorCabang(tugasPemeriksaan.getKantorCabang().getNamaKantor());
+            hasilPemeriksaanRestService.getByTugasPemeriksaan(tugasPemeriksaan).ifPresent(
+                    pemeriksaan -> tugasPemeriksaanDTO.setIdHasilPemeriksaan(pemeriksaan.getIdHasilPemeriksaan()));
+            result.add(tugasPemeriksaanDTO);
         }
+
+        response.setStatus(200);
+        response.setMessage("success");
+        response.setResult(result);
         return response;
     }
 

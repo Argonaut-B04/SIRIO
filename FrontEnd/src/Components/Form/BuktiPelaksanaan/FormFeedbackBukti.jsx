@@ -1,33 +1,9 @@
 import React from 'react';
-import SirioFormWithDetail from '../SirioFormWithDetail';
+import SirioForm from '../SirioForm';
 import SirioButton from '../../Button/SirioButton';
-import classes from '../../DetailPages/BuktiPelaksanaan/DetailBukti.module.css';
 
 export default class FormFeedbackBukti extends React.Component {
 
-    columns = [{
-        dataField: 'informasi',
-        classes: classes.rowItem,
-        headerClasses: classes.colheader,
-        headerStyle: (colum, colIndex) => {
-            return { width: "5%", textAlign: 'left' };
-        }
-
-    }, {
-        dataField: 'isiInformasi',
-        classes: classes.rowItem,
-        headerClasses: classes.colheader,
-        headerStyle: (colum, colIndex) => {
-            return { width: "20%", textAlign: 'left' };
-        }
-    }];
-
-    data = [
-        { "informasi": "Keterangan :", "isiInformasi": "Keterangan bukti rekomendasi tesss" },
-        { "informasi": "Lampiran :", "isiInformasi": "https://drive.google.com/drive/folders/1SvB_2W4BjD8rxVQR1-dDbA63-4Zx-hoN" },
-    ]
-
-    // Form Feedback
     constructor(props) {
         super(props);
 
@@ -36,25 +12,21 @@ export default class FormFeedbackBukti extends React.Component {
         }
 
         this.handleChange = this.handleChange.bind(this);
-        this.inputDefinition = this.inputDefinition.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    data = {
+        Keterangan: "Keterangan bukti rekomendasi",
+        Lampiran: "https://drive.google.com/drive/folders/1SvB_2W4BjD8rxVQR1-dDbA63-4Zx-hoN"
     }
 
     handleChange(event) {
-        if (typeof event.target.checked === "boolean") {
-            this.setState(
-                {
-                    [event.target.name]
-                        : event.target.checked
-                }
-            )
-        } else {
-            this.setState(
-                {
-                    [event.target.name]
-                        : event.target.value
-                }
-            )
-        }
+        this.setState(
+            {
+                [event.target.name]
+                    : event.target.value
+            }
+        )
     }
 
     handleSubmit(event) {
@@ -63,18 +35,26 @@ export default class FormFeedbackBukti extends React.Component {
     }
 
     inputDefinition() {
-        return (
-            [
-                {
-                    label: "Feedback :",
-                    handleChange: this.handleChange,
-                    type: "textarea",
-                    name: "feedback",
-                    value: this.state.feedback,
-                    placeholder: "Masukan feedback penolakan"
-                }
-            ]
+        var rowDefinition = [];
+        Object.keys(this.data).map(key => rowDefinition.push(
+            {
+                label: key,
+                customInput: <p>{this.data[key]}</p>
+            }
+        ))
+        
+        rowDefinition.push(
+            {
+                label: "Feedback :",
+                handleChange: this.handleChange,
+                type: "textarea",
+                name: "feedback",
+                value: this.state.feedback,
+                placeholder: "Masukan feedback penolakan"
+            }
         )
+        
+        return rowDefinition;
     }
 
     submitButton() {
@@ -95,11 +75,10 @@ export default class FormFeedbackBukti extends React.Component {
 
     render() {
         return (
-            <SirioFormWithDetail
+            <SirioForm
                 title="Form Feedback Penolakan Bukti"
                 data={this.data}
                 id='id'
-                columnsDefinition={this.columns}
                 inputDefinition={this.inputDefinition()}
                 onSubmit={this.handleSubmit}
                 submitButton={this.submitButton()}
