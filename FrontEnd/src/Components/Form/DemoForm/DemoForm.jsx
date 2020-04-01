@@ -198,14 +198,22 @@ export default class DemoForm extends React.Component {
     // Fungsi render SirioForm
     render() {
         return (
-            <SirioForm
-                title="Demo Form"
-                betweenTitleSubtitle={this.getBetween()}
-                subtitle="Ini demo form untuk ngedemoin ... form"
-                inputDefinition={this.inputDefinition()}
-                onSubmit={this.handleSubmit}
-                submitButton={this.submitButton()}
-            />
+            <>
+                <SirioForm
+                    title="Demo Form"
+                    betweenTitleSubtitle={this.getBetween()}
+                    subtitle="Ini demo form untuk ngedemoin ... form"
+                    inputDefinition={this.inputDefinition()}
+                    onSubmit={this.handleSubmit}
+                    submitButton={this.submitButton()}
+                />
+                <SirioForm
+                    noHeader
+                    inputDefinition={this.inputDefinition()}
+                    onSubmit={this.handleSubmit}
+                    submitButton={this.submitButton()}
+                />
+            </>
         );
     }
 }

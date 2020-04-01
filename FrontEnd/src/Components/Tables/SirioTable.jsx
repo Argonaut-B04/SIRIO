@@ -6,6 +6,7 @@ import overlayFactory from 'react-bootstrap-table2-overlay';
 import classes from './SirioTable.module.css';
 import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css"
 import 'react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.min.css';
+import SirioComponentHeader from '../Header/SirioComponentHeader';
 
 /**
  * Kelas komponen tabel untuk Sirio secara umum
@@ -117,12 +118,14 @@ export default class SirioTable extends Component {
         const columnsDefinition = this.columns.concat(this.props.columnsDefinition);
         return (
             <div>
-                <div className={classes.headerWrapper}>
-                    <h2 className={classes.title}>
-                        {this.props.title}
-                    </h2>
-                    {this.props.headerButton}
-                </div>
+                {this.props.noHeader || this.props.customHeader ? this.props.customHeader :
+                    <SirioComponentHeader
+                        headerButton={this.props.headerButton}
+                        title={this.props.title}
+                        subtitle={this.props.subtitle}
+                        betweenTitleSubtitle={this.props.betweenTitleSubtitle}
+                    />
+                }
                 <div className={classes.toolkitWrapper}>
                     <ToolkitProvider
                         bootstrap4
