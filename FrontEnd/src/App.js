@@ -49,7 +49,7 @@ class App extends React.Component {
             <Route exact path="/bukti-pelaksanaan/detail-persetujuan" component={DetailPersetujuanBukti} />
             <Route exact path="/bukti-pelaksanaan/tolak-bukti" component={FormFeedbackBukti} />
             <Route exact path="/registrasi-risiko" component={RegistrasiRisiko} />
-            <Route exact path="/registrasi-risiko/detail/1" component={DetailRisiko} />
+            <Route exact path="/registrasi-risiko/detail" component={DetailRisiko} />
             <Route exact path="/registrasi-risiko/tambah" component={FormRisiko} />
             <Route exact path="/registrasi-risiko/ubah-hierarki" component={HierarkiRisiko} />
             <Route exact path="/login" component={Login} />

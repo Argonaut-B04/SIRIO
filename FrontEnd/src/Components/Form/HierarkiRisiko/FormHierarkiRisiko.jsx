@@ -5,11 +5,43 @@ import SirioTable from '../../Tables/SirioTable';
 
 export default class FormHierarkiRisiko extends React.Component {
 
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            nama: "",
+            kategori: "",
+            editMode: false,
+        }
+
+        this.handleSelectChange = this.handleSelectChange.bind(this);
+    }
+
+    // Fungsi untuk mengubah state ketika isi dropdown diubah
+    // Fungsi unu wajib ada jika membuat field tipe select
+    handleSelectChange(name, event) {
+        this.setState(
+            {
+                [name]
+                    : event.value
+            }
+        )
+    }
+
+    // Fungsi yang akan dijalankan ketika user submit
+    // Umumnya akan digunakan untuk memanggil service komunikasi ke backend
+    handleSubmit(event) {
+        alert("submited");
+        // event.preventDefault wajib ada
+        event.preventDefault();
+    }
+
     getButtons(cell, row) {
         return (
             <SirioButton
                 purple
-                onClick={() => window.location.href = "/registrasi-risiko/ubah-hierarki/ubah"}
+                onClick={() => this.setState.editMode(true),
+                    window.location.href = "/registrasi-risiko/ubah-hierarki/ubah"}
             >
                 Ubah Hierarki
             </SirioButton>
@@ -71,6 +103,18 @@ export default class FormHierarkiRisiko extends React.Component {
         dataField: 'id',
         order: 'asc'
     }];
+
+    // getButtonSecond(){
+    //     if (this.state.editMode) {
+    //         return (
+            
+    //         )
+    //     } else {
+    //         return (
+
+    //         )
+    //     }
+    // }
 
     // Fungsi untuk mendapatkan tombol di sisi kanan title
     headerButton() {
