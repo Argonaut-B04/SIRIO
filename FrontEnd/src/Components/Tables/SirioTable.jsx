@@ -103,10 +103,9 @@ export default class SirioTable extends Component {
     columns = [{
         dataField: 'no',
         text: 'NO',
-        sort: true,
-        classes: classes.rowNumber,
-        headerClasses: classes.colheader,
-        headerStyle: (colum, colIndex) => {
+        classes: [classes.rowNumber, "d-none d-sm-table-cell"].join(" "),
+        headerClasses: [classes.colheader, "d-none d-sm-table-cell"].join(" "),
+        headerStyle: () => {
             return { width: "50px", textAlign: 'center' };
         },
         formatter: (cell, row, enumObject, index) => this.numberFormatter(enumObject),
@@ -130,7 +129,6 @@ export default class SirioTable extends Component {
                         keyField={this.props.id}
                         data={this.props.data}
                         columns={columnsDefinition}
-                        defaultSorted={this.props.defaultSorted}
                         search={{
                             searchFormatted: true
                         }}
@@ -154,7 +152,7 @@ export default class SirioTable extends Component {
                                         ref={n => this.node = n}
                                         striped
                                         hover
-                                        condensed
+                                        defaultSorted={this.props.defaultSorted}
                                         noDataIndication={this.indication}
                                         pagination={this.pagination}
                                         overlay={this.overlay}

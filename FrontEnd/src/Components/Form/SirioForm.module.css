@@ -13,10 +13,11 @@
 }
 
 .headerWrapper {
-    /* padding: 0 1rem; */
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1.5rem;
-    margin-top: 2rem;
+    flex-direction: column;
+}
+
+.headerWrapper>* {
+    margin: 5px 0;
 }
