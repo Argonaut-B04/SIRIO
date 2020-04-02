@@ -19,6 +19,7 @@ public class RiskLevelRestServiceImpl implements RiskLevelRestService {
 
     @Override
     public RiskLevel buatRiskLevel(RiskLevel riskLevel) {
+        riskLevel.setStatus(RiskLevel.Status.AKTIF);
         return riskLevelDB.save(riskLevel);
     }
 
@@ -35,11 +36,14 @@ public class RiskLevelRestServiceImpl implements RiskLevelRestService {
     }
 
     @Override
+    public List<RiskLevel> getAktif() {
+        return riskLevelDB.findAllByStatus(RiskLevel.Status.AKTIF);
+    }
+
+    @Override
     public RiskLevel ubahRiskLevel(int idRiskLevel, RiskLevel riskLevel) {
         RiskLevel target = getById(idRiskLevel);
         target.setBobotLevel(riskLevel.getBobotLevel());
-        target.setStatus(String.valueOf(riskLevel.getStatus()));
-        target.setPengelola(riskLevel.getPengelola());
         target.setNamaLevel(riskLevel.getNamaLevel());
         target.setKeteranganLevel(riskLevel.getKeteranganLevel());
         return riskLevelDB.save(target);
@@ -48,5 +52,18 @@ public class RiskLevelRestServiceImpl implements RiskLevelRestService {
     @Override
     public void hapusRiskLevel(int idRiskLevel) {
         riskLevelDB.deleteById(idRiskLevel);
+    }
+
+    @Override
+    public boolean isExistInDatabase(RiskLevel riskLevel) {
+        return riskLevelDB.findById(riskLevel.getIdLevel()).isPresent();
+    }
+
+    @Override
+    public void nonaktifkan(RiskLevel riskLevel) {
+        RiskLevel target = getById(
+                riskLevel.getIdLevel()
+        );
+        target.setStatus(RiskLevel.Status.NONAKTIF);
     }
 }
