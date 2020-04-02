@@ -70,6 +70,7 @@ class TableRiskLevel extends React.Component {
         return (
             [{
                 dataField: 'namaLevel',
+                editable: this.state.editMode,
                 text: 'Nama',
                 sort: true,
                 classes: classes.rowItem,
@@ -79,6 +80,7 @@ class TableRiskLevel extends React.Component {
                 },
             }, {
                 dataField: 'bobotLevel',
+                editable: this.state.editMode,
                 text: 'Bobot',
                 sort: true,
                 classes: classes.rowItem,
@@ -88,6 +90,7 @@ class TableRiskLevel extends React.Component {
                 },
             }, {
                 dataField: 'keteranganLevel',
+                editable: this.state.editMode,
                 text: 'Keterangan',
                 sort: true,
                 classes: classes.rowItem,

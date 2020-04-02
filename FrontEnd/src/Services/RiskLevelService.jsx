@@ -14,10 +14,7 @@ class RiskLevelService {
     }
 
     async submitChanges(data) {
-        const dataToPass = {
-            levels: data
-        }
-        return this.axiosInstance.post(SirioAxiosBase.BASEURL + '/RiskLevel', dataToPass)
+        return this.axiosInstance.post(SirioAxiosBase.BASEURL + '/RiskLevel', data)
     }
 }
 
