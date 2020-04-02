@@ -154,6 +154,7 @@ export default class SirioTable extends Component {
                                         {...props.baseProps}
                                         ref={n => this.node = n}
                                         striped
+                                        cellEdit={this.props.cellEdit}
                                         hover
                                         defaultSorted={this.props.defaultSorted}
                                         noDataIndication={this.indication}
