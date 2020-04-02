@@ -35,6 +35,11 @@ public class RiskLevelRestServiceImpl implements RiskLevelRestService {
     }
 
     @Override
+    public List<RiskLevel> getAktif() {
+        return riskLevelDB.findAllByStatus(RiskLevel.Status.AKTIF);
+    }
+
+    @Override
     public RiskLevel ubahRiskLevel(int idRiskLevel, RiskLevel riskLevel) {
         RiskLevel target = getById(idRiskLevel);
         target.setBobotLevel(riskLevel.getBobotLevel());

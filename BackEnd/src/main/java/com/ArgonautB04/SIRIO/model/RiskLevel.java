@@ -13,7 +13,7 @@ import java.io.Serializable;
 @Table
 public class RiskLevel implements Serializable {
 
-    enum Status {
+    public enum Status {
         AKTIF, NONAKTIF
     }
 
