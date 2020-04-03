@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import SirioField from './SirioFormComponent/SirioField';
 import classes from "./SirioForm.module.css";
+import SirioComponentHeader from '../Header/SirioComponentHeader';
 
 /**
  * Komponen form untuk Sirio secara umum
@@ -17,11 +18,13 @@ class SirioForm extends Component {
     render() {
         return (
             <>
-                <div className={classes.headerWrapper}>
-                    <h2 className={classes.title}>
-                        {this.props.title}
-                    </h2>
-                </div>
+                {this.props.noHeader || this.props.customHeader ? this.props.customHeader :
+                    <SirioComponentHeader
+                        title={this.props.title}
+                        subtitle={this.props.subtitle}
+                        betweenTitleSubtitle={this.props.betweenTitleSubtitle}
+                    />
+                }
                 <form className={classes.formWrapper} onSubmit={this.props.onSubmit}>
                     {this.props.inputDefinition.map((field, i) =>
                         <SirioField
@@ -33,6 +36,8 @@ class SirioForm extends Component {
                             value={field.value}
                             placeholder={field.placeholder}
                             optionList={field.optionList}
+                            classes={field.classes}
+                            customInput={field.customInput}
                         />
                     )}
                     <div className="w-100 text-right">

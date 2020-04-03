@@ -12,6 +12,8 @@ public interface RisikoRestService {
 
     List<Risiko> getAll();
 
+    List<Risiko> getByKategori(Integer kategori);
+
     Risiko ubahRisiko(int idRisiko, Risiko risiko);
 
     void hapusRisiko(int idRisiko);

@@ -4,7 +4,6 @@ import com.ArgonautB04.SIRIO.model.*;
 import com.ArgonautB04.SIRIO.rest.*;
 import com.ArgonautB04.SIRIO.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
@@ -152,6 +151,7 @@ public class HasilPemeriksaanRestController {
             result.setTugasPemeriksaan(new TugasPemeriksaanDTO());
             result.getTugasPemeriksaan().setId(hasilPemeriksaan.getTugasPemeriksaan().getIdTugas());
             result.getTugasPemeriksaan().setIdQA(hasilPemeriksaan.getTugasPemeriksaan().getPelaksana().getIdEmployee());
+            result.getTugasPemeriksaan().setNamaQA(hasilPemeriksaan.getTugasPemeriksaan().getPelaksana().getNama());
             result.getTugasPemeriksaan().setNamaKantorCabang(
                     hasilPemeriksaan.getTugasPemeriksaan().getKantorCabang().getNamaKantor());
             result.setNamaStatus(hasilPemeriksaan.getStatusHasilPemeriksaan().getNamaStatus());
@@ -211,13 +211,6 @@ public class HasilPemeriksaanRestController {
         BaseResponse<HasilPemeriksaan> response = new BaseResponse<>();
 
         Employee employee = employeeRestService.getByUsername(principal.getName()).get();
-        if (employee != employeeRestService.getById(hasilPemeriksaanDTO.getTugasPemeriksaan().getIdQA()) &&
-                employee.getRole() == roleRestService.getById(6))
-            throw new ResponseStatusException(
-                    HttpStatus.FORBIDDEN, "Employee dengan ID " + employee.getIdEmployee() +
-                    " tidak ditugaskan untuk membuat hasil pemeriksaan ini!"
-            );
-
         HasilPemeriksaan hasilPemeriksaanTemp = new HasilPemeriksaan();
 
         try {
@@ -229,7 +222,7 @@ public class HasilPemeriksaanRestController {
                         HttpStatus.FORBIDDEN, "Status tidak diperbolehkan!"
                 );
             hasilPemeriksaanTemp.setStatusHasilPemeriksaan(statusHasilPemeriksaan);
-        } catch (NoSuchElementException e) {
+        } catch (NoSuchElementException | NullPointerException e) {
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND, "Status Hasil Pemeriksaan tidak ditemukan!"
             );
@@ -237,8 +230,9 @@ public class HasilPemeriksaanRestController {
 
         hasilPemeriksaanTemp.setPembuat(employee);
 
+        TugasPemeriksaan tugasPemeriksaan;
         try {
-            TugasPemeriksaan tugasPemeriksaan = tugasPemeriksaanRestService.getById(
+            tugasPemeriksaan = tugasPemeriksaanRestService.getById(
                     hasilPemeriksaanDTO.getTugasPemeriksaan().getId());
             if (hasilPemeriksaanRestService.getByTugasPemeriksaan(tugasPemeriksaan).isPresent())
                 throw new ResponseStatusException(
@@ -251,6 +245,13 @@ public class HasilPemeriksaanRestController {
                     HttpStatus.NOT_FOUND, "Tugas Pemeriksaan tidak ditemukan!"
             );
         }
+
+        if (employee != tugasPemeriksaan.getPelaksana() && employee.getRole() == roleRestService.getById(6))
+            throw new ResponseStatusException(
+                    HttpStatus.FORBIDDEN, "Employee dengan ID " + employee.getIdEmployee() +
+                    " tidak ditugaskan untuk membuat hasil pemeriksaan ini!"
+            );
+
         HasilPemeriksaan hasilPemeriksaan = hasilPemeriksaanRestService.buatHasilPemeriksaan(hasilPemeriksaanTemp);
 
         if(hasilPemeriksaanDTO.getDaftarKomponenPemeriksaan() != null &&
@@ -259,7 +260,12 @@ public class HasilPemeriksaanRestController {
                 KomponenPemeriksaan komponenPemeriksaanTemp = new KomponenPemeriksaan();
                 komponenPemeriksaanTemp.setHasilPemeriksaan(hasilPemeriksaan);
                 try {
-                    komponenPemeriksaanTemp.setRisiko(risikoRestService.getById(komponenPemeriksaanData.getRisiko().getId()));
+                    Risiko risiko = risikoRestService.getById(komponenPemeriksaanData.getRisiko().getId());
+                    if (risiko.getRisikoKategori() != 3) {
+                        hasilPemeriksaanRestService.hapusHasilPemeriksaan(hasilPemeriksaan.getIdHasilPemeriksaan());
+                        throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Risiko harus kategori 3!");
+                    }
+                    komponenPemeriksaanTemp.setRisiko(risiko);
                 } catch (NoSuchElementException | NullPointerException e) {
                     hasilPemeriksaanRestService.hapusHasilPemeriksaan(hasilPemeriksaan.getIdHasilPemeriksaan());
                     throw new ResponseStatusException(
@@ -308,6 +314,7 @@ public class HasilPemeriksaanRestController {
                         hasilPemeriksaanDTO, employee, komponenPemeriksaanData, komponenPemeriksaan);
             }
         else {
+            hasilPemeriksaanRestService.hapusHasilPemeriksaan(hasilPemeriksaan.getIdHasilPemeriksaan());
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND, "Komponen Pemeriksaan tidak ditemukan!"
             );
@@ -331,17 +338,9 @@ public class HasilPemeriksaanRestController {
             Principal principal, ModelMap model
     ) {
         BaseResponse<HasilPemeriksaan> response = new BaseResponse<>();
-
         Employee employee = employeeRestService.getByUsername(principal.getName()).get();
-        if (employee != employeeRestService.getById(hasilPemeriksaanDTO.getTugasPemeriksaan().getIdQA()) &&
-                employee.getRole() == roleRestService.getById(6))
-            throw new ResponseStatusException(
-                    HttpStatus.FORBIDDEN, "Employee dengan ID " + employee.getIdEmployee() +
-                    " tidak ditugaskan untuk mengubah hasil pemeriksaan ini!"
-            );
 
         HasilPemeriksaan hasilPemeriksaanTemp;
-
         try {
             hasilPemeriksaanTemp = hasilPemeriksaanRestService.getById(hasilPemeriksaanDTO.getId());
         } catch (NoSuchElementException e) {
@@ -353,9 +352,12 @@ public class HasilPemeriksaanRestController {
         try {
             StatusHasilPemeriksaan statusHasilPemeriksaan =
                     statusHasilPemeriksaanRestService.getById(hasilPemeriksaanDTO.getIdStatus());
-            if (statusHasilPemeriksaan != statusHasilPemeriksaanRestService.getById(1) &&
+            if ((hasilPemeriksaanTemp.getStatusHasilPemeriksaan() != statusHasilPemeriksaanRestService.getById(1) &&
+                    hasilPemeriksaanTemp.getStatusHasilPemeriksaan() != statusHasilPemeriksaanRestService.getById(2) &&
+                    hasilPemeriksaanTemp.getStatusHasilPemeriksaan() != statusHasilPemeriksaanRestService.getById(3)) ||
+                    (statusHasilPemeriksaan != statusHasilPemeriksaanRestService.getById(1) &&
                     statusHasilPemeriksaan != statusHasilPemeriksaanRestService.getById(2) &&
-                    statusHasilPemeriksaan != statusHasilPemeriksaanRestService.getById(3))
+                    statusHasilPemeriksaan != statusHasilPemeriksaanRestService.getById(3)))
                 throw new ResponseStatusException(
                         HttpStatus.FORBIDDEN, "Status tidak diperbolehkan!"
                 );
@@ -364,6 +366,13 @@ public class HasilPemeriksaanRestController {
                     HttpStatus.NOT_FOUND, "Status Hasil Pemeriksaan tidak ditemukan!"
             );
         }
+
+        if (employee != hasilPemeriksaanTemp.getTugasPemeriksaan().getPelaksana() &&
+                employee.getRole() == roleRestService.getById(6))
+            throw new ResponseStatusException(
+                    HttpStatus.FORBIDDEN, "Employee dengan ID " + employee.getIdEmployee() +
+                    " tidak ditugaskan untuk mengubah hasil pemeriksaan ini!"
+            );
 
         HasilPemeriksaan hasilPemeriksaan = hasilPemeriksaanRestService.buatHasilPemeriksaan(
                 hasilPemeriksaanDTO.getId(), hasilPemeriksaanTemp);
@@ -400,7 +409,7 @@ public class HasilPemeriksaanRestController {
 
                 if (komponenPemeriksaanData.getJumlahSampel() != null) {
                     komponenPemeriksaanTemp.setJumlahSampel(komponenPemeriksaanData.getJumlahSampel());
-                } else if (hasilPemeriksaanDTO.getIdStatus() == 2) {
+                } else if (hasilPemeriksaanDTO.getIdStatus() == 2 || hasilPemeriksaanDTO.getIdStatus() == 3) {
                     throw new ResponseStatusException(
                             HttpStatus.METHOD_NOT_ALLOWED, "Jumlah sampel perlu diisi untuk pengajuan persetujuan " +
                             "Hasil Pemeriksaan! Hanya data valid sebelumnya yang berhasil diubah"
@@ -409,7 +418,7 @@ public class HasilPemeriksaanRestController {
 
                 if (komponenPemeriksaanData.getKeteranganSampel() != null) {
                     komponenPemeriksaanTemp.setKeteranganSampel(komponenPemeriksaanData.getKeteranganSampel());
-                } else if (hasilPemeriksaanDTO.getIdStatus() == 2) {
+                } else if (hasilPemeriksaanDTO.getIdStatus() == 2 || hasilPemeriksaanDTO.getIdStatus() == 3) {
                     throw new ResponseStatusException(
                             HttpStatus.METHOD_NOT_ALLOWED, "Keterangan sampel perlu diisi untuk pengajuan persetujuan " +
                             "Hasil Pemeriksaan! Hanya data valid sebelumnya yang berhasil diubah"
@@ -429,9 +438,6 @@ public class HasilPemeriksaanRestController {
         for (KomponenPemeriksaanDTO komponenPemeriksaanData: hasilPemeriksaanDTO.getDaftarKomponenPemeriksaan()) {
             KomponenPemeriksaan komponenPemeriksaan =
                     komponenPemeriksaanRestService.getById(komponenPemeriksaanData.getId());
-
-            createTemuanRisikoAndRekomendasi(
-                    hasilPemeriksaanDTO, employee, komponenPemeriksaanData, komponenPemeriksaan);
 
             List<TemuanRisiko> daftarTemuanRisikoTersimpan =
                     temuanRisikoRestService.getByKomponenPemeriksaan(komponenPemeriksaan);
@@ -485,6 +491,9 @@ public class HasilPemeriksaanRestController {
                 }
             }
 
+            createTemuanRisikoAndRekomendasi(
+                    hasilPemeriksaanDTO, employee, komponenPemeriksaanData, komponenPemeriksaan);
+
         }
 
         response.setStatus(200);
@@ -535,17 +544,9 @@ public class HasilPemeriksaanRestController {
             Principal principal, ModelMap model
     ) {
         BaseResponse<String> response = new BaseResponse<>();
-
         Employee employee = employeeRestService.getByUsername(principal.getName()).get();
-        if (employee != employeeRestService.getById(hasilPemeriksaanDTO.getTugasPemeriksaan().getIdQA()) &&
-                employee.getRole() == roleRestService.getById(6))
-            throw new ResponseStatusException(
-                    HttpStatus.FORBIDDEN, "Employee dengan ID " + employee.getIdEmployee() +
-                    " tidak ditugaskan untuk menghapus hasil pemeriksaan ini!"
-            );
 
         HasilPemeriksaan hasilPemeriksaan;
-
         try {
             hasilPemeriksaan = hasilPemeriksaanRestService.getById(hasilPemeriksaanDTO.getId());
         } catch (NoSuchElementException e) {
@@ -559,6 +560,13 @@ public class HasilPemeriksaanRestController {
                 hasilPemeriksaan.getStatusHasilPemeriksaan().getIdStatusHasil() != 3)
             throw new ResponseStatusException(
                     HttpStatus.FORBIDDEN, "Hasil Pemeriksaan tidak boleh dihapus!"
+            );
+
+        if (employee != hasilPemeriksaan.getTugasPemeriksaan().getPelaksana() &&
+                employee.getRole() == roleRestService.getById(6))
+            throw new ResponseStatusException(
+                    HttpStatus.FORBIDDEN, "Employee dengan ID " + employee.getIdEmployee() +
+                    " tidak ditugaskan untuk menghapus hasil pemeriksaan ini!"
             );
 
         hasilPemeriksaanRestService.hapusHasilPemeriksaan(hasilPemeriksaan.getIdHasilPemeriksaan());

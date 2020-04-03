@@ -13,10 +13,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.security.Principal;
 import java.text.ParseException;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.*;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -96,7 +93,10 @@ public class RekomendasiRestController {
                     RekomendasiDTO rekomendasiDTO = new RekomendasiDTO();
                     rekomendasiDTO.setId(rekomendasi.getIdRekomendasi());
                     rekomendasiDTO.setKeterangan(rekomendasi.getKeterangan());
-                    rekomendasiDTO.setTenggatWaktu(rekomendasi.getTenggatWaktu().toString());
+                    Date tenggatWaktu = rekomendasi.getTenggatWaktu();
+                    if (tenggatWaktu != null) {
+                        rekomendasiDTO.setTenggatWaktu(tenggatWaktu.toString());
+                    }
                     rekomendasiDTO.setStatus(rekomendasi.getStatusRekomendasi().getNamaStatus());
                     List<BuktiPelaksanaan> buktiList = buktiPelaksanaanRestService.getByDaftarRekomendasi(result);
                     for (BuktiPelaksanaan buktiPelaksanaan : buktiList) {

@@ -21,39 +21,52 @@ export default class SirioField extends Component {
         if (this.props.customInput) {
             return (
                 <fieldset>
-                    <label className={classes.label}>
-                        {this.props.label}
-                    </label>
+                    {this.props.label ?
+                        <label className={classes.label}>
+                            {this.props.label}
+                        </label>
+                        :
+                        ""
+                    }
                     {this.props.customInput}
                 </fieldset>
             )
         } else if (this.props.type === "select") {
             return (
                 <fieldset>
-                    <label className={classes.label}>
-                        {this.props.label}
-                    </label>
+                    {this.props.label ?
+                        <label className={classes.label}>
+                            {this.props.label}
+                        </label>
+                        :
+                        ""
+                    }
                     <SirioSelect
                         name={this.props.name}
                         value={this.props.value}
                         handleChange={this.props.handleChange}
                         options={this.props.optionList}
+                        className={this.props.classes}
                     />
                 </fieldset>
             )
         } else if (this.props.type === "textarea") {
             return (
                 <fieldset>
-                    <label className={classes.label}>
-                        {this.props.label}
-                    </label>
+                    {this.props.label ?
+                        <label className={classes.label}>
+                            {this.props.label}
+                        </label>
+                        :
+                        ""
+                    }
                     <TextareaAutosize
                         name={this.props.name}
                         value={this.props.value}
                         onChange={this.props.handleChange}
 
                         placeholder={this.props.placeholder}
-                        className={classes.input}
+                        className={this.props.classes ? [this.props.calsses, classes.input].join(" ") : classes.input}
                         minRows={3}
                         maxRows={6}
                     />
@@ -62,9 +75,13 @@ export default class SirioField extends Component {
         } else if (this.props.type === "checkbox") {
             return (
                 <fieldset>
-                    <label className={classes.label} type={this.props.type}>
-                        {this.props.label}
-                    </label>
+                    {this.props.label ?
+                        <label className={classes.label} type={this.props.type}>
+                            {this.props.label}
+                        </label>
+                        :
+                        ""
+                    }
                     <input
                         type={this.props.type}
 
@@ -73,17 +90,21 @@ export default class SirioField extends Component {
                         value={this.defaultChecked ? true : false}
                         onChange={this.props.handleChange}
 
-                        className={classes.input}
+                        className={this.props.classes ? [this.props.classes, classes.input].join(" ") : classes.input}
                     />
-                    <span class="checkmark"></span>
+                    <span className="checkmark"></span>
                 </fieldset>
             );
         }
         return (
             <fieldset>
-                <label className={classes.label} type={this.props.type}>
-                    {this.props.label}
-                </label>
+                {this.props.label ?
+                    <label className={classes.label} type={this.props.type}>
+                        {this.props.label}
+                    </label>
+                    :
+                    ""
+                }
                 <input
                     type={this.props.type}
 
@@ -92,7 +113,7 @@ export default class SirioField extends Component {
                     onChange={this.props.handleChange}
 
                     placeholder={this.props.placeholder}
-                    className={classes.input}
+                    className={this.props.classes ? [this.props.classes, classes.input].join(" ") : classes.input}
                 />
             </fieldset>
         );

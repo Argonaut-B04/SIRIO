@@ -22,6 +22,9 @@ public class RekomendasiRestServiceImpl implements RekomendasiRestService {
     @Autowired
     private RekomendasiDB rekomendasiDB;
 
+    @Autowired
+    private StatusRekomendasiRestService statusRekomendasiRestService;
+
     @Override
     public Rekomendasi buatRekomendasi(Rekomendasi rekomendasi) {
         return rekomendasiDB.save(rekomendasi);
@@ -61,6 +64,7 @@ public class RekomendasiRestServiceImpl implements RekomendasiRestService {
         Rekomendasi target = getById(idRekomendasi);
         if (target.getStatusRekomendasi().isDapatSetTenggatWaktu()) {
             target.setTenggatWaktu(tenggatWaktuDate);
+            target.setStatusRekomendasi(statusRekomendasiRestService.getByNamaStatus("Menunggu Pelaksanaan"));
             return rekomendasiDB.save(target);
         } else throw new IllegalAccessError();
     }

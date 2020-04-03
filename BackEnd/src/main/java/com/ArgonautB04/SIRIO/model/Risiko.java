@@ -31,11 +31,10 @@ public class Risiko implements Serializable {
     @NotNull
     @Size(max = 50)
     @Column(nullable = false)
-    private String risikoKategori;
+    private Integer risikoKategori;
 
-    @NotNull
-    @Size(max = 25)
-    @Column(nullable = false)
+    @Size(max = 500)
+    @Column
     private String komponen;
 
     @NotNull
@@ -55,7 +54,7 @@ public class Risiko implements Serializable {
     private List<Risiko> childList;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "sop", referencedColumnName = "idSop", nullable = false)
+    @JoinColumn(name = "sop", referencedColumnName = "idSop")
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private SOP sop;
@@ -76,11 +75,11 @@ public class Risiko implements Serializable {
         this.namaRisiko = namaRisiko;
     }
 
-    public String getRisikoKategori() {
+    public Integer getRisikoKategori() {
         return risikoKategori;
     }
 
-    public void setRisikoKategori(String risikoKategori) {
+    public void setRisikoKategori(Integer risikoKategori) {
         this.risikoKategori = risikoKategori;
     }
 

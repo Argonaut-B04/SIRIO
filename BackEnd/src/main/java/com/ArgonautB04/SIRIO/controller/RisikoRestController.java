@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -151,6 +152,38 @@ public class RisikoRestController {
         response.setStatus(200);
         response.setMessage("success");
         response.setResult(result);
+        return response;
+    }
+
+    /**
+     * Mengambil daftar risiko di kategori 3
+     *
+     * @return daftar detail risiko di kategori 3
+     */
+    @GetMapping("/getAll/child")
+    private BaseResponse<List<RisikoDTO>> getAllRisikoChild() {
+        BaseResponse<List<RisikoDTO>> response = new BaseResponse<>();
+        List<RisikoDTO> result = new ArrayList<>();
+
+        List<Risiko> daftarRisiko = risikoRestService.getByKategori(3);
+        for (Risiko risiko: daftarRisiko) {
+            RisikoDTO risikoDTO = new RisikoDTO();
+            risikoDTO.setId(risiko.getIdRisiko());
+            risikoDTO.setNama(risiko.getNamaRisiko());
+            risikoDTO.setKomponen(risiko.getKomponen());
+            if (risiko.getParent() != null) {
+                risikoDTO.setParent(risiko.getParent().getIdRisiko());
+                if (risiko.getParent().getParent() != null)
+                    risikoDTO.setGrantParent(risiko.getParent().getParent().getIdRisiko());
+            }
+            risikoDTO.setLinkSop(risiko.getSop().getLinkDokumen());
+            risikoDTO.setNamaSop(risiko.getSop().getJudul());
+            result.add(risikoDTO);
+        }
+
+        response.setResult(result);
+        response.setStatus(200);
+        response.setMessage("success");
         return response;
     }
 }

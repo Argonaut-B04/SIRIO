@@ -24,12 +24,12 @@ public class KantorCabang implements Serializable {
 
     @NotNull
     @Size(max = 125)
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String regional;
 
     @NotNull
     @Size(max = 125)
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String area;
 
     @NotNull
@@ -37,20 +37,20 @@ public class KantorCabang implements Serializable {
     private boolean kunjunganAudit;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "risk_rating", referencedColumnName = "idRating", nullable = false)
+    @JoinColumn(name = "risk_rating", referencedColumnName = "idRating")
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private RiskRating riskRating;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "pemilik", referencedColumnName = "idEmployee", nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @OnDelete(action = OnDeleteAction.NO_ACTION)
     @JsonIgnore
     private Employee pemilik;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "pembuat", referencedColumnName = "idEmployee", nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @OnDelete(action = OnDeleteAction.NO_ACTION)
     @JsonIgnore
     private Employee pembuat;
 

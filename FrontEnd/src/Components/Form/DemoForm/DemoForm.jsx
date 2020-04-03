@@ -1,6 +1,7 @@
 import React from 'react';
 import SirioForm from '../SirioForm';
 import SirioButton from '../../Button/SirioButton';
+import SirioField from '../SirioFormComponent/SirioField';
 
 /**
  * Kelas untuk membuat form demo
@@ -15,7 +16,9 @@ export default class DemoForm extends React.Component {
             nama: "bambang",
             umur: 18,
             jenisKelamin: "Pria",
-            manusia: true
+            manusia: true,
+            customDropdown: "bambang",
+            customDropdown2: "pria"
         }
 
         this.handleChange = this.handleChange.bind(this);
@@ -26,6 +29,7 @@ export default class DemoForm extends React.Component {
     // Fungsi untuk mengubah state ketika isi dari input diubah
     // Fungsi ini wajib ada jika membuat form
     handleChange(event) {
+        console.log(event);
         if (typeof event.target.checked === "boolean") {
             this.setState(
                 {
@@ -69,19 +73,19 @@ export default class DemoForm extends React.Component {
         return (
             [
                 {
-                    label: "Nama Bambang",
+                    label: "Nama",
                     handleChange: this.handleChange,
                     type: "textarea",
                     name: "nama",
                     value: this.state.nama,
-                    placeholder: "masukan nama bambang"
+                    placeholder: "masukan nama"
                 }, {
-                    label: "Umur Bambang",
+                    label: "Umur",
                     handleChange: this.handleChange,
                     type: "number",
                     name: "umur",
                     value: this.state.umur,
-                    placeholder: "masukan umur bambang"
+                    placeholder: "masukan umur"
                 }, {
                     label: "Jenis Kelamin",
                     handleChange: this.handleSelectChange,
@@ -111,6 +115,70 @@ export default class DemoForm extends React.Component {
         )
     }
 
+    customSelectHandle(name, event) {
+        if (event.value === "vanish") {
+            this.setState({
+                nama: "Solo Quisiera Desaparecer"
+            })
+        } else if (event.value === "bambang") {
+            this.setState({
+                nama: "Bambang"
+            })
+        }
+    }
+
+    getBetween() {
+        return (
+            <>
+                <div className="col-md-3 pl-0">
+                    <SirioField
+                        type="select"
+                        handleChange={(name, event) => {
+                            this.handleSelectChange(name, event);
+                            this.customSelectHandle(name, event);
+                        }}
+                        classes="p-1"
+                        name="customDropdown"
+                        value={this.state.customDropdown}
+                        optionList={
+                            [
+                                {
+                                    label: "Bambang",
+                                    value: "bambang"
+                                },
+                                {
+                                    label: "Vanish",
+                                    value: "vanish"
+                                }
+                            ]
+                        }
+                    />
+                </div>
+                <div className="col-md-3 pl-0">
+                    <SirioField
+                        type="select"
+                        handleChange={this.handleSelectChange}
+                        classes="p-1"
+                        name="customDropdown2"
+                        value={this.state.customDropdown2}
+                        optionList={
+                            [
+                                {
+                                    label: "Chisato",
+                                    value: 1
+                                },
+                                {
+                                    label: "Chidua",
+                                    value: 2
+                                }
+                            ]
+                        }
+                    />
+                </div>
+            </>
+        )
+    }
+
     submitButton() {
         return (
             <div>
@@ -130,12 +198,22 @@ export default class DemoForm extends React.Component {
     // Fungsi render SirioForm
     render() {
         return (
-            <SirioForm
-                title="Demo Form"
-                inputDefinition={this.inputDefinition()}
-                onSubmit={this.handleSubmit}
-                submitButton={this.submitButton()}
-            />
+            <>
+                <SirioForm
+                    title="Demo Form"
+                    betweenTitleSubtitle={this.getBetween()}
+                    subtitle="Ini demo form untuk ngedemoin ... form"
+                    inputDefinition={this.inputDefinition()}
+                    onSubmit={this.handleSubmit}
+                    submitButton={this.submitButton()}
+                />
+                <SirioForm
+                    noHeader
+                    inputDefinition={this.inputDefinition()}
+                    onSubmit={this.handleSubmit}
+                    submitButton={this.submitButton()}
+                />
+            </>
         );
     }
 }
