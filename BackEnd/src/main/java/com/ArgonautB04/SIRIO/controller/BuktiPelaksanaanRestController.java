@@ -124,16 +124,14 @@ public class BuktiPelaksanaanRestController {
         buktiPelaksanaanTemp.setKeterangan(buktiPelaksanaanDTO.getKeterangan());
         buktiPelaksanaanTemp.setLampiran(buktiPelaksanaanDTO.getLampiran());
         buktiPelaksanaanTemp.setPembuat(employee);
-        /*try {
+        try {
             Rekomendasi rekomendasi = rekomendasiRestService.getById(buktiPelaksanaanDTO.getIdRekomendasi());
             buktiPelaksanaanTemp.setRekomendasi(rekomendasi);
         } catch (NoSuchElementException e) {
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND, "Rekomendasi dengan ID " + buktiPelaksanaanDTO.getIdRekomendasi() + " tidak ditemukan!"
             );
-        }*/
-        Rekomendasi rekomendasi = rekomendasiRestService.getById(buktiPelaksanaanDTO.getIdRekomendasi());
-        buktiPelaksanaanTemp.setRekomendasi(rekomendasi);
+        }
         BuktiPelaksanaan buktiPelaksanaan = buktiPelaksanaanRestService.buatBuktiPelaksanaan(buktiPelaksanaanTemp);
         response.setStatus(200);
         response.setMessage("success");

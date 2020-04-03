@@ -59,7 +59,7 @@ export default class TabelRekomendasi extends React.Component {
                 <NavLink to={{
                     pathname: "/bm/bukti-pelaksanaan/tambah",
                     state: {
-                        idRekomendasi: row.idRekomendasi
+                        idRekomendasi: row.id
                     }
                 }}>
                     <SirioButton

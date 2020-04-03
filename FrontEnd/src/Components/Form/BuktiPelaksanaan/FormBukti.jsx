@@ -2,6 +2,7 @@ import React from 'react';
 import SirioForm from '../SirioForm';
 import SirioButton from '../../Button/SirioButton';
 import BuktiPelaksanaanService from '../../../Services/BuktiPelaksanaanService'
+import { withRouter } from 'react-router-dom';
 
 export default class FormBukti extends React.Component {
 
@@ -12,7 +13,6 @@ export default class FormBukti extends React.Component {
         this.state = {
             keterangan: "",
             lampiran: ""
-           
         }
 
         this.handleChange = this.handleChange.bind(this);
@@ -35,7 +35,6 @@ export default class FormBukti extends React.Component {
         const buktiPelaksanaan = {
             keterangan: this.state.keterangan,
             lampiran: this.state.lampiran
-            
         }
         BuktiPelaksanaanService.addBuktiPelaksanaan(buktiPelaksanaan)
         .then( (response) => console.log(response) );
@@ -92,3 +91,5 @@ export default class FormBukti extends React.Component {
         );
     }
 }
+
+withRouter(FormBukti);
