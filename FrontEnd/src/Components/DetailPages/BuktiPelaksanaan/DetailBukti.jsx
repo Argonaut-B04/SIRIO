@@ -5,8 +5,8 @@ import SirioButton from '../../Button/SirioButton';
 export default class DetailBukti extends React.Component {
 
     data = {
-        keterangan: "Keterangan bukti pelaksanaan rekomendasi",
-        lampiran: "https://drive.google.com/drive/folders/1SvB_2W4BjD8rxVQR1-dDbA63-4Zx-hoN"
+        Keterangan: ": Keterangan bukti pelaksanaan rekomendasi",
+        Lampiran: ": https://drive.google.com/drive/folders/1SvB_2W4BjD8rxVQR1-dDbA63-4Zx-hoN"
     };
 
     subButton() {

@@ -9,8 +9,12 @@ class BuktiPelaksanaanService {
         this.axiosInstance.defaults.headers.common['Authorization'] = AuthenticationService.getToken();
     }
 
-    async addBuktiPelaksanaan(data) {
-        return this.axiosInstance.post(SirioAxiosBase.BASEURL + `/BuktiPelaksanaan/tambah`, data);
+    async submitChanges(idRekomendasi, data) {
+        const dataToPass = {
+            id: idRekomendasi,
+            bukti: data
+        }
+        return this.axiosInstance.post(SirioAxiosBase.BASEURL + `/BuktiPelaksanaan/tambah`, dataToPass);
     }
 
 }

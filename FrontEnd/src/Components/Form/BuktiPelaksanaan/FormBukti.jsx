@@ -12,12 +12,18 @@ export default class FormBukti extends React.Component {
 
         this.state = {
             keterangan: "",
-            lampiran: ""
+            lampiran: "",
+            id: ""
         }
-
+        // this.renderId = this.renderId.bind(this);
+        // this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.inputDefinition = this.inputDefinition.bind(this);
     }
+
+    // componentDidMount() {
+    //     this.renderId();
+    // }
 
     handleChange(event) {
         this.setState(
@@ -28,17 +34,25 @@ export default class FormBukti extends React.Component {
         )
     }
 
-    // Fungsi yang akan dijalankan ketika user submit
-    // Umumnya akan digunakan untuk memanggil service komunikasi ke backend
-    handleSubmit(event) {
-        event.preventDefault();
-        const buktiPelaksanaan = {
-            keterangan: this.state.keterangan,
-            lampiran: this.state.lampiran
-        }
-        BuktiPelaksanaanService.addBuktiPelaksanaan(buktiPelaksanaan)
-        .then( (response) => console.log(response) );
-    }
+    // handleSubmit(event) {
+    //     event.preventDefault();
+    //     const buktiPelaksanaan = {
+    //         keterangan: this.state.keterangan,
+    //         lampiran: this.state.lampiran
+    //     }
+    //     BuktiPelaksanaanService.submitChanges(this.props.location.state.id, buktiPelaksanaan)
+    //     .then(() => {
+    //         this.renderId()
+    //         window.location.href = "/bm/rekomendasi"
+    //     });
+    // }
+
+    // async renderId() {
+    //     const response = this.props.location.state.id;
+    //     this.setState({
+    //         id: response
+    //     })
+    // }
 
     // Fungsi yang akan mengembalikan definisi tiap field pada form
     inputDefinition() {
@@ -68,7 +82,7 @@ export default class FormBukti extends React.Component {
             <div>
                 <SirioButton purple recommended
                     classes="mx-2"
-                    onClick={(event)  => this.handleSubmit(event)}>
+                    onClick={(event) => this.handleSubmit(event)}>
                     Simpan
                 </SirioButton>
                 <SirioButton purple

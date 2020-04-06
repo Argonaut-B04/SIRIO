@@ -45,7 +45,7 @@ export default class FormFeedbackBukti extends React.Component {
         
         rowDefinition.push(
             {
-                label: "Feedback :",
+                label: "Feedback",
                 handleChange: this.handleChange,
                 type: "textarea",
                 name: "feedback",
