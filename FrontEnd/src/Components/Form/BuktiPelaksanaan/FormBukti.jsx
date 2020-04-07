@@ -4,7 +4,7 @@ import SirioButton from '../../Button/SirioButton';
 import BuktiPelaksanaanService from '../../../Services/BuktiPelaksanaanService'
 import { withRouter } from 'react-router-dom';
 
-export default class FormBukti extends React.Component {
+class FormBukti extends React.Component {
 
     // Masukan user disimpan kedalam state sebelum dikirim ke backend
     constructor(props) {
@@ -16,13 +16,13 @@ export default class FormBukti extends React.Component {
             id: ""
         }
         // this.renderId = this.renderId.bind(this);
-        // this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.inputDefinition = this.inputDefinition.bind(this);
     }
 
     // componentDidMount() {
-    //     this.renderId();
+    //     console.log(this.props.location.state.id);
     // }
 
     handleChange(event) {
@@ -34,18 +34,17 @@ export default class FormBukti extends React.Component {
         )
     }
 
-    // handleSubmit(event) {
-    //     event.preventDefault();
-    //     const buktiPelaksanaan = {
-    //         keterangan: this.state.keterangan,
-    //         lampiran: this.state.lampiran
-    //     }
-    //     BuktiPelaksanaanService.submitChanges(this.props.location.state.id, buktiPelaksanaan)
-    //     .then(() => {
-    //         this.renderId()
-    //         window.location.href = "/bm/rekomendasi"
-    //     });
-    // }
+    handleSubmit(event) {
+        event.preventDefault();
+        const buktiPelaksanaan = {
+            keterangan: this.state.keterangan,
+            lampiran: this.state.lampiran
+        }
+        BuktiPelaksanaanService.submitChanges(this.props.location.state.id, buktiPelaksanaan)
+            .then(() => {
+                window.location.href = "/bm/rekomendasi"
+            });
+    }
 
     // async renderId() {
     //     const response = this.props.location.state.id;
@@ -106,4 +105,4 @@ export default class FormBukti extends React.Component {
     }
 }
 
-withRouter(FormBukti);
+export default withRouter(FormBukti);
