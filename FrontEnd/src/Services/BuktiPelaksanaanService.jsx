@@ -11,8 +11,9 @@ class BuktiPelaksanaanService {
 
     async submitChanges(idRekomendasi, data) {
         const dataToPass = {
-            id: idRekomendasi,
-            bukti: data
+            idRekomendasi: idRekomendasi,
+            keterangan: data.keterangan,
+            lampiran: data.lampiran
         }
         return this.axiosInstance.post(SirioAxiosBase.BASEURL + `/BuktiPelaksanaan/tambah`, dataToPass);
     }
