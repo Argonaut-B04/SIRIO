@@ -50,7 +50,7 @@ export default class TabelRekomendasi extends React.Component {
 
     getButtons(cell, row) {
         const status = row.statusBukti;
-        const tambah = status === "";
+        const tambah = status === null;
         const detail = status === "Menunggu Persetujuan" || status === "Disetujui" || status === "Ditolak";
 
         if (tambah) {
