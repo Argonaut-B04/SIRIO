@@ -74,7 +74,7 @@ public class RekomendasiRestController {
                     rekomendasiDTO.setKeterangan(rekomendasi.getKeterangan());
                     String tenggatWaktu = rekomendasi.getTenggatWaktu().toString();
                     String tenggatWaktuFinal = "";
-                    tenggatWaktuFinal = tenggatWaktu.substring(0,10);
+                    tenggatWaktuFinal = tenggatWaktu.substring(0, 10);
                     rekomendasiDTO.setTenggatWaktu(tenggatWaktuFinal);
                     rekomendasiDTO.setDurasi("10 Hari");
                     List<BuktiPelaksanaan> buktiList = buktiPelaksanaanRestService.getByDaftarRekomendasi(result);
@@ -98,12 +98,18 @@ public class RekomendasiRestController {
                         rekomendasiDTO.setTenggatWaktu(tenggatWaktu.toString());
                     }
                     rekomendasiDTO.setStatus(rekomendasi.getStatusRekomendasi().getNamaStatus());
-                    List<BuktiPelaksanaan> buktiList = buktiPelaksanaanRestService.getByDaftarRekomendasi(result);
-                    for (BuktiPelaksanaan buktiPelaksanaan : buktiList) {
-                        rekomendasiDTO.setStatusBukti(buktiPelaksanaan.getStatusBuktiPelaksanaan().getNamaStatus());
-                    }
-                    rekomendasiDTO.setNamaKantorCabang(rekomendasi.getKomponenPemeriksaan().getHasilPemeriksaan()
-                            .getTugasPemeriksaan().getKantorCabang().getNamaKantor());
+//                    List<BuktiPelaksanaan> buktiList = buktiPelaksanaanRestService.getByDaftarRekomendasi(result);
+//                    for (BuktiPelaksanaan buktiPelaksanaan : buktiList) {
+//                        rekomendasiDTO.setStatusBukti(buktiPelaksanaan.getStatusBuktiPelaksanaan().getNamaStatus());
+//                    }
+//                    rekomendasiDTO.setNamaKantorCabang(
+//                            rekomendasi
+//                                    .getKomponenPemeriksaan()
+//                                    .getHasilPemeriksaan()
+//                                    .getTugasPemeriksaan()
+//                                    .getKantorCabang()
+//                                    .getNamaKantor()
+//                    );
                     resultDTO.add(rekomendasiDTO);
                 }
             }
