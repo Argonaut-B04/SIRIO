@@ -13,7 +13,7 @@ class EmployeeService {
         return this.axiosInstance.get(SirioAxiosBase.BASEURL + `/Employee/getAll`);
     }
 
-    async submitChanges(data) {
+    async addEmployee(data) {
         return this.axiosInstance.post(SirioAxiosBase.BASEURL + '/Employee/tambah', data)
     }
 

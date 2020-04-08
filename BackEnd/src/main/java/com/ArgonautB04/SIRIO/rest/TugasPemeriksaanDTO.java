@@ -9,6 +9,15 @@ public class TugasPemeriksaanDTO {
     private Integer kantorCabang;
     private String namaKantorCabang;
     private String namaQA;
+    private String usernameQA;
+
+    public String getUsernameQA() {
+        return usernameQA;
+    }
+
+    public void setUsernameQA(String usernameQA) {
+        this.usernameQA = usernameQA;
+    }
 
     public Integer getIdHasilPemeriksaan() {
         return idHasilPemeriksaan;
