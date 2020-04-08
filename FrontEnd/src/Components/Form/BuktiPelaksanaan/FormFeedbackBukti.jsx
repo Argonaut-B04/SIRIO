@@ -18,29 +18,29 @@ class FormFeedbackBukti extends React.Component {
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    componentDidMount() {
-        this.renderDataBukti();
-    }
-
-    async renderDataBukti() {
-        const response = await BuktiPelaksanaanService.getBuktiPelaksanaan(this.props.location.state.id);
-
-        this.setState({
-            buktiPelaksanaan: response.data.result
-        })
-    }
-
-    data() {
-        return {
-            "Keterangan": this.state.buktiPelaksanaan.keterangan,
-            "Lampiran": this.state.buktiPelaksanaan.lampiran
-        }
-    }
-
-    // data = {
-    //     Keterangan: "Keterangan bukti rekomendasi",
-    //     Lampiran: "https://drive.google.com/drive/folders/1SvB_2W4BjD8rxVQR1-dDbA63-4Zx-hoN"
+    // componentDidMount() {
+    //     this.renderDataBukti();
     // }
+
+    // async renderDataBukti() {
+    //     const response = await BuktiPelaksanaanService.getBuktiPelaksanaan(this.props.location.state.id);
+
+    //     this.setState({
+    //         buktiPelaksanaan: response.data.result
+    //     })
+    // }
+
+    // data() {
+    //     return {
+    //         "Keterangan": this.state.buktiPelaksanaan.keterangan,
+    //         "Lampiran": this.state.buktiPelaksanaan.lampiran
+    //     }
+    // }
+
+    data = {
+        Keterangan: "test",
+        Lampiran: "test"
+    }
 
     handleChange(event) {
         this.setState(
@@ -56,7 +56,7 @@ class FormFeedbackBukti extends React.Component {
         const buktiPelaksanaan = {
             feedback: this.state.feedback
         }
-        BuktiPelaksanaanService.submitChanges(this.props.location.state.id, buktiPelaksanaan)
+        BuktiPelaksanaanService.submitPersetujuan(this.props.location.state.id, buktiPelaksanaan)
             .then(() => {
                 window.location.href = "/bukti-pelaksanaan"
                 
@@ -65,10 +65,10 @@ class FormFeedbackBukti extends React.Component {
 
     inputDefinition() {
         var rowDefinition = [];
-        Object.keys(this.data()).map(key => rowDefinition.push(
+        Object.keys(this.data).map(key => rowDefinition.push(
             {
                 label: key,
-                customInput: <p>{this.data()[key]}</p>
+                customInput: <p>{this.data[key]}</p>
             }
         ))
         
@@ -106,7 +106,7 @@ class FormFeedbackBukti extends React.Component {
         return (
             <SirioForm
                 title="Form Feedback Penolakan Bukti"
-                data={this.data()}
+                data={this.data}
                 id='id'
                 inputDefinition={this.inputDefinition()}
                 onSubmit={this.handleSubmit}

@@ -4,6 +4,7 @@ import SirioTable from '../SirioTable';
 import RekomendasiService from '../../../Services/RekomendasiService';
 import { NavLink } from 'react-router-dom';
 import classes from './TabelRekomendasiBM.module.css';
+import SirioMessageButton from '../../Button/ActionButton/SirioMessageButton';
 
 export default class TabelRekomendasi extends React.Component {
 
@@ -144,13 +145,22 @@ export default class TabelRekomendasi extends React.Component {
 
     render() {
         return (
-            <SirioTable
-                title="Daftar Rekomendasi"
-                data={this.state.rowList}
-                id='id'
-                columnsDefinition={this.columns}
-                includeSearchBar
-            />
+            <>
+                <SirioTable
+                    title="Daftar Rekomendasi"
+                    data={this.state.rowList}
+                    id='id'
+                    columnsDefinition={this.columns}
+                    includeSearchBar
+                />
+                {/* <SirioMessageButton
+                    show
+                    classes="d-none"
+                    modalTitle="Bukti pelaksanaan berhasil ditambahkan"
+                    customConfirmText="Tutup"
+                    onClick={this.endNotification}
+                /> */}
+            </>
         );
     }
 } 

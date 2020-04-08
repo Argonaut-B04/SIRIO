@@ -22,8 +22,12 @@ class BuktiPelaksanaanService {
         return this.axiosInstance.get(SirioAxiosBase.BASEURL + `/BuktiPelaksanaan/` + id);
     }
 
-    async setujuiBukti(id) {
-        return this.axiosInstance.put(SirioAxiosBase.BASEURL + `/BuktiPelaksanaan/persetujuan`, id)
+    async submitPersetujuan(id, data) {
+        const dataToPass = {
+            id: id,
+            feedback: data.feedback
+        }
+        return this.axiosInstance.put(SirioAxiosBase.BASEURL + `/BuktiPelaksanaan/persetujuan`, dataToPass)
     }
 
 }
