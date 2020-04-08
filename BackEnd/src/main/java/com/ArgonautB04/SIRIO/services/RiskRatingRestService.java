@@ -14,4 +14,6 @@ public interface RiskRatingRestService {
     RiskRating ubahRiskRating(int idRiskRating, RiskRating riskRating);
 
     void hapusRiskRating(int idRiskRating);
+
+    boolean isExistInDatabase(RiskRating riskRating);
 }

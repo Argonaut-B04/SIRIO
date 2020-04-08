@@ -3,6 +3,7 @@
     border: 2px solid #E0E0E0;
     box-sizing: border-box;
     border-radius: 6px;
+    margin-bottom: 1rem;
 }
 
 .formWrapper>*>* {
@@ -10,14 +11,4 @@
     margin: 10px 0px;
     display: inline-block;
     vertical-align: top;
-}
-
-.headerWrapper {
-    display: flex;
-    justify-content: space-between;
-    flex-direction: column;
-}
-
-.headerWrapper>* {
-    margin: 5px 0;
 }

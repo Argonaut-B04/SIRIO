@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface KantorCabangDB extends JpaRepository<KantorCabang, Integer> {
-    KantorCabang findKantorCabangByPemilik(Employee pemilik);
+    KantorCabang findAllByPemilik(Employee pemilik);
 }
