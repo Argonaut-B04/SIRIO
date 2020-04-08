@@ -62,6 +62,7 @@ class DetailBukti extends React.Component {
                 data={this.data()}
                 id='id'
                 subButton={this.subButton()}
+                link="bukti-pelaksanaan"
             />
         );
     }
