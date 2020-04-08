@@ -542,7 +542,7 @@ public class HasilPemeriksaanRestController {
      *
      * @param hasilPemeriksaanDTO data transfer object untuk hasil pemeriksaan yang akan dihapus
      */
-    @DeleteMapping("/hapus")
+    @PostMapping("/hapus")
     private BaseResponse<String> hapusHasilPemeriksaan(
             @RequestBody HasilPemeriksaanDTO hasilPemeriksaanDTO,
             Principal principal, ModelMap model

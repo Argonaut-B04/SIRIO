@@ -4,8 +4,10 @@ import SirioButton from '../../Button/SirioButton';
 import HasilPemeriksaanService from '../../../Services/HasilPemeriksaanService';
 import SirioConfirmButton from '../../Button/ActionButton/SirioConfirmButton';
 import { NavLink } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import { withRouter } from 'react-router-dom';
 import AuthenticationService from "../../../Services/AuthenticationService";
+import SirioWarningButton from "../../Button/ActionButton/SirioWarningButton";
 
 
 class DetailHasilPemeriksaan extends React.Component {
@@ -20,16 +22,35 @@ class DetailHasilPemeriksaan extends React.Component {
             riskScore: 100,
             role: AuthenticationService.getRole(),
             username: AuthenticationService.getUsername(),
-            yangDitugaskan: false
-        }
+            yangDitugaskan: false,
+            redirect: false
+        };
             
         this.renderDataHasilPemeriksaan = this.renderDataHasilPemeriksaan.bind(this);
         this.reduceRiskScore = this.reduceRiskScore.bind(this);
+        this.setRedirect = this.setRedirect.bind(this);
     }
 
     componentDidMount() {
         this.renderDataHasilPemeriksaan();
     }
+
+    setRedirect = () => {
+        this.setState({
+            redirect: true
+        })
+    };
+
+    renderRedirect = () => {
+        if (this.state.redirect) {
+            return <Redirect to={{
+                pathname: "/hasil-pemeriksaan",
+                state: {
+                    deleteSuccess: true
+                }
+            }} />
+        }
+    };
 
     async renderDataHasilPemeriksaan() {
         const response = await HasilPemeriksaanService.getHasilPemeriksaan(this.props.location.state.id);
@@ -88,6 +109,14 @@ class DetailHasilPemeriksaan extends React.Component {
         }
     }
 
+    hapus(id) {
+        const hasilPemeriksaan = {
+            id: id
+        };
+        HasilPemeriksaanService.deleteHasilPemeriksaan(hasilPemeriksaan)
+            .then(() => this.setRedirect());
+    }
+
     buttonUbah(id) {
         return (
             <NavLink to={{
@@ -107,18 +136,16 @@ class DetailHasilPemeriksaan extends React.Component {
 
     buttonHapus(id) {
         return (
-            <NavLink to={{
-                pathname: "/hasil-pemeriksaan/hapus",
-                state: {
-                    id: id
-                }
-            }}>
-                <SirioButton
-                    purple
-                >
-                    Hapus
-                </SirioButton>
-            </NavLink>
+            <SirioWarningButton
+                red
+                modalTitle="Konfirmasi Penghapusan"
+                modalDesc="Apakah anda yakin untuk menghapus hasil pemeriksaan?"
+                onConfirm={() => this.hapus(id)}
+                customConfirmText="Ya, Hapus"
+                customCancelText="Batal"
+            >
+                Hapus
+            </SirioWarningButton>
         )
     }
 
@@ -133,7 +160,7 @@ class DetailHasilPemeriksaan extends React.Component {
             closeOnConfirm
         >
             Setuju
-        </SirioConfirmButton>
+        </SirioConfirmButton>;
 
     buttonTolak(id) {
         return (
@@ -162,7 +189,7 @@ class DetailHasilPemeriksaan extends React.Component {
                         {this.buttonSetuju}
                         {this.buttonTolak(this.state.hasilPemeriksaan.id)}
                     </div>
-                )
+                );
             case "admin":
                 return (
                     <div>
@@ -171,7 +198,7 @@ class DetailHasilPemeriksaan extends React.Component {
                         {this.buttonSetuju}
                         {this.buttonTolak(this.state.hasilPemeriksaan.id)}
                     </div>
-                )
+                );
             case "QA Officer Operational Risk":
                 if (this.state.yangDitugaskan) {
                     return (
@@ -189,7 +216,7 @@ class DetailHasilPemeriksaan extends React.Component {
                         {this.buttonSetuju}
                         {this.buttonTolak(this.state.hasilPemeriksaan.id)}
                     </div>
-                )
+                );
             default:
                 return null
         }
@@ -233,6 +260,7 @@ class DetailHasilPemeriksaan extends React.Component {
     render() {
         return (
             <div>
+                {this.renderRedirect()}
                 <SirioDetailPage
                     title="Detail Hasil Pemeriksaan"
                     data={this.state.dataGeneral}
