@@ -12,7 +12,12 @@ class DetailRisiko extends React.Component {
         super(props);
 
         this.state = {
-            risiko: {}
+            namaRisiko: "",
+            risikoKategori: "",
+            sop: "",
+            parent: "",
+            komponen: "",
+
         }
 
         this.renderDataRisiko = this.renderDataRisiko.bind(this);
@@ -24,8 +29,8 @@ class DetailRisiko extends React.Component {
     }
 
     parentFormatter() {
-        if (this.state.risiko.parent) {
-            return this.state.risiko.parent
+        if (this.state.parent) {
+            return this.state.parent.namaRisiko
         } else {
             return "-"
         }
@@ -35,17 +40,21 @@ class DetailRisiko extends React.Component {
         const response = await RegistrasiRisikoService.getRisiko(this.props.location.state.id);
 
         this.setState({
-            risiko: response.data.result
+            namaRisiko: response.data.result.namaRisiko,
+            risikoKategori: response.data.result.risikoKategori,
+            sop: response.data.result.sop.judul,
+            parent: response.data.result.parent,
+            komponen: response.data.result.komponen,
         })
     }
 
     data() {
         return {
-            "Nama Risiko": this.state.risiko.namaRisiko,
-            "Kategori Risiko": this.state.risiko.risikoKategori,
-            "Referensi SOP": this.state.risiko.sop,
+            "Nama Risiko": this.state.namaRisiko,
+            "Kategori Risiko": this.state.risikoKategori,
+            "Referensi SOP": this.state.sop,
             "Parent": this.parentFormatter(),
-            "Komponen Risiko": this.state.risiko.komponen
+            "Komponen Risiko": this.state.komponen
         };
     }
 
@@ -55,7 +64,7 @@ class DetailRisiko extends React.Component {
                 <NavLink to={{
                     pathname: "/registrasi-risiko/ubah",
                     state: {
-                        id: this.state.risiko.idRisiko,
+                        id: this.state.idRisiko,
                     }
                 }}>
                     <SirioButton

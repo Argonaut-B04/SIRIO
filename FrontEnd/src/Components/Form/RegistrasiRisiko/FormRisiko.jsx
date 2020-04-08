@@ -139,7 +139,7 @@ export default class FormRisiko extends React.Component {
                         }
                     ]
                 }, {
-                    label: "Komponen Risiko*",
+                    label: "Komponen Risiko",
                     handleChange: this.handleChange,
                     type: "textarea",
                     name: "komponen",
