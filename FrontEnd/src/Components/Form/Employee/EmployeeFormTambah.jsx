@@ -76,8 +76,8 @@ export default class EmployeeFormTambah extends React.Component {
             jabatan: this.state.jabatan,
             email: this.state.email,
             noHp: this.state.noHp
-        }
-        EmployeeService.submitChanges(employee)
+        };
+        EmployeeService.addEmployee(employee)
             .then(() => window.location.href = "/employee");
     }
 
