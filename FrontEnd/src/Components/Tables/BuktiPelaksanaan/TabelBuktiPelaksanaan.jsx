@@ -50,13 +50,25 @@ export default class TabelBuktiPelaksanaan extends React.Component {
     }
 
     getButtons(cell, row) {
-        return (
-            <SirioButton purple
-                onClick={() => window.location.href = "/bukti-pelaksanaan/detail-persetujuan"}
-            >
-                Detail Bukti
-            </SirioButton>
-        )
+        const status = row.statusBukti;
+        const adaBukti = status === "Menunggu Persetujuan" || status === "Disetujui" || status === "Ditolak";
+
+        if (adaBukti) {
+            return (
+                <NavLink to={{
+                    pathname: "/bukti-pelaksanaan/persetujuan",
+                    state: {
+                        id: row.id
+                    }
+                }}>
+                    <SirioButton
+                        purple
+                    >
+                        Detail Bukti
+                    </SirioButton>
+                </NavLink>
+            )
+        }
     }
 
     columns = [{

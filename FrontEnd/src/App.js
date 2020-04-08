@@ -53,11 +53,11 @@ class App extends React.Component {
             <AuthorizedRoute exact path="/risk-level" component={RiskLevel} />
             <AuthorizedRoute exact path="/risk-rating" component={RiskRating} />
             <Route exact path="/bm/rekomendasi" component={DaftarRekomendasiBM} />
-            <Route exact path="/bm/bukti-pelaksanaan/tambah" component={FormBuktiBM} />
-            <Route exact path="/bm/rekomendasi/detail-bukti" component={DetailBuktiBM} />
+            <Route exact path="/bukti-pelaksanaan/tambah" component={FormBuktiBM} />
+            <Route exact path="/bukti-pelaksanaan/detail" component={DetailBuktiBM} />
             <Route exact path="/bukti-pelaksanaan" component={DaftarBuktiPelaksanaan} />
-            <Route exact path="/bukti-pelaksanaan/detail-persetujuan" component={DetailPersetujuanBukti} />
-            <Route exact path="/bukti-pelaksanaan/tolak-bukti" component={FormFeedbackBukti} />
+            <Route exact path="/bukti-pelaksanaan/persetujuan" component={DetailPersetujuanBukti} />
+            <Route exact path="/bukti-pelaksanaan/tolak" component={FormFeedbackBukti} />
             <Route exact path="/registrasi-risiko" component={RegistrasiRisiko} />
             <Route exact path="/registrasi-risiko/detail/1" component={DetailRisiko} />
             <Route exact path="/login" component={Login} />
