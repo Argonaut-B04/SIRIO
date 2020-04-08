@@ -18,6 +18,14 @@ class BuktiPelaksanaanService {
         return this.axiosInstance.post(SirioAxiosBase.BASEURL + `/BuktiPelaksanaan/tambah`, dataToPass);
     }
 
+    async getBuktiPelaksanaan(id) {
+        return this.axiosInstance.get(SirioAxiosBase.BASEURL + `/BuktiPelaksanaan/` + id);
+    }
+
+    async setujuiBukti(id) {
+        return this.axiosInstance.put(SirioAxiosBase.BASEURL + `/BuktiPelaksanaan/persetujuan`, id)
+    }
+
 }
 
 export default new BuktiPelaksanaanService();

@@ -3,6 +3,7 @@ import SirioForm from '../SirioForm';
 import SirioButton from '../../Button/SirioButton';
 import BuktiPelaksanaanService from '../../../Services/BuktiPelaksanaanService'
 import { withRouter } from 'react-router-dom';
+import SirioMessageButton from '../../Button/ActionButton/SirioMessageButton';
 
 class FormBukti extends React.Component {
 
@@ -13,7 +14,8 @@ class FormBukti extends React.Component {
         this.state = {
             keterangan: "",
             lampiran: "",
-            id: ""
+            id: "",
+            addComplete: false
         }
         // this.renderId = this.renderId.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -34,6 +36,12 @@ class FormBukti extends React.Component {
         )
     }
 
+    endNotification() {
+        this.setState({
+            addComplete: false
+        })
+    }
+
     handleSubmit(event) {
         event.preventDefault();
         const buktiPelaksanaan = {
@@ -43,6 +51,9 @@ class FormBukti extends React.Component {
         BuktiPelaksanaanService.submitChanges(this.props.location.state.id, buktiPelaksanaan)
             .then(() => {
                 window.location.href = "/bm/rekomendasi"
+                this.setState({
+                    addComplete: true
+                })
             });
     }
 
@@ -95,12 +106,23 @@ class FormBukti extends React.Component {
     // Fungsi render SirioForm
     render() {
         return (
+            <div>
             <SirioForm
                 title="Form Tambah Bukti Pelaksanaan Rekomendasi"
                 inputDefinition={this.inputDefinition()}
                 onSubmit={this.handleSubmit}
                 submitButton={this.submitButton()}
             />
+            {this.state.addComplete &&
+                <SirioMessageButton
+                    show
+                    classes="d-none"
+                    modalTitle="Bukti pelaksanaan berhasil ditambahkan"
+                    customConfirmText="Kembali"
+                    onClick={this.endNotification}
+                />
+            }
+            </div>
         );
     }
 }

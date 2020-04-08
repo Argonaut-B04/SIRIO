@@ -50,13 +50,13 @@ export default class TabelRekomendasi extends React.Component {
 
     getButtons(cell, row) {
         const status = row.statusBukti;
-        const tambah = status === null;
-        const detail = status === "Menunggu Persetujuan" || status === "Disetujui" || status === "Ditolak";
+        const tanpaBukti = status === null;
+        const adaBukti = status === "Menunggu Persetujuan" || status === "Disetujui" || status === "Ditolak";
 
-        if (tambah) {
+        if (tanpaBukti) {
             return (
                 <NavLink to={{
-                    pathname: "/bm/bukti-pelaksanaan/tambah",
+                    pathname: "/bukti-pelaksanaan/tambah",
                     state: {
                         id: row.id
                     }
@@ -68,14 +68,20 @@ export default class TabelRekomendasi extends React.Component {
                     </SirioButton>
                 </NavLink>
             )
-        } else if (detail) {
+        } else if (adaBukti) {
             return (
-                <SirioButton
-                    purple
-                    onClick={() => window.location.href = "/bm/rekomendasi/detail-bukti"}
-                >
-                    Detail Bukti
-                </SirioButton>
+                <NavLink to={{
+                    pathname: "/bukti-pelaksanaan/detail",
+                    state: {
+                        id: row.id
+                    }
+                }}>
+                    <SirioButton
+                        purple
+                    >
+                        Detail Bukti
+                    </SirioButton>
+                </NavLink>
             )
         }
     }

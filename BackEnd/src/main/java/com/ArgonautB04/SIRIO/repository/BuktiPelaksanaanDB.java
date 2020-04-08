@@ -14,4 +14,6 @@ public interface BuktiPelaksanaanDB extends JpaRepository<BuktiPelaksanaan, Inte
     List<BuktiPelaksanaan> findAllByPembuat(Employee pembuat);
 
     List<BuktiPelaksanaan> findAllByRekomendasiIn(Collection<Rekomendasi> rekomendasi);
+
+    BuktiPelaksanaan findByRekomendasi(Rekomendasi rekomendasi);
 }
