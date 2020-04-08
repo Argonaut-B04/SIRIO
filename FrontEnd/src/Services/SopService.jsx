@@ -2,20 +2,16 @@ import axios from 'axios';
 import SirioAxiosBase from './SirioAxiosBase';
 import AuthenticationService from './AuthenticationService';
 
-class RegistrasiRisikoService {
+class SopService {
 
     constructor() {
         this.axiosInstance = axios.create();
         this.axiosInstance.defaults.headers.common['Authorization'] = AuthenticationService.getToken();
     }
 
-    async getRisiko() {
-        return this.axiosInstance.get(SirioAxiosBase.BASEURL + '/Risiko/getAll');
-    }
-
-    async submitChanges(data) {
-        return this.axiosInstance.post(SirioAxiosBase.BASEURL + '/Risiko/tambah', data);
+    async getSopList() {
+        return this.axiosInstance.get(SirioAxiosBase.BASEURL + `/SOP/getAll`);
     }
 }
 
-export default new RegistrasiRisikoService();
+export default new SopService();

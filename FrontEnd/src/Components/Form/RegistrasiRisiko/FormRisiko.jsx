@@ -1,6 +1,8 @@
 import React from 'react';
 import SirioForm from '../SirioForm';
 import SirioButton from '../../Button/SirioButton';
+import RegistrasiRisikoService from '../../../Services/RegistrasiRisikoService';
+import SopService from '../../../Services/SopService';
 
 export default class FormRisiko extends React.Component {
 
@@ -18,6 +20,27 @@ export default class FormRisiko extends React.Component {
         this.handleChange = this.handleChange.bind(this);
         this.inputDefinition = this.inputDefinition.bind(this);
         this.handleSelectChange = this.handleSelectChange.bind(this);
+    }
+
+    componentDidMount() {
+        this.renderSopOption();
+    }
+
+    async renderSopOption() {
+        const response = await SopService.getSopList();
+
+        const sopOptionList = response.data.result.map(sop => {
+            return (
+                {
+                    label: sop.idSop,
+                    value: sop.isSop
+                }
+            )
+        });
+
+        this.setState({
+            sopOptionList: sopOptionList
+        })
     }
 
     // Fungsi untuk mengubah state ketika isi dari input diubah
@@ -54,9 +77,16 @@ export default class FormRisiko extends React.Component {
     // Fungsi yang akan dijalankan ketika user submit
     // Umumnya akan digunakan untuk memanggil service komunikasi ke backend
     handleSubmit(event) {
-        alert("submited");
         // event.preventDefault wajib ada
         event.preventDefault();
+        const risiko = {
+            nama: this.state.nama,
+            kategori: this.state.kategori,
+            sop: this.state.sop,
+            komponen: this.state.komponen
+        }
+        RegistrasiRisikoService.submitChanges(risiko)
+            .then(() => window.location.href = "/registrasi-risiko");
     }
 
     // Fungsi yang akan mengembalikan definisi tiap field pada form
@@ -81,13 +111,13 @@ export default class FormRisiko extends React.Component {
                     optionList: [
                         {
                             label: "Kategori 1",
-                            value: "Kategori 1"
+                            value: 1
                         }, {
                             label: "Kategori 2",
-                            value: "Kategori 2"
+                            value: 2
                         }, {
                             label: "Kategori 3",
-                            value: "Kategori 3"
+                            value: 3
                         }
                     ]
                 }, {
@@ -125,7 +155,7 @@ export default class FormRisiko extends React.Component {
             <div>
                 <SirioButton purple recommended
                     classes="mx-2"
-                    onClick={() => window.location.href = "/registrasi-risiko"}>
+                    onClick={(event)  => this.handleSubmit(event)}>
                     Simpan
                 </SirioButton>
                 <SirioButton purple

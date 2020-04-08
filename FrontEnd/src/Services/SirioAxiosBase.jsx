@@ -18,9 +18,13 @@ export default class SirioAxiosBase {
     }
 
     static formatDateFromString(string) {
-        const dateStringinArray = string.split(" ");
-        const dateinArray = dateStringinArray[0].split("-");
-        return this.formatDate(dateinArray);
+        if (string) {
+            const dateStringinArray = string.split(" ");
+            const dateinArray = dateStringinArray[0].split("-");
+            return this.formatDate(dateinArray);
+        } else {
+            return "-"
+        }
     }
 
     static formatDateFromSirioDatePicker(string) {

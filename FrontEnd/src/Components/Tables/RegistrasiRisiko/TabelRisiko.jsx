@@ -98,10 +98,13 @@ export default class TabelRisiko extends React.Component {
     headerButton() {
         return (
             <div>
-                <SirioButton purple recommended classes="mx-2"
-                onClick={() => window.location.href = "/registrasi-risiko/tambah"}>
-                    Tambah Risiko
-                </SirioButton>
+                <NavLink to={{
+                    pathname: "/registrasi-risiko/tambah"
+                }}>
+                    <SirioButton purple recommended classes="mx-2">
+                        Tambah Risiko
+                    </SirioButton>
+                </NavLink>
                 <SirioButton purple
                 onClick={() => window.location.href = "/registrasi-risiko/ubah-hierarki"}>
                     Ubah Semua Hierarki
