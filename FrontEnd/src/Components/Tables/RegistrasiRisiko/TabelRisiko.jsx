@@ -22,7 +22,7 @@ export default class TabelRisiko extends React.Component {
     }
 
     async renderRows() {
-        const response = await RegistrasiRisikoService.getRisiko();
+        const response = await RegistrasiRisikoService.getAllRisiko();
 
         this.setState({
             rowList: response.data.result
@@ -30,11 +30,12 @@ export default class TabelRisiko extends React.Component {
     }
 
     getButtons(cell, row) {
+        console.log(row)
         return (
             <NavLink to={{
                 pathname: "/registrasi-risiko/detail",
                 state: {
-                    id: row.id,
+                    id: row.idRisiko,
                 }
             }}>
                 <SirioButton
@@ -44,6 +45,14 @@ export default class TabelRisiko extends React.Component {
                 </SirioButton>
             </NavLink>
         )
+    }
+
+    parentFormatter() {
+        if (this.parent) {
+            return this.parent
+        } else {
+            return "-"
+        }
     }
 
     columns = [{
@@ -68,14 +77,14 @@ export default class TabelRisiko extends React.Component {
         dataField: 'parent',
         text: 'PARENT',
         sort: true,
+        formatter: this.parentFormatter,
         classes: classes.rowItem,
         headerClasses: classes.colheader,
         headerStyle: (colum, colIndex) => {
             return { width: "20%", textAlign: 'center' };
-        },
-        formatter: this.formatterParent
+        }
     }, {
-        dataField: 'id',
+        dataField: 'noData 1',
         text: '',
         headerClasses: classes.colheader,
         classes: classes.rowItem,
@@ -84,10 +93,6 @@ export default class TabelRisiko extends React.Component {
         },
         formatter: this.getButtons
     }];
-
-    formatterParent(cell, row) {
-        console.log(cell)
-    }
 
     defaultSorted = [{
         dataField: 'id',
@@ -105,10 +110,13 @@ export default class TabelRisiko extends React.Component {
                         Tambah Risiko
                     </SirioButton>
                 </NavLink>
-                <SirioButton purple
-                onClick={() => window.location.href = "/registrasi-risiko/ubah-hierarki"}>
-                    Ubah Semua Hierarki
-                </SirioButton> 
+                <NavLink to={{
+                    pathname: "/registrasi-risiko/ubah-hierarki"
+                }}>
+                    <SirioButton purple classes="mx-2">
+                        Ubah Semua Hierarki
+                    </SirioButton>
+                </NavLink>
             </div>
         )
     }

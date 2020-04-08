@@ -9,12 +9,20 @@ class RegistrasiRisikoService {
         this.axiosInstance.defaults.headers.common['Authorization'] = AuthenticationService.getToken();
     }
 
-    async getRisiko() {
+    async getAllRisiko() {
         return this.axiosInstance.get(SirioAxiosBase.BASEURL + '/Risiko/getAll');
     }
 
     async submitChanges(data) {
         return this.axiosInstance.post(SirioAxiosBase.BASEURL + '/Risiko/tambah', data);
+    }
+
+    async getRisiko(id) {
+        return this.axiosInstance.get(SirioAxiosBase.BASEURL + `/Risiko/` + id);
+    }
+
+    async hapusRisiko(data) {
+        return this.axiosInstance.get(SirioAxiosBase.BASEURL + '/Risiko/hapus', data);
     }
 }
 

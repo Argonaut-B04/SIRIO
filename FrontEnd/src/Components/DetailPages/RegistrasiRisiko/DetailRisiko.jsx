@@ -1,36 +1,79 @@
 import React from 'react';
-import classes from './DetailRisiko.module.css';
 import SirioDetailPage from '../SirioDetailPage';
 import SirioButton from '../../Button/SirioButton';
+import SirioConfirmButton from '../../Button/ActionButton/SirioConfirmButton';
+import RegistrasiRisikoService from '../../../Services/RegistrasiRisikoService';
+import { NavLink } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 
-export default class RegistrasiRisiko extends React.Component {
+class DetailRisiko extends React.Component {
 
-    data = {
-        Nama: "Risiko 1",
-        Kategori: "Kategori 1",
-        Parent: "-",
-        SOP: "SOP 1",
-        Komponen: "Komponen Risiko 1",
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            risiko: {}
+        }
+
+        this.renderDataRisiko = this.renderDataRisiko.bind(this);
+    }
+
+    componentDidMount() {
+        this.renderDataRisiko();
+        console.log(this.props.location)
+    }
+
+    parentFormatter() {
+        if (this.state.risiko.parent) {
+            return this.state.risiko.parent
+        } else {
+            return "-"
+        }
+    }
+
+    async renderDataRisiko() {
+        const response = await RegistrasiRisikoService.getRisiko(this.props.location.state.id);
+
+        this.setState({
+            risiko: response.data.result
+        })
+    }
+
+    data() {
+        return {
+            "Nama Risiko": this.state.risiko.namaRisiko,
+            "Kategori Risiko": this.state.risiko.risikoKategori,
+            "Referensi SOP": this.state.risiko.sop,
+            "Parent": this.parentFormatter(),
+            "Komponen Risiko": this.state.risiko.komponen
+        };
     }
 
     subButton() {
         return (
             <div>
-                <SirioButton 
+                <NavLink to={{
+                    pathname: "/registrasi-risiko/ubah",
+                    state: {
+                        id: this.state.risiko.idRisiko,
+                    }
+                }}>
+                    <SirioButton
                     classes="mx-2"
                     purple recommended
-                    onClick={() => window.location.href = "/"}
-                    className={classes.buttons}
-                >
-                    Ubah
-                </SirioButton>
-                <SirioButton
+                    >
+                        Ubah
+                    </SirioButton>
+                </NavLink>
+                <SirioConfirmButton
                     purple
-                    onClick={() => window.location.href = "/"}
-                    className={classes.buttons}
+                    modalTitle="Apa Anda yakin untuk menghapus risiko?"
+                    onConfirm={() => window.location.href = "http://www.google.com"}
+                    customConfirmText="Ya, hapus"
+                    customCancelText="Batal"
                 >
                     Hapus
-                </SirioButton>
+                </SirioConfirmButton>
             </div>
         )
     }
@@ -39,7 +82,7 @@ export default class RegistrasiRisiko extends React.Component {
         return (
             <SirioDetailPage
                 title="Detail Risiko"
-                data={this.data}
+                data={this.data()}
                 id='id'
                 columnsDefinition={this.columns}
                 subButton={this.subButton()}
@@ -48,3 +91,5 @@ export default class RegistrasiRisiko extends React.Component {
         );
     }
 } 
+
+export default withRouter(DetailRisiko);
