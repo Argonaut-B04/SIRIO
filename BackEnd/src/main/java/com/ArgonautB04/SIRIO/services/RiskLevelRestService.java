@@ -11,7 +11,13 @@ public interface RiskLevelRestService {
 
     List<RiskLevel> getAll();
 
+    List<RiskLevel> getAktif();
+
     RiskLevel ubahRiskLevel(int idRiskLevel, RiskLevel riskLevel);
 
     void hapusRiskLevel(int idRiskLevel);
+
+    boolean isExistInDatabase(RiskLevel riskLevel);
+
+    void nonaktifkan(RiskLevel riskLevel);
 }

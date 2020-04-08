@@ -1,0 +1,17 @@
+.headerWrapper {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    margin-top: 2rem;
+}
+
+.headerWithButton {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 2rem;
+}
+
+.headerWrapper>* {
+    margin: 5px 0;
+}
