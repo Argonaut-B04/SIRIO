@@ -22,7 +22,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Employee employee = employeeDB.findByUsername(username).get();
+        Employee employee = employeeDB.findByUsernameAndStatus(username, Employee.Status.AKTIF).get();
 
         Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
         grantedAuthorities.add(new SimpleGrantedAuthority(employee.getRole().getNamaRole()));

@@ -46,19 +46,19 @@ public class EmployeeRestServiceImpl implements EmployeeRestService {
 
     @Override
     public Employee getById(int idEmployee) {
-        Optional<Employee> employee = employeeDb.findById(idEmployee);
+        Optional<Employee> employee = employeeDb.findByIdEmployeeAndStatus(idEmployee, Employee.Status.AKTIF);
         if (employee.isPresent()) return employee.get();
         else throw new NoSuchElementException();
     }
 
     @Override
     public Optional<Employee> getByUsername(String username) {
-        return employeeDb.findByUsername(username);
+        return employeeDb.findByUsernameAndStatus(username, Employee.Status.AKTIF);
     }
 
     @Override
     public List<Employee> getAll() {
-        return employeeDb.findAll();
+        return employeeDb.findAllByStatus(Employee.Status.AKTIF);
     }
 
     @Override
