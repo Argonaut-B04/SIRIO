@@ -180,8 +180,8 @@ export default class TabelRekomendasi extends React.Component {
         const status = row.status;
         const tenggatWaktu = SirioAxiosBase.formatDateFromString(row.tenggatWaktu);
         const recommended = status === "Menunggu Pengaturan Tenggat Waktu";
-        const hyperlink = status === "Menunggu Pelaksanaan";
-        const text = status === "Sedang Dilaksanakan" || status === "Selesai";
+        const hyperlink = status === "Menunggu Pelaksanaan" || status === "Sedang Dilaksanakan";
+        const text = status === "Selesai";
 
         const disabled = !recommended;
         if (text) {
