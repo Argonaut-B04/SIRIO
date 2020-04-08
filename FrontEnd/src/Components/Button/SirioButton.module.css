@@ -44,6 +44,7 @@
     color: blue;
     border: none;
     background-color: transparent;
+    border: solid 1.5px #7F3F98;
 }
 
 .hyperlinkLeft {
