@@ -8,13 +8,31 @@ import java.util.List;
 public class KomponenPemeriksaanDTO {
     private Integer id;
     private Integer idRiskLevel;
+    private Float bobotRiskLevel;
     private Integer jumlahSampel;
     private String keteranganSampel;
+    private String namaRiskLevel;
     private List<TemuanRisikoDTO> daftarTemuanRisiko;
     private List<RekomendasiDTO> daftarRekomendasi;
     private List<TemuanRisiko> daftarTemuanRisikoTerdaftar;
     private List<Rekomendasi> daftarRekomendasiTerdaftar;
     private RisikoDTO risiko;
+
+    public Float getBobotRiskLevel() {
+        return bobotRiskLevel;
+    }
+
+    public void setBobotRiskLevel(Float bobotRiskLevel) {
+        this.bobotRiskLevel = bobotRiskLevel;
+    }
+
+    public String getNamaRiskLevel() {
+        return namaRiskLevel;
+    }
+
+    public void setNamaRiskLevel(String namaRiskLevel) {
+        this.namaRiskLevel = namaRiskLevel;
+    }
 
     public List<TemuanRisiko> getDaftarTemuanRisikoTerdaftar() {
         return daftarTemuanRisikoTerdaftar;

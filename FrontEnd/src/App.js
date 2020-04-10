@@ -9,6 +9,7 @@ import {
 import MainPage from "./pages";
 import DaftarHasilPemeriksaan from "./pages/QAOfficer/DaftarHasilPemeriksaan";
 import DaftarTugasPemeriksaan from "./pages/QAOfficer/DaftarTugasPemeriksaan";
+import DetailHasilPemeriksaan from "./pages/QAOfficer/DetailHasilPemeriksaan";
 import DaftarEmployee from "./pages/Administrator/DaftarEmployee";
 import FormTambahEmployee from "./pages/Administrator/FormTambahEmployee";
 import DetailEmployee from "./pages/Administrator/DetailEmployee";
@@ -44,6 +45,7 @@ class App extends React.Component {
           <Switch>
             <Route exact path="/" component={MainPage} />
             <Route exact path="/hasil-pemeriksaan" component={DaftarHasilPemeriksaan} />
+            <Route exact path="/hasil-pemeriksaan/detail" component={DetailHasilPemeriksaan} />
             <Route exact path="/tugas-pemeriksaan" component={DaftarTugasPemeriksaan} />
             <Route exact path="/employee" component={DaftarEmployee} />
             <Route exact path="/employee/tambah" component={FormTambahEmployee} />
@@ -53,11 +55,11 @@ class App extends React.Component {
             <AuthorizedRoute exact path="/risk-level" component={RiskLevel} />
             <AuthorizedRoute exact path="/risk-rating" component={RiskRating} />
             <Route exact path="/bm/rekomendasi" component={DaftarRekomendasiBM} />
-            <Route exact path="/bm/bukti-pelaksanaan/tambah" component={FormBuktiBM} />
-            <Route exact path="/bm/rekomendasi/detail-bukti" component={DetailBuktiBM} />
+            <Route exact path="/bukti-pelaksanaan/tambah" component={FormBuktiBM} />
+            <Route exact path="/bukti-pelaksanaan/detail" component={DetailBuktiBM} />
             <Route exact path="/bukti-pelaksanaan" component={DaftarBuktiPelaksanaan} />
-            <Route exact path="/bukti-pelaksanaan/detail-persetujuan" component={DetailPersetujuanBukti} />
-            <Route exact path="/bukti-pelaksanaan/tolak-bukti" component={FormFeedbackBukti} />
+            <Route exact path="/bukti-pelaksanaan/persetujuan" component={DetailPersetujuanBukti} />
+            <Route exact path="/bukti-pelaksanaan/tolak" component={FormFeedbackBukti} />
             <Route exact path="/registrasi-risiko" component={RegistrasiRisiko} />
             <Route exact path="/registrasi-risiko/detail" component={DetailRisiko} />
             <Route exact path="/registrasi-risiko/tambah" component={FormRisiko} />

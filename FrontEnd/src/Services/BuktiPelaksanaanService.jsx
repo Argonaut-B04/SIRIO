@@ -9,8 +9,25 @@ class BuktiPelaksanaanService {
         this.axiosInstance.defaults.headers.common['Authorization'] = AuthenticationService.getToken();
     }
 
-    async addBuktiPelaksanaan(data) {
-        return this.axiosInstance.post(SirioAxiosBase.BASEURL + `/BuktiPelaksanaan/tambah`, data);
+    async submitChanges(idRekomendasi, data) {
+        const dataToPass = {
+            idRekomendasi: idRekomendasi,
+            keterangan: data.keterangan,
+            lampiran: data.lampiran
+        }
+        return this.axiosInstance.post(SirioAxiosBase.BASEURL + `/BuktiPelaksanaan/tambah`, dataToPass);
+    }
+
+    async getBuktiPelaksanaan(id) {
+        return this.axiosInstance.get(SirioAxiosBase.BASEURL + `/BuktiPelaksanaan/` + id);
+    }
+
+    async submitPersetujuan(id, data) {
+        const dataToPass = {
+            id: id,
+            feedback: data.feedback
+        }
+        return this.axiosInstance.put(SirioAxiosBase.BASEURL + `/BuktiPelaksanaan/persetujuan`, dataToPass)
     }
 
 }
