@@ -118,7 +118,7 @@ public class EmployeeRestController {
      * @param employeeDTO data transfer object untuk employee yang akan diubah
      * @return employee yang telah diperbarui
      */
-    @PutMapping(value = "/ubah", consumes = {"application/json"})
+    @PostMapping(value = "/ubah", consumes = {"application/json"})
     private BaseResponse<Employee> ubahEmployee(
             @RequestBody EmployeeDTO employeeDTO
     ) {
@@ -132,6 +132,11 @@ public class EmployeeRestController {
                     HttpStatus.NOT_FOUND, "Employee dengan ID " + employeeDTO.getId() + " tidak ditemukan!"
             );
         }
+
+        if (employee.getStatus() == Employee.Status.NONAKTIF)
+            throw new ResponseStatusException(
+                    HttpStatus.FORBIDDEN, "Employee dengan ID " + employeeDTO.getId() + " sudah tidak aktif!"
+            );
 
         if (employeeDTO.getNama() != null && !employeeDTO.getNama().equals("")) {
             employee.setNama(employeeDTO.getNama());
@@ -174,32 +179,32 @@ public class EmployeeRestController {
         return response;
     }
 
-    /**
-     * Nonaktivasi employee
-     *
-     * @param employeeDTO data transfer object untuk employee yang akan dinonaktifkan
-     * @return employee yang telah dinonaktifkan
-     */
-    @PutMapping(value = "/nonaktif", consumes = {"application/json"})
-    private BaseResponse<Employee> nonaktifEmployee(
-            @RequestBody EmployeeDTO employeeDTO
-    ) {
-        BaseResponse<Employee> response = new BaseResponse<>();
-
-        Employee employee;
-        try {
-            employee = employeeRestService.getById(employeeDTO.getId());
-        } catch (NoSuchElementException | NullPointerException e) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Employee dengan ID " + employeeDTO.getId() + " tidak ditemukan!"
-            );
-        }
-
-        response.setStatus(200);
-        response.setMessage("success");
-        response.setResult(employeeRestService.nonaktifkanEmployee(employee.getIdEmployee()));
-        return response;
-    }
+//    /**
+//     * Nonaktivasi employee
+//     *
+//     * @param employeeDTO data transfer object untuk employee yang akan dinonaktifkan
+//     * @return employee yang telah dinonaktifkan
+//     */
+//    @PutMapping(value = "/nonaktif", consumes = {"application/json"})
+//    private BaseResponse<Employee> nonaktifEmployee(
+//            @RequestBody EmployeeDTO employeeDTO
+//    ) {
+//        BaseResponse<Employee> response = new BaseResponse<>();
+//
+//        Employee employee;
+//        try {
+//            employee = employeeRestService.getById(employeeDTO.getId());
+//        } catch (NoSuchElementException | NullPointerException e) {
+//            throw new ResponseStatusException(
+//                    HttpStatus.NOT_FOUND, "Employee dengan ID " + employeeDTO.getId() + " tidak ditemukan!"
+//            );
+//        }
+//
+//        response.setStatus(200);
+//        response.setMessage("success");
+//        response.setResult(employeeRestService.nonaktifkanEmployee(employee.getIdEmployee()));
+//        return response;
+//    }
 
     /**
      * Mengambil seluruh employee
@@ -263,7 +268,7 @@ public class EmployeeRestController {
      *
      * @param employeeDTO data transfer object untuk employee yang akan dihapus
      */
-    @DeleteMapping("/hapus")
+    @PostMapping("/hapus")
     private BaseResponse<String> hapusEmployee(
             @RequestBody EmployeeDTO employeeDTO
     ) {
@@ -278,17 +283,17 @@ public class EmployeeRestController {
             );
         }
 
+        response.setStatus(200);
+        response.setMessage("success");
+
         try {
             employeeRestService.hapusEmployee(employee.getIdEmployee());
         } catch (DataIntegrityViolationException e) {
-            throw new ResponseStatusException(
-                    HttpStatus.FORBIDDEN, "Employee sudah digunakan pada suatu aksi atau transaksi sehingga " +
-                    "tidak dapat dihapus."
-            );
+            employeeRestService.nonaktifkanEmployee(employee.getIdEmployee());
+            response.setResult("Employee dengan id " + employeeDTO.getId() + " dinonaktifkan!");
+            return response;
         }
 
-        response.setStatus(200);
-        response.setMessage("success");
         response.setResult("Employee dengan id " + employeeDTO.getId() + " terhapus!");
         return response;
     }

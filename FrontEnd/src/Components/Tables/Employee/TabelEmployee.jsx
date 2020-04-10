@@ -4,21 +4,31 @@ import classes from './TabelEmployee.module.css';
 import SirioTable from '../SirioTable';
 import EmployeeService from '../../../Services/EmployeeService';
 import { NavLink } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
+import SirioMessageButton from "../../Button/ActionButton/SirioMessageButton";
 
-export default class TabelEmployee extends React.Component {
+class TabelEmployee extends React.Component {
 
     constructor(props) {
         super(props);
 
         this.state = {
-            rowList: []
-        }
+            rowList: [],
+            openNotification: true
+        };
 
         this.renderRows = this.renderRows.bind(this);
+        this.endNotification = this.endNotification.bind(this);
     }
 
     componentDidMount() {
         this.renderRows();
+    }
+
+    endNotification() {
+        this.setState({
+            openNotification: false
+        })
     }
 
     async renderRows() {
@@ -119,14 +129,45 @@ export default class TabelEmployee extends React.Component {
 
     render() {
         return (
-            <SirioTable
-                title="Daftar Employee"
-                data={this.state.rowList}
-                id='id'
-                columnsDefinition={this.columns}
-                includeSearchBar
-                headerButton={this.getButtonsHeader()}
-            />
+            <>
+                <SirioTable
+                    title="Daftar Employee"
+                    data={this.state.rowList}
+                    id='id'
+                    columnsDefinition={this.columns}
+                    includeSearchBar
+                    headerButton={this.getButtonsHeader()}
+                />
+                {this.props.location.state && this.props.location.state.addSuccess && this.state.openNotification &&
+                <SirioMessageButton
+                    show
+                    classes="d-none"
+                    modalTitle="Employee berhasil Disimpan"
+                    customConfirmText="Tutup"
+                    onClick={this.endNotification}
+                />
+                }
+                {this.props.location.state && this.props.location.state.deleteSuccess && this.state.openNotification &&
+                <SirioMessageButton
+                    show
+                    classes="d-none"
+                    modalTitle="Employee berhasil Dihapus"
+                    customConfirmText="Tutup"
+                    onClick={this.endNotification}
+                />
+                }
+                {this.props.location.state && this.props.location.state.editSuccess && this.state.openNotification &&
+                <SirioMessageButton
+                    show
+                    classes="d-none"
+                    modalTitle="Employee berhasil Diubah"
+                    customConfirmText="Tutup"
+                    onClick={this.endNotification}
+                />
+                }
+            </>
         );
     }
 }
+
+export default withRouter(TabelEmployee);
