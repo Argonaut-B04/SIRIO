@@ -18,6 +18,7 @@ class TabelRisiko extends React.Component {
         }
 
         this.renderRows = this.renderRows.bind(this);
+        this.endNotification = this.endNotification(this);
     }
 
     componentDidMount() {
@@ -39,7 +40,6 @@ class TabelRisiko extends React.Component {
     }
 
     getButtons(cell, row) {
-        console.log(row)
         return (
             <NavLink to={{
                 pathname: "/registrasi-risiko/detail",

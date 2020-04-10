@@ -22,12 +22,10 @@ class RegistrasiRisikoService {
     }
 
     async hapusRisiko(data) {
-        return this.axiosInstance.get(SirioAxiosBase.BASEURL + '/Risiko/hapus', data);
+        return this.axiosInstance.post(SirioAxiosBase.BASEURL + '/Risiko/hapus', data);
     }
 
     async ubahRisiko(data) {
-        console.log(data);
-        console.log(SirioAxiosBase.BASEURL + '/Risiko/ubah');
         return this.axiosInstance.post(SirioAxiosBase.BASEURL + '/Risiko/ubah', data)
     }
 }

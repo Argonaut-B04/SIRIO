@@ -1,7 +1,7 @@
 import React from 'react';
 import SirioDetailPage from '../SirioDetailPage';
 import SirioButton from '../../Button/SirioButton';
-import SirioConfirmButton from '../../Button/ActionButton/SirioConfirmButton';
+import SirioWarningButton from '../../Button/ActionButton/SirioWarningButton';
 import RegistrasiRisikoService from '../../../Services/RegistrasiRisikoService';
 import { NavLink } from 'react-router-dom';
 import { withRouter } from 'react-router-dom';
@@ -30,7 +30,6 @@ class DetailRisiko extends React.Component {
 
     componentDidMount() {
         this.renderDataRisiko();
-        console.log(this.props.location)
     }
 
     parentFormatter() {
@@ -114,7 +113,7 @@ class DetailRisiko extends React.Component {
                         Ubah
                     </SirioButton>
                 </NavLink>
-                <SirioConfirmButton
+                <SirioWarningButton
                     purple
                     modalTitle="Apa Anda yakin untuk menghapus risiko?"
                     onConfirm={() => this.hapus(this.state.idRisiko)}
@@ -122,7 +121,7 @@ class DetailRisiko extends React.Component {
                     customCancelText="Batal"
                 >
                     Hapus
-                </SirioConfirmButton>
+                </SirioWarningButton>
             </div>
         )
     }
@@ -135,7 +134,6 @@ class DetailRisiko extends React.Component {
                 title="Detail Risiko"
                 data={this.data()}
                 id= 'id'
-                columnsDefinition={this.columns}
                 subButton={this.subButton()}
                 link="registrasi-risiko"
             />

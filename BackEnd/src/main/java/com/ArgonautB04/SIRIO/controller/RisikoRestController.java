@@ -100,8 +100,7 @@ public class RisikoRestController {
         Risiko risiko;
         try {
             risiko = risikoRestService.getById(risikoDTO.getId());
-            risiko = risikoRestService.transformasidto(risiko, risikoDTO);
-            if (komponenPemeriksaanRestService.getByRisiko(risikoRestService.getById(risikoDTO.getId())) != null) {
+            if (komponenPemeriksaanRestService.getByRisiko(risiko) != null) {
                 response.setStatus(403);
                 response.setMessage("failed");
                 risikoRestService.nonaktifkanRisiko(risiko.getIdRisiko());
