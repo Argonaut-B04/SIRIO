@@ -8,7 +8,6 @@ import com.ArgonautB04.SIRIO.services.KomponenPemeriksaanRestService;
 import com.ArgonautB04.SIRIO.services.RisikoRestService;
 import com.ArgonautB04.SIRIO.services.SOPRestService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -94,28 +93,31 @@ public class RisikoRestController {
      * @param risikoDTO data transfer object untuk risiko yang akan dihapus
      * @return risiko dengan idRisiko tersebut dihapus dari db
      */
-    @DeleteMapping(value = "/hapus")
+    @PostMapping(value = "/hapus")
     private BaseResponse<String> hapusRisiko(@RequestBody RisikoDTO risikoDTO
     ) {
         BaseResponse<String> response = new BaseResponse<>();
+        Risiko risiko;
         try {
+            risiko = risikoRestService.getById(risikoDTO.getId());
+            risiko = risikoRestService.transformasidto(risiko, risikoDTO);
             if (komponenPemeriksaanRestService.getByRisiko(risikoRestService.getById(risikoDTO.getId())) != null) {
-                throw new Exception();
+                response.setStatus(403);
+                response.setMessage("failed");
+                risikoRestService.nonaktifkanRisiko(risiko.getIdRisiko());
+                response.setResult("Risiko dengan id " + risiko.getIdRisiko() + " dinonaktifkan!");
+                return response;
+            } else {
+                risikoRestService.hapusRisiko(risiko.getIdRisiko());
             }
-            risikoRestService.hapusRisiko(risikoDTO.getId());
-
-            response.setStatus(200);
-            response.setMessage("success");
-            response.setResult("Risiko dengan id " + risikoDTO.getId() + " terhapus!");
-        } catch (EmptyResultDataAccessException e) {
+        } catch (NoSuchElementException | NullPointerException e) {
             response.setStatus(404);
             response.setMessage("not found");
             response.setResult("Risiko dengan id " + risikoDTO.getId() + " tidak dapat ditemukan");
-        } catch (Exception e) {
-            response.setStatus(403);
-            response.setMessage("failed");
-            response.setResult("Risiko dengan id " + risikoDTO.getId() + " tidak dapat dihapus");
         }
+        response.setStatus(200);
+        response.setMessage("success");
+        response.setResult("Risiko dengan id " + risikoDTO.getId() + " terhapus!");
         return response;
     }
 
@@ -124,11 +126,12 @@ public class RisikoRestController {
      * @param risikoDTO data transfer object untuk risiko yang akan diubah
      * @return perubahan data akan disimpan di db
      */
-    @PutMapping(value = "/ubah", consumes = {"application/json"})
+    @PostMapping(value = "/ubah", consumes = {"application/json"})
     private BaseResponse<Risiko> ubahRisiko(
             @RequestBody RisikoDTO risikoDTO
     ) {
         BaseResponse<Risiko> response = new BaseResponse<>();
+        try {
         Risiko risikoTemp = risikoRestService.getById(risikoDTO.getId());
         risikoTemp = risikoRestService.transformasidto(risikoTemp, risikoDTO);
         Risiko result = risikoRestService.ubahRisiko(risikoTemp.getIdRisiko(), risikoTemp);
@@ -136,6 +139,10 @@ public class RisikoRestController {
         response.setStatus(200);
         response.setMessage("success");
         response.setResult(result);
+        } catch (NoSuchElementException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "ID Risiko " + risikoDTO.getId() + " Tidak Ditemukan");
+        }
 
         return response;
 

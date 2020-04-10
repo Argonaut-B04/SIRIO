@@ -79,7 +79,7 @@ public class RisikoRestServiceImpl implements RisikoRestService {
         risiko.setKomponen(risikoDTO.getKomponen());
         risiko.setRisikoKategori(risikoDTO.getKategori());
         risiko.setNamaRisiko(risikoDTO.getNama());
-        if (risikoDTO.getParent() != 0) {
+        if (risikoDTO.getParent() != null) {
             risiko.setParent(getById(risikoDTO.getId()));
         } else {
             risiko.setParent(null);
