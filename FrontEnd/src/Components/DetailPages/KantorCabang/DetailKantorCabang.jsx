@@ -1,62 +1,86 @@
 import React from 'react';
-import classes from './DetailKantorCabang.module.css';
 import SirioDetailPage from '../SirioDetailPage';
 import SirioButton from '../../Button/SirioButton';
+import KantorCabangService from '../../../Services/KantorCabangService';
+import { NavLink } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 
-export default class TabelKantorCabang extends React.Component {
-    
-    columns = [{
-        dataField: 'informasi',
-        classes: classes.rowItem,
-        headerClasses: classes.colheader,
-        headerStyle: (colum, colIndex) => {
-            return { width: "20%", textAlign: 'left' };
+class DetailKantorCabang extends React.Component {
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            kantorCabang: {}
         }
 
-    }, {
-        dataField: 'isiInformasi',
-        classes: classes.rowItem,
-        headerClasses: classes.colheader,
-        headerStyle: (colum, colIndex) => {
-            return { width: "20%", textAlign: 'left' };
-        }
-    }];
+        this.renderDataKantor = this.renderDataKantor.bind(this);
+    }
 
-    data = [
-        { "informasi": "Nama Point  :", "isiInformasi": "Kantor Cabang 1" },
-        { "informasi": "Branch Manager  :", "isiInformasi": "Billa" },
-        { "informasi": "Area    :", "isiInformasi": "Area 1" },
-        { "informasi": "Regional    :", "isiInformasi": "Regional 1" },
-        { "informasi": "Jumlah Kunjungan:", "isiInformasi": "2" },
-        { "informasi": "Kunjungan Audit:", "isiInformasi": "Sudah Pernah" },
-    ]
+    componentDidMount() {
+        this.renderDataKantor();
+    }
 
-    // deleteButton() {
-    //     return (
-    //         <SirioButton purple>
-    //             Hapus
-    //             className={classes.buttons}
-    //         </SirioButton>
-    //     )
-    // }
+    async renderDataKantor() {
+        const response = await KantorCabangService.getKantorCabangDetail(this.props.location.state.id);
+
+        this.setState({
+           kantorCabang: response.data.result
+        })
+    }
+
+    data() {
+        return {
+            "Nama Point      :": this.state.kantorCabang.namaKantor,
+            "Branch Manager  :": this.state.kantorCabang.pemilik,
+            "Area            :": this.state.kantorCabang.area,
+            "Regional        :": this.state.kantorCabang.regional,
+            "Kunjungan Audit :": this.state.kantorCabang.kunjunganAudit
+        };
+    }
+
+    subButton() {
+        return (
+            <div>
+                <NavLink to={{
+                    pathname: "/KantorCabang/ubah",
+                    state: {
+                        id: this.state.kantorCabang.idKantorCabang,
+                    }
+                }}>
+                    <SirioButton
+                        purple
+                    >
+                        Ubah
+                    </SirioButton>
+                </NavLink>
+                <a>     </a>
+                <NavLink to={{
+                    pathname: "/KantorCabang/hapus",
+                    state: {
+                        id: this.state.kantorCabang.idKantorCabang,
+                    }
+                }}>
+                    <SirioButton
+                        purple
+                    >
+                        Hapus
+                    </SirioButton>
+                </NavLink>
+            </div>
+        )
+    }
 
     render() {
         return (
-            <div>
-                <SirioDetailPage
-                    title="Detail Kantor Cabang"
-                    data={this.data}
-                    id='id'
-                    columnsDefinition={this.columns}
-                    deleteButton={this.deleteButton}
-                />
-                <SirioButton purple>
-                    Hapus
-                    className={classes.buttons}
-                </SirioButton>
-            </div>
-        
-           
+            <SirioDetailPage
+                title="Detail Kantor Cabang"
+                data={this.data()}
+                id='id'
+                subButton={this.subButton()}
+            />
         );
     }
-} 
+}
+
+export default withRouter(DetailKantorCabang);

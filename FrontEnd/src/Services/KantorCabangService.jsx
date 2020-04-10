@@ -13,8 +13,12 @@ class KantorCabangService {
         return this.axiosInstance.get(SirioAxiosBase.BASEURL + `/KantorCabang/getAll`);
     }
 
-    async getKantorCabangDetail() {
-        return this.axiosInstance.get(SirioAxiosBase.BASEURL + `/KantorCabang/1`);
+    async getKantorCabangDetail(id) {
+        return this.axiosInstance.get(SirioAxiosBase.BASEURL + `/KantorCabang/` + id);
+    }
+
+    async addKantorCabang(data) {
+        return this.axiosInstance.post(SirioAxiosBase.BASEURL + `/KantorCabang/tambah`, data);
     }
 }
 

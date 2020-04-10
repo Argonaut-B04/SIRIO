@@ -9,6 +9,15 @@ public class EmployeeDTO {
     private String email;
     private Integer idRole;
     private String username;
+    private String jabatan;
+
+    public String getJabatan() {
+        return jabatan;
+    }
+
+    public void setJabatan(String jabatan) {
+        this.jabatan = jabatan;
+    }
 
     public Integer getId() {
         return id;

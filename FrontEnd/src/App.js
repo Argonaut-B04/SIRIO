@@ -23,6 +23,9 @@ import FormTambahKantorCabang from "./pages/Administrator/FormTambahKantorCabang
 import DaftarHasilPemeriksaan from "./pages/QAOfficer/DaftarHasilPemeriksaan";
 import DaftarTugasPemeriksaan from "./pages/QAOfficer/DaftarTugasPemeriksaan";
 
+import DaftarEmployee from "./pages/Administrator/DaftarEmployee";
+import FormTambahEmployee from "./pages/Administrator/FormTambahEmployee";
+import DetailEmployee from "./pages/Administrator/DetailEmployee";
 import DaftarRekomendasi from "./pages/QAOfficer/DaftarRekomendasi";
 import Reminder from "./pages/QAOfficer/Reminder";
 
@@ -40,6 +43,8 @@ import AuthorizedRoute from './Components/Route/AuthorizedRoute';
 import './App.css';
 import RegistrasiRisiko from './pages/ManagerOR/RegistrasiRisiko';
 import DetailRisiko from './pages/ManagerOR/DetailRisiko';
+import RiskLevel from './pages/ManagerOR/RiskLevel';
+import RiskRating from './pages/ManagerOR/RiskRating';
 
 /**
  * Router utama yang memetakan url ke controller
@@ -65,9 +70,14 @@ class App extends React.Component {
 
             <Route exact path="/hasil-pemeriksaan" component={DaftarHasilPemeriksaan} />
             <Route exact path="/tugas-pemeriksaan" component={DaftarTugasPemeriksaan} />
+            <Route exact path="/employee" component={DaftarEmployee} />
+            <Route exact path="/employee/tambah" component={FormTambahEmployee} />
+            <Route exact path="/employee/detail" component={DetailEmployee} />
             <AuthorizedRoute exact path="/rekomendasi" component={DaftarRekomendasi} />
             <AuthorizedRoute exact path="/rekomendasi/reminder" component={Reminder} />
 
+            <AuthorizedRoute exact path="/risk-level" component={RiskLevel} />
+            <AuthorizedRoute exact path="/risk-rating" component={RiskRating} />
             <Route exact path="/bm/rekomendasi" component={DaftarRekomendasiBM} />
             <Route exact path="/bm/bukti-pelaksanaan/tambah" component={FormBuktiBM} />
             <Route exact path="/bm/rekomendasi/detail-bukti" component={DetailBuktiBM} />

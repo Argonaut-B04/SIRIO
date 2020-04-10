@@ -26,13 +26,23 @@ export default class TabelKantorCabang extends React.Component {
 
     async renderRows() {
         const response = await KantorCabangService.getKantorCabangByLoggedInUser();
+
         this.setState({
             rowList: response.data.result
         })
     }
 
     columns = [{
-        dataField: 'bm',
+        dataField: 'namaKantor',
+        text: 'NAMA POINT',
+        sort: true,
+        classes: classes.rowItem,
+        headerClasses: classes.colheader,
+        headerStyle: (colum, colIndex) => {
+            return { width: "20%", textAlign: 'left' };
+        }
+    },{
+        dataField: 'pemilik',
         text: 'BRANCH MANAGER',
         sort: true,
         classes: classes.rowItem,
@@ -95,19 +105,11 @@ export default class TabelKantorCabang extends React.Component {
     }
 
     getButtonsFirst(cell, row) {
-        // return (
-        //     <SirioButton
-        //         purple
-        //         onClick={() => window.location.href = "/administrator/kantorCabang/detail-kantorCabang"}
-        //     >
-        //         Detail
-        //     </SirioButton>
-        // )
         return (
             <NavLink to={{
-                pathname: "/kantorCabang/detail-kantorCabang",
+                pathname: "/administrator/kantorCabang/detail-kantorCabang",
                 state: {
-                    id: row.idEmployee,
+                    id: row.idKantor
                 }
             }}>
                 <SirioButton
@@ -118,9 +120,6 @@ export default class TabelKantorCabang extends React.Component {
             </NavLink>
         )
     }
-
-    
-
 
     render() {
         return (

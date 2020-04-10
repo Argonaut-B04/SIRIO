@@ -6,6 +6,7 @@ import overlayFactory from 'react-bootstrap-table2-overlay';
 import classes from './SirioTable.module.css';
 import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css"
 import 'react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.min.css';
+import SirioComponentHeader from '../Header/SirioComponentHeader';
 
 /**
  * Kelas komponen tabel untuk Sirio secara umum
@@ -103,10 +104,9 @@ export default class SirioTable extends Component {
     columns = [{
         dataField: 'no',
         text: 'NO',
-        sort: true,
-        classes: classes.rowNumber,
-        headerClasses: classes.colheader,
-        headerStyle: (colum, colIndex) => {
+        classes: [classes.rowNumber, "d-none d-sm-table-cell"].join(" "),
+        headerClasses: [classes.colheader, "d-none d-sm-table-cell"].join(" "),
+        headerStyle: () => {
             return { width: "50px", textAlign: 'center' };
         },
         formatter: (cell, row, enumObject, index) => this.numberFormatter(enumObject),
@@ -118,19 +118,20 @@ export default class SirioTable extends Component {
         const columnsDefinition = this.columns.concat(this.props.columnsDefinition);
         return (
             <div>
-                <div className={classes.headerWrapper}>
-                    <h2 className={classes.title}>
-                        {this.props.title}
-                    </h2>
-                    {this.props.headerButton}
-                </div>
+                {this.props.noHeader || this.props.customHeader ? this.props.customHeader :
+                    <SirioComponentHeader
+                        headerButton={this.props.headerButton}
+                        title={this.props.title}
+                        subtitle={this.props.subtitle}
+                        betweenTitleSubtitle={this.props.betweenTitleSubtitle}
+                    />
+                }
                 <div className={classes.toolkitWrapper}>
                     <ToolkitProvider
                         bootstrap4
                         keyField={this.props.id}
                         data={this.props.data}
                         columns={columnsDefinition}
-                        defaultSorted={this.props.defaultSorted}
                         search={{
                             searchFormatted: true
                         }}
@@ -153,8 +154,9 @@ export default class SirioTable extends Component {
                                         {...props.baseProps}
                                         ref={n => this.node = n}
                                         striped
+                                        cellEdit={this.props.cellEdit}
                                         hover
-                                        condensed
+                                        defaultSorted={this.props.defaultSorted}
                                         noDataIndication={this.indication}
                                         pagination={this.pagination}
                                         overlay={this.overlay}

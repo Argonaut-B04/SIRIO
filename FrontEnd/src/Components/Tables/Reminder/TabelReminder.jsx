@@ -24,7 +24,6 @@ class TabelReminder extends React.Component {
         }
 
         this.renderRows = this.renderRows.bind(this);
-        this.hapus = this.hapus.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.endNotification = this.endNotification.bind(this);
     }

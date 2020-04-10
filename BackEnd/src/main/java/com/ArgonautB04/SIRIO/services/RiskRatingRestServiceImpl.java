@@ -49,4 +49,9 @@ public class RiskRatingRestServiceImpl implements RiskRatingRestService {
     public void hapusRiskRating(int idRiskRating) {
         riskRatingDB.deleteById(idRiskRating);
     }
+
+    @Override
+    public boolean isExistInDatabase(RiskRating riskRating) {
+        return riskRatingDB.existsById(riskRating.getIdRating());
+    }
 }

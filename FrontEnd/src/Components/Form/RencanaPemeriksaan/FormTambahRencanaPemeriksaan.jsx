@@ -1,6 +1,7 @@
 import React from 'react';
 import SirioForm from '../SirioForm';
 import SirioButton from '../../Button/SirioButton';
+import SirioMessageButton from '../../Button/ActionButton/SirioMessageButton';
 
 /**
  * Kelas untuk membuat form demo
@@ -16,7 +17,8 @@ export default class FormTambahKantorCabang extends React.Component {
             QA: "Billa",
             tanggalMulai: "12/12/2020",
             tanggalSelesai: "19/12/2020",
-            link: "ini link"
+            link: "ini link",
+            tugasPemeriksaan: []
            
         }
 
@@ -179,19 +181,26 @@ export default class FormTambahKantorCabang extends React.Component {
     // Fungsi render SirioForm
     render() {
         return (
-            <div>
+            <>
                 <SirioForm
                     title="Form Tambah Rencana Pemeriksaan"
                     inputDefinition={this.inputDefinition()}
                     onSubmit={this.handleSubmit}
                     submitButton={this.submitButton()}
+                    subtitle="Tugas Pemeriksaan 1"
                     // cancelButton={this.cancelButton()}
                     // removeButton={this.removeButton()}
                 />
-                {/* <div className="btn-wrapper">
-                    <button type="button" onClick={handleAdd} className="btn-add">+</button>
-                </div> */}
-            </div>
+               {this.state.changeComplete &&
+                    <SirioMessageButton
+                        show
+                        classes="d-none"
+                        modalTitle="Tenggat Waktu berhasil Disimpan"
+                        customConfirmText="Kembali"
+                        onClick={this.endNotification}
+                    />
+                }
+            </>
            
         );
     }

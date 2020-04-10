@@ -37,8 +37,11 @@ export default class MainPage extends React.Component {
                 {/* Contoh cara menampilkan tombol redirect */}
                 {/* Alternatif lain: href="/tujuan" */}
                 <Link to="/rekomendasi" className="btn btn-primary">Tabel Rekomendasi</Link>
-                <Link to="/manager/rencanaPemeriksaan" className="btn btn-primary">Tabel Rencana Pemeriksaan</Link>
-                <Link to="/administrator/kantorCabang" className="btn btn-primary">Tabel Kantor Cabang</Link>
+                <br />
+                <Link to="/risk-level" className="btn btn-primary">Risk Level</Link>
+                <br />
+                <Link to="/risk-rating" className="btn btn-primary">Risk Rating</Link>
+                <br />
                 <Link to="/bm/rekomendasi" className="btn btn-primary">Rekomendasi BM</Link>
                 <br />
                 <Link to="/bukti-pelaksanaan" className="btn btn-primary">Tabel Bukti</Link>

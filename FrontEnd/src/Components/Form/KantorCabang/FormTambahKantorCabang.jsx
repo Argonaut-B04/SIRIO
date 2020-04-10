@@ -1,6 +1,9 @@
 import React from 'react';
 import SirioForm from '../../Form/SirioForm';
 import SirioButton from '../../Button/SirioButton';
+import KantorCabangService from '../../../Services/KantorCabangService';
+import EmployeeService from '../../../Services/EmployeeService';
+import SirioMessageButton from '../../Button/ActionButton/SirioMessageButton';
 
 /**
  * Kelas untuk membuat form demo
@@ -12,15 +15,39 @@ export default class FormTambahKantorCabang extends React.Component {
         super(props);
 
         this.state = {
-            kc: "kantor cabang 1",
-            bm: "Billa",
-            area: "area 1",
-            regional: "regional 1"
+            namaKantorCabang: "",
+            idPemilik: "",
+            area: "",
+            regional: "",
+            kunjunganAudit: "",
+            employeeOptionList: []
         }
 
+        this.renderEmployeeOption = this.renderEmployeeOption.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.inputDefinition = this.inputDefinition.bind(this);
         this.handleSelectChange = this.handleSelectChange.bind(this);
+    }
+
+    componentDidMount() {
+        this.renderEmployeeOption();
+    }
+
+    async renderEmployeeOption() {
+        const response = await EmployeeService.getEmployeeList();
+
+        const employeeOptionList = response.data.result.map(employee => {
+            return (
+                {
+                    label: employee.nama,
+                    value: employee.idEmployee
+                }
+            )
+        });
+
+        this.setState({
+            employeeOptionList: employeeOptionList
+        })
     }
 
     // Fungsi untuk mengubah state ketika isi dari input diubah
@@ -48,9 +75,18 @@ export default class FormTambahKantorCabang extends React.Component {
     // Fungsi yang akan dijalankan ketika user submit
     // Umumnya akan digunakan untuk memanggil service komunikasi ke backend
     handleSubmit(event) {
-        alert("submited");
-        // event.preventDefault wajib ada
         event.preventDefault();
+        const kantorCabang = {
+            namaKantorCabang: this.state.namaKantorCabang,
+            idPemilik: this.state.idPemilik,
+            area: this.state.area,
+            regional: this.state.regional,
+            kunjunganAudit: this.state.kunjunganAudit
+        }
+        KantorCabangService.addKantorCabang(kantorCabang)
+        // console.log(event)
+        
+        .then( () => window.location.href = "/administrator/kantorCabang");
     }
 
     // Fungsi yang akan mengembalikan definisi tiap field pada form
@@ -63,64 +99,38 @@ export default class FormTambahKantorCabang extends React.Component {
                     label: "Nama Point*",
                     handleChange: this.handleChange,
                     type: "text",
-                    name: "kc",
-                    value: this.state.kc,
+                    name: "namaKantorCabang",
+                    value: this.state.namaKantorCabang,
                     placeholder: "Masukan nama point"
                 }, {
                     label: "Branch Manger*",
                     handleChange: this.handleSelectChange,
                     type: "select",
-                    name: "bm",
-                    value: this.state.bm,
-                    optionList: [
-                        {
-                            label: "Billa",
-                            value: "Billa"
-                        }, {
-                            label: "kana",
-                            value: "kana"
-                        }, {
-                            label: "tora",
-                            value: "tora"
-                        }
-                    ]
+                    name: "idPemilik",
+                    value: this.state.idPemilik,
+                    optionList: this.state.employeeOptionList
                 },{
                     label: "Area*",
-                    handleChange: this.handleSelectChange,
-                    type: "select",
+                    handleChange: this.handleChange,
+                    type: "text",
                     name: "area",
                     value: this.state.area,
-                    optionList: [
-                        {
-                            label: "area 1",
-                            value: "area 1"
-                        }, {
-                            label: "area 2",
-                            value: "area 2"
-                        }, {
-                            label: "area 3",
-                            value: "area 3"
-                        }
-                    ]
+                    placeholder: "Masukan nama area"
                 },{
                     label: "Regional*",
-                    handleChange: this.handleSelectChange,
-                    type: "select",
+                    handleChange: this.handleChange,
+                    type: "text",
                     name: "regional",
                     value: this.state.regional,
-                    optionList: [
-                        {
-                            label: "regional 1",
-                            value: "regional 1"
-                        }, {
-                            label: "regional 2",
-                            value: "regional 2"
-                        }, {
-                            label: "regional 3",
-                            value: "regional 3"
-                        }
-                    ]
+                    placeholder: "Masukan nama regional"
+                },{
+                    label: "Kunjungan Audit*",
+                    handleChange: this.handleChange,
+                    type: "checkbox",
+                    name: "kunjunganAudit",
+                    value: this.state.kunjunganAudit,
                 }
+
 
             ]
         )
@@ -131,11 +141,11 @@ export default class FormTambahKantorCabang extends React.Component {
             <div>
                 <SirioButton purple recommended
                     classes="mx-2"
-                    onClick={() => window.location.href = "http://www.google.com"}>
+                    onClick={(event)  => this.handleSubmit(event)}>
                     Simpan
                 </SirioButton>
                 <SirioButton purple
-                    onClick={() => window.location.href = "http://www.google.com"}>
+                    onClick={() => window.location.href = "/administrator/kantorCabang"}>
                     Batal
                 </SirioButton>
             </div>
@@ -145,12 +155,24 @@ export default class FormTambahKantorCabang extends React.Component {
     // Fungsi render SirioForm
     render() {
         return (
-            <SirioForm
-                title="Form Tambah Kantor Cabang"
-                inputDefinition={this.inputDefinition()}
-                onSubmit={this.handleSubmit}
-                submitButton={this.submitButton()}
-            />
+            <>
+                <SirioForm
+                    title="Form Tambah Kantor Cabang"
+                    inputDefinition={this.inputDefinition()}
+                    onSubmit={this.handleSubmit}
+                    submitButton={this.submitButton()}
+                />
+           
+                {this.state.changeComplete &&
+                    <SirioMessageButton
+                        show
+                        classes="d-none"
+                        modalTitle="Tenggat Waktu berhasil Disimpan"
+                        customConfirmText="Kembali"
+                        onClick={this.endNotification}
+                    />
+                }
+             </>
         );
     }
 }

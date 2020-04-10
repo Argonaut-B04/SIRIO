@@ -12,6 +12,14 @@ class RencanaPemeriksaanService {
     async getRencanaPemeriksaanByLoggedInUser() {
         return this.axiosInstance.get(SirioAxiosBase.BASEURL + `/RencanaPemeriksaan/getAll`);
     }
+
+    async getRencanaPemeriksaanDetail(id) {
+        return this.axiosInstance.get(SirioAxiosBase.BASEURL + `/RencanaPemeriksaan/` + id);
+    }
+
+    async addRencanaPemeriksaanCabang(data) {
+        return this.axiosInstance.post(SirioAxiosBase.BASEURL + `/RencanaPemeriksaan/tambah`, data);
+    }
 }
 
 export default new RencanaPemeriksaanService();

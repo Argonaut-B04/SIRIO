@@ -31,9 +31,17 @@ public class KantorCabangRestServiceImpl implements KantorCabangRestService {
     }
 
     @Override
+    public KantorCabang getByPemilik(Employee pemilik) {
+        return kantorCabangDB.findAllByPemilik(pemilik);
+    }
+
+    @Override
     public List<KantorCabang> getAll() {
         return kantorCabangDB.findAll();
     }
+
+    @Override
+    public KantorCabang getByNama(String nama){ return kantorCabangDB.findByNamaKantor(nama);}
 
     @Override
     public KantorCabang ubahKantorCabang(int idKantorCabang, KantorCabang kantorCabang) {

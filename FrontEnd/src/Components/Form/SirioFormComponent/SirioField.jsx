@@ -91,7 +91,7 @@ export default class SirioField extends Component {
                         value={this.defaultChecked ? true : false}
                         onChange={this.props.handleChange}
 
-                        className={this.props.classes ? [this.props.calsses, classes.input].join(" ") : classes.input}
+                        className={this.props.classes ? [this.props.classes, classes.input].join(" ") : classes.input}
                     />
                     <span className="checkmark"></span>
                 </fieldset>
@@ -114,7 +114,7 @@ export default class SirioField extends Component {
                     onChange={this.props.handleChange}
 
                     placeholder={this.props.placeholder}
-                    className={this.props.classes ? [this.props.calsses, classes.input].join(" ") : classes.input}
+                    className={this.props.classes ? [this.props.classes, classes.input].join(" ") : classes.input}
                 />
             </fieldset>
         );

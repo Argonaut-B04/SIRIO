@@ -4,7 +4,7 @@ public class BuktiPelaksanaanDTO {
     private Integer id;
     private String keterangan;
     private String lampiran;
-    private Integer idPembuat;
+    private String namaPembuat;
     private Integer idRekomendasi;
 
     public Integer getId() {
@@ -31,12 +31,12 @@ public class BuktiPelaksanaanDTO {
         this.lampiran = lampiran;
     }
 
-    public Integer getIdPembuat() {
-        return idPembuat;
+    public String getNamaPembuat() {
+        return namaPembuat;
     }
 
-    public void setIdPembuat(Integer idPembuat) {
-        this.idPembuat = idPembuat;
+    public void setNamaPembuat(String namaPembuat) {
+        this.namaPembuat = namaPembuat;
     }
 
     public Integer getIdRekomendasi() {

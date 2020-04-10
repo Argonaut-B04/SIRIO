@@ -10,6 +10,10 @@ public interface KantorCabangRestService {
 
     KantorCabang getById(int idKantorCabang);
 
+    KantorCabang getByNama (String nama);
+
+    KantorCabang getByPemilik(Employee pemilik);
+
     List<KantorCabang> getAll();
 
     KantorCabang ubahKantorCabang(int idKantorCabang, KantorCabang kantorCabang);
