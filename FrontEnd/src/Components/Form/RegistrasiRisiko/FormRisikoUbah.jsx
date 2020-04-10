@@ -2,6 +2,7 @@ import React from 'react';
 import SirioForm from '../SirioForm';
 import SirioButton from '../../Button/SirioButton';
 import RegistrasiRisikoService from '../../../Services/RegistrasiRisikoService';
+import SopService from '../../../Services/SopService';
 import { Redirect } from 'react-router-dom';
 import { withRouter } from 'react-router-dom';
 
@@ -12,24 +13,26 @@ class FormRisikoUbah extends React.Component {
         super(props);
 
         this.state = {
+            id: "",
             nama: "",
             kategori: "",
             sop: "",
             komponen: "",
+            sopOptionList: [],
             redirect: false
-        };
+        }
 
-        this.renderRoleOption = this.renderRoleOption.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.inputDefinition = this.inputDefinition.bind(this);
         this.handleSelectChange = this.handleSelectChange.bind(this);
         this.setRedirect = this.setRedirect.bind(this);
-        this.renderDataEmployee = this.renderDataEmployee.bind(this);
+        this.renderDataRisiko = this.renderDataRisiko.bind(this);
+        this.renderSopOption = this.renderSopOption.bind(this);
     }
 
     componentDidMount() {
-        this.renderRoleOption();
-        this.renderDataEmployee();
+        this.renderSopOption();
+        this.renderDataRisiko();
     }
 
     setRedirect = () => {
@@ -41,7 +44,7 @@ class FormRisikoUbah extends React.Component {
     renderRedirect = () => {
         if (this.state.redirect) {
             return <Redirect to={{
-                pathname: "/employee",
+                pathname: "/registrasi-risiko",
                 state: {
                     editSuccess: true
                 }
@@ -49,42 +52,33 @@ class FormRisikoUbah extends React.Component {
         }
     };
 
-    async renderRoleOption() {
-        const response = await RoleService.getRoleList();
+    async renderSopOption() {
+        const response = await SopService.getSopList();
 
-        const roleOptionList = response.data.result.map(role => {
+        const sopOptionList = response.data.result.map(sop => {
             return (
                 {
-                    label: role.namaRole,
-                    value: role.idRole
+                    label: sop.judul,
+                    value: sop.idSop
                 }
             )
         });
 
         this.setState({
-            roleOptionList: roleOptionList
+            sopOptionList: sopOptionList
         })
     }
 
-    async renderDataEmployee() {
-        const response = await EmployeeService.getEmployee(this.props.location.state.id);
+    async renderDataRisiko() {
+        const response = await RegistrasiRisikoService.getRisiko(this.props.location.state.id);
 
         this.setState({
-            id: response.data.result.idEmployee,
-            idRole: response.data.result.role.idRole,
-            nama: response.data.result.nama,
-            jabatan: response.data.result.jabatan,
-            email: response.data.result.email,
-            noHp: this.nomorHpFormatter(response.data.result.noHp),
+            id: response.data.result.idRisiko,
+            nama: response.data.result.namaRisiko,
+            kategori: response.data.result.risikoKategori,
+            sop: response.data.result.sop.idSop,
+            komponen: response.data.result.komponen,
         })
-    }
-
-    nomorHpFormatter(noHp) {
-        if (noHp) {
-            return noHp
-        } else {
-            return ""
-        }
     }
 
     handleChange(event) {
@@ -106,17 +100,16 @@ class FormRisikoUbah extends React.Component {
     }
 
     handleSubmit(event) {
+        // event.preventDefault wajib ada
         event.preventDefault();
-        const employee = {
+        const risiko = {
             id: this.state.id,
-            idRole: this.state.idRole,
             nama: this.state.nama,
-            jabatan: this.state.jabatan,
-            email: this.state.email,
-            noHp: this.state.noHp
-        };
-        console.log("test");
-        EmployeeService.editEmployee(employee)
+            kategori: this.state.kategori,
+            sop: this.state.sop,
+            komponen: this.state.komponen
+        }
+        RegistrasiRisikoService.ubahRisiko(risiko)
             .then(() => this.setRedirect());
     }
 
@@ -124,46 +117,53 @@ class FormRisikoUbah extends React.Component {
     // Setiap objek {} pada List [] akan menjadi 1 field
     // untuk informasi lebih lengkap, cek SirioForm
     inputDefinition() {
+        console.log(this.state.sop);
         return (
             [
                 {
-                label: "Role",
-                handleChange: this.handleSelectChange,
-                type: "select",
-                name: "idRole",
-                value: this.state.idRole,
-                optionList: this.state.roleOptionList
-            }, {
-                label: "Nama",
-                handleChange: this.handleChange,
-                type: "text",
-                name: "nama",
-                value: this.state.nama,
-                placeholder: "Nama"
-            }, {
-                label: "Jabatan",
-                handleChange: this.handleChange,
-                type: "text",
-                name: "jabatan",
-                value: this.state.jabatan,
-                placeholder: "Jabatan"
-            }, {
-                label: "Email",
-                handleChange: this.handleChange,
-                type: "text",
-                name: "email",
-                value: this.state.email,
-                placeholder: "email@email.com"
-            }, {
-                label: "Nomor Telepon",
-                handleChange: this.handleChange,
-                type: "text",
-                name: "noHp",
-                value: this.state.noHp,
-                placeholder: "08123456789"
-            }]
+                    label: "Nama Risiko*",
+                    handleChange: this.handleChange,
+                    type: "textarea",
+                    name: "nama",
+                    value: this.state.nama,
+                    placeholder: "Masukan nama risiko"
+                }, {
+                    label: "Kategori Risiko*",
+                    handleChange: this.handleSelectChange,
+                    type: "select",
+                    name: "kategori",
+                    value: this.state.kategori,
+                    optionList: [
+                        {
+                            label: "Kategori 1",
+                            value: 1
+                        }, {
+                            label: "Kategori 2",
+                            value: 2
+                        }, {
+                            label: "Kategori 3",
+                            value: 3
+                        }
+                    ]
+                }, {
+                    label: "Referensi SOP*",
+                    handleChange: this.handleSelectChange,
+                    type: "select",
+                    name: "sop",
+                    value: this.state.sop,
+                    optionList: this.state.sopOptionList
+                }, {
+                    label: "Komponen Risiko",
+                    handleChange: this.handleChange,
+                    type: "textarea",
+                    name: "komponen",
+                    value: this.state.komponen,
+                    placeholder: "Masukan komponen risiko"
+                }
+            ]
         )
     }
+
 
     submitButton() {
         return (
@@ -175,7 +175,7 @@ class FormRisikoUbah extends React.Component {
                 </SirioButton>
                 <SirioButton purple
                              classes="mx-1"
-                             onClick={() => window.location.href = "/employee"}>
+                             onClick={() => window.location.href = "/registrasi-risiko"}>
                     Batal
                 </SirioButton>
             </div>
@@ -188,7 +188,7 @@ class FormRisikoUbah extends React.Component {
             <>
                 {this.renderRedirect()}
                 <SirioForm
-                    title="Form Ubah Pengguna"
+                    title="Form Ubah Risiko"
                     inputDefinition={this.inputDefinition()}
                     onSubmit={this.handleSubmit}
                     submitButton={this.submitButton()}
@@ -197,4 +197,4 @@ class FormRisikoUbah extends React.Component {
         );
     }
 }
-export default withRouter(EmployeeFormUbah);
+export default withRouter(FormRisikoUbah);

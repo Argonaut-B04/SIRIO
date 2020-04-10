@@ -35,8 +35,8 @@ export default class FormRisiko extends React.Component {
         const sopOptionList = response.data.result.map(sop => {
             return (
                 {
-                    label: sop.idSop,
-                    value: sop.isSop
+                    label: sop.judul,
+                    value: sop.idSop
                 }
             )
         });
@@ -129,18 +129,7 @@ export default class FormRisiko extends React.Component {
                     type: "select",
                     name: "sop",
                     value: this.state.sop,
-                    optionList: [
-                        {
-                            label: "1",
-                            value: "1"
-                        }, {
-                            label: "2",
-                            value: "2"
-                        }, {
-                            label: "3",
-                            value: "3"
-                        }
-                    ]
+                    optionList: this.state.sopOptionList
                 }, {
                     label: "Komponen Risiko",
                     handleChange: this.handleChange,

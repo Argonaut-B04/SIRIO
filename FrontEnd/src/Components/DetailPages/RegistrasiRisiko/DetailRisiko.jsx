@@ -17,6 +17,7 @@ class DetailRisiko extends React.Component {
             namaRisiko: "",
             risikoKategori: "",
             sop: "",
+            judulSop: "",
             parent: "",
             komponen: "",
             redirect: false,
@@ -47,7 +48,8 @@ class DetailRisiko extends React.Component {
             idRisiko: response.data.result.idRisiko,
             namaRisiko: response.data.result.namaRisiko,
             risikoKategori: response.data.result.risikoKategori,
-            sop: response.data.result.sop.judul,
+            judulSop: response.data.result.sop.judul,
+            sop: response.data.result.sop.idSop,
             parent: response.data.result.parent,
             komponen: response.data.result.komponen,
         })
@@ -57,7 +59,7 @@ class DetailRisiko extends React.Component {
         return {
             "Nama Risiko": this.state.namaRisiko,
             "Kategori Risiko": this.state.risikoKategori,
-            "Referensi SOP": this.state.sop,
+            "Referensi SOP": this.state.judulSop,
             "Parent": this.parentFormatter(),
             "Komponen Risiko": this.state.komponen
         };
@@ -82,7 +84,7 @@ class DetailRisiko extends React.Component {
 
     hapus(id) {
         const risiko = {
-            idRisiko: id
+            id: id
         };
         RegistrasiRisikoService.hapusRisiko(risiko)
             .then(() => this.setRedirect());
