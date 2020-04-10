@@ -41,6 +41,14 @@ class DetailRisiko extends React.Component {
         }
     }
 
+    komponenFormatter() {
+        if (this.state.komponen === "" | this.state.komponen === null) {
+            return "-"
+        } else {
+            return this.state.komponen
+        }
+    }
+
     async renderDataRisiko() {
         const response = await RegistrasiRisikoService.getRisiko(this.props.location.state.id);
 
@@ -61,7 +69,7 @@ class DetailRisiko extends React.Component {
             "Kategori Risiko": this.state.risikoKategori,
             "Referensi SOP": this.state.judulSop,
             "Parent": this.parentFormatter(),
-            "Komponen Risiko": this.state.komponen
+            "Komponen Risiko": this.komponenFormatter()
         };
     }
 

@@ -13,7 +13,8 @@ class TabelRisiko extends React.Component {
         super(props);
 
         this.state = {
-            rowList: []
+            rowList: [],
+            openNotification: true,
         }
 
         this.renderRows = this.renderRows.bind(this);
@@ -21,6 +22,12 @@ class TabelRisiko extends React.Component {
 
     componentDidMount() {
         this.renderRows();
+    }
+
+    endNotification() {
+        this.setState({
+            openNotification: false
+        })
     }
 
     async renderRows() {
