@@ -5,6 +5,7 @@ import SirioConfirmButton from '../../Button/ActionButton/SirioConfirmButton';
 import RegistrasiRisikoService from '../../../Services/RegistrasiRisikoService';
 import { NavLink } from 'react-router-dom';
 import { withRouter } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 
 class DetailRisiko extends React.Component {
 
@@ -12,15 +13,18 @@ class DetailRisiko extends React.Component {
         super(props);
 
         this.state = {
+            idRisiko: "",
             namaRisiko: "",
             risikoKategori: "",
             sop: "",
             parent: "",
             komponen: "",
+            redirect: false,
 
         }
 
         this.renderDataRisiko = this.renderDataRisiko.bind(this);
+        this.setRedirect = this.setRedirect.bind(this);
     }
 
     componentDidMount() {
@@ -40,6 +44,7 @@ class DetailRisiko extends React.Component {
         const response = await RegistrasiRisikoService.getRisiko(this.props.location.state.id);
 
         this.setState({
+            idRisiko: response.data.result.idRisiko,
             namaRisiko: response.data.result.namaRisiko,
             risikoKategori: response.data.result.risikoKategori,
             sop: response.data.result.sop.judul,
@@ -56,6 +61,31 @@ class DetailRisiko extends React.Component {
             "Parent": this.parentFormatter(),
             "Komponen Risiko": this.state.komponen
         };
+    }
+
+    setRedirect = () => {
+        this.setState({
+            redirect: true
+        })
+    };
+
+    renderRedirect = () => {
+        if (this.state.redirect) {
+            return <Redirect to={{
+                pathname: "/registrasi-risiko",
+                state: {
+                    deleteSuccess: true
+                }
+            }} />
+        }
+    };
+
+    hapus(id) {
+        const risiko = {
+            idRisiko: id
+        };
+        RegistrasiRisikoService.hapusRisiko(risiko)
+            .then(() => this.setRedirect());
     }
 
     subButton() {
@@ -77,7 +107,7 @@ class DetailRisiko extends React.Component {
                 <SirioConfirmButton
                     purple
                     modalTitle="Apa Anda yakin untuk menghapus risiko?"
-                    onConfirm={() => window.location.href = "http://www.google.com"}
+                    onConfirm={() => this.hapus(this.state.idRisiko)}
                     customConfirmText="Ya, hapus"
                     customCancelText="Batal"
                 >
@@ -89,14 +119,17 @@ class DetailRisiko extends React.Component {
 
     render() {
         return (
+            <>
+            {this.renderRedirect()}
             <SirioDetailPage
                 title="Detail Risiko"
                 data={this.data()}
-                id='id'
+                id= 'id'
                 columnsDefinition={this.columns}
                 subButton={this.subButton()}
                 link="registrasi-risiko"
             />
+            </>
         );
     }
 } 

@@ -15,11 +15,14 @@ export default class FormRisiko extends React.Component {
             kategori: "",
             sop: "",
             komponen: "",
+            sopOptionList: [],
+            redirect: false,
         }
 
         this.handleChange = this.handleChange.bind(this);
         this.inputDefinition = this.inputDefinition.bind(this);
         this.handleSelectChange = this.handleSelectChange.bind(this);
+        this.renderSopOption = this.renderSopOption.bind(this);
     }
 
     componentDidMount() {

@@ -4,8 +4,10 @@ import classes from '../RegistrasiRisiko/TabelRisiko.module.css';
 import SirioTable from '../SirioTable';
 import RegistrasiRisikoService from '../../../Services/RegistrasiRisikoService';
 import { NavLink } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
+import SirioMessageButton from "../../Button/ActionButton/SirioMessageButton";
 
-export default class TabelRisiko extends React.Component {
+class TabelRisiko extends React.Component {
 
     constructor(props) {
         super(props);
@@ -123,6 +125,7 @@ export default class TabelRisiko extends React.Component {
 
     render() {
         return (
+            <>
             <SirioTable
                 title="Registrasi Risiko"
                 data={this.state.rowList}
@@ -131,6 +134,36 @@ export default class TabelRisiko extends React.Component {
                 includeSearchBar
                 headerButton={this.headerButton()}
             />
+            {this.props.location.state && this.props.location.state.addSuccess && this.state.openNotification &&
+                <SirioMessageButton
+                    show
+                    classes="d-none"
+                    modalTitle="Risiko berhasil Disimpan"
+                    customConfirmText="Tutup"
+                    onClick={this.endNotification}
+                />
+                }
+                {this.props.location.state && this.props.location.state.deleteSuccess && this.state.openNotification &&
+                <SirioMessageButton
+                    show
+                    classes="d-none"
+                    modalTitle="Risiko berhasil Dihapus"
+                    customConfirmText="Tutup"
+                    onClick={this.endNotification}
+                />
+                }
+                {this.props.location.state && this.props.location.state.editSuccess && this.state.openNotification &&
+                <SirioMessageButton
+                    show
+                    classes="d-none"
+                    modalTitle="Risiko berhasil Diubah"
+                    customConfirmText="Tutup"
+                    onClick={this.endNotification}
+                />
+                }
+            </>
         );
     }
 } 
+
+export default withRouter(TabelRisiko);
