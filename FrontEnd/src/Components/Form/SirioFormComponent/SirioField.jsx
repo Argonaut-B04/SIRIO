@@ -18,7 +18,9 @@ import TextareaAutosize from 'react-textarea-autosize';
 export default class SirioField extends Component {
 
     render() {
-        if (this.props.customInput) {
+        if (this.props.fullComponent) {
+            return this.props.fullComponent;
+        } else if (this.props.customInput) {
             return (
                 <fieldset>
                     {this.props.label ?
@@ -46,7 +48,7 @@ export default class SirioField extends Component {
                         value={this.props.value}
                         handleChange={this.props.handleChange}
                         options={this.props.optionList}
-                        className={this.props.classes}
+                        className={[this.props.classes, classes.sirioSelect].join(" ")}
                     />
                 </fieldset>
             )
