@@ -7,6 +7,7 @@ import classes from './SirioTable.module.css';
 import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css"
 import 'react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.min.css';
 import SirioComponentHeader from '../Header/SirioComponentHeader';
+import ComponentWrapper from '../../Layout/ComponentWrapper';
 
 /**
  * Kelas komponen tabel untuk Sirio secara umum
@@ -126,7 +127,7 @@ export default class SirioTable extends Component {
                         betweenTitleSubtitle={this.props.betweenTitleSubtitle}
                     />
                 }
-                <div className={classes.toolkitWrapper}>
+                <ComponentWrapper>
                     <ToolkitProvider
                         bootstrap4
                         keyField={this.props.id}
@@ -173,7 +174,7 @@ export default class SirioTable extends Component {
                         :
                         null
                     }
-                </div>
+                </ComponentWrapper>
             </div>
         );
     }
