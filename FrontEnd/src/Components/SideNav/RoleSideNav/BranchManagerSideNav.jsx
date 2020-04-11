@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import SideNavFramework from '../SideNavFramework';
+import { halamanUtama, rekomendasi, dashboard, profilKC } from '../../../Configuration/UrlConfig';
 
 /**
  * Komponen SideNav untuk Branch Manager
@@ -10,26 +11,10 @@ export default class BranchManagerSideNav extends Component {
             <SideNavFramework
                 links={
                     [
-                        {
-                            link: "#",
-                            title: "Halaman Utama",
-                            active: false
-                        },
-                        {
-                            link: "#",
-                            title: "Rekomendasi",
-                            active: false
-                        },
-                        {
-                            link: "#",
-                            title: "Dashboard",
-                            active: false
-                        },
-                        {
-                            link: "#",
-                            title: "Profil Kantor Cabang",
-                            active: false
-                        }
+                        halamanUtama,
+                        rekomendasi,
+                        dashboard,
+                        profilKC
                     ]
                 }
             />

@@ -68,12 +68,13 @@ a {
     cursor: pointer;
 }
 
-.clickableNavigation.active {
+.active {
     background-color: rgba(93, 188, 210, 60%) !important;
 }
 
 .clickableNavigation:hover {
     background-color: rgba(93, 188, 210, 30%);
+    color: white;
 }
 
 .dropdownMenu {
