@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
+import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -72,11 +74,29 @@ public class RekomendasiRestController {
                     RekomendasiDTO rekomendasiDTO = new RekomendasiDTO();
                     rekomendasiDTO.setId(rekomendasi.getIdRekomendasi());
                     rekomendasiDTO.setKeterangan(rekomendasi.getKeterangan());
-                    String tenggatWaktu = rekomendasi.getTenggatWaktu().toString();
-                    String tenggatWaktuFinal = "";
-                    tenggatWaktuFinal = tenggatWaktu.substring(0, 10);
-                    rekomendasiDTO.setTenggatWaktu(tenggatWaktuFinal);
-                    rekomendasiDTO.setDurasi("10 Hari");
+
+                    Date tenggatWaktu = rekomendasi.getTenggatWaktu();
+                    if (tenggatWaktu != null) {
+                        String tenggatWaktuString = tenggatWaktu.toString();
+                        String tenggatWaktuFinal = tenggatWaktuString.substring(0, 10);
+                        rekomendasiDTO.setTenggatWaktu(tenggatWaktuFinal);
+                    }
+
+                    DateFormat df = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
+                    Date dateobj = new Date();
+                    String mulai = df.format(dateobj);
+//                    String mulai = rekomendasi.getKomponenPemeriksaan().getHasilPemeriksaan().getTugasPemeriksaan().getTanggalMulai().toString();
+                    String selesai = rekomendasi.getTenggatWaktu().toString();
+                    String tanggalMulai = mulai.substring(0, 2);
+                    String tanggalSelesai = selesai.substring(8, 10);
+                    int tanggalMulaiFinal = Integer.parseInt(tanggalMulai);
+                    int tanggalSelesaiFinal = Integer.parseInt(tanggalSelesai);
+                    int durasi = (tanggalSelesaiFinal - tanggalMulaiFinal) + 1;
+                    if (durasi < 0) { durasi = 0; }
+                    String durasiString = Integer.toString(durasi);
+                    String durasiFinal = durasiString + " Hari";
+                    rekomendasiDTO.setDurasi(durasiFinal);
+
                     List<BuktiPelaksanaan> buktiList = buktiPelaksanaanRestService.getByDaftarRekomendasi(result);
                     for (BuktiPelaksanaan buktiPelaksanaan : buktiList) {
                         if (buktiPelaksanaan.getRekomendasi().equals(rekomendasi)) {
@@ -91,10 +111,29 @@ public class RekomendasiRestController {
                     RekomendasiDTO rekomendasiDTO = new RekomendasiDTO();
                     rekomendasiDTO.setId(rekomendasi.getIdRekomendasi());
                     rekomendasiDTO.setKeterangan(rekomendasi.getKeterangan());
+
                     Date tenggatWaktu = rekomendasi.getTenggatWaktu();
                     if (tenggatWaktu != null) {
-                        rekomendasiDTO.setTenggatWaktu(tenggatWaktu.toString());
+                        String tenggatWaktuString = tenggatWaktu.toString();
+                        String tenggatWaktuFinal = tenggatWaktuString.substring(0, 10);
+                        rekomendasiDTO.setTenggatWaktu(tenggatWaktuFinal);
                     }
+
+                    DateFormat df = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
+                    Date dateobj = new Date();
+                    String mulai = df.format(dateobj);
+//                    String mulai = rekomendasi.getKomponenPemeriksaan().getHasilPemeriksaan().getTugasPemeriksaan().getTanggalMulai().toString();
+                    String selesai = rekomendasi.getTenggatWaktu().toString();
+                    String tanggalMulai = mulai.substring(0, 2);
+                    String tanggalSelesai = selesai.substring(8, 10);
+                    int tanggalMulaiFinal = Integer.parseInt(tanggalMulai);
+                    int tanggalSelesaiFinal = Integer.parseInt(tanggalSelesai);
+                    int durasi = (tanggalSelesaiFinal - tanggalMulaiFinal) + 1;
+                    if (durasi < 0) { durasi = 0; }
+                    String durasiString = Integer.toString(durasi);
+                    String durasiFinal = durasiString + " Hari";
+                    rekomendasiDTO.setDurasi(durasiFinal);
+
                     rekomendasiDTO.setStatus(rekomendasi.getStatusRekomendasi().getNamaStatus());
                     List<BuktiPelaksanaan> buktiList = buktiPelaksanaanRestService.getByDaftarRekomendasi(result);
                     for (BuktiPelaksanaan buktiPelaksanaan : buktiList) {
@@ -102,13 +141,9 @@ public class RekomendasiRestController {
                             rekomendasiDTO.setStatusBukti(buktiPelaksanaan.getStatusBuktiPelaksanaan().getNamaStatus());
                         }
                     }
+
                     rekomendasiDTO.setNamaKantorCabang(
-                            rekomendasi
-                                    .getKomponenPemeriksaan()
-                                    .getHasilPemeriksaan()
-                                    .getTugasPemeriksaan()
-                                    .getKantorCabang()
-                                    .getNamaKantor()
+                            rekomendasi.getKomponenPemeriksaan().getHasilPemeriksaan().getTugasPemeriksaan().getKantorCabang().getNamaKantor()
                     );
                     resultDTO.add(rekomendasiDTO);
                 }

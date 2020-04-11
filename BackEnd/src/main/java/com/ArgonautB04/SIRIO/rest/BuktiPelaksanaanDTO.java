@@ -7,10 +7,9 @@ public class BuktiPelaksanaanDTO {
     private String namaPembuat;
     private String namaPemeriksa;
     private Integer idRekomendasi;
-
     private Integer status;
-
     private String feedback;
+
     public Integer getId() {
         return id;
     }
