@@ -30,6 +30,7 @@ public class Role implements Serializable {
     private List<Employee> employeeList;
 
     @OneToOne(mappedBy = "role", cascade = CascadeType.ALL)
+    @JsonIgnore
     private AccessPermissions accessPermissions;
 
     public int getIdRole() {

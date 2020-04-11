@@ -27,6 +27,9 @@ public class AccessPermissions implements Serializable {
     @Column(columnDefinition = "boolean default false")
     private Boolean ubahRiskLevel;
 
+    @Column(columnDefinition = "boolean default false")
+    private Boolean ubahReminder;
+
     public Integer getIdPermission() {
         return idPermission;
     }
@@ -73,5 +76,13 @@ public class AccessPermissions implements Serializable {
 
     public void setUbahRiskLevel(Boolean ubahRiskLevel) {
         this.ubahRiskLevel = ubahRiskLevel;
+    }
+
+    public Boolean getUbahReminder() {
+        return ubahReminder;
+    }
+
+    public void setUbahReminder(Boolean ubahReminder) {
+        this.ubahReminder = ubahReminder;
     }
 }
