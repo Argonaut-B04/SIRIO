@@ -22,6 +22,7 @@ class FormUbahBukti extends React.Component {
         this.inputDefinition = this.inputDefinition.bind(this);
         this.setRedirect = this.setRedirect.bind(this);
         this.renderDataBuktiPelaksanaan = this.renderDataBuktiPelaksanaan.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     componentDidMount() {
@@ -49,7 +50,7 @@ class FormUbahBukti extends React.Component {
         const response = await BuktiPelaksanaanService.getBuktiPelaksanaan(this.props.location.state.id);
         
         this.setState({
-            id: response.data.result.idBuktiPelaksanaan,
+            id: response.data.result.id,
             keterangan: response.data.result.keterangan,
             lampiran: response.data.result.lampiran
         })

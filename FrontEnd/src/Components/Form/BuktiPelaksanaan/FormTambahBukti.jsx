@@ -21,6 +21,7 @@ class FormTambahBukti extends React.Component {
         this.handleChange = this.handleChange.bind(this);
         this.inputDefinition = this.inputDefinition.bind(this);
         this.setRedirect = this.setRedirect.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     setRedirect = () => {

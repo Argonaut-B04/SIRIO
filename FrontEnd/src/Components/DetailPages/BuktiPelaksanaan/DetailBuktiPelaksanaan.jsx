@@ -55,9 +55,13 @@ class DetailBuktiPelaksanaan extends React.Component {
     data() {
         return {
             "Keterangan": this.state.buktiPelaksanaan.keterangan,
-            "Lampiran": this.state.buktiPelaksanaan.lampiran,
-            "Feedback": this.state.buktiPelaksanaan.feedback
+            "Lampiran": this.lampiranFormater(this.state.buktiPelaksanaan.lampiran),
+            "Feedback": this.feedbackFormatter(this.state.buktiPelaksanaan.feedback)
         }
+    }
+
+    lampiranFormater(lampiran) {
+        return (<a href={lampiran}>{lampiran}</a>)
     }
 
     feedbackFormatter(feedback) {
@@ -72,7 +76,7 @@ class DetailBuktiPelaksanaan extends React.Component {
         const buktiPelaksanaan = {
             status: 2
         };
-        BuktiPelaksanaanService.statusBukti(this.state.buktiPelaksanaan.id, buktiPelaksanaan)
+        BuktiPelaksanaanService.setStatusBukti(this.state.buktiPelaksanaan.id, buktiPelaksanaan)
             .then(() => this.setRedirect());
     }
 
@@ -86,6 +90,7 @@ class DetailBuktiPelaksanaan extends React.Component {
             }}>
                 <SirioButton
                     purple
+                    classes="mx-1"
                 >
                     Ubah
                 </SirioButton>
@@ -96,13 +101,14 @@ class DetailBuktiPelaksanaan extends React.Component {
     buttonSetuju() {
         return (
             <SirioConfirmButton
-                red
+                purple recommended
+                classes="mx-1"
                 modalTitle="Apakah anda yakin untuk menyetujui bukti pelaksanaan?"
                 onConfirm={() => this.setuju()}
                 customConfirmText="Ya, Setujui"
                 customCancelText="Batal"
             >
-                Setuju
+                Setujui
             </SirioConfirmButton>
         )
     }
@@ -117,6 +123,7 @@ class DetailBuktiPelaksanaan extends React.Component {
             }}>
                 <SirioButton
                     purple
+                    classes="mx-1"
                 >
                     Tolak
                 </SirioButton>
@@ -149,7 +156,7 @@ class DetailBuktiPelaksanaan extends React.Component {
                     return (
                         <div>
                             {this.buttonUbah(this.state.buktiPelaksanaan.id)}
-                            {this.buttonSetuju}
+                            {this.buttonSetuju()}
                             {this.buttonTolak(this.state.buktiPelaksanaan.id)}
                         </div>
                     );

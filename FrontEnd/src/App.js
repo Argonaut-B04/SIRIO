@@ -55,7 +55,6 @@ class App extends React.Component {
             <Route exact path="/bukti-pelaksanaan/ubah" component={FormUbahBukti} />
             <Route exact path="/bukti-pelaksanaan/detail" component={DetailBuktiPelaksanaan} />
             <Route exact path="/bukti-pelaksanaan" component={DaftarBuktiPelaksanaan} />
-            <Route exact path="/bukti-pelaksanaan/setujui" component={DetailBuktiPelaksanaan} />
             <Route exact path="/bukti-pelaksanaan/tolak" component={FormTolakBukti} />
             <Route exact path="/registrasi-risiko" component={RegistrasiRisiko} />
             <Route exact path="/registrasi-risiko/detail/1" component={DetailRisiko} />

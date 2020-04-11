@@ -15,7 +15,6 @@ class FormTolakBukti extends React.Component {
         this.state = {
             buktiPelaksanaan: {},
             feedback: "",
-            id: "",
             redirect: false
         };
 
@@ -23,6 +22,7 @@ class FormTolakBukti extends React.Component {
         this.inputDefinition = this.inputDefinition.bind(this);
         this.setRedirect = this.setRedirect.bind(this);
         this.renderDataBuktiPelaksanaan = this.renderDataBuktiPelaksanaan.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     componentDidMount() {
@@ -50,25 +50,11 @@ class FormTolakBukti extends React.Component {
         const response = await BuktiPelaksanaanService.getBuktiPelaksanaan(this.props.location.state.id);
         
         this.setState({
-            // buktiPelaksanaan: response.data.result
-            id: response.data.result.idBuktiPelaksanaan,
+            id: response.data.result.id,
             keterangan: response.data.result.keterangan,
             lampiran: response.data.result.lampiran
         })
     }
-
-    // data = {
-    //     id: this.state.buktiPelaksanaan.idBuktiPelaksanaan,
-    //     keterangan: this.state.buktiPelaksanaan.keterangan,
-    //     lampiran: this.state.buktiPelaksanaan.lampiran
-    // }
-
-    // data() {
-    //     return {
-    //         keterangan: this.state.buktiPelaksanaan.keterangan,
-    //         lampiran: this.state.buktiPelaksanaan.lampiran
-    //     }
-    // }
 
     handleChange(event) {
         this.setState(
@@ -82,16 +68,13 @@ class FormTolakBukti extends React.Component {
     handleSubmit(event) {
         event.preventDefault();
         const buktiPelaksanaan = {
-            id: this.state.id,
+            status: 3,
             feedback: this.state.feedback
         };
-        BuktiPelaksanaanService.statusBukti(this.state.buktiPelaksanaan.id, buktiPelaksanaan)
+        BuktiPelaksanaanService.setStatusBukti(this.state.id, buktiPelaksanaan)
             .then(() => this.setRedirect());
     }
 
-    // Fungsi yang akan mengembalikan definisi tiap field pada form
-    // Setiap objek {} pada List [] akan menjadi 1 field
-    // untuk informasi lebih lengkap, cek SirioForm
     inputDefinition() {
         var rowDefinition = [];
         // Object.keys(this.data).map(key => rowDefinition.push(
@@ -123,7 +106,8 @@ class FormTolakBukti extends React.Component {
         return (
             <div>
                 <SirioConfirmButton
-                    red
+                    purple recommended
+                    classes="mx-1"
                     modalTitle="Apakah anda yakin untuk menolak bukti pelaksanaan?"
                     onConfirm={(event)  => this.handleSubmit(event)}
                     customConfirmText="Ya, Tolak"

@@ -19,14 +19,12 @@ class BuktiPelaksanaanService {
     }
 
     async editBukti(data) {
-        console.log(data);
-        console.log(SirioAxiosBase.BASEURL + '/BuktiPelaksanaan/ubah');
         return this.axiosInstance.post(SirioAxiosBase.BASEURL + '/BuktiPelaksanaan/ubah', data)
     }
 
-    async statusBukti(idBuktiPelaksanaan, data) {
+    async setStatusBukti(idBuktiPelaksanaan, data) {
         const dataToPass = {
-            idBuktiPelaksanaan: idBuktiPelaksanaan,
+            id: idBuktiPelaksanaan,
             status: data.status,
             feedback: data.feedback
         }
@@ -35,14 +33,6 @@ class BuktiPelaksanaanService {
 
     async getBuktiPelaksanaan(id) {
         return this.axiosInstance.get(SirioAxiosBase.BASEURL + `/BuktiPelaksanaan/` + id);
-    }
-
-    async submitPersetujuan(id, data) {
-        const dataToPass = {
-            id: id,
-            feedback: data.feedback
-        }
-        return this.axiosInstance.put(SirioAxiosBase.BASEURL + `/BuktiPelaksanaan/persetujuan`, dataToPass)
     }
 
 }
