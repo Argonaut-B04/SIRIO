@@ -3,23 +3,32 @@ import SirioButton from '../../Button/SirioButton';
 import SirioTable from '../SirioTable';
 import RekomendasiService from '../../../Services/RekomendasiService';
 import { NavLink } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import classes from '../Rekomendasi/TabelRekomendasi.module.css';
+import SirioMessageButton from '../../Button/ActionButton/SirioMessageButton';
 
-
-export default class TabelBuktiPelaksanaan extends React.Component {
+class TabelBuktiPelaksanaan extends React.Component {
 
     constructor(props) {
         super(props);
 
         this.state = {
-            rowList: []
+            rowList: [],
+            openNotification: true
         }
 
         this.renderRows = this.renderRows.bind(this);
+        this.endNotification = this.endNotification.bind(this);
     }
 
     componentDidMount() {
         this.renderRows();
+    }
+
+    endNotification() {
+        this.setState({
+            openNotification: false
+        })
     }
 
     async renderRows() {
@@ -56,7 +65,7 @@ export default class TabelBuktiPelaksanaan extends React.Component {
         if (adaBukti) {
             return (
                 <NavLink to={{
-                    pathname: "/bukti-pelaksanaan/persetujuan",
+                    pathname: "/bukti-pelaksanaan/detail",
                     state: {
                         id: row.id
                     }
@@ -117,13 +126,26 @@ export default class TabelBuktiPelaksanaan extends React.Component {
 
     render() {
         return (
-            <SirioTable
-                title="Daftar Bukti Pelaksanaan Rekomendasi"
-                data={this.state.rowList}
-                id='id'
-                columnsDefinition={this.columns}
-                includeSearchBar
-            />
+            <>
+                <SirioTable
+                    title="Daftar Bukti Pelaksanaan Rekomendasi"
+                    data={this.state.rowList}
+                    id='id'
+                    columnsDefinition={this.columns}
+                    includeSearchBar
+                />
+                {this.props.location.state && this.props.location.state.approveSuccess && this.state.openNotification &&
+                <SirioMessageButton
+                    show
+                    classes="d-none"
+                    modalTitle="Bukti pelaksanaan berhasil disetujui"
+                    customConfirmText="Tutup"
+                    onClick={this.endNotification}
+                />
+                }
+            </>
         );
     }
 } 
+
+export default withRouter(TabelBuktiPelaksanaan);

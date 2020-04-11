@@ -1,10 +1,11 @@
 import React from 'react';
 import SirioForm from '../SirioForm';
 import SirioButton from '../../Button/SirioButton';
-import BuktiPelaksanaanService from '../../../Services/BuktiPelaksanaanService'
+import BuktiPelaksanaanService from '../../../Services/BuktiPelaksanaanService';
+import { Redirect } from 'react-router-dom';
 import { withRouter } from 'react-router-dom';
 
-class FormBukti extends React.Component {
+class FormTambahBukti extends React.Component {
 
     // Masukan user disimpan kedalam state sebelum dikirim ke backend
     constructor(props) {
@@ -13,18 +14,32 @@ class FormBukti extends React.Component {
         this.state = {
             keterangan: "",
             lampiran: "",
-            id: ""
-        }
-        // this.renderId = this.renderId.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
+            id: "",
+            redirect: false
+        };
+
         this.handleChange = this.handleChange.bind(this);
         this.inputDefinition = this.inputDefinition.bind(this);
+        this.setRedirect = this.setRedirect.bind(this);
     }
 
-    // componentDidMount() {
-    //     console.log(this.props.location.state.id);
-    // }
+    setRedirect = () => {
+        this.setState({
+            redirect: true
+        })
+    };
 
+    renderRedirect = () => {
+        if (this.state.redirect) {
+            return <Redirect to={{
+                pathname: "/bm/rekomendasi",
+                state: {
+                    addSuccess: true
+                }
+            }} />
+        }
+    };
+    
     handleChange(event) {
         this.setState(
             {
@@ -33,33 +48,20 @@ class FormBukti extends React.Component {
             }
         )
     }
-
-    // endNotification() {
-    //     this.setState({
-    //         addComplete: false
-    //     })
-    // }
-
+    
     handleSubmit(event) {
         event.preventDefault();
         const buktiPelaksanaan = {
             keterangan: this.state.keterangan,
             lampiran: this.state.lampiran
-        }
-        BuktiPelaksanaanService.submitChanges(this.props.location.state.id, buktiPelaksanaan)
-            .then(() => {
-                window.location.href = "/bm/rekomendasi"
-            });
+        };
+        BuktiPelaksanaanService.addBukti(this.props.location.state.id, buktiPelaksanaan)
+            .then(() => this.setRedirect());
     }
 
-    // async renderId() {
-    //     const response = this.props.location.state.id;
-    //     this.setState({
-    //         id: response
-    //     })
-    // }
-
     // Fungsi yang akan mengembalikan definisi tiap field pada form
+    // Setiap objek {} pada List [] akan menjadi 1 field
+    // untuk informasi lebih lengkap, cek SirioForm
     inputDefinition() {
         return (
             [
@@ -86,12 +88,13 @@ class FormBukti extends React.Component {
         return (
             <div>
                 <SirioButton purple recommended
-                    classes="mx-2"
-                    onClick={(event) => this.handleSubmit(event)}>
+                             classes="mx-1"
+                             onClick={(event)  => this.handleSubmit(event)}>
                     Simpan
                 </SirioButton>
                 <SirioButton purple
-                    onClick={() => window.location.href = "/bm/rekomendasi"}>
+                             classes="mx-1"
+                             onClick={() => window.location.href = "/bm/rekomendasi"}>
                     Batal
                 </SirioButton>
             </div>
@@ -101,16 +104,17 @@ class FormBukti extends React.Component {
     // Fungsi render SirioForm
     render() {
         return (
-            <div>
-            <SirioForm
-                title="Form Tambah Bukti Pelaksanaan Rekomendasi"
-                inputDefinition={this.inputDefinition()}
-                onSubmit={this.handleSubmit}
-                submitButton={this.submitButton()}
-            />
-            </div>
+            <>
+                {this.renderRedirect()}
+                <SirioForm
+                    title="Form Tambah Bukti Pelaksanaan"
+                    inputDefinition={this.inputDefinition()}
+                    onSubmit={this.handleSubmit}
+                    submitButton={this.submitButton()}
+                />
+            </>
         );
     }
 }
 
-export default withRouter(FormBukti);
+export default withRouter(FormTambahBukti);

@@ -15,11 +15,11 @@ import DetailEmployee from "./pages/Administrator/DetailEmployee";
 import DaftarRekomendasi from "./pages/QAOfficer/DaftarRekomendasi";
 import Reminder from "./pages/QAOfficer/Reminder";
 import DaftarRekomendasiBM from "./pages/BranchManager/DaftarRekomendasi";
-import FormBuktiBM from "./pages/BranchManager/FormBuktiPelaksanaan";
-import DetailBuktiBM from "./pages/BranchManager/DetailBuktiPelaksanaan";
+import FormTambahBukti from "./pages/BranchManager/TambahBuktiForm";
+import FormUbahBukti from "./pages/BranchManager/UbahBuktiForm";
+import DetailBuktiPelaksanaan from "./pages/BranchManager/BuktiPelaksanaanDetail";
 import DaftarBuktiPelaksanaan from "./pages/QAOfficer/DaftarBuktiPelaksanaan";
-import DetailPersetujuanBukti from "./pages/QAOfficer/DetailPersetujuanBukti";
-import FormFeedbackBukti from "./pages/QAOfficer/FormFeedbackBukti";
+import FormTolakBukti from "./pages/QAOfficer/TolakBuktiForm";
 import NotFound from "./pages/error";
 import Login from "./pages/login";
 import Logout from "./pages/logout";
@@ -51,11 +51,12 @@ class App extends React.Component {
             <AuthorizedRoute exact path="/risk-level" component={RiskLevel} />
             <AuthorizedRoute exact path="/risk-rating" component={RiskRating} />
             <Route exact path="/bm/rekomendasi" component={DaftarRekomendasiBM} />
-            <Route exact path="/bukti-pelaksanaan/tambah" component={FormBuktiBM} />
-            <Route exact path="/bukti-pelaksanaan/detail" component={DetailBuktiBM} />
+            <Route exact path="/bukti-pelaksanaan/tambah" component={FormTambahBukti} />
+            <Route exact path="/bukti-pelaksanaan/ubah" component={FormUbahBukti} />
+            <Route exact path="/bukti-pelaksanaan/detail" component={DetailBuktiPelaksanaan} />
             <Route exact path="/bukti-pelaksanaan" component={DaftarBuktiPelaksanaan} />
-            <Route exact path="/bukti-pelaksanaan/persetujuan" component={DetailPersetujuanBukti} />
-            <Route exact path="/bukti-pelaksanaan/tolak" component={FormFeedbackBukti} />
+            <Route exact path="/bukti-pelaksanaan/setujui" component={DetailBuktiPelaksanaan} />
+            <Route exact path="/bukti-pelaksanaan/tolak" component={FormTolakBukti} />
             <Route exact path="/registrasi-risiko" component={RegistrasiRisiko} />
             <Route exact path="/registrasi-risiko/detail/1" component={DetailRisiko} />
             <Route exact path="/login" component={Login} />
