@@ -22,7 +22,6 @@ import DetailBuktiBM from "./pages/BranchManager/DetailBuktiPelaksanaan";
 import DaftarBuktiPelaksanaan from "./pages/QAOfficer/DaftarBuktiPelaksanaan";
 import DetailPersetujuanBukti from "./pages/QAOfficer/DetailPersetujuanBukti";
 import FormFeedbackBukti from "./pages/QAOfficer/FormFeedbackBukti";
-import NotFound from "./pages/error";
 import Login from "./pages/login";
 import Logout from "./pages/logout";
 import FormDemo from "./pages/formPage";
@@ -35,6 +34,8 @@ import HierarkiRisiko from './pages/ManagerOR/HierarkiRisiko';
 import RiskLevel from './pages/ManagerOR/RiskLevel';
 import RiskRating from './pages/ManagerOR/RiskRating';
 import FormMultiPage from './pages/formMultiPage';
+import Error401 from './pages/Errors/Error401';
+import Error404 from './pages/Errors/Error404';
 
 /**
  * Router utama yang memetakan url ke controller
@@ -71,7 +72,8 @@ class App extends React.Component {
             <Route exact path="/logout" component={Logout} />
             <Route exact path="/Form" component={FormDemo} />
             <Route exact path="/Form-Multi" component={FormMultiPage} />
-            <Route exact path="/404" component={NotFound} />
+            <Route exact path="/404" component={Error404} />
+            <Route exact path="/401" component={Error401} />
             <Redirect to="/404" />
           </Switch>
         </Router>
