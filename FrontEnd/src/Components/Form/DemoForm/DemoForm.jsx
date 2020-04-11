@@ -18,12 +18,14 @@ export default class DemoForm extends React.Component {
             jenisKelamin: "Pria",
             manusia: true,
             customDropdown: "bambang",
-            customDropdown2: "pria"
+            customDropdown2: "pria",
+            totalForm: 1
         }
 
         this.handleChange = this.handleChange.bind(this);
         this.innerInputDefinition = this.innerInputDefinition.bind(this);
         this.handleSelectChange = this.handleSelectChange.bind(this);
+        this.addForm = this.addForm.bind(this);
     }
 
     // Fungsi untuk mengubah state ketika isi dari input diubah
@@ -118,8 +120,6 @@ export default class DemoForm extends React.Component {
                             noHeader
                             isInnerForm
                             inputDefinition={this.innerInputDefinition()}
-                            onSubmit={this.handleSubmit}
-                            submitButton={this.submitButton()}
                         />
                 }, {
                     label: "Manusia?",
@@ -200,11 +200,13 @@ export default class DemoForm extends React.Component {
         return (
             <div>
                 <SirioButton purple recommended
-                    classes="mx-2"
                 >
                     Simpan
                 </SirioButton>
                 <SirioButton purple
+                    classes="ml-2"
+                    type="button"
+                    onClick={() => alert("batal")}
                 >
                     Batal
                 </SirioButton>
@@ -212,17 +214,47 @@ export default class DemoForm extends React.Component {
         )
     }
 
+    addForm() {
+        // this.setState({
+        //     totalForm: ++this.state.totalForm
+        // })
+    }
+
     // Fungsi render SirioForm
     render() {
+        var forms = [];
+        for (let i = 1; i < this.state.totalForm; i++) {
+            forms.push(
+                <SirioForm
+                    noHeader
+                    inputDefinition={this.innerInputDefinition()}
+                    onSubmit={this.handleSubmit}
+                    submitButton={this.submitButton()}
+                />
+            )
+        }
         return (
-            <SirioForm
-                title="Demo Form"
-                betweenTitleSubtitle={this.getBetween()}
-                subtitle="Ini demo form untuk ngedemoin ... form"
-                inputDefinition={this.outerInputDefinition()}
-                onSubmit={this.handleSubmit}
-                submitButton={this.submitButton()}
-            />
+            <>
+                <SirioForm
+                    title="Demo Form"
+                    betweenTitleSubtitle={this.getBetween()}
+                    subtitle="Ini demo form untuk ngedemoin ... form"
+                    inputDefinition={this.outerInputDefinition()}
+                    onSubmit={this.handleSubmit}
+                    submitButton={this.submitButton()}
+                />
+                {forms.map(object => {
+                    return object;
+                })}
+                <div className="w-100 text-right">
+                    <SirioButton blue recommended
+                        classes="mr-3"
+                        onClick={() => this.addForm()}
+                    >
+                        Tambah Form
+                    </SirioButton>
+                </div>
+            </>
         );
     }
 }

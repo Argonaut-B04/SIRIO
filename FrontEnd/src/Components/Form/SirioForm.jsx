@@ -25,13 +25,13 @@ class SirioForm extends Component {
                         betweenTitleSubtitle={this.props.betweenTitleSubtitle}
                     />
                 }
-                {this.props.isInnerForm ?
-                    <ComponentWrapper classes="m-4">
+                {this.props.isInnerForm || this.props.childForm ?
+                    <ComponentWrapper classes={this.props.isInnerForm ? "m-4" : ""}>
                         {this.props.inputDefinition.map((field, i) =>
                             <SirioField
                                 key={i}
                                 label={field.label}
-                                handleChange={field.handleChange}
+                                handleChange={(event) => field.handleChange(event, this.props.id)}
                                 type={field.type}
                                 name={field.name}
                                 value={field.value}
@@ -42,16 +42,22 @@ class SirioForm extends Component {
                                 fullComponent={field.fullComponent}
                             />
                         )}
+                        {this.props.footerButton ?
+                            <div className="w-100 text-right">
+                                <br />
+                                {this.props.footerButton}
+                            </div>
+                            : ""
+                        }
                     </ComponentWrapper>
                     :
                     <ComponentWrapper>
-
                         <form onSubmit={this.props.onSubmit}>
                             {this.props.inputDefinition.map((field, i) =>
                                 <SirioField
                                     key={i}
                                     label={field.label}
-                                    handleChange={field.handleChange}
+                                    handleChange={(event) => field.handleChange(event, this.props.id)}
                                     type={field.type}
                                     name={field.name}
                                     value={field.value}
