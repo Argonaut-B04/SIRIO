@@ -13,12 +13,23 @@ class EmployeeService {
         return this.axiosInstance.get(SirioAxiosBase.BASEURL + `/Employee/getAll`);
     }
 
-    async submitChanges(data) {
+    async addEmployee(data) {
+        console.log(data);
         return this.axiosInstance.post(SirioAxiosBase.BASEURL + '/Employee/tambah', data)
+    }
+
+    async editEmployee(data) {
+        console.log(data);
+        console.log(SirioAxiosBase.BASEURL + '/Employee/ubah');
+        return this.axiosInstance.post(SirioAxiosBase.BASEURL + '/Employee/ubah', data)
     }
 
     async getEmployee(id) {
         return this.axiosInstance.get(SirioAxiosBase.BASEURL + `/Employee/` + id);
+    }
+
+    async deleteEmployee(data) {
+        return this.axiosInstance.post(SirioAxiosBase.BASEURL + `/Employee/hapus`, data)
     }
 }
 

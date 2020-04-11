@@ -4,17 +4,21 @@ import classes from './TabelHasilPemeriksaan.module.css';
 import SirioTable from '../SirioTable';
 import HasilPemeriksaanService from '../../../Services/HasilPemeriksaanService';
 import { NavLink } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
+import SirioMessageButton from "../../Button/ActionButton/SirioMessageButton";
 
-export default class TabelHasilPemeriksaan extends React.Component {
+class TabelHasilPemeriksaan extends React.Component {
 
     constructor(props) {
         super(props);
 
         this.state = {
-            rowList: []
-        }
+            rowList: [],
+            openNotification: true
+        };
 
         this.renderRows = this.renderRows.bind(this);
+        this.endNotification = this.endNotification.bind(this);
     }
 
     componentDidMount() {
@@ -26,6 +30,12 @@ export default class TabelHasilPemeriksaan extends React.Component {
 
         this.setState({
             rowList: response.data.result
+        })
+    }
+
+    endNotification() {
+        this.setState({
+            openNotification: false
         })
     }
 
@@ -102,7 +112,7 @@ export default class TabelHasilPemeriksaan extends React.Component {
                 return { width: "25%", textAlign: 'left' };
             }
         }, {
-            dataField: 'statusHasilPemeriksaan',
+            dataField: 'namaStatus',
             text: 'STATUS',
             sort: true,
             classes: classes.rowItem,
@@ -138,13 +148,35 @@ export default class TabelHasilPemeriksaan extends React.Component {
 
     render() {
         return (
-            <SirioTable
-                title="Daftar Hasil Pemeriksaan"
-                data={this.state.rowList}
-                id='id'
-                columnsDefinition={this.columns}
-                includeSearchBar
-            />
+            <>
+                <SirioTable
+                    title="Daftar Hasil Pemeriksaan"
+                    data={this.state.rowList}
+                    id='id'
+                    columnsDefinition={this.columns}
+                    includeSearchBar
+                />
+                {this.props.location.state && this.props.location.state.addSuccess && this.state.openNotification &&
+                <SirioMessageButton
+                    show
+                    classes="d-none"
+                    modalTitle="Hasil Pemeriksaan berhasil Disimpan"
+                    customConfirmText="Tutup"
+                    onClick={this.endNotification}
+                />
+                }
+                {this.props.location.state && this.props.location.state.deleteSuccess && this.state.openNotification &&
+                    <SirioMessageButton
+                        show
+                        classes="d-none"
+                        modalTitle="Hasil Pemeriksaan berhasil Dihapus"
+                        customConfirmText="Tutup"
+                        onClick={this.endNotification}
+                    />
+                }
+            </>
         );
     }
 }
+
+export default withRouter(TabelHasilPemeriksaan);

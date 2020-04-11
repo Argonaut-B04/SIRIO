@@ -62,6 +62,20 @@ public class KantorCabangRestServiceImpl implements KantorCabangRestService {
     }
 
     @Override
+    public KantorCabang nonaktifkanKantor(int idKantor) {
+        KantorCabang kantorCabang = getById(idKantor);
+        //kantorCabang.setStatus(KantorCabang.Status.NONAKTIF);
+        return kantorCabang;
+    }
+
+    @Override
+    public KantorCabang aktifkanKantor(int idKantor) {
+        KantorCabang kantorCabang= getById(idKantor);
+       // kantorCabang.setStatus(KantorCabang.Status.AKTIF);
+        return kantorCabang;
+    }
+
+    @Override
     public List<KantorCabang> getByPembuat(Employee pembuat){
         return kantorCabangDB.findAllByPembuat(pembuat);
     }

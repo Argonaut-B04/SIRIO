@@ -1,12 +1,12 @@
 import React from "react";
-import DetailRencana from "../../Components/DetailPages/RencanaPemeriksaan/DetailRencana";
+import Detail from "../../Components/DetailPages/HasilPemeriksaan/DetailHasilPemeriksaan";
 import SirioMainLayout from "../../Layout/SirioMainLayout";
 
-export default class DetailRencanaPemeriksaan extends React.Component {
+export default class DetailHasilPemeriksaan extends React.Component {
     render() {
         return (
             <SirioMainLayout>
-                <DetailRencana />
+                <Detail />
             </SirioMainLayout>
         );
     }

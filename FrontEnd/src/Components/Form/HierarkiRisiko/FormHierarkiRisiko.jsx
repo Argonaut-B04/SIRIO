@@ -1,11 +1,11 @@
 import React from 'react';
 import SirioButton from '../../Button/SirioButton';
-import classes from '../RegistrasiRisiko/TabelRisiko.module.css';
-import SirioTable from '../SirioTable';
+import classes from '../../Tables/RegistrasiRisiko/TabelRisiko.module.css';
+import SirioTable from '../../Tables/SirioTable';
 import RegistrasiRisikoService from '../../../Services/RegistrasiRisikoService';
 import { NavLink } from 'react-router-dom';
 
-export default class TabelRisiko extends React.Component {
+export default class FormHierarkiRisiko extends React.Component {
 
     constructor(props) {
         super(props);
@@ -33,7 +33,7 @@ export default class TabelRisiko extends React.Component {
         console.log(row)
         return (
             <NavLink to={{
-                pathname: "/registrasi-risiko/detail",
+                pathname: "/registrasi-risiko/ubah-hierarki/ubah",
                 state: {
                     id: row.idRisiko,
                 }
@@ -41,7 +41,7 @@ export default class TabelRisiko extends React.Component {
                 <SirioButton
                     purple
                 >
-                    Detail
+                    Ubah Hierarki
                 </SirioButton>
             </NavLink>
         )
@@ -107,14 +107,14 @@ export default class TabelRisiko extends React.Component {
                     pathname: "/registrasi-risiko/tambah"
                 }}>
                     <SirioButton purple recommended classes="mx-2">
-                        Tambah Risiko
+                        Simpan
                     </SirioButton>
                 </NavLink>
                 <NavLink to={{
-                    pathname: "/registrasi-risiko/ubah-hierarki"
+                    pathname: "/registrasi-risiko"
                 }}>
                     <SirioButton purple classes="mx-2">
-                        Ubah Semua Hierarki
+                        Batal
                     </SirioButton>
                 </NavLink>
             </div>

@@ -32,6 +32,11 @@ public class BuktiPelaksananRestServiceImpl implements BuktiPelaksanaanRestServi
     }
 
     @Override
+    public BuktiPelaksanaan getByRekomendasi(Rekomendasi rekomendasi) {
+        return buktiPelaksanaanDB.findByRekomendasi(rekomendasi);
+    }
+
+    @Override
     public List<BuktiPelaksanaan> getAll() {
         return buktiPelaksanaanDB.findAll();
     }

@@ -20,6 +20,17 @@ class RencanaPemeriksaanService {
     async addRencanaPemeriksaanCabang(data) {
         return this.axiosInstance.post(SirioAxiosBase.BASEURL + `/RencanaPemeriksaan/tambah`, data);
     }
+
+    async editRencanaPemeriksaan(data) {
+        console.log(data);
+        console.log(SirioAxiosBase.BASEURL + '/RencanaPemeriksaan/ubah');
+        return this.axiosInstance.post(SirioAxiosBase.BASEURL + '/RencanaPemeriksaan/ubah', data)
+    }
+
+    async deleteRencanaPemeriksaan(data) {
+        return this.axiosInstance.post(SirioAxiosBase.BASEURL + `/RencanaPemeriksaan/hapus`, data)
+    }
+
 }
 
 export default new RencanaPemeriksaanService();

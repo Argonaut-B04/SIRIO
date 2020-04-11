@@ -1,9 +1,9 @@
 import React from 'react';
-import SirioForm from '../../Form/SirioForm';
+import SirioForm from '../SirioForm';
 import SirioButton from '../../Button/SirioButton';
 import KantorCabangService from '../../../Services/KantorCabangService';
 import EmployeeService from '../../../Services/EmployeeService';
-import SirioMessageButton from '../../Button/ActionButton/SirioMessageButton';
+import { Redirect } from 'react-router-dom';
 
 /**
  * Kelas untuk membuat form demo
@@ -19,19 +19,39 @@ export default class FormTambahKantorCabang extends React.Component {
             idPemilik: "",
             area: "",
             regional: "",
-            kunjunganAudit: "",
-            employeeOptionList: []
+            kunjunganAudit: false,
+            employeeOptionList: [],
+            redirect: false
         }
 
         this.renderEmployeeOption = this.renderEmployeeOption.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.inputDefinition = this.inputDefinition.bind(this);
         this.handleSelectChange = this.handleSelectChange.bind(this);
+        this.handleInputChange = this.handleInputChange.bind(this);
+        this.setRedirect = this.setRedirect.bind(this);
     }
 
     componentDidMount() {
         this.renderEmployeeOption();
     }
+
+    setRedirect = () => {
+        this.setState({
+            redirect: true
+        })
+    };
+
+    renderRedirect = () => {
+        if (this.state.redirect) {
+            return <Redirect to={{
+                pathname: "/administrator/kantorCabang",
+                state: {
+                    addSuccess: true
+                }
+            }} />
+        }
+    };
 
     async renderEmployeeOption() {
         const response = await EmployeeService.getEmployeeList();
@@ -62,7 +82,7 @@ export default class FormTambahKantorCabang extends React.Component {
     }
 
     // Fungsi untuk mengubah state ketika isi dropdown diubah
-    // Fungsi unu wajib ada jika membuat field tipe select
+    // Fungsi ini wajib ada jika membuat field tipe select
     handleSelectChange(name, event) {
         this.setState(
             {
@@ -70,6 +90,18 @@ export default class FormTambahKantorCabang extends React.Component {
                     : event.value
             }
         )
+    }
+
+    // Fungsi untuk mengubah state ketika isi checkbox diubah
+    // Fungsi ini wajib ada jika membuat field tipe checked
+    handleInputChange(event) {
+        const target = event.target;
+        const value = target.name === 'kunjunganAudit' ? target.checked : target.value;
+        const name = target.name;
+    
+        this.setState({
+          [name]: value
+        });
     }
 
     // Fungsi yang akan dijalankan ketika user submit
@@ -84,11 +116,8 @@ export default class FormTambahKantorCabang extends React.Component {
             kunjunganAudit: this.state.kunjunganAudit
         }
         KantorCabangService.addKantorCabang(kantorCabang)
-        // console.log(event)
-        
-        .then( () => window.location.href = "/administrator/kantorCabang");
+        .then(() => this.setRedirect());
     }
-
     // Fungsi yang akan mengembalikan definisi tiap field pada form
     // Setiap objek {} pada List [] akan menjadi 1 field
     // untuk informasi lebih lengkap, cek SirioForm
@@ -125,10 +154,11 @@ export default class FormTambahKantorCabang extends React.Component {
                     placeholder: "Masukan nama regional"
                 },{
                     label: "Kunjungan Audit*",
-                    handleChange: this.handleChange,
+                    handleChange: this.handleInputChange,
                     type: "checkbox",
                     name: "kunjunganAudit",
                     value: this.state.kunjunganAudit,
+                    checked: this.state.kunjunganAudit,
                 }
 
 
@@ -156,22 +186,13 @@ export default class FormTambahKantorCabang extends React.Component {
     render() {
         return (
             <>
+                {this.renderRedirect()}
                 <SirioForm
                     title="Form Tambah Kantor Cabang"
                     inputDefinition={this.inputDefinition()}
                     onSubmit={this.handleSubmit}
                     submitButton={this.submitButton()}
                 />
-           
-                {this.state.changeComplete &&
-                    <SirioMessageButton
-                        show
-                        classes="d-none"
-                        modalTitle="Tenggat Waktu berhasil Disimpan"
-                        customConfirmText="Kembali"
-                        onClick={this.endNotification}
-                    />
-                }
              </>
         );
     }

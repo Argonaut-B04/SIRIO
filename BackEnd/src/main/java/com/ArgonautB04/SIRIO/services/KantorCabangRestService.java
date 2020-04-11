@@ -14,6 +14,10 @@ public interface KantorCabangRestService {
 
     KantorCabang getByPemilik(Employee pemilik);
 
+    KantorCabang nonaktifkanKantor(int idKantor);
+
+    KantorCabang aktifkanKantor(int idKantor);
+
     List<KantorCabang> getAll();
 
     KantorCabang ubahKantorCabang(int idKantorCabang, KantorCabang kantorCabang);

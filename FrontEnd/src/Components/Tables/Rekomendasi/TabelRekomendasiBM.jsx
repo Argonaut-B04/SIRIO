@@ -4,6 +4,7 @@ import SirioTable from '../SirioTable';
 import RekomendasiService from '../../../Services/RekomendasiService';
 import { NavLink } from 'react-router-dom';
 import classes from './TabelRekomendasiBM.module.css';
+import SirioMessageButton from '../../Button/ActionButton/SirioMessageButton';
 
 export default class TabelRekomendasi extends React.Component {
 
@@ -50,16 +51,15 @@ export default class TabelRekomendasi extends React.Component {
 
     getButtons(cell, row) {
         const status = row.statusBukti;
-        const tambah = status === "";
-        const detail = status === "Menunggu Persetujuan" || status === "Disetujui" || status === "Ditolak";
+        const tanpaBukti = status === null;
+        const adaBukti = status === "Menunggu Persetujuan" || status === "Disetujui" || status === "Ditolak";
 
-        console.log(row)
-        if (tambah) {
+        if (tanpaBukti) {
             return (
                 <NavLink to={{
-                    pathname: "/bm/bukti-pelaksanaan/tambah",
+                    pathname: "/bukti-pelaksanaan/tambah",
                     state: {
-                        idRekomendasi: row.id
+                        id: row.id
                     }
                 }}>
                     <SirioButton
@@ -69,14 +69,20 @@ export default class TabelRekomendasi extends React.Component {
                     </SirioButton>
                 </NavLink>
             )
-        } else if (detail) {
+        } else if (adaBukti) {
             return (
-                <SirioButton
-                    purple
-                    onClick={() => window.location.href = "/bm/rekomendasi/detail-bukti"}
-                >
-                    Detail Bukti
-                </SirioButton>
+                <NavLink to={{
+                    pathname: "/bukti-pelaksanaan/detail",
+                    state: {
+                        id: row.id
+                    }
+                }}>
+                    <SirioButton
+                        purple
+                    >
+                        Detail Bukti
+                    </SirioButton>
+                </NavLink>
             )
         }
     }
@@ -139,13 +145,22 @@ export default class TabelRekomendasi extends React.Component {
 
     render() {
         return (
-            <SirioTable
-                title="Daftar Rekomendasi"
-                data={this.state.rowList}
-                id='id'
-                columnsDefinition={this.columns}
-                includeSearchBar
-            />
+            <>
+                <SirioTable
+                    title="Daftar Rekomendasi"
+                    data={this.state.rowList}
+                    id='id'
+                    columnsDefinition={this.columns}
+                    includeSearchBar
+                />
+                {/* <SirioMessageButton
+                    show
+                    classes="d-none"
+                    modalTitle="Bukti pelaksanaan berhasil ditambahkan"
+                    customConfirmText="Tutup"
+                    onClick={this.endNotification}
+                /> */}
+            </>
         );
     }
 } 

@@ -1,12 +1,12 @@
 import React from "react";
-import DetailRencana from "../../Components/DetailPages/RencanaPemeriksaan/DetailRencana";
+import FormRisiko from "../../Components/Form/RegistrasiRisiko/FormRisiko";
 import SirioMainLayout from "../../Layout/SirioMainLayout";
 
-export default class DetailRencanaPemeriksaan extends React.Component {
+export default class FormRegistrasiRisiko extends React.Component {
     render() {
         return (
             <SirioMainLayout>
-                <DetailRencana />
+                <FormRisiko />
             </SirioMainLayout>
         );
     }

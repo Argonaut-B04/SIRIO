@@ -12,6 +12,14 @@ class HasilPemeriksaanService {
     async getHasilPemeriksaanByLoggedInUser() {
         return this.axiosInstance.get(SirioAxiosBase.BASEURL + `/HasilPemeriksaan/getTabelHasilPemeriksaan`);
     }
+
+    async getHasilPemeriksaan(id) {
+        return this.axiosInstance.get(SirioAxiosBase.BASEURL + `/HasilPemeriksaan/` + id);
+    }
+
+    async deleteHasilPemeriksaan(data) {
+        return this.axiosInstance.post(SirioAxiosBase.BASEURL + `/HasilPemeriksaan/hapus`, data)
+    }
 }
 
 export default new HasilPemeriksaanService();

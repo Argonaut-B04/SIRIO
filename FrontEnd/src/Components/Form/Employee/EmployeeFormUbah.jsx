@@ -4,16 +4,16 @@ import SirioButton from '../../Button/SirioButton';
 import EmployeeService from '../../../Services/EmployeeService';
 import RoleService from '../../../Services/RoleService';
 import { Redirect } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 
-export default class EmployeeFormTambah extends React.Component {
+class EmployeeFormUbah extends React.Component {
 
     // Masukan user disimpan kedalam state sebelum dikirim ke backend
     constructor(props) {
         super(props);
 
         this.state = {
-            username: "",
-            password: "",
+            id: "",
             idRole: "",
             nama: "",
             jabatan: "",
@@ -28,10 +28,12 @@ export default class EmployeeFormTambah extends React.Component {
         this.inputDefinition = this.inputDefinition.bind(this);
         this.handleSelectChange = this.handleSelectChange.bind(this);
         this.setRedirect = this.setRedirect.bind(this);
+        this.renderDataEmployee = this.renderDataEmployee.bind(this);
     }
 
     componentDidMount() {
         this.renderRoleOption();
+        this.renderDataEmployee();
     }
 
     setRedirect = () => {
@@ -45,7 +47,7 @@ export default class EmployeeFormTambah extends React.Component {
             return <Redirect to={{
                 pathname: "/employee",
                 state: {
-                    addSuccess: true
+                    editSuccess: true
                 }
             }} />
         }
@@ -67,7 +69,28 @@ export default class EmployeeFormTambah extends React.Component {
             roleOptionList: roleOptionList
         })
     }
-    
+
+    async renderDataEmployee() {
+        const response = await EmployeeService.getEmployee(this.props.location.state.id);
+
+        this.setState({
+            id: response.data.result.idEmployee,
+            idRole: response.data.result.role.idRole,
+            nama: response.data.result.nama,
+            jabatan: response.data.result.jabatan,
+            email: response.data.result.email,
+            noHp: this.nomorHpFormatter(response.data.result.noHp),
+        })
+    }
+
+    nomorHpFormatter(noHp) {
+        if (noHp) {
+            return noHp
+        } else {
+            return ""
+        }
+    }
+
     handleChange(event) {
         this.setState(
             {
@@ -76,7 +99,7 @@ export default class EmployeeFormTambah extends React.Component {
             }
         )
     }
-    
+
     handleSelectChange(name, event) {
         this.setState(
             {
@@ -85,19 +108,19 @@ export default class EmployeeFormTambah extends React.Component {
             }
         )
     }
-    
+
     handleSubmit(event) {
         event.preventDefault();
         const employee = {
-            username: this.state.username,
-            password: this.state.password,
+            id: this.state.id,
             idRole: this.state.idRole,
             nama: this.state.nama,
             jabatan: this.state.jabatan,
             email: this.state.email,
             noHp: this.state.noHp
         };
-        EmployeeService.addEmployee(employee)
+        console.log("test");
+        EmployeeService.editEmployee(employee)
             .then(() => this.setRedirect());
     }
 
@@ -108,55 +131,41 @@ export default class EmployeeFormTambah extends React.Component {
         return (
             [
                 {
-                    label: "Username",
-                    handleChange: this.handleChange,
-                    type: "text",
-                    name: "username",
-                    value: this.state.username,
-                    placeholder: "Username"
-                }, {
-                    label: "Password",
-                    handleChange: this.handleChange,
-                    type: "password",
-                    name: "password",
-                    value: this.state.password,
-                    placeholder: "Password"
-                }, {
-                    label: "Role",
-                    handleChange: this.handleSelectChange,
-                    type: "select",
-                    name: "idRole",
-                    value: this.state.idRole,
-                    optionList: this.state.roleOptionList
-                }, {
-                    label: "Nama",
-                    handleChange: this.handleChange,
-                    type: "text",
-                    name: "nama",
-                    value: this.state.nama,
-                    placeholder: "Nama"
-                }, {
-                    label: "Jabatan",
-                    handleChange: this.handleChange,
-                    type: "text",
-                    name: "jabatan",
-                    value: this.state.jabatan,
-                    placeholder: "Jabatan"
-                }, {
-                    label: "Email",
-                    handleChange: this.handleChange,
-                    type: "text",
-                    name: "email",
-                    value: this.state.email,
-                    placeholder: "email@email.com"
-                }, {
-                    label: "Nomor Telepon",
-                    handleChange: this.handleChange,
-                    type: "text",
-                    name: "noHp",
-                    value: this.state.noHp,
-                    placeholder: "08123456789"
-                }]
+                label: "Role",
+                handleChange: this.handleSelectChange,
+                type: "select",
+                name: "idRole",
+                value: this.state.idRole,
+                optionList: this.state.roleOptionList
+            }, {
+                label: "Nama",
+                handleChange: this.handleChange,
+                type: "text",
+                name: "nama",
+                value: this.state.nama,
+                placeholder: "Nama"
+            }, {
+                label: "Jabatan",
+                handleChange: this.handleChange,
+                type: "text",
+                name: "jabatan",
+                value: this.state.jabatan,
+                placeholder: "Jabatan"
+            }, {
+                label: "Email",
+                handleChange: this.handleChange,
+                type: "text",
+                name: "email",
+                value: this.state.email,
+                placeholder: "email@email.com"
+            }, {
+                label: "Nomor Telepon",
+                handleChange: this.handleChange,
+                type: "text",
+                name: "noHp",
+                value: this.state.noHp,
+                placeholder: "08123456789"
+            }]
         )
     }
 
@@ -183,7 +192,7 @@ export default class EmployeeFormTambah extends React.Component {
             <>
                 {this.renderRedirect()}
                 <SirioForm
-                    title="Form Tambah Pengguna"
+                    title="Form Ubah Pengguna"
                     inputDefinition={this.inputDefinition()}
                     onSubmit={this.handleSubmit}
                     submitButton={this.submitButton()}
@@ -192,3 +201,5 @@ export default class EmployeeFormTambah extends React.Component {
         );
     }
 }
+
+export default withRouter(EmployeeFormUbah);

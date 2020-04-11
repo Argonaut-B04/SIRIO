@@ -12,6 +12,8 @@ public interface BuktiPelaksanaanRestService {
 
     BuktiPelaksanaan getById(int idBuktiPelaksanaan);
 
+    BuktiPelaksanaan getByRekomendasi(Rekomendasi rekomendasi);
+
     List<BuktiPelaksanaan> getAll();
 
     BuktiPelaksanaan ubahBuktiPelaksanaan(int idBuktiPelaksanaan, BuktiPelaksanaan buktiPelaksanaan);

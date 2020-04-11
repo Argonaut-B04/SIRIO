@@ -9,7 +9,7 @@ class KantorCabangService {
         this.axiosInstance.defaults.headers.common['Authorization'] = AuthenticationService.getToken();
     }
 
-    async getKantorCabangByLoggedInUser() {
+    async getKantorCabangList() {
         return this.axiosInstance.get(SirioAxiosBase.BASEURL + `/KantorCabang/getAll`);
     }
 
@@ -20,6 +20,17 @@ class KantorCabangService {
     async addKantorCabang(data) {
         return this.axiosInstance.post(SirioAxiosBase.BASEURL + `/KantorCabang/tambah`, data);
     }
+
+    async editKantorCabang(data) {
+        console.log(data);
+        console.log(SirioAxiosBase.BASEURL + '/KantorCabang/ubah');
+        return this.axiosInstance.post(SirioAxiosBase.BASEURL + '/KantorCabang/ubah', data)
+    }
+
+    async deleteKantorCabang(data) {
+        return this.axiosInstance.post(SirioAxiosBase.BASEURL + `/KantorCabang/hapus`, data)
+    }
+
 }
 
 export default new KantorCabangService();
