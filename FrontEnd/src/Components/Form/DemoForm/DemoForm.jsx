@@ -18,7 +18,7 @@ export default class DemoForm extends React.Component {
             jenisKelamin: "Pria",
             manusia: true,
             customDropdown: "bambang",
-            customDropdown2: "pria"
+            customDropdown2: "pria",
         }
 
         this.handleChange = this.handleChange.bind(this);
@@ -118,8 +118,6 @@ export default class DemoForm extends React.Component {
                             noHeader
                             isInnerForm
                             inputDefinition={this.innerInputDefinition()}
-                            onSubmit={this.handleSubmit}
-                            submitButton={this.submitButton()}
                         />
                 }, {
                     label: "Manusia?",
@@ -200,11 +198,13 @@ export default class DemoForm extends React.Component {
         return (
             <div>
                 <SirioButton purple recommended
-                    classes="mx-2"
                 >
                     Simpan
                 </SirioButton>
                 <SirioButton purple
+                    classes="ml-2"
+                    type="button"
+                    onClick={() => alert("batal")}
                 >
                     Batal
                 </SirioButton>
@@ -215,14 +215,24 @@ export default class DemoForm extends React.Component {
     // Fungsi render SirioForm
     render() {
         return (
-            <SirioForm
-                title="Demo Form"
-                betweenTitleSubtitle={this.getBetween()}
-                subtitle="Ini demo form untuk ngedemoin ... form"
-                inputDefinition={this.outerInputDefinition()}
-                onSubmit={this.handleSubmit}
-                submitButton={this.submitButton()}
-            />
+            <>
+                <SirioForm
+                    title="Demo Form"
+                    betweenTitleSubtitle={this.getBetween()}
+                    subtitle="Ini demo form untuk ngedemoin ... form"
+                    inputDefinition={this.outerInputDefinition()}
+                    onSubmit={this.handleSubmit}
+                    submitButton={this.submitButton()}
+                />
+                <div className="w-100 text-right">
+                    <SirioButton blue recommended
+                        classes="mr-3"
+                        onClick={() => this.addForm()}
+                    >
+                        Tambah Form
+                    </SirioButton>
+                </div>
+            </>
         );
     }
 }
