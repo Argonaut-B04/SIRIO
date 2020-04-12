@@ -7,6 +7,7 @@ import AdministratorSideNav from "./RoleSideNav/AdministratorSideNav";
 import BranchManagerSideNav from "./RoleSideNav/BranchManagerSideNav";
 import QALeadSideNav from "./RoleSideNav/QALeadSideNav";
 import SupervisorSideNav from "./RoleSideNav/SupervisorSideNav";
+import GuestSideNav from "./RoleSideNav/GuestSideNav";
 
 /**
  * Komponen _Switcher_ yang akan menampilkan SideNav berdasarkan Role
@@ -41,7 +42,7 @@ export default class SirioSideNav extends React.Component {
             case "Supervisor":
                 return <SupervisorSideNav {...this.props} />
             default:
-                return <ManagerOperationalSideNav {...this.props} />
+                return <GuestSideNav {...this.props} />
         }
     }
 }
