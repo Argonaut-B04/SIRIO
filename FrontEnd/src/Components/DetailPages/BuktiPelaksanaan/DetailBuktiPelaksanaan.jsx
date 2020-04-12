@@ -134,34 +134,27 @@ class DetailBuktiPelaksanaan extends React.Component {
     subButton() {
         const status = this.state.buktiPelaksanaan.status;
         const menungguPersetujuan = status === 1;
-        const sudahPersetujuan = status === 2 || status === 3;
+        const sudahPersetujuan = status === 2 || 3;
+        const role = this.state.role;
+        const satuButton = role === "Branch Manager";
+        const tigaButton = role === "admin" || "QA Officer Operational Risk" || "Super QA Officer Operational Risk" ||
+                                    "Manajer Operational Risk" || "QA Lead Operational Risk";
 
         if (menungguPersetujuan) {
-            switch (this.state.role) {
-                case "Branch Manager":
-                    return (
-                        <div>
-                            {this.buttonUbah(this.state.buktiPelaksanaan.id)}
-                        </div>
-                    );
-                case "admin":
-                    return (
-                        <div>
-                            {this.buttonUbah(this.state.buktiPelaksanaan.id)}
-                            {this.buttonSetuju()}
-                            {this.buttonTolak(this.state.buktiPelaksanaan.id)}
-                        </div>
-                    );
-                case "Manajer Operational Risk":
-                    return (
-                        <div>
-                            {this.buttonUbah(this.state.buktiPelaksanaan.id)}
-                            {this.buttonSetuju()}
-                            {this.buttonTolak(this.state.buktiPelaksanaan.id)}
-                        </div>
-                    );
-                default:
-                    return null
+            if (satuButton) {
+                return (
+                    <div>
+                        {this.buttonUbah(this.state.buktiPelaksanaan.id)}
+                    </div>
+                );
+            } else if (tigaButton) {
+                return (
+                    <div>
+                        {this.buttonUbah(this.state.buktiPelaksanaan.id)}
+                        {this.buttonSetuju()}
+                        {this.buttonTolak(this.state.buktiPelaksanaan.id)}
+                    </div>
+                );
             }
         } else if (sudahPersetujuan) {
             return ("")
