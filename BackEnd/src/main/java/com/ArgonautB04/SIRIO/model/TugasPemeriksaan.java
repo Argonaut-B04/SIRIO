@@ -19,13 +19,13 @@ public class TugasPemeriksaan implements Serializable {
     private int idTugas;
 
     @NotNull
-    @DateTimeFormat(pattern = "MM-dd-yyy")
-    @Column(name = "tanggal_mulai", nullable = false)
+    @DateTimeFormat(pattern = "MM-dd-yyyy")
+    @Column(nullable = false)
     private LocalDate tanggalMulai;
 
     @NotNull
-    @DateTimeFormat(pattern = "MM-dd-yyy")
-    @Column(name = "tanggal_selesai", nullable = false)
+    @DateTimeFormat(pattern = "MM-dd-yyyy")
+    @Column(nullable = false)
     private LocalDate tanggalSelesai;
 
     @ManyToOne(fetch = FetchType.EAGER)
