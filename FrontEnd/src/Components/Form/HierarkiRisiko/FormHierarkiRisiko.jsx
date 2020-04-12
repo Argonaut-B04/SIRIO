@@ -2,8 +2,13 @@ import React from 'react';
 import SirioButton from '../../Button/SirioButton';
 import classes from '../../Tables/RegistrasiRisiko/TabelRisiko.module.css';
 import SirioTable from '../../Tables/SirioTable';
-import RegistrasiRisikoService from '../../../Services/RegistrasiRisikoService';
+import HierarkiRisikoService from '../../../Services/HierarkiRisikoService';
 import { NavLink } from 'react-router-dom';
+import CellEditFactory, { Type } from 'react-bootstrap-table2-editor';
+import SirioConfirmButton from '../../Button/ActionButton/SirioConfirmButton';
+import SirioMessageButton from '../../Button/ActionButton/SirioMessageButton';
+import SirioWarningButton from '../../Button/ActionButton/SirioWarningButton';
+import { Redirect } from 'react-router-dom';
 
 export default class FormHierarkiRisiko extends React.Component {
 
@@ -11,52 +16,115 @@ export default class FormHierarkiRisiko extends React.Component {
         super(props);
 
         this.state = {
-            rowList: []
+            rowList: [],
+            changeComplete: false,
+            editMode: true,
+            activeEditRowId: [],
+            optionList: [],
         }
 
         this.renderRows = this.renderRows.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+        this.endNotification = this.endNotification.bind(this);
+        // this.toggleEditMode = this.toggleEditMode.bind(this);
     }
 
     componentDidMount() {
         this.renderRows();
     }
 
-    async renderRows() {
-        const response = await RegistrasiRisikoService.getAllRisiko();
-
+    endNotification() {
         this.setState({
-            rowList: response.data.result
+            changeComplete: false
         })
     }
 
-    getButtons(cell, row) {
-        console.log(row)
-        return (
-            <NavLink to={{
-                pathname: "/registrasi-risiko/ubah-hierarki/ubah",
+    // toggleEditMode() {
+    //     this.setState({
+    //         editMode: !this.state.editMode
+    //     })
+    // }
+
+    renderRedirect = () => {
+        if (this.state.redirect) {
+            return <Redirect to={{
+                pathname: "/registrasi-risiko",
                 state: {
-                    id: row.idRisiko,
+                    editSuccess: true
                 }
-            }}>
-                <SirioButton
-                    purple
-                >
-                    Ubah Hierarki
-                </SirioButton>
-            </NavLink>
-        )
+            }} />
+        }
+    };
+
+    handleSubmit() {
+        HierarkiRisikoService.submitChanges(this.state.rowList)
+            .then(() => {
+                this.renderRows()
+                this.setState({
+                    changeComplete: true,
+                    editMode: false
+                })
+                this.renderRedirect()
+            });
     }
 
-    parentFormatter() {
-        if (this.parent) {
-            return this.parent
-        } else {
+    async renderRows() {
+        const tabel = await HierarkiRisikoService.getAllRisiko();
+
+        this.setState({
+            rowList: tabel.data.result
+        })
+    };
+
+    // getButtons(cell, row) {
+    //     console.log(row)
+    //     if (this) {
+    //         return (
+    //             <NavLink to={{
+    //                 pathname: "/registrasi-risiko/ubah-hierarki/ubah",
+    //                 state: {
+    //                     id: row.idRisiko,
+    //                 }
+    //             }}>
+    //                 <SirioButton
+    //                     purple
+    //                 >
+    //                     Ubah Hierarki
+    //                 </SirioButton>
+    //             </NavLink>
+    //         )
+    //     }
+    // }
+
+    parentFormatter(cell, row) {
+        if (row.parent === null) {
             return "-"
+        } else {
+            return row.namaParent
         }
     }
 
-    columns = [{
-        dataField: 'namaRisiko',
+    async getOptions(cell, row) {
+        const response = await HierarkiRisikoService.getParentByKategori(row.id);
+        const optionList = response.data.result.map(object => {
+            return (
+                {
+                    label: object.namaRisiko,
+                    value: object.idRisiko
+                }
+            )
+        });
+        console.log(optionList)
+        this.setState({
+            optionList: optionList
+        })
+    }
+
+    columns() {
+        return (
+        [{
+        dataField: 'nama',
+        editable: false,
         text: 'NAMA',
         sort: true,
         classes: classes.rowItem,
@@ -65,7 +133,8 @@ export default class FormHierarkiRisiko extends React.Component {
             return { width: "30%", textAlign: 'left' };
         }
     }, {
-        dataField: 'risikoKategori',
+        dataField: 'kategori',
+        editable: false,
         text: 'KATEGORI',
         sort: true,
         classes: classes.rowItem,
@@ -75,48 +144,92 @@ export default class FormHierarkiRisiko extends React.Component {
         }
     }, {
         dataField: 'parent',
+        name: 'parent',
         text: 'PARENT',
+        editor: {
+            type: Type.SELECT,
+            name: 'parent',
+            // getOptions: this.getOptions
+        },
         sort: true,
-        formatter: this.parentFormatter,
+        formatter: (cell,row) => this.getOptions(cell, row),
         classes: classes.rowItem,
         headerClasses: classes.colheader,
         headerStyle: (colum, colIndex) => {
             return { width: "20%", textAlign: 'center' };
         }
-    }, {
-        dataField: 'noData 1',
-        text: '',
-        headerClasses: classes.colheader,
-        classes: classes.rowItem,
-        style: () => {
-            return { textAlign: 'center' }
-        },
-        formatter: this.getButtons
-    }];
+    }, 
+    // {
+    //     dataField: 'noData 1',
+    //     text: '',
+    //     headerClasses: classes.colheader,
+    //     classes: classes.rowItem,
+    //     style: () => {
+    //         return { textAlign: 'center' }
+    //     },
+    //     formatter: this.getButtons
+    //     }
+    ]
+    )}
 
-    defaultSorted = [{
-        dataField: 'id',
-        order: 'asc'
-    }];
+    cellEdit = CellEditFactory({
+        mode: 'click',
+        blurToSave: true,
+    })
+
+    footerContent() {
+        return (
+            <div>
+                <SirioConfirmButton
+                    purple
+                    classes="m-1"
+                    modalTitle="Anda akan menyimpan perubahan hierarki risiko"
+                    onConfirm={this.handleSubmit}
+                    customConfirmText="Konfirmasi"
+                    customCancelText="Batal"
+                    closeOnConfirm
+                >
+                    Simpan
+            </SirioConfirmButton>
+                <SirioWarningButton
+                    red
+                    modalTitle="Konfirmasi Pembatalan"
+                    modalDesc="Seluruh perubahan hierarki risiko yang belum tersimpan akan dihapus. Apakah Anda yakin?"
+                    onConfirm={() => window.location.href = "/"}
+                    customConfirmText="Konfirmasi"
+                    customCancelText="Kembali"
+                >
+                    Batal
+            </SirioWarningButton>
+            </div>
+            )
+        }
 
     // Fungsi untuk mendapatkan tombol di sisi kanan title
     headerButton() {
         return (
             <div>
-                <NavLink to={{
-                    pathname: "/registrasi-risiko/tambah"
-                }}>
-                    <SirioButton purple recommended classes="mx-2">
-                        Simpan
-                    </SirioButton>
-                </NavLink>
-                <NavLink to={{
-                    pathname: "/registrasi-risiko"
-                }}>
-                    <SirioButton purple classes="mx-2">
-                        Batal
-                    </SirioButton>
-                </NavLink>
+                <SirioConfirmButton
+                    purple
+                    classes="m-1"
+                    modalTitle="Anda akan menyimpan perubahan hierarki risiko"
+                    onConfirm={this.handleSubmit}
+                    customConfirmText="Konfirmasi"
+                    customCancelText="Batal"
+                    closeOnConfirm
+                >
+                    Simpan
+            </SirioConfirmButton>
+                <SirioWarningButton
+                    red
+                    modalTitle="Konfirmasi Pembatalan"
+                    modalDesc="Seluruh perubahan hierarki risiko yang belum tersimpan akan dihapus. Apakah Anda yakin?"
+                    onConfirm={() => window.location.href = "/registrasi-risiko"}
+                    customConfirmText="Konfirmasi"
+                    customCancelText="Kembali"
+                >
+                    Batal
+            </SirioWarningButton>
             </div>
         )
     }
@@ -124,12 +237,13 @@ export default class FormHierarkiRisiko extends React.Component {
     render() {
         return (
             <SirioTable
-                title="Registrasi Risiko"
+                title="Hierarki Semua Risiko"
                 data={this.state.rowList}
-                id='id'
-                columnsDefinition={this.columns}
+                id='idRisiko'
+                columnsDefinition={this.columns()}
                 includeSearchBar
                 headerButton={this.headerButton()}
+                cellEdit={this.cellEdit}
             />
         );
     }

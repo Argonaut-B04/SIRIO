@@ -1,6 +1,7 @@
 package com.ArgonautB04.SIRIO.services;
 
 import com.ArgonautB04.SIRIO.model.Risiko;
+import com.ArgonautB04.SIRIO.model.RiskLevel;
 import com.ArgonautB04.SIRIO.model.SOP;
 import com.ArgonautB04.SIRIO.repository.RisikoDB;
 import com.ArgonautB04.SIRIO.rest.RisikoDTO;
@@ -98,6 +99,32 @@ public class RisikoRestServiceImpl implements RisikoRestService {
     @Override
     public List<Risiko> getByKategori(Integer kategori) {
         return risikoDB.findAllByRisikoKategori(kategori);
+    }
+
+    @Override
+    public boolean isExistInDatabase(Risiko risiko) {
+        return risikoDB.findById(risiko.getIdRisiko()).isPresent();
+    }
+
+    @Override
+    public void ubahHierarki(Risiko risikoAwal, Risiko risikoBaru) {
+        if (getById(risikoBaru.getParent().getIdRisiko()) != null) {
+            risikoAwal.setParent(risikoBaru.getParent());
+            risikoDB.save(risikoAwal);
+        } else {
+            throw new NoSuchElementException("Parent Risiko tidak ada.");
+        }
+    }
+
+    @Override
+    public List<Risiko> getParentByKategori(Integer kategori) {
+        if (kategori == 2) {
+            return getByKategori(1);
+        } else if (kategori == 3) {
+            return getByKategori(2);
+        } else {
+            throw new NoSuchElementException("");
+        }
     }
 
 }

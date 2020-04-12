@@ -1,7 +1,6 @@
 package com.ArgonautB04.SIRIO.controller;
 
 import com.ArgonautB04.SIRIO.model.Risiko;
-import com.ArgonautB04.SIRIO.model.SOP;
 import com.ArgonautB04.SIRIO.rest.BaseResponse;
 import com.ArgonautB04.SIRIO.rest.RisikoDTO;
 import com.ArgonautB04.SIRIO.services.KomponenPemeriksaanRestService;
@@ -11,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -152,12 +150,30 @@ public class RisikoRestController {
      * @return daftar risiko berupa list.
      */
     @GetMapping("/getAll")
-    private BaseResponse<List<Risiko>> getAllRisiko() {
-        BaseResponse<List<Risiko>> response = new BaseResponse<>();
-        List<Risiko> result = risikoRestService.getAll();
+    private BaseResponse<List<RisikoDTO>> getAllRisiko() {
+        BaseResponse<List<RisikoDTO>> response = new BaseResponse<>();
+        List<Risiko> daftarRisiko = risikoRestService.getAll();
+        List<RisikoDTO> daftarRisikoDTO = new ArrayList<>();
+        for (Risiko risiko : daftarRisiko) {
+            RisikoDTO risikoDTO = new RisikoDTO();
+            risikoDTO.setId(risiko.getIdRisiko());
+            risikoDTO.setNama(risiko.getNamaRisiko());
+            risikoDTO.setKategori(risiko.getRisikoKategori());
+            risikoDTO.setSop(risiko.getSop().getIdSop());
+            if (risiko.getKomponen() == null || risiko.getKomponen().equals("")) {
+                risikoDTO.setKomponen(null);
+            } else {
+                risikoDTO.setKomponen(risiko.getKomponen());
+            }
+            if (risiko.getParent() != null) {
+                risikoDTO.setParent(risiko.getParent().getIdRisiko());
+                risikoDTO.setNamaParent(risiko.getParent().getNamaRisiko());
+            }
+            daftarRisikoDTO.add(risikoDTO);
+        }
         response.setStatus(200);
         response.setMessage("success");
-        response.setResult(result);
+        response.setResult(daftarRisikoDTO);
         return response;
     }
 
@@ -190,6 +206,50 @@ public class RisikoRestController {
         response.setResult(result);
         response.setStatus(200);
         response.setMessage("success");
+        return response;
+    }
+
+    @PostMapping("/ubah-hierarki")
+    private BaseResponse<List<Risiko>> ubahHierarkiRisiko(
+            @RequestBody List<Risiko> risikoList
+    ) {
+        BaseResponse<List<Risiko>> response = new BaseResponse<>();
+        try {
+            List<Risiko> listRisikoBaru = new ArrayList<>();
+            for (Risiko risk : risikoList) {
+                if (risikoRestService.isExistInDatabase(risk)) {
+                    Risiko risikoAwal = risikoRestService.getById(risk.getIdRisiko());
+                    risikoRestService.ubahHierarki(risikoAwal, risk);
+                    listRisikoBaru.add(risikoAwal);
+                } else {
+                    throw new NoSuchElementException("risiko yang hierarkinya akan diubah tidak ditemukan.");
+                }
+            }
+
+            response.setStatus(200);
+            response.setMessage("success");
+            response.setResult(listRisikoBaru);
+        } catch (NoSuchElementException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Konfigurasi Risk Level gagal"
+            );
+        }
+        return response;
+    }
+
+    @GetMapping("/ubah-hierarki/getParent/{idRisiko}")
+    private BaseResponse<List<Risiko>> getParent(@PathVariable("idRisiko") int idRisiko) {
+        BaseResponse<List<Risiko>> response = new BaseResponse<>();
+        try {
+            Risiko risk = risikoRestService.getById(idRisiko);
+            List<Risiko> result = risikoRestService.getParentByKategori(risk.getRisikoKategori());
+            response.setStatus(200);
+            response.setMessage("success");
+            response.setResult(result);
+        } catch (NoSuchElementException e) {
+            response.setStatus(404);
+            response.setMessage("kategori tidak ditemukan");
+        }
         return response;
     }
 }

@@ -22,7 +22,7 @@ export default class DemoForm extends React.Component {
         }
 
         this.handleChange = this.handleChange.bind(this);
-        this.inputDefinition = this.inputDefinition.bind(this);
+        this.innerInputDefinition = this.innerInputDefinition.bind(this);
         this.handleSelectChange = this.handleSelectChange.bind(this);
     }
 
@@ -69,7 +69,7 @@ export default class DemoForm extends React.Component {
     // Fungsi yang akan mengembalikan definisi tiap field pada form
     // Setiap objek {} pada List [] akan menjadi 1 field
     // untuk informasi lebih lengkap, cek SirioForm
-    inputDefinition() {
+    innerInputDefinition() {
         return (
             [
                 {
@@ -104,6 +104,23 @@ export default class DemoForm extends React.Component {
                             value: "gak tau apa"
                         }
                     ]
+                }
+            ]
+        )
+    }
+
+    outerInputDefinition() {
+        return (
+            [
+                {
+                    fullComponent:
+                        <SirioForm
+                            noHeader
+                            isInnerForm
+                            inputDefinition={this.innerInputDefinition()}
+                            onSubmit={this.handleSubmit}
+                            submitButton={this.submitButton()}
+                        />
                 }, {
                     label: "Manusia?",
                     handleChange: this.handleChange,
@@ -184,11 +201,11 @@ export default class DemoForm extends React.Component {
             <div>
                 <SirioButton purple recommended
                     classes="mx-2"
-                    onClick={() => window.location.href = "http://www.google.com"}>
+                >
                     Simpan
                 </SirioButton>
                 <SirioButton purple
-                    onClick={() => window.location.href = "http://www.google.com"}>
+                >
                     Batal
                 </SirioButton>
             </div>
@@ -198,22 +215,14 @@ export default class DemoForm extends React.Component {
     // Fungsi render SirioForm
     render() {
         return (
-            <>
-                <SirioForm
-                    title="Demo Form"
-                    betweenTitleSubtitle={this.getBetween()}
-                    subtitle="Ini demo form untuk ngedemoin ... form"
-                    inputDefinition={this.inputDefinition()}
-                    onSubmit={this.handleSubmit}
-                    submitButton={this.submitButton()}
-                />
-                <SirioForm
-                    noHeader
-                    inputDefinition={this.inputDefinition()}
-                    onSubmit={this.handleSubmit}
-                    submitButton={this.submitButton()}
-                />
-            </>
+            <SirioForm
+                title="Demo Form"
+                betweenTitleSubtitle={this.getBetween()}
+                subtitle="Ini demo form untuk ngedemoin ... form"
+                inputDefinition={this.outerInputDefinition()}
+                onSubmit={this.handleSubmit}
+                submitButton={this.submitButton()}
+            />
         );
     }
 }

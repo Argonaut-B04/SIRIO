@@ -23,4 +23,10 @@ public interface RisikoRestService {
     Risiko aktifkanRisiko(int idRisiko);
 
     Risiko transformasidto(Risiko risiko, RisikoDTO risikoDTO);
+
+    boolean isExistInDatabase(Risiko risiko);
+
+    void ubahHierarki(Risiko risikoAwal, Risiko risikoBaru);
+
+    List<Risiko> getParentByKategori(Integer kategori);
 }

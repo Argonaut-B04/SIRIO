@@ -18,7 +18,6 @@ class DetailRisiko extends React.Component {
             risikoKategori: "",
             sop: "",
             judulSop: "",
-            parent: "",
             komponen: "",
             redirect: false,
 
@@ -30,14 +29,6 @@ class DetailRisiko extends React.Component {
 
     componentDidMount() {
         this.renderDataRisiko();
-    }
-
-    parentFormatter() {
-        if (this.state.parent) {
-            return this.state.parent.namaRisiko
-        } else {
-            return "-"
-        }
     }
 
     komponenFormatter() {
@@ -57,7 +48,6 @@ class DetailRisiko extends React.Component {
             risikoKategori: response.data.result.risikoKategori,
             judulSop: response.data.result.sop.judul,
             sop: response.data.result.sop.idSop,
-            parent: response.data.result.parent,
             komponen: response.data.result.komponen,
         })
     }
@@ -67,7 +57,6 @@ class DetailRisiko extends React.Component {
             "Nama Risiko": this.state.namaRisiko,
             "Kategori Risiko": this.state.risikoKategori,
             "Referensi SOP": this.state.judulSop,
-            "Parent": this.parentFormatter(),
             "Komponen Risiko": this.komponenFormatter()
         };
     }

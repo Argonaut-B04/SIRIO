@@ -33,6 +33,7 @@ class TabelRisiko extends React.Component {
 
     async renderRows() {
         const response = await RegistrasiRisikoService.getAllRisiko();
+        console.log(response.data.result)
 
         this.setState({
             rowList: response.data.result
@@ -44,7 +45,7 @@ class TabelRisiko extends React.Component {
             <NavLink to={{
                 pathname: "/registrasi-risiko/detail",
                 state: {
-                    id: row.idRisiko,
+                    id: row.id,
                 }
             }}>
                 <SirioButton
@@ -56,16 +57,16 @@ class TabelRisiko extends React.Component {
         )
     }
 
-    parentFormatter() {
-        if (this.parent) {
-            return this.parent
-        } else {
+    parentFormatter(cell, row) {
+        if (row.parent === null) {
             return "-"
+        } else {
+            return row.namaParent
         }
     }
 
     columns = [{
-        dataField: 'namaRisiko',
+        dataField: 'nama',
         text: 'NAMA',
         sort: true,
         classes: classes.rowItem,
@@ -74,7 +75,7 @@ class TabelRisiko extends React.Component {
             return { width: "30%", textAlign: 'left' };
         }
     }, {
-        dataField: 'risikoKategori',
+        dataField: 'kategori',
         text: 'KATEGORI',
         sort: true,
         classes: classes.rowItem,
