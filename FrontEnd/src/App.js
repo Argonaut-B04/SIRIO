@@ -50,6 +50,7 @@ import FormRisiko from './pages/ManagerOR/FormRisiko';
 import HierarkiRisiko from './pages/ManagerOR/HierarkiRisiko';
 import RiskLevel from './pages/ManagerOR/RiskLevel';
 import RiskRating from './pages/ManagerOR/RiskRating';
+import FormMultiPage from './pages/formMultiPage';
 
 /**
  * Router utama yang memetakan url ke controller
@@ -100,6 +101,7 @@ class App extends React.Component {
             <Route exact path="/login" component={Login} />
             <Route exact path="/logout" component={Logout} />
             <Route exact path="/Form" component={FormDemo} />
+            <Route exact path="/Form-Multi" component={FormMultiPage} />
             <Route exact path="/404" component={NotFound} />
             <Redirect to="/404" />
           </Switch>

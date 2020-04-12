@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import SirioField from './SirioFormComponent/SirioField';
-import classes from "./SirioForm.module.css";
 import SirioComponentHeader from '../Header/SirioComponentHeader';
+import ComponentWrapper from '../../Layout/ComponentWrapper';
 
 /**
  * Komponen form untuk Sirio secara umum
@@ -25,26 +25,56 @@ class SirioForm extends Component {
                         betweenTitleSubtitle={this.props.betweenTitleSubtitle}
                     />
                 }
-                <form className={classes.formWrapper} onSubmit={this.props.onSubmit}>
-                    {this.props.inputDefinition.map((field, i) =>
-                        <SirioField
-                            key={i}
-                            label={field.label}
-                            handleChange={field.handleChange}
-                            type={field.type}
-                            name={field.name}
-                            value={field.value}
-                            placeholder={field.placeholder}
-                            optionList={field.optionList}
-                            classes={field.classes}
-                            customInput={field.customInput}
-                        />
-                    )}
-                    <div className="w-100 text-right">
-                        <br></br>
-                        {this.props.submitButton}
-                    </div>
-                </form>
+                {this.props.isInnerForm || this.props.childForm ?
+                    <ComponentWrapper classes={this.props.isInnerForm ? "m-4" : ""}>
+                        {this.props.inputDefinition.map((field, i) =>
+                            <SirioField
+                                key={i}
+                                label={field.label}
+                                handleChange={(event) => field.handleChange(event, this.props.id)}
+                                type={field.type}
+                                name={field.name}
+                                value={field.value}
+                                placeholder={field.placeholder}
+                                optionList={field.optionList}
+                                classes={field.classes}
+                                customInput={field.customInput}
+                                fullComponent={field.fullComponent}
+                            />
+                        )}
+                        {this.props.footerButton ?
+                            <div className="w-100 text-right">
+                                <br />
+                                {this.props.footerButton}
+                            </div>
+                            : ""
+                        }
+                    </ComponentWrapper>
+                    :
+                    <ComponentWrapper>
+                        <form onSubmit={this.props.onSubmit}>
+                            {this.props.inputDefinition.map((field, i) =>
+                                <SirioField
+                                    key={i}
+                                    label={field.label}
+                                    handleChange={(event) => field.handleChange(event, this.props.id)}
+                                    type={field.type}
+                                    name={field.name}
+                                    value={field.value}
+                                    placeholder={field.placeholder}
+                                    optionList={field.optionList}
+                                    classes={field.classes}
+                                    customInput={field.customInput}
+                                    fullComponent={field.fullComponent}
+                                />
+                            )}
+                            <div className="w-100 text-right">
+                                <br></br>
+                                {this.props.submitButton}
+                            </div>
+                        </form>
+                    </ComponentWrapper>
+                }
             </>
         );
     }

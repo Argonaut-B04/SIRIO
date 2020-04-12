@@ -50,6 +50,8 @@ export default class MainPage extends React.Component {
                 <br />
                 <Link to="/Form" className="btn btn-primary">Demo Form</Link>
                 <br />
+                <Link to="/Form-Multi" className="btn btn-primary">Demo Multi Form</Link>
+                <br />
                 <Link to="/login" className="btn btn-primary">Login</Link>
                 <br />
                 <Link to="/logout" className="btn btn-primary">Logout</Link>
