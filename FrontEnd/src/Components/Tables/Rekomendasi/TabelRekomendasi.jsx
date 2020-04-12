@@ -91,7 +91,7 @@ export default class TabelRekomendasi extends React.Component {
             }
         }, {
             dataField: 'noData 1',
-            text: '',
+            text: 'Hasil Pemeriksaan',
             headerClasses: [classes.colheader, "d-block d-sm-table-cell"].join(" "),
             classes: [classes.rowItem, "d-block d-sm-table-cell"].join(" "),
             style: () => {
@@ -100,7 +100,7 @@ export default class TabelRekomendasi extends React.Component {
             formatter: (cell, row) => this.getButtonsFirst(cell, row)
         }, {
             dataField: 'noData 2',
-            text: '',
+            text: 'Tenggat Waktu',
             headerClasses: [classes.colheader, "d-block d-sm-table-cell"].join(" "),
             classes: [classes.rowItem, "d-block d-sm-table-cell"].join(" "),
             style: () => {
@@ -109,7 +109,7 @@ export default class TabelRekomendasi extends React.Component {
             formatter: (cell, row) => this.getButtonsSecond(cell, row)
         }, {
             dataField: 'noData 3',
-            text: '',
+            text: 'Reminder',
             headerClasses: [classes.colheader, "d-block d-sm-table-cell"].join(" "),
             classes: [classes.rowItem, "d-block d-sm-table-cell"].join(" "),
             style: () => {
@@ -180,8 +180,8 @@ export default class TabelRekomendasi extends React.Component {
         const status = row.status;
         const tenggatWaktu = SirioAxiosBase.formatDateFromString(row.tenggatWaktu);
         const recommended = status === "Menunggu Pengaturan Tenggat Waktu";
-        const hyperlink = status === "Menunggu Pelaksanaan";
-        const text = status === "Sedang Dilaksanakan" || status === "Selesai";
+        const hyperlink = status === "Menunggu Pelaksanaan" || status === "Sedang Dilaksanakan";
+        const text = status === "Selesai";
 
         const disabled = !recommended;
         if (text) {

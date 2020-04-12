@@ -70,7 +70,7 @@ class TabelReminder extends React.Component {
         formatter: SirioAxiosBase.formatDate
     }, {
         dataField: 'noData 1',
-        text: '',
+        text: 'Aksi Ubah',
         headerClasses: classes.colheader,
         classes: classes.rowItem,
         headerStyle: () => {
@@ -82,7 +82,7 @@ class TabelReminder extends React.Component {
         formatter: (cell, row) => this.getButtonsFirst(cell, row)
     }, {
         dataField: 'noData 2',
-        text: '',
+        text: 'Aksi Hapus',
         headerClasses: classes.colheader,
         classes: classes.rowItem,
         headerStyle: () => {
