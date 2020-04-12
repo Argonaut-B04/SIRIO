@@ -20,6 +20,10 @@ class HierarkiRisikoService {
     async getParentByKategori(id) {
         return this.axiosInstance.get(SirioAxiosBase.BASEURL + '/Risiko/ubah-hierarki/getParent/' + id);
     }
+
+    async getByKategori() {
+        return this.axiosInstance.get(SirioAxiosBase.BASEURL + '/Risiko/kategori');
+    }
 }
 
 export default new HierarkiRisikoService();

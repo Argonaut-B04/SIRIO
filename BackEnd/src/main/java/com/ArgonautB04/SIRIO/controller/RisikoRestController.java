@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -29,6 +30,7 @@ public class RisikoRestController {
 
     /**
      * Menambahkan risiko baru.
+     *
      * @param risikoDTO data transfer object untuk risiko yang akan ditambah
      * @return menyimpan risiko baru ke db
      */
@@ -55,7 +57,7 @@ public class RisikoRestController {
 //                    HttpStatus.NOT_FOUND, "SOP dengan ID " + risikoDTO.getSop() + " tidak ditemukan!"
 //            );
 //        }
-        risikoTemp= risikoRestService.transformasidto(risikoTemp, risikoDTO);
+        risikoTemp = risikoRestService.transformasidto(risikoTemp, risikoDTO);
 
         Risiko risiko = risikoRestService.buatRisiko(risikoTemp);
         response.setStatus(200);
@@ -67,6 +69,7 @@ public class RisikoRestController {
 
     /**
      * Menampilkan satu risiko.
+     *
      * @param idRisiko
      * @return object risiko beserta atribut yang sesuai dengan idRisiko tersebut
      */
@@ -88,6 +91,7 @@ public class RisikoRestController {
 
     /**
      * Menghapus satu risiko.
+     *
      * @param risikoDTO data transfer object untuk risiko yang akan dihapus
      * @return risiko dengan idRisiko tersebut dihapus dari db
      */
@@ -120,6 +124,7 @@ public class RisikoRestController {
 
     /**
      * Mengubah risiko, semua atribut dapat diubah.
+     *
      * @param risikoDTO data transfer object untuk risiko yang akan diubah
      * @return perubahan data akan disimpan di db
      */
@@ -129,13 +134,13 @@ public class RisikoRestController {
     ) {
         BaseResponse<Risiko> response = new BaseResponse<>();
         try {
-        Risiko risikoTemp = risikoRestService.getById(risikoDTO.getId());
-        risikoTemp = risikoRestService.transformasidto(risikoTemp, risikoDTO);
-        Risiko result = risikoRestService.ubahRisiko(risikoTemp.getIdRisiko(), risikoTemp);
+            Risiko risikoTemp = risikoRestService.getById(risikoDTO.getId());
+            risikoTemp = risikoRestService.transformasidto(risikoTemp, risikoDTO);
+            Risiko result = risikoRestService.ubahRisiko(risikoTemp.getIdRisiko(), risikoTemp);
 
-        response.setStatus(200);
-        response.setMessage("success");
-        response.setResult(result);
+            response.setStatus(200);
+            response.setMessage("success");
+            response.setResult(result);
         } catch (NoSuchElementException e) {
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND, "ID Risiko " + risikoDTO.getId() + " Tidak Ditemukan");
@@ -147,6 +152,7 @@ public class RisikoRestController {
 
     /**
      * Menampilkan daftar risiko-risiko yang sudah ada.
+     *
      * @return daftar risiko berupa list.
      */
     @GetMapping("/getAll")
@@ -188,7 +194,7 @@ public class RisikoRestController {
         List<RisikoDTO> result = new ArrayList<>();
 
         List<Risiko> daftarRisiko = risikoRestService.getByKategori(3);
-        for (Risiko risiko: daftarRisiko) {
+        for (Risiko risiko : daftarRisiko) {
             RisikoDTO risikoDTO = new RisikoDTO();
             risikoDTO.setId(risiko.getIdRisiko());
             risikoDTO.setNama(risiko.getNamaRisiko());
@@ -250,6 +256,22 @@ public class RisikoRestController {
             response.setStatus(404);
             response.setMessage("kategori tidak ditemukan");
         }
+        return response;
+    }
+
+    @GetMapping("/kategori")
+    private BaseResponse<List<List<Risiko>>> getByKategori() {
+        BaseResponse<List<List<Risiko>>> response = new BaseResponse<>();
+        List<List<Risiko>> listOfOptionList = new ArrayList<>();
+        listOfOptionList.add(
+                risikoRestService.getByKategori(1)
+        );
+        listOfOptionList.add(
+                risikoRestService.getByKategori(2)
+        );
+        response.setStatus(200);
+        response.setMessage("success");
+        response.setResult(listOfOptionList);
         return response;
     }
 }

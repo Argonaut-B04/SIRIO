@@ -1,14 +1,10 @@
 import React from 'react';
-import SirioButton from '../../Button/SirioButton';
 import classes from '../../Tables/RegistrasiRisiko/TabelRisiko.module.css';
 import SirioTable from '../../Tables/SirioTable';
 import HierarkiRisikoService from '../../../Services/HierarkiRisikoService';
-import { NavLink } from 'react-router-dom';
-import CellEditFactory, { Type } from 'react-bootstrap-table2-editor';
 import SirioConfirmButton from '../../Button/ActionButton/SirioConfirmButton';
-import SirioMessageButton from '../../Button/ActionButton/SirioMessageButton';
 import SirioWarningButton from '../../Button/ActionButton/SirioWarningButton';
-import { Redirect } from 'react-router-dom';
+import SirioButton from '../../Button/SirioButton';
 import SirioSelect from '../../Dropdown/SirioSelect';
 
 export default class FormHierarkiRisiko extends React.Component {
@@ -18,57 +14,17 @@ export default class FormHierarkiRisiko extends React.Component {
 
         this.state = {
             rowList: [],
-            listOfOptionList: []
-            // changeComplete: false,
-            // editMode: true,
-            // activeEditRowId: [],
-            // optionList: [],
+            listOfOptionList: [],
         }
 
         this.renderRows = this.renderRows.bind(this);
-        // this.handleSubmit = this.handleSubmit.bind(this);
-        // this.endNotification = this.endNotification.bind(this);
-        // this.toggleEditMode = this.toggleEditMode.bind(this);
+        this.activeUbah = this.activeUbah.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     componentDidMount() {
         this.renderRows();
     }
-
-    // endNotification() {
-    //     this.setState({
-    //         changeComplete: false
-    //     })
-    // }
-
-    // toggleEditMode() {
-    //     this.setState({
-    //         editMode: !this.state.editMode
-    //     })
-    // }
-
-    // renderRedirect = () => {
-    //     if (this.state.redirect) {
-    //         return <Redirect to={{
-    //             pathname: "/registrasi-risiko",
-    //             state: {
-    //                 editSuccess: true
-    //             }
-    //         }} />
-    //     }
-    // };
-
-    // handleSubmit() {
-    //     HierarkiRisikoService.submitChanges(this.state.rowList)
-    //         .then(() => {
-    //             this.renderRows()
-    //             this.setState({
-    //                 changeComplete: true,
-    //                 editMode: false
-    //             })
-    //             this.renderRedirect()
-    //         });
-    // }
 
     async renderRows() {
         HierarkiRisikoService.getAllRisiko()
@@ -77,88 +33,17 @@ export default class FormHierarkiRisiko extends React.Component {
                     this.setState({
                         rowList: response.data.result
                     })
-                    this.renderOptions();
                 }
             );
+        HierarkiRisikoService.getByKategori()
+            .then(
+                response => {
+                    this.setState({
+                        listOfOptionList: response.data.result
+                    })
+                }
+            )
     };
-
-    async renderOptions() {
-        console.log(this.state.rowList)
-    }
-
-    // getButtons(cell, row) {
-    //     console.log(row)
-    //     if (this) {
-    //         return (
-    //             <NavLink to={{
-    //                 pathname: "/registrasi-risiko/ubah-hierarki/ubah",
-    //                 state: {
-    //                     id: row.idRisiko,
-    //                 }
-    //             }}>
-    //                 <SirioButton
-    //                     purple
-    //                 >
-    //                     Ubah Hierarki
-    //                 </SirioButton>
-    //             </NavLink>
-    //         )
-    //     }
-    // }
-
-    // parentFormatter(cell, row) {
-    //     if (row.parent === null) {
-    //         return "-"
-    //     } else {
-    //         return row.namaParent
-    //     }
-    // }
-
-    // async getOptions(cell, row) {
-    //     const response = await HierarkiRisikoService.getParentByKategori(row.id);
-    //     const optionList = response.data.result.map(object => {
-    //         return (
-    //             {
-    //                 label: object.namaRisiko,
-    //                 value: object.idRisiko
-    //             }
-    //         )
-    //     });
-    //     console.log(optionList)
-    //     this.setState({
-    //         optionList: optionList
-    //     })
-    // }
-
-    getOptions(cell, row) {
-        // var optionList;
-        // const hasil = HierarkiRisikoService.getParentByKategori(row.id).then(
-        //     response => {
-        //         if (response.data.result) {
-        //             optionList = response.data.result.map(object => {
-        //                 return (
-        //                     {
-        //                         label: object.namaRisiko,
-        //                         value: object.idRisiko
-        //                     }
-        //                 )
-        //             });
-        //         } else {
-        //             return "-"
-        //         }
-        //     }
-        // );
-        // console.log(optionList)
-        // return (
-        //     <SirioSelect
-        //         // name={this.props.name}
-        //         // value={this.props.value}
-        //         // handleChange={this.props.handleChange}
-        //         optionList={optionList}
-        //     />
-        // )
-        return ""
-    }
 
     columns() {
         return (
@@ -184,41 +69,90 @@ export default class FormHierarkiRisiko extends React.Component {
                 }
             }, {
                 dataField: 'noData 1',
-                // name: 'parent',
                 text: 'PARENT',
                 isDummyField: true,
-                // editor: {
-                //     type: Type.SELECT,
-                //     name: 'parent',
-                //     // getOptions: this.getOptions
-                // },
                 sort: true,
                 editable: false,
-                formatter: (cell, row) => this.getOptions(cell, row),
+                formatter: (cell, row) => this.getOptions(row),
                 classes: classes.rowItem,
                 headerClasses: classes.colheader,
                 headerStyle: (colum, colIndex) => {
                     return { width: "20%", textAlign: 'center' };
                 }
-            },
-                // {
-                //     dataField: 'noData 1',
-                //     text: '',
-                //     headerClasses: classes.colheader,
-                //     classes: classes.rowItem,
-                //     style: () => {
-                //         return { textAlign: 'center' }
-                //     },
-                //     formatter: this.getButtons
-                //     }
+            }, {
+                dataField: 'noData 2',
+                text: 'EDIT',
+                isDummyField: true,
+                sort: true,
+                editable: false,
+                formatter: (cell, row) => this.activeUbah(row),
+                classes: classes.rowItem,
+                headerClasses: classes.colheader,
+                headerStyle: (colum, colIndex) => {
+                    return { width: "20%", textAlign: 'center' };
+                }
+            }
             ]
         )
     }
 
-    cellEdit = CellEditFactory({
-        mode: 'click',
-        blurToSave: true,
-    })
+    activeUbah(row) {
+        // eslint-disable-next-line
+        if (row.changeable == undefined) {
+            row.changeable = false;
+        }
+
+        if (row.kategori === 1) {
+            return "";
+        }
+
+        return (
+            <SirioButton
+                purple
+                recommended
+                onClick={() => {
+                    row.changeable = !row.changeable;
+                    this.forceUpdate();
+                }}
+            >
+                {row.changeable ? "Turn Off Ubah" : "Turn On Ubah"}
+            </SirioButton>
+        )
+    }
+
+    getOptions(row) {
+        if (row.kategori === 1) {
+            return "-";
+        }
+
+        if (row.changeable) {
+            const arrayIndexToGet = row.kategori - 2;
+            const objectList = this.state.listOfOptionList[arrayIndexToGet];
+
+            if (objectList) {
+                const optionList = objectList.map(object => {
+                    return ({
+                        label: object.namaRisiko,
+                        value: object.idRisiko
+                    })
+                })
+                return (
+                    <SirioSelect
+                        name="parent"
+                        value={row.parent}
+                        handleChange={(name, event) => {
+                            row.parent = event.value;
+                            row.namaParent = event.label;
+                            this.forceUpdate();
+                        }}
+                        options={optionList}
+                    />
+                )
+            }
+        } else {
+            return row.namaParent
+        }
+    }
 
     footerContent() {
         return (
@@ -246,6 +180,10 @@ export default class FormHierarkiRisiko extends React.Component {
             </SirioWarningButton>
             </div>
         )
+    }
+
+    handleSubmit() {
+        HierarkiRisikoService.submitChanges(this.state.rowList);
     }
 
     // Fungsi untuk mendapatkan tombol di sisi kanan title
