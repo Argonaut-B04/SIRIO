@@ -107,13 +107,10 @@ public class RisikoRestServiceImpl implements RisikoRestService {
     }
 
     @Override
-    public void ubahHierarki(Risiko risikoAwal, Risiko risikoBaru) {
-        if (getById(risikoBaru.getParent().getIdRisiko()) != null) {
-            risikoAwal.setParent(risikoBaru.getParent());
-            risikoDB.save(risikoAwal);
-        } else {
-            throw new NoSuchElementException("Parent Risiko tidak ada.");
-        }
+    public RisikoDTO ubahHierarki(Risiko risikoAwal, RisikoDTO risikoBaru) {
+        risikoAwal.setParent(getById(risikoBaru.getParent()));
+        risikoDB.save(risikoAwal);
+        return risikoBaru;
     }
 
     @Override

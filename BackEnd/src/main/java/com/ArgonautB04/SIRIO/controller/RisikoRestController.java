@@ -216,50 +216,40 @@ public class RisikoRestController {
     }
 
     @PostMapping("/ubah-hierarki")
-    private BaseResponse<List<Risiko>> ubahHierarkiRisiko(
-            @RequestBody List<Risiko> risikoList
+    private BaseResponse<List<RisikoDTO>> ubahHierarkiRisiko(
+            @RequestBody List<RisikoDTO> risikoList
     ) {
-        BaseResponse<List<Risiko>> response = new BaseResponse<>();
+        BaseResponse<List<RisikoDTO>> response = new BaseResponse<>();
         try {
-            List<Risiko> listRisikoBaru = new ArrayList<>();
-            for (Risiko risk : risikoList) {
-                if (risikoRestService.isExistInDatabase(risk)) {
-                    Risiko risikoAwal = risikoRestService.getById(risk.getIdRisiko());
-                    risikoRestService.ubahHierarki(risikoAwal, risk);
-                    listRisikoBaru.add(risikoAwal);
+            List<RisikoDTO> listRisikoBaru = new ArrayList<>();
+            for (RisikoDTO risk : risikoList) {
+                Risiko risiko = risikoRestService.getById(risk.getId());
+                if (risk.getParent() != null) {
+                    if (risiko.getParent() == null || risk.getParent() != risiko.getParent().getIdRisiko()) {
+                        risiko = risikoRestService.transformasidto(risiko, risk);
+                        risk = risikoRestService.ubahHierarki(risiko, risk);
+                        risk.setId(risiko.getIdRisiko());
+                        risk.setSop(risiko.getSop().getIdSop());
+                        listRisikoBaru.add(risk);
+                    } else {
+                        listRisikoBaru.add(risk);
+                    }
                 } else {
-                    throw new NoSuchElementException("risiko yang hierarkinya akan diubah tidak ditemukan.");
+                    listRisikoBaru.add(risk);
                 }
+                response.setStatus(200);
+                response.setMessage("success");
+                response.setResult(listRisikoBaru);
             }
-
-            response.setStatus(200);
-            response.setMessage("success");
-            response.setResult(listRisikoBaru);
         } catch (NoSuchElementException e) {
             throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Konfigurasi Risk Level gagal"
+                    HttpStatus.NOT_FOUND, "Ubah hierarki risiko gagal"
             );
         }
         return response;
     }
 
-    @GetMapping("/ubah-hierarki/getParent/{idRisiko}")
-    private BaseResponse<List<Risiko>> getParent(@PathVariable("idRisiko") int idRisiko) {
-        BaseResponse<List<Risiko>> response = new BaseResponse<>();
-        try {
-            Risiko risk = risikoRestService.getById(idRisiko);
-            List<Risiko> result = risikoRestService.getParentByKategori(risk.getRisikoKategori());
-            response.setStatus(200);
-            response.setMessage("success");
-            response.setResult(result);
-        } catch (NoSuchElementException e) {
-            response.setStatus(404);
-            response.setMessage("kategori tidak ditemukan");
-        }
-        return response;
-    }
-
-    @GetMapping("/kategori")
+    @GetMapping("/ubah-hierarki/kategori")
     private BaseResponse<List<List<Risiko>>> getByKategori() {
         BaseResponse<List<List<Risiko>>> response = new BaseResponse<>();
         List<List<Risiko>> listOfOptionList = new ArrayList<>();

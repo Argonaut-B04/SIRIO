@@ -26,7 +26,7 @@ public interface RisikoRestService {
 
     boolean isExistInDatabase(Risiko risiko);
 
-    void ubahHierarki(Risiko risikoAwal, Risiko risikoBaru);
+    RisikoDTO ubahHierarki(Risiko risikoAwal, RisikoDTO risikoBaru);
 
     List<Risiko> getParentByKategori(Integer kategori);
 }
