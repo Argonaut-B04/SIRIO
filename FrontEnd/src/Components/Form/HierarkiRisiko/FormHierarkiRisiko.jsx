@@ -9,6 +9,7 @@ import SirioConfirmButton from '../../Button/ActionButton/SirioConfirmButton';
 import SirioMessageButton from '../../Button/ActionButton/SirioMessageButton';
 import SirioWarningButton from '../../Button/ActionButton/SirioWarningButton';
 import { Redirect } from 'react-router-dom';
+import SirioSelect from '../../Dropdown/SirioSelect';
 
 export default class FormHierarkiRisiko extends React.Component {
 
@@ -17,15 +18,16 @@ export default class FormHierarkiRisiko extends React.Component {
 
         this.state = {
             rowList: [],
-            changeComplete: false,
-            editMode: true,
-            activeEditRowId: [],
-            optionList: [],
+            listOfOptionList: []
+            // changeComplete: false,
+            // editMode: true,
+            // activeEditRowId: [],
+            // optionList: [],
         }
 
         this.renderRows = this.renderRows.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
-        this.endNotification = this.endNotification.bind(this);
+        // this.handleSubmit = this.handleSubmit.bind(this);
+        // this.endNotification = this.endNotification.bind(this);
         // this.toggleEditMode = this.toggleEditMode.bind(this);
     }
 
@@ -33,11 +35,11 @@ export default class FormHierarkiRisiko extends React.Component {
         this.renderRows();
     }
 
-    endNotification() {
-        this.setState({
-            changeComplete: false
-        })
-    }
+    // endNotification() {
+    //     this.setState({
+    //         changeComplete: false
+    //     })
+    // }
 
     // toggleEditMode() {
     //     this.setState({
@@ -45,36 +47,44 @@ export default class FormHierarkiRisiko extends React.Component {
     //     })
     // }
 
-    renderRedirect = () => {
-        if (this.state.redirect) {
-            return <Redirect to={{
-                pathname: "/registrasi-risiko",
-                state: {
-                    editSuccess: true
-                }
-            }} />
-        }
-    };
+    // renderRedirect = () => {
+    //     if (this.state.redirect) {
+    //         return <Redirect to={{
+    //             pathname: "/registrasi-risiko",
+    //             state: {
+    //                 editSuccess: true
+    //             }
+    //         }} />
+    //     }
+    // };
 
-    handleSubmit() {
-        HierarkiRisikoService.submitChanges(this.state.rowList)
-            .then(() => {
-                this.renderRows()
-                this.setState({
-                    changeComplete: true,
-                    editMode: false
-                })
-                this.renderRedirect()
-            });
-    }
+    // handleSubmit() {
+    //     HierarkiRisikoService.submitChanges(this.state.rowList)
+    //         .then(() => {
+    //             this.renderRows()
+    //             this.setState({
+    //                 changeComplete: true,
+    //                 editMode: false
+    //             })
+    //             this.renderRedirect()
+    //         });
+    // }
 
     async renderRows() {
-        const tabel = await HierarkiRisikoService.getAllRisiko();
-
-        this.setState({
-            rowList: tabel.data.result
-        })
+        HierarkiRisikoService.getAllRisiko()
+            .then(
+                response => {
+                    this.setState({
+                        rowList: response.data.result
+                    })
+                    this.renderOptions();
+                }
+            );
     };
+
+    async renderOptions() {
+        console.log(this.state.rowList)
+    }
 
     // getButtons(cell, row) {
     //     console.log(row)
@@ -96,81 +106,114 @@ export default class FormHierarkiRisiko extends React.Component {
     //     }
     // }
 
-    parentFormatter(cell, row) {
-        if (row.parent === null) {
-            return "-"
-        } else {
-            return row.namaParent
-        }
-    }
+    // parentFormatter(cell, row) {
+    //     if (row.parent === null) {
+    //         return "-"
+    //     } else {
+    //         return row.namaParent
+    //     }
+    // }
 
-    async getOptions(cell, row) {
-        const response = await HierarkiRisikoService.getParentByKategori(row.id);
-        const optionList = response.data.result.map(object => {
-            return (
-                {
-                    label: object.namaRisiko,
-                    value: object.idRisiko
-                }
-            )
-        });
-        console.log(optionList)
-        this.setState({
-            optionList: optionList
-        })
+    // async getOptions(cell, row) {
+    //     const response = await HierarkiRisikoService.getParentByKategori(row.id);
+    //     const optionList = response.data.result.map(object => {
+    //         return (
+    //             {
+    //                 label: object.namaRisiko,
+    //                 value: object.idRisiko
+    //             }
+    //         )
+    //     });
+    //     console.log(optionList)
+    //     this.setState({
+    //         optionList: optionList
+    //     })
+    // }
+
+    getOptions(cell, row) {
+        // var optionList;
+        // const hasil = HierarkiRisikoService.getParentByKategori(row.id).then(
+        //     response => {
+        //         if (response.data.result) {
+        //             optionList = response.data.result.map(object => {
+        //                 return (
+        //                     {
+        //                         label: object.namaRisiko,
+        //                         value: object.idRisiko
+        //                     }
+        //                 )
+        //             });
+        //         } else {
+        //             return "-"
+        //         }
+        //     }
+        // );
+        // console.log(optionList)
+        // return (
+        //     <SirioSelect
+        //         // name={this.props.name}
+        //         // value={this.props.value}
+        //         // handleChange={this.props.handleChange}
+        //         optionList={optionList}
+        //     />
+        // )
+        return ""
     }
 
     columns() {
         return (
-        [{
-        dataField: 'nama',
-        editable: false,
-        text: 'NAMA',
-        sort: true,
-        classes: classes.rowItem,
-        headerClasses: classes.colheader,
-        headerStyle: (colum, colIndex) => {
-            return { width: "30%", textAlign: 'left' };
-        }
-    }, {
-        dataField: 'kategori',
-        editable: false,
-        text: 'KATEGORI',
-        sort: true,
-        classes: classes.rowItem,
-        headerClasses: classes.colheader,
-        headerStyle: (colum, colIndex) => {
-            return { width: "25%", textAlign: 'center' };
-        }
-    }, {
-        dataField: 'parent',
-        name: 'parent',
-        text: 'PARENT',
-        editor: {
-            type: Type.SELECT,
-            name: 'parent',
-            // getOptions: this.getOptions
-        },
-        sort: true,
-        formatter: (cell,row) => this.getOptions(cell, row),
-        classes: classes.rowItem,
-        headerClasses: classes.colheader,
-        headerStyle: (colum, colIndex) => {
-            return { width: "20%", textAlign: 'center' };
-        }
-    }, 
-    // {
-    //     dataField: 'noData 1',
-    //     text: '',
-    //     headerClasses: classes.colheader,
-    //     classes: classes.rowItem,
-    //     style: () => {
-    //         return { textAlign: 'center' }
-    //     },
-    //     formatter: this.getButtons
-    //     }
-    ]
-    )}
+            [{
+                dataField: 'nama',
+                editable: false,
+                text: 'NAMA',
+                sort: true,
+                classes: classes.rowItem,
+                headerClasses: classes.colheader,
+                headerStyle: (colum, colIndex) => {
+                    return { width: "30%", textAlign: 'left' };
+                }
+            }, {
+                dataField: 'kategori',
+                editable: false,
+                text: 'KATEGORI',
+                sort: true,
+                classes: classes.rowItem,
+                headerClasses: classes.colheader,
+                headerStyle: (colum, colIndex) => {
+                    return { width: "25%", textAlign: 'center' };
+                }
+            }, {
+                dataField: 'noData 1',
+                // name: 'parent',
+                text: 'PARENT',
+                isDummyField: true,
+                // editor: {
+                //     type: Type.SELECT,
+                //     name: 'parent',
+                //     // getOptions: this.getOptions
+                // },
+                sort: true,
+                editable: false,
+                formatter: (cell, row) => this.getOptions(cell, row),
+                classes: classes.rowItem,
+                headerClasses: classes.colheader,
+                headerStyle: (colum, colIndex) => {
+                    return { width: "20%", textAlign: 'center' };
+                }
+            },
+                // {
+                //     dataField: 'noData 1',
+                //     text: '',
+                //     headerClasses: classes.colheader,
+                //     classes: classes.rowItem,
+                //     style: () => {
+                //         return { textAlign: 'center' }
+                //     },
+                //     formatter: this.getButtons
+                //     }
+            ]
+        )
+    }
 
     cellEdit = CellEditFactory({
         mode: 'click',
@@ -202,8 +245,8 @@ export default class FormHierarkiRisiko extends React.Component {
                     Batal
             </SirioWarningButton>
             </div>
-            )
-        }
+        )
+    }
 
     // Fungsi untuk mendapatkan tombol di sisi kanan title
     headerButton() {
@@ -239,7 +282,7 @@ export default class FormHierarkiRisiko extends React.Component {
             <SirioTable
                 title="Hierarki Semua Risiko"
                 data={this.state.rowList}
-                id='idRisiko'
+                id='id'
                 columnsDefinition={this.columns()}
                 includeSearchBar
                 headerButton={this.headerButton()}

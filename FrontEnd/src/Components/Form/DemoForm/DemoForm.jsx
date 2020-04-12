@@ -118,9 +118,13 @@ export default class DemoForm extends React.Component {
                             noHeader
                             isInnerForm
                             inputDefinition={this.innerInputDefinition()}
-                            onSubmit={this.handleSubmit}
-                            submitButton={this.submitButton()}
                         />
+                }, {
+                    fullComponent:
+                        <SirioButton purple recommended>Ini tombol</SirioButton>
+                }, {
+                    fullComponent:
+                        <h1>Ini H1</h1>
                 }, {
                     label: "Manusia?",
                     handleChange: this.handleChange,
