@@ -29,8 +29,7 @@ export default class DemoForm extends React.Component {
     // Fungsi untuk mengubah state ketika isi dari input diubah
     // Fungsi ini wajib ada jika membuat form
     handleChange(event) {
-        console.log(event);
-        if (typeof event.target.checked === "boolean") {
+        if (event.target.type === "checkbox") {
             this.setState(
                 {
                     [event.target.name]
@@ -215,24 +214,14 @@ export default class DemoForm extends React.Component {
     // Fungsi render SirioForm
     render() {
         return (
-            <>
-                <SirioForm
-                    title="Demo Form"
-                    betweenTitleSubtitle={this.getBetween()}
-                    subtitle="Ini demo form untuk ngedemoin ... form"
-                    inputDefinition={this.outerInputDefinition()}
-                    onSubmit={this.handleSubmit}
-                    submitButton={this.submitButton()}
-                />
-                <div className="w-100 text-right">
-                    <SirioButton blue recommended
-                        classes="mr-3"
-                        onClick={() => this.addForm()}
-                    >
-                        Tambah Form
-                    </SirioButton>
-                </div>
-            </>
+            <SirioForm
+                title="Demo Form"
+                betweenTitleSubtitle={this.getBetween()}
+                subtitle="Ini demo form untuk ngedemoin ... form"
+                inputDefinition={this.outerInputDefinition()}
+                onSubmit={this.handleSubmit}
+                submitButton={this.submitButton()}
+            />
         );
     }
 }

@@ -31,7 +31,8 @@ class SirioForm extends Component {
                             <SirioField
                                 key={i}
                                 label={field.label}
-                                handleChange={(event) => field.handleChange(event, this.props.id)}
+                                handleChange={field.handleChange}
+                                index={field.index}
                                 type={field.type}
                                 name={field.name}
                                 value={field.value}
@@ -57,7 +58,8 @@ class SirioForm extends Component {
                                 <SirioField
                                     key={i}
                                     label={field.label}
-                                    handleChange={(event) => field.handleChange(event, this.props.id)}
+                                    handleChange={field.handleChange}
+                                    index={field.index}
                                     type={field.type}
                                     name={field.name}
                                     value={field.value}
