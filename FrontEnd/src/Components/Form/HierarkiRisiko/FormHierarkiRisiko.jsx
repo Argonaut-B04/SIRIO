@@ -6,8 +6,10 @@ import SirioConfirmButton from '../../Button/ActionButton/SirioConfirmButton';
 import SirioWarningButton from '../../Button/ActionButton/SirioWarningButton';
 import SirioButton from '../../Button/SirioButton';
 import SirioSelect from '../../Dropdown/SirioSelect';
+import { Redirect } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 
-export default class FormHierarkiRisiko extends React.Component {
+class FormHierarkiRisiko extends React.Component {
 
     constructor(props) {
         super(props);
@@ -15,11 +17,13 @@ export default class FormHierarkiRisiko extends React.Component {
         this.state = {
             rowList: [],
             listOfOptionList: [],
+            redirect: false,
         }
 
         this.renderRows = this.renderRows.bind(this);
         this.activeUbah = this.activeUbah.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.setRedirect = this.setRedirect.bind(this);
     }
 
     componentDidMount() {
@@ -183,8 +187,28 @@ export default class FormHierarkiRisiko extends React.Component {
     }
 
     handleSubmit() {
-        HierarkiRisikoService.submitChanges(this.state.rowList);
+        console.log(this.state.rowList)
+        HierarkiRisikoService.submitChanges(this.state.rowList)
+            .then(() => this.setRedirect());
     }
+
+    setRedirect = () => {
+        this.setState({
+            redirect: true
+        })
+    };
+
+    renderRedirect = () => {
+        console.log(this.state.redirect)
+        if (this.state.redirect) {
+            return <Redirect to={{
+                pathname: "/registrasi-risiko",
+                state: {
+                    editHierarkiSuccess: true
+                }
+            }} />
+        }
+    };
 
     // Fungsi untuk mendapatkan tombol di sisi kanan title
     headerButton() {
@@ -217,15 +241,18 @@ export default class FormHierarkiRisiko extends React.Component {
 
     render() {
         return (
+            <>
+            {this.renderRedirect()}
             <SirioTable
                 title="Hierarki Semua Risiko"
                 data={this.state.rowList}
                 id='id'
                 columnsDefinition={this.columns()}
-                includeSearchBar
                 headerButton={this.headerButton()}
-                cellEdit={this.cellEdit}
             />
+            </>
         );
     }
 } 
+
+export default withRouter(FormHierarkiRisiko);

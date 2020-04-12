@@ -3,8 +3,10 @@ import SirioForm from '../SirioForm';
 import SirioButton from '../../Button/SirioButton';
 import RegistrasiRisikoService from '../../../Services/RegistrasiRisikoService';
 import SopService from '../../../Services/SopService';
+import { Redirect } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 
-export default class FormRisiko extends React.Component {
+class FormRisiko extends React.Component {
 
     // Masukan user disimpan kedalam state sebelum dikirim ke backend
     constructor(props) {
@@ -21,9 +23,27 @@ export default class FormRisiko extends React.Component {
 
         this.handleChange = this.handleChange.bind(this);
         this.inputDefinition = this.inputDefinition.bind(this);
+        this.setRedirect = this.setRedirect.bind(this);
         this.handleSelectChange = this.handleSelectChange.bind(this);
         this.renderSopOption = this.renderSopOption.bind(this);
     }
+
+    setRedirect = () => {
+        this.setState({
+            redirect: true
+        })
+    };
+
+    renderRedirect = () => {
+        if (this.state.redirect) {
+            return <Redirect to={{
+                pathname: "/registrasi-risiko",
+                state: {
+                    addSuccess: true
+                }
+            }} />
+        }
+    };
 
     componentDidMount() {
         this.renderSopOption();
@@ -89,7 +109,7 @@ export default class FormRisiko extends React.Component {
             komponen: this.state.komponen
         }
         RegistrasiRisikoService.submitChanges(risiko)
-            .then(() => window.location.href = "/registrasi-risiko");
+            .then(() => this.setRedirect());
     }
 
     // Fungsi yang akan mengembalikan definisi tiap field pada form
@@ -161,12 +181,17 @@ export default class FormRisiko extends React.Component {
     // Fungsi render SirioForm
     render() {
         return (
+            <>
+            {this.renderRedirect()}
             <SirioForm
                 title="Form Risiko"
                 inputDefinition={this.inputDefinition()}
                 onSubmit={this.handleSubmit}
                 submitButton={this.submitButton()}
             />
+            </>
         );
     }
 }
+
+export default withRouter(FormRisiko);

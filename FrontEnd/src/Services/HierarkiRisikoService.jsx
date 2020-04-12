@@ -17,12 +17,8 @@ class HierarkiRisikoService {
         return this.axiosInstance.post(SirioAxiosBase.BASEURL + '/Risiko/ubah-hierarki', data);
     }
 
-    async getParentByKategori(id) {
-        return this.axiosInstance.get(SirioAxiosBase.BASEURL + '/Risiko/ubah-hierarki/getParent/' + id);
-    }
-
     async getByKategori() {
-        return this.axiosInstance.get(SirioAxiosBase.BASEURL + '/Risiko/kategori');
+        return this.axiosInstance.get(SirioAxiosBase.BASEURL + '/Risiko/ubah-hierarki/kategori');
     }
 }
 
