@@ -27,6 +27,7 @@ export default class TabelRencanaPemeriksaan extends React.Component {
         this.setState({
             rowList: response.data.result
         })
+        console.log(response.data.result)
     }
 
     statusFormatter(cell) {
@@ -59,6 +60,20 @@ export default class TabelRencanaPemeriksaan extends React.Component {
         )
     }
 
+    getTahunFormatter(cell, row) {
+        const tanggalString = row.daftarTugasPemeriksaan[0].tanggalSelesai;
+        const tahun = tanggalString.split("-")[0]
+        return tahun;
+    }
+
+    getBulanFormatter(cell, row) {
+        const tanggalString = row.daftarTugasPemeriksaan[0].tanggalSelesai;
+        const bulan = tanggalString.split("-")[1]
+        var namaBulan = ["Januari", "Februari", "Maret", "April", "Mei", "Juni",
+            "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+        return namaBulan[bulan - 1];
+    }
+
     columns = [{
         dataField: 'namaRencana',
         text: 'NAMA RENCANA',
@@ -69,7 +84,8 @@ export default class TabelRencanaPemeriksaan extends React.Component {
             return { width: "25%", textAlign: 'left' };
         }
     }, {
-        dataField: 'daftarTugasPemeriksaan[0].tanggalSelesai',
+        dataField: 'noData1',
+        dummyField: true,
         text: 'TAHUN',
         sort: true,
         classes: classes.rowItem,
@@ -77,17 +93,18 @@ export default class TabelRencanaPemeriksaan extends React.Component {
         headerStyle: (colum, colIndex) => {
             return { width: "15%", textAlign: 'left' }
         },
-        formatter: SirioAxiosBase.formatDateYear
+        formatter: (cell, row) => this.getTahunFormatter(cell, row)
     }, {
-        dataField: 'daftarTugasPemeriksaan[0].tanggalSelesai',
+        dataField: 'noData2',
         text: 'BULAN',
+        dummyField: true,
         sort: true,
         classes: classes.rowItem,
         headerClasses: classes.colheader,
         headerStyle: (colum, colIndex) => {
             return { width: "15%", textAlign: 'left' }
         },
-        formatter: SirioAxiosBase.formatDateMonth
+        formatter: (cell, row) => this.getBulanFormatter(cell, row)
     }, {
         dataField: 'status',
         text: 'STATUS',
@@ -108,7 +125,7 @@ export default class TabelRencanaPemeriksaan extends React.Component {
         },
         formatter: this.getButtonsFirst
     }];
-    
+
 
     defaultSorted = [{
         dataField: 'id',
@@ -117,7 +134,7 @@ export default class TabelRencanaPemeriksaan extends React.Component {
 
     headerButton() {
         return (
-            <SirioButton 
+            <SirioButton
                 purple
                 onClick={() => window.location.href = "/manager/rencanaPemeriksaan/tambah"}
             >
