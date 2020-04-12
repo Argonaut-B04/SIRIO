@@ -16,18 +16,30 @@ export default class DemoMultiForm extends React.Component {
                 {
                     nama: "bambang",
                     umur: 18,
+                    jenisKelamin: "Pria",
                 }
             ]
         }
 
         this.handleChange = this.handleChange.bind(this);
+        this.handleSelectChange = this.handleSelectChange.bind(this);
         this.inputDefinition = this.inputDefinition.bind(this);
     }
 
-    handleChange(event, id) {
+    handleChange(event, index) {
         const formList = this.state.formList
-        formList[id][event.target.name] = event.target.value;
+        formList[index][event.target.name] = event.target.value;
 
+        this.setState(
+            {
+                formList: formList
+            }
+        )
+    }
+
+    handleSelectChange(name, target, index) {
+        const formList = this.state.formList;
+        formList[index][name] = target.value;
 
         this.setState(
             {
@@ -49,6 +61,7 @@ export default class DemoMultiForm extends React.Component {
                     handleChange: this.handleChange,
                     type: "textarea",
                     name: "nama",
+                    index: index,
                     value: this.state.formList[index].nama,
                     placeholder: "masukan nama"
                 }, {
@@ -56,8 +69,28 @@ export default class DemoMultiForm extends React.Component {
                     handleChange: this.handleChange,
                     type: "number",
                     name: "umur",
+                    index: index,
                     value: this.state.formList[index].umur,
                     placeholder: "masukan umur"
+                }, {
+                    label: "Jenis Kelamin",
+                    handleChange: this.handleSelectChange,
+                    index: index,
+                    type: "select",
+                    name: "jenisKelamin",
+                    value: this.state.formList[index].jenisKelamin,
+                    optionList: [
+                        {
+                            label: "Pria",
+                            value: "Pria"
+                        }, {
+                            label: "Wanita",
+                            value: "Wanita"
+                        }, {
+                            label: "Gak tau apa",
+                            value: "gak tau apa"
+                        }
+                    ]
                 }
             ]
         )

@@ -44,6 +44,7 @@ export default class SirioField extends Component {
                         ""
                     }
                     <SirioSelect
+                        index={this.props.index}
                         name={this.props.name}
                         value={this.props.value}
                         handleChange={this.props.handleChange}
@@ -65,7 +66,7 @@ export default class SirioField extends Component {
                     <TextareaAutosize
                         name={this.props.name}
                         value={this.props.value}
-                        onChange={this.props.handleChange}
+                        onChange={(event) => this.props.handleChange(event, this.props.index)}
 
                         placeholder={this.props.placeholder}
                         className={this.props.classes ? [this.props.calsses, classes.input].join(" ") : classes.input}
@@ -91,6 +92,7 @@ export default class SirioField extends Component {
                         defaultChecked={this.props.value}
                         value={this.defaultChecked ? true : false}
                         onChange={this.props.handleChange}
+                        index={this.props.index}
 
                         className={this.props.classes ? [this.props.classes, classes.input].join(" ") : classes.input}
                     />
@@ -112,7 +114,7 @@ export default class SirioField extends Component {
 
                     name={this.props.name}
                     value={this.props.value}
-                    onChange={this.props.handleChange}
+                    onChange={(event) => this.props.handleChange(event, this.props.index)}
 
                     placeholder={this.props.placeholder}
                     className={this.props.classes ? [this.props.classes, classes.input].join(" ") : classes.input}
