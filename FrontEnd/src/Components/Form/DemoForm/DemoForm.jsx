@@ -18,19 +18,19 @@ export default class DemoForm extends React.Component {
             jenisKelamin: "Pria",
             manusia: true,
             customDropdown: "bambang",
-            customDropdown2: "pria"
+            customDropdown2: "pria",
+            submitable: true,
         }
 
         this.handleChange = this.handleChange.bind(this);
-        this.inputDefinition = this.inputDefinition.bind(this);
+        this.innerInputDefinition = this.innerInputDefinition.bind(this);
         this.handleSelectChange = this.handleSelectChange.bind(this);
     }
 
     // Fungsi untuk mengubah state ketika isi dari input diubah
     // Fungsi ini wajib ada jika membuat form
     handleChange(event) {
-        console.log(event);
-        if (typeof event.target.checked === "boolean") {
+        if (event.target.type === "checkbox") {
             this.setState(
                 {
                     [event.target.name]
@@ -62,28 +62,78 @@ export default class DemoForm extends React.Component {
     // Umumnya akan digunakan untuk memanggil service komunikasi ke backend
     handleSubmit(event) {
         alert("submited");
-        // event.preventDefault wajib ada
         event.preventDefault();
+    }
+
+    componentDidUpdate() {
+        var submitable = true;
+
+        submitable = this.validateNama() && this.validateUmur();
+
+        if (this.state.submitable !== submitable) {
+            this.setState({
+                submitable: submitable
+            })
+        }
+    }
+
+    validateNama() {
+        var submitable = true;
+        const fokusNama = this.state.nama;
+        var errorNama;
+        if (fokusNama.length < 2) {
+            submitable = false;
+            errorNama = "Nama minimal 2 karakter, nd mungkin aku panggil kamu sebagai Tuan/Nyonya " + fokusNama;
+        } else if (fokusNama.length > 10) {
+            submitable = false;
+            errorNama = "uvuvwevwe osas ?";
+        }
+        if (this.state.errorNama !== errorNama) {
+            this.setState({
+                errorNama: errorNama
+            })
+        }
+        return submitable;
+    }
+
+    validateUmur() {
+        var submitable = true;
+        const fokusUmur = this.state.umur;
+        var errorUmur;
+        if (fokusUmur < 18) {
+            submitable = false;
+            errorUmur = "Khusus 18 tahun keatas ya ^-^";
+        }
+        if (this.state.errorUmur !== errorUmur) {
+            this.setState({
+                errorUmur: errorUmur
+            })
+        }
+        return submitable;
     }
 
     // Fungsi yang akan mengembalikan definisi tiap field pada form
     // Setiap objek {} pada List [] akan menjadi 1 field
     // untuk informasi lebih lengkap, cek SirioForm
-    inputDefinition() {
+    innerInputDefinition() {
         return (
             [
                 {
                     label: "Nama",
+                    required: true,
                     handleChange: this.handleChange,
+                    validation: this.state.errorNama,
                     type: "textarea",
                     name: "nama",
                     value: this.state.nama,
-                    placeholder: "masukan nama"
+                    placeholder: "masukan nama",
                 }, {
                     label: "Umur",
                     handleChange: this.handleChange,
+                    validation: this.state.errorUmur,
                     type: "number",
                     name: "umur",
+                    min: 1,
                     value: this.state.umur,
                     placeholder: "masukan umur"
                 }, {
@@ -104,6 +154,21 @@ export default class DemoForm extends React.Component {
                             value: "gak tau apa"
                         }
                     ]
+                }
+            ]
+        )
+    }
+
+    outerInputDefinition() {
+        return (
+            [
+                {
+                    fullComponent:
+                        <SirioForm
+                            noHeader
+                            isInnerForm
+                            inputDefinition={this.innerInputDefinition()}
+                        />
                 }, {
                     label: "Manusia?",
                     handleChange: this.handleChange,
@@ -178,42 +243,37 @@ export default class DemoForm extends React.Component {
             </>
         )
     }
-
     submitButton() {
         return (
             <div>
-                <SirioButton purple recommended
-                    classes="mx-2"
-                    onClick={() => window.location.href = "http://www.google.com"}>
+                <SirioButton
+                    purple
+                    recommended={this.state.submitable}
+                    disabled={!this.state.submitable}
+                >
                     Simpan
                 </SirioButton>
                 <SirioButton purple
-                    onClick={() => window.location.href = "http://www.google.com"}>
+                    classes="ml-2"
+                    type="button"
+                    onClick={() => alert("batal")}
+                >
                     Batal
                 </SirioButton>
             </div>
         )
     }
-
     // Fungsi render SirioForm
     render() {
         return (
-            <>
-                <SirioForm
-                    title="Demo Form"
-                    betweenTitleSubtitle={this.getBetween()}
-                    subtitle="Ini demo form untuk ngedemoin ... form"
-                    inputDefinition={this.inputDefinition()}
-                    onSubmit={this.handleSubmit}
-                    submitButton={this.submitButton()}
-                />
-                <SirioForm
-                    noHeader
-                    inputDefinition={this.inputDefinition()}
-                    onSubmit={this.handleSubmit}
-                    submitButton={this.submitButton()}
-                />
-            </>
+            <SirioForm
+                title="Demo Form"
+                betweenTitleSubtitle={this.getBetween()}
+                subtitle="Ini demo form untuk ngedemoin ... form"
+                inputDefinition={this.outerInputDefinition()}
+                onSubmit={this.handleSubmit}
+                submitButton={this.submitButton()}
+            />
         );
     }
 }

@@ -134,11 +134,11 @@ class DetailBuktiPelaksanaan extends React.Component {
     subButton() {
         const status = this.state.buktiPelaksanaan.status;
         const menungguPersetujuan = status === 1;
-        const sudahPersetujuan = status === 2 || 3;
+        const sudahPersetujuan = status === 2 || status === 3;
         const role = this.state.role;
         const satuButton = role === "Branch Manager";
-        const tigaButton = role === "admin" || "QA Officer Operational Risk" || "Super QA Officer Operational Risk" ||
-                                    "Manajer Operational Risk" || "QA Lead Operational Risk";
+        const tigaButton = role === "admin" || role === "Manajer Operational Risk" ||
+                                role === "QA Operational Risk" || role === "Super QA Operational Risk";
 
         if (menungguPersetujuan) {
             if (satuButton) {

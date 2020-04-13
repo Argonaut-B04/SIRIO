@@ -112,6 +112,9 @@ public class RekomendasiRestController {
                         rekomendasiDTO.setStatusBukti(buktiPelaksanaan.getStatusBuktiPelaksanaan().getNamaStatus());
                     }
                 }
+                rekomendasiDTO.setNamaKantorCabang(
+                        rekomendasi.getKomponenPemeriksaan().getHasilPemeriksaan().getTugasPemeriksaan().getKantorCabang().getNamaKantor()
+                );
                 resultDTO.add(rekomendasiDTO);
             }
 

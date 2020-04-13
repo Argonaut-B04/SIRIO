@@ -58,11 +58,49 @@ class TabelBuktiPelaksanaan extends React.Component {
         }
     }
 
+    // getButtonFirst(cell, row) {
+    //     const status = row.statusBukti;
+    //     const adaBukti = status === "Menunggu Persetujuan" || status === "Disetujui" || status === "Ditolak";
+
+    //     if (adaBukti) {
+    //         return (
+    //             <NavLink to={{
+    //                 pathname: "/bukti-pelaksanaan/detail",
+    //                 state: {
+    //                     id: row.id
+    //                 }
+    //             }}>
+    //                 <SirioButton
+    //                     purple
+    //                 >
+    //                     Detail Bukti
+    //                 </SirioButton>
+    //             </NavLink>
+    //         )
+    //     }
+    // }
+
     getButtons(cell, row) {
         const status = row.statusBukti;
+        const tanpaBukti = status === null;
         const adaBukti = status === "Menunggu Persetujuan" || status === "Disetujui" || status === "Ditolak";
 
-        if (adaBukti) {
+        if (tanpaBukti) {
+            return (
+                <NavLink to={{
+                    pathname: "/bukti-pelaksanaan/tambah",
+                    state: {
+                        id: row.id
+                    }
+                }}>
+                    <SirioButton
+                        purple
+                    >
+                        Tambah Bukti
+                    </SirioButton>
+                </NavLink>
+            )
+        } else if (adaBukti) {
             return (
                 <NavLink to={{
                     pathname: "/bukti-pelaksanaan/detail",
@@ -80,6 +118,130 @@ class TabelBuktiPelaksanaan extends React.Component {
         }
     }
 
+    // getColumns() {
+    //     // const columns = [];
+    //     const role = this.state.role;
+    //     const firstColumn = role === "admin" || role === "Manajer Operational Risk";
+    //     const secondColumn = role === "Branch Manager";
+
+    //     console.log(secondColumn)
+    //     if (firstColumn) {
+    //         return (
+    //             [{
+    //                 dataField: 'keterangan',
+    //                 text: 'KETERANGAN',
+    //                 // sort: true,
+    //                 classes: classes.rowItem,
+    //                 headerClasses: classes.colheader,
+    //                 headerStyle: (colum, colIndex) => {
+    //                     return { width: "20%", textAlign: 'left' };
+    //                 }
+    //             }, {
+    //                 dataField: 'namaKantorCabang',
+    //                 text: 'KANTOR CABANG',
+    //                 // sort: true,
+    //                 classes: classes.rowItem,
+    //                 headerClasses: classes.colheader,
+    //                 headerStyle: (colum, colIndex) => {
+    //                     return { width: "15%", textAlign: 'left' };
+    //                 }
+    //             }, {
+    //                 dataField: 'tenggatWaktu',
+    //                 text: 'TENGGAT WAKTU',
+    //                 // sort: true,
+    //                 classes: classes.rowItem,
+    //                 headerClasses: classes.colheader,
+    //                 headerStyle: (colum, colIndex) => {
+    //                     return { width: "15%", textAlign: 'left' };
+    //                 }
+                    
+    //             }, {
+    //                 dataField: 'durasi',
+    //                 text: 'DURASI',
+    //                 // sort: true,
+    //                 classes: classes.rowItem,
+    //                 headerClasses: classes.colheader,
+    //                 headerStyle: (colum, colIndex) => {
+    //                     return { width: "10%", textAlign: 'left' };
+    //                 }
+                    
+    //             }, {
+    //                 dataField: 'statusBukti',
+    //                 text: 'STATUS BUKTI',
+    //                 // sort: true,
+    //                 classes: classes.rowItem,
+    //                 formatter: this.statusFormatter,
+    //                 headerClasses: classes.colheader,
+    //                 headerStyle: (colum, colIndex) => {
+    //                     return { width: "20%", textAlign: 'left' };
+    //                 }
+    //             }, {
+    //                 dataField: 'action',
+    //                 text: '',
+    //                 headerClasses: classes.colheader,
+    //                 classes: classes.rowItem,
+    //                 style: () => {
+    //                     return { textAlign: 'center' }
+    //                 },
+    //                 formatter: this.getButtons
+    //             }]
+    //         );
+    //     } else if (secondColumn) {
+    //         return (
+    //             [{
+    //                 dataField: 'keterangan',
+    //                 text: 'KETERANGAN',
+    //                 // sort: true,
+    //                 classes: classes.rowItem,
+    //                 headerClasses: classes.colheader,
+    //                 headerStyle: (colum, colIndex) => {
+    //                     return { width: "25%", textAlign: 'left' };
+    //                 }
+            
+    //             }, {
+    //                 dataField: 'tenggatWaktu',
+    //                 text: 'TENGGAT WAKTU',
+    //                 // sort: true,
+    //                 classes: classes.rowItem,
+    //                 headerClasses: classes.colheader,
+    //                 headerStyle: (colum, colIndex) => {
+    //                     return { width: "20%", textAlign: 'left' };
+    //                 }
+                    
+    //             }, {
+    //                 dataField: 'durasi',
+    //                 text: 'DURASI',
+    //                 // sort: true,
+    //                 classes: classes.rowItem,
+    //                 headerClasses: classes.colheader,
+    //                 headerStyle: (colum, colIndex) => {
+    //                     return { width: "12%", textAlign: 'left' };
+    //                 }
+                    
+    //             }, {
+    //                 dataField: 'statusBukti',
+    //                 text: 'STATUS BUKTI',
+    //                 // sort: true,
+    //                 classes: classes.rowItem,
+    //                 formatter: this.statusFormatter,
+    //                 headerClasses: classes.colheader,
+    //                 headerStyle: (colum, colIndex) => {
+    //                     return { width: "20%", textAlign: 'left' };
+    //                 }
+    //             }, {
+    //                 dataField: 'action',
+    //                 text: '',
+    //                 headerClasses: classes.colheader,
+    //                 classes: classes.rowItem,
+    //                 style: () => {
+    //                     return { textAlign: 'center' }
+    //                 },
+    //                 formatter: this.getButtons
+    //             }]
+    //         );
+    //     }
+    // }
+
     columns = [{
         dataField: 'keterangan',
         text: 'KETERANGAN',
@@ -87,7 +249,7 @@ class TabelBuktiPelaksanaan extends React.Component {
         classes: classes.rowItem,
         headerClasses: classes.colheader,
         headerStyle: (colum, colIndex) => {
-            return { width: "30%", textAlign: 'left' };
+            return { width: "20%", textAlign: 'left' };
         }
     }, {
         dataField: 'namaKantorCabang',
@@ -96,8 +258,28 @@ class TabelBuktiPelaksanaan extends React.Component {
         classes: classes.rowItem,
         headerClasses: classes.colheader,
         headerStyle: (colum, colIndex) => {
-            return { width: "25%", textAlign: 'left' };
+            return { width: "15%", textAlign: 'left' };
         }
+    }, {
+        dataField: 'tenggatWaktu',
+        text: 'TENGGAT WAKTU',
+        sort: true,
+        classes: classes.rowItem,
+        headerClasses: classes.colheader,
+        headerStyle: (colum, colIndex) => {
+            return { width: "15%", textAlign: 'left' };
+        }
+        
+    }, {
+        dataField: 'durasi',
+        text: 'DURASI',
+        sort: true,
+        classes: classes.rowItem,
+        headerClasses: classes.colheader,
+        headerStyle: (colum, colIndex) => {
+            return { width: "10%", textAlign: 'left' };
+        }
+        
     }, {
         dataField: 'statusBukti',
         text: 'STATUS BUKTI',
@@ -117,7 +299,7 @@ class TabelBuktiPelaksanaan extends React.Component {
             return { textAlign: 'center' }
         },
         formatter: this.getButtons
-    }];
+    }]
 
     defaultSorted = [{
         dataField: 'id',
