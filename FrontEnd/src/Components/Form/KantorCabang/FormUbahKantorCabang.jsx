@@ -224,6 +224,7 @@ class FormUbahKantorCabang extends React.Component {
                 {
                     label: "Nama Point*",
                     handleChange: this.handleChange,
+                    required: true,
                     type: "text",
                     name: "namaKantorCabang",
                     validation: this.state.errorNama,
@@ -232,6 +233,7 @@ class FormUbahKantorCabang extends React.Component {
                 }, {
                     label: "Branch Manger*",
                     handleChange: this.handleSelectChange,
+                    required: true,
                     type: "select",
                     name: "idPemilik",
                     value: this.state.idPemilik,
@@ -240,6 +242,7 @@ class FormUbahKantorCabang extends React.Component {
                 },{
                     label: "Area*",
                     handleChange: this.handleChange,
+                    required: true,
                     type: "text",
                     name: "area",
                     validation: this.state.errorArea,
@@ -248,6 +251,7 @@ class FormUbahKantorCabang extends React.Component {
                 },{
                     label: "Regional*",
                     handleChange: this.handleChange,
+                    required: true,
                     type: "text",
                     name: "regional",
                     value: this.state.regional,
@@ -256,6 +260,7 @@ class FormUbahKantorCabang extends React.Component {
                 },{
                     label: "Kunjungan Audit*",
                     handleChange: this.handleInputChange,
+                    required: true,
                     type: "checkbox",
                     name: "kunjunganAudit",
                     value: this.state.kunjunganAudit,

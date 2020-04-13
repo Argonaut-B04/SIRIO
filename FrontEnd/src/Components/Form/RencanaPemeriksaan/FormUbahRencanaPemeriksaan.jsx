@@ -255,6 +255,7 @@ class FormUbahRencana extends React.Component {
         <SirioButton blue recommended
             classes="mr-3"
             onClick={() => this.addForm()}
+            type="button"
         >
             Tambah Tugas
         </SirioButton>

@@ -23,7 +23,7 @@ export default class FormTambahRencana extends React.Component {
             status: 1,
             kantorOptionList: [],
             employeeOptionList: [],
-            tugasPemeriksaanList: [{
+            daftarTugasPemeriksaan: [{
                 kantorCabang: "",
                 idQA: "",
                 tanggalMulai: "",
@@ -64,13 +64,12 @@ export default class FormTambahRencana extends React.Component {
     };
 
     handleMultipleChange(event, index) {
-        console.log(event.target);
-        const tugasPemeriksaanList = this.state.tugasPemeriksaanList
-        tugasPemeriksaanList[index][event.target.name] = event.target.value;
+        const daftarTugasPemeriksaan = this.state.daftarTugasPemeriksaan
+        daftarTugasPemeriksaan[index][event.target.name] = event.target.value;
 
         this.setState(
             {
-                tugasPemeriksaanList: tugasPemeriksaanList
+                daftarTugasPemeriksaan: daftarTugasPemeriksaan
             }
         )
     }
@@ -78,16 +77,12 @@ export default class FormTambahRencana extends React.Component {
     // Fungsi untuk mengubah state ketika isi dropdown diubah
     // Fungsi ini wajib ada jika membuat field tipe select
     handleMultipleSelectChange(name, target, index) {
-        // const tugasPemeriksaanList = this.state.tugasPemeriksaanList
-        // tugasPemeriksaanList[index][event.target.name] = event.target.value;
-        // console.log(name);
-        // console.log(target);
-        // console.log(index);
-        const formList = this.state.tugasPemeriksaanList;
+        console.log(index);
+        const formList = this.state.daftarTugasPemeriksaan;
         formList[index][name] = target.value;
         this.setState(
             {
-                tugasPemeriksaanList: formList
+                daftarTugasPemeriksaan: formList
             }
         )
     }
@@ -195,7 +190,7 @@ export default class FormTambahRencana extends React.Component {
                 namaRencana: this.state.namaRencana,
                 linkMajelis: this.state.linkMajelis,
                 status: 2,
-                tugasPemeriksaanList: [{
+                daftarTugasPemeriksaan: [{
                     kantorCabang: this.state.kantorCabang,
                     idQA: this.state.idQA,
                     tanggalMulai: this.state.tanggalMulai,
@@ -211,7 +206,7 @@ export default class FormTambahRencana extends React.Component {
                 namaRencana: this.state.namaRencana,
                 linkMajelis: this.state.linkMajelis,
                 status: this.state.status,
-                tugasPemeriksaanList: [{
+                daftarTugasPemeriksaan: [{
                     kantorCabang: this.state.kantorCabang,
                     idQA: this.state.idQA,
                     tanggalMulai: this.state.tanggalMulai,
@@ -226,7 +221,7 @@ export default class FormTambahRencana extends React.Component {
 
     fullComponentInside() {
         const forms = [];
-        for (let i = 0; i < this.state.tugasPemeriksaanList.length; i++) {
+        for (let i = 0; i < this.state.daftarTugasPemeriksaan.length; i++) {
             forms.push(
                 <SirioForm
                     subtitle="Tugas Pemeriksaan"
@@ -253,6 +248,7 @@ export default class FormTambahRencana extends React.Component {
                     handleChange: this.handleChange,
                     type: "text",
                     name: "namaRencana",
+                    required: true,
                     validation: this.state.errorNama,
                     value: this.state.namaRencana,
                     placeholder: "Masukan nama rencana"
@@ -261,6 +257,7 @@ export default class FormTambahRencana extends React.Component {
                     handleChange: this.handleChange,
                     type: "text",
                     name: "linkMajelis",
+                    required: true,
                     validation: this.state.errorLink,
                     value: this.state.linkMajelis,
                     placeholder: "Masukan link pemeriksaan"
@@ -293,9 +290,10 @@ export default class FormTambahRencana extends React.Component {
                     label: "Kantor Cabang*",
                     handleChange: this.handleMultipleSelectChange,
                     index: index,
+                    required: true,
                     type: "select",
                     name: "kantorCabang",
-                    value: this.state.tugasPemeriksaanList[index].kantorCabang,
+                    value: this.state.daftarTugasPemeriksaan[index].kantorCabang,
                     optionList: this.state.kantorOptionList
                 }, {
                     label: "QA Officer*",
@@ -303,22 +301,25 @@ export default class FormTambahRencana extends React.Component {
                     index: index,
                     type: "select",
                     name: "idQA",
-                    value: this.state.tugasPemeriksaanList[index].idQA,
+                    required: true,
+                    value: this.state.daftarTugasPemeriksaan[index].idQA,
                     optionList: this.state.employeeOptionList
                 }, {
                     label: "Tanggal Mulai*",
                     handleChange: this.handleMultipleChange,
                     index: index,
                     type: "date",
+                    required: true,
                     name: "tanggalMulai",
-                    value: this.state.tugasPemeriksaanList[index].tanggalMulai
+                    value: this.state.daftarTugasPemeriksaan[index].tanggalMulai
                 }, {
                     label: "Tanggal Selesai*",
                     handleChange: this.handleMultipleChange,
                     index: index,
                     type: "date",
+                    required: true,
                     name: "tanggalSelesai",
-                    value: this.state.tugasPemeriksaanList[index].tanggalSelesai
+                    value: this.state.daftarTugasPemeriksaan[index].tanggalSelesai
                 }
 
             ]
@@ -362,12 +363,12 @@ export default class FormTambahRencana extends React.Component {
 
 
     deleteChildForm(index) {
-        const tugasPemeriksaanList = this.state.tugasPemeriksaanList
-        const newtugasPemeriksaanList = this.deleteItem(tugasPemeriksaanList, index)
+        const daftarTugasPemeriksaan= this.state.daftarTugasPemeriksaan
+        const newdaftarTugasPemeriksaan = this.deleteItem(daftarTugasPemeriksaan, index)
 
         this.setState(
             {
-                tugasPemeriksaanList: newtugasPemeriksaanList
+                daftarTugasPemeriksaan: newdaftarTugasPemeriksaan
             }
         )
     }
@@ -387,12 +388,12 @@ export default class FormTambahRencana extends React.Component {
     }
 
     addForm() {
-        const tugasPemeriksaanList = this.state.tugasPemeriksaanList
-        tugasPemeriksaanList.push({});
+        const daftarTugasPemeriksaan = this.state.daftarTugasPemeriksaan
+        daftarTugasPemeriksaan.push({});
 
         this.setState(
             {
-                tugasPemeriksaanList: tugasPemeriksaanList
+                daftarTugasPemeriksaan: daftarTugasPemeriksaan
             }
         )
     }

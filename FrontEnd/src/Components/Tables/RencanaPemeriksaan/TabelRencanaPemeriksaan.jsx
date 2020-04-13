@@ -169,7 +169,7 @@ class TabelRencanaPemeriksaan extends React.Component {
             <SirioMessageButton
                 show
                 classes="d-none"
-                modalTitle="Kantor Cabang berhasil Disimpan"
+                modalTitle="Rencana Pemeriksaan berhasil Disimpan"
                 customConfirmText="Tutup"
                 onClick={this.endNotification}
             />
@@ -178,7 +178,7 @@ class TabelRencanaPemeriksaan extends React.Component {
             <SirioMessageButton
                 show
                 classes="d-none"
-                modalTitle="Kantor Cabang berhasil Dihapus"
+                modalTitle="Rencana Pemeriksaan berhasil Dihapus"
                 customConfirmText="Tutup"
                 onClick={this.endNotification}
             />
@@ -187,7 +187,7 @@ class TabelRencanaPemeriksaan extends React.Component {
             <SirioMessageButton
                 show
                 classes="d-none"
-                modalTitle="Kantor Cabang berhasil Diubah"
+                modalTitle="Rencana Pemeriksaan berhasil Diubah"
                 customConfirmText="Tutup"
                 onClick={this.endNotification}
             />
