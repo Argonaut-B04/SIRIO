@@ -30,6 +30,76 @@ public class AccessPermissions implements Serializable {
     @Column(columnDefinition = "boolean default false")
     private Boolean ubahReminder;
 
+    @Column(columnDefinition = "boolean default false")
+    private Boolean aksesTabelRisiko;
+
+    @Column(columnDefinition = "boolean default false")
+    private Boolean aksesRisiko;
+
+    @Column(columnDefinition = "boolean default false")
+    private Boolean aksesTambahRisiko;
+
+    @Column(columnDefinition = "boolean default false")
+    private Boolean aksesUbahRisiko;
+
+    @Column(columnDefinition = "boolean default false")
+    private Boolean aksesHapusRisiko;
+
+    @Column(columnDefinition = "boolean default false")
+    private Boolean aksesUbahHierarki;
+
+//    @Column(columnDefinition = "boolean default false")
+//    private Boolean aksesKategoriUbahHierarki;
+
+
+    public Boolean getAksesTabelRisiko() {
+        return aksesTabelRisiko;
+    }
+
+    public void setAksesTabelRisiko(Boolean aksesTabelRisiko) {
+        this.aksesTabelRisiko = aksesTabelRisiko;
+    }
+
+    public Boolean getAksesRisiko() {
+        return aksesRisiko;
+    }
+
+    public void setAksesRisiko(Boolean aksesRisiko) {
+        this.aksesRisiko = aksesRisiko;
+    }
+
+    public Boolean getAksesTambahRisiko() {
+        return aksesTambahRisiko;
+    }
+
+    public void setAksesTambahRisiko(Boolean aksesTambahRisiko) {
+        this.aksesTambahRisiko = aksesTambahRisiko;
+    }
+
+    public Boolean getAksesUbahRisiko() {
+        return aksesUbahRisiko;
+    }
+
+    public void setAksesUbahRisiko(Boolean aksesUbahRisiko) {
+        this.aksesUbahRisiko = aksesUbahRisiko;
+    }
+
+    public Boolean getAksesHapusRisiko() {
+        return aksesHapusRisiko;
+    }
+
+    public void setAksesHapusRisiko(Boolean aksesHapusRisiko) {
+        this.aksesHapusRisiko = aksesHapusRisiko;
+    }
+
+    public Boolean getAksesUbahHierarki() {
+        return aksesUbahHierarki;
+    }
+
+    public void setAksesUbahHierarki(Boolean aksesUbahHierarki) {
+        this.aksesUbahHierarki = aksesUbahHierarki;
+    }
+
     public Integer getIdPermission() {
         return idPermission;
     }

@@ -29,7 +29,6 @@ public class Risiko implements Serializable {
     private String namaRisiko;
 
     @NotNull
-    @Size(max = 50)
     @Column(nullable = false)
     private Integer risikoKategori;
 
@@ -56,7 +55,6 @@ public class Risiko implements Serializable {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "sop", referencedColumnName = "idSop")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonIgnore
     private SOP sop;
 
     public int getIdRisiko() {

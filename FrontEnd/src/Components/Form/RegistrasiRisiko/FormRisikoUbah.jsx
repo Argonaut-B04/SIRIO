@@ -6,45 +6,35 @@ import SopService from '../../../Services/SopService';
 import { Redirect } from 'react-router-dom';
 import { withRouter } from 'react-router-dom';
 
-class FormRisiko extends React.Component {
+class FormRisikoUbah extends React.Component {
 
     // Masukan user disimpan kedalam state sebelum dikirim ke backend
     constructor(props) {
         super(props);
 
         this.state = {
+            id: "",
             nama: "",
             kategori: "",
             sop: "",
             komponen: "",
             sopOptionList: [],
             redirect: false,
-            submitable: false,
+            submitable: true,
         }
 
         this.handleChange = this.handleChange.bind(this);
         this.inputDefinition = this.inputDefinition.bind(this);
-        this.setRedirect = this.setRedirect.bind(this);
         this.handleSelectChange = this.handleSelectChange.bind(this);
+        this.setRedirect = this.setRedirect.bind(this);
+        this.renderDataRisiko = this.renderDataRisiko.bind(this);
         this.renderSopOption = this.renderSopOption.bind(this);
     }
 
-    setRedirect = () => {
-        this.setState({
-            redirect: true
-        })
-    };
-
-    renderRedirect = () => {
-        if (this.state.redirect) {
-            return <Redirect to={{
-                pathname: "/registrasi-risiko",
-                state: {
-                    addSuccess: true
-                }
-            }} />
-        }
-    };
+    componentDidMount() {
+        this.renderSopOption();
+        this.renderDataRisiko();
+    }
 
     componentDidUpdate(prevProps, prevState) {
         var submitable = true;
@@ -127,9 +117,11 @@ class FormRisiko extends React.Component {
         var submitable = true;
         const fokusKomponen = this.state.komponen;
         var errorKomponen;
-        if (fokusKomponen.length > 500) {
-            submitable = false;
-            errorKomponen = "Komponen Risiko terlalu panjang!";
+        if (fokusKomponen !== null || fokusKomponen.length > 1) {
+            if (fokusKomponen.length > 500) {
+                submitable = false;
+                errorKomponen = "Komponen Risiko terlalu panjang!";
+            }
         }
         if (this.state.errorKomponen !== errorKomponen) {
             this.setState({
@@ -139,9 +131,22 @@ class FormRisiko extends React.Component {
         return submitable;
     }
 
-    componentDidMount() {
-        this.renderSopOption();
-    }
+    setRedirect = () => {
+        this.setState({
+            redirect: true
+        })
+    };
+
+    renderRedirect = () => {
+        if (this.state.redirect) {
+            return <Redirect to={{
+                pathname: "/registrasi-risiko",
+                state: {
+                    editSuccess: true
+                }
+            }} />
+        }
+    };
 
     async renderSopOption() {
         const response = await SopService.getSopList();
@@ -160,28 +165,27 @@ class FormRisiko extends React.Component {
         })
     }
 
-    // Fungsi untuk mengubah state ketika isi dari input diubah
-    // Fungsi ini wajib ada jika membuat form
-    handleChange(event) {
-        if (typeof event.target.checked === "boolean") {
-            this.setState(
-                {
-                    [event.target.name]
-                        : event.target.checked
-                }
-            )
-        } else {
-            this.setState(
-                {
-                    [event.target.name]
-                        : event.target.value
-                }
-            )
-        }
+    async renderDataRisiko() {
+        const response = await RegistrasiRisikoService.getRisiko(this.props.location.state.id);
+
+        this.setState({
+            id: response.data.result.idRisiko,
+            nama: response.data.result.namaRisiko,
+            kategori: response.data.result.risikoKategori,
+            sop: response.data.result.sop.idSop,
+            komponen: response.data.result.komponen,
+        })
     }
 
-    // Fungsi untuk mengubah state ketika isi dropdown diubah
-    // Fungsi unu wajib ada jika membuat field tipe select
+    handleChange(event) {
+        this.setState(
+            {
+                [event.target.name]
+                    : event.target.value
+            }
+        )
+    }
+
     handleSelectChange(name, event) {
         this.setState(
             {
@@ -191,18 +195,17 @@ class FormRisiko extends React.Component {
         )
     }
 
-    // Fungsi yang akan dijalankan ketika user submit
-    // Umumnya akan digunakan untuk memanggil service komunikasi ke backend
     handleSubmit(event) {
         // event.preventDefault wajib ada
         event.preventDefault();
         const risiko = {
+            id: this.state.id,
             nama: this.state.nama,
             kategori: this.state.kategori,
             sop: this.state.sop,
             komponen: this.state.komponen
         }
-        RegistrasiRisikoService.submitChanges(risiko)
+        RegistrasiRisikoService.ubahRisiko(risiko)
             .then(() => this.setRedirect());
     }
 
@@ -216,18 +219,17 @@ class FormRisiko extends React.Component {
                     label: "Nama Risiko*",
                     handleChange: this.handleChange,
                     type: "textarea",
+                    name: "nama",
                     required: true,
                     validation: this.state.errorNama,
-                    name: "nama",
                     value: this.state.nama,
                     placeholder: "Masukan nama risiko"
                 }, {
                     label: "Kategori Risiko*",
                     handleChange: this.handleSelectChange,
                     type: "select",
-                    required: true,
-                    validation: this.state.errorKategori,
                     name: "kategori",
+                    validation: this.state.errorKategori,
                     value: this.state.kategori,
                     optionList: [
                         {
@@ -245,10 +247,9 @@ class FormRisiko extends React.Component {
                     label: "Referensi SOP*",
                     handleChange: this.handleSelectChange,
                     type: "select",
-                    validation: this.state.errorSop,
-                    required: true,
                     name: "sop",
                     value: this.state.sop,
+                    validation: this.state.errorSop,
                     optionList: this.state.sopOptionList
                 }, {
                     label: "Komponen Risiko",
@@ -263,18 +264,20 @@ class FormRisiko extends React.Component {
         )
     }
 
+
     submitButton() {
         return (
             <div>
                 <SirioButton purple 
-                    recommended={this.state.submitable}
-                    disabled={!this.state.submitable}
-                    classes="mx-2"
-                    onClick={(event)  => this.handleSubmit(event)}>
+                            recommended={this.state.submitable}
+                            disabled={!this.state.submitable}
+                             classes="mx-1"
+                             onClick={(event)  => this.handleSubmit(event)}>
                     Simpan
                 </SirioButton>
                 <SirioButton purple
-                    onClick={() => window.location.href = "/registrasi-risiko"}>
+                             classes="mx-1"
+                             onClick={() => window.location.href = "/registrasi-risiko"}>
                     Batal
                 </SirioButton>
             </div>
@@ -285,16 +288,15 @@ class FormRisiko extends React.Component {
     render() {
         return (
             <>
-            {this.renderRedirect()}
-            <SirioForm
-                title="Form Risiko"
-                inputDefinition={this.inputDefinition()}
-                onSubmit={this.handleSubmit}
-                submitButton={this.submitButton()}
-            />
+                {this.renderRedirect()}
+                <SirioForm
+                    title="Form Ubah Risiko"
+                    inputDefinition={this.inputDefinition()}
+                    onSubmit={this.handleSubmit}
+                    submitButton={this.submitButton()}
+                />
             </>
         );
     }
 }
-
-export default withRouter(FormRisiko);
+export default withRouter(FormRisikoUbah);
