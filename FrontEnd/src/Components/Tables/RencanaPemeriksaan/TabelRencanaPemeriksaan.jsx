@@ -29,6 +29,7 @@ class TabelRencanaPemeriksaan extends React.Component {
         this.setState({
             rowList: response.data.result
         })
+        console.log(response.data.result)
     }
 
     statusFormatter(cell) {
@@ -74,7 +75,10 @@ class TabelRencanaPemeriksaan extends React.Component {
     }
 
     getBulanFormatter(cell, row) {
+<<<<<<< HEAD
         console.log(row.daftarTugasPemeriksaan[0])
+=======
+>>>>>>> 5f813fd2ec314af0be3a9bd94816eace5996db5f
         const tanggalString = row.daftarTugasPemeriksaan[0].tanggalSelesai;
         const bulan = tanggalString.split("-")[1]
         var namaBulan = ["Januari", "Februari", "Maret", "April", "Mei", "Juni",
@@ -92,7 +96,8 @@ class TabelRencanaPemeriksaan extends React.Component {
             return { width: "25%", textAlign: 'left' };
         }
     }, {
-        dataField: 'daftarTugasPemeriksaan[0].tanggalSelesai',
+        dataField: 'noData1',
+        dummyField: true,
         text: 'TAHUN',
         sort: true,
         classes: classes.rowItem,
@@ -102,8 +107,9 @@ class TabelRencanaPemeriksaan extends React.Component {
         },
         formatter: (cell, row) => this.getTahunFormatter(cell, row)
     }, {
-        dataField: 'daftarTugasPemeriksaan[0].tanggalSelesai',
+        dataField: 'noData2',
         text: 'BULAN',
+        dummyField: true,
         sort: true,
         classes: classes.rowItem,
         headerClasses: classes.colheader,
@@ -131,7 +137,7 @@ class TabelRencanaPemeriksaan extends React.Component {
         },
         formatter: this.getButtonsFirst
     }];
-    
+
 
     defaultSorted = [{
         dataField: 'id',
@@ -140,6 +146,7 @@ class TabelRencanaPemeriksaan extends React.Component {
 
     headerButton() {
         return (
+<<<<<<< HEAD
             <NavLink to={{
                 pathname: "/manager/rencanaPemeriksaan/tambah"
             }}>
@@ -149,6 +156,15 @@ class TabelRencanaPemeriksaan extends React.Component {
                     Tambah Rencana Pemeriksaan
                 </SirioButton>
             </NavLink>
+=======
+            <SirioButton
+                purple
+                onClick={() => window.location.href = "/manager/rencanaPemeriksaan/tambah"}
+            >
+
+                Tambah Rencana
+            </SirioButton>
+>>>>>>> 5f813fd2ec314af0be3a9bd94816eace5996db5f
         )
     }
     render() {
