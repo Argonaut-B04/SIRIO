@@ -149,6 +149,7 @@ public class HasilPemeriksaanRestController {
             HasilPemeriksaanDTO result = new HasilPemeriksaanDTO();
             result.setId(hasilPemeriksaan.getIdHasilPemeriksaan());
             result.setIdStatus(hasilPemeriksaan.getStatusHasilPemeriksaan().getIdStatusHasil());
+            result.setFeedback(hasilPemeriksaan.getFeedback());
             result.setTugasPemeriksaan(new TugasPemeriksaanDTO());
             result.getTugasPemeriksaan().setId(hasilPemeriksaan.getTugasPemeriksaan().getIdTugas());
             result.getTugasPemeriksaan().setIdQA(hasilPemeriksaan.getTugasPemeriksaan().getPelaksana().getIdEmployee());
@@ -586,7 +587,7 @@ public class HasilPemeriksaanRestController {
      *
      * @param persetujuanHasilPemeriksaanDTO data transfer object untuk persetujuan hasil pemeriksaan
      */
-    @PutMapping(value = "/persetujuan", consumes = {"application/json"})
+    @PostMapping(value = "/persetujuan", consumes = {"application/json"})
     private BaseResponse<String> persetujuanHasilPemeriksaan(
             @RequestBody PersetujuanHasilPemeriksaanDTO persetujuanHasilPemeriksaanDTO,
             Principal principal, ModelMap model

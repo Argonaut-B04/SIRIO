@@ -15,7 +15,16 @@ public class HasilPemeriksaanDTO {
     private String namaPembuat;
     private String namaPemeriksa;
     private String usernamePembuat;
+    private String feedback;
     private Boolean siapDijalankan;
+
+    public String getFeedback() {
+        return feedback;
+    }
+
+    public void setFeedback(String feedback) {
+        this.feedback = feedback;
+    }
 
     public TugasPemeriksaanDTO getTugasPemeriksaan() {
         return tugasPemeriksaan;
