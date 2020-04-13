@@ -23,7 +23,8 @@ class FormUbahKantorCabang extends React.Component {
             regional: "",
             kunjunganAudit: false,
             employeeOptionList: [],
-            redirect: false
+            redirect: false,
+            submitable: true,
         }
 
         this.renderEmployeeOption = this.renderEmployeeOption.bind(this);
@@ -57,6 +58,66 @@ class FormUbahKantorCabang extends React.Component {
             }} />
         }
     };
+
+    componentDidUpdate() {
+        var submitable = true;
+
+        submitable = this.validateKantor() && this.validateArea() && this.validateRegional();
+
+        if (this.state.submitable !== submitable) {
+            this.setState({
+                submitable: submitable
+            })
+        }
+    }
+
+    validateKantor() {
+        var submitable = true;
+        var errorNama;
+        const fokusNama = this.state.namaKantorCabang
+        if (fokusNama.length < 2) {
+            submitable = false;
+            errorNama = "Minimal terdapat 2 karakter";
+        } 
+        if (this.state.errorNama !== errorNama) {
+            this.setState({
+                errorNama: errorNama
+            })
+        }
+        return submitable;
+    }
+
+    validateArea() {
+        var submitable = true;
+        var errorArea;
+        const fokusArea = this.state.area
+        if (fokusArea.length < 2) {
+            submitable = false;
+            errorArea = "Minimal terdapat 2 karakter";
+        } 
+        if (this.state.errorArea !== errorArea) {
+            this.setState({
+                errorArea: errorArea
+            })
+        }
+        return submitable;
+    }
+
+    validateRegional() {
+        var submitable = true;
+        var errorReg;
+        const fokusReg = this.state.regional
+        if (fokusReg.length < 2) {
+            submitable = false;
+            errorReg = "Minimal terdapat 2 karakter";
+        } 
+        if (this.state.errorReg!== errorReg) {
+            this.setState({
+                errorReg: errorReg
+            })
+        }
+        return submitable;
+    }
 
     async renderEmployeeOption() {
         const response = await EmployeeService.getAllBM();
@@ -149,6 +210,7 @@ class FormUbahKantorCabang extends React.Component {
                     handleChange: this.handleChange,
                     type: "text",
                     name: "namaKantorCabang",
+                    validation: this.state.errorNama,
                     value: this.state.namaKantorCabang,
                     placeholder: "Masukan nama point"
                 }, {
@@ -163,6 +225,7 @@ class FormUbahKantorCabang extends React.Component {
                     handleChange: this.handleChange,
                     type: "text",
                     name: "area",
+                    validation: this.state.errorArea,
                     value: this.state.area,
                     placeholder: "Masukan nama area"
                 },{
@@ -171,6 +234,7 @@ class FormUbahKantorCabang extends React.Component {
                     type: "text",
                     name: "regional",
                     value: this.state.regional,
+                    validation: this.state.errorReg,
                     placeholder: "Masukan nama regional"
                 },{
                     label: "Kunjungan Audit*",
@@ -189,12 +253,15 @@ class FormUbahKantorCabang extends React.Component {
     submitButton() {
         return (
             <div>
-                <SirioButton purple recommended
-                    classes="mx-2"
+                <SirioButton purple 
+                    recommended={this.state.submitable}
+                    disabled={!this.state.submitable}
+                    classes="mx-1"
                     onClick={(event)  => this.handleSubmit(event)}>
                     Simpan
                 </SirioButton>
                 <SirioButton purple
+                    classes="mx-1"
                     onClick={() => window.location.href = "/administrator/kantorCabang"}>
                     Batal
                 </SirioButton>

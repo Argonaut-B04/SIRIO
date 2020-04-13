@@ -305,15 +305,17 @@ class FormUbahRencana extends React.Component {
         return (
             <div>
                 <SirioButton purple recommended
-                    classes="mx-2"
+                    classes="mx-1"
                     onClick={(event) => this.handleSubmit(event,"simpan")}>
                     Simpan
                 </SirioButton>
                 <SirioButton purple
+                    classes="mx-1"
                     onClick={(event) => this.handleSubmit(event,"draft")}>
                     Draft
                 </SirioButton>
                 <SirioButton purple
+                    classes="mx-1"
                     onClick={() => window.location.href = "/manager/rencanaPemeriksaan"}>
                     Batal
                 </SirioButton>

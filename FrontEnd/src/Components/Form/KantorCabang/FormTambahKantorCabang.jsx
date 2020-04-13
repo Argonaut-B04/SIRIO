@@ -21,7 +21,8 @@ export default class FormTambahKantorCabang extends React.Component {
             regional: "",
             kunjunganAudit: false,
             employeeOptionList: [],
-            redirect: false
+            redirect: false,
+            submitable: true,
         }
 
         this.renderEmployeeOption = this.renderEmployeeOption.bind(this);
@@ -104,6 +105,19 @@ export default class FormTambahKantorCabang extends React.Component {
         });
     }
 
+    componentDidUpdate() {
+        var submitable = true;
+
+        submitable = this.validateKantor() && this.validateArea() && this.validateRegional() && this.validateBM();
+
+        if (this.state.submitable !== submitable) {
+            this.setState({
+                submitable: submitable
+            })
+        }
+    }
+
+
     // Fungsi yang akan dijalankan ketika user submit
     // Umumnya akan digunakan untuk memanggil service komunikasi ke backend
     handleSubmit(event) {
@@ -118,6 +132,72 @@ export default class FormTambahKantorCabang extends React.Component {
         KantorCabangService.addKantorCabang(kantorCabang)
         .then(() => this.setRedirect());
     }
+
+    validateKantor() {
+        var submitable = true;
+        var errorNama;
+        const fokusNama = this.state.namaKantorCabang
+        if (fokusNama.length < 2) {
+            submitable = false;
+            errorNama = "Minimal terdapat 2 karakter";
+        } 
+        if (this.state.errorNama !== errorNama) {
+            this.setState({
+                errorNama: errorNama
+            })
+        }
+        return submitable;
+    }
+
+    validateArea() {
+        var submitable = true;
+        var errorArea;
+        const fokusArea = this.state.area
+        if (fokusArea.length < 2) {
+            submitable = false;
+            errorArea = "Minimal terdapat 2 karakter";
+        } 
+        if (this.state.errorArea !== errorArea) {
+            this.setState({
+                errorArea: errorArea
+            })
+        }
+        return submitable;
+    }
+
+    validateBM() {
+        var submitable = true;
+        var errorBM;
+        const fokusBM = this.state.idPemilik
+        if (fokusBM.length < 2) {
+            submitable = false;
+            errorBM = "Branch Manager harus diisi";
+        } 
+        if (this.state.errorBM !== errorBM) {
+            this.setState({
+                errorBM: errorBM
+            })
+        }
+        return submitable;
+    }
+
+
+    validateRegional() {
+        var submitable = true;
+        var errorReg;
+        const fokusReg = this.state.regional
+        if (fokusReg.length < 2) {
+            submitable = false;
+            errorReg = "Minimal terdapat 2 karakter";
+        } 
+        if (this.state.errorReg!== errorReg) {
+            this.setState({
+                errorReg: errorReg
+            })
+        }
+        return submitable;
+    }
+
     // Fungsi yang akan mengembalikan definisi tiap field pada form
     // Setiap objek {} pada List [] akan menjadi 1 field
     // untuk informasi lebih lengkap, cek SirioForm
@@ -126,13 +206,17 @@ export default class FormTambahKantorCabang extends React.Component {
             [
                 {
                     label: "Nama Point*",
+                    required: true,
                     handleChange: this.handleChange,
                     type: "text",
                     name: "namaKantorCabang",
+                    validation: this.state.errorNama,
                     value: this.state.namaKantorCabang,
                     placeholder: "Masukan nama point"
                 }, {
                     label: "Branch Manger*",
+                    required: true,
+                    validation: this.state.errorBM,
                     handleChange: this.handleSelectChange,
                     type: "select",
                     name: "idPemilik",
@@ -140,16 +224,20 @@ export default class FormTambahKantorCabang extends React.Component {
                     optionList: this.state.employeeOptionList
                 },{
                     label: "Area*",
+                    required: true,
                     handleChange: this.handleChange,
                     type: "text",
                     name: "area",
+                    validation: this.state.errorArea,
                     value: this.state.area,
                     placeholder: "Masukan nama area"
                 },{
                     label: "Regional*",
+                    required: true,
                     handleChange: this.handleChange,
                     type: "text",
                     name: "regional",
+                    validation: this.state.errorReg,
                     value: this.state.regional,
                     placeholder: "Masukan nama regional"
                 },{
@@ -169,12 +257,15 @@ export default class FormTambahKantorCabang extends React.Component {
     submitButton() {
         return (
             <div>
-                <SirioButton purple recommended
-                    classes="mx-2"
+                <SirioButton purple
+                    recommended={this.state.submitable}
+                    disabled={!this.state.submitable}
+                    classes="mx-1"
                     onClick={(event)  => this.handleSubmit(event)}>
                     Simpan
                 </SirioButton>
                 <SirioButton purple
+                    classes="mx-1"
                     onClick={() => window.location.href = "/administrator/kantorCabang"}>
                     Batal
                 </SirioButton>

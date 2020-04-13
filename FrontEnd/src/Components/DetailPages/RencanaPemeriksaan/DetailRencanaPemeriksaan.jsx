@@ -93,34 +93,44 @@ class DetailRencanaPemeriksaan extends React.Component {
             .then(() => this.setRedirect());
     }
 
-    subButton() {
-        return (
-            <div>
-                <NavLink to={{
-                    pathname: "/manager/rencanaPemeriksaan/ubah",
-                    state: {
-                        id: this.state.rencanaPemeriksaan.id,
-                    }
-                }}>
-                    <SirioButton
-                        purple
+    subButton(status) {
+        if (status === 1){
+            return (
+                <div>
+                    <NavLink to={{
+                        pathname: "/manager/rencanaPemeriksaan/ubah",
+                        state: {
+                            id: this.state.rencanaPemeriksaan.id,
+                        }
+                    }}>
+                        <SirioButton
+                            purple
+                        >
+                            Ubah
+                        </SirioButton>
+                    </NavLink>
+                    <a>  </a>
+                    <SirioWarningButton
+                        red
+                        modalTitle="Konfirmasi Penghapusan"
+                        modalDesc="Apakah anda yakin untuk menghapus rencana pemeriksaan?"
+                        onConfirm={() => this.hapus(this.state.rencanaPemeriksaan.id)}
+                        customConfirmText="Ya, Hapus"
+                        customCancelText="Batal"
                     >
-                        Ubah
-                    </SirioButton>
-                </NavLink>
-                <SirioWarningButton
-                    red
-                    modalTitle="Konfirmasi Penghapusan"
-                    modalDesc="Apakah anda yakin untuk menghapus rencana pemeriksaan?"
-                    onConfirm={() => this.hapus(this.state.rencanaPemeriksaan.id)}
-                    customConfirmText="Ya, Hapus"
-                    customCancelText="Batal"
-                >
-                    Hapus
-                </SirioWarningButton>
-            </div>
-            
-        )
+                        Hapus
+                    </SirioWarningButton>
+                </div>
+                
+            )
+        }else{
+            return (
+                <div>
+                   
+                </div>
+                
+            )
+        }
     }
     
 
@@ -132,7 +142,7 @@ class DetailRencanaPemeriksaan extends React.Component {
                     title="Detail Rencana Pemeriksaan"
                     data={this.state.dataGeneral}
                     id='id'
-                    subButton={this.subButton()}
+                    subButton={this.subButton(this.state.rencanaPemeriksaan.status)}
                     link="manager/rencanaPemeriksaan"
                 />
                 {this.state.daftarTugasPemeriksaan.map(tugas=>

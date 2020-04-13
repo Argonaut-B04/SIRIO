@@ -361,7 +361,6 @@ public class RencanaPemeriksaanRestController {
                     HttpStatus.NOT_FOUND, "Rencana pemeriksaan dengan ID " + rencanaPemeriksaanDTO.getId() + " tidak ditemukan!"
             );
         }
-
         //Tidak dapat dihapus jika rencana sudah dijalankan
         if(rencanaPemeriksaanDTO.getStatus() > 1){
             response.setStatus(500);

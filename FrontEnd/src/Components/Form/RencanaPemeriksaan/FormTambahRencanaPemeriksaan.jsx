@@ -16,6 +16,8 @@ export default class FormTambahRencana extends React.Component {
         super(props);
 
         this.state = {
+            redirect: false,
+            submitable: true,
             namaRencana: "",
             linkMajelis: "",
             status: 1,
@@ -86,10 +88,54 @@ export default class FormTambahRencana extends React.Component {
         formList[index][name] = target.value;
         this.setState(
             {
-                //tugasPemeriksaanList: tugasPemeriksaanList,
                 tugasPemeriksaanList: formList
             }
         )
+    }
+
+    componentDidUpdate() {
+        var submitable = true;
+
+        submitable = this.validateNama() && this.validateLink();
+
+        if (this.state.submitable !== submitable) {
+            this.setState({
+                submitable: submitable
+            })
+        }
+    }
+
+
+    validateNama() {
+        var submitable = true;
+        var errorNama;
+        const fokusNama = this.state.namaRencana
+        if (fokusNama.length < 2) {
+            submitable = false;
+            errorNama = "Minimal terdapat 2 karakter";
+        } 
+        if (this.state.errorNama !== errorNama) {
+            this.setState({
+                errorNama: errorNama
+            })
+        }
+        return submitable;
+    }
+
+    validateLink() {
+        var submitable = true;
+        var errorLink;
+        const fokusLink = this.state.linkMajelis
+        if (!fokusLink.includes("http://")) {
+            submitable = false;
+            errorLink = "Link harus mengandung 'http://' ";
+        } 
+        if (this.state.errorLink !== errorLink) {
+            this.setState({
+                errorLink: errorLink
+            })
+        }
+        return submitable;
     }
 
     async renderEmployeeOption() {
@@ -136,6 +182,8 @@ export default class FormTambahRencana extends React.Component {
             }
         )
     }
+
+    
 
     // Fungsi yang akan dijalankan ketika user submit
     // Umumnya akan digunakan untuk memanggil service komunikasi ke backend
@@ -206,6 +254,7 @@ export default class FormTambahRencana extends React.Component {
                     handleChange: this.handleChange,
                     type: "text",
                     name: "namaRencana",
+                    validation: this.state.errorNama,
                     value: this.state.namaRencana,
                     placeholder: "Masukan nama rencana"
                 }, {
@@ -213,6 +262,7 @@ export default class FormTambahRencana extends React.Component {
                     handleChange: this.handleChange,
                     type: "text",
                     name: "linkMajelis",
+                    validation: this.state.errorLink,
                     value: this.state.linkMajelis,
                     placeholder: "Masukan link pemeriksaan"
                 },{
@@ -280,16 +330,20 @@ export default class FormTambahRencana extends React.Component {
     submitButton() {
         return (
             <div>
-                <SirioButton purple recommended
-                    classes="mx-2"
+                <SirioButton purple 
+                    recommended={this.state.submitable}
+                    disabled={!this.state.submitable}
+                    classes="mx-1"
                     onClick={(event) => this.handleSubmit(event,"simpan")}>
                     Simpan
                 </SirioButton>
                 <SirioButton purple
+                    classes="mx-1"
                     onClick={(event) => this.handleSubmit(event,"draft")}>
                     Draft
                 </SirioButton>
                 <SirioButton purple
+                    classes="mx-1"
                     onClick={() => window.location.href = "/manager/rencanaPemeriksaan"}>
                     Batal
                 </SirioButton>
@@ -351,7 +405,6 @@ export default class FormTambahRencana extends React.Component {
                 {this.renderRedirect()}
                 <SirioForm
                     title="Form Tambah Rencana Pemeriksaan"
-                    subtitle="Tugas Pemeriksaan"
                     inputDefinition={this.outerInputDefinition()}
                     onSubmit={this.handleSubmit}
                     submitButton={this.submitButton()}
