@@ -18,8 +18,8 @@ export default class FormTambahRencana extends React.Component {
         this.state = {
             namaRencana: "",
             linkMajelis: "",
-            status:1,
-            kantorOptionList:[],
+            status: 1,
+            kantorOptionList: [],
             employeeOptionList: [],
             tugasPemeriksaanList: [{
                 kantorCabang: "",
@@ -36,6 +36,7 @@ export default class FormTambahRencana extends React.Component {
         this.setRedirect = this.setRedirect.bind(this);
         this.renderEmployeeOption = this.renderEmployeeOption.bind(this);
         this.renderKantorOption = this.renderKantorOption.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     componentDidMount() {
@@ -63,7 +64,7 @@ export default class FormTambahRencana extends React.Component {
     handleMultipleChange(event, id) {
         const tugasPemeriksaanList = this.state.tugasPemeriksaanList
         tugasPemeriksaanList[id][event.target.name] = event.target.value;
-    
+
         this.setState(
             {
                 tugasPemeriksaanList: tugasPemeriksaanList
@@ -167,7 +168,7 @@ export default class FormTambahRencana extends React.Component {
     //         RencanaPemeriksaanService.addRencanaPemeriksaan(rencanaPemeriksaan)
     //         .then(() => this.setRedirect());
     //     }
-    
+
     // }
 
     handleSubmit(event) {
@@ -184,70 +185,12 @@ export default class FormTambahRencana extends React.Component {
             }]
         }
         RencanaPemeriksaanService.addRencanaPemeriksaan(rencanaPemeriksaan)
-        .then(() => this.setRedirect());
+            .then(() => this.setRedirect());
     }
 
-    outerInputDefinition() {
-        // const forms = [];
-        // for (let i = 1; i < this.state.tugasPemeriksaanList.length; i++) {
-        //     forms.push(
-        //         <SirioForm
-        //             key={i}
-        //             childForm
-        //             id={i}
-        //             inputDefinition={this.innerInputDefinition(i)}
-        //             footerButton={this.childFooterButton(i)}
-        //         />
-        //     )
-        // }
-        return (
-            
-            [
-                {
-                    fullComponent:
-                        <SirioForm
-                            id={0}
-                            noHeader
-                            isInnerForm
-                            inputDefinition={this.innerInputDefinition(0)}
-                            
-                        />
-                    
-                }
-                //,{  
-                    // fullComponent:
-                    //     <div className="w-100 text-right">
-                    //         <SirioButton blue recommended
-                    //             classes="mr-3"
-                    //             onClick={() => this.addForm()}
-                    //         >
-                    //             Tambah Tugas
-                    //         </SirioButton>
-                    //     </div>
-                //}
-                ,{  
-                    label: "Nama Rencana*",
-                    handleChange: this.handleChange,
-                    type: "text",
-                    name: "link",
-                    value: this.state.namaRencana,
-                    placeholder: "Masukan link majelis"
-                }, {  
-                    label: "Link Pemeriksaan*",
-                    handleChange: this.handleChange,
-                    type: "text",
-                    name: "link",
-                    value: this.state.linkMajelis,
-                    placeholder: "Masukan link majelis"
-                }  
-                      
-            ]
-        )
-    }
- 
-    getBetween(){
+    fullComponentInside() {
         const forms = [];
-        for (let i = 1; i < this.state.tugasPemeriksaanList.length; i++) {
+        for (let i = 0; i < this.state.tugasPemeriksaanList.length; i++) {
             forms.push(
                 <SirioForm
                     key={i}
@@ -258,26 +201,51 @@ export default class FormTambahRencana extends React.Component {
                 />
             )
         }
-       
         return (
             <>
                 {forms.map(form => form)}
-                <div className="w-100 text-right">
-                    <SirioButton blue recommended
-                        classes="mr-3"
-                        onClick={() => this.addForm()}
-                    >
-                        Tambah Tugas
-                    </SirioButton>
-                </div>
             </>
         )
-       
     }
 
-    // Fungsi yang akan mengembalikan definisi tiap field pada form
-    // Setiap objek {} pada List [] akan menjadi 1 field
-    // untuk informasi lebih lengkap, cek SirioForm
+    outerInputDefinition() {
+        return (
+            [
+                {
+                    fullComponent:
+                        this.tambahTugasButton
+                }, {
+                    fullComponent:
+                        this.fullComponentInside()
+                }, {
+                    label: "Nama Rencana*",
+                    handleChange: this.handleChange,
+                    type: "text",
+                    name: "link",
+                    value: this.state.namaRencana,
+                    placeholder: "Masukan link majelis"
+                }, {
+                    label: "Link Pemeriksaan*",
+                    handleChange: this.handleChange,
+                    type: "text",
+                    name: "link",
+                    value: this.state.linkMajelis,
+                    placeholder: "Masukan link majelis"
+                }
+
+            ]
+        )
+    }
+
+    tambahTugasButton = (
+        <SirioButton blue recommended
+            classes="mr-3"
+            onClick={() => this.addForm()}
+        >
+            Tambah Tugas
+        </SirioButton>
+    )
+
     innerInputDefinition(index) {
         return (
             [
@@ -295,14 +263,14 @@ export default class FormTambahRencana extends React.Component {
                     name: "idQA",
                     value: this.state.idQA,
                     optionList: this.state.employeeOptionList
-                },{
+                }, {
                     label: "Tanggal Mulai*",
                     handleChange: this.handleMultipleChange,
                     type: "date",
                     name: "tanggalMulai",
                     value: this.state.tanggalMulai,
                     placeholder: "Masukan tanggal mulai"
-                },{
+                }, {
                     label: "Tanggal Selesai*",
                     handleChange: this.handleMultipleChange,
                     type: "date",
@@ -310,7 +278,7 @@ export default class FormTambahRencana extends React.Component {
                     value: this.state.tanggalSelesai,
                     placeholder: "Masukan tanggal selesai"
                 }
-                    
+
             ]
         )
     }
@@ -320,17 +288,17 @@ export default class FormTambahRencana extends React.Component {
             <div>
                 <SirioButton purple recommended
                     classes="mx-2"
-                    onClick={(event)  => this.handleSubmit(event)}>
+                    onClick={(event) => this.handleSubmit(event)}>
                     Simpan
                 </SirioButton>
                 <SirioButton purple
-                    onClick={(event)  => this.handleSubmit(event)}>
-                >
+                    onClick={(event) => this.handleSubmit(event)}>
+                    >
                     Draft
                 </SirioButton>
                 <SirioButton purple
                     onClick={() => window.location.href = "/manager/rencanaPemeriksaan"}>
-                >
+                    >
                     Batal
                 </SirioButton>
             </div>
@@ -392,16 +360,13 @@ export default class FormTambahRencana extends React.Component {
                 <SirioForm
                     title="Form Tambah Rencana Pemeriksaan"
                     subtitle="Tugas Pemeriksaan"
-                    betweenTitleSubtitle={this.getBetween()}
                     inputDefinition={this.outerInputDefinition()}
                     onSubmit={this.handleSubmit}
                     submitButton={this.submitButton()}
-                    
-                    
                 />
-                
+
             </>
-           
+
         );
     }
 }
