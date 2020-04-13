@@ -90,7 +90,6 @@ export default class DemoForm extends React.Component {
     }
 
     validateNama() {
-        console.log("nama")
         var submitable = true;
         const fokusNama = this.state.nama;
         var errorNama;
@@ -110,11 +109,10 @@ export default class DemoForm extends React.Component {
     }
 
     validateUmur() {
-        console.log("validatingUmur")
         var submitable = true;
         const fokusUmur = this.state.umur;
         var errorUmur;
-        if (fokusUmur == "") {
+        if (fokusUmur === "") {
             submitable = false;
             errorUmur = "Maaf, umurnya tolong jangan kosongin";
         } else if (fokusUmur < 18) {
