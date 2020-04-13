@@ -112,56 +112,6 @@ export default class DemoForm extends React.Component {
         var submitable = true;
         const fokusUmur = this.state.umur;
         var errorUmur;
-        if (fokusUmur === "") {
-            submitable = false;
-            errorUmur = "Maaf, umurnya tolong jangan kosongin";
-        } else if (fokusUmur < 18) {
-            submitable = false;
-            errorUmur = "Khusus 18 tahun keatas ya ^-^";
-        }
-        if (this.state.errorUmur !== errorUmur) {
-            this.setState({
-                errorUmur: errorUmur
-            })
-        }
-        return submitable;
-    }
-
-    componentDidUpdate() {
-        var submitable = true;
-
-        submitable = this.validateNama() && this.validateUmur();
-
-        if (this.state.submitable !== submitable) {
-            this.setState({
-                submitable: submitable
-            })
-        }
-    }
-
-    validateNama() {
-        var submitable = true;
-        const fokusNama = this.state.nama;
-        var errorNama;
-        if (fokusNama.length < 2) {
-            submitable = false;
-            errorNama = "Nama minimal 2 karakter, nd mungkin aku panggil kamu sebagai Tuan/Nyonya " + fokusNama;
-        } else if (fokusNama.length > 10) {
-            submitable = false;
-            errorNama = "uvuvwevwe osas ?";
-        }
-        if (this.state.errorNama !== errorNama) {
-            this.setState({
-                errorNama: errorNama
-            })
-        }
-        return submitable;
-    }
-
-    validateUmur() {
-        var submitable = true;
-        const fokusUmur = this.state.umur;
-        var errorUmur;
         if (fokusUmur < 18) {
             submitable = false;
             errorUmur = "Khusus 18 tahun keatas ya ^-^";
@@ -263,28 +213,6 @@ export default class DemoForm extends React.Component {
                 [event.target.name]
                     : targetArray
             }
-        )
-    }
-
-
-    outerInputDefinition() {
-        return (
-            [
-                {
-                    fullComponent:
-                        <SirioForm
-                            noHeader
-                            isInnerForm
-                            inputDefinition={this.innerInputDefinition()}
-                        />
-                }, {
-                    label: "Manusia?",
-                    handleChange: this.handleChange,
-                    type: "checkbox",
-                    name: "manusia",
-                    value: this.state.manusia,
-                }
-            ]
         )
     }
 
