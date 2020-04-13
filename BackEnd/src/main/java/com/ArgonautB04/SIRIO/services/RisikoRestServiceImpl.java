@@ -1,7 +1,6 @@
 package com.ArgonautB04.SIRIO.services;
 
 import com.ArgonautB04.SIRIO.model.Risiko;
-import com.ArgonautB04.SIRIO.model.RiskLevel;
 import com.ArgonautB04.SIRIO.model.SOP;
 import com.ArgonautB04.SIRIO.repository.RisikoDB;
 import com.ArgonautB04.SIRIO.rest.RisikoDTO;
@@ -40,7 +39,7 @@ public class RisikoRestServiceImpl implements RisikoRestService {
 
     @Override
     public List<Risiko> getAll() {
-        return risikoDB.findAll();
+        return risikoDB.findAllByStatus(Risiko.Status.AKTIF);
     }
 
     @Override

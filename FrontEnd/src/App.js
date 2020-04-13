@@ -34,7 +34,7 @@ import FormRisiko from './pages/ManagerOR/FormRisiko';
 import HierarkiRisiko from './pages/ManagerOR/HierarkiRisiko';
 import RiskLevel from './pages/ManagerOR/RiskLevel';
 import RiskRating from './pages/ManagerOR/RiskRating';
-import FormRisikoUbah from './Components/Form/RegistrasiRisiko/FormRisikoUbah';
+import FormRisikoUbah from './pages/ManagerOR/FormRisikoUbah';
 import FormMultiPage from './pages/formMultiPage';
 import Error401 from './pages/Errors/Error401';
 import Error404 from './pages/Errors/Error404';
@@ -67,11 +67,11 @@ class App extends React.Component {
             <Route exact path="/bukti-pelaksanaan" component={DaftarBuktiPelaksanaan} />
             <Route exact path="/bukti-pelaksanaan/persetujuan" component={DetailPersetujuanBukti} />
             <Route exact path="/bukti-pelaksanaan/tolak" component={FormFeedbackBukti} />
-            <Route exact path="/registrasi-risiko" component={RegistrasiRisiko} />
-            <Route exact path="/registrasi-risiko/detail" component={DetailRisiko} />
-            <Route exact path="/registrasi-risiko/tambah" component={FormRisiko} />
-            <Route exact path="/registrasi-risiko/ubah" component={FormRisikoUbah} />
-            <Route exact path="/registrasi-risiko/ubah-hierarki" component={HierarkiRisiko} />
+            <AuthorizedRoute exact path="/registrasi-risiko" component={RegistrasiRisiko} />
+            <AuthorizedRoute exact path="/registrasi-risiko/detail" component={DetailRisiko} />
+            <AuthorizedRoute exact path="/registrasi-risiko/tambah" component={FormRisiko} />
+            <AuthorizedRoute exact path="/registrasi-risiko/ubah" component={FormRisikoUbah} />
+            <AuthorizedRoute exact path="/registrasi-risiko/ubah-hierarki" component={HierarkiRisiko} />
             <Route exact path="/login" component={Login} />
             <Route exact path="/logout" component={Logout} />
             <Route exact path="/Form" component={FormDemo} />

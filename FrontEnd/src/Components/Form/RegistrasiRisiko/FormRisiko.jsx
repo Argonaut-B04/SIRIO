@@ -19,6 +19,7 @@ class FormRisiko extends React.Component {
             komponen: "",
             sopOptionList: [],
             redirect: false,
+            submitable: true,
         }
 
         this.handleChange = this.handleChange.bind(this);
@@ -44,6 +45,37 @@ class FormRisiko extends React.Component {
             }} />
         }
     };
+
+    componentDidUpdate() {
+        var submitable = true;
+
+        submitable = this.validateNama();
+
+        if (this.state.submitable !== submitable) {
+            this.setState({
+                submitable: submitable
+            })
+        }
+    }
+
+    validateNama() {
+        var submitable = true;
+        const fokusNama = this.state.nama;
+        var errorNama;
+        if (fokusNama.length < 1) {
+            submitable = false;
+            errorNama = "Nama minimal 2 karakter, nd mungkin aku panggil kamu sebagai Tuan/Nyonya " + fokusNama;
+        } else if (fokusNama.length > 10) {
+            submitable = false;
+            errorNama = "uvuvwevwe osas ?";
+        }
+        if (this.state.errorNama !== errorNama) {
+            this.setState({
+                errorNama: errorNama
+            })
+        }
+        return submitable;
+    }
 
     componentDidMount() {
         this.renderSopOption();
@@ -122,6 +154,8 @@ class FormRisiko extends React.Component {
                     label: "Nama Risiko*",
                     handleChange: this.handleChange,
                     type: "textarea",
+                    required: true,
+                    validation: this.state.errorNama,
                     name: "nama",
                     value: this.state.nama,
                     placeholder: "Masukan nama risiko"
@@ -129,6 +163,7 @@ class FormRisiko extends React.Component {
                     label: "Kategori Risiko*",
                     handleChange: this.handleSelectChange,
                     type: "select",
+                    required: true,
                     name: "kategori",
                     value: this.state.kategori,
                     optionList: [
@@ -147,6 +182,7 @@ class FormRisiko extends React.Component {
                     label: "Referensi SOP*",
                     handleChange: this.handleSelectChange,
                     type: "select",
+                    required: true,
                     name: "sop",
                     value: this.state.sop,
                     optionList: this.state.sopOptionList
@@ -165,7 +201,9 @@ class FormRisiko extends React.Component {
     submitButton() {
         return (
             <div>
-                <SirioButton purple recommended
+                <SirioButton purple 
+                    recommended={this.state.submitable}
+                    disabled={!this.state.submitable}
                     classes="mx-2"
                     onClick={(event)  => this.handleSubmit(event)}>
                     Simpan

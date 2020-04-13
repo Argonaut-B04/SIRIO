@@ -42,7 +42,7 @@ export const konfigurasi = {
             link: "#"
         }, {
             title: "Registrasi Risiko",
-            link: "#"
+            link: "/registrasi-risiko"
         }, {
             title: "Risk Level",
             link: "#"

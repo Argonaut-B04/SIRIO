@@ -19,7 +19,8 @@ class FormRisikoUbah extends React.Component {
             sop: "",
             komponen: "",
             sopOptionList: [],
-            redirect: false
+            redirect: false,
+            submitable: true,
         }
 
         this.handleChange = this.handleChange.bind(this);
@@ -33,6 +34,37 @@ class FormRisikoUbah extends React.Component {
     componentDidMount() {
         this.renderSopOption();
         this.renderDataRisiko();
+    }
+
+    componentDidUpdate() {
+        var submitable = true;
+
+        submitable = this.validateNama();
+
+        if (this.state.submitable !== submitable) {
+            this.setState({
+                submitable: submitable
+            })
+        }
+    }
+
+    validateNama() {
+        var submitable = true;
+        const fokusNama = this.state.nama;
+        var errorNama;
+        if (fokusNama.length < 1) {
+            submitable = false;
+            errorNama = "Nama minimal 2 karakter, nd mungkin aku panggil kamu sebagai Tuan/Nyonya " + fokusNama;
+        } else if (fokusNama.length > 255) {
+            submitable = false;
+            errorNama = "uvuvwevwe osas ?";
+        }
+        if (this.state.errorNama !== errorNama) {
+            this.setState({
+                errorNama: errorNama
+            })
+        }
+        return submitable;
     }
 
     setRedirect = () => {
@@ -117,7 +149,6 @@ class FormRisikoUbah extends React.Component {
     // Setiap objek {} pada List [] akan menjadi 1 field
     // untuk informasi lebih lengkap, cek SirioForm
     inputDefinition() {
-        console.log(this.state.sop);
         return (
             [
                 {
@@ -125,6 +156,8 @@ class FormRisikoUbah extends React.Component {
                     handleChange: this.handleChange,
                     type: "textarea",
                     name: "nama",
+                    required: true,
+                    validation: this.state.errorNama,
                     value: this.state.nama,
                     placeholder: "Masukan nama risiko"
                 }, {
@@ -168,7 +201,9 @@ class FormRisikoUbah extends React.Component {
     submitButton() {
         return (
             <div>
-                <SirioButton purple recommended
+                <SirioButton purple 
+                            recommended={this.state.submitable}
+                            disabled={!this.state.submitable}
                              classes="mx-1"
                              onClick={(event)  => this.handleSubmit(event)}>
                     Simpan
