@@ -46,6 +46,9 @@ class SirioForm extends Component {
                                 required={field.required}
                                 min={field.min}
                                 afterValidity={field.afterValidity}
+                                multiple={field.multiple}
+                                sideButton={field.sideButton}
+                                modifier={field.modifier}
                             />
                         )}
 

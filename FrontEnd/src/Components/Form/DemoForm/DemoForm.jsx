@@ -13,18 +13,22 @@ export default class DemoForm extends React.Component {
         super(props);
 
         this.state = {
-            nama: "bambang",
-            umur: 18,
-            jenisKelamin: "Pria",
+            nama: "",
+            umur: 1,
+            jenis: "neko",
             manusia: true,
-            customDropdown: "bambang",
-            customDropdown2: "pria",
+            customDropdown: "Shironeko",
+            customDropdown2: "wanita",
             submitable: true,
+            namaMain: ["Chocola", "Vanilla"],
         }
 
         this.handleChange = this.handleChange.bind(this);
         this.innerInputDefinition = this.innerInputDefinition.bind(this);
         this.handleSelectChange = this.handleSelectChange.bind(this);
+        this.handleMultiFieldChange = this.handleMultiFieldChange.bind(this);
+        this.modifyFieldCount = this.modifyFieldCount.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     // Fungsi untuk mengubah state ketika isi dari input diubah
@@ -61,14 +65,22 @@ export default class DemoForm extends React.Component {
     // Fungsi yang akan dijalankan ketika user submit
     // Umumnya akan digunakan untuk memanggil service komunikasi ke backend
     handleSubmit(event) {
-        alert("submited");
         event.preventDefault();
+        if (this.state.submitable) {
+            alert("submited");
+        }
     }
 
-    componentDidUpdate() {
+    componentDidUpdate(prevProps, prevState) {
         var submitable = true;
 
-        submitable = this.validateNama() && this.validateUmur();
+        if (prevState.nama !== this.state.nama) {
+            submitable = submitable && this.validateNama();
+        }
+
+        if (prevState.umur !== this.state.umur) {
+            submitable = submitable && this.validateUmur();
+        }
 
         if (this.state.submitable !== submitable) {
             this.setState({
@@ -78,6 +90,7 @@ export default class DemoForm extends React.Component {
     }
 
     validateNama() {
+        console.log("nama")
         var submitable = true;
         const fokusNama = this.state.nama;
         var errorNama;
@@ -97,10 +110,14 @@ export default class DemoForm extends React.Component {
     }
 
     validateUmur() {
+        console.log("validatingUmur")
         var submitable = true;
         const fokusUmur = this.state.umur;
         var errorUmur;
-        if (fokusUmur < 18) {
+        if (fokusUmur == "") {
+            submitable = false;
+            errorUmur = "Maaf, umurnya tolong jangan kosongin";
+        } else if (fokusUmur < 18) {
             submitable = false;
             errorUmur = "Khusus 18 tahun keatas ya ^-^";
         }
@@ -135,13 +152,14 @@ export default class DemoForm extends React.Component {
                     name: "umur",
                     min: 1,
                     value: this.state.umur,
-                    placeholder: "masukan umur"
+                    placeholder: "masukan umur",
+                    required: true
                 }, {
-                    label: "Jenis Kelamin",
+                    label: "Jenis",
                     handleChange: this.handleSelectChange,
                     type: "select",
-                    name: "jenisKelamin",
-                    value: this.state.jenisKelamin,
+                    name: "jenis",
+                    value: this.state.jenis,
                     optionList: [
                         {
                             label: "Pria",
@@ -150,14 +168,44 @@ export default class DemoForm extends React.Component {
                             label: "Wanita",
                             value: "Wanita"
                         }, {
-                            label: "Gak tau apa",
-                            value: "gak tau apa"
+                            label: "Kucing",
+                            value: "neko"
                         }
                     ]
+                }, {
+                    label: "Nama Mereka",
+                    multiple: true,
+                    handleChange: this.handleMultiFieldChange,
+                    type: "text",
+                    name: "namaMain",
+                    value: this.state.namaMain,
+                    modifier: this.modifyFieldCount
                 }
             ]
         )
     }
+
+    modifyFieldCount(name, newField) {
+        this.setState(
+            {
+                [name]: newField
+            }
+        )
+    }
+
+    handleMultiFieldChange(event, index) {
+        const targetName = event.target.name;
+        const targetValue = event.target.value;
+        const targetArray = this.state[targetName];
+        targetArray[index] = targetValue;
+        this.setState(
+            {
+                [event.target.name]
+                    : targetArray
+            }
+        )
+    }
+
 
     outerInputDefinition() {
         return (
@@ -185,9 +233,9 @@ export default class DemoForm extends React.Component {
             this.setState({
                 nama: "Solo Quisiera Desaparecer"
             })
-        } else if (event.value === "bambang") {
+        } else if (event.value === "Shironeko") {
             this.setState({
-                nama: "Bambang"
+                nama: "Shironeko"
             })
         }
     }
@@ -208,8 +256,8 @@ export default class DemoForm extends React.Component {
                         optionList={
                             [
                                 {
-                                    label: "Bambang",
-                                    value: "bambang"
+                                    label: "Shironeko",
+                                    value: "Shironeko"
                                 },
                                 {
                                     label: "Vanish",
