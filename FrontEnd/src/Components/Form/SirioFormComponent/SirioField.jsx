@@ -99,7 +99,7 @@ export default class SirioField extends Component {
     }
 
     generateSideDeleteButton(name, array, index, functionToUpdate) {
-        if (array.length == 1) {
+        if (array.length === 1) {
             return "";
         }
         return (
@@ -127,7 +127,7 @@ export default class SirioField extends Component {
                 </label>
             // modifier untuk multiple
             var field;
-            if (typeof this.props.value === "object") {
+            if (Array.isArray(this.props.value)) {
                 const fieldList = [];
                 var sidebutton = this.generateAddButton(this.props.name, this.props.value, this.props.modifier);
                 for (let i = 0; i < this.props.value.length; i++) {
@@ -150,14 +150,14 @@ export default class SirioField extends Component {
                         )
 
                     const fieldFinal =
-                        <div className="row">
+                        <div className="row" key={i}>
                             <div className="col-8">
                                 {singleField}
                             </div>
                             <div className="col-2">
                                 {deleteButton}
                             </div>
-                            {i == (this.props.value.length - 1) &&
+                            {i === (this.props.value.length - 1) &&
                                 <div className="col-2">
                                     {sidebutton}
                                 </div>
