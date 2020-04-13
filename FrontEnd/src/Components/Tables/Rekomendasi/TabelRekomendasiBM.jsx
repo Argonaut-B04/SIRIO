@@ -3,22 +3,31 @@ import SirioButton from '../../Button/SirioButton';
 import SirioTable from '../SirioTable';
 import RekomendasiService from '../../../Services/RekomendasiService';
 import { NavLink } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import classes from './TabelRekomendasiBM.module.css';
 
-export default class TabelRekomendasi extends React.Component {
+class TabelRekomendasiBM extends React.Component {
 
     constructor(props) {
         super(props);
 
         this.state = {
-            rowList: []
+            rowList: [],
+            openNotification: true
         }
 
         this.renderRows = this.renderRows.bind(this);
+        this.endNotification = this.endNotification.bind(this);
     }
 
     componentDidMount() {
         this.renderRows();
+    }
+
+    endNotification() {
+        this.setState({
+            openNotification: false
+        })
     }
 
     async renderRows() {
@@ -152,14 +161,27 @@ export default class TabelRekomendasi extends React.Component {
                     columnsDefinition={this.columns}
                     includeSearchBar
                 />
-                {/* <SirioMessageButton
+                {this.props.location.state && this.props.location.state.addSuccess && this.state.openNotification &&
+                <SirioMessageButton
                     show
                     classes="d-none"
                     modalTitle="Bukti pelaksanaan berhasil ditambahkan"
                     customConfirmText="Tutup"
                     onClick={this.endNotification}
-                /> */}
+                />
+                }
+                {this.props.location.state && this.props.location.state.editSuccess && this.state.openNotification &&
+                <SirioMessageButton
+                    show
+                    classes="d-none"
+                    modalTitle="Bukti pelaksanaan berhasil diubah"
+                    customConfirmText="Tutup"
+                    onClick={this.endNotification}
+                />
+                }
             </>
         );
     }
 } 
+
+export default withRouter(TabelRekomendasiBM);

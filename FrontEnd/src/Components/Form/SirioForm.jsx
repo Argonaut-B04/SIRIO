@@ -94,5 +94,4 @@ class SirioForm extends Component {
         );
     }
 }
-
 export default SirioForm;
