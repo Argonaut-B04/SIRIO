@@ -13,8 +13,8 @@ export default class DemoForm extends React.Component {
         super(props);
 
         this.state = {
-            nama: "Shironeko",
-            umur: 18,
+            nama: "",
+            umur: 1,
             jenis: "neko",
             manusia: true,
             customDropdown: "Shironeko",
@@ -71,10 +71,16 @@ export default class DemoForm extends React.Component {
         }
     }
 
-    componentDidUpdate() {
+    componentDidUpdate(prevProps, prevState) {
         var submitable = true;
 
-        submitable = this.validateNama() && this.validateUmur();
+        if (prevState.nama !== this.state.nama) {
+            submitable = submitable && this.validateNama();
+        }
+
+        if (prevState.umur !== this.state.umur) {
+            submitable = submitable && this.validateUmur();
+        }
 
         if (this.state.submitable !== submitable) {
             this.setState({
@@ -84,6 +90,7 @@ export default class DemoForm extends React.Component {
     }
 
     validateNama() {
+        console.log("nama")
         var submitable = true;
         const fokusNama = this.state.nama;
         var errorNama;
@@ -103,6 +110,7 @@ export default class DemoForm extends React.Component {
     }
 
     validateUmur() {
+        console.log("validatingUmur")
         var submitable = true;
         const fokusUmur = this.state.umur;
         var errorUmur;
