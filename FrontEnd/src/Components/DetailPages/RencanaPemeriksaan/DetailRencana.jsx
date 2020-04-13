@@ -1,8 +1,13 @@
 import React from 'react';
 import classes from './DetailRencana.module.css';
 import SirioDetailPage from '../SirioDetailPage';
+import RencanaPemeriksaanService from '../../../Services/RencanaPemeriksaanService';
+import { NavLink } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
+import SirioWarningButton from "../../Button/ActionButton/SirioWarningButton";
 
-export default class TabelRencanaPemeriksaan extends React.Component {
+class DetailRencanaPemeriksaan extends React.Component {
 
     columns = [{
         dataField: 'informasi',
@@ -59,3 +64,5 @@ export default class TabelRencanaPemeriksaan extends React.Component {
         );
     }
 } 
+
+export default withRouter(DetailRencanaPemeriksaan);

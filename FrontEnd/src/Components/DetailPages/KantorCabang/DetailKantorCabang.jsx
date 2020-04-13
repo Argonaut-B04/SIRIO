@@ -114,6 +114,7 @@ class DetailKantorCabang extends React.Component {
                     data={this.state.dataGeneral}
                     id='id'
                     subButton={this.subButton()}
+                    link="administrator/kantorCabang"
                 />
             </>
         );

@@ -9,7 +9,7 @@ class RencanaPemeriksaanService {
         this.axiosInstance.defaults.headers.common['Authorization'] = AuthenticationService.getToken();
     }
 
-    async getRencanaPemeriksaanByLoggedInUser() {
+    async getRencanaPemeriksaanList() {
         return this.axiosInstance.get(SirioAxiosBase.BASEURL + `/RencanaPemeriksaan/getAll`);
     }
 
@@ -17,7 +17,7 @@ class RencanaPemeriksaanService {
         return this.axiosInstance.get(SirioAxiosBase.BASEURL + `/RencanaPemeriksaan/` + id);
     }
 
-    async addRencanaPemeriksaanCabang(data) {
+    async addRencanaPemeriksaan(data) {
         return this.axiosInstance.post(SirioAxiosBase.BASEURL + `/RencanaPemeriksaan/tambah`, data);
     }
 
