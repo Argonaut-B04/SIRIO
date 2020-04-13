@@ -75,7 +75,6 @@ class TabelRencanaPemeriksaan extends React.Component {
     }
 
     getBulanFormatter(cell, row) {
-        console.log(row.daftarTugasPemeriksaan[0])
         const tanggalString = row.daftarTugasPemeriksaan[0].tanggalSelesai;
         const bulan = tanggalString.split("-")[1]
         var namaBulan = ["Januari", "Februari", "Maret", "April", "Mei", "Juni",

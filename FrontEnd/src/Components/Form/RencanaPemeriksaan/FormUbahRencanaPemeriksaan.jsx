@@ -17,12 +17,15 @@ class FormUbahRencana extends React.Component {
         super(props);
 
         this.state = {
+            redirect: false,
+            submitable: true,
+            id:"",
             namaRencana: "",
             linkMajelis: "",
-            status: 1,
+            status: "",
             kantorOptionList: [],
             employeeOptionList: [],
-            tugasPemeriksaanList: [{
+            daftarTugasPemeriksaan: [{
                 kantorCabang: "",
                 idQA: "",
                 tanggalMulai: "",
@@ -45,6 +48,7 @@ class FormUbahRencana extends React.Component {
     componentDidMount() {
         this.renderEmployeeOption();
         this.renderKantorOption();
+        this.renderDataRencana();
     }
 
     setRedirect = () => {
@@ -58,42 +62,43 @@ class FormUbahRencana extends React.Component {
             return <Redirect to={{
                 pathname: "/manager/rencanaPemeriksaan",
                 state: {
-                    addSuccess: true
+                    editSuccess: true
                 }
             }} />
         }
     };
-    
+
+    componentDidUpdate() {
+        var submitable = true;
+
+        submitable = this.validateNama() && this.validateLink();
+
+        if (this.state.submitable !== submitable) {
+            this.setState({
+                submitable: submitable
+            })
+        }
+    }
+
     async renderDataRencana() {
         const response = await RencanaPemeriksaanService.getRencanaPemeriksaanDetail(this.props.location.state.id);
-
+        console.log(response.data.result)
         this.setState({
             id: response.data.result.id,
             namaRencana: response.data.result.namaRencana,
             linkMajelis: response.data.result.linkMajelis,
             status: response.data.result.status,
-            daftarTugasPemeriksaan: response.data.result.daftarTugasPemeriksaan.map(tugas => {
-                return (
-                    {
-                        kantorCabang: tugas.kantorCabang,
-                        idQA: tugas.idQA,
-                        tanggalMulai: tugas.tanggalMulai,
-                        tanggalSelesai: tugas.tanggalSelesai
-                    }
-                )
-            })
+            daftarTugasPemeriksaan: response.data.result.daftarTugasPemeriksaan
         })
     }
 
     handleMultipleChange(event, index) {
-        console.log(event);
-        console.log(index);
-        const tugasPemeriksaanList = this.state.tugasPemeriksaanList
-        tugasPemeriksaanList[index][event.target.name] = event.target.value;
+        const daftarTugasPemeriksaan = this.state.daftarTugasPemeriksaan
+        daftarTugasPemeriksaan[index][event.target.name] = event.target.value;
 
         this.setState(
             {
-                tugasPemeriksaanList: tugasPemeriksaanList
+                daftarTugasPemeriksaan: daftarTugasPemeriksaan
             }
         )
     }
@@ -101,20 +106,16 @@ class FormUbahRencana extends React.Component {
     // Fungsi untuk mengubah state ketika isi dropdown diubah
     // Fungsi ini wajib ada jika membuat field tipe select
     handleMultipleSelectChange(name, target, index) {
-        // const tugasPemeriksaanList = this.state.tugasPemeriksaanList
-        // tugasPemeriksaanList[index][event.target.name] = event.target.value;
-        console.log(name);
-        console.log(target);
         console.log(index);
-        const formList = this.state.tugasPemeriksaanList;
+        const formList = this.state.daftarTugasPemeriksaan;
         formList[index][name] = target.value;
         this.setState(
             {
-                //tugasPemeriksaanList: tugasPemeriksaanList,
-                tugasPemeriksaanList: formList
+                daftarTugasPemeriksaan: formList
             }
         )
     }
+
 
     async renderEmployeeOption() {
         const response = await EmployeeService.getAllQAOfficer();
@@ -161,6 +162,38 @@ class FormUbahRencana extends React.Component {
         )
     }
 
+    validateNama() {
+        var submitable = true;
+        var errorNama;
+        const fokusNama = this.state.namaRencana
+        if (fokusNama.length < 2) {
+            submitable = false;
+            errorNama = "Minimal terdapat 2 karakter";
+        } 
+        if (this.state.errorNama !== errorNama) {
+            this.setState({
+                errorNama: errorNama
+            })
+        }
+        return submitable;
+    }
+
+    validateLink() {
+        var submitable = true;
+        var errorLink;
+        const fokusLink = this.state.linkMajelis
+        if (!fokusLink.includes("http://") ) {
+            submitable = false;
+            errorLink = "Link harus mengandung 'http://' ";
+        } 
+        if (this.state.errorLink !== errorLink) {
+            this.setState({
+                errorLink: errorLink
+            })
+        }
+        return submitable;
+    }
+
     // Fungsi yang akan dijalankan ketika user submit
     // Umumnya akan digunakan untuk memanggil service komunikasi ke backend
     // Fungsi yang akan dijalankan ketika user submit
@@ -172,12 +205,7 @@ class FormUbahRencana extends React.Component {
                 namaRencana: this.state.namaRencana,
                 linkMajelis: this.state.linkMajelis,
                 status: 2,
-                tugasPemeriksaanList: [{
-                    kantorCabang: this.state.kantorCabang,
-                    idQA: this.state.idQA,
-                    tanggalMulai: this.state.tanggalMulai,
-                    tanggalSelesai: this.state.tanggalSelesai,
-                }]
+                daftarTugasPemeriksaan: this.state.daftarTugasPemeriksaan
             }
             RencanaPemeriksaanService.editRencanaPemeriksaan(rencanaPemeriksaan)
             .then(() => this.setRedirect());
@@ -188,12 +216,7 @@ class FormUbahRencana extends React.Component {
                 namaRencana: this.state.namaRencana,
                 linkMajelis: this.state.linkMajelis,
                 status: this.state.status,
-                tugasPemeriksaanList: [{
-                    kantorCabang: this.state.kantorCabang,
-                    idQA: this.state.idQA,
-                    tanggalMulai: this.state.tanggalMulai,
-                    tanggalSelesai: this.state.tanggalSelesai,
-                }]
+                daftarTugasPemeriksaan: this.state.daftarTugasPemeriksaan
             }
             RencanaPemeriksaanService.editRencanaPemeriksaan(rencanaPemeriksaan)
             .then(() => this.setRedirect());
@@ -203,7 +226,7 @@ class FormUbahRencana extends React.Component {
 
     fullComponentInside() {
         const forms = [];
-        for (let i = 0; i < this.state.tugasPemeriksaanList.length; i++) {
+        for (let i = 0; i < this.state.daftarTugasPemeriksaan.length; i++) {
             forms.push(
                 <SirioForm
                     subtitle="Tugas Pemeriksaan"
@@ -230,6 +253,7 @@ class FormUbahRencana extends React.Component {
                     handleChange: this.handleChange,
                     type: "text",
                     name: "namaRencana",
+                    validation: this.state.errorNama,
                     value: this.state.namaRencana,
                     placeholder: "Masukan nama rencana"
                 }, {
@@ -237,6 +261,7 @@ class FormUbahRencana extends React.Component {
                     handleChange: this.handleChange,
                     type: "text",
                     name: "linkMajelis",
+                    validation: this.state.errorLink,
                     value: this.state.linkMajelis,
                     placeholder: "Masukan link pemeriksaan"
                 },{
@@ -270,7 +295,7 @@ class FormUbahRencana extends React.Component {
                     index: index,
                     type: "select",
                     name: "kantorCabang",
-                    value: this.state.tugasPemeriksaanList[index].kantorCabang,
+                    value: this.state.daftarTugasPemeriksaan[index].kantorCabang,
                     optionList: this.state.kantorOptionList
                 }, {
                     label: "QA Officer*",
@@ -278,7 +303,7 @@ class FormUbahRencana extends React.Component {
                     index: index,
                     type: "select",
                     name: "idQA",
-                    value: this.state.tugasPemeriksaanList[index].idQA,
+                    value: this.state.daftarTugasPemeriksaan[index].idQA,
                     optionList: this.state.employeeOptionList
                 }, {
                     label: "Tanggal Mulai*",
@@ -286,7 +311,7 @@ class FormUbahRencana extends React.Component {
                     index: index,
                     type: "date",
                     name: "tanggalMulai",
-                    value: this.state.tugasPemeriksaanList[index].tanggalMulai,
+                    value: this.state.daftarTugasPemeriksaan[index].tanggalMulai,
                     placeholder: "Masukan tanggal mulai"
                 }, {
                     label: "Tanggal Selesai*",
@@ -294,7 +319,7 @@ class FormUbahRencana extends React.Component {
                     index: index,
                     type: "date",
                     name: "tanggalSelesai",
-                    value: this.state.tugasPemeriksaanList[index].tanggalSelesai,
+                    value: this.state.daftarTugasPemeriksaan[index].tanggalSelesai,
                     placeholder: "Masukan tanggal selesai"
                 }
 
@@ -305,7 +330,9 @@ class FormUbahRencana extends React.Component {
     submitButton() {
         return (
             <div>
-                <SirioButton purple recommended
+                <SirioButton purple 
+                    recommended={this.state.submitable}
+                    disabled={!this.state.submitable}
                     classes="mx-1"
                     onClick={(event) => this.handleSubmit(event,"simpan")}>
                     Simpan
@@ -337,12 +364,12 @@ class FormUbahRencana extends React.Component {
 
 
     deleteChildForm(index) {
-        const tugasPemeriksaanList = this.state.tugasPemeriksaanList
-        const newtugasPemeriksaanList = this.deleteItem(tugasPemeriksaanList, index)
+        const daftarTugasPemeriksaan = this.state.daftarTugasPemeriksaan
+        const newdaftarTugasPemeriksaan = this.deleteItem(daftarTugasPemeriksaan, index)
 
         this.setState(
             {
-                tugasPemeriksaanList: newtugasPemeriksaanList
+                daftarTugasPemeriksaan: newdaftarTugasPemeriksaan
             }
         )
     }
@@ -362,12 +389,12 @@ class FormUbahRencana extends React.Component {
     }
 
     addForm() {
-        const tugasPemeriksaanList = this.state.tugasPemeriksaanList
-        tugasPemeriksaanList.push({});
+        const daftarTugasPemeriksaan = this.state.daftarTugasPemeriksaan
+        daftarTugasPemeriksaan.push({});
 
         this.setState(
             {
-                tugasPemeriksaanList: tugasPemeriksaanList
+                daftarTugasPemeriksaan: daftarTugasPemeriksaan
             }
         )
     }

@@ -233,7 +233,7 @@ public class RencanaPemeriksaanRestController {
                     );
                 }
 
-                if (tugasPemeriksaanDTO.getTanggalMulai() != null && tugasPemeriksaanDTO.getTanggalSelesai() != null  ) {
+                if (tugasPemeriksaanDTO.getTanggalMulai() != null && tugasPemeriksaanDTO.getTanggalSelesai() != null ) {
                     Date tanggalMulaiLocalDate = Settings.stringToDate(tugasPemeriksaanDTO.getTanggalMulai());
                     Date tanggalSelesaiLocalDate = Settings.stringToDate(tugasPemeriksaanDTO.getTanggalSelesai());
 

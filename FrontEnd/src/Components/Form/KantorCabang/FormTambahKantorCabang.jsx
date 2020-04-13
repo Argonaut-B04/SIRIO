@@ -117,6 +117,30 @@ export default class FormTambahKantorCabang extends React.Component {
         }
     }
 
+    // componentDidUpdate(prevProps, prevState) {
+    //     var submitable = true;
+    //     if (prevState.namaKantorCabang !== this.state.namaKantorCabang){
+    //         submitable = submitable && this.validateKantor() 
+    //     }
+
+    //     if (prevState.area !== this.state.area){
+    //         submitable = submitable && this.validateArea() 
+    //     }
+
+    //     if (prevState.idPemilik !== this.state.idPemilik){
+    //         submitable = submitable && this.this.validateBM() 
+    //     }
+
+    //     if (prevState.regional !== this.state.regional){
+    //         submitable = submitable && this.this.validateRegional() 
+    //     }
+
+    //     if (this.state.submitable !== submitable) {
+    //         this.setState({
+    //             submitable: submitable
+    //         })
+    //     }
+    // }
 
     // Fungsi yang akan dijalankan ketika user submit
     // Umumnya akan digunakan untuk memanggil service komunikasi ke backend

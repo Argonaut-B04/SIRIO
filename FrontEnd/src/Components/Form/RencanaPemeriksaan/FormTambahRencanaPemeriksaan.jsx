@@ -17,7 +17,7 @@ export default class FormTambahRencana extends React.Component {
 
         this.state = {
             redirect: false,
-            submitable: true,
+            submitable: false,
             namaRencana: "",
             linkMajelis: "",
             status: 1,
@@ -176,8 +176,6 @@ export default class FormTambahRencana extends React.Component {
         )
     }
 
-    
-
     // Fungsi yang akan dijalankan ketika user submit
     // Umumnya akan digunakan untuk memanggil service komunikasi ke backend
     // Fungsi yang akan dijalankan ketika user submit
@@ -185,17 +183,11 @@ export default class FormTambahRencana extends React.Component {
     handleSubmit(event, nama) {
         if(nama == "simpan"){
             event.preventDefault();
-            console.log("lulus")
             const rencanaPemeriksaan = {
                 namaRencana: this.state.namaRencana,
                 linkMajelis: this.state.linkMajelis,
                 status: 2,
-                daftarTugasPemeriksaan: [{
-                    kantorCabang: this.state.kantorCabang,
-                    idQA: this.state.idQA,
-                    tanggalMulai: this.state.tanggalMulai,
-                    tanggalSelesai: this.state.tanggalSelesai,
-                }]
+                daftarTugasPemeriksaan: this.state.daftarTugasPemeriksaan
             }
             RencanaPemeriksaanService.addRencanaPemeriksaan(rencanaPemeriksaan)
             .then(() => this.setRedirect());
@@ -206,12 +198,7 @@ export default class FormTambahRencana extends React.Component {
                 namaRencana: this.state.namaRencana,
                 linkMajelis: this.state.linkMajelis,
                 status: this.state.status,
-                daftarTugasPemeriksaan: [{
-                    kantorCabang: this.state.kantorCabang,
-                    idQA: this.state.idQA,
-                    tanggalMulai: this.state.tanggalMulai,
-                    tanggalSelesai: this.state.tanggalSelesai,
-                }]
+                daftarTugasPemeriksaan: this.state.daftarTugasPemeriksaan
             }
             RencanaPemeriksaanService.addRencanaPemeriksaan(rencanaPemeriksaan)
             .then(() => this.setRedirect());
