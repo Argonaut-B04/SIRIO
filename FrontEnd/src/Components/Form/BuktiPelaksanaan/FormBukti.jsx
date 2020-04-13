@@ -1,8 +1,10 @@
 import React from 'react';
 import SirioForm from '../SirioForm';
 import SirioButton from '../../Button/SirioButton';
+import BuktiPelaksanaanService from '../../../Services/BuktiPelaksanaanService'
+import { withRouter } from 'react-router-dom';
 
-export default class FormBukti extends React.Component {
+class FormBukti extends React.Component {
 
     // Masukan user disimpan kedalam state sebelum dikirim ke backend
     constructor(props) {
@@ -11,43 +13,53 @@ export default class FormBukti extends React.Component {
         this.state = {
             keterangan: "",
             lampiran: "",
+            id: ""
         }
-
+        // this.renderId = this.renderId.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.inputDefinition = this.inputDefinition.bind(this);
     }
 
-    // Fungsi untuk mengubah state ketika isi dari input diubah
-    // Fungsi ini wajib ada jika membuat form
+    // componentDidMount() {
+    //     console.log(this.props.location.state.id);
+    // }
+
     handleChange(event) {
-        if (typeof event.target.checked === "boolean") {
-            this.setState(
-                {
-                    [event.target.name]
-                        : event.target.checked
-                }
-            )
-        } else {
-            this.setState(
-                {
-                    [event.target.name]
-                        : event.target.value
-                }
-            )
-        }
+        this.setState(
+            {
+                [event.target.name]
+                    : event.target.value
+            }
+        )
     }
 
-    // Fungsi yang akan dijalankan ketika user submit
-    // Umumnya akan digunakan untuk memanggil service komunikasi ke backend
+    // endNotification() {
+    //     this.setState({
+    //         addComplete: false
+    //     })
+    // }
+
     handleSubmit(event) {
-        alert("submited");
-        // event.preventDefault wajib ada
         event.preventDefault();
+        const buktiPelaksanaan = {
+            keterangan: this.state.keterangan,
+            lampiran: this.state.lampiran
+        }
+        BuktiPelaksanaanService.submitChanges(this.props.location.state.id, buktiPelaksanaan)
+            .then(() => {
+                window.location.href = "/bm/rekomendasi"
+            });
     }
+
+    // async renderId() {
+    //     const response = this.props.location.state.id;
+    //     this.setState({
+    //         id: response
+    //     })
+    // }
 
     // Fungsi yang akan mengembalikan definisi tiap field pada form
-    // Setiap objek {} pada List [] akan menjadi 1 field
-    // untuk informasi lebih lengkap, cek SirioForm
     inputDefinition() {
         return (
             [
@@ -75,7 +87,7 @@ export default class FormBukti extends React.Component {
             <div>
                 <SirioButton purple recommended
                     classes="mx-2"
-                    onClick={() => window.location.href = "/bm/rekomendasi"}>
+                    onClick={(event) => this.handleSubmit(event)}>
                     Simpan
                 </SirioButton>
                 <SirioButton purple
@@ -89,12 +101,16 @@ export default class FormBukti extends React.Component {
     // Fungsi render SirioForm
     render() {
         return (
+            <div>
             <SirioForm
-                title="Form Pengajuan Bukti Pelaksanaan Rekomendasi"
+                title="Form Tambah Bukti Pelaksanaan Rekomendasi"
                 inputDefinition={this.inputDefinition()}
                 onSubmit={this.handleSubmit}
                 submitButton={this.submitButton()}
             />
+            </div>
         );
     }
 }
+
+export default withRouter(FormBukti);

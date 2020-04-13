@@ -50,10 +50,23 @@ public class Employee implements Serializable {
     @Column(nullable = false)
     private String email;
 
+    @NotNull
+    @Size(max = 30)
+    @Column(nullable = false)
+    private String jabatan;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role", referencedColumnName = "idRole", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Role role;
+
+    public String getJabatan() {
+        return jabatan;
+    }
+
+    public void setJabatan(String jabatan) {
+        this.jabatan = jabatan;
+    }
 
     public Integer getIdEmployee() {
         return idEmployee;

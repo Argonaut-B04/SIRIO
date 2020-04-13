@@ -1,44 +1,71 @@
 import React from 'react';
-import classes from './DetailBukti.module.css';
 import SirioDetailPage from '../SirioDetailPage';
 import SirioButton from '../../Button/SirioButton';
+import BuktiPelaksanaanService from '../../../Services/BuktiPelaksanaanService'
+import { NavLink } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 
-export default class DetailPersetujuanBukti extends React.Component {
+class DetailPersetujuanBukti extends React.Component {
 
-    columns = [{
-        dataField: 'informasi',
-        classes: classes.rowItem,
-        headerClasses: classes.colheader,
-        headerStyle: (colum, colIndex) => {
-            return { width: "5%", textAlign: 'left' };
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            buktiPelaksanaan: {}
         }
 
-    }, {
-        dataField: 'isiInformasi',
-        classes: classes.rowItem,
-        headerClasses: classes.colheader,
-        headerStyle: (colum, colIndex) => {
-            return { width: "20%", textAlign: 'left' };
-        }
-    }];
+        this.renderDataBukti = this.renderDataBukti.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+    }
 
-    data = [
-        { "informasi": "Keterangan :", "isiInformasi": "Keterangan bukti rekomendasi tesss" },
-        { "informasi": "Lampiran :", "isiInformasi": "https://drive.google.com/drive/folders/1SvB_2W4BjD8rxVQR1-dDbA63-4Zx-hoN" },
-        ]
+    componentDidMount() {
+        this.renderDataBukti();
+    }
+
+    async renderDataBukti() {
+        const response = await BuktiPelaksanaanService.getBuktiPelaksanaan(this.props.location.state.id);
+
+        this.setState({
+            buktiPelaksanaan: response.data.result
+        })
+    }
+
+    data() {
+        return {
+            "Keterangan": this.state.buktiPelaksanaan.keterangan,
+            "Lampiran": this.state.buktiPelaksanaan.lampiran
+        }
+    }
+
+    handleSubmit(event) {
+        event.preventDefault();
+        BuktiPelaksanaanService.setujuiBukti(this.props.location.state.id)
+            .then(() => {
+                window.location.href = "/bukti-pelaksanaan"
+                
+            });
+    }
 
     subButton() {
         return (
             <div>
                 <SirioButton purple recommended
                     classes="mx-2"
-                    onClick={() => window.location.href = "http://www.google.com"}>
+                    onClick={(event) => this.handleSubmit(event)}>
                     Setujui
                 </SirioButton>
-                <SirioButton purple
-                    onClick={() => window.location.href = "/bukti-pelaksanaan/tolak-bukti"}>
-                    Tolak
-                </SirioButton>
+                <NavLink to={{
+                    pathname: "/bukti-pelaksanaan/tolak",
+                    state: {
+                        id: this.state.buktiPelaksanaan.id,
+                    }
+                }}>
+                    <SirioButton
+                        purple
+                    >
+                        Tolak
+                    </SirioButton>
+                </NavLink>
             </div>
         )
     }
@@ -46,12 +73,14 @@ export default class DetailPersetujuanBukti extends React.Component {
     render() {
         return (
             <SirioDetailPage
-                title="Bukti Pelaksanaan Rekomendasi"
-                data={this.data}
+                title="Detail Bukti Pelaksanaan"
+                data={this.data()}
                 id='id'
-                columnsDefinition={this.columns}
                 subButton={this.subButton()}
+                link="bm/rekomendasi"
             />
         );
     }
 } 
+
+export default withRouter(DetailPersetujuanBukti); 

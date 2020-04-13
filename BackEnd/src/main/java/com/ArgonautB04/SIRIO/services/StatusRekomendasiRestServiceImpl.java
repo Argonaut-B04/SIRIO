@@ -33,4 +33,11 @@ public class StatusRekomendasiRestServiceImpl implements StatusRekomendasiRestSe
     public List<StatusRekomendasi> getAll() {
         return statusRekomendasiDB.findAll();
     }
+
+    @Override
+    public StatusRekomendasi getByNamaStatus(String namaStatus) {
+        Optional<StatusRekomendasi> target = statusRekomendasiDB.findByNamaStatus(namaStatus);
+        if (target.isPresent()) return target.get();
+        else throw new NoSuchElementException();
+    }
 }

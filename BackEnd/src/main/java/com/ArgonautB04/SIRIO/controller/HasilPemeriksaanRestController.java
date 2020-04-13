@@ -105,7 +105,8 @@ public class HasilPemeriksaanRestController {
         Employee employee = employeeRestService.getByUsername(principal.getName()).get();
 
         List<HasilPemeriksaan> daftarHasilPemeriksaan = employee.getRole() == roleRestService.getById(6) ?
-                hasilPemeriksaanRestService.getByPembuat(employee) : hasilPemeriksaanRestService.getAll();
+                hasilPemeriksaanRestService.getByDaftarTugasPemeriksaan(
+                        tugasPemeriksaanRestService.getByPelaksana(employee)) : hasilPemeriksaanRestService.getAll();
 
         List<HasilPemeriksaanDTO> result = new ArrayList<>();
         for (HasilPemeriksaan hasilPemeriksaan: daftarHasilPemeriksaan) {
@@ -148,10 +149,12 @@ public class HasilPemeriksaanRestController {
             HasilPemeriksaanDTO result = new HasilPemeriksaanDTO();
             result.setId(hasilPemeriksaan.getIdHasilPemeriksaan());
             result.setIdStatus(hasilPemeriksaan.getStatusHasilPemeriksaan().getIdStatusHasil());
+            result.setFeedback(hasilPemeriksaan.getFeedback());
             result.setTugasPemeriksaan(new TugasPemeriksaanDTO());
             result.getTugasPemeriksaan().setId(hasilPemeriksaan.getTugasPemeriksaan().getIdTugas());
             result.getTugasPemeriksaan().setIdQA(hasilPemeriksaan.getTugasPemeriksaan().getPelaksana().getIdEmployee());
             result.getTugasPemeriksaan().setNamaQA(hasilPemeriksaan.getTugasPemeriksaan().getPelaksana().getNama());
+            result.getTugasPemeriksaan().setUsernameQA(hasilPemeriksaan.getTugasPemeriksaan().getPelaksana().getUsername());
             result.getTugasPemeriksaan().setNamaKantorCabang(
                     hasilPemeriksaan.getTugasPemeriksaan().getKantorCabang().getNamaKantor());
             result.setNamaStatus(hasilPemeriksaan.getStatusHasilPemeriksaan().getNamaStatus());
@@ -165,6 +168,8 @@ public class HasilPemeriksaanRestController {
                 KomponenPemeriksaanDTO komponenPemeriksaanDTO = new KomponenPemeriksaanDTO();
                 komponenPemeriksaanDTO.setId(komponenPemeriksaan.getIdKomponenPemeriksaan());
                 komponenPemeriksaanDTO.setIdRiskLevel(komponenPemeriksaan.getRiskLevel().getIdLevel());
+                komponenPemeriksaanDTO.setNamaRiskLevel(komponenPemeriksaan.getRiskLevel().getNamaLevel());
+                komponenPemeriksaanDTO.setBobotRiskLevel(komponenPemeriksaan.getRiskLevel().getBobotLevel());
                 komponenPemeriksaanDTO.setJumlahSampel(komponenPemeriksaan.getJumlahSampel());
                 komponenPemeriksaanDTO.setKeteranganSampel(komponenPemeriksaan.getKeteranganSampel());
 
@@ -538,7 +543,7 @@ public class HasilPemeriksaanRestController {
      *
      * @param hasilPemeriksaanDTO data transfer object untuk hasil pemeriksaan yang akan dihapus
      */
-    @DeleteMapping("/hapus")
+    @PostMapping("/hapus")
     private BaseResponse<String> hapusHasilPemeriksaan(
             @RequestBody HasilPemeriksaanDTO hasilPemeriksaanDTO,
             Principal principal, ModelMap model
@@ -582,7 +587,7 @@ public class HasilPemeriksaanRestController {
      *
      * @param persetujuanHasilPemeriksaanDTO data transfer object untuk persetujuan hasil pemeriksaan
      */
-    @PutMapping(value = "/persetujuan", consumes = {"application/json"})
+    @PostMapping(value = "/persetujuan", consumes = {"application/json"})
     private BaseResponse<String> persetujuanHasilPemeriksaan(
             @RequestBody PersetujuanHasilPemeriksaanDTO persetujuanHasilPemeriksaanDTO,
             Principal principal, ModelMap model

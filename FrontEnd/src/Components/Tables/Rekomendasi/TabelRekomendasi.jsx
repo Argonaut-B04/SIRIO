@@ -6,6 +6,7 @@ import RekomendasiService from '../../../Services/RekomendasiService';
 import { NavLink } from 'react-router-dom';
 import classes from './TabelRekomendasi.module.css';
 import SirioAxiosBase from '../../../Services/SirioAxiosBase';
+import SirioMessageButton from '../../Button/ActionButton/SirioMessageButton';
 
 /**
  * Kelas untuk membuat komponen tabel rekomendasi
@@ -16,10 +17,12 @@ export default class TabelRekomendasi extends React.Component {
         super(props);
 
         this.state = {
-            rowList: []
+            rowList: [],
+            changeComplete: false
         }
 
         this.renderRows = this.renderRows.bind(this);
+        this.endNotification = this.endNotification.bind(this);
     }
 
     componentDidMount() {
@@ -59,39 +62,82 @@ export default class TabelRekomendasi extends React.Component {
             dataField: 'status',
             text: 'STATUS',
             sort: true,
+            sortFunc: (a, b, order, dataField, rowA, rowB) => {
+                const sorter = {
+                    "Draft": 1,
+                    "Menunggu Persetujuan": 2,
+                    "Ditolak": 3,
+                    "Menunggu Pengaturan Tenggat Waktu": 4,
+                    "Menunggu Pelaksanaan": 5,
+                    "Sedang Dilaksanakan": 6,
+                    "Selesai": 7
+                }
+                const aNum = sorter[a];
+                const bNum = sorter[b];
+                if (aNum === bNum) {
+                    return rowA.keterangan.localeCompare(rowB.keterangan);
+                }
+                if (order === "asc") {
+                    return aNum - bNum;
+                } else {
+                    return bNum - aNum;
+                }
+            },
             classes: classes.rowItem,
             formatter: this.statusFormatter,
             headerClasses: classes.colheader,
-            headerStyle: (colum, colIndex) => {
+            headerStyle: () => {
                 return { width: "20%", textAlign: 'left' };
             }
         }, {
             dataField: 'noData 1',
-            text: '',
-            headerClasses: classes.colheader,
-            classes: classes.rowItem,
+            text: 'Hasil Pemeriksaan',
+            headerClasses: [classes.colheader, "d-block d-sm-table-cell"].join(" "),
+            classes: [classes.rowItem, "d-block d-sm-table-cell"].join(" "),
             style: () => {
                 return { textAlign: 'center' }
             },
-            formatter: this.getButtonsFirst
+            formatter: (cell, row) => this.getButtonsFirst(cell, row)
         }, {
             dataField: 'noData 2',
-            text: '',
-            headerClasses: classes.colheader,
-            classes: classes.rowItem,
+            text: 'Tenggat Waktu',
+            sort: true,
+            // sortFunc: (a, b, order, dataField, rowA, rowB) => {
+            //     const sorter = {
+            //         "Draft": 1,
+            //         "Menunggu Persetujuan": 2,
+            //         "Ditolak": 3,
+            //         "Menunggu Pengaturan Tenggat Waktu": 4,
+            //         "Menunggu Pelaksanaan": 5,
+            //         "Sedang Dilaksanakan": 6,
+            //         "Selesai": 7
+            //     }
+            //     const aNum = sorter[a];
+            //     const bNum = sorter[b];
+            //     if (aNum === bNum) {
+            //         return rowA.keterangan.localeCompare(rowB.keterangan);
+            //     }
+            //     if (order === "asc") {
+            //         return aNum - bNum;
+            //     } else {
+            //         return bNum - aNum;
+            //     }
+            // },
+            headerClasses: [classes.colheader, "d-block d-sm-table-cell"].join(" "),
+            classes: [classes.rowItem, "d-block d-sm-table-cell"].join(" "),
             style: () => {
                 return { textAlign: 'center' }
             },
-            formatter: this.getButtonsSecond
+            formatter: (cell, row) => this.getButtonsSecond(cell, row)
         }, {
             dataField: 'noData 3',
-            text: '',
-            headerClasses: classes.colheader,
-            classes: classes.rowItem,
+            text: 'Reminder',
+            headerClasses: [classes.colheader, "d-block d-sm-table-cell"].join(" "),
+            classes: [classes.rowItem, "d-block d-sm-table-cell"].join(" "),
             style: () => {
                 return { textAlign: 'center' }
             },
-            formatter: this.getButtonsThird
+            formatter: (cell, row) => this.getButtonsThird(cell, row)
         }];
 
     // Formatter untuk kolom status
@@ -117,7 +163,7 @@ export default class TabelRekomendasi extends React.Component {
                 return (
                     <span style={{ color: '#F2994A' }}>{cell}</span>
                 );
-            case "Sedang Dijalankan":
+            case "Sedang Dilaksanakan":
                 return (
                     <span style={{ color: '#6FCF97' }}>{cell}</span>
                 );
@@ -131,51 +177,43 @@ export default class TabelRekomendasi extends React.Component {
         return (
             <SirioButton
                 purple
-                onClick={() => window.location.href = "http://www.google.com"}
+                onClick={() => alert("Halaman Hasil Pemeriksaan belum terimplementasi")}
             >
                 Hasil Pemeriksaan
             </SirioButton>
         )
     }
 
-    static aturTenggatWaktu(date, id) {
-        // yyyy-MM-dd
-        // let month = (date.getMonth() + 1);
-        // if (month < 10) {
-        //     month = "0" + month;
-        // }
-        // let simpleDate = date.getDate();
-        // if (simpleDate < 10) {
-        //     simpleDate = "0" + simpleDate;
-        // }
-        // let formattedDate = date.getFullYear() + "-" + month + "-" + simpleDate;
+    aturTenggatWaktu(date, id) {
         const newDate = [(date.getFullYear()), (date.getMonth() + 1), date.getDate()];
         RekomendasiService.setTenggatWaktu({
             id: id,
             tenggatWaktuDate: newDate
-        }).then(response => console.log(response));
+        }).then(() => {
+            this.renderRows();
+            this.setState({
+                changeComplete: true
+            })
+        });
     }
 
     // Formatter untuk render button kedua
     getButtonsSecond(cell, row) {
         const status = row.status;
-        const tenggatWaktu = row.tenggatWaktu;
-        const tenggatWaktuExist = tenggatWaktu !== "";
+        const tenggatWaktu = SirioAxiosBase.formatDateFromString(row.tenggatWaktu);
         const recommended = status === "Menunggu Pengaturan Tenggat Waktu";
-        const hyperlink = status === "Menunggu Pelaksanaan" && tenggatWaktuExist;
-        const text = status === "Sedang Dijalankan" && tenggatWaktuExist;
+        const hyperlink = status === "Menunggu Pelaksanaan";
+        const text = status === "Selesai" || status === "Sedang Dilaksanakan";
 
         const disabled = !recommended;
-        if (recommended) {
+        if (text) {
             return (
-                <SirioDatePickerButton
+                <SirioButton
                     purple
-                    recommended
-                    id={row.id}
-                    handleChange={(date, id) => TabelRekomendasi.aturTenggatWaktu(date, id)}
+                    text
                 >
-                    Tenggat Waktu
-                </SirioDatePickerButton>
+                    {tenggatWaktu}
+                </SirioButton>
             )
         } else if (hyperlink) {
             return (
@@ -183,19 +221,22 @@ export default class TabelRekomendasi extends React.Component {
                     purple
                     hyperlink
                     id={row.id}
-                    handleChange={(date, id) => TabelRekomendasi.aturTenggatWaktu(date, id)}
+                    handleChange={(date, id) => this.aturTenggatWaktu(date, id)}
+                    minDate={new Date()}
                 >
-                    {SirioAxiosBase.formatDateFromString(tenggatWaktu)}
+                    {tenggatWaktu}
                 </SirioDatePickerButton>
             )
-        } else if (text) {
+        } else if (recommended) {
             return (
-                <SirioButton
+                <SirioDatePickerButton
                     purple
-                    text
+                    recommended
+                    id={row.id}
+                    handleChange={(date, id) => this.aturTenggatWaktu(date, id)}
                 >
-                    {SirioAxiosBase.formatDateFromString(tenggatWaktu)}
-                </SirioButton>
+                    Tenggat Waktu
+                </SirioDatePickerButton>
             )
         } else if (disabled) {
             return (
@@ -212,52 +253,73 @@ export default class TabelRekomendasi extends React.Component {
     // Formatter untuk render button ketiga
     getButtonsThird(cell, row) {
         const status = row.status;
-        const reminderEnable = status === "Menunggu Pelaksanaan" || status === "Sedang Dijalankan";
+        const reminderEnable = status === "Menunggu Pelaksanaan" || status === "Sedang Dilaksanakan";
 
-        return (
-            <NavLink to={{
-                pathname: "/rekomendasi/reminder",
-                state: {
-                    id: row.id,
-                    keterangan: row.keterangan
-                }
-            }}>
+        if (reminderEnable) {
+            return (
+                <NavLink
+                    to={{
+                        pathname: "/rekomendasi/reminder",
+                        state: {
+                            id: row.id,
+                            keterangan: row.keterangan
+                        }
+                    }}>
+                    <SirioButton
+                        purple
+                        disabled={!reminderEnable}
+                    >
+                        Reminder
+                    </SirioButton>
+                </NavLink>
+            )
+        } else {
+            return (
                 <SirioButton
                     purple
-                    disabled={!reminderEnable}
+                    disabled
                 >
                     Reminder
                 </SirioButton>
-            </NavLink>
-        )
+            )
+        }
     }
 
     // Kolom yang akan di sort secara default
     defaultSorted = [{
-        dataField: 'id',
+        dataField: 'status',
         order: 'asc'
     }];
 
-    // Fungsi untuk mendapatkan tombol di sisi kanan title
-    headerButton() {
-        return (
-            <SirioButton purple>
-                Header Button
-            </SirioButton>
-        )
+    endNotification() {
+        this.setState({
+            changeComplete: false
+        })
     }
 
     // Fungsi render Tabel rekomendasi
     render() {
         return (
-            <SirioTable
-                title="Daftar Rekomendasi"
-                data={this.state.rowList}
-                id='id'
-                columnsDefinition={this.columns}
-                includeSearchBar
-                headerButton={this.headerButton()}
-            />
+            <>
+                <SirioTable
+                    title="Daftar Rekomendasi"
+                    data={this.state.rowList}
+                    defaultSorted={this.defaultSorted}
+                    id='id'
+                    columnsDefinition={this.columns}
+                    includeSearchBar
+                    indication="Tidak Terdapat Data Rekomendasi"
+                />
+                {this.state.changeComplete &&
+                    <SirioMessageButton
+                        show
+                        classes="d-none"
+                        modalTitle="Tenggat Waktu berhasil Disimpan"
+                        customConfirmText="Kembali"
+                        onClick={this.endNotification}
+                    />
+                }
+            </>
         );
     }
 } 

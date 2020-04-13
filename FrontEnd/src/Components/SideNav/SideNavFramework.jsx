@@ -5,6 +5,8 @@ import SirioButton from "../Button/SirioButton";
 import SirioDropdown from "../Dropdown/SirioDropdown";
 import SirioDropdownItem from "../Dropdown/SirioDropdownItem";
 import AuthenticationService from "../../Services/AuthenticationService";
+import { NavLink } from "react-router-dom";
+import { logout, login } from "../../Configuration/UrlConfig";
 
 /**
  * Komponen Side Nav secara General
@@ -37,8 +39,32 @@ export default class SideNavFramework extends React.Component {
 
     // Fungsi untuk render SideNav
     render() {
+        var logButton;
+        if (AuthenticationService.isLoggedIn()) {
+            logButton =
+                <SirioButton
+                    red
+                    recommended
+                    circular
+                    classes={classes.footerButton}
+                    onClick={() => window.location.href = logout.link}
+                >
+                    {logout.title}
+                </SirioButton>
+        } else {
+            logButton =
+                <SirioButton
+                    blue
+                    recommended
+                    circular
+                    classes={classes.footerButton}
+                    onClick={() => window.location.href = login.link}
+                >
+                    {login.title}
+                </SirioButton>
+        }
         return (
-            <div className={this.props.classes ? [this.props.classes, classes.sidebar].join(' ') : classes.sidebar}>
+            <nav className={this.props.classes ? [this.props.classes, classes.sidebar].join(' ') : classes.sidebar}>
                 <LogoTag light />
                 <div className={classes.identity}>
                     <h3 className={classes.username}>
@@ -50,7 +76,6 @@ export default class SideNavFramework extends React.Component {
                 </div>
                 <div className={classes.navigationContainer}>
                     {this.props.links.map((menu, i) =>
-
                         menu.dropdown ?
                             <SirioDropdown
                                 key={i}
@@ -71,28 +96,18 @@ export default class SideNavFramework extends React.Component {
                                 )}
                             </SirioDropdown>
                             :
-                            <a href={menu.link} key={i}>
-                                <div className={menu.active ? [classes.clickableNavigation, classes.active].join(' ') : classes.clickableNavigation}>
-                                    {menu.title}
-                                </div>
-                            </a>
+                            <NavLink to={menu.link} key={i} exact activeClassName={classes.active} className={classes.clickableNavigation}>
+                                {menu.title}
+                            </NavLink>
                     )}
 
                 </div>
                 <div className={classes.sideFooter}>
                     <div className={classes.footerButtonContainer}>
-                        <SirioButton
-                            blue
-                            recommended
-                            circular
-                            classes={classes.footerButton}
-                            onClick={() => window.location.href = '/logout'}
-                        >
-                            Logout
-                            </SirioButton>
+                        {logButton}
                     </div>
                 </div>
-            </div>
+            </nav>
         );
     }
 }

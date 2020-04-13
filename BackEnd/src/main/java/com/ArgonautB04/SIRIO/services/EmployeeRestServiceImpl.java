@@ -3,6 +3,7 @@ package com.ArgonautB04.SIRIO.services;
 import com.ArgonautB04.SIRIO.model.Employee;
 import com.ArgonautB04.SIRIO.repository.EmployeeDB;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +22,7 @@ public class EmployeeRestServiceImpl implements EmployeeRestService {
     @Override
     public Employee buatEmployee(Employee employee) {
         employee.setPassword(encrypt(employee.getPassword()));
+        employee.setStatus(Employee.Status.AKTIF);
         return employeeDb.save(employee);
     }
 
@@ -38,24 +40,25 @@ public class EmployeeRestServiceImpl implements EmployeeRestService {
         target.setPassword(employee.getPassword());
         target.setRole(employee.getRole());
         target.setUsername(employee.getUsername());
+        target.setJabatan(employee.getJabatan());
         return employeeDb.save(target);
     }
 
     @Override
     public Employee getById(int idEmployee) {
-        Optional<Employee> employee = employeeDb.findById(idEmployee);
+        Optional<Employee> employee = employeeDb.findByIdEmployeeAndStatus(idEmployee, Employee.Status.AKTIF);
         if (employee.isPresent()) return employee.get();
         else throw new NoSuchElementException();
     }
 
     @Override
     public Optional<Employee> getByUsername(String username) {
-        return employeeDb.findByUsername(username);
+        return employeeDb.findByUsernameAndStatus(username, Employee.Status.AKTIF);
     }
 
     @Override
     public List<Employee> getAll() {
-        return employeeDb.findAll();
+        return employeeDb.findAllByStatus(Employee.Status.AKTIF);
     }
 
     @Override
@@ -73,7 +76,7 @@ public class EmployeeRestServiceImpl implements EmployeeRestService {
     }
 
     @Override
-    public void hapusEmployee(int idEmployee) {
+    public void hapusEmployee(int idEmployee) throws DataIntegrityViolationException {
         employeeDb.deleteById(idEmployee);
     }
 }

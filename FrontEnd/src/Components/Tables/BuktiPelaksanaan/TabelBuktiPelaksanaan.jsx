@@ -1,9 +1,34 @@
 import React from 'react';
 import SirioButton from '../../Button/SirioButton';
-import classes from '../Rekomendasi/TabelRekomendasi.module.css';
 import SirioTable from '../SirioTable';
+import RekomendasiService from '../../../Services/RekomendasiService';
+import { NavLink } from 'react-router-dom';
+import classes from '../Rekomendasi/TabelRekomendasi.module.css';
+
 
 export default class TabelBuktiPelaksanaan extends React.Component {
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            rowList: []
+        }
+
+        this.renderRows = this.renderRows.bind(this);
+    }
+
+    componentDidMount() {
+        this.renderRows();
+    }
+
+    async renderRows() {
+        const response = await RekomendasiService.getRekomendasiByLoggedInUser();
+
+        this.setState({
+            rowList: response.data.result
+        })
+    }
 
     statusFormatter(cell) {
         switch (cell) {
@@ -25,28 +50,29 @@ export default class TabelBuktiPelaksanaan extends React.Component {
     }
 
     getButtons(cell, row) {
-        return (
-            <SirioButton purple
-                onClick={() => window.location.href = "/bukti-pelaksanaan/detail-persetujuan"}
-            >
-                Detail Bukti
-            </SirioButton>
-        )
+        const status = row.statusBukti;
+        const adaBukti = status === "Menunggu Persetujuan" || status === "Disetujui" || status === "Ditolak";
+
+        if (adaBukti) {
+            return (
+                <NavLink to={{
+                    pathname: "/bukti-pelaksanaan/persetujuan",
+                    state: {
+                        id: row.id
+                    }
+                }}>
+                    <SirioButton
+                        purple
+                    >
+                        Detail Bukti
+                    </SirioButton>
+                </NavLink>
+            )
+        }
     }
 
     columns = [{
-        dataField: '',
-        isDummyField: true,
-        text: 'NO',
-        sort: true,
-        classes: classes.rowNumber,
-        headerClasses: classes.colheader,
-        headerStyle: (colum, colIndex) => {
-            return { width: "60px", textAlign: 'center' };
-        },
-        formatter: this.rowNumber
-    }, {
-        dataField: 'keteranganRekomendasi',
+        dataField: 'keterangan',
         text: 'KETERANGAN',
         sort: true,
         classes: classes.rowItem,
@@ -74,7 +100,7 @@ export default class TabelBuktiPelaksanaan extends React.Component {
             return { width: "20%", textAlign: 'left' };
         }
     }, {
-        dataField: 'id',
+        dataField: 'action',
         text: '',
         headerClasses: classes.colheader,
         classes: classes.rowItem,
@@ -83,16 +109,6 @@ export default class TabelBuktiPelaksanaan extends React.Component {
         },
         formatter: this.getButtons
     }];
-
-    data = [
-        { "id": 10, "keteranganRekomendasi": "Keterangan", "namaKantorCabang": "Kantor Cabang Depok", "statusBukti": "Disetujui" },
-        { "id": 1, "keteranganRekomendasi": "Keterangan", "namaKantorCabang": "Kantor Cabang Depok", "statusBukti": "Ditolak" },
-        { "id": 2, "keteranganRekomendasi": "Keterangan", "namaKantorCabang": "Kantor Cabang Depok", "statusBukti": "Disetujui" },
-        { "id": 3, "keteranganRekomendasi": "Keterangan", "namaKantorCabang": "Kantor Cabang Depok", "statusBukti": "Menunggu Persetujuan" },
-        { "id": 4, "keteranganRekomendasi": "Keterangan", "namaKantorCabang": "Kantor Cabang Depok", "statusBukti": "Menunggu Persetujuan" },
-        { "id": 5, "keteranganRekomendasi": "Keterangan", "namaKantorCabang": "Kantor Cabang Depok", "statusBukti": "Menunggu Persetujuan" },
-        { "id": 6, "keteranganRekomendasi": "Keterangan", "namaKantorCabang": "Kantor Cabang Depok", "statusBukti": "Menunggu Persetujuan" },
-    ]
 
     defaultSorted = [{
         dataField: 'id',
@@ -103,7 +119,7 @@ export default class TabelBuktiPelaksanaan extends React.Component {
         return (
             <SirioTable
                 title="Daftar Bukti Pelaksanaan Rekomendasi"
-                data={this.data}
+                data={this.state.rowList}
                 id='id'
                 columnsDefinition={this.columns}
                 includeSearchBar

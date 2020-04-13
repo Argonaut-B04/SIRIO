@@ -13,10 +13,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.security.Principal;
 import java.text.ParseException;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.*;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -41,45 +38,83 @@ public class RekomendasiRestController {
     @Autowired
     private KantorCabangRestService kantorCabangRestService;
 
+    @Autowired
+    private BuktiPelaksanaanRestService buktiPelaksanaanRestService;
+
     /**
      * Mengambil seluruh rekomendasi yang terhubung dengan user yang sedang login
-     * <p>
-     * Changelog:
-     * - Mengubah filter id pembuat dengan filter logged in user
      *
      * @return daftar rekomendasi yang terhubung dengan pembuat tersebut
      */
     @GetMapping("/getAll")
     private BaseResponse<List<RekomendasiDTO>> getAllRekomendasiUntukLoggedInUser(Principal principal) {
         BaseResponse<List<RekomendasiDTO>> response = new BaseResponse<>();
-        try {
-            Optional<Employee> employeeTarget = employeeRestService.getByUsername(principal.getName());
-            Employee employee;
-            if (employeeTarget.isPresent()) {
-                employee = employeeTarget.get();
-            } else {
-                throw new NoSuchElementException();
-            }
-            List<Rekomendasi> result = rekomendasiRestService.getByPembuat(employee);
-            List<RekomendasiDTO> resultDTO = new ArrayList<>();
-            for (Rekomendasi rekomedasi : result) {
+        Optional<Employee> employeeTarget = employeeRestService.getByUsername(principal.getName());
+        Employee employee;
+        if (employeeTarget.isPresent()) {
+            employee = employeeTarget.get();
+        } else throw new ResponseStatusException(
+                HttpStatus.NOT_FOUND, "Akun anda tidak terdaftar dalam Sirio"
+        );
+
+        List<RekomendasiDTO> resultDTO = new ArrayList<>();
+        if (employee.getRole().getNamaRole().equals("Branch Manager")) {
+            KantorCabang kantorCabang = kantorCabangRestService.getByPemilik(employee);
+            List<TugasPemeriksaan> daftarTugasPemeriksaan = tugasPemeriksaanRestService.getByKantorCabang(kantorCabang);
+            List<HasilPemeriksaan> daftarHasilPemeriksaan = hasilPemeriksaanRestService.getByDaftarTugasPemeriksaan(daftarTugasPemeriksaan);
+            List<KomponenPemeriksaan> daftarKomponenPemeriksaan = komponenPemeriksaanRestService.getByDaftarHasilPemeriksaan(daftarHasilPemeriksaan);
+            List<Rekomendasi> result = rekomendasiRestService.getByDaftarKomponenPemeriksaan(daftarKomponenPemeriksaan);
+            for (Rekomendasi rekomendasi : result) {
                 RekomendasiDTO rekomendasiDTO = new RekomendasiDTO();
-                rekomendasiDTO.setId(rekomedasi.getIdRekomendasi());
-                rekomendasiDTO.setKeterangan(rekomedasi.getKeterangan());
-                rekomendasiDTO.setTenggatWaktu(rekomedasi.getTenggatWaktu().toString());
-                rekomendasiDTO.setStatus(rekomedasi.getStatusRekomendasi().getNamaStatus());
+                rekomendasiDTO.setId(rekomendasi.getIdRekomendasi());
+                rekomendasiDTO.setKeterangan(rekomendasi.getKeterangan());
+                String tenggatWaktu = rekomendasi.getTenggatWaktu().toString();
+                String tenggatWaktuFinal = "";
+                tenggatWaktuFinal = tenggatWaktu.substring(0, 10);
+                rekomendasiDTO.setTenggatWaktu(tenggatWaktuFinal);
+                rekomendasiDTO.setDurasi("10 Hari");
+                List<BuktiPelaksanaan> buktiList = buktiPelaksanaanRestService.getByDaftarRekomendasi(result);
+                for (BuktiPelaksanaan buktiPelaksanaan : buktiList) {
+                    if (buktiPelaksanaan.getRekomendasi().equals(rekomendasi)) {
+                        rekomendasiDTO.setStatusBukti(buktiPelaksanaan.getStatusBuktiPelaksanaan().getNamaStatus());
+                    }
+                }
                 resultDTO.add(rekomendasiDTO);
             }
-
-            response.setStatus(200);
-            response.setMessage("success");
-            response.setResult(resultDTO);
-        } catch (NoSuchElementException e) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Akun anda tidak terdaftar atau tidak ditemukan!"
-            );
+        } else if (employee.getRole().getNamaRole().equals("QA Officer Operational Risk")) {
+            List<Rekomendasi> result = rekomendasiRestService.getByPembuat(employee);
+            for (Rekomendasi rekomendasi : result) {
+                RekomendasiDTO rekomendasiDTO = new RekomendasiDTO();
+                rekomendasiDTO.setId(rekomendasi.getIdRekomendasi());
+                rekomendasiDTO.setKeterangan(rekomendasi.getKeterangan());
+                Date tenggatWaktu = rekomendasi.getTenggatWaktu();
+                if (tenggatWaktu != null) {
+                    rekomendasiDTO.setTenggatWaktu(tenggatWaktu.toString());
+                }
+                rekomendasiDTO.setStatus(rekomendasi.getStatusRekomendasi().getNamaStatus());
+                List<BuktiPelaksanaan> buktiList = buktiPelaksanaanRestService.getByDaftarRekomendasi(result);
+                for (BuktiPelaksanaan buktiPelaksanaan : buktiList) {
+                    if (buktiPelaksanaan.getRekomendasi().equals(rekomendasi)) {
+                        rekomendasiDTO.setStatusBukti(buktiPelaksanaan.getStatusBuktiPelaksanaan().getNamaStatus());
+                    }
+                }
+                rekomendasiDTO.setNamaKantorCabang(
+                        rekomendasi
+                                .getKomponenPemeriksaan()
+                                .getHasilPemeriksaan()
+                                .getTugasPemeriksaan()
+                                .getKantorCabang()
+                                .getNamaKantor()
+                );
+                resultDTO.add(rekomendasiDTO);
+            }
         }
+        response.setStatus(200);
+        response.setMessage("success");
+        response.setResult(resultDTO);
         return response;
+
+
     }
 
     /**

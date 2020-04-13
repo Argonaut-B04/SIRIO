@@ -6,6 +6,8 @@ import overlayFactory from 'react-bootstrap-table2-overlay';
 import classes from './SirioTable.module.css';
 import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css"
 import 'react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.min.css';
+import SirioComponentHeader from '../Header/SirioComponentHeader';
+import ComponentWrapper from '../../Layout/ComponentWrapper';
 
 /**
  * Kelas komponen tabel untuk Sirio secara umum
@@ -30,11 +32,6 @@ export default class SirioTable extends Component {
 
         this.renderRowNumber = this.renderRowNumber.bind(this);
         this.numberFormatter = this.numberFormatter.bind(this);
-    }
-
-    // Fungsi untuk menampilkan hasil return jika tidak ada data yang ditampilkan pada tabel
-    indication() {
-        return "No Data in Table"
     }
 
     // Fungsi untuk menampilkan informasi jumlah entry tabel
@@ -101,12 +98,13 @@ export default class SirioTable extends Component {
     }
 
     columns = [{
-        dataField: 'no',
+        dataField: 'noData',
         text: 'NO',
-        sort: true,
-        classes: classes.rowNumber,
-        headerClasses: classes.colheader,
-        headerStyle: (colum, colIndex) => {
+        isDummyField: true,
+        searchable: false,
+        classes: [classes.rowNumber, "d-none d-sm-table-cell"].join(" "),
+        headerClasses: [classes.colheader, "d-none d-sm-table-cell"].join(" "),
+        headerStyle: () => {
             return { width: "50px", textAlign: 'center' };
         },
         formatter: (cell, row, enumObject, index) => this.numberFormatter(enumObject),
@@ -118,19 +116,20 @@ export default class SirioTable extends Component {
         const columnsDefinition = this.columns.concat(this.props.columnsDefinition);
         return (
             <div>
-                <div className={classes.headerWrapper}>
-                    <h2 className={classes.title}>
-                        {this.props.title}
-                    </h2>
-                    {this.props.headerButton}
-                </div>
-                <div className={classes.toolkitWrapper}>
+                {this.props.noHeader || this.props.customHeader ? this.props.customHeader :
+                    <SirioComponentHeader
+                        headerButton={this.props.headerButton}
+                        title={this.props.title}
+                        subtitle={this.props.subtitle}
+                        betweenTitleSubtitle={this.props.betweenTitleSubtitle}
+                    />
+                }
+                <ComponentWrapper>
                     <ToolkitProvider
                         bootstrap4
                         keyField={this.props.id}
                         data={this.props.data}
                         columns={columnsDefinition}
-                        defaultSorted={this.props.defaultSorted}
                         search={{
                             searchFormatted: true
                         }}
@@ -153,9 +152,10 @@ export default class SirioTable extends Component {
                                         {...props.baseProps}
                                         ref={n => this.node = n}
                                         striped
+                                        cellEdit={this.props.cellEdit}
                                         hover
-                                        condensed
-                                        noDataIndication={this.indication}
+                                        defaultSorted={this.props.defaultSorted}
+                                        noDataIndication={this.props.indication ? this.props.indication : "No Data"}
                                         pagination={this.pagination}
                                         overlay={this.overlay}
                                         classes="table-responsive-lg"
@@ -171,7 +171,7 @@ export default class SirioTable extends Component {
                         :
                         null
                     }
-                </div>
+                </ComponentWrapper>
             </div>
         );
     }

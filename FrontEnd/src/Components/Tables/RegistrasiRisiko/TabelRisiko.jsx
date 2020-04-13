@@ -1,33 +1,61 @@
 import React from 'react';
 import SirioButton from '../../Button/SirioButton';
-import classes from '../Rekomendasi/TabelRekomendasi.module.css';
+import classes from '../RegistrasiRisiko/TabelRisiko.module.css';
 import SirioTable from '../SirioTable';
+import RegistrasiRisikoService from '../../../Services/RegistrasiRisikoService';
+import { NavLink } from 'react-router-dom';
 
 export default class TabelRisiko extends React.Component {
 
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            rowList: []
+        }
+
+        this.renderRows = this.renderRows.bind(this);
+    }
+
+    componentDidMount() {
+        this.renderRows();
+    }
+
+    async renderRows() {
+        const response = await RegistrasiRisikoService.getAllRisiko();
+
+        this.setState({
+            rowList: response.data.result
+        })
+    }
+
     getButtons(cell, row) {
+        console.log(row)
         return (
-            <SirioButton
-                purple
-                onClick={() => window.location.href = "/registrasi-risiko/detail/1"}
-            >
-                Detail
-            </SirioButton>
+            <NavLink to={{
+                pathname: "/registrasi-risiko/detail",
+                state: {
+                    id: row.idRisiko,
+                }
+            }}>
+                <SirioButton
+                    purple
+                >
+                    Detail
+                </SirioButton>
+            </NavLink>
         )
     }
 
+    parentFormatter() {
+        if (this.parent) {
+            return this.parent
+        } else {
+            return "-"
+        }
+    }
+
     columns = [{
-        dataField: 'number',
-        isDummyField: true,
-        text: 'NO',
-        sort: true,
-        classes: classes.rowNumber,
-        headerClasses: classes.colheader,
-        headerStyle: (colum, colIndex) => {
-            return { width: "60px", textAlign: 'center' };
-        },
-        formatter: this.rowNumber
-    }, {
         dataField: 'namaRisiko',
         text: 'NAMA',
         sort: true,
@@ -37,26 +65,26 @@ export default class TabelRisiko extends React.Component {
             return { width: "30%", textAlign: 'left' };
         }
     }, {
-        dataField: 'kategoriRisiko',
+        dataField: 'risikoKategori',
         text: 'KATEGORI',
         sort: true,
         classes: classes.rowItem,
         headerClasses: classes.colheader,
         headerStyle: (colum, colIndex) => {
-            return { width: "25%", textAlign: 'left' };
+            return { width: "25%", textAlign: 'center' };
         }
     }, {
-        dataField: 'parentRisiko',
+        dataField: 'parent',
         text: 'PARENT',
         sort: true,
+        formatter: this.parentFormatter,
         classes: classes.rowItem,
-        formatter: this.statusFormatter,
         headerClasses: classes.colheader,
         headerStyle: (colum, colIndex) => {
-            return { width: "20%", textAlign: 'left' };
+            return { width: "20%", textAlign: 'center' };
         }
     }, {
-        dataField: 'id',
+        dataField: 'noData 1',
         text: '',
         headerClasses: classes.colheader,
         classes: classes.rowItem,
@@ -65,18 +93,6 @@ export default class TabelRisiko extends React.Component {
         },
         formatter: this.getButtons
     }];
-
-    data = [
-        { "id": 1, "namaRisiko": "Risiko 1", "kategoriRisiko": "Kategori 1", "parentRisiko": "-" },
-        { "id": 2, "namaRisiko": "Risiko 2", "kategoriRisiko": "Kategori 2", "parentRisiko": "Risiko 1" },
-        { "id": 3, "namaRisiko": "Risiko 3", "kategoriRisiko": "Kategori 3", "parentRisiko": "Risiko 2" },
-        { "id": 4, "namaRisiko": "Risiko 4", "kategoriRisiko": "Kategori 1", "parentRisiko": "-" },
-        { "id": 5, "namaRisiko": "Risiko 5", "kategoriRisiko": "Kategori 2", "parentRisiko": "Risiko 4" },
-        { "id": 6, "namaRisiko": "Risiko 6", "kategoriRisiko": "Kategori 3", "parentRisiko": "Risiko 5" },
-        { "id": 7, "namaRisiko": "Risiko 7", "kategoriRisiko": "Kategori 1", "parentRisiko": "-" },
-        { "id": 8, "namaRisiko": "Risiko 8", "kategoriRisiko": "Kategori 2", "parentRisiko": "Risiko 7" },
-        { "id": 9, "namaRisiko": "Risiko 9", "kategoriRisiko": "Kategori 3", "parentRisiko": "Risiko 8" },
-    ]
 
     defaultSorted = [{
         dataField: 'id',
@@ -87,14 +103,20 @@ export default class TabelRisiko extends React.Component {
     headerButton() {
         return (
             <div>
-                <SirioButton purple recommended classes="mx-2"
-                onClick={() => window.location.href = "http://www.google.com"}>
-                    Tambah Risiko
-                </SirioButton>
-                <SirioButton purple
-                onClick={() => window.location.href = "http://www.google.com"}>
-                    Ubah Semua Hierarki
-                </SirioButton> 
+                <NavLink to={{
+                    pathname: "/registrasi-risiko/tambah"
+                }}>
+                    <SirioButton purple recommended classes="mx-2">
+                        Tambah Risiko
+                    </SirioButton>
+                </NavLink>
+                <NavLink to={{
+                    pathname: "/registrasi-risiko/ubah-hierarki"
+                }}>
+                    <SirioButton purple classes="mx-2">
+                        Ubah Semua Hierarki
+                    </SirioButton>
+                </NavLink>
             </div>
         )
     }
@@ -103,7 +125,7 @@ export default class TabelRisiko extends React.Component {
         return (
             <SirioTable
                 title="Registrasi Risiko"
-                data={this.data}
+                data={this.state.rowList}
                 id='id'
                 columnsDefinition={this.columns}
                 includeSearchBar

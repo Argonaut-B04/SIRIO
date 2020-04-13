@@ -2,6 +2,7 @@ package com.ArgonautB04.SIRIO.services;
 
 import com.ArgonautB04.SIRIO.model.BuktiPelaksanaan;
 import com.ArgonautB04.SIRIO.model.Employee;
+import com.ArgonautB04.SIRIO.model.Rekomendasi;
 import com.ArgonautB04.SIRIO.repository.BuktiPelaksanaanDB;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,6 +32,11 @@ public class BuktiPelaksananRestServiceImpl implements BuktiPelaksanaanRestServi
     }
 
     @Override
+    public BuktiPelaksanaan getByRekomendasi(Rekomendasi rekomendasi) {
+        return buktiPelaksanaanDB.findByRekomendasi(rekomendasi);
+    }
+
+    @Override
     public List<BuktiPelaksanaan> getAll() {
         return buktiPelaksanaanDB.findAll();
     }
@@ -51,5 +57,10 @@ public class BuktiPelaksananRestServiceImpl implements BuktiPelaksanaanRestServi
     @Override
     public List<BuktiPelaksanaan> getByPembuat(Employee pembuat) {
         return buktiPelaksanaanDB.findAllByPembuat(pembuat);
+    }
+
+    @Override
+    public List<BuktiPelaksanaan> getByDaftarRekomendasi(List<Rekomendasi> rekomendasiList) {
+        return buktiPelaksanaanDB.findAllByRekomendasiIn(rekomendasiList);
     }
 }
