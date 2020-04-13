@@ -251,18 +251,19 @@ public class RencanaPemeriksaanRestController {
      *
      * @param rencanaPemeriksaanDTO data transfer object untuk rencana pemeriksaan yang akan dihapus
      */
-    @DeleteMapping("/hapus")
+    @PostMapping("/hapus")
     private BaseResponse<String> hapusRencanaPemeriksaan(
             @RequestBody RencanaPemeriksaanDTO rencanaPemeriksaanDTO
     ) {
         BaseResponse<String> response = new BaseResponse<>();
+        RencanaPemeriksaan rencanaPemeriksaan;
         try {
-            RencanaPemeriksaan rencanaPemeriksaan = rencanaPemeriksaanRestService.getById(rencanaPemeriksaanDTO.getId());
+            rencanaPemeriksaan = rencanaPemeriksaanRestService.getById(rencanaPemeriksaanDTO.getId());
 
-        } catch (EmptyResultDataAccessException e) {
-            response.setStatus(404);
-            response.setMessage("not found");
-            response.setResult("Rencana pemeriksaan id " + rencanaPemeriksaanDTO.getId() + " tidak dapat ditemukan");
+        } catch (NoSuchElementException | NullPointerException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Rencana pemeriksaan dengan ID " + rencanaPemeriksaanDTO.getId() + " tidak ditemukan!"
+            );
         }
 
         //Tidak dapat dihapus jika rencana sudah dijalankan
@@ -271,7 +272,11 @@ public class RencanaPemeriksaanRestController {
             response.setMessage("error");
             response.setResult("Rencana pemeriksaan dengan id " + rencanaPemeriksaanDTO.getId() + " tidak dapat dihapus!");
         }else {
-            rencanaPemeriksaanRestService.hapusRencanaPemeriksaan(rencanaPemeriksaanDTO.getId());
+            for (TugasPemeriksaanDTO tugasPemeriksaanDTO : rencanaPemeriksaanDTO.getDaftarTugasPemeriksaan()) {
+                TugasPemeriksaan tugasPemeriksaanTemp = tugasPemeriksaanRestService.getById(tugasPemeriksaanDTO.getId());
+                tugasPemeriksaanRestService.hapusTugasPemeriksaan(tugasPemeriksaanTemp.getIdTugas());
+            }
+            rencanaPemeriksaanRestService.hapusRencanaPemeriksaan(rencanaPemeriksaan.getIdRencana());
             response.setStatus(200);
             response.setMessage("success");
             response.setResult("Rencana pemeriksaan dengan id " + rencanaPemeriksaanDTO.getId() + " terhapus!");
