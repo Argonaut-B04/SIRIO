@@ -4,7 +4,8 @@ import SirioButton from '../../Button/SirioButton';
 import EmployeeService from '../../../Services/EmployeeService';
 import { NavLink } from 'react-router-dom';
 import { withRouter } from 'react-router-dom';
-
+import { Redirect } from 'react-router-dom';
+import SirioWarningButton from "../../Button/ActionButton/SirioWarningButton";
 
 class DetailEmployee extends React.Component {
 
@@ -12,40 +13,66 @@ class DetailEmployee extends React.Component {
         super(props);
 
         this.state = {
-            employee: {}
-        }
+            employee: {},
+            dataGeneral: {},
+            redirect: false
+        };
 
         this.renderDataEmployee = this.renderDataEmployee.bind(this);
+        this.setRedirect = this.setRedirect.bind(this);
     }
 
     componentDidMount() {
         this.renderDataEmployee();
     }
 
+    setRedirect = () => {
+        this.setState({
+            redirect: true
+        })
+    };
+
+    renderRedirect = () => {
+        if (this.state.redirect) {
+            return <Redirect to={{
+                pathname: "/employee",
+                state: {
+                    deleteSuccess: true
+                }
+            }} />
+        }
+    };
+
     async renderDataEmployee() {
         const response = await EmployeeService.getEmployee(this.props.location.state.id);
 
         this.setState({
-            employee: response.data.result
+            employee: response.data.result,
+            dataGeneral: {
+                "Nama": response.data.result.nama,
+                "Jabatan": response.data.result.jabatan,
+                "Username": response.data.result.username,
+                "Role": response.data.result.role.namaRole,
+                "Email": response.data.result.email,
+                "Nomor Telepon": this.nomorHpFormatter(response.data.result.noHp)
+            }
         })
     }
 
-    nomorHpFormatter() {
-        if (this.state.employee.noHp) {
-            return this.state.employee.noHp
+    nomorHpFormatter(noHp) {
+        if (noHp) {
+            return noHp
         } else {
             return "-"
         }
     }
 
-    data() {
-        return {
-            "Nama": this.state.employee.nama,
-            "Jabatan": this.state.employee.jabatan,
-            "Username": this.state.employee.username,
-            "Email": this.state.employee.email,
-            "Nomor Telepon": this.nomorHpFormatter()
+    hapus(id) {
+        const employee = {
+            id: id
         };
+        EmployeeService.deleteEmployee(employee)
+            .then(() => this.setRedirect());
     }
 
     subButton() {
@@ -63,30 +90,31 @@ class DetailEmployee extends React.Component {
                         Ubah
                     </SirioButton>
                 </NavLink>
-                <NavLink to={{
-                    pathname: "/employee/hapus",
-                    state: {
-                        id: this.state.employee.idEmployee,
-                    }
-                }}>
-                    <SirioButton
-                        purple
-                    >
-                        Hapus
-                    </SirioButton>
-                </NavLink>
+                <SirioWarningButton
+                    red
+                    modalTitle="Konfirmasi Penghapusan"
+                    modalDesc="Apakah anda yakin untuk menghapus employee?"
+                    onConfirm={() => this.hapus(this.state.employee.idEmployee)}
+                    customConfirmText="Ya, Hapus"
+                    customCancelText="Batal"
+                >
+                    Hapus
+                </SirioWarningButton>
             </div>
         )
     }
 
     render() {
         return (
-            <SirioDetailPage
-                title="Detail Employee"
-                data={this.data()}
-                id='id'
-                subButton={this.subButton()}
-            />
+            <>
+                {this.renderRedirect()}
+                <SirioDetailPage
+                    title="Detail Employee"
+                    data={this.state.dataGeneral}
+                    id='id'
+                    subButton={this.subButton()}
+                />
+            </>
         );
     }
 }

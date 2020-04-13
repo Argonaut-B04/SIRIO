@@ -7,6 +7,7 @@ import classes from './SirioTable.module.css';
 import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css"
 import 'react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.min.css';
 import SirioComponentHeader from '../Header/SirioComponentHeader';
+import ComponentWrapper from '../../Layout/ComponentWrapper';
 
 /**
  * Kelas komponen tabel untuk Sirio secara umum
@@ -33,11 +34,6 @@ export default class SirioTable extends Component {
         this.numberFormatter = this.numberFormatter.bind(this);
     }
 
-    // Fungsi untuk menampilkan hasil return jika tidak ada data yang ditampilkan pada tabel
-    indication() {
-        return "No Data in Table"
-    }
-
     // Fungsi untuk menampilkan informasi jumlah entry tabel
     // TODO: Ubah menjadi sesuai dengan desain
     customTotal = (from, to, size) => (
@@ -59,7 +55,7 @@ export default class SirioTable extends Component {
         };
         return (
             <li className="page-item" key={page} >
-                <a href="https://www.google.com/" className="sirio-pagination-button" onClick={handleClick}>{page}</a>
+                <p className="sirio-pagination-button" onClick={handleClick}>{page}</p>
             </li>
         );
     };
@@ -74,7 +70,10 @@ export default class SirioTable extends Component {
             paginationTotalRenderer: this.customTotal,
             onPageChange: (page, sizePerPage) => {
                 this.renderRowNumber(page, sizePerPage)
-            }
+            },
+            onSizePerPageChange: (sizePerPage, page) => {
+                this.renderRowNumber(page, sizePerPage)
+            },
         })
 
     // Overlay adalah animasi singkat yang ditampilkan pada tabel ketika isi tabel sedang dirender
@@ -102,8 +101,10 @@ export default class SirioTable extends Component {
     }
 
     columns = [{
-        dataField: 'no',
+        dataField: 'noData',
         text: 'NO',
+        isDummyField: true,
+        searchable: false,
         classes: [classes.rowNumber, "d-none d-sm-table-cell"].join(" "),
         headerClasses: [classes.colheader, "d-none d-sm-table-cell"].join(" "),
         headerStyle: () => {
@@ -126,7 +127,7 @@ export default class SirioTable extends Component {
                         betweenTitleSubtitle={this.props.betweenTitleSubtitle}
                     />
                 }
-                <div className={classes.toolkitWrapper}>
+                <ComponentWrapper>
                     <ToolkitProvider
                         bootstrap4
                         keyField={this.props.id}
@@ -157,7 +158,7 @@ export default class SirioTable extends Component {
                                         cellEdit={this.props.cellEdit}
                                         hover
                                         defaultSorted={this.props.defaultSorted}
-                                        noDataIndication={this.indication}
+                                        noDataIndication={this.props.indication ? this.props.indication : "No Data"}
                                         pagination={this.pagination}
                                         overlay={this.overlay}
                                         classes="table-responsive-lg"
@@ -166,14 +167,12 @@ export default class SirioTable extends Component {
                             )
                         }
                     </ToolkitProvider>
-                    {this.props.footerContent ?
+                    {this.props.footerContent &&
                         <div className={classes.footerWrapper}>
                             {this.props.footerContent}
                         </div>
-                        :
-                        null
                     }
-                </div>
+                </ComponentWrapper>
             </div>
         );
     }

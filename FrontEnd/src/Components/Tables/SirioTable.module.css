@@ -5,13 +5,6 @@
     align-items: flex-end;
 }
 
-.toolkitWrapper {
-    border: solid #E0E0E0 2px;
-    border-radius: 10px;
-    padding: 1rem;
-    margin-bottom: 5rem;
-}
-
 .colheader {
     color: white;
     background-color: #7F3F98;

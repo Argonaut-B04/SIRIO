@@ -6,6 +6,7 @@ import AuthenticationService from "../Services/AuthenticationService";
 import SirioMessageButton from "../Components/Button/ActionButton/SirioMessageButton";
 import SirioWarningButton from "../Components/Button/ActionButton/SirioWarningButton";
 import SirioConfirmButton from "../Components/Button/ActionButton/SirioConfirmButton";
+import SirioMainLayout from "../Layout/SirioMainLayout";
 
 /**
  * Controller untuk menampilkan halaman utama
@@ -24,15 +25,12 @@ export default class MainPage extends React.Component {
 
     render() {
         return (
-            <div>
+            <SirioMainLayout>
                 <h3>Welcome to SIRIO</h3>
 
                 {/* Contoh cara menampilkan username dan role */}
                 {this.state.username && <h4>Username: {this.state.username}</h4>}
                 {this.state.role && <h4>Role: {this.state.role}</h4>}
-
-                <small>Main Page</small>
-                <br />
 
                 {/* Contoh cara menampilkan tombol redirect */}
                 {/* Alternatif lain: href="/tujuan" */}
@@ -48,11 +46,8 @@ export default class MainPage extends React.Component {
                 <br />
                 <Link to="/Form" className="btn btn-primary">Demo Form</Link>
                 <br />
-                <Link to="/login" className="btn btn-primary">Login</Link>
+                <Link to="/Form-Multi" className="btn btn-primary">Demo Multi Form</Link>
                 <br />
-                <Link to="/logout" className="btn btn-primary">Logout</Link>
-                <br />
-
                 {/* Contoh button yang mengeluarkan popup berupa message */}
                 <SirioMessageButton
                     purple
@@ -90,7 +85,7 @@ export default class MainPage extends React.Component {
                 >
                     Test Popup Konfirmasi
                 </SirioConfirmButton>
-            </div>
+            </SirioMainLayout>
         )
     }
 }

@@ -91,7 +91,7 @@ export default class TabelRekomendasi extends React.Component {
             }
         }, {
             dataField: 'noData 1',
-            text: '',
+            text: 'Hasil Pemeriksaan',
             headerClasses: [classes.colheader, "d-block d-sm-table-cell"].join(" "),
             classes: [classes.rowItem, "d-block d-sm-table-cell"].join(" "),
             style: () => {
@@ -100,27 +100,62 @@ export default class TabelRekomendasi extends React.Component {
             formatter: (cell, row) => this.getButtonsFirst(cell, row)
         }, {
             dataField: 'noData 2',
-            text: '',
+            text: 'Tenggat Waktu',
             headerClasses: [classes.colheader, "d-block d-sm-table-cell"].join(" "),
             classes: [classes.rowItem, "d-block d-sm-table-cell"].join(" "),
             style: () => {
                 return { textAlign: 'center' }
             },
+            sort: true,
+            sortFunc: (a, b, order, dataField, rowA, rowB) => {
+                const tenggatWaktuA = Date.parse(rowA.tenggatWaktu);
+                const tenggatWaktuB = Date.parse(rowB.tenggatWaktu);
+                if (isNaN(tenggatWaktuA) && isNaN(tenggatWaktuB)) {
+                    return rowA.keterangan.localeCompare(rowB.keterangan);
+                } else if (isNaN(tenggatWaktuA)) {
+                    return 1
+                } else if (isNaN(tenggatWaktuB)) {
+                    return -1
+                }
+                if (order === "asc") {
+                    return tenggatWaktuA - tenggatWaktuB;
+                } else {
+                    return tenggatWaktuB - tenggatWaktuA;
+                }
+            },
             formatter: (cell, row) => this.getButtonsSecond(cell, row)
         }, {
             dataField: 'noData 3',
-            text: '',
+            text: 'Reminder',
             headerClasses: [classes.colheader, "d-block d-sm-table-cell"].join(" "),
             classes: [classes.rowItem, "d-block d-sm-table-cell"].join(" "),
             style: () => {
                 return { textAlign: 'center' }
             },
             formatter: (cell, row) => this.getButtonsThird(cell, row)
+        }, {
+            dataField: 'untukSearchStatus',
+            text: '',
+            hidden: true,
+            formatter: this.statusNoFormatter,
+        }, {
+            dataField: 'untukSearchTanggal',
+            text: '',
+            hidden: true,
+            formatter: this.tanggalNoFormatter,
         }];
 
+    tanggalNoFormatter(cell, row) {
+        return SirioAxiosBase.formatDateFromString(row.tenggatWaktu);
+    }
+
+    statusNoFormatter(cell, row) {
+        return row.status;
+    }
+
     // Formatter untuk kolom status
-    statusFormatter(cell) {
-        switch (cell) {
+    statusFormatter(cell, row) {
+        switch (row.status) {
             case "Draft":
                 return (
                     <span style={{ color: '#7F3F98' }}>{cell}</span>
@@ -181,7 +216,7 @@ export default class TabelRekomendasi extends React.Component {
         const tenggatWaktu = SirioAxiosBase.formatDateFromString(row.tenggatWaktu);
         const recommended = status === "Menunggu Pengaturan Tenggat Waktu";
         const hyperlink = status === "Menunggu Pelaksanaan";
-        const text = status === "Sedang Dilaksanakan" || status === "Selesai";
+        const text = status === "Selesai" || status === "Sedang Dilaksanakan";
 
         const disabled = !recommended;
         if (text) {
@@ -200,6 +235,7 @@ export default class TabelRekomendasi extends React.Component {
                     hyperlink
                     id={row.id}
                     handleChange={(date, id) => this.aturTenggatWaktu(date, id)}
+                    minDate={new Date()}
                 >
                     {tenggatWaktu}
                 </SirioDatePickerButton>
@@ -230,7 +266,7 @@ export default class TabelRekomendasi extends React.Component {
     // Formatter untuk render button ketiga
     getButtonsThird(cell, row) {
         const status = row.status;
-        const reminderEnable = status === "Menunggu Pelaksanaan" || status === "Sedang Dijalankan";
+        const reminderEnable = status === "Menunggu Pelaksanaan" || status === "Sedang Dilaksanakan";
 
         if (reminderEnable) {
             return (
@@ -285,6 +321,7 @@ export default class TabelRekomendasi extends React.Component {
                     id='id'
                     columnsDefinition={this.columns}
                     includeSearchBar
+                    indication="Tidak Terdapat Data Rekomendasi"
                 />
                 {this.state.changeComplete &&
                     <SirioMessageButton

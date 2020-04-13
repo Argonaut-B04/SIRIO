@@ -5,7 +5,6 @@ import RekomendasiService from '../../../Services/RekomendasiService';
 import { NavLink } from 'react-router-dom';
 import { withRouter } from 'react-router-dom';
 import classes from './TabelRekomendasiBM.module.css';
-import SirioMessageButton from '../../Button/ActionButton/SirioMessageButton';
 
 class TabelRekomendasiBM extends React.Component {
 

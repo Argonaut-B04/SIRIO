@@ -6,7 +6,7 @@ import classes from './SirioButton.module.css';
  * 
  * Props yang tersedia:
  * - purple / blue
- * - recommended / hyperlink / text / disabled
+ * - recommended / hyperlink / hyperlinkLeft / text / disabled
  * - circular (optional)
  * - classes                : cssClass, kelas tambahan untuk SirioButton
  */
@@ -27,6 +27,8 @@ export default class SirioButton extends React.Component {
             style = classes.recommended;
         } else if (this.props.hyperlink) {
             style = classes.hyperlink;
+        } else if (this.props.hyperlinkLeft) {
+            style = classes.hyperlinkLeft;
         } else if (this.props.text) {
             style = classes.text;
         } else if (this.props.disabled) {
@@ -59,6 +61,7 @@ export default class SirioButton extends React.Component {
             <button
                 onClick={this.props.onClick}
                 className={fullClass}
+                type={this.props.type}
             >
                 <h6 className={classes.buttonTitle}>
                     {this.props.children}

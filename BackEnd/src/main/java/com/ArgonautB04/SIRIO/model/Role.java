@@ -29,6 +29,10 @@ public class Role implements Serializable {
     @JsonIgnore
     private List<Employee> employeeList;
 
+    @OneToOne(mappedBy = "role", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private AccessPermissions accessPermissions;
+
     public int getIdRole() {
         return idRole;
     }
@@ -51,5 +55,13 @@ public class Role implements Serializable {
 
     public void setEmployeeList(List<Employee> employeeList) {
         this.employeeList = employeeList;
+    }
+
+    public AccessPermissions getAccessPermissions() {
+        return accessPermissions;
+    }
+
+    public void setAccessPermissions(AccessPermissions accessPermissions) {
+        this.accessPermissions = accessPermissions;
     }
 }

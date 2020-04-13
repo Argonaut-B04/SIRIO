@@ -3,6 +3,7 @@ import SirioForm from '../SirioForm';
 import SirioButton from '../../Button/SirioButton';
 import EmployeeService from '../../../Services/EmployeeService';
 import RoleService from '../../../Services/RoleService';
+import { Redirect } from 'react-router-dom';
 
 export default class EmployeeFormTambah extends React.Component {
 
@@ -18,18 +19,37 @@ export default class EmployeeFormTambah extends React.Component {
             jabatan: "",
             email: "",
             noHp: "",
-            roleOptionList: []
-        }
+            roleOptionList: [],
+            redirect: false
+        };
 
         this.renderRoleOption = this.renderRoleOption.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.inputDefinition = this.inputDefinition.bind(this);
         this.handleSelectChange = this.handleSelectChange.bind(this);
+        this.setRedirect = this.setRedirect.bind(this);
     }
 
     componentDidMount() {
         this.renderRoleOption();
     }
+
+    setRedirect = () => {
+        this.setState({
+            redirect: true
+        })
+    };
+
+    renderRedirect = () => {
+        if (this.state.redirect) {
+            return <Redirect to={{
+                pathname: "/employee",
+                state: {
+                    addSuccess: true
+                }
+            }} />
+        }
+    };
 
     async renderRoleOption() {
         const response = await RoleService.getRoleList();
@@ -76,9 +96,9 @@ export default class EmployeeFormTambah extends React.Component {
             jabatan: this.state.jabatan,
             email: this.state.email,
             noHp: this.state.noHp
-        }
-        EmployeeService.submitChanges(employee)
-            .then(() => window.location.href = "/employee");
+        };
+        EmployeeService.addEmployee(employee)
+            .then(() => this.setRedirect());
     }
 
     // Fungsi yang akan mengembalikan definisi tiap field pada form
@@ -160,12 +180,15 @@ export default class EmployeeFormTambah extends React.Component {
     // Fungsi render SirioForm
     render() {
         return (
-            <SirioForm
-                title="Form Tambah Pengguna"
-                inputDefinition={this.inputDefinition()}
-                onSubmit={this.handleSubmit}
-                submitButton={this.submitButton()}
-            />
+            <>
+                {this.renderRedirect()}
+                <SirioForm
+                    title="Form Tambah Pengguna"
+                    inputDefinition={this.inputDefinition()}
+                    onSubmit={this.handleSubmit}
+                    submitButton={this.submitButton()}
+                />
+            </>
         );
     }
 }
