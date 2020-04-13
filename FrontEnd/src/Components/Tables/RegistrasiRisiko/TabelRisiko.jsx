@@ -33,7 +33,6 @@ class TabelRisiko extends React.Component {
 
     async renderRows() {
         const response = await RegistrasiRisikoService.getAllRisiko();
-        console.log(response.data.result)
 
         this.setState({
             rowList: response.data.result

@@ -36,10 +36,24 @@ class FormRisikoUbah extends React.Component {
         this.renderDataRisiko();
     }
 
-    componentDidUpdate() {
+    componentDidUpdate(prevProps, prevState) {
         var submitable = true;
 
-        submitable = this.validateNama();
+        if (prevState.nama !== this.state.nama) {
+            submitable = submitable && this.validateNama();
+        }
+
+        if (prevState.kategori !== this.state.kategori) {
+            submitable = submitable && this.validateKategori();
+        }
+
+        if (prevState.sop !== this.state.sop) {
+            submitable = submitable && this.validateSop();
+        }
+
+        if (prevState.komponen !== this.state.komponen) {
+            submitable = submitable && this.validateKomponen();
+        }
 
         if (this.state.submitable !== submitable) {
             this.setState({
@@ -54,14 +68,64 @@ class FormRisikoUbah extends React.Component {
         var errorNama;
         if (fokusNama.length < 1) {
             submitable = false;
-            errorNama = "Nama minimal 2 karakter, nd mungkin aku panggil kamu sebagai Tuan/Nyonya " + fokusNama;
-        } else if (fokusNama.length > 255) {
+            errorNama = "Nama tidak boleh kosong";
+        } else if (fokusNama.length > 50) {
             submitable = false;
-            errorNama = "uvuvwevwe osas ?";
+            errorNama = "Nama terlalu panjang";
         }
         if (this.state.errorNama !== errorNama) {
             this.setState({
                 errorNama: errorNama
+            })
+        }
+        return submitable;
+    }
+
+    validateKategori() {
+        var submitable = true;
+        const fokusKategori = this.state.kategori;
+        var errorKategori;
+        if (fokusKategori.length < 1) {
+            submitable = false;
+            errorKategori = "Kategori Risiko tidak boleh kosong!";
+        }
+        if (this.state.errorKategori !== errorKategori) {
+            this.setState({
+                errorKategori: errorKategori
+            })
+        }
+        return submitable;
+    }
+
+    validateSop() {
+        var submitable = true;
+        const fokusSop = this.state.sop;
+        var errorSop;
+        if (fokusSop.length < 1) {
+            submitable = false;
+            errorSop = "Referensi SOP tidak boleh kosong!";
+        } 
+        if (this.state.errorSop !== errorSop) {
+            this.setState({
+                errorSop: errorSop
+            })
+        }
+        return submitable;
+    }
+
+    validateKomponen() {
+        var submitable = true;
+        const fokusKomponen = this.state.komponen;
+        var errorKomponen;
+        if (fokusKomponen !== null || fokusKomponen.length > 1) {
+            if (fokusKomponen.length > 500) {
+                submitable = false;
+                errorKomponen = "Komponen Risiko terlalu panjang!";
+            }
+        }
+        if (this.state.errorKomponen !== errorKomponen) {
+            this.setState({
+                errorKomponen: errorKomponen
             })
         }
         return submitable;
@@ -165,6 +229,7 @@ class FormRisikoUbah extends React.Component {
                     handleChange: this.handleSelectChange,
                     type: "select",
                     name: "kategori",
+                    validation: this.state.errorKategori,
                     value: this.state.kategori,
                     optionList: [
                         {
@@ -184,10 +249,12 @@ class FormRisikoUbah extends React.Component {
                     type: "select",
                     name: "sop",
                     value: this.state.sop,
+                    validation: this.state.errorSop,
                     optionList: this.state.sopOptionList
                 }, {
                     label: "Komponen Risiko",
                     handleChange: this.handleChange,
+                    validation: this.state.errorKomponen,
                     type: "textarea",
                     name: "komponen",
                     value: this.state.komponen,

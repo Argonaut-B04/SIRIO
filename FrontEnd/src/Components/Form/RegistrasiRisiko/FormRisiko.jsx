@@ -47,11 +47,22 @@ class FormRisiko extends React.Component {
     };
 
     componentDidUpdate(prevProps, prevState) {
-        console.log("apakek")
         var submitable = true;
 
         if (prevState.nama !== this.state.nama) {
             submitable = submitable && this.validateNama();
+        }
+
+        if (prevState.kategori !== this.state.kategori) {
+            submitable = submitable && this.validateKategori();
+        }
+
+        if (prevState.sop !== this.state.sop) {
+            submitable = submitable && this.validateSop();
+        }
+
+        if (prevState.komponen !== this.state.komponen) {
+            submitable = submitable && this.validateKomponen();
         }
 
         if (this.state.submitable !== submitable) {
@@ -67,14 +78,62 @@ class FormRisiko extends React.Component {
         var errorNama;
         if (fokusNama.length < 1) {
             submitable = false;
-            errorNama = "Nama minimal 2 karakter, nd mungkin aku panggil kamu sebagai Tuan/Nyonya " + fokusNama;
-        } else if (fokusNama.length > 255) {
+            errorNama = "Nama tidak boleh kosong";
+        } else if (fokusNama.length > 50) {
             submitable = false;
-            errorNama = "uvuvwevwe osas ?";
+            errorNama = "Nama terlalu panjang";
         }
         if (this.state.errorNama !== errorNama) {
             this.setState({
                 errorNama: errorNama
+            })
+        }
+        return submitable;
+    }
+
+    validateKategori() {
+        var submitable = true;
+        const fokusKategori = this.state.kategori;
+        var errorKategori;
+        if (fokusKategori.length < 1) {
+            submitable = false;
+            errorKategori = "Kategori Risiko tidak boleh kosong!";
+        }
+        if (this.state.errorKategori !== errorKategori) {
+            this.setState({
+                errorKategori: errorKategori
+            })
+        }
+        return submitable;
+    }
+
+    validateSop() {
+        var submitable = true;
+        const fokusSop = this.state.sop;
+        var errorSop;
+        if (fokusSop.length < 1) {
+            submitable = false;
+            errorSop = "Referensi SOP tidak boleh kosong!";
+        } 
+        if (this.state.errorSop !== errorSop) {
+            this.setState({
+                errorSop: errorSop
+            })
+        }
+        return submitable;
+    }
+
+    validateKomponen() {
+        var submitable = true;
+        const fokusKomponen = this.state.komponen;
+        var errorKomponen;
+        if (fokusKomponen.length > 500) {
+            submitable = false;
+            errorKomponen = "Komponen Risiko terlalu panjang!";
+        }
+        if (this.state.errorKomponen !== errorKomponen) {
+            this.setState({
+                errorKomponen: errorKomponen
             })
         }
         return submitable;
@@ -167,6 +226,7 @@ class FormRisiko extends React.Component {
                     handleChange: this.handleSelectChange,
                     type: "select",
                     required: true,
+                    validation: this.state.errorKategori,
                     name: "kategori",
                     value: this.state.kategori,
                     optionList: [
@@ -185,6 +245,7 @@ class FormRisiko extends React.Component {
                     label: "Referensi SOP*",
                     handleChange: this.handleSelectChange,
                     type: "select",
+                    validation: this.state.errorSop,
                     required: true,
                     name: "sop",
                     value: this.state.sop,
@@ -192,6 +253,7 @@ class FormRisiko extends React.Component {
                 }, {
                     label: "Komponen Risiko",
                     handleChange: this.handleChange,
+                    validation: this.state.errorKomponen,
                     type: "textarea",
                     name: "komponen",
                     value: this.state.komponen,
@@ -202,7 +264,6 @@ class FormRisiko extends React.Component {
     }
 
     submitButton() {
-        console.log(this.state)
         return (
             <div>
                 <SirioButton purple 
