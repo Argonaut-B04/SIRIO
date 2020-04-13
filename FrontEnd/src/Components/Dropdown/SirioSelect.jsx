@@ -18,11 +18,12 @@ export default class SirioSelect extends Component {
             ...base,
             border: "none",
             margin: 0,
-            boxShadow: 'none'   
+            boxShadow: 'none',
+            height: "40px"
         }),
         valueContainer: base => ({
             ...base,
-            padding: 0
+            padding: "5px",
         }),
         option: (base, state) => ({
             ...base,
