@@ -24,6 +24,10 @@ class HasilPemeriksaanService {
     async setujuiHasilPemeriksaan(data) {
         return this.axiosInstance.post(SirioAxiosBase.BASEURL + '/HasilPemeriksaan/persetujuan', data)
     }
+
+    async addHasilPemeriksaan(data) {
+        return this.axiosInstance.post(SirioAxiosBase.BASEURL + '/HasilPemeriksaan/tambah', data)
+    }
 }
 
 export default new HasilPemeriksaanService();
