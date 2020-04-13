@@ -54,7 +54,7 @@ export default class FormTambahKantorCabang extends React.Component {
     };
 
     async renderEmployeeOption() {
-        const response = await EmployeeService.getEmployeeList();
+        const response = await EmployeeService.getAllBM();
 
         const employeeOptionList = response.data.result.map(employee => {
             return (

@@ -143,13 +143,15 @@ class TabelRencanaPemeriksaan extends React.Component {
 
     headerButton() {
         return (
-            <SirioButton
-                purple
-                onClick={() => window.location.href = "/manager/rencanaPemeriksaan/tambah"}
-            >
-
-                Tambah Rencana
-            </SirioButton>
+            <NavLink to={{
+                pathname: "/manager/rencanaPemeriksaan/tambah"
+            }}>
+                <SirioButton
+                    purple
+                >
+                    Tambah Rencana Pemeriksaan
+                </SirioButton>
+            </NavLink>
         )
     }
     render() {

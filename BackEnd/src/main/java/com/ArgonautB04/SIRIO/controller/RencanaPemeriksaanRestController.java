@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/v1/RencanaPemeriksaan")
 public class RencanaPemeriksaanRestController {
@@ -131,13 +132,30 @@ public class RencanaPemeriksaanRestController {
      * @return detail rencana pemeriksaan
      */
     @GetMapping("/{idRencanaPemeriksaan}")
-    private BaseResponse<RencanaPemeriksaan> getRencanaPemeriksaan(
+    private BaseResponse<RencanaPemeriksaanDTO> getRencanaPemeriksaan(
             @PathVariable("idRencanaPemeriksaan") int idRencanaPemeriksaan
     ) {
-        BaseResponse<RencanaPemeriksaan> response = new BaseResponse<>();
+        BaseResponse<RencanaPemeriksaanDTO> response = new BaseResponse<>();
         try {
-            RencanaPemeriksaan result = rencanaPemeriksaanRestService.getById(idRencanaPemeriksaan);
-
+            RencanaPemeriksaan rencanaPemeriksaan = rencanaPemeriksaanRestService.getById(idRencanaPemeriksaan);
+            RencanaPemeriksaanDTO result = new RencanaPemeriksaanDTO();
+            result.setId(rencanaPemeriksaan.getIdRencana());
+            result.setStatus(rencanaPemeriksaan.getStatus().getIdStatusRencana());
+            result.setLinkMajelis(rencanaPemeriksaan.getLinkMajelis());
+            result.setNamaRencana(rencanaPemeriksaan.getNamaRencana());
+            result.setDaftarTugasPemeriksaan(new ArrayList<>());
+            for (TugasPemeriksaan tugasPemeriksaan:
+                    tugasPemeriksaanRestService.getByRencana(rencanaPemeriksaan)) {
+                TugasPemeriksaanDTO tugasPemeriksaanDTO = new TugasPemeriksaanDTO();
+                tugasPemeriksaanDTO.setId(tugasPemeriksaan.getIdTugas());
+                tugasPemeriksaanDTO.setTanggalSelesai(tugasPemeriksaan.getTanggalSelesai().toString());
+                tugasPemeriksaanDTO.setTanggalMulai(tugasPemeriksaan.getTanggalMulai().toString());
+                tugasPemeriksaanDTO.setNamaQA(tugasPemeriksaan.getPelaksana().getNama());
+                tugasPemeriksaanDTO.setIdQA(tugasPemeriksaan.getPelaksana().getIdEmployee());
+                tugasPemeriksaanDTO.setKantorCabang(tugasPemeriksaan.getKantorCabang().getIdKantor());
+                tugasPemeriksaanDTO.setNamaKantorCabang(tugasPemeriksaan.getKantorCabang().getNamaKantor());
+                result.getDaftarTugasPemeriksaan().add(tugasPemeriksaanDTO);
+            }
             response.setStatus(200);
             response.setMessage("success");
             response.setResult(result);
@@ -157,36 +175,80 @@ public class RencanaPemeriksaanRestController {
      */
     @PostMapping(value = "/tambah", consumes = {"application/json"})
     private BaseResponse<RencanaPemeriksaan> tambahRencanaPemeriksaan(
-            @RequestBody RencanaPemeriksaanDTO rencanaPemeriksaanDTO
+            @RequestBody RencanaPemeriksaanDTO rencanaPemeriksaanDTO,
+            Principal principal
     ) {
         BaseResponse<RencanaPemeriksaan> response = new BaseResponse<>();
         RencanaPemeriksaan rencanaPemeriksaanTemp = new RencanaPemeriksaan();
 
-        rencanaPemeriksaanTemp.setNamaRencana(rencanaPemeriksaanDTO.getNamaRencana());
-        rencanaPemeriksaanTemp.setLinkMajelis(rencanaPemeriksaanDTO.getLinkMajelis());
-        rencanaPemeriksaanTemp.setPembuat(employeeRestService.getById(rencanaPemeriksaanDTO.getIdPembuat()));
-        rencanaPemeriksaanTemp.setStatus(statusRencanaPemeriksaanRestService.getById(rencanaPemeriksaanDTO.getStatus()));
-
-        RencanaPemeriksaan rencanaPemeriksaan = rencanaPemeriksaanRestService.buatRencanaPemeriksaan(rencanaPemeriksaanTemp);
-
-        for (TugasPemeriksaanDTO tugasPemeriksaanDTO: rencanaPemeriksaanDTO.getDaftarTugasPemeriksaan()){
-            TugasPemeriksaan tugasPemeriksaanTemp = new TugasPemeriksaan();
-
-            tugasPemeriksaanTemp.setRencanaPemeriksaan(rencanaPemeriksaan);
-            tugasPemeriksaanTemp.setKantorCabang(kantorCabangRestService.getById(tugasPemeriksaanDTO.getKantorCabang()));
-            tugasPemeriksaanTemp.setPelaksana(employeeRestService.getById(tugasPemeriksaanDTO.getIdQA()));
-
-            LocalDate tanggalMulaiLocalDate = Settings.stringToLocalDate(tugasPemeriksaanDTO.getTanggalMulai());
-            LocalDate tanggalSelesaiLocalDate = Settings.stringToLocalDate(tugasPemeriksaanDTO.getTanggalSelesai());
-
-            if (tanggalMulaiLocalDate.compareTo(tanggalSelesaiLocalDate) < 0) {
-                tugasPemeriksaanTemp.setTanggalMulai(tanggalMulaiLocalDate);
-                tugasPemeriksaanTemp.setTanggalSelesai(tanggalSelesaiLocalDate);
-            }
-
-            tugasPemeriksaanRestService.buatTugasPemeriksaan(tugasPemeriksaanTemp);
+        try {
+            Employee employee = employeeRestService.getByUsername(principal.getName()).get();
+            rencanaPemeriksaanTemp.setPembuat(employee);
+        } catch (NoSuchElementException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Employee dengan ID " + rencanaPemeriksaanDTO.getIdPembuat() + " tidak ditemukan!"
+            );
         }
 
+        if (rencanaPemeriksaanDTO.getNamaRencana() != null && !rencanaPemeriksaanDTO.getNamaRencana().equals("")) {
+            rencanaPemeriksaanTemp.setNamaRencana(rencanaPemeriksaanDTO.getNamaRencana());
+        } else {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Nama Rencana belum terisi!"
+            );
+        }
+
+        if (rencanaPemeriksaanDTO.getLinkMajelis() != null && !rencanaPemeriksaanDTO.getLinkMajelis().equals("")) {
+            rencanaPemeriksaanTemp.setLinkMajelis(rencanaPemeriksaanDTO.getLinkMajelis());
+        } else {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Link Pemeriksaan belum terisi!"
+            );
+        }
+
+        rencanaPemeriksaanTemp.setStatus(statusRencanaPemeriksaanRestService.getById(rencanaPemeriksaanDTO.getStatus()));
+        RencanaPemeriksaan rencanaPemeriksaan = rencanaPemeriksaanRestService.buatRencanaPemeriksaan(rencanaPemeriksaanTemp);
+
+        if(rencanaPemeriksaanDTO.getDaftarTugasPemeriksaan() != null &&
+                !rencanaPemeriksaanDTO.getDaftarTugasPemeriksaan().isEmpty()){
+            for (TugasPemeriksaanDTO tugasPemeriksaanDTO: rencanaPemeriksaanDTO.getDaftarTugasPemeriksaan()){
+                TugasPemeriksaan tugasPemeriksaanTemp = new TugasPemeriksaan();
+                tugasPemeriksaanTemp.setRencanaPemeriksaan(rencanaPemeriksaan);
+
+                if (tugasPemeriksaanDTO.getKantorCabang() != null) {
+                    tugasPemeriksaanTemp.setKantorCabang(kantorCabangRestService.getById(tugasPemeriksaanDTO.getKantorCabang()));;
+                } else {
+                    throw new ResponseStatusException(
+                            HttpStatus.NOT_FOUND, "Kantor Cabang belum terisi!"
+                    );
+                }
+
+                if (tugasPemeriksaanDTO.getIdQA() != null) {
+                    tugasPemeriksaanTemp.setPelaksana(employeeRestService.getById(tugasPemeriksaanDTO.getIdQA()));
+                } else {
+                    throw new ResponseStatusException(
+                            HttpStatus.NOT_FOUND, "Pelaksana belum terisi!"
+                    );
+                }
+
+                if (tugasPemeriksaanDTO.getTanggalMulai() != null && tugasPemeriksaanDTO.getTanggalSelesai() != null  ) {
+                    LocalDate tanggalMulaiLocalDate = Settings.stringToLocalDate(tugasPemeriksaanDTO.getTanggalMulai());
+                    LocalDate tanggalSelesaiLocalDate = Settings.stringToLocalDate(tugasPemeriksaanDTO.getTanggalSelesai());
+
+                    if (tanggalMulaiLocalDate.compareTo(tanggalSelesaiLocalDate) < 0) {
+                        tugasPemeriksaanTemp.setTanggalMulai(tanggalMulaiLocalDate);
+                        tugasPemeriksaanTemp.setTanggalSelesai(tanggalSelesaiLocalDate);
+                    }
+                } else {
+                    throw new ResponseStatusException(
+                            HttpStatus.NOT_FOUND, "Tanggal belum terisi!"
+                    );
+                }
+
+                tugasPemeriksaanRestService.buatTugasPemeriksaan(tugasPemeriksaanTemp);
+            }
+
+        }
         response.setStatus(200);
         response.setMessage("success");
         response.setResult(rencanaPemeriksaan);
@@ -200,48 +262,82 @@ public class RencanaPemeriksaanRestController {
      * @param rencanaPemeriksaanDTO data transfer object untuk rencana pemeriksaan yang akan diubah
      * @return rencana pemeriksaan yang telah disimpan perubahannya
      */
-    @PutMapping(value = "/ubah", consumes = {"application/json"})
+    @PostMapping(value = "/ubah", consumes = {"application/json"})
     private BaseResponse<RencanaPemeriksaan> ubahRencanaPemeriksaan(
             @RequestBody RencanaPemeriksaanDTO rencanaPemeriksaanDTO
     ) {
         BaseResponse<RencanaPemeriksaan> response = new BaseResponse<>();
 
+        RencanaPemeriksaan rencanaPemeriksaanTemp;
         try {
-            RencanaPemeriksaan rencanaPemeriksaanTemp = rencanaPemeriksaanRestService.getById(rencanaPemeriksaanDTO.getId());
-
-            rencanaPemeriksaanTemp.setStatus(statusRencanaPemeriksaanRestService.getById(rencanaPemeriksaanDTO.getStatus()));
-            rencanaPemeriksaanTemp.setNamaRencana(rencanaPemeriksaanDTO.getNamaRencana());
-            rencanaPemeriksaanTemp.setLinkMajelis(rencanaPemeriksaanDTO.getLinkMajelis());
-            rencanaPemeriksaanTemp.setPembuat(employeeRestService.getById(rencanaPemeriksaanDTO.getIdPembuat()));
-
-            RencanaPemeriksaan rencanaPemeriksaan = rencanaPemeriksaanRestService.ubahRencanaPemeriksaan(rencanaPemeriksaanDTO.getId(), rencanaPemeriksaanTemp);
-
-            for (TugasPemeriksaanDTO tugasPemeriksaanDTO : rencanaPemeriksaanDTO.getDaftarTugasPemeriksaan()) {
-                TugasPemeriksaan tugasPemeriksaanTemp = tugasPemeriksaanRestService.getById(tugasPemeriksaanDTO.getId());
-
-                tugasPemeriksaanTemp.setRencanaPemeriksaan(rencanaPemeriksaan);
-                tugasPemeriksaanTemp.setKantorCabang(kantorCabangRestService.getById(tugasPemeriksaanDTO.getKantorCabang()));
-                tugasPemeriksaanTemp.setPelaksana(employeeRestService.getById(tugasPemeriksaanDTO.getIdQA()));
-
-                LocalDate tanggalMulaiLocalDate = Settings.stringToLocalDate(tugasPemeriksaanDTO.getTanggalMulai());
-                LocalDate tanggalSelesaiLocalDate = Settings.stringToLocalDate(tugasPemeriksaanDTO.getTanggalSelesai());
-
-                if (tanggalMulaiLocalDate.compareTo(tanggalSelesaiLocalDate) < 0) {
-                    tugasPemeriksaanTemp.setTanggalMulai(tanggalMulaiLocalDate);
-                    tugasPemeriksaanTemp.setTanggalSelesai(tanggalSelesaiLocalDate);
-                }
-
-                tugasPemeriksaanRestService.ubahTugasPemeriksaan(tugasPemeriksaanDTO.getId(), tugasPemeriksaanTemp);
-            }
-
-            response.setStatus(200);
-            response.setMessage("success");
-            response.setResult(rencanaPemeriksaan);
-        }catch (NoSuchElementException e) {
+            rencanaPemeriksaanTemp = rencanaPemeriksaanRestService.getById(rencanaPemeriksaanDTO.getId());
+        } catch (NoSuchElementException | NullPointerException e) {
             throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Rencana Pemeriksaan dengan ID " + rencanaPemeriksaanDTO.getId() + " tidak ditemukan!"
+                    HttpStatus.NOT_FOUND, "Renaca Pemeriksaan dengan ID " + rencanaPemeriksaanDTO.getId() + " tidak ditemukan!"
             );
         }
+
+        if (rencanaPemeriksaanDTO.getNamaRencana() != null && !rencanaPemeriksaanDTO.getNamaRencana().equals("")) {
+            rencanaPemeriksaanTemp.setNamaRencana(rencanaPemeriksaanDTO.getNamaRencana());
+        } else {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Nama Rencana belum terisi!"
+            );
+        }
+
+        if (rencanaPemeriksaanDTO.getLinkMajelis() != null && !rencanaPemeriksaanDTO.getLinkMajelis().equals("")) {
+            rencanaPemeriksaanTemp.setLinkMajelis(rencanaPemeriksaanDTO.getLinkMajelis());
+        } else {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Link Pemeriksaan belum terisi!"
+            );
+        }
+
+        rencanaPemeriksaanTemp.setStatus(statusRencanaPemeriksaanRestService.getById(rencanaPemeriksaanDTO.getStatus()));
+        RencanaPemeriksaan rencanaPemeriksaan = rencanaPemeriksaanRestService.ubahRencanaPemeriksaan(rencanaPemeriksaanDTO.getId(), rencanaPemeriksaanTemp);
+
+        if(rencanaPemeriksaanDTO.getDaftarTugasPemeriksaan() != null &&
+                !rencanaPemeriksaanDTO.getDaftarTugasPemeriksaan().isEmpty()) {
+            for (TugasPemeriksaanDTO tugasPemeriksaanDTO : rencanaPemeriksaanDTO.getDaftarTugasPemeriksaan()) {
+                TugasPemeriksaan tugasPemeriksaanTemp = new TugasPemeriksaan();
+                tugasPemeriksaanTemp.setRencanaPemeriksaan(rencanaPemeriksaan);
+
+                if (tugasPemeriksaanDTO.getKantorCabang() != null) {
+                    tugasPemeriksaanTemp.setKantorCabang(kantorCabangRestService.getById(tugasPemeriksaanDTO.getKantorCabang()));
+                    ;
+                } else {
+                    throw new ResponseStatusException(
+                            HttpStatus.NOT_FOUND, "Kantor Cabang belum terisi!"
+                    );
+                }
+
+                if (tugasPemeriksaanDTO.getIdQA() != null) {
+                    tugasPemeriksaanTemp.setPelaksana(employeeRestService.getById(tugasPemeriksaanDTO.getIdQA()));
+                } else {
+                    throw new ResponseStatusException(
+                            HttpStatus.NOT_FOUND, "Pelaksana belum terisi!"
+                    );
+                }
+
+                if (tugasPemeriksaanDTO.getTanggalMulai() != null && tugasPemeriksaanDTO.getTanggalSelesai() != null) {
+                    LocalDate tanggalMulaiLocalDate = Settings.stringToLocalDate(tugasPemeriksaanDTO.getTanggalMulai());
+                    LocalDate tanggalSelesaiLocalDate = Settings.stringToLocalDate(tugasPemeriksaanDTO.getTanggalSelesai());
+
+                    if (tanggalMulaiLocalDate.compareTo(tanggalSelesaiLocalDate) < 0) {
+                        tugasPemeriksaanTemp.setTanggalMulai(tanggalMulaiLocalDate);
+                        tugasPemeriksaanTemp.setTanggalSelesai(tanggalSelesaiLocalDate);
+                    }
+                } else {
+                    throw new ResponseStatusException(
+                            HttpStatus.NOT_FOUND, "Tanggal belum terisi!"
+                    );
+                }
+                tugasPemeriksaanRestService.ubahTugasPemeriksaan(tugasPemeriksaanDTO.getId(), tugasPemeriksaanTemp);
+            }
+        }
+        response.setStatus(200);
+        response.setMessage("success");
+        response.setResult(rencanaPemeriksaan);
 
         return response;
     }

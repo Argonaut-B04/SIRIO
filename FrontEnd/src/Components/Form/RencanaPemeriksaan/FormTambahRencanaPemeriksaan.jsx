@@ -18,8 +18,8 @@ export default class FormTambahRencana extends React.Component {
         this.state = {
             namaRencana: "",
             linkMajelis: "",
-            status:1,
-            kantorOptionList:[],
+            status: 1,
+            kantorOptionList: [],
             employeeOptionList: [],
             tugasPemeriksaanList: [{
                 kantorCabang: "",
@@ -36,6 +36,7 @@ export default class FormTambahRencana extends React.Component {
         this.setRedirect = this.setRedirect.bind(this);
         this.renderEmployeeOption = this.renderEmployeeOption.bind(this);
         this.renderKantorOption = this.renderKantorOption.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     componentDidMount() {
@@ -60,10 +61,12 @@ export default class FormTambahRencana extends React.Component {
         }
     };
 
-    handleMultipleChange(event, id) {
+    handleMultipleChange(event, index) {
+        console.log(event);
+        console.log(index);
         const tugasPemeriksaanList = this.state.tugasPemeriksaanList
-        tugasPemeriksaanList[id][event.target.name] = event.target.value;
-    
+        tugasPemeriksaanList[index][event.target.name] = event.target.value;
+
         this.setState(
             {
                 tugasPemeriksaanList: tugasPemeriksaanList
@@ -73,20 +76,24 @@ export default class FormTambahRencana extends React.Component {
 
     // Fungsi untuk mengubah state ketika isi dropdown diubah
     // Fungsi ini wajib ada jika membuat field tipe select
-    handleMultipleSelectChange(name, event, id) {
-        const tugasPemeriksaanList = this.state.tugasPemeriksaanList
-        tugasPemeriksaanList[id][event.target.name] = event.target.value;
+    handleMultipleSelectChange(name, target, index) {
+        // const tugasPemeriksaanList = this.state.tugasPemeriksaanList
+        // tugasPemeriksaanList[index][event.target.name] = event.target.value;
+        console.log(name);
+        console.log(target);
+        console.log(index);
+        const formList = this.state.tugasPemeriksaanList;
+        formList[index][name] = target.value;
         this.setState(
             {
-                tugasPemeriksaanList: tugasPemeriksaanList,
-                [name]
-                    : event.value
+                //tugasPemeriksaanList: tugasPemeriksaanList,
+                tugasPemeriksaanList: formList
             }
         )
     }
 
     async renderEmployeeOption() {
-        const response = await EmployeeService.getEmployeeList();
+        const response = await EmployeeService.getAllQAOfficer();
 
         const employeeOptionList = response.data.result.map(employee => {
             return (
@@ -134,122 +141,48 @@ export default class FormTambahRencana extends React.Component {
     // Umumnya akan digunakan untuk memanggil service komunikasi ke backend
     // Fungsi yang akan dijalankan ketika user submit
     // Umumnya akan digunakan untuk memanggil service komunikasi ke backend
-    // handleSubmit(event) {
-    //     if(event.nama == "Simpan"){
-    //         event.preventDefault();
-    //         const rencanaPemeriksaan = {
-    //             namaRencana: this.state.namaRencana,
-    //             linkMajelis: this.state.linkMajelis,
-    //             status: 2,
-    //             tugasPemeriksaanList: this.state.tugasPemeriksaanList[{
-    //                 kantorCabang: this.state.kantorCabang,
-    //                 idQA: this.state.idQA,
-    //                 tanggalMulai: this.state.tanggalMulai,
-    //                 tanggalSelesai: this.state.tanggalSelesai,
-    //             }]
-    //         }
-    //         RencanaPemeriksaanService.addRencanaPemeriksaan(rencanaPemeriksaan)
-    //         .then(() => this.setRedirect());
-    //     }
-    //     else if (event.nama == "Draft"){
-    //         event.preventDefault();
-    //         const rencanaPemeriksaan = {
-    //             namaRencana: this.state.namaRencana,
-    //             linkMajelis: this.state.linkMajelis,
-    //             status: this.state.status,
-    //             tugasPemeriksaanList: this.state.tugasPemeriksaanList[{
-    //                 kantorCabang: this.state.kantorCabang,
-    //                 idQA: this.state.idQA,
-    //                 tanggalMulai: this.state.tanggalMulai,
-    //                 tanggalSelesai: this.state.tanggalSelesai,
-    //             }]
-    //         }
-    //         RencanaPemeriksaanService.addRencanaPemeriksaan(rencanaPemeriksaan)
-    //         .then(() => this.setRedirect());
-    //     }
-    
-    // }
-
-    handleSubmit(event) {
-        event.preventDefault();
-        const rencanaPemeriksaan = {
-            namaRencana: this.state.namaRencana,
-            linkMajelis: this.state.linkMajelis,
-            status: this.state.status,
-            tugasPemeriksaanList: this.state.tugasPemeriksaanList[{
-                kantorCabang: this.state.kantorCabang,
-                idQA: this.state.idQA,
-                tanggalMulai: this.state.tanggalMulai,
-                tanggalSelesai: this.state.tanggalSelesai,
-            }]
+    handleSubmit(event, nama) {
+        if(nama == "simpan"){
+            event.preventDefault();
+            const rencanaPemeriksaan = {
+                namaRencana: this.state.namaRencana,
+                linkMajelis: this.state.linkMajelis,
+                status: 2,
+                tugasPemeriksaanList: [{
+                    kantorCabang: this.state.kantorCabang,
+                    idQA: this.state.idQA,
+                    tanggalMulai: this.state.tanggalMulai,
+                    tanggalSelesai: this.state.tanggalSelesai,
+                }]
+            }
+            RencanaPemeriksaanService.addRencanaPemeriksaan(rencanaPemeriksaan)
+            .then(() => this.setRedirect());
         }
-        RencanaPemeriksaanService.addRencanaPemeriksaan(rencanaPemeriksaan)
-        .then(() => this.setRedirect());
+        else if (nama == "draft"){
+            event.preventDefault();
+            const rencanaPemeriksaan = {
+                namaRencana: this.state.namaRencana,
+                linkMajelis: this.state.linkMajelis,
+                status: this.state.status,
+                tugasPemeriksaanList: [{
+                    kantorCabang: this.state.kantorCabang,
+                    idQA: this.state.idQA,
+                    tanggalMulai: this.state.tanggalMulai,
+                    tanggalSelesai: this.state.tanggalSelesai,
+                }]
+            }
+            RencanaPemeriksaanService.addRencanaPemeriksaan(rencanaPemeriksaan)
+            .then(() => this.setRedirect());
+        }
+
     }
 
-    outerInputDefinition() {
-        // const forms = [];
-        // for (let i = 1; i < this.state.tugasPemeriksaanList.length; i++) {
-        //     forms.push(
-        //         <SirioForm
-        //             key={i}
-        //             childForm
-        //             id={i}
-        //             inputDefinition={this.innerInputDefinition(i)}
-        //             footerButton={this.childFooterButton(i)}
-        //         />
-        //     )
-        // }
-        return (
-            
-            [
-                {
-                    fullComponent:
-                        <SirioForm
-                            id={0}
-                            noHeader
-                            isInnerForm
-                            inputDefinition={this.innerInputDefinition(0)}
-                            
-                        />
-                    
-                }
-                //,{  
-                    // fullComponent:
-                    //     <div className="w-100 text-right">
-                    //         <SirioButton blue recommended
-                    //             classes="mr-3"
-                    //             onClick={() => this.addForm()}
-                    //         >
-                    //             Tambah Tugas
-                    //         </SirioButton>
-                    //     </div>
-                //}
-                ,{  
-                    label: "Nama Rencana*",
-                    handleChange: this.handleChange,
-                    type: "text",
-                    name: "link",
-                    value: this.state.namaRencana,
-                    placeholder: "Masukan link majelis"
-                }, {  
-                    label: "Link Pemeriksaan*",
-                    handleChange: this.handleChange,
-                    type: "text",
-                    name: "link",
-                    value: this.state.linkMajelis,
-                    placeholder: "Masukan link majelis"
-                }  
-                      
-            ]
-        )
-    }
- 
-    getBetween(){
+    fullComponentInside() {
         const forms = [];
-        for (let i = 1; i < this.state.tugasPemeriksaanList.length; i++) {
+        for (let i = 0; i < this.state.tugasPemeriksaanList.length; i++) {
             forms.push(
                 <SirioForm
+                    subtitle="Tugas Pemeriksaan"
                     key={i}
                     childForm
                     id={i}
@@ -258,59 +191,88 @@ export default class FormTambahRencana extends React.Component {
                 />
             )
         }
-       
         return (
             <>
                 {forms.map(form => form)}
-                <div className="w-100 text-right">
-                    <SirioButton blue recommended
-                        classes="mr-3"
-                        onClick={() => this.addForm()}
-                    >
-                        Tambah Tugas
-                    </SirioButton>
-                </div>
             </>
         )
-       
     }
 
-    // Fungsi yang akan mengembalikan definisi tiap field pada form
-    // Setiap objek {} pada List [] akan menjadi 1 field
-    // untuk informasi lebih lengkap, cek SirioForm
+    outerInputDefinition() {
+        return (
+            [
+                {
+                    label: "Nama Rencana*",
+                    handleChange: this.handleChange,
+                    type: "text",
+                    name: "namaRencana",
+                    value: this.state.namaRencana,
+                    placeholder: "Masukan nama rencana"
+                }, {
+                    label: "Link Pemeriksaan*",
+                    handleChange: this.handleChange,
+                    type: "text",
+                    name: "linkMajelis",
+                    value: this.state.linkMajelis,
+                    placeholder: "Masukan link pemeriksaan"
+                },{
+                    fullComponent:
+                        this.tambahTugasButton
+                }, {
+                    fullComponent:
+                        this.fullComponentInside()
+                } 
+
+            ]
+        )
+    }
+
+    tambahTugasButton = (
+        <SirioButton blue recommended
+            classes="mr-3"
+            onClick={() => this.addForm()}
+        >
+            Tambah Tugas
+        </SirioButton>
+    )
+
     innerInputDefinition(index) {
         return (
             [
                 {
                     label: "Kantor Cabang*",
                     handleChange: this.handleMultipleSelectChange,
+                    index: index,
                     type: "select",
                     name: "kantorCabang",
-                    value: this.state.kantorCabang,
+                    value: this.state.tugasPemeriksaanList[index].kantorCabang,
                     optionList: this.state.kantorOptionList
                 }, {
                     label: "QA Officer*",
                     handleChange: this.handleMultipleSelectChange,
+                    index: index,
                     type: "select",
                     name: "idQA",
-                    value: this.state.idQA,
+                    value: this.state.tugasPemeriksaanList[index].idQA,
                     optionList: this.state.employeeOptionList
-                },{
+                }, {
                     label: "Tanggal Mulai*",
                     handleChange: this.handleMultipleChange,
+                    index: index,
                     type: "date",
                     name: "tanggalMulai",
-                    value: this.state.tanggalMulai,
+                    value: this.state.tugasPemeriksaanList[index].tanggalMulai,
                     placeholder: "Masukan tanggal mulai"
-                },{
+                }, {
                     label: "Tanggal Selesai*",
                     handleChange: this.handleMultipleChange,
+                    index: index,
                     type: "date",
                     name: "tanggalSelesai",
-                    value: this.state.tanggalSelesai,
+                    value: this.state.tugasPemeriksaanList[index].tanggalSelesai,
                     placeholder: "Masukan tanggal selesai"
                 }
-                    
+
             ]
         )
     }
@@ -320,17 +282,15 @@ export default class FormTambahRencana extends React.Component {
             <div>
                 <SirioButton purple recommended
                     classes="mx-2"
-                    onClick={(event)  => this.handleSubmit(event)}>
+                    onClick={(event) => this.handleSubmit(event,"simpan")}>
                     Simpan
                 </SirioButton>
                 <SirioButton purple
-                    onClick={(event)  => this.handleSubmit(event)}>
-                >
+                    onClick={(event) => this.handleSubmit(event,"draft")}>
                     Draft
                 </SirioButton>
                 <SirioButton purple
                     onClick={() => window.location.href = "/manager/rencanaPemeriksaan"}>
-                >
                     Batal
                 </SirioButton>
             </div>
@@ -392,16 +352,13 @@ export default class FormTambahRencana extends React.Component {
                 <SirioForm
                     title="Form Tambah Rencana Pemeriksaan"
                     subtitle="Tugas Pemeriksaan"
-                    betweenTitleSubtitle={this.getBetween()}
                     inputDefinition={this.outerInputDefinition()}
                     onSubmit={this.handleSubmit}
                     submitButton={this.submitButton()}
-                    
-                    
                 />
-                
+
             </>
-           
+
         );
     }
 }

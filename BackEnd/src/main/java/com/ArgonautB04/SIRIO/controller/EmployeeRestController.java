@@ -18,6 +18,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
 import java.sql.SQLIntegrityConstraintViolationException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -220,6 +221,49 @@ public class EmployeeRestController {
         response.setResult(result);
         return response;
     }
+
+    /**
+     * Mengambil seluruh branch manager
+     *
+     * @return daftar hasil employee
+     */
+    @GetMapping("/getAllBranchManager")
+    private BaseResponse<List<Employee>> getAllBM() {
+        BaseResponse<List<Employee>> response = new BaseResponse<>();
+        ArrayList<Employee> result = new ArrayList<>();
+        List<Employee> emp = employeeRestService.getAll();
+        for (Employee e: emp){
+            if (e.getRole().getIdRole() == 7){
+                result.add(e);
+            }
+        }
+        response.setStatus(200);
+        response.setMessage("success");
+        response.setResult(result);
+        return response;
+    }
+
+    /**
+     * Mengambil seluruh QA Officer
+     *
+     * @return daftar hasil employee
+     */
+    @GetMapping("/getAllQAOfficer")
+    private BaseResponse<List<Employee>> getAllQAOfficer() {
+        BaseResponse<List<Employee>> response = new BaseResponse<>();
+        ArrayList<Employee> result = new ArrayList<>();
+        List<Employee> emp = employeeRestService.getAll();
+        for (Employee e: emp){
+            if (e.getRole().getIdRole() == 6 || e.getRole().getIdRole() == 8){
+                result.add(e);
+            }
+        }
+        response.setStatus(200);
+        response.setMessage("success");
+        response.setResult(result);
+        return response;
+    }
+
 
     /**
      * Mengambil suatu employee

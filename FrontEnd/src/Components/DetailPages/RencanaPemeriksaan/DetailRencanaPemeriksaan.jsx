@@ -1,6 +1,7 @@
 import React from 'react';
 import SirioButton from '../../Button/SirioButton';
 import SirioDetailPage from '../SirioDetailPage';
+import SirioSubdetailPage from '../SirioSubdetailPage';
 import RencanaPemeriksaanService from '../../../Services/RencanaPemeriksaanService';
 import { NavLink } from 'react-router-dom';
 import { withRouter } from 'react-router-dom';
@@ -14,6 +15,7 @@ class DetailRencanaPemeriksaan extends React.Component {
 
         this.state = {
             rencanaPemeriksaan: {},
+            daftarTugasPemeriksaan: [],
             dataGeneral: {},
             redirect: false
         }
@@ -43,15 +45,43 @@ class DetailRencanaPemeriksaan extends React.Component {
         }
     };
 
+    statusFormatter(status) {
+        switch (status) {
+            case 1:
+                return (
+                    <span style={{ color: '#black' }}>Draft</span>
+                );
+            case 3:
+                return (
+                    <span style={{ color: '#5DBCD2' }}>Selesai</span>
+                );
+            case 2:
+                return (
+                    <span style={{ color: '#6FCF97' }}>Sedang Dijalankan</span>
+                );
+        }
+    }
+
     async renderDataRencana() {
         const response = await RencanaPemeriksaanService.getRencanaPemeriksaanDetail(this.props.location.state.id);
 
         this.setState({
            rencanaPemeriksaan: response.data.result,
            dataGeneral: {
-            "Nama Rencana     :": response.data.result.namaRencana,
-            "Link Pemeriksaan  :": response.data.result.linkMajelis
-        }
+            "Nama Rencana      :": response.data.result.namaRencana,
+            "Link Pemeriksaan  :": response.data.result.linkMajelis,
+            "Status            :": this.statusFormatter(response.data.result.status),
+            },
+            daftarTugasPemeriksaan: response.data.result.daftarTugasPemeriksaan.map(tugas => {
+                return (
+                    {
+                        "Nama QA": tugas.namaQA,
+                        "Kantor Cabang": tugas.namaKantorCabang,
+                        "tanggalMulai": tugas.tanggalMulai,
+                        "tanggalSelesai": tugas.tanggalSelesai
+                    }
+                )
+            })
         })
     }
 
@@ -78,7 +108,6 @@ class DetailRencanaPemeriksaan extends React.Component {
                         Ubah
                     </SirioButton>
                 </NavLink>
-                <a>     </a>
                 <SirioWarningButton
                     red
                     modalTitle="Konfirmasi Penghapusan"
@@ -106,6 +135,13 @@ class DetailRencanaPemeriksaan extends React.Component {
                     subButton={this.subButton()}
                     link="manager/rencanaPemeriksaan"
                 />
+                {this.state.daftarTugasPemeriksaan.map(tugas=>
+                    <SirioSubdetailPage
+                        title="Tugas Pemeriksaan"
+                        data={tugas}
+                        id='id'
+                    />
+                )}
             </>
             
         );

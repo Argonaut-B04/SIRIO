@@ -12,6 +12,7 @@ import MainPage from "./pages";
 import DaftarRencanaPemeriksaan from './pages/Manager/DaftarRencanaPemeriksaan';
 import DetailRencanaPemeriksaan from "./pages/Manager/DetailRencanaPemeriksaan";
 import FormTambahRencanaPemeriksaan from "./pages/Manager/FormTambahRencanaPemeriksaan";
+import FormUbahRencanaPemeriksaan from "./pages/Manager/FormUbahRencanaPemeriksaan";
 
 import DaftarKantorCabang from './pages/Administrator/DaftarKantorCabang';
 import DetailKantorCabang from "./pages/Administrator/DetailKantorCabang";
@@ -70,7 +71,7 @@ class App extends React.Component {
             <Route exact path="/manager/rencanaPemeriksaan" component={DaftarRencanaPemeriksaan} />
             <Route exact path="/manager/rencanaPemeriksaan/detail" component={DetailRencanaPemeriksaan} />
             <Route exact path="/manager/rencanaPemeriksaan/tambah" component={FormTambahRencanaPemeriksaan} />
-           {/* <Route exact path="/manager/rencanaPemeriksaan/ubah" component={FormUbahRencanaPemeriksaan} /> */}
+            <Route exact path="/manager/rencanaPemeriksaan/ubah" component={FormUbahRencanaPemeriksaan} />
             
             <Route exact path="/administrator/kantorCabang/ubah" component={FormUbahKantorCabang} />
             <Route exact path="/administrator/kantorCabang/tambah" component={FormTambahKantorCabang} />
