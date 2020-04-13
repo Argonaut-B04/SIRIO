@@ -16,6 +16,7 @@ import ComponentWrapper from '../../Layout/ComponentWrapper';
 class SirioForm extends Component {
 
     render() {
+
         return (
             <>
                 {this.props.noHeader || this.props.customHeader ? this.props.customHeader :
@@ -31,7 +32,8 @@ class SirioForm extends Component {
                             <SirioField
                                 key={i}
                                 label={field.label}
-                                handleChange={(event) => field.handleChange(event, this.props.id)}
+                                handleChange={field.handleChange}
+                                index={field.index}
                                 type={field.type}
                                 name={field.name}
                                 value={field.value}
@@ -40,8 +42,13 @@ class SirioForm extends Component {
                                 classes={field.classes}
                                 customInput={field.customInput}
                                 fullComponent={field.fullComponent}
+                                validator={field.validation}
+                                required={field.required}
+                                min={field.min}
+                                afterValidity={field.afterValidity}
                             />
                         )}
+
                         {this.props.footerButton ?
                             <div className="w-100 text-right">
                                 <br />
@@ -57,7 +64,8 @@ class SirioForm extends Component {
                                 <SirioField
                                     key={i}
                                     label={field.label}
-                                    handleChange={(event) => field.handleChange(event, this.props.id)}
+                                    handleChange={field.handleChange}
+                                    index={field.index}
                                     type={field.type}
                                     name={field.name}
                                     value={field.value}
@@ -66,6 +74,10 @@ class SirioForm extends Component {
                                     classes={field.classes}
                                     customInput={field.customInput}
                                     fullComponent={field.fullComponent}
+                                    validator={field.validation}
+                                    required={field.required}
+                                    afterValidity={field.afterValidity}
+                                    min={field.min}
                                 />
                             )}
                             <div className="w-100 text-right">

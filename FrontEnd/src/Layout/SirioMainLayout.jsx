@@ -14,7 +14,7 @@ export default class SirioMainLayout extends Component {
         return (
             <>
                 <SirioSideNav />
-                <div className={classes.mainContent}>
+                <div className={this.props.transparent ? classes.mainContentTransparent : classes.mainContent}>
                     <div className={classes.pageContent}>
                         {this.props.children}
                     </div>
