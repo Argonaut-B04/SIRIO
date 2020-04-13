@@ -62,7 +62,7 @@ class FormUbahKantorCabang extends React.Component {
     componentDidUpdate() {
         var submitable = true;
 
-        submitable = this.validateKantor() && this.validateArea() && this.validateRegional();
+        submitable = this.validateKantor() && this.validateArea() && this.validateRegional() && this.validateBM();
 
         if (this.state.submitable !== submitable) {
             this.setState({
@@ -114,6 +114,22 @@ class FormUbahKantorCabang extends React.Component {
         if (this.state.errorReg!== errorReg) {
             this.setState({
                 errorReg: errorReg
+            })
+        }
+        return submitable;
+    }
+
+    validateBM() {
+        var submitable = true;
+        var errorBM;
+        const fokusBM = this.state.idPemilik
+        if (fokusBM.length < 2) {
+            submitable = false;
+            errorBM = "Branch Manager harus diisi";
+        } 
+        if (this.state.errorBM !== errorBM) {
+            this.setState({
+                errorBM: errorBM
             })
         }
         return submitable;
@@ -219,6 +235,7 @@ class FormUbahKantorCabang extends React.Component {
                     type: "select",
                     name: "idPemilik",
                     value: this.state.idPemilik,
+                    validation: this.state.errorBM,
                     optionList: this.state.employeeOptionList
                 },{
                     label: "Area*",

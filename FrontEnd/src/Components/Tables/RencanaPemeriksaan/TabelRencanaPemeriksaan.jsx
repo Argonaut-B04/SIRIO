@@ -125,7 +125,7 @@ class TabelRencanaPemeriksaan extends React.Component {
             return { width: "20%", textAlign: 'left' };
         }
     }, {
-        dataField: 'noData1',
+        dataField: 'noData3',
         text: '',
         headerClasses: classes.colheader,
         classes: classes.rowItem,

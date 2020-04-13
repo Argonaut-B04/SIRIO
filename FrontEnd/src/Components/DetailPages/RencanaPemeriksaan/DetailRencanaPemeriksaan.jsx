@@ -77,8 +77,8 @@ class DetailRencanaPemeriksaan extends React.Component {
                     {
                         "Nama QA": tugas.namaQA,
                         "Kantor Cabang": tugas.namaKantorCabang,
-                        "tanggalMulai": tugas.tanggalMulai,
-                        "tanggalSelesai": tugas.tanggalSelesai
+                        "Tanggal Mulai": tugas.tanggalMulai,
+                        "Tanggal Selesai": tugas.tanggalSelesai
                     }
                 )
             })
@@ -89,6 +89,7 @@ class DetailRencanaPemeriksaan extends React.Component {
         const rencanaPemeriksaan = {
             id: id
         };
+        console.log(rencanaPemeriksaan)
         RencanaPemeriksaanService.deleteRencanaPemeriksaan(rencanaPemeriksaan)
             .then(() => this.setRedirect());
     }

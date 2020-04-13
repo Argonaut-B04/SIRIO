@@ -64,8 +64,7 @@ export default class FormTambahRencana extends React.Component {
     };
 
     handleMultipleChange(event, index) {
-        console.log(event);
-        console.log(index);
+        console.log(event.target);
         const tugasPemeriksaanList = this.state.tugasPemeriksaanList
         tugasPemeriksaanList[index][event.target.name] = event.target.value;
 
@@ -81,9 +80,9 @@ export default class FormTambahRencana extends React.Component {
     handleMultipleSelectChange(name, target, index) {
         // const tugasPemeriksaanList = this.state.tugasPemeriksaanList
         // tugasPemeriksaanList[index][event.target.name] = event.target.value;
-        console.log(name);
-        console.log(target);
-        console.log(index);
+        // console.log(name);
+        // console.log(target);
+        // console.log(index);
         const formList = this.state.tugasPemeriksaanList;
         formList[index][name] = target.value;
         this.setState(
@@ -105,7 +104,6 @@ export default class FormTambahRencana extends React.Component {
         }
     }
 
-
     validateNama() {
         var submitable = true;
         var errorNama;
@@ -126,7 +124,7 @@ export default class FormTambahRencana extends React.Component {
         var submitable = true;
         var errorLink;
         const fokusLink = this.state.linkMajelis
-        if (!fokusLink.includes("http://")) {
+        if (!fokusLink.includes("http://") ) {
             submitable = false;
             errorLink = "Link harus mengandung 'http://' ";
         } 
@@ -192,6 +190,7 @@ export default class FormTambahRencana extends React.Component {
     handleSubmit(event, nama) {
         if(nama == "simpan"){
             event.preventDefault();
+            console.log("lulus")
             const rencanaPemeriksaan = {
                 namaRencana: this.state.namaRencana,
                 linkMajelis: this.state.linkMajelis,
@@ -281,6 +280,7 @@ export default class FormTambahRencana extends React.Component {
         <SirioButton blue recommended
             classes="mr-3"
             onClick={() => this.addForm()}
+            type="button"
         >
             Tambah Tugas
         </SirioButton>
@@ -311,16 +311,14 @@ export default class FormTambahRencana extends React.Component {
                     index: index,
                     type: "date",
                     name: "tanggalMulai",
-                    value: this.state.tugasPemeriksaanList[index].tanggalMulai,
-                    placeholder: "Masukan tanggal mulai"
+                    value: this.state.tugasPemeriksaanList[index].tanggalMulai
                 }, {
                     label: "Tanggal Selesai*",
                     handleChange: this.handleMultipleChange,
                     index: index,
                     type: "date",
                     name: "tanggalSelesai",
-                    value: this.state.tugasPemeriksaanList[index].tanggalSelesai,
-                    placeholder: "Masukan tanggal selesai"
+                    value: this.state.tugasPemeriksaanList[index].tanggalSelesai
                 }
 
             ]

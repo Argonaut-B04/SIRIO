@@ -15,7 +15,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
-import java.time.LocalDate;
+import java.text.ParseException;
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -177,7 +178,7 @@ public class RencanaPemeriksaanRestController {
     private BaseResponse<RencanaPemeriksaan> tambahRencanaPemeriksaan(
             @RequestBody RencanaPemeriksaanDTO rencanaPemeriksaanDTO,
             Principal principal
-    ) {
+    ) throws ParseException {
         BaseResponse<RencanaPemeriksaan> response = new BaseResponse<>();
         RencanaPemeriksaan rencanaPemeriksaanTemp = new RencanaPemeriksaan();
 
@@ -211,6 +212,7 @@ public class RencanaPemeriksaanRestController {
 
         if(rencanaPemeriksaanDTO.getDaftarTugasPemeriksaan() != null &&
                 !rencanaPemeriksaanDTO.getDaftarTugasPemeriksaan().isEmpty()){
+            System.out.println(rencanaPemeriksaanDTO.getDaftarTugasPemeriksaan());
             for (TugasPemeriksaanDTO tugasPemeriksaanDTO: rencanaPemeriksaanDTO.getDaftarTugasPemeriksaan()){
                 TugasPemeriksaan tugasPemeriksaanTemp = new TugasPemeriksaan();
                 tugasPemeriksaanTemp.setRencanaPemeriksaan(rencanaPemeriksaan);
@@ -232,8 +234,8 @@ public class RencanaPemeriksaanRestController {
                 }
 
                 if (tugasPemeriksaanDTO.getTanggalMulai() != null && tugasPemeriksaanDTO.getTanggalSelesai() != null  ) {
-                    LocalDate tanggalMulaiLocalDate = Settings.stringToLocalDate(tugasPemeriksaanDTO.getTanggalMulai());
-                    LocalDate tanggalSelesaiLocalDate = Settings.stringToLocalDate(tugasPemeriksaanDTO.getTanggalSelesai());
+                    Date tanggalMulaiLocalDate = Settings.stringToDate(tugasPemeriksaanDTO.getTanggalMulai());
+                    Date tanggalSelesaiLocalDate = Settings.stringToDate(tugasPemeriksaanDTO.getTanggalSelesai());
 
                     if (tanggalMulaiLocalDate.compareTo(tanggalSelesaiLocalDate) < 0) {
                         tugasPemeriksaanTemp.setTanggalMulai(tanggalMulaiLocalDate);
@@ -265,7 +267,7 @@ public class RencanaPemeriksaanRestController {
     @PostMapping(value = "/ubah", consumes = {"application/json"})
     private BaseResponse<RencanaPemeriksaan> ubahRencanaPemeriksaan(
             @RequestBody RencanaPemeriksaanDTO rencanaPemeriksaanDTO
-    ) {
+    ) throws ParseException {
         BaseResponse<RencanaPemeriksaan> response = new BaseResponse<>();
 
         RencanaPemeriksaan rencanaPemeriksaanTemp;
@@ -320,8 +322,8 @@ public class RencanaPemeriksaanRestController {
                 }
 
                 if (tugasPemeriksaanDTO.getTanggalMulai() != null && tugasPemeriksaanDTO.getTanggalSelesai() != null) {
-                    LocalDate tanggalMulaiLocalDate = Settings.stringToLocalDate(tugasPemeriksaanDTO.getTanggalMulai());
-                    LocalDate tanggalSelesaiLocalDate = Settings.stringToLocalDate(tugasPemeriksaanDTO.getTanggalSelesai());
+                    Date tanggalMulaiLocalDate = Settings.stringToDate(tugasPemeriksaanDTO.getTanggalMulai());
+                    Date tanggalSelesaiLocalDate = Settings.stringToDate(tugasPemeriksaanDTO.getTanggalSelesai());
 
                     if (tanggalMulaiLocalDate.compareTo(tanggalSelesaiLocalDate) < 0) {
                         tugasPemeriksaanTemp.setTanggalMulai(tanggalMulaiLocalDate);
@@ -362,15 +364,12 @@ public class RencanaPemeriksaanRestController {
             );
         }
         //Tidak dapat dihapus jika rencana sudah dijalankan
-        if(rencanaPemeriksaanDTO.getStatus() > 1){
+        System.out.println(rencanaPemeriksaan.getStatus().getIdStatusRencana());
+        if(rencanaPemeriksaan.getStatus().getIdStatusRencana() > 1){
             response.setStatus(500);
             response.setMessage("error");
             response.setResult("Rencana pemeriksaan dengan id " + rencanaPemeriksaanDTO.getId() + " tidak dapat dihapus!");
         }else {
-            for (TugasPemeriksaanDTO tugasPemeriksaanDTO : rencanaPemeriksaanDTO.getDaftarTugasPemeriksaan()) {
-                TugasPemeriksaan tugasPemeriksaanTemp = tugasPemeriksaanRestService.getById(tugasPemeriksaanDTO.getId());
-                tugasPemeriksaanRestService.hapusTugasPemeriksaan(tugasPemeriksaanTemp.getIdTugas());
-            }
             rencanaPemeriksaanRestService.hapusRencanaPemeriksaan(rencanaPemeriksaan.getIdRencana());
             response.setStatus(200);
             response.setMessage("success");
