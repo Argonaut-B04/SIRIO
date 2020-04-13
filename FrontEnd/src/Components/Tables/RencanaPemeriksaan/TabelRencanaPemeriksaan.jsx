@@ -55,7 +55,7 @@ class TabelRencanaPemeriksaan extends React.Component {
             <NavLink to={{
                 pathname: "/manager/rencanaPemeriksaan/detail",
                 state: {
-                    id: row.idKantor
+                    id: row.id
                 }
             }}>
                 <SirioButton

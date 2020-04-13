@@ -10,7 +10,7 @@ import MainPage from "./pages";
 
 // import DaftarRekomendasi from "./pages/DaftarRekomendasi";
 import DaftarRencanaPemeriksaan from './pages/Manager/DaftarRencanaPemeriksaan';
-import DetailRencana from "./pages/Manager/DetailRencanaPemeriksaan";
+import DetailRencanaPemeriksaan from "./pages/Manager/DetailRencanaPemeriksaan";
 import FormTambahRencanaPemeriksaan from "./pages/Manager/FormTambahRencanaPemeriksaan";
 
 import DaftarKantorCabang from './pages/Administrator/DaftarKantorCabang';
@@ -68,7 +68,7 @@ class App extends React.Component {
             <Route exact path="/rekomendasi" component={DaftarRekomendasi} />
 
             <Route exact path="/manager/rencanaPemeriksaan" component={DaftarRencanaPemeriksaan} />
-            <Route exact path="/manager/rencanaPemeriksaan/detail" component={DetailRencana} />
+            <Route exact path="/manager/rencanaPemeriksaan/detail" component={DetailRencanaPemeriksaan} />
             <Route exact path="/manager/rencanaPemeriksaan/tambah" component={FormTambahRencanaPemeriksaan} />
            {/* <Route exact path="/manager/rencanaPemeriksaan/ubah" component={FormUbahRencanaPemeriksaan} /> */}
             

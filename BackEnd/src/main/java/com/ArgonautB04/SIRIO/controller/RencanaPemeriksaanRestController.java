@@ -68,13 +68,18 @@ public class RencanaPemeriksaanRestController {
                 rencanaPemeriksaanDTO.setId(rencanaPemeriksaan.getIdRencana());
                 rencanaPemeriksaanDTO.setStatus(rencanaPemeriksaan.getStatus().getIdStatusRencana());
                 rencanaPemeriksaanDTO.setNamaRencana(rencanaPemeriksaan.getNamaRencana());
+                rencanaPemeriksaanDTO.setLinkMajelis(rencanaPemeriksaan.getLinkMajelis());
+                rencanaPemeriksaanDTO.setIdPembuat(rencanaPemeriksaan.getPembuat().getIdEmployee());
 
                 List<TugasPemeriksaan> daftarTugasPemeriksaan = tugasPemeriksaanRestService.getByRencana(rencanaPemeriksaan);
                 List<TugasPemeriksaanDTO> daftarTugasDTO = new ArrayList<>();
                 for (TugasPemeriksaan tugasPemeriksaan: daftarTugasPemeriksaan){
                     TugasPemeriksaanDTO tugasPemeriksaanDTO = new TugasPemeriksaanDTO();
                     tugasPemeriksaanDTO.setId(tugasPemeriksaan.getIdTugas());
+                    tugasPemeriksaanDTO.setKantorCabang(tugasPemeriksaan.getKantorCabang().getIdKantor());
+                    tugasPemeriksaanDTO.setIdQA(tugasPemeriksaan.getPelaksana().getIdEmployee());
                     tugasPemeriksaanDTO.setTanggalSelesai(tugasPemeriksaan.getTanggalSelesai().toString());
+                    tugasPemeriksaanDTO.setTanggalMulai(tugasPemeriksaan.getTanggalMulai().toString());
                     daftarTugasDTO.add(tugasPemeriksaanDTO);
                 }
                 rencanaPemeriksaanDTO.setDaftarTugasPemeriksaan(daftarTugasDTO);

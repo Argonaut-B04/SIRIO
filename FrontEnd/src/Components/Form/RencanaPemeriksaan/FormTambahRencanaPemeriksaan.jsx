@@ -233,7 +233,7 @@ export default class FormTambahRencana extends React.Component {
                     value: this.state.namaRencana,
                     placeholder: "Masukan link majelis"
                 }, {  
-                    label: "Link Majelis*",
+                    label: "Link Pemeriksaan*",
                     handleChange: this.handleChange,
                     type: "text",
                     name: "link",
