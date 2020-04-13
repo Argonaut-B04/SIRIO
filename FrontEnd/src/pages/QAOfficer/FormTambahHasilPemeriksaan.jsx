@@ -1,12 +1,12 @@
 import React from "react";
-import FormBuktiBM from "../../Components/Form/BuktiPelaksanaan/FormBukti";
+import FormTambah from "../../Components/Form/HasilPemeriksaan/HasilPemeriksaanFormTambah";
 import SirioMainLayout from "../../Layout/SirioMainLayout";
 
-export default class FormBuktiPelaksanaan extends React.Component {
+export default class FormTambahHasilPemeriksaan extends React.Component {
     render() {
         return (
             <SirioMainLayout>
-                <FormBuktiBM />
+                <FormTambah />
             </SirioMainLayout>
         );
     }

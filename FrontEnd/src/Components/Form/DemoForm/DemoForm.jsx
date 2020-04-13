@@ -127,6 +127,53 @@ export default class DemoForm extends React.Component {
         return submitable;
     }
 
+    componentDidUpdate() {
+        var submitable = true;
+
+        submitable = this.validateNama() && this.validateUmur();
+
+        if (this.state.submitable !== submitable) {
+            this.setState({
+                submitable: submitable
+            })
+        }
+    }
+
+    validateNama() {
+        var submitable = true;
+        const fokusNama = this.state.nama;
+        var errorNama;
+        if (fokusNama.length < 2) {
+            submitable = false;
+            errorNama = "Nama minimal 2 karakter, nd mungkin aku panggil kamu sebagai Tuan/Nyonya " + fokusNama;
+        } else if (fokusNama.length > 10) {
+            submitable = false;
+            errorNama = "uvuvwevwe osas ?";
+        }
+        if (this.state.errorNama !== errorNama) {
+            this.setState({
+                errorNama: errorNama
+            })
+        }
+        return submitable;
+    }
+
+    validateUmur() {
+        var submitable = true;
+        const fokusUmur = this.state.umur;
+        var errorUmur;
+        if (fokusUmur < 18) {
+            submitable = false;
+            errorUmur = "Khusus 18 tahun keatas ya ^-^";
+        }
+        if (this.state.errorUmur !== errorUmur) {
+            this.setState({
+                errorUmur: errorUmur
+            })
+        }
+        return submitable;
+    }
+
     // Fungsi yang akan mengembalikan definisi tiap field pada form
     // Setiap objek {} pada List [] akan menjadi 1 field
     // untuk informasi lebih lengkap, cek SirioForm
@@ -170,6 +217,21 @@ export default class DemoForm extends React.Component {
                             value: "neko"
                         }
                     ]
+                }
+            ]
+        )
+    }
+
+    outerInputDefinition() {
+        return (
+            [
+                {
+                    fullComponent:
+                        <SirioForm
+                            noHeader
+                            isInnerForm
+                            inputDefinition={this.innerInputDefinition()}
+                        />
                 }, {
                     label: "Nama Mereka",
                     multiple: true,

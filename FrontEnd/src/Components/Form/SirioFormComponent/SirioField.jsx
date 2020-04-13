@@ -48,20 +48,35 @@ export default class SirioField extends Component {
                     required={required}
                 />
         } else if (type === "checkbox") {
-            field =
-                <input
-                    key={key}
-                    type={type}
+            if (this.props.value) {
+                field =
+                    <input
+                        type={this.props.type}
 
-                    name={name}
-                    defaultChecked={value}
-                    value={this.defaultChecked ? true : false}
-                    onChange={handleChange}
-                    index={index}
+                        checked
 
-                    className={[customClass, classes.input].join(" ")}
-                    required={required}
-                />
+                        name={this.props.name}
+                        defaultChecked={this.props.value}
+                        value={this.defaultChecked ? true : false}
+                        onChange={this.props.handleChange}
+                        index={this.props.index}
+
+                        className={this.props.classes ? [this.props.classes, classes.input].join(" ") : classes.input}
+                    />
+            } else {
+                field =
+                    <input
+                        type={this.props.type}
+
+                        name={this.props.name}
+                        defaultChecked={this.props.value}
+                        value={this.defaultChecked ? true : false}
+                        onChange={this.props.handleChange}
+                        index={this.props.index}
+
+                        className={this.props.classes ? [this.props.classes, classes.input].join(" ") : classes.input}
+                    />
+            }
         } else {
             field =
                 <input
