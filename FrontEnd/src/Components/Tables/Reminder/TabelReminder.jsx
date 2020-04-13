@@ -3,7 +3,7 @@ import SirioButton from '../../Button/SirioButton';
 import SirioDatePickerButton from '../../Button/SirioDatePickerButton';
 import ReminderService from '../../../Services/ReminderService';
 import SirioTable from '../SirioTable';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Prompt } from 'react-router-dom';
 import classes from '../Rekomendasi/TabelRekomendasi.module.css';
 import SirioConfirmButton from '../../Button/ActionButton/SirioConfirmButton';
 import SirioMessageButton from '../../Button/ActionButton/SirioMessageButton';
@@ -20,7 +20,8 @@ class TabelReminder extends React.Component {
 
         this.state = {
             rowList: [],
-            changeComplete: false
+            changeComplete: false,
+            changed: false
         }
 
         this.renderRows = this.renderRows.bind(this);
@@ -43,7 +44,8 @@ class TabelReminder extends React.Component {
             .then(() => {
                 this.renderRows()
                 this.setState({
-                    changeComplete: true
+                    changeComplete: true,
+                    changed: false
                 })
             });
     }
@@ -70,7 +72,7 @@ class TabelReminder extends React.Component {
         formatter: SirioAxiosBase.formatDate
     }, {
         dataField: 'noData 1',
-        text: '',
+        text: 'Aksi Ubah',
         headerClasses: classes.colheader,
         classes: classes.rowItem,
         headerStyle: () => {
@@ -82,7 +84,7 @@ class TabelReminder extends React.Component {
         formatter: (cell, row) => this.getButtonsFirst(cell, row)
     }, {
         dataField: 'noData 2',
-        text: '',
+        text: 'Aksi Hapus',
         headerClasses: classes.colheader,
         classes: classes.rowItem,
         headerStyle: () => {
@@ -113,7 +115,8 @@ class TabelReminder extends React.Component {
         })
 
         this.setState({
-            rowList: changedRow
+            rowList: changedRow,
+            changed: true
         })
     }
 
@@ -138,7 +141,8 @@ class TabelReminder extends React.Component {
         })
 
         this.setState({
-            rowList: changedRow
+            rowList: changedRow,
+            changed: true
         })
     }
 
@@ -160,17 +164,24 @@ class TabelReminder extends React.Component {
         })
 
         this.setState({
-            rowList: changedRow
+            rowList: changedRow,
+            changed: true
         })
     }
 
     // Formatter untuk render button pertama
     getButtonsFirst(cell, row) {
+        const date = row.tanggalPengiriman;
+        const currentDate = new Date();
+        if (date[0] < currentDate.getFullYear() || date[1] < currentDate.getMonth() || date[2] < currentDate.getDate()) {
+            return "";
+        }
         return (
             <SirioDatePickerButton
                 purple
                 id={row.idReminder}
                 handleChange={(date, id) => this.ubah(date, id)}
+                minDate={currentDate}
             >
                 Ubah
             </SirioDatePickerButton>
@@ -179,6 +190,11 @@ class TabelReminder extends React.Component {
 
     // Formatter untuk render button kedua
     getButtonsSecond(cell, row) {
+        const date = row.tanggalPengiriman;
+        const currentDate = new Date();
+        if (date[0] < currentDate.getFullYear() || date[1] < currentDate.getMonth() || date[2] < currentDate.getDate()) {
+            return "";
+        }
         return (
             <SirioButton
                 red
@@ -244,6 +260,10 @@ class TabelReminder extends React.Component {
                     includeSearchBar
                     headerButton={this.headerButton()}
                     footerContent={this.footerContent()}
+                />
+                <Prompt
+                    when={this.state.changed}
+                    message={`Anda akan membatalkan perubahan pengaturan, konfirmasi ?`}
                 />
                 {this.state.changeComplete &&
                     <SirioMessageButton

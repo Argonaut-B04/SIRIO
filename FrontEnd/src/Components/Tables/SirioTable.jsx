@@ -34,11 +34,6 @@ export default class SirioTable extends Component {
         this.numberFormatter = this.numberFormatter.bind(this);
     }
 
-    // Fungsi untuk menampilkan hasil return jika tidak ada data yang ditampilkan pada tabel
-    indication() {
-        return "No Data in Table"
-    }
-
     // Fungsi untuk menampilkan informasi jumlah entry tabel
     // TODO: Ubah menjadi sesuai dengan desain
     customTotal = (from, to, size) => (
@@ -103,8 +98,10 @@ export default class SirioTable extends Component {
     }
 
     columns = [{
-        dataField: 'no',
+        dataField: 'noData',
         text: 'NO',
+        isDummyField: true,
+        searchable: false,
         classes: [classes.rowNumber, "d-none d-sm-table-cell"].join(" "),
         headerClasses: [classes.colheader, "d-none d-sm-table-cell"].join(" "),
         headerStyle: () => {
@@ -158,7 +155,7 @@ export default class SirioTable extends Component {
                                         cellEdit={this.props.cellEdit}
                                         hover
                                         defaultSorted={this.props.defaultSorted}
-                                        noDataIndication={this.indication}
+                                        noDataIndication={this.props.indication ? this.props.indication : "No Data"}
                                         pagination={this.pagination}
                                         overlay={this.overlay}
                                         classes="table-responsive-lg"

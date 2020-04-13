@@ -4,6 +4,7 @@ import classes from './TabelTugasPemeriksaan.module.css';
 import SirioTable from '../SirioTable';
 import TugasPemeriksaanService from '../../../Services/TugasPemeriksaanService';
 import AuthenticationService from '../../../Services/AuthenticationService';
+import SirioAxiosBase from '../../../Services/SirioAxiosBase';
 import { NavLink } from 'react-router-dom';
 
 export default class TabelTugasPemeriksaan extends React.Component {
@@ -94,6 +95,7 @@ export default class TabelTugasPemeriksaan extends React.Component {
             text: 'TANGGAL MULAI',
             sort: true,
             classes: classes.rowItem,
+            // formatter: SirioAxiosBase.formatDate,
             headerClasses: classes.colheader,
             headerStyle: (colum, colIndex) => {
                 return { width: "20%", textAlign: 'left' };
@@ -103,6 +105,7 @@ export default class TabelTugasPemeriksaan extends React.Component {
             text: 'TANGGAL SELESAI',
             sort: true,
             classes: classes.rowItem,
+            // formatter: SirioAxiosBase.formatDate,
             headerClasses: classes.colheader,
             headerStyle: (colum, colIndex) => {
                 return { width: "20%", textAlign: 'left' };

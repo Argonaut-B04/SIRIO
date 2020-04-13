@@ -91,7 +91,7 @@ export default class TabelRekomendasi extends React.Component {
             }
         }, {
             dataField: 'noData 1',
-            text: '',
+            text: 'Hasil Pemeriksaan',
             headerClasses: [classes.colheader, "d-block d-sm-table-cell"].join(" "),
             classes: [classes.rowItem, "d-block d-sm-table-cell"].join(" "),
             style: () => {
@@ -100,7 +100,29 @@ export default class TabelRekomendasi extends React.Component {
             formatter: (cell, row) => this.getButtonsFirst(cell, row)
         }, {
             dataField: 'noData 2',
-            text: '',
+            text: 'Tenggat Waktu',
+            sort: true,
+            // sortFunc: (a, b, order, dataField, rowA, rowB) => {
+            //     const sorter = {
+            //         "Draft": 1,
+            //         "Menunggu Persetujuan": 2,
+            //         "Ditolak": 3,
+            //         "Menunggu Pengaturan Tenggat Waktu": 4,
+            //         "Menunggu Pelaksanaan": 5,
+            //         "Sedang Dilaksanakan": 6,
+            //         "Selesai": 7
+            //     }
+            //     const aNum = sorter[a];
+            //     const bNum = sorter[b];
+            //     if (aNum === bNum) {
+            //         return rowA.keterangan.localeCompare(rowB.keterangan);
+            //     }
+            //     if (order === "asc") {
+            //         return aNum - bNum;
+            //     } else {
+            //         return bNum - aNum;
+            //     }
+            // },
             headerClasses: [classes.colheader, "d-block d-sm-table-cell"].join(" "),
             classes: [classes.rowItem, "d-block d-sm-table-cell"].join(" "),
             style: () => {
@@ -109,7 +131,7 @@ export default class TabelRekomendasi extends React.Component {
             formatter: (cell, row) => this.getButtonsSecond(cell, row)
         }, {
             dataField: 'noData 3',
-            text: '',
+            text: 'Reminder',
             headerClasses: [classes.colheader, "d-block d-sm-table-cell"].join(" "),
             classes: [classes.rowItem, "d-block d-sm-table-cell"].join(" "),
             style: () => {
@@ -181,7 +203,7 @@ export default class TabelRekomendasi extends React.Component {
         const tenggatWaktu = SirioAxiosBase.formatDateFromString(row.tenggatWaktu);
         const recommended = status === "Menunggu Pengaturan Tenggat Waktu";
         const hyperlink = status === "Menunggu Pelaksanaan";
-        const text = status === "Sedang Dilaksanakan" || status === "Selesai";
+        const text = status === "Selesai" || status === "Sedang Dilaksanakan";
 
         const disabled = !recommended;
         if (text) {
@@ -200,6 +222,7 @@ export default class TabelRekomendasi extends React.Component {
                     hyperlink
                     id={row.id}
                     handleChange={(date, id) => this.aturTenggatWaktu(date, id)}
+                    minDate={new Date()}
                 >
                     {tenggatWaktu}
                 </SirioDatePickerButton>
@@ -230,7 +253,7 @@ export default class TabelRekomendasi extends React.Component {
     // Formatter untuk render button ketiga
     getButtonsThird(cell, row) {
         const status = row.status;
-        const reminderEnable = status === "Menunggu Pelaksanaan" || status === "Sedang Dijalankan";
+        const reminderEnable = status === "Menunggu Pelaksanaan" || status === "Sedang Dilaksanakan";
 
         if (reminderEnable) {
             return (
@@ -285,6 +308,7 @@ export default class TabelRekomendasi extends React.Component {
                     id='id'
                     columnsDefinition={this.columns}
                     includeSearchBar
+                    indication="Tidak Terdapat Data Rekomendasi"
                 />
                 {this.state.changeComplete &&
                     <SirioMessageButton

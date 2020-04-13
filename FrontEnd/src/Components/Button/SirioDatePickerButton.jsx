@@ -34,6 +34,10 @@ export default class SirioDatePickerButton extends React.Component {
                 popperClassName={classes.panel}
                 popperPlacement={this.props.popper}
                 dateFormat="yyyy-MM-dd"
+                minDate={this.props.minDate ? this.props.minDate : new Date()}
+                showMonthDropdown
+                showYearDropdown
+                dropdownMode="select"
                 customInput={<SirioDatePickerCustomInput {...this.props} />}
             />
         );

@@ -92,61 +92,60 @@ public class ReminderRestController {
         Integer idRekomendasi = rekomendasiDTO.getId();
         Optional<Employee> employeeTarget = employeeRestService.getByUsername(principal.getName());
         Employee employee;
-        try {
-            if (employeeTarget.isPresent()) {
-                employee = employeeTarget.get();
-            } else {
-                throw new NoSuchElementException();
-            }
-        } catch (NoSuchElementException e) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Akun anda tidak terdaftar atau tidak ditemukan!"
-            );
-        }
+        if (employeeTarget.isPresent()) {
+            employee = employeeTarget.get();
+            if (employee.getRole().getAccessPermissions().getUbahReminder()) {
 
-        try {
-            Rekomendasi rekomendasi = rekomendasiRestService.getById(idRekomendasi);
-            List<Reminder> daftarReminderBaru = new ArrayList<>();
-            List<ReminderDTO> daftarReminderDTOBaru = new ArrayList<>();
+                try {
+                    Rekomendasi rekomendasi = rekomendasiRestService.getById(idRekomendasi);
+                    List<Reminder> daftarReminderBaru = new ArrayList<>();
+                    List<ReminderDTO> daftarReminderDTOBaru = new ArrayList<>();
 
-            for (ReminderDTO reminder : rekomendasiDTO.getReminder()) {
-                Date tanggalDate = Settings.convertToDateViaInstant(
-                        reminder.getTanggalPengiriman()
-                );
-                if (reminderRestService.isExistById(reminder.getIdReminder())) {
-                    Reminder reminderTarget = reminderRestService.ubahReminder(
-                            reminder.getIdReminder(),
-                            tanggalDate
+                    for (ReminderDTO reminder : rekomendasiDTO.getReminder()) {
+                        Date tanggalDate = Settings.convertToDateViaInstant(
+                                reminder.getTanggalPengiriman()
+                        );
+                        if (reminderRestService.isExistById(reminder.getIdReminder())) {
+                            Reminder reminderTarget = reminderRestService.ubahReminder(
+                                    reminder.getIdReminder(),
+                                    tanggalDate
+                            );
+                            ReminderDTO newReminder = new ReminderDTO();
+                            newReminder.setIdReminder(reminderTarget.getIdReminder());
+                            newReminder.setTanggalPengiriman(reminder.getTanggalPengiriman());
+
+                            daftarReminderDTOBaru.add(newReminder);
+                            daftarReminderBaru.add(reminderTarget);
+                        } else {
+                            Reminder newReminder = new Reminder();
+                            newReminder.setPembuat(employee);
+                            newReminder.setTanggalPengiriman(tanggalDate);
+                            newReminder = reminderRestService.buatReminder(newReminder);
+
+                            reminder.setIdReminder(newReminder.getIdReminder());
+                            daftarReminderDTOBaru.add(reminder);
+                            daftarReminderBaru.add(newReminder);
+                        }
+                    }
+
+                    rekomendasi.setDaftarReminder(daftarReminderBaru);
+                    rekomendasiRestService.ubahRekomendasi(idRekomendasi, rekomendasi);
+
+                    response.setStatus(200);
+                    response.setMessage("success");
+                    response.setResult(daftarReminderDTOBaru);
+
+                    return response;
+                } catch (NoSuchElementException e) {
+                    throw new ResponseStatusException(
+                            HttpStatus.NOT_FOUND, "Rekomendasi dengan ID " + idRekomendasi + " tidak ditemukan!"
                     );
-                    ReminderDTO newReminder = new ReminderDTO();
-                    newReminder.setIdReminder(reminderTarget.getIdReminder());
-                    newReminder.setTanggalPengiriman(reminder.getTanggalPengiriman());
-
-                    daftarReminderDTOBaru.add(newReminder);
-                    daftarReminderBaru.add(reminderTarget);
-                } else {
-                    Reminder newReminder = new Reminder();
-                    newReminder.setPembuat(employee);
-                    newReminder.setTanggalPengiriman(tanggalDate);
-                    newReminder = reminderRestService.buatReminder(newReminder);
-
-                    reminder.setIdReminder(newReminder.getIdReminder());
-                    daftarReminderDTOBaru.add(reminder);
-                    daftarReminderBaru.add(newReminder);
                 }
-            }
-
-            rekomendasi.setDaftarReminder(daftarReminderBaru);
-            rekomendasiRestService.ubahRekomendasi(idRekomendasi, rekomendasi);
-
-            response.setStatus(200);
-            response.setMessage("success");
-            response.setResult(daftarReminderDTOBaru);
-        } catch (NoSuchElementException e) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Rekomendasi dengan ID " + idRekomendasi + " tidak ditemukan!"
+            } else throw new ResponseStatusException(
+                    HttpStatus.UNAUTHORIZED, "Akun anda tidak memiliki akses ke pengaturan ini!"
             );
-        }
-        return response;
+        } else throw new ResponseStatusException(
+                HttpStatus.UNAUTHORIZED, "Akun anda tidak terdaftar dalam Sirio!"
+        );
     }
 }

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import SideNavFramework from '../SideNavFramework';
+import { halamanUtama, rencanaPemeriksaan, konfigurasi } from '../../../Configuration/UrlConfig';
 
 /**
  * Komponen SideNav untuk Manager Operational
@@ -10,36 +11,9 @@ export default class ManagerOperationalSideNav extends Component {
             <SideNavFramework
                 links={
                     [
-                        {
-                            link: "#",
-                            title: "Halaman Utama",
-                            active: false
-                        },
-                        {
-                            link: "#",
-                            title: "Rencana Pemeriksaan",
-                            active: false
-                        },
-                        {
-                            link: "#",
-                            title: "Konfigurasi",
-                            active: false,
-                            dropdown: [
-                                {
-                                    title: "Risk Rating",
-                                    link: "#"
-                                }, {
-                                    title: "Registrasi Risiko",
-                                    link: "#"
-                                }, {
-                                    title: "Risk Level",
-                                    link: "#"
-                                }, {
-                                    title: "SOP",
-                                    link: "#"
-                                }
-                            ]
-                        },
+                        halamanUtama,
+                        rencanaPemeriksaan,
+                        konfigurasi,
                     ]
                 }
             />

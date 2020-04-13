@@ -1,0 +1,21 @@
+.errorDetailMainWrapper {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    color: white;
+}
+.errorDetailMainWrapper>* {
+    padding: 1rem;
+    text-align: center;
+    margin: 0;
+}
+
+.errorTitle {
+    font-size: 6rem;
+}
+
+.errorDetail {
+    font-size: 2rem;
+}

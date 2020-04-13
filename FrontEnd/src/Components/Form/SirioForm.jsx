@@ -16,6 +16,7 @@ import ComponentWrapper from '../../Layout/ComponentWrapper';
 class SirioForm extends Component {
 
     render() {
+
         return (
             <>
                 {this.props.noHeader || this.props.customHeader ? this.props.customHeader :
@@ -25,13 +26,14 @@ class SirioForm extends Component {
                         betweenTitleSubtitle={this.props.betweenTitleSubtitle}
                     />
                 }
-                {this.props.isInnerForm ?
-                    <ComponentWrapper classes="m-4">
+                {this.props.isInnerForm || this.props.childForm ?
+                    <ComponentWrapper classes={this.props.isInnerForm ? "m-4" : ""}>
                         {this.props.inputDefinition.map((field, i) =>
                             <SirioField
                                 key={i}
                                 label={field.label}
                                 handleChange={field.handleChange}
+                                index={field.index}
                                 type={field.type}
                                 name={field.name}
                                 value={field.value}
@@ -40,18 +42,30 @@ class SirioForm extends Component {
                                 classes={field.classes}
                                 customInput={field.customInput}
                                 fullComponent={field.fullComponent}
+                                validator={field.validation}
+                                required={field.required}
+                                min={field.min}
+                                afterValidity={field.afterValidity}
                             />
                         )}
+
+                        {this.props.footerButton ?
+                            <div className="w-100 text-right">
+                                <br />
+                                {this.props.footerButton}
+                            </div>
+                            : ""
+                        }
                     </ComponentWrapper>
                     :
                     <ComponentWrapper>
-
                         <form onSubmit={this.props.onSubmit}>
                             {this.props.inputDefinition.map((field, i) =>
                                 <SirioField
                                     key={i}
                                     label={field.label}
                                     handleChange={field.handleChange}
+                                    index={field.index}
                                     type={field.type}
                                     name={field.name}
                                     value={field.value}
@@ -60,6 +74,10 @@ class SirioForm extends Component {
                                     classes={field.classes}
                                     customInput={field.customInput}
                                     fullComponent={field.fullComponent}
+                                    validator={field.validation}
+                                    required={field.required}
+                                    afterValidity={field.afterValidity}
+                                    min={field.min}
                                 />
                             )}
                             <div className="w-100 text-right">
@@ -73,5 +91,4 @@ class SirioForm extends Component {
         );
     }
 }
-
 export default SirioForm;

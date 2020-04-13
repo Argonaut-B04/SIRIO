@@ -28,14 +28,29 @@ public class RiskRatingRestController {
     private EmployeeRestService employeeRestService;
 
     @GetMapping("")
-    private BaseResponse<List<RiskRating>> getAllAktifRiskRating() {
+    private BaseResponse<List<RiskRating>> getAllAktifRiskRating(
+            Principal principal
+    ) {
         BaseResponse<List<RiskRating>> response = new BaseResponse<>();
-        response.setStatus(200);
-        response.setMessage("success");
-        response.setResult(
-                riskRatingRestService.getAll()
+        Optional<Employee> pengelolaOptional = employeeRestService.getByUsername(principal.getName());
+        Employee pengelola;
+        if (pengelolaOptional.isPresent()) {
+            pengelola = pengelolaOptional.get();
+            if (pengelola.getRole().getAccessPermissions().getAksesRiskRating()) {
+
+                response.setStatus(200);
+                response.setMessage("success");
+                response.setResult(
+                        riskRatingRestService.getAll()
+                );
+                return response;
+
+            } else throw new ResponseStatusException(
+                    HttpStatus.UNAUTHORIZED, "Akun anda tidak memiliki akses ke pengaturan ini"
+            );
+        } else throw new ResponseStatusException(
+                HttpStatus.UNAUTHORIZED, "Akun anda tidak terdaftar dalam Sirio"
         );
-        return response;
     }
 
     @PostMapping("")
@@ -44,38 +59,35 @@ public class RiskRatingRestController {
             Principal principal
     ) {
         BaseResponse<List<RiskRating>> response = new BaseResponse<>();
-        try {
-            Optional<Employee> pengelolaOptional = employeeRestService.getByUsername(principal.getName());
-            Employee pengelola;
-            if (pengelolaOptional.isPresent()) {
-                pengelola = pengelolaOptional.get();
-            } else {
-                throw new ResponseStatusException(
-                        HttpStatus.UNAUTHORIZED, "Role Manajer diperlukan untuk mengubah konfigurasi risk rating"
+        Optional<Employee> pengelolaOptional = employeeRestService.getByUsername(principal.getName());
+        Employee pengelola;
+        if (pengelolaOptional.isPresent()) {
+            pengelola = pengelolaOptional.get();
+            if (pengelola.getRole().getAccessPermissions().getUbahRiskRating()) {
+
+                List<RiskRating> currentRiskRating = riskRatingRestService.getAll();
+                for (RiskRating riskRating : currentRiskRating) {
+                    riskRatingRestService.hapusRiskRating(riskRating.getIdRating());
+                }
+
+                for (RiskRating riskRating : riskRatingList) {
+                    riskRating.setPengelola(pengelola);
+                    riskRatingRestService.buatRiskRating(riskRating);
+                }
+
+
+                response.setStatus(200);
+                response.setMessage("success");
+                response.setResult(
+                        riskRatingRestService.getAll()
                 );
-            }
+                return response;
 
-            List<RiskRating> currentRiskRating = riskRatingRestService.getAll();
-            for (RiskRating riskRating : currentRiskRating) {
-                riskRatingRestService.hapusRiskRating(riskRating.getIdRating());
-            }
-
-            for (RiskRating riskRating : riskRatingList) {
-                riskRating.setPengelola(pengelola);
-                riskRatingRestService.buatRiskRating(riskRating);
-            }
-
-
-            response.setStatus(200);
-            response.setMessage("success");
-            response.setResult(
-                    riskRatingRestService.getAll()
+            } else throw new ResponseStatusException(
+                    HttpStatus.UNAUTHORIZED, "Akun anda tidak memiliki akses ke pengaturan ini"
             );
-        } catch (NoSuchElementException e) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Konfigurasi Risk Level gagal"
-            );
-        }
-        return response;
+        } else throw new ResponseStatusException(
+                HttpStatus.UNAUTHORIZED, "Akun anda tidak terdaftar dalam Sirio"
+        );
     }
 }

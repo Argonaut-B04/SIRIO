@@ -23,30 +23,49 @@ class DetailHasilPemeriksaan extends React.Component {
             role: AuthenticationService.getRole(),
             username: AuthenticationService.getUsername(),
             yangDitugaskan: false,
-            redirect: false
+            hapus: false,
+            setuju: false,
         };
             
         this.renderDataHasilPemeriksaan = this.renderDataHasilPemeriksaan.bind(this);
         this.reduceRiskScore = this.reduceRiskScore.bind(this);
-        this.setRedirect = this.setRedirect.bind(this);
+        this.setRedirectHapus = this.setRedirectHapus.bind(this);
+        this.setRedirectSetuju = this.setRedirectSetuju.bind(this);
     }
 
     componentDidMount() {
         this.renderDataHasilPemeriksaan();
     }
 
-    setRedirect = () => {
+    setRedirectHapus = () => {
         this.setState({
-            redirect: true
+            hapus: true
         })
     };
 
-    renderRedirect = () => {
-        if (this.state.redirect) {
+    setRedirectSetuju = () => {
+        this.setState({
+            setuju: true
+        })
+    };
+
+    renderRedirectHapus = () => {
+        if (this.state.hapus) {
             return <Redirect to={{
                 pathname: "/hasil-pemeriksaan",
                 state: {
                     deleteSuccess: true
+                }
+            }} />
+        }
+    };
+
+    renderRedirectSetuju = () => {
+        if (this.state.setuju) {
+            return <Redirect to={{
+                pathname: "/hasil-pemeriksaan",
+                state: {
+                    setujuSuccess: true
                 }
             }} />
         }
@@ -114,69 +133,97 @@ class DetailHasilPemeriksaan extends React.Component {
             id: id
         };
         HasilPemeriksaanService.deleteHasilPemeriksaan(hasilPemeriksaan)
-            .then(() => this.setRedirect());
+            .then(() => this.setRedirectHapus());
     }
 
-    buttonUbah(id) {
-        return (
-            <NavLink to={{
-                pathname: "/hasil-pemeriksaan/ubah",
-                state: {
-                    id: id
-                }
-            }}>
-                <SirioButton
-                    purple
+    setuju(id) {
+        const persetujuan = {
+            id: id,
+            status: "4",
+        };
+        HasilPemeriksaanService.setujuiHasilPemeriksaan(persetujuan)
+            .then(() => this.setRedirectSetuju());
+    }
+
+    buttonUbah(id, status) {
+        if(status === "Draft" || status === "Menunggu Persetujuan" || status === "Ditolak") {
+            return (
+                <NavLink to={{
+                    pathname: "/hasil-pemeriksaan/ubah",
+                    state: {
+                        id: id
+                    }
+                }}>
+                    <SirioButton
+                        purple
+                    >
+                        Ubah
+                    </SirioButton>
+                </NavLink>
+            )
+        } else {
+            return null
+        }
+    }
+
+    buttonHapus(id, status) {
+        if(status === "Draft" || status === "Menunggu Persetujuan" || status === "Ditolak") {
+            return (
+                <SirioWarningButton
+                    red
+                    modalTitle="Konfirmasi Penghapusan"
+                    modalDesc="Apakah anda yakin untuk menghapus hasil pemeriksaan?"
+                    onConfirm={() => this.hapus(id)}
+                    customConfirmText="Ya, Hapus"
+                    customCancelText="Batal"
                 >
-                    Ubah
-                </SirioButton>
-            </NavLink>
-        )
+                    Hapus
+                </SirioWarningButton>
+            )
+        } else {
+            return null
+        }
     }
 
-    buttonHapus(id) {
-        return (
-            <SirioWarningButton
-                red
-                modalTitle="Konfirmasi Penghapusan"
-                modalDesc="Apakah anda yakin untuk menghapus hasil pemeriksaan?"
-                onConfirm={() => this.hapus(id)}
-                customConfirmText="Ya, Hapus"
-                customCancelText="Batal"
-            >
-                Hapus
-            </SirioWarningButton>
-        )
-    }
-
-    buttonSetuju =
-        <SirioConfirmButton
-            purple
-            classes="m-1"
-            modalTitle="Apakah anda yakin untuk menyetujui hasil pemeriksaan?"
-            onConfirm={null}
-            customConfirmText="Ya, Setujui"
-            customCancelText="Batal"
-            closeOnConfirm
-        >
-            Setuju
-        </SirioConfirmButton>;
-
-    buttonTolak(id) {
-        return (
-            <NavLink to={{
-                pathname: "/hasil-pemeriksaan/tolak",
-                state: {
-                    id: id
-                }
-            }}>
-                <SirioButton
+    buttonSetuju(id, status) {
+        if(status === "Menunggu Persetujuan") {
+            return (
+                <SirioConfirmButton
                     purple
+                    classes="m-1"
+                    modalTitle="Apakah anda yakin untuk menyetujui hasil pemeriksaan?"
+                    onConfirm={() => this.setuju(id)}
+                    customConfirmText="Ya, Setujui"
+                    customCancelText="Batal"
+                    closeOnConfirm
                 >
-                    Tolak
-                </SirioButton>
-            </NavLink>
-        )
+                    Setuju
+                </SirioConfirmButton>
+            )
+        } else {
+            return null
+        }
+    }
+
+    buttonTolak(id, status) {
+        if(status === "Menunggu Persetujuan") {
+            return (
+                <NavLink to={{
+                    pathname: "/hasil-pemeriksaan/tolak",
+                    state: {
+                        id: id
+                    }
+                }}>
+                    <SirioButton
+                        purple
+                    >
+                        Tolak
+                    </SirioButton>
+                </NavLink>
+            )
+        } else {
+            return null
+        }
     }
 
     subButton() {
@@ -184,27 +231,27 @@ class DetailHasilPemeriksaan extends React.Component {
             case "Super QA Officer Operational Risk":
                 return (
                     <div>
-                        {this.buttonUbah(this.state.hasilPemeriksaan.id)}
-                        {this.buttonHapus(this.state.hasilPemeriksaan.id)}
-                        {this.buttonSetuju}
-                        {this.buttonTolak(this.state.hasilPemeriksaan.id)}
+                        {this.buttonUbah(this.state.hasilPemeriksaan.id, this.state.hasilPemeriksaan.namaStatus)}
+                        {this.buttonHapus(this.state.hasilPemeriksaan.id, this.state.hasilPemeriksaan.namaStatus)}
+                        {this.buttonSetuju(this.state.hasilPemeriksaan.id, this.state.hasilPemeriksaan.namaStatus)}
+                        {this.buttonTolak(this.state.hasilPemeriksaan.id, this.state.hasilPemeriksaan.namaStatus)}
                     </div>
                 );
             case "admin":
                 return (
                     <div>
-                        {this.buttonUbah(this.state.hasilPemeriksaan.id)}
-                        {this.buttonHapus(this.state.hasilPemeriksaan.id)}
-                        {this.buttonSetuju}
-                        {this.buttonTolak(this.state.hasilPemeriksaan.id)}
+                        {this.buttonUbah(this.state.hasilPemeriksaan.id, this.state.hasilPemeriksaan.namaStatus)}
+                        {this.buttonHapus(this.state.hasilPemeriksaan.id, this.state.hasilPemeriksaan.namaStatus)}
+                        {this.buttonSetuju(this.state.hasilPemeriksaan.id, this.state.hasilPemeriksaan.namaStatus)}
+                        {this.buttonTolak(this.state.hasilPemeriksaan.id, this.state.hasilPemeriksaan.namaStatus)}
                     </div>
                 );
             case "QA Officer Operational Risk":
                 if (this.state.yangDitugaskan) {
                     return (
                         <div>
-                            {this.buttonUbah(this.state.hasilPemeriksaan.id)}
-                            {this.buttonHapus(this.state.hasilPemeriksaan.id)}
+                            {this.buttonUbah(this.state.hasilPemeriksaan.id, this.state.hasilPemeriksaan.namaStatus)}
+                            {this.buttonHapus(this.state.hasilPemeriksaan.id, this.state.hasilPemeriksaan.namaStatus)}
                         </div>
                     )
                 } else {
@@ -213,8 +260,8 @@ class DetailHasilPemeriksaan extends React.Component {
             case "QA Lead Operational Risk":
                 return (
                     <div>
-                        {this.buttonSetuju}
-                        {this.buttonTolak(this.state.hasilPemeriksaan.id)}
+                        {this.buttonSetuju(this.state.hasilPemeriksaan.id, this.state.hasilPemeriksaan.namaStatus)}
+                        {this.buttonTolak(this.state.hasilPemeriksaan.id, this.state.hasilPemeriksaan.namaStatus)}
                     </div>
                 );
             default:
@@ -260,14 +307,18 @@ class DetailHasilPemeriksaan extends React.Component {
     render() {
         return (
             <div>
-                {this.renderRedirect()}
+                {this.renderRedirectHapus()}
+                {this.renderRedirectSetuju()}
                 <SirioDetailPage
                     title="Detail Hasil Pemeriksaan"
                     data={this.state.dataGeneral}
                     id='id'
                 />
                 <SirioDetailPage
-                    data={{"Risk Score": this.state.riskScore}}
+                    data={{
+                        "Risk Score": this.state.riskScore,
+                        "Feedback": this.state.hasilPemeriksaan.feedback
+                    }}
                     id='id'
                 />
                 {this.state.dataKomponen.map(komponen =>
