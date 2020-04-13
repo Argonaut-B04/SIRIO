@@ -35,6 +35,8 @@ class HasilPemeriksaanFormTambah extends React.Component {
         this.handleSelectChangeKomponen = this.handleSelectChangeKomponen.bind(this);
         this.handleSelectChange = this.handleSelectChange.bind(this);
         this.handleSelectChangeRisiko = this.handleSelectChangeRisiko.bind(this);
+        this.handleMultiFieldChange = this.handleMultiFieldChange.bind(this);
+        this.modifyFieldCount = this.modifyFieldCount.bind(this);
         this.setRedirect = this.setRedirect.bind(this);
         this.innerInputDefinition = this.innerInputDefinition.bind(this);
     }
@@ -126,13 +128,11 @@ class HasilPemeriksaanFormTambah extends React.Component {
                         keteranganSampel:"",
                         daftarTemuanRisiko:[
                             {
-                                id: 1,
                                 keterangan: ""
                             }
                         ],
                         daftarRekomendasi:[
                             {
-                                id: 1,
                                 keterangan: ""
                             }
                         ]
@@ -189,6 +189,24 @@ class HasilPemeriksaanFormTambah extends React.Component {
                     name: "idRiskLevel",
                     value: komponen.idRiskLevel,
                     optionList: this.state.riskLevelOptionList
+                }, {
+                    label: "Hasil Temuan",
+                    multiple: true,
+                    isMultipleObject: true,
+                    handleChange: (event, index) => this.handleMultiFieldChange(event, index, komponen.id, komponen.daftarTemuanRisiko, "keterangan"),
+                    type: "textArea",
+                    name: "daftarTemuanRisiko",
+                    value: komponen.daftarTemuanRisiko.map(temuan => temuan.keterangan),
+                    modifier: (name, newField) => this.modifyFieldCount(name, newField, komponen.id, "keterangan"),
+                }, {
+                    label: "Rekomendasi",
+                    multiple: true,
+                    isMultipleObject: true,
+                    handleChange: (event, index) => this.handleMultiFieldChange(event, index, komponen.id, komponen.daftarRekomendasi, "keterangan"),
+                    type: "textArea",
+                    name: "daftarRekomendasi",
+                    value: komponen.daftarRekomendasi.map(rekomendasi => rekomendasi.keterangan),
+                    modifier: (name, newField) => this.modifyFieldCount(name, newField, komponen.id, "keterangan"),
                 }
             ]
         )
@@ -299,6 +317,38 @@ class HasilPemeriksaanFormTambah extends React.Component {
                 </div>
             </>
         )
+    }
+
+    modifyFieldCount(name, newField, idKomponen, objectKey) {
+        const newArray = [];
+        for(let i = 0; i < newField.length; i++) {
+            newArray.push({
+                [objectKey]: newField[i]
+            })
+        }
+        this.setState(prevState => ({
+            ...prevState,
+            daftarKomponenPemeriksaan: prevState.daftarKomponenPemeriksaan.map(komponen => ({
+                ...komponen,
+                [name]: komponen.id === idKomponen ? newArray : komponen[name]
+            }))
+        }))
+    }
+
+    handleMultiFieldChange(event, index, idKomponen, array, objectKey) {
+        const targetName = event.target.name;
+        const targetValue = event.target.value;
+        const targetArray = array;
+        targetArray[index] = {
+            [objectKey]: targetValue
+        };
+        this.setState(prevState => ({
+            ...prevState,
+            daftarKomponenPemeriksaan: prevState.daftarKomponenPemeriksaan.map(komponen => ({
+                ...komponen,
+                [targetName]: komponen.id === idKomponen ? targetArray : komponen[targetName]
+            }))
+        }))
     }
 
     handleChangeKomponen(event, idKomponen) {

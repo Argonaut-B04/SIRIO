@@ -5,7 +5,7 @@ import TextareaAutosize from 'react-textarea-autosize';
 
 /**
  * Komponen field untuk SirioForm
- * 
+ *
  * Props yang tersedia:
  * - label              : String, judul field
  * - customInput        : Komponen, jika ingin menggunakan selain input tag
@@ -173,9 +173,9 @@ export default class SirioField extends Component {
                                 {deleteButton}
                             </div>
                             {i === (this.props.value.length - 1) &&
-                                <div className="col-2">
-                                    {sidebutton}
-                                </div>
+                            <div className="col-2">
+                                {sidebutton}
+                            </div>
                             }
                         </div>
 
