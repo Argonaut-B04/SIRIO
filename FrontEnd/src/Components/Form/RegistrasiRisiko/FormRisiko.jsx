@@ -47,11 +47,12 @@ class FormRisiko extends React.Component {
     };
 
     componentDidUpdate(prevProps, prevState) {
+        console.log("apakek")
         var submitable = true;
 
-        // if (prevState.nama !== this.state.nama) {
-        //     submitable = submitable && this.validateNama();
-        // }
+        if (prevState.nama !== this.state.nama) {
+            submitable = submitable && this.validateNama();
+        }
 
         if (this.state.submitable !== submitable) {
             this.setState({
@@ -60,24 +61,24 @@ class FormRisiko extends React.Component {
         }
     }
 
-    // validateNama() {
-    //     var submitable = true;
-    //     const fokusNama = this.state.nama;
-    //     var errorNama;
-    //     if (fokusNama.length < 1) {
-    //         submitable = false;
-    //         errorNama = "Nama minimal 2 karakter, nd mungkin aku panggil kamu sebagai Tuan/Nyonya " + fokusNama;
-    //     } else if (fokusNama.length > 10) {
-    //         submitable = false;
-    //         errorNama = "uvuvwevwe osas ?";
-    //     }
-    //     if (this.state.errorNama !== errorNama) {
-    //         this.setState({
-    //             errorNama: errorNama
-    //         })
-    //     }
-    //     return submitable;
-    // }
+    validateNama() {
+        var submitable = true;
+        const fokusNama = this.state.nama;
+        var errorNama;
+        if (fokusNama.length < 1) {
+            submitable = false;
+            errorNama = "Nama minimal 2 karakter, nd mungkin aku panggil kamu sebagai Tuan/Nyonya " + fokusNama;
+        } else if (fokusNama.length > 255) {
+            submitable = false;
+            errorNama = "uvuvwevwe osas ?";
+        }
+        if (this.state.errorNama !== errorNama) {
+            this.setState({
+                errorNama: errorNama
+            })
+        }
+        return submitable;
+    }
 
     componentDidMount() {
         this.renderSopOption();
@@ -201,6 +202,7 @@ class FormRisiko extends React.Component {
     }
 
     submitButton() {
+        console.log(this.state)
         return (
             <div>
                 <SirioButton purple 
