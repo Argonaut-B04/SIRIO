@@ -99,7 +99,7 @@ export default class SirioField extends Component {
     }
 
     generateSideDeleteButton(name, array, index, functionToUpdate) {
-        if (array.length == 1) {
+        if (array.length === 1) {
             return "";
         }
         return (
@@ -157,7 +157,7 @@ export default class SirioField extends Component {
                             <div className="col-2">
                                 {deleteButton}
                             </div>
-                            {i == (this.props.value.length - 1) &&
+                            {i === (this.props.value.length - 1) &&
                                 <div className="col-2">
                                     {sidebutton}
                                 </div>

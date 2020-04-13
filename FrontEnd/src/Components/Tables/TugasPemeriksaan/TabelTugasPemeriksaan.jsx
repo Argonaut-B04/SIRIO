@@ -4,7 +4,6 @@ import classes from './TabelTugasPemeriksaan.module.css';
 import SirioTable from '../SirioTable';
 import TugasPemeriksaanService from '../../../Services/TugasPemeriksaanService';
 import AuthenticationService from '../../../Services/AuthenticationService';
-import SirioAxiosBase from '../../../Services/SirioAxiosBase';
 import { NavLink } from 'react-router-dom';
 
 export default class TabelTugasPemeriksaan extends React.Component {
