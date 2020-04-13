@@ -78,7 +78,6 @@ class DetailRencanaPemeriksaan extends React.Component {
                         Ubah
                     </SirioButton>
                 </NavLink>
-                <a>     </a>
                 <SirioWarningButton
                     red
                     modalTitle="Konfirmasi Penghapusan"
