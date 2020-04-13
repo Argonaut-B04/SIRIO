@@ -15,7 +15,7 @@ class FormTambahBukti extends React.Component {
             keterangan: "",
             lampiran: "",
             id: "",
-            submitable: true,
+            submitable: false,
             redirect: false
         };
 
@@ -61,11 +61,14 @@ class FormTambahBukti extends React.Component {
             .then(() => this.setRedirect());
     }
 
-    componentDidUpdate() {
+    componentDidUpdate(prevProps, prevState) {
         var submitable = true;
-
-        submitable = this.validateKeterangan() && this.validateLampiran();
-
+        if (prevState.keterangan !== this.state.keterangan) {
+            submitable = submitable && this.validateKeterangan();
+        }
+        if (prevState.lampiran !== this.state.lampiran) {
+            submitable = submitable && this.validateLampiran();
+        }
         if (this.state.submitable !== submitable) {
             this.setState({
                 submitable: submitable
@@ -97,11 +100,10 @@ class FormTambahBukti extends React.Component {
         var submitable = true;
         const varLampiran = this.state.lampiran;
         var errorLampiran;
-        if (varLampiran.length > 1) {
+        if (varLampiran.length < 1) {
             submitable = false;
             errorLampiran = "Lampiran wajib diisi";
-        } 
-        if (!(varLampiran.includes("https://")) || !(varLampiran.includes("http://"))) {
+        } else if (!(varLampiran.includes("https://")) || !(varLampiran.includes("http://"))) {
             submitable = false;
             errorLampiran = "Lampiran harus berupa link url";
         }
@@ -117,9 +119,6 @@ class FormTambahBukti extends React.Component {
         return submitable;
     }
 
-    // Fungsi yang akan mengembalikan definisi tiap field pada form
-    // Setiap objek {} pada List [] akan menjadi 1 field
-    // untuk informasi lebih lengkap, cek SirioForm
     inputDefinition() {
         return (
             [
@@ -149,7 +148,9 @@ class FormTambahBukti extends React.Component {
     submitButton() {
         return (
             <div>
-                <SirioButton purple recommended
+                <SirioButton purple
+                             recommended={this.state.submitable}
+                             disabled={!this.state.submitable}
                              classes="mx-1"
                              onClick={(event)  => this.handleSubmit(event)}>
                     Simpan

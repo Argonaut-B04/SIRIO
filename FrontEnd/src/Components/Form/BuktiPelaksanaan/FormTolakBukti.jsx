@@ -15,6 +15,7 @@ class FormTolakBukti extends React.Component {
         this.state = {
             buktiPelaksanaan: {},
             feedback: "",
+            submitable: false,
             redirect: false
         };
 
@@ -75,14 +76,43 @@ class FormTolakBukti extends React.Component {
             .then(() => this.setRedirect());
     }
 
+    componentDidUpdate(prevProps, prevState) {
+        var submitable = true;
+        if (prevState.keterangan !== this.state.keterangan) {
+            submitable = submitable && this.validateKeterangan();
+        }
+        if (prevState.lampiran !== this.state.lampiran) {
+            submitable = submitable && this.validateLampiran();
+        }
+        if (this.state.submitable !== submitable) {
+            this.setState({
+                submitable: submitable
+            })
+        }
+    }
+
+    validateFeedback() {
+        var submitable = true;
+        const varFeedback = this.state.feedback;
+        var errorFeedback;
+        if (varFeedback.length < 1) {
+            submitable = false;
+            errorFeedback = "Feedback wajib diisi";
+        }
+        if (varFeedback.length > 125) {
+            submitable = false;
+            errorFeedback = "Feedback tidak boleh lebih dari 125 karakter";
+        }
+        if (this.state.errorFeedback !== errorFeedback) {
+            this.setState({
+                errorFeedback: errorFeedback
+            })
+        }
+        return submitable;
+    }
+
     inputDefinition() {
         var rowDefinition = [];
-        // Object.keys(this.data).map(key => rowDefinition.push(
-        //     {
-        //         label: key,
-        //         customInput: <p>{this.data[key]}</p>
-        //     }
-        // ))
         rowDefinition.push(
             {
                 label: "Keterangan",
@@ -92,7 +122,9 @@ class FormTolakBukti extends React.Component {
                 customInput: <p>{this.state.lampiran}</p>
             }, {
                 label: "Feedback*",
+                required: true,
                 handleChange: this.handleChange,
+                validation: this.state.errorFeedback,
                 type: "textarea",
                 name: "feedback",
                 value: this.state.feedback,
@@ -106,7 +138,9 @@ class FormTolakBukti extends React.Component {
         return (
             <div>
                 <SirioConfirmButton
-                    purple recommended
+                    purple 
+                    recommended={this.state.submitable}
+                    disabled={!this.state.submitable}
                     classes="mx-1"
                     modalTitle="Apakah anda yakin untuk menolak bukti pelaksanaan?"
                     onConfirm={(event)  => this.handleSubmit(event)}
