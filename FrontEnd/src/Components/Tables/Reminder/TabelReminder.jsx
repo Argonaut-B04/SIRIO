@@ -103,7 +103,7 @@ class TabelReminder extends React.Component {
         ]
     }
 
-    async tambah(date, id) {
+    tambah(date, id) {
 
         const newDate = [(date.getFullYear()), (date.getMonth() + 1), date.getDate()];
 
@@ -130,7 +130,7 @@ class TabelReminder extends React.Component {
         })
     }
 
-    async ubah(date, id) {
+    ubah(date, id) {
 
         const changedDate = [(date.getFullYear()), (date.getMonth() + 1), date.getDate()];
         const originalRow = this.state.rowList;
@@ -156,7 +156,7 @@ class TabelReminder extends React.Component {
         return toReturn;
     }
 
-    async hapus(id) {
+    hapus(id) {
         const originalRow = this.state.rowList;
 
         const changedRow = this.deleteItem(originalRow, {
