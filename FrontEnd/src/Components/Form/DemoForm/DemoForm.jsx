@@ -13,18 +13,21 @@ export default class DemoForm extends React.Component {
         super(props);
 
         this.state = {
-            nama: "bambang",
+            nama: "Shironeko",
             umur: 18,
-            jenisKelamin: "Pria",
+            jenis: "neko",
             manusia: true,
-            customDropdown: "bambang",
-            customDropdown2: "pria",
+            customDropdown: "Shironeko",
+            customDropdown2: "wanita",
             submitable: true,
+            namaMain: ["Chocola", "Vanilla"],
         }
 
         this.handleChange = this.handleChange.bind(this);
         this.innerInputDefinition = this.innerInputDefinition.bind(this);
         this.handleSelectChange = this.handleSelectChange.bind(this);
+        this.handleMultiFieldChange = this.handleMultiFieldChange.bind(this);
+        this.modifyFieldCount = this.modifyFieldCount.bind(this);
     }
 
     // Fungsi untuk mengubah state ketika isi dari input diubah
@@ -137,11 +140,11 @@ export default class DemoForm extends React.Component {
                     value: this.state.umur,
                     placeholder: "masukan umur"
                 }, {
-                    label: "Jenis Kelamin",
+                    label: "Jenis",
                     handleChange: this.handleSelectChange,
                     type: "select",
-                    name: "jenisKelamin",
-                    value: this.state.jenisKelamin,
+                    name: "jenis",
+                    value: this.state.jenis,
                     optionList: [
                         {
                             label: "Pria",
@@ -150,14 +153,44 @@ export default class DemoForm extends React.Component {
                             label: "Wanita",
                             value: "Wanita"
                         }, {
-                            label: "Gak tau apa",
-                            value: "gak tau apa"
+                            label: "Kucing",
+                            value: "neko"
                         }
                     ]
+                }, {
+                    label: "Nama Mereka",
+                    multiple: true,
+                    handleChange: this.handleMultiFieldChange,
+                    type: "text",
+                    name: "namaMain",
+                    value: this.state.namaMain,
+                    modifier: this.modifyFieldCount
                 }
             ]
         )
     }
+
+    modifyFieldCount(name, newField) {
+        this.setState(
+            {
+                [name]: newField
+            }
+        )
+    }
+
+    handleMultiFieldChange(event, index) {
+        const targetName = event.target.name;
+        const targetValue = event.target.value;
+        const targetArray = this.state[targetName];
+        targetArray[index] = targetValue;
+        this.setState(
+            {
+                [event.target.name]
+                    : targetArray
+            }
+        )
+    }
+
 
     outerInputDefinition() {
         return (
@@ -185,9 +218,9 @@ export default class DemoForm extends React.Component {
             this.setState({
                 nama: "Solo Quisiera Desaparecer"
             })
-        } else if (event.value === "bambang") {
+        } else if (event.value === "Shironeko") {
             this.setState({
-                nama: "Bambang"
+                nama: "Shironeko"
             })
         }
     }
@@ -208,8 +241,8 @@ export default class DemoForm extends React.Component {
                         optionList={
                             [
                                 {
-                                    label: "Bambang",
-                                    value: "bambang"
+                                    label: "Shironeko",
+                                    value: "Shironeko"
                                 },
                                 {
                                     label: "Vanish",
