@@ -60,6 +60,7 @@ export default class SirioField extends Component {
                     index={index}
 
                     className={[customClass, classes.input].join(" ")}
+                    required={required}
                 />
         } else {
             field =

@@ -28,6 +28,7 @@ export default class DemoForm extends React.Component {
         this.handleSelectChange = this.handleSelectChange.bind(this);
         this.handleMultiFieldChange = this.handleMultiFieldChange.bind(this);
         this.modifyFieldCount = this.modifyFieldCount.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     // Fungsi untuk mengubah state ketika isi dari input diubah
@@ -64,8 +65,10 @@ export default class DemoForm extends React.Component {
     // Fungsi yang akan dijalankan ketika user submit
     // Umumnya akan digunakan untuk memanggil service komunikasi ke backend
     handleSubmit(event) {
-        alert("submited");
         event.preventDefault();
+        if (this.state.submitable) {
+            alert("submited");
+        }
     }
 
     componentDidUpdate() {
@@ -103,7 +106,10 @@ export default class DemoForm extends React.Component {
         var submitable = true;
         const fokusUmur = this.state.umur;
         var errorUmur;
-        if (fokusUmur < 18) {
+        if (fokusUmur == "") {
+            submitable = false;
+            errorUmur = "Maaf, umurnya tolong jangan kosongin";
+        } else if (fokusUmur < 18) {
             submitable = false;
             errorUmur = "Khusus 18 tahun keatas ya ^-^";
         }
@@ -138,7 +144,8 @@ export default class DemoForm extends React.Component {
                     name: "umur",
                     min: 1,
                     value: this.state.umur,
-                    placeholder: "masukan umur"
+                    placeholder: "masukan umur",
+                    required: true
                 }, {
                     label: "Jenis",
                     handleChange: this.handleSelectChange,
