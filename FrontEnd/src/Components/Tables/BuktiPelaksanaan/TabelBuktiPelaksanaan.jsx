@@ -6,6 +6,7 @@ import { NavLink } from 'react-router-dom';
 import { withRouter } from 'react-router-dom';
 import classes from '../Rekomendasi/TabelRekomendasi.module.css';
 import SirioMessageButton from '../../Button/ActionButton/SirioMessageButton';
+import AuthenticationService from "../../../Services/AuthenticationService";
 
 class TabelBuktiPelaksanaan extends React.Component {
 
@@ -14,6 +15,7 @@ class TabelBuktiPelaksanaan extends React.Component {
 
         this.state = {
             rowList: [],
+            role: AuthenticationService.getRole(),
             openNotification: true
         }
 
@@ -58,28 +60,6 @@ class TabelBuktiPelaksanaan extends React.Component {
         }
     }
 
-    // getButtonFirst(cell, row) {
-    //     const status = row.statusBukti;
-    //     const adaBukti = status === "Menunggu Persetujuan" || status === "Disetujui" || status === "Ditolak";
-
-    //     if (adaBukti) {
-    //         return (
-    //             <NavLink to={{
-    //                 pathname: "/bukti-pelaksanaan/detail",
-    //                 state: {
-    //                     id: row.id
-    //                 }
-    //             }}>
-    //                 <SirioButton
-    //                     purple
-    //                 >
-    //                     Detail Bukti
-    //                 </SirioButton>
-    //             </NavLink>
-    //         )
-    //     }
-    // }
-
     getButtons(cell, row) {
         const status = row.statusBukti;
         const tanpaBukti = status === null;
@@ -118,188 +98,128 @@ class TabelBuktiPelaksanaan extends React.Component {
         }
     }
 
-    // getColumns() {
-    //     // const columns = [];
-    //     const role = this.state.role;
-    //     const firstColumn = role === "admin" || role === "Manajer Operational Risk";
-    //     const secondColumn = role === "Branch Manager";
+    getColumns() {
+        const role = this.state.role;
+        const firstColumn = role === "admin" || role === "Manajer Operational Risk" ||
+                            role === "QA Operational Risk" || role === "Super QA Operational Risk";
+        const secondColumn = role === "Branch Manager";
 
-    //     console.log(secondColumn)
-    //     if (firstColumn) {
-    //         return (
-    //             [{
-    //                 dataField: 'keterangan',
-    //                 text: 'KETERANGAN',
-    //                 // sort: true,
-    //                 classes: classes.rowItem,
-    //                 headerClasses: classes.colheader,
-    //                 headerStyle: (colum, colIndex) => {
-    //                     return { width: "20%", textAlign: 'left' };
-    //                 }
-    //             }, {
-    //                 dataField: 'namaKantorCabang',
-    //                 text: 'KANTOR CABANG',
-    //                 // sort: true,
-    //                 classes: classes.rowItem,
-    //                 headerClasses: classes.colheader,
-    //                 headerStyle: (colum, colIndex) => {
-    //                     return { width: "15%", textAlign: 'left' };
-    //                 }
-    //             }, {
-    //                 dataField: 'tenggatWaktu',
-    //                 text: 'TENGGAT WAKTU',
-    //                 // sort: true,
-    //                 classes: classes.rowItem,
-    //                 headerClasses: classes.colheader,
-    //                 headerStyle: (colum, colIndex) => {
-    //                     return { width: "15%", textAlign: 'left' };
-    //                 }
+        if (firstColumn) {
+            return (
+                [{
+                    dataField: 'keterangan',
+                    text: 'KETERANGAN',
+                    sort: true,
+                    classes: classes.rowItem,
+                    headerClasses: classes.colheader,
+                    headerStyle: (colum, colIndex) => {
+                        return { width: "20%", textAlign: 'left' };
+                    }
+                }, {
+                    dataField: 'namaKantorCabang',
+                    text: 'KANTOR CABANG',
+                    sort: true,
+                    classes: classes.rowItem,
+                    headerClasses: classes.colheader,
+                    headerStyle: (colum, colIndex) => {
+                        return { width: "15%", textAlign: 'left' };
+                    }
+                }, {
+                    dataField: 'tenggatWaktu',
+                    text: 'TENGGAT WAKTU',
+                    sort: true,
+                    classes: classes.rowItem,
+                    headerClasses: classes.colheader,
+                    headerStyle: (colum, colIndex) => {
+                        return { width: "15%", textAlign: 'left' };
+                    }
                     
-    //             }, {
-    //                 dataField: 'durasi',
-    //                 text: 'DURASI',
-    //                 // sort: true,
-    //                 classes: classes.rowItem,
-    //                 headerClasses: classes.colheader,
-    //                 headerStyle: (colum, colIndex) => {
-    //                     return { width: "10%", textAlign: 'left' };
-    //                 }
+                }, {
+                    dataField: 'durasi',
+                    text: 'DURASI',
+                    sort: true,
+                    classes: classes.rowItem,
+                    headerClasses: classes.colheader,
+                    headerStyle: (colum, colIndex) => {
+                        return { width: "10%", textAlign: 'left' };
+                    }
                     
-    //             }, {
-    //                 dataField: 'statusBukti',
-    //                 text: 'STATUS BUKTI',
-    //                 // sort: true,
-    //                 classes: classes.rowItem,
-    //                 formatter: this.statusFormatter,
-    //                 headerClasses: classes.colheader,
-    //                 headerStyle: (colum, colIndex) => {
-    //                     return { width: "20%", textAlign: 'left' };
-    //                 }
-    //             }, {
-    //                 dataField: 'action',
-    //                 text: '',
-    //                 headerClasses: classes.colheader,
-    //                 classes: classes.rowItem,
-    //                 style: () => {
-    //                     return { textAlign: 'center' }
-    //                 },
-    //                 formatter: this.getButtons
-    //             }]
-    //         );
-    //     } else if (secondColumn) {
-    //         return (
-    //             [{
-    //                 dataField: 'keterangan',
-    //                 text: 'KETERANGAN',
-    //                 // sort: true,
-    //                 classes: classes.rowItem,
-    //                 headerClasses: classes.colheader,
-    //                 headerStyle: (colum, colIndex) => {
-    //                     return { width: "25%", textAlign: 'left' };
-    //                 }
+                }, {
+                    dataField: 'statusBukti',
+                    text: 'STATUS BUKTI',
+                    sort: true,
+                    classes: classes.rowItem,
+                    formatter: this.statusFormatter,
+                    headerClasses: classes.colheader,
+                    headerStyle: (colum, colIndex) => {
+                        return { width: "20%", textAlign: 'left' };
+                    }
+                }, {
+                    dataField: 'action',
+                    text: '',
+                    headerClasses: classes.colheader,
+                    classes: classes.rowItem,
+                    style: () => {
+                        return { textAlign: 'center' }
+                    },
+                    formatter: this.getButtons
+                }]
+            );
+        } else if (secondColumn) {
+            return (
+                [{
+                    dataField: 'keterangan',
+                    text: 'KETERANGAN',
+                    sort: true,
+                    classes: classes.rowItem,
+                    headerClasses: classes.colheader,
+                    headerStyle: (colum, colIndex) => {
+                        return { width: "25%", textAlign: 'left' };
+                    }
             
-    //             }, {
-    //                 dataField: 'tenggatWaktu',
-    //                 text: 'TENGGAT WAKTU',
-    //                 // sort: true,
-    //                 classes: classes.rowItem,
-    //                 headerClasses: classes.colheader,
-    //                 headerStyle: (colum, colIndex) => {
-    //                     return { width: "20%", textAlign: 'left' };
-    //                 }
+                }, {
+                    dataField: 'tenggatWaktu',
+                    text: 'TENGGAT WAKTU',
+                    sort: true,
+                    classes: classes.rowItem,
+                    headerClasses: classes.colheader,
+                    headerStyle: (colum, colIndex) => {
+                        return { width: "20%", textAlign: 'left' };
+                    }
                     
-    //             }, {
-    //                 dataField: 'durasi',
-    //                 text: 'DURASI',
-    //                 // sort: true,
-    //                 classes: classes.rowItem,
-    //                 headerClasses: classes.colheader,
-    //                 headerStyle: (colum, colIndex) => {
-    //                     return { width: "12%", textAlign: 'left' };
-    //                 }
+                }, {
+                    dataField: 'durasi',
+                    text: 'DURASI',
+                    sort: true,
+                    classes: classes.rowItem,
+                    headerClasses: classes.colheader,
+                    headerStyle: (colum, colIndex) => {
+                        return { width: "12%", textAlign: 'left' };
+                    }
                     
-    //             }, {
-    //                 dataField: 'statusBukti',
-    //                 text: 'STATUS BUKTI',
-    //                 // sort: true,
-    //                 classes: classes.rowItem,
-    //                 formatter: this.statusFormatter,
-    //                 headerClasses: classes.colheader,
-    //                 headerStyle: (colum, colIndex) => {
-    //                     return { width: "20%", textAlign: 'left' };
-    //                 }
-    //             }, {
-    //                 dataField: 'action',
-    //                 text: '',
-    //                 headerClasses: classes.colheader,
-    //                 classes: classes.rowItem,
-    //                 style: () => {
-    //                     return { textAlign: 'center' }
-    //                 },
-    //                 formatter: this.getButtons
-    //             }]
-    //         );
-    //     }
-    // }
-
-    columns = [{
-        dataField: 'keterangan',
-        text: 'KETERANGAN',
-        sort: true,
-        classes: classes.rowItem,
-        headerClasses: classes.colheader,
-        headerStyle: (colum, colIndex) => {
-            return { width: "20%", textAlign: 'left' };
+                }, {
+                    dataField: 'statusBukti',
+                    text: 'STATUS BUKTI',
+                    sort: true,
+                    classes: classes.rowItem,
+                    formatter: this.statusFormatter,
+                    headerClasses: classes.colheader,
+                    headerStyle: (colum, colIndex) => {
+                        return { width: "20%", textAlign: 'left' };
+                    }
+                }, {
+                    dataField: 'action',
+                    text: '',
+                    headerClasses: classes.colheader,
+                    classes: classes.rowItem,
+                    style: () => {
+                        return { textAlign: 'center' }
+                    },
+                    formatter: this.getButtons
+                }]
+            );
         }
-    }, {
-        dataField: 'namaKantorCabang',
-        text: 'KANTOR CABANG',
-        sort: true,
-        classes: classes.rowItem,
-        headerClasses: classes.colheader,
-        headerStyle: (colum, colIndex) => {
-            return { width: "15%", textAlign: 'left' };
-        }
-    }, {
-        dataField: 'tenggatWaktu',
-        text: 'TENGGAT WAKTU',
-        sort: true,
-        classes: classes.rowItem,
-        headerClasses: classes.colheader,
-        headerStyle: (colum, colIndex) => {
-            return { width: "15%", textAlign: 'left' };
-        }
-        
-    }, {
-        dataField: 'durasi',
-        text: 'DURASI',
-        sort: true,
-        classes: classes.rowItem,
-        headerClasses: classes.colheader,
-        headerStyle: (colum, colIndex) => {
-            return { width: "10%", textAlign: 'left' };
-        }
-        
-    }, {
-        dataField: 'statusBukti',
-        text: 'STATUS BUKTI',
-        sort: true,
-        classes: classes.rowItem,
-        formatter: this.statusFormatter,
-        headerClasses: classes.colheader,
-        headerStyle: (colum, colIndex) => {
-            return { width: "20%", textAlign: 'left' };
-        }
-    }, {
-        dataField: 'action',
-        text: '',
-        headerClasses: classes.colheader,
-        classes: classes.rowItem,
-        style: () => {
-            return { textAlign: 'center' }
-        },
-        formatter: this.getButtons
-    }]
+    }
 
     defaultSorted = [{
         dataField: 'id',
@@ -313,9 +233,27 @@ class TabelBuktiPelaksanaan extends React.Component {
                     title="Daftar Bukti Pelaksanaan Rekomendasi"
                     data={this.state.rowList}
                     id='id'
-                    columnsDefinition={this.columns}
+                    columnsDefinition={this.getColumns()}
                     includeSearchBar
                 />
+                {this.props.location.state && this.props.location.state.addSuccess && this.state.openNotification &&
+                <SirioMessageButton
+                    show
+                    classes="d-none"
+                    modalTitle="Bukti pelaksanaan berhasil ditambahkan"
+                    customConfirmText="Tutup"
+                    onClick={this.endNotification}
+                />
+                }
+                {this.props.location.state && this.props.location.state.editSuccess && this.state.openNotification &&
+                <SirioMessageButton
+                    show
+                    classes="d-none"
+                    modalTitle="Bukti pelaksanaan berhasil diubah"
+                    customConfirmText="Tutup"
+                    onClick={this.endNotification}
+                />
+                }
                 {this.props.location.state && this.props.location.state.approveSuccess && this.state.openNotification &&
                 <SirioMessageButton
                     show

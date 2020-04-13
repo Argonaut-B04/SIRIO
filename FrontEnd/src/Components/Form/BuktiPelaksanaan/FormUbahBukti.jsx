@@ -39,7 +39,7 @@ class FormUbahBukti extends React.Component {
     renderRedirect = () => {
         if (this.state.redirect) {
             return <Redirect to={{
-                pathname: "/bm/rekomendasi",
+                pathname: "/bukti-pelaksanaan",
                 state: {
                     editSuccess: true
                 }
@@ -172,7 +172,7 @@ class FormUbahBukti extends React.Component {
                 </SirioButton>
                 <SirioButton purple
                              classes="mx-1"
-                             onClick={() => window.location.href = "/bm/rekomendasi"}>
+                             onClick={() => window.location.href = "/bukti-pelaksanaan"}>
                     Batal
                 </SirioButton>
             </div>

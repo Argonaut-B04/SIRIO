@@ -42,8 +42,6 @@ export default class MainPage extends React.Component {
                 <br />
                 <Link to="/risk-rating" className="btn btn-primary">Risk Rating</Link>
                 <br />
-                <Link to="/bm/rekomendasi" className="btn btn-primary">Rekomendasi BM</Link>
-                <br />
                 <Link to="/bukti-pelaksanaan" className="btn btn-primary">Tabel Bukti</Link>
                 <br />
                 <Link to="/registrasi-risiko" className="btn btn-primary">Registrasi Risiko</Link>
