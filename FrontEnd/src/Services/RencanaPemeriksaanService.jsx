@@ -18,6 +18,7 @@ class RencanaPemeriksaanService {
     }
 
     async addRencanaPemeriksaan(data) {
+        console.log(data)
         return this.axiosInstance.post(SirioAxiosBase.BASEURL + `/RencanaPemeriksaan/tambah`, data);
     }
 
