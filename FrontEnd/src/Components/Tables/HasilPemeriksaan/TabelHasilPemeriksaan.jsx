@@ -174,6 +174,24 @@ class TabelHasilPemeriksaan extends React.Component {
                         onClick={this.endNotification}
                     />
                 }
+                {this.props.location.state && this.props.location.state.setujuSuccess && this.state.openNotification &&
+                <SirioMessageButton
+                    show
+                    classes="d-none"
+                    modalTitle="Hasil Pemeriksaan berhasil Disejutui"
+                    customConfirmText="Tutup"
+                    onClick={this.endNotification}
+                />
+                }
+                {this.props.location.state && this.props.location.state.tolakSuccess && this.state.openNotification &&
+                <SirioMessageButton
+                    show
+                    classes="d-none"
+                    modalTitle="Hasil Pemeriksaan berhasil Ditolak"
+                    customConfirmText="Tutup"
+                    onClick={this.endNotification}
+                />
+                }
             </>
         );
     }
