@@ -80,8 +80,11 @@ class TabelRisiko extends React.Component {
         classes: classes.rowItem,
         headerClasses: classes.colheader,
         headerStyle: (colum, colIndex) => {
-            return { width: "25%", textAlign: 'center' };
-        }
+            return { width: "20%", textAlign: 'center' };
+        },
+        style: () => {
+            return { textAlign: 'center' }
+        },
     }, {
         dataField: 'parent',
         text: 'PARENT',
@@ -90,11 +93,11 @@ class TabelRisiko extends React.Component {
         classes: classes.rowItem,
         headerClasses: classes.colheader,
         headerStyle: (colum, colIndex) => {
-            return { width: "20%", textAlign: 'center' };
+            return { width: "25%", textAlign: 'center' };
         }
     }, {
         dataField: 'noData 1',
-        text: '',
+        text: 'AKSI',
         headerClasses: classes.colheader,
         classes: classes.rowItem,
         style: () => {
