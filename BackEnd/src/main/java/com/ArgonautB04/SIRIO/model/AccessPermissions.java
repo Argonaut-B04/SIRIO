@@ -52,6 +52,13 @@ public class AccessPermissions implements Serializable {
 //    private Boolean aksesKategoriUbahHierarki;
 
 
+    public AccessPermissions() {
+    }
+
+    public AccessPermissions(Role role) {
+        this.role = role;
+    }
+
     public Boolean getAksesTabelRisiko() {
         return aksesTabelRisiko;
     }

@@ -15,14 +15,16 @@ public class DatabaseLoader implements CommandLineRunner {
     private final StatusRekomendasiDB statusRekomendasiDB;
     private final EmployeeRestService employeeRestService;
     private final RoleDB roleDB;
+    private final AccessPermissionDB accessPermissionDB;
 
-    public DatabaseLoader(StatusBuktiPelaksanaanDB statusBuktiPelaksanaanDB, StatusHasilPemeriksaanDB statusHasilPemeriksaanDB, StatusRencanaPemeriksaanDB statusRencanaPemeriksaanDB, StatusRisikoDB statusRisikoDB, StatusRekomendasiDB statusRekomendasiDB, EmployeeRestService employeeRestService, RoleDB roleDB) {
+    public DatabaseLoader(StatusBuktiPelaksanaanDB statusBuktiPelaksanaanDB, StatusHasilPemeriksaanDB statusHasilPemeriksaanDB, StatusRencanaPemeriksaanDB statusRencanaPemeriksaanDB, StatusRisikoDB statusRisikoDB, StatusRekomendasiDB statusRekomendasiDB, EmployeeRestService employeeRestService, RoleDB roleDB, AccessPermissionDB accessPermissionDB) {
         this.statusBuktiPelaksanaanDB = statusBuktiPelaksanaanDB;
         this.statusHasilPemeriksaanDB = statusHasilPemeriksaanDB;
         this.statusRencanaPemeriksaanDB = statusRencanaPemeriksaanDB;
         this.statusRekomendasiDB = statusRekomendasiDB;
         this.employeeRestService = employeeRestService;
         this.roleDB = roleDB;
+        this.accessPermissionDB = accessPermissionDB;
     }
 
     @Override
@@ -35,48 +37,188 @@ public class DatabaseLoader implements CommandLineRunner {
     }
 
     private void populasiEmployeedanRole() {
-        Role roleAdmin = new Role();
-        roleAdmin.setNamaRole("admin");
-        roleDB.save(roleAdmin);
 
-        Role roleAdministrator = new Role();
-        roleAdministrator.setNamaRole("Administrator");
-        roleDB.save(roleAdministrator);
+        // Inisiasi Role
+        Role roleAdministrator = roleDB.save(new Role("Administrator"));
+        Role roleSupervisor = roleDB.save(new Role("Supervisor"));
+        Role roleManajer = roleDB.save(new Role("Manajer Operational Risk"));
+        Role roleLead = roleDB.save(new Role("QA Lead Operational Risk"));
+        Role roleOfficer = roleDB.save(new Role("QA Officer Operational Risk"));
+        Role roleBM = roleDB.save(new Role("Branch Manager"));
+        Role roleSuper = roleDB.save(new Role("Super QA Officer Operational Risk"));
+        Role roleDeveloper = roleDB.save(new Role("dev"));
+        // Inisiasi Role Selesai
 
-        Role roleSupervisor = new Role();
-        roleSupervisor.setNamaRole("Supervisor");
-        roleDB.save(roleSupervisor);
 
-        Role roleManajer = new Role();
-        roleManajer.setNamaRole("Manajer Operational Risk");
-        roleDB.save(roleManajer);
+        // Inisiasi Akses
+        // Akses Admin
+        AccessPermissions aksesAdmin = new AccessPermissions(roleAdministrator);
+        accessPermissionDB.save(aksesAdmin);
+        // Akses Admin Selesai
 
-        Role roleLead = new Role();
-        roleLead.setNamaRole("QA Lead Operational Risk");
-        roleDB.save(roleLead);
+        // Akses Supervisor
+        AccessPermissions aksesSupervisor = new AccessPermissions(roleSupervisor);
+        accessPermissionDB.save(aksesSupervisor);
+        // Akses Supervisor Selesai
 
-        Role roleOfficer = new Role();
-        roleOfficer.setNamaRole("QA Officer Operational Risk");
-        roleDB.save(roleOfficer);
+        // Akses Manajer
+        AccessPermissions aksesManajer = new AccessPermissions(roleManajer);
+        aksesManajer.setAksesRiskRating(true);
+        aksesManajer.setUbahRiskRating(true);
 
-        Role roleBM = new Role();
-        roleBM.setNamaRole("Branch Manager");
-        roleDB.save(roleBM);
+        aksesManajer.setAksesRiskLevel(true);
+        aksesManajer.setUbahRiskLevel(true);
+        accessPermissionDB.save(aksesManajer);
+        // Akses Manajer Selesai
 
-        Role roleSuperOfficer = new Role();
-        roleSuperOfficer.setNamaRole("Super QA Officer Operational Risk");
-        roleDB.save(roleSuperOfficer);
+        // Akses Lead
+        AccessPermissions aksesLead = new AccessPermissions(roleLead);
+        accessPermissionDB.save(aksesLead);
+        // Akses Lead Selesai
 
-        Employee admin = new Employee();
-        admin.setEmail("admin@admin.com");
-        admin.setNama("admin");
-        admin.setUsername("admin");
-        admin.setStatus(Employee.Status.AKTIF);
-        admin.setPassword("admin");
-        admin.setRole(roleAdmin);
-        admin.setNoHp("123");
-        admin.setJabatan("QA Officer Operational Risk");
+        // Akses Officer
+        AccessPermissions aksesOfficer = new AccessPermissions(roleOfficer);
+        aksesOfficer.setAksesRisiko(true);
+        aksesOfficer.setAksesTabelRisiko(true);
+
+        aksesOfficer.setUbahReminder(true);
+        accessPermissionDB.save(aksesOfficer);
+        // Akses Officer Selesai
+
+        // Akses BM
+        AccessPermissions aksesBM = new AccessPermissions(roleBM);
+        accessPermissionDB.save(aksesBM);
+        // Akses BM Selesai
+
+        // Akses SuperQA
+        AccessPermissions aksesSuper = new AccessPermissions(roleSuper);
+        aksesSuper.setAksesTambahRisiko(true);
+        aksesSuper.setAksesHapusRisiko(true);
+        aksesSuper.setAksesRisiko(true);
+        aksesSuper.setAksesUbahRisiko(true);
+        aksesSuper.setAksesTabelRisiko(true);
+
+        aksesSuper.setAksesRiskRating(true);
+        aksesSuper.setUbahRiskRating(true);
+
+        aksesSuper.setAksesRiskLevel(true);
+        aksesSuper.setUbahRiskLevel(true);
+
+        aksesSuper.setUbahReminder(true);
+        accessPermissionDB.save(aksesSuper);
+        // Akses SuperQA Selesai
+
+        // Akses Developer
+        AccessPermissions aksesDeveloper = new AccessPermissions(roleDeveloper);
+        aksesDeveloper.setAksesTambahRisiko(true);
+        aksesDeveloper.setAksesHapusRisiko(true);
+        aksesDeveloper.setAksesRisiko(true);
+        aksesDeveloper.setAksesUbahRisiko(true);
+        aksesDeveloper.setAksesTabelRisiko(true);
+
+        aksesDeveloper.setAksesRiskRating(true);
+        aksesDeveloper.setUbahRiskRating(true);
+
+        aksesDeveloper.setAksesRiskLevel(true);
+        aksesDeveloper.setUbahRiskLevel(true);
+
+        aksesDeveloper.setUbahReminder(true);
+        accessPermissionDB.save(aksesDeveloper);
+        // Akses Developer selesai
+        // Inisiasi Akses Selesai
+
+
+        // Inisiasi Akun Awal
+        Employee admin = new Employee(
+                "Aku Administrator",
+                Employee.Status.AKTIF,
+                "administrator",
+                "administrator123",
+                "0123",
+                "administrator@sirio.com",
+                "Administrator",
+                roleAdministrator
+        );
+        Employee supervisor = new Employee(
+                "Aku Supervisor",
+                Employee.Status.AKTIF,
+                "supervisor",
+                "supervisor123",
+                "0123",
+                "supervisor@sirio.com",
+                "Supervisor",
+                roleSupervisor
+        );
+        Employee manajer = new Employee(
+                "Aku Manajer",
+                Employee.Status.AKTIF,
+                "manajer",
+                "manajer123",
+                "0123",
+                "manajer@sirio.com",
+                "QA Manajer",
+                roleManajer
+        );
+        Employee lead = new Employee(
+                "Aku Lead",
+                Employee.Status.AKTIF,
+                "leadlead",
+                "leadlead123",
+                "0123",
+                "lead@sirio.com",
+                "QA Lead",
+                roleLead
+        );
+        Employee officer = new Employee(
+                "Aku Officer",
+                Employee.Status.AKTIF,
+                "qaofficer",
+                "qaofficer123",
+                "0123",
+                "officer@sirio.com",
+                "QA Officer",
+                roleOfficer
+        );
+        Employee bm = new Employee(
+                "Aku BM",
+                Employee.Status.AKTIF,
+                "branchmanager",
+                "branchmanager123",
+                "0123",
+                "bm@sirio.com",
+                "Branch Manager",
+                roleBM
+        );
+        Employee superQA = new Employee(
+                "Aku SuperQA",
+                Employee.Status.AKTIF,
+                "superofficer",
+                "superofficer123",
+                "0123",
+                "superQA@sirio.com",
+                "Super QA",
+                roleSuper
+        );
+        Employee dev = new Employee(
+                "dev",
+                Employee.Status.AKTIF,
+                "dev",
+                "dev",
+                "0123",
+                "developers@sirio.com",
+                "Core Developers",
+                roleDeveloper
+        );
+
         employeeRestService.buatEmployee(admin);
+        employeeRestService.buatEmployee(supervisor);
+        employeeRestService.buatEmployee(manajer);
+        employeeRestService.buatEmployee(lead);
+        employeeRestService.buatEmployee(officer);
+        employeeRestService.buatEmployee(bm);
+        employeeRestService.buatEmployee(superQA);
+        employeeRestService.buatEmployee(dev);
+        // Inisiasi Akun Awal selesai
     }
 
     private void populasiStatusBuktiPelaksanaan() {

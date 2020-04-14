@@ -60,6 +60,20 @@ public class Employee implements Serializable {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Role role;
 
+    public Employee() {
+    }
+
+    public Employee(@NotNull @Size(max = 50) String nama, @NotNull Status status, @NotNull @Size(max = 20) String username, @NotNull @Size(max = 70) String password, @Size(max = 20) String noHp, @NotNull @Size(max = 30) String email, @NotNull @Size(max = 30) String jabatan, Role role) {
+        this.nama = nama;
+        this.status = status;
+        this.username = username;
+        this.password = password;
+        this.noHp = noHp;
+        this.email = email;
+        this.jabatan = jabatan;
+        this.role = role;
+    }
+
     public String getJabatan() {
         return jabatan;
     }
