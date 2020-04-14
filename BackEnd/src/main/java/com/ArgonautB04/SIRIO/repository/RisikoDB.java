@@ -9,5 +9,6 @@ import java.util.List;
 @Repository
 public interface RisikoDB extends JpaRepository<Risiko, Integer> {
     List<Risiko> findAllByRisikoKategori(Integer kategori);
+    List<Risiko> findAllByRisikoKategoriAndStatus(Integer kategori, Risiko.Status status);
     List<Risiko> findAllByStatus(Risiko.Status status);
 }

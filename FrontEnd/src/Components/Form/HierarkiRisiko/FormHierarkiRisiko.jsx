@@ -59,7 +59,7 @@ class FormHierarkiRisiko extends React.Component {
                 classes: classes.rowItem,
                 headerClasses: classes.colheader,
                 headerStyle: (colum, colIndex) => {
-                    return { width: "30%", textAlign: 'left' };
+                    return { width: "30%", textAlign: 'center' };
                 }
             }, {
                 dataField: 'kategori',
@@ -69,8 +69,11 @@ class FormHierarkiRisiko extends React.Component {
                 classes: classes.rowItem,
                 headerClasses: classes.colheader,
                 headerStyle: (colum, colIndex) => {
-                    return { width: "25%", textAlign: 'center' };
-                }
+                    return { width: "20%", textAlign: 'center' };
+                },
+                style: () => {
+                    return { textAlign: 'center' }
+                },
             }, {
                 dataField: 'noData 1',
                 text: 'PARENT',
@@ -81,7 +84,7 @@ class FormHierarkiRisiko extends React.Component {
                 classes: classes.rowItem,
                 headerClasses: classes.colheader,
                 headerStyle: (colum, colIndex) => {
-                    return { width: "20%", textAlign: 'center' };
+                    return { width: "25%", textAlign: 'center' };
                 }
             }, {
                 dataField: 'noData 2',
@@ -92,9 +95,9 @@ class FormHierarkiRisiko extends React.Component {
                 formatter: (cell, row) => this.activeUbah(row),
                 classes: classes.rowItem,
                 headerClasses: classes.colheader,
-                headerStyle: (colum, colIndex) => {
-                    return { width: "20%", textAlign: 'center' };
-                }
+                style: () => {
+                    return { textAlign: 'center' }
+                },
             }
             ]
         )
@@ -112,6 +115,7 @@ class FormHierarkiRisiko extends React.Component {
 
         return (
             <SirioButton
+
                 purple
                 recommended
                 onClick={() => {
@@ -119,7 +123,7 @@ class FormHierarkiRisiko extends React.Component {
                     this.forceUpdate();
                 }}
             >
-                {row.changeable ? "Turn Off Ubah" : "Turn On Ubah"}
+                {row.changeable ? "Selesai" : "Ubah Hierarki"}
             </SirioButton>
         )
     }
@@ -178,7 +182,7 @@ class FormHierarkiRisiko extends React.Component {
                     modalDesc="Seluruh perubahan hierarki risiko yang belum tersimpan akan dihapus. Apakah Anda yakin?"
                     onConfirm={() => window.location.href = "/"}
                     customConfirmText="Konfirmasi"
-                    customCancelText="Kembali"
+                    customCancelText="Batal"
                 >
                     Batal
             </SirioWarningButton>
@@ -231,7 +235,7 @@ class FormHierarkiRisiko extends React.Component {
                     modalDesc="Seluruh perubahan hierarki risiko yang belum tersimpan akan dihapus. Apakah Anda yakin?"
                     onConfirm={() => window.location.href = "/registrasi-risiko"}
                     customConfirmText="Konfirmasi"
-                    customCancelText="Kembali"
+                    customCancelText="Batal"
                 >
                     Batal
             </SirioWarningButton>

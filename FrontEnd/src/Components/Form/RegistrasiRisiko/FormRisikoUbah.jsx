@@ -38,42 +38,67 @@ class FormRisikoUbah extends React.Component {
 
     componentDidUpdate(prevProps, prevState) {
         var submitable = true;
+        var validating = false;
 
+        submitable = this.validateRequired();
         if (prevState.nama !== this.state.nama) {
-            submitable = submitable && this.validateNama();
+            submitable = this.validateNama() && submitable;
+            validating = true;
         }
 
         if (prevState.kategori !== this.state.kategori) {
-            submitable = submitable && this.validateKategori();
+            submitable = this.validateKategori() && submitable;
+            validating = true;
+
         }
 
         if (prevState.sop !== this.state.sop) {
-            submitable = submitable && this.validateSop();
+            submitable = this.validateSop() && submitable;
+            validating = true;
+
         }
 
         if (prevState.komponen !== this.state.komponen) {
-            submitable = submitable && this.validateKomponen();
+            submitable = this.validateKomponen() && submitable;
+            validating = true;
+
         }
 
-        if (this.state.submitable !== submitable) {
-            this.setState({
-                submitable: submitable
-            })
+        if (validating) {
+            if (this.state.submitable !== submitable) {
+                this.setState({
+                    submitable: submitable
+                })
+            }
         }
     }
 
+    validateRequired() {
+        var submitable = true;
+        const required = [this.state.nama, this.state.kategori, this.state.sop];
+        for (let i=0; i<required.length; i++) {
+            submitable = submitable && (required[i] !== null && required[i] !== "");
+        }
+        return submitable;
+    }
+    
     validateNama() {
         var submitable = true;
         const fokusNama = this.state.nama;
         var errorNama;
-        if (fokusNama.length < 1) {
+        console.log(fokusNama.length)
+        console.log(fokusNama)
+        if (fokusNama.length < 1 || fokusNama === null || fokusNama === "") {
+            console.log("masuk jg")
             submitable = false;
             errorNama = "Nama tidak boleh kosong";
         } else if (fokusNama.length > 50) {
+            console.log("masuk sini gasi")
             submitable = false;
             errorNama = "Nama terlalu panjang";
         }
         if (this.state.errorNama !== errorNama) {
+            console.log("masuk sini")
             this.setState({
                 errorNama: errorNama
             })
@@ -117,11 +142,9 @@ class FormRisikoUbah extends React.Component {
         var submitable = true;
         const fokusKomponen = this.state.komponen;
         var errorKomponen;
-        if (fokusKomponen !== null || fokusKomponen.length > 1) {
-            if (fokusKomponen.length > 500) {
-                submitable = false;
-                errorKomponen = "Komponen Risiko terlalu panjang!";
-            }
+        if (fokusKomponen.length > 500) {
+            submitable = false;
+            errorKomponen = "Komponen Risiko terlalu panjang!";
         }
         if (this.state.errorKomponen !== errorKomponen) {
             this.setState({

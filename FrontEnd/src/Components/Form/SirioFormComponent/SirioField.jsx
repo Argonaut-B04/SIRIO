@@ -156,6 +156,7 @@ export default class SirioField extends Component {
     }
 
     render() {
+
         if (this.props.fullComponent) {
             return this.props.fullComponent;
         } else {
