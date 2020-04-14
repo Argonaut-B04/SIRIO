@@ -50,6 +50,7 @@
     border: none;
     color: #7F3F98;
     pointer-events: none;
+    background-color: transparent;
 }
 
 .borderCircular {
