@@ -89,9 +89,8 @@ public class RekomendasiRestController {
                            DateFormat df = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
                            Date dateobj = new Date();
                            String mulai = df.format(dateobj);
-                           String selesai = rekomendasi.getTenggatWaktu().toString();
                            String tanggalMulai = mulai.substring(0, 2);
-                           String tanggalSelesai = selesai.substring(8, 10);
+                           String tanggalSelesai = tenggatWaktuString.substring(8, 10);
                            int tanggalMulaiFinal = Integer.parseInt(tanggalMulai);
                            int tanggalSelesaiFinal = Integer.parseInt(tanggalSelesai);
                            int durasi = (tanggalSelesaiFinal - tanggalMulaiFinal) + 1;

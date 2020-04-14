@@ -138,7 +138,7 @@ class DetailBuktiPelaksanaan extends React.Component {
         const role = this.state.role;
         const satuButton = role === "Branch Manager";
         const tigaButton = role === "admin" || role === "Manajer Operational Risk" ||
-                                role === "QA Operational Risk" || role === "Super QA Operational Risk";
+                                role === "QA Officer Operational Risk" || role === "Super QA Officer Operational Risk";
 
         if (menungguPersetujuan) {
             if (satuButton) {

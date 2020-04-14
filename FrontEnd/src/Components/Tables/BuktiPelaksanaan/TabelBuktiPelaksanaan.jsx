@@ -101,7 +101,7 @@ class TabelBuktiPelaksanaan extends React.Component {
     getColumns() {
         const role = this.state.role;
         const firstColumn = role === "admin" || role === "Manajer Operational Risk" ||
-                            role === "QA Operational Risk" || role === "Super QA Operational Risk";
+                            role === "QA Officer Operational Risk" || role === "Super QA Officer Operational Risk";
         const secondColumn = role === "Branch Manager";
 
         if (firstColumn) {
