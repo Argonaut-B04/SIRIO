@@ -206,7 +206,7 @@ class FormUbahRencana extends React.Component {
         if (fokusLink.length < 1) {
             submitable = false;
             errorLink = "Lampiran wajib diisi";
-        } else if (!fokusLink.includes("http")) {
+        } else if (!fokusLink.includes("https://")) {
             submitable = false;
             errorLink = "Lampiran harus berupa link url";
         }

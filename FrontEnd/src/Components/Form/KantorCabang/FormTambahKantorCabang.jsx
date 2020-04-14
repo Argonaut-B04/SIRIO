@@ -323,7 +323,7 @@ class FormTambahKantorCabang extends React.Component {
                     value: this.state.regional,
                     placeholder: "Masukan nama regional"
                 },{
-                    label: "Kunjungan Audit*",
+                    label: "Kunjungan Audit",
                     handleChange: this.handleInputChange,
                     type: "checkbox",
                     name: "kunjunganAudit",

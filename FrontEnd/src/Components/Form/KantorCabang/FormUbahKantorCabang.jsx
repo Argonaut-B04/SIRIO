@@ -325,7 +325,7 @@ class FormUbahKantorCabang extends React.Component {
                         validation: this.state.errorReg,
                         placeholder: "Masukan nama regional"
                     },{
-                        label: "Kunjungan Audit*",
+                        label: "Kunjungan Audit",
                         handleChange: this.handleInputChange,
                         required: true,
                         type: "checkbox",
