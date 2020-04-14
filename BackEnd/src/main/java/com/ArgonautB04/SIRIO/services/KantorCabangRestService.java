@@ -20,6 +20,10 @@ public interface KantorCabangRestService {
 
     List<KantorCabang> getAll();
 
+    boolean isExistInDatabase(KantorCabang kantorCabang);
+
+    KantorCabang isExistInDatabase(String namaRiskLevel);
+
     KantorCabang ubahKantorCabang(int idKantorCabang, KantorCabang kantorCabang);
 
     void hapusKantorCabang(int idKantorCabang);

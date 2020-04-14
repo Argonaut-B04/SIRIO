@@ -13,7 +13,7 @@ export default class ManagerOperationalSideNav extends Component {
                     [
                         halamanUtama,
                         rencanaPemeriksaan,
-                        konfigurasi,
+                        konfigurasi
                     ]
                 }
             />

@@ -1,5 +1,6 @@
 import React from 'react';
 import SirioForm from '../SirioForm';
+import SirioWarningButton from "../../Button/ActionButton/SirioWarningButton";
 import SirioButton from '../../Button/SirioButton';
 import EmployeeService from '../../../Services/EmployeeService';
 import KantorCabangService from '../../../Services/KantorCabangService';
@@ -87,27 +88,40 @@ export default class FormTambahRencana extends React.Component {
         )
     }
 
-    // componentDidUpdate() {
-    //     var submitable = true;
-     
-    //     submitable = this.validateNama() && this.validateLink() && this.validateKC() && this.validateQA() && this.validateTanggalMulai() && this.validateTanggalSelesai()
-        
-    //     if (this.state.submitable !== submitable) {
-    //         this.setState({
-    //             submitable: submitable
-    //         })
-    //     }
-    // }
-
-
-    componentDidUpdate() {
+    componentDidUpdate(prevProps, prevState) {
         var submitable = true;
-        if (this.state.daftarTugasPemeriksaan[0] == null){
-            submitable = this.validateNama() && this.validateLink() 
-            
-        }else{
-            submitable = this.validateNama() && this.validateLink() && this.validateKC() && this.validateQA() && this.validateTanggalMulai() && this.validateTanggalSelesai()  
+        var validating = false;
+        submitable = this.validateRequired();
+        if (prevState.namaRencana!== this.state.namaRencana){
+            submitable = this.validateNama() && submitable
+            validating = true;
         }
+
+        if (prevState.linkMajelis!== this.state.linkMajelis){
+            submitable = this.validateLink() && submitable
+            validating = true;
+        }
+
+        // if (prevState.daftarTugasPemeriksaan.kantorCabang !== this.state.daftarTugasPemeriksaan.kantorCabang){
+        //     submitable = this.validateKC() && submitable
+        //     validating = true;
+        // }
+
+        // if (prevState.daftarTugasPemeriksaan.idQA !== this.state.daftarTugasPemeriksaan.idQA){
+        //     submitable = this.validateQA() && submitable
+        //     validating = true;
+        // }
+
+        // if (prevState.daftarTugasPemeriksaan.kantorCabang !== this.state.daftarTugasPemeriksaan.kantorCabang){
+        //     submitable = this.validateKC() && submitable
+        //     validating = true;
+        // }
+
+        // if (prevState.daftarTugasPemeriksaan.idQA !== this.state.daftarTugasPemeriksaan.idQA){
+        //     submitable = this.validateQA() && submitable
+        //     validating = true; 
+        // }
+
         if (this.state.submitable !== submitable) {
             this.setState({
                 submitable: submitable
@@ -115,38 +129,14 @@ export default class FormTambahRencana extends React.Component {
         }
     }
 
-    // componentDidUpdate(prevProps, prevState) {
-    //     var submitable = true;
-    //     if (prevState.namaRencana!== this.state.namaRencana){
-    //         submitable = submitable && this.validateNama() 
-    //     }
-
-    //     if (prevState.linkMajelis!== this.state.linkMajelis){
-    //         submitable = submitable && this.this.validateLink() 
-    //     }
-
-    //     if (prevState.daftarTugasPemeriksaan.kantorCabang !== this.state.daftarTugasPemeriksaan.kantorCabang){
-    //         submitable = submitable && this.validateKC() 
-    //     }
-
-    //     if (prevState.daftarTugasPemeriksaan.idQA !== this.state.daftarTugasPemeriksaan.idQA){
-    //         submitable = submitable && this.this.validateQA() 
-    //     }
-
-    //     if (prevState.daftarTugasPemeriksaan.kantorCabang !== this.state.daftarTugasPemeriksaan.kantorCabang){
-    //         submitable = submitable && this.validateKC() 
-    //     }
-
-    //     if (prevState.daftarTugasPemeriksaan.idQA !== this.state.daftarTugasPemeriksaan.idQA){
-    //         submitable = submitable && this.this.validateQA() 
-    //     }
-
-    //     if (this.state.submitable !== submitable) {
-    //         this.setState({
-    //             submitable: submitable
-    //         })
-    //     }
-    // }
+    validateRequired() {
+        var submitable = true;
+        const required = [this.state.namaRencana, this.state.linkMajelis];
+        for (let i = 0; i < required.length; i++) {
+            submitable = submitable && (required[i] !== null && required[i] !== "");
+        }
+        return submitable;
+    }
 
     validateNama() {
         var submitable = true;
@@ -512,13 +502,17 @@ export default class FormTambahRencana extends React.Component {
     childFooterButton(index) {
         return (
             <div>
-                <SirioButton
-                    red
-                    type="button"
-                    onClick={() => this.deleteChildForm(index)}
-                >
-                    Hapus
-                </SirioButton>
+                 <SirioWarningButton
+                        red
+                        type="button"
+                        modalTitle="Konfirmasi Penghapusan"
+                        modalDesc="Apakah anda yakin untuk menghapus tugas pemeriksaan?"
+                        onConfirm={() => this.deleteChildForm(index)}
+                        customConfirmText="Ya, Hapus"
+                        customCancelText="Batal"
+                    >
+                        Hapus
+                    </SirioWarningButton>
             </div>
         )
     }

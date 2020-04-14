@@ -21,6 +21,10 @@ class KantorCabangService {
         return this.axiosInstance.post(SirioAxiosBase.BASEURL + `/KantorCabang/tambah`, data);
     }
 
+    async isExistKantorCabang(string) {
+        return this.axiosInstance.post(SirioAxiosBase.BASEURL + `/KantorCabang/nama`, string);
+    }
+
     async editKantorCabang(data) {
         console.log(data);
         console.log(SirioAxiosBase.BASEURL + '/KantorCabang/ubah');

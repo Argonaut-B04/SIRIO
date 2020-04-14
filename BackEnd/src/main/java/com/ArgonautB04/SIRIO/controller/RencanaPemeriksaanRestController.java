@@ -55,15 +55,15 @@ public class RencanaPemeriksaanRestController {
     private BaseResponse<List<RencanaPemeriksaanDTO>> getAllRencanaPemeriksaan(Principal principal) {
         BaseResponse<List<RencanaPemeriksaanDTO>> response = new BaseResponse<>();
 
-        try {
-            Optional<Employee> employeeTarget = employeeRestService.getByUsername(principal.getName());
-            Employee employee;
-            if (employeeTarget.isPresent()) {
-                employee = employeeTarget.get();
-            } else {
-                throw new NoSuchElementException();
-            }
-            List<RencanaPemeriksaan> result = rencanaPemeriksaanRestService.getByPembuat(employee);
+//        try {
+//            Optional<Employee> employeeTarget = employeeRestService.getByUsername(principal.getName());
+//            Employee employee;
+//            if (employeeTarget.isPresent()) {
+//                employee = employeeTarget.get();
+//            } else {
+//                throw new NoSuchElementException();
+//            }
+            List<RencanaPemeriksaan> result = rencanaPemeriksaanRestService.getAll();
             List<RencanaPemeriksaanDTO> resultDTO = new ArrayList<>();
             for (RencanaPemeriksaan rencanaPemeriksaan : result) {
                 RencanaPemeriksaanDTO rencanaPemeriksaanDTO = new RencanaPemeriksaanDTO();
@@ -91,11 +91,11 @@ public class RencanaPemeriksaanRestController {
             response.setStatus(200);
             response.setMessage("success");
             response.setResult(resultDTO);
-        } catch (NoSuchElementException e) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Akun anda tidak terdaftar atau tidak ditemukan!"
-            );
-        }
+//        } catch (NoSuchElementException e) {
+//            throw new ResponseStatusException(
+//                    HttpStatus.NOT_FOUND, "Akun anda tidak terdaftar atau tidak ditemukan!"
+//            );
+//        }
         return response;
     }
 

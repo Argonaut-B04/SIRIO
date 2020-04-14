@@ -17,7 +17,7 @@ class DetailRencanaPemeriksaan extends React.Component {
             rencanaPemeriksaan: {},
             daftarTugasPemeriksaan: [],
             dataGeneral: {},
-            redirect: false
+            redirect: 0
         }
 
         this.renderDataRencana = this.renderDataRencana.bind(this);
@@ -30,16 +30,29 @@ class DetailRencanaPemeriksaan extends React.Component {
 
     setRedirect = () => {
         this.setState({
-            redirect: true
+            redirect: 1
+        })
+    };
+
+    setRedirect1 = () => {
+        this.setState({
+            redirect: 2
         })
     };
 
     renderRedirect = () => {
-        if (this.state.redirect) {
+        if (this.state.redirect == 1) {
             return <Redirect to={{
                 pathname: "/manager/rencanaPemeriksaan",
                 state: {
                     deleteSuccess: true
+                }
+            }} />
+        }else if (this.state.redirect == 2) {
+            return <Redirect to={{
+                pathname: "/manager/rencanaPemeriksaan",
+                state: {
+                    endSuccess: true
                 }
             }} />
         }
@@ -110,6 +123,19 @@ class DetailRencanaPemeriksaan extends React.Component {
             .then(() => this.setRedirect());
     }
 
+    async ubahStatus() {
+        const response = await RencanaPemeriksaanService.getRencanaPemeriksaanDetail(this.props.location.state.id);
+        const rencanaPemeriksaan = {
+            id: response.data.result.id,
+            namaRencana: response.data.result.namaRencana,
+            linkMajelis: response.data.result.linkMajelis,
+            status: 3,
+            daftarTugasPemeriksaan: response.data.result.daftarTugasPemeriksaan
+        }
+        RencanaPemeriksaanService.editRencanaPemeriksaan(rencanaPemeriksaan)
+        .then(() => this.setRedirect1());
+    }
+
     subButton(status) {
         if (status === 1){
             return (
@@ -139,6 +165,21 @@ class DetailRencanaPemeriksaan extends React.Component {
                     </SirioWarningButton>
                 </div>
                 
+            )
+        }else if (status === 2){
+            return (
+                <div>
+                    <SirioWarningButton
+                        red
+                        modalTitle="Konfirmasi Penyelesaian"
+                        modalDesc="Apakah anda yakin untuk menyelesaikan rencana pemeriksaan?"
+                        onConfirm={() => this.ubahStatus()}
+                        customConfirmText="Ya, Selesai"
+                        customCancelText="Batal"
+                    >
+                        Selesai
+                    </SirioWarningButton>
+                </div>
             )
         }else{
             return (

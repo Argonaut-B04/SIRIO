@@ -123,7 +123,7 @@ class FormUbahKantorCabang extends React.Component {
         var submitable = true;
         var errorReg;
         const fokusReg = this.state.regional
-        if(fokusReg.match(".*[1234567890!-@#$%^&*()_+{}:.,[]|>/=<?]+.*")){
+        if(fokusReg.match(".*[-@#$!%^&*()_+{}:.,[]|>/=<?]+.*")){
             submitable = false;
             errorReg= "Hanya boleh mengandung huruf";
         }
@@ -243,49 +243,49 @@ class FormUbahKantorCabang extends React.Component {
     // Setiap objek {} pada List [] akan menjadi 1 field
     // untuk informasi lebih lengkap, cek SirioForm
     inputDefinition() {
-        if(this.state.kunjunganAudit){
-            return (
-                [
-                    {
-                        label: "Nama Point*",
-                        handleChange: this.handleChange,
-                        required: true,
-                        type: "text",
-                        name: "namaKantorCabang",
-                        validation: this.state.errorNama,
-                        value: this.state.namaKantorCabang,
-                        placeholder: "Masukan nama point"
-                    }, {
-                        label: "Branch Manger*",
-                        handleChange: this.handleSelectChange,
-                        required: true,
-                        type: "select",
-                        name: "idPemilik",
-                        value: this.state.idPemilik,
-                        validation: this.state.errorBM,
-                        optionList: this.state.employeeOptionList
-                    },{
-                        label: "Area*",
-                        handleChange: this.handleChange,
-                        required: true,
-                        type: "text",
-                        name: "area",
-                        validation: this.state.errorArea,
-                        value: this.state.area,
-                        placeholder: "Masukan nama area"
-                    },{
-                        label: "Regional*",
-                        handleChange: this.handleChange,
-                        required: true,
-                        type: "text",
-                        name: "regional",
-                        value: this.state.regional,
-                        validation: this.state.errorReg,
-                        placeholder: "Masukan nama regional"
-                    }
-                ]
-            )
-        }else{
+        // if(this.state.kunjunganAudit){
+        //     return (
+        //         [
+        //             {
+        //                 label: "Nama Point*",
+        //                 handleChange: this.handleChange,
+        //                 required: true,
+        //                 type: "text",
+        //                 name: "namaKantorCabang",
+        //                 validation: this.state.errorNama,
+        //                 value: this.state.namaKantorCabang,
+        //                 placeholder: "Masukan nama point"
+        //             }, {
+        //                 label: "Branch Manger*",
+        //                 handleChange: this.handleSelectChange,
+        //                 required: true,
+        //                 type: "select",
+        //                 name: "idPemilik",
+        //                 value: this.state.idPemilik,
+        //                 validation: this.state.errorBM,
+        //                 optionList: this.state.employeeOptionList
+        //             },{
+        //                 label: "Area*",
+        //                 handleChange: this.handleChange,
+        //                 required: true,
+        //                 type: "text",
+        //                 name: "area",
+        //                 validation: this.state.errorArea,
+        //                 value: this.state.area,
+        //                 placeholder: "Masukan nama area"
+        //             },{
+        //                 label: "Regional*",
+        //                 handleChange: this.handleChange,
+        //                 required: true,
+        //                 type: "text",
+        //                 name: "regional",
+        //                 value: this.state.regional,
+        //                 validation: this.state.errorReg,
+        //                 placeholder: "Masukan nama regional"
+        //             }
+        //         ]
+        //     )
+        // }else{
             return (
                 [
                     {
@@ -337,7 +337,7 @@ class FormUbahKantorCabang extends React.Component {
     
                 ]
             )
-        }
+        //}
         
     }
 
@@ -352,6 +352,7 @@ class FormUbahKantorCabang extends React.Component {
                     Simpan
                 </SirioButton>
                 <SirioButton purple
+                    type="button"
                     classes="mx-1"
                     onClick={() => window.location.href = "/administrator/kantorCabang"}>
                     Batal

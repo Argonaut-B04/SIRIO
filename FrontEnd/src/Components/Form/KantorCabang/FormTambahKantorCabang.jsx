@@ -4,11 +4,11 @@ import SirioButton from '../../Button/SirioButton';
 import KantorCabangService from '../../../Services/KantorCabangService';
 import EmployeeService from '../../../Services/EmployeeService';
 import { Redirect } from 'react-router-dom';
-
+import { withRouter } from 'react-router-dom';
 /**
  * Kelas untuk membuat form demo
  */
-export default class FormTambahKantorCabang extends React.Component {
+class FormTambahKantorCabang extends React.Component {
 
     // Masukan user disimpan kedalam state sebelum dikirim ke backend
     constructor(props) {
@@ -119,27 +119,45 @@ export default class FormTambahKantorCabang extends React.Component {
 
     componentDidUpdate(prevProps, prevState) {
         var submitable = true;
+        var validating = false;
+        submitable = this.validateRequired();
         if (prevState.namaKantorCabang !== this.state.namaKantorCabang){
-            submitable = submitable && this.validateKantor() 
+            submitable = this.validateKantor() & submitable
+            validating = true;
         }
 
         if (prevState.area !== this.state.area){
-            submitable = submitable && this.validateArea() 
+            submitable = this.validateArea() && submitable 
+            validating = true;
         }
 
         if (prevState.idPemilik !== this.state.idPemilik){
-            submitable = submitable && this.this.validateBM() 
+            submitable = this.validateBM() && submitable 
+            validating = true;
         }
 
         if (prevState.regional !== this.state.regional){
-            submitable = submitable && this.this.validateRegional() 
+            submitable = this.validateRegional() && submitable 
+            validating = true; 
         }
 
-        if (this.state.submitable !== submitable) {
-            this.setState({
-                submitable: submitable
-            })
+        if (validating){
+            if (this.state.submitable !== submitable) {
+                this.setState({
+                    submitable: submitable
+                })
+            }
         }
+        
+    }
+
+    validateRequired() {
+        var submitable = true;
+        const required = [this.state.namaKantorCabang, this.state.idPemilik, this.state.area, this.state.regional];
+        for (let i = 0; i < required.length; i++) {
+            submitable = submitable && (required[i] !== null && required[i] !== "");
+        }
+        return submitable;
     }
 
     // Fungsi yang akan dijalankan ketika user submit
@@ -157,10 +175,26 @@ export default class FormTambahKantorCabang extends React.Component {
         .then(() => this.setRedirect());
     }
 
-    validateKantor() {
+    async validateKantor() {
         var submitable = true;
         var errorNama;
         const fokusNama = this.state.namaKantorCabang
+        //const response1 = await KantorCabangService.isExistKantorCabang(fokusNama)
+        // KantorCabangService.isExistKantorCabang(fokusNama).then (
+        //     response => { 
+        //         console.log(response)
+        //         if(!response.result){
+        //             submitable = false;
+        //             errorNama = "Nama kantor sudah ada di database";
+        //         }
+        //     }
+            
+        // )
+        // console.log(response1.data.result)
+        // if(response1.data.result){
+        //     submitable = false;
+        //     errorNama = "Nama kantor sudah ada di database";
+        // }
         if(fokusNama.match(".*[1234567890!-@#$%^&*()_+{}:.,[]|>/=<?]+.*")){
             submitable = false;
             errorNama = "Hanya boleh mengandung huruf";
@@ -209,7 +243,7 @@ export default class FormTambahKantorCabang extends React.Component {
         var submitable = true;
         var errorReg;
         const fokusReg = this.state.regional
-        if(fokusReg.match(".*[1234567890!-@#$%^&*()_+{}:.,[]|>/=<?]+.*")){
+        if(fokusReg.match(".*[-@#!$%^&*()_+{}:.,[]|>/=<?]+.*")){
             submitable = false;
             errorReg= "Hanya boleh mengandung huruf";
         }
@@ -336,3 +370,5 @@ export default class FormTambahKantorCabang extends React.Component {
         );
     }
 }
+
+export default withRouter (FormTambahKantorCabang);

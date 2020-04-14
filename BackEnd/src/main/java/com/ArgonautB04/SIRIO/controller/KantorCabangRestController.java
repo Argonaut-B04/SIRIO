@@ -12,6 +12,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.security.Principal;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -45,6 +46,37 @@ public class KantorCabangRestController {
 
         return response;
     }
+
+//    @PostMapping("/nama")
+//    private BaseResponse<Boolean> isExistInDatabase(
+//            @RequestBody String namaKantorBaru,
+//            Principal principal
+//    ) {
+//        System.out.println(namaKantorBaru);
+//        BaseResponse<Boolean> response = new BaseResponse<>();
+//        Optional<Employee> pengelolaOptional = employeeRestService.getByUsername(principal.getName());
+//
+//        if (pengelolaOptional.isPresent()) {
+//            Employee pengelola;
+//            Boolean exist = false;
+//            try{
+//                KantorCabang ada = kantorCabangRestService.isExistInDatabase(namaKantorBaru);
+//                System.out.println(ada.getNamaKantor() + "iniii");
+//                if (ada != null ){
+//                    exist = true;
+//                }
+//            }catch (NullPointerException e) {
+//                exist = false;
+//            }
+//                response.setStatus(200);
+//                response.setMessage("success");
+//                response.setResult(exist);
+//
+//        } else throw new ResponseStatusException(
+//                HttpStatus.UNAUTHORIZED, "Akun anda tidak terdaftar dalam Sirio"
+//        );
+//        return response;
+//    }
 
     /**
      * Mengambil suatu kantor cabang

@@ -202,6 +202,15 @@ class TabelRencanaPemeriksaan extends React.Component {
                 onClick={this.endNotification}
             />
             }
+            {this.props.location.state && this.props.location.state.endSuccess && this.state.openNotification &&
+            <SirioMessageButton
+                show
+                classes="d-none"
+                modalTitle="Rencana Pemeriksaan telah Selesai"
+                customConfirmText="Tutup"
+                onClick={this.endNotification}
+            />
+            }
             </>
         );
     }

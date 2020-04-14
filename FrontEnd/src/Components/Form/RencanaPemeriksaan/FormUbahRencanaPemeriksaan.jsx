@@ -1,11 +1,13 @@
 import React from 'react';
 import SirioForm from '../SirioForm';
 import SirioButton from '../../Button/SirioButton';
+import SirioWarningButton from "../../Button/ActionButton/SirioWarningButton";
 import EmployeeService from '../../../Services/EmployeeService';
 import KantorCabangService from '../../../Services/KantorCabangService';
 import { Redirect } from 'react-router-dom';
 import { withRouter } from 'react-router-dom';
 import RencanaPemeriksaanService from '../../../Services/RencanaPemeriksaanService';
+
 
 /**
  * Kelas untuk membuat form demo
@@ -19,7 +21,7 @@ class FormUbahRencana extends React.Component {
         this.state = {
             redirect: false,
             submitable: true,
-            id:"",
+            id: "",
             namaRencana: "",
             linkMajelis: "",
             status: "",
@@ -459,6 +461,7 @@ class FormUbahRencana extends React.Component {
                 </SirioButton>
                 <SirioButton purple
                     classes="mx-1"
+                    type="button"
                     onClick={() => window.location.href = "/manager/rencanaPemeriksaan"}>
                     Batal
                 </SirioButton>
@@ -492,13 +495,17 @@ class FormUbahRencana extends React.Component {
     childFooterButton(index) {
         return (
             <div>
-                <SirioButton
-                    red
-                    type="button"
-                    onClick={() => this.deleteChildForm(index)}
-                >
-                    Hapus
-                </SirioButton>
+                 <SirioWarningButton
+                        red
+                        type="button"
+                        modalTitle="Konfirmasi Penghapusan"
+                        modalDesc="Apakah anda yakin untuk menghapus tugas pemeriksaan?"
+                        onConfirm={() => this.deleteChildForm(index)}
+                        customConfirmText="Ya, Hapus"
+                        customCancelText="Batal"
+                    >
+                        Hapus
+                    </SirioWarningButton>
             </div>
         )
     }
