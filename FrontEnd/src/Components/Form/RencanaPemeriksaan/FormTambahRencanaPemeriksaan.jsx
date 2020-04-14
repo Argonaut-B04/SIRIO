@@ -87,33 +87,33 @@ export default class FormTambahRencana extends React.Component {
         )
     }
 
-    componentDidUpdate() {
-        var submitable = true;
-     
-        submitable = this.validateNama() && this.validateLink()
-        
-        if (this.state.submitable !== submitable) {
-            this.setState({
-                submitable: submitable
-            })
-        }
-    }
-
-
     // componentDidUpdate() {
     //     var submitable = true;
-    //     if (this.state.daftarTugasPemeriksaan[0] == null){
-    //         submitable = this.validateNama() && this.validateLink() 
-            
-    //     }else{
-    //         submitable = this.validateNama() && this.validateLink() && this.validateKC() && this.validateQA() && this.validateTanggalMulai() && this.validateTanggalSelesai()  
-    //     }
+     
+    //     submitable = this.validateNama() && this.validateLink() && this.validateKC() && this.validateQA() && this.validateTanggalMulai() && this.validateTanggalSelesai()
+        
     //     if (this.state.submitable !== submitable) {
     //         this.setState({
     //             submitable: submitable
     //         })
     //     }
     // }
+
+
+    componentDidUpdate() {
+        var submitable = true;
+        if (this.state.daftarTugasPemeriksaan[0] == null){
+            submitable = this.validateNama() && this.validateLink() 
+            
+        }else{
+            submitable = this.validateNama() && this.validateLink() && this.validateKC() && this.validateQA() && this.validateTanggalMulai() && this.validateTanggalSelesai()  
+        }
+        if (this.state.submitable !== submitable) {
+            this.setState({
+                submitable: submitable
+            })
+        }
+    }
 
     // componentDidUpdate(prevProps, prevState) {
     //     var submitable = true;
@@ -201,7 +201,7 @@ export default class FormTambahRencana extends React.Component {
         if (this.state.daftarTugasPemeriksaan[0] != null){
             for (let i = 0; i < this.state.daftarTugasPemeriksaan.length;i++) {
                 const fokusKC = this.state.daftarTugasPemeriksaan[i].kantorCabang
-                if (fokusKC.length < 1) {
+                if (fokusKC == null) {
                     submitable = false;
                     errorKC = "Kantor Cabang harus diisi";
                 } 
@@ -221,7 +221,7 @@ export default class FormTambahRencana extends React.Component {
         if (this.state.daftarTugasPemeriksaan[0] != null){
             for (let i = 0; i < this.state.daftarTugasPemeriksaan.length;i++) {
                 const fokusQA = this.state.daftarTugasPemeriksaan[i].idQA
-                if (fokusQA.length < 1) {
+                if (fokusQA == null) {
                     submitable = false;
                     errorQA = "QA Officer harus diisi";
                 } 
@@ -241,7 +241,7 @@ export default class FormTambahRencana extends React.Component {
         if (this.state.daftarTugasPemeriksaan[0] != null){
             for (let i = 0; i < this.state.daftarTugasPemeriksaan.length;i++) {
                 const fokusTM = this.state.daftarTugasPemeriksaan[i].tanggalMulai
-                if (fokusTM.length < 1) {
+                if (fokusTM == null) {
                     submitable = false;
                     errorTM = "Tanggal Mulai harus diisi";
                 } 
@@ -261,7 +261,7 @@ export default class FormTambahRencana extends React.Component {
         if (this.state.daftarTugasPemeriksaan[0] != null){
             for (let i = 0; i < this.state.daftarTugasPemeriksaan.length;i++) {
                 const fokusTS = this.state.daftarTugasPemeriksaan[i].tanggalSelesai
-                if (fokusTS.length < 1) {
+                if (fokusTS == null) {
                     submitable = false;
                     errorTS = "Tanggal Selesai harus diisi";
                 } 
@@ -423,7 +423,7 @@ export default class FormTambahRencana extends React.Component {
                     handleChange: this.handleMultipleSelectChange,
                     index: index,
                     required: true,
-                    validation: this.state.errorKC,
+                    validation: this.state.daftarTugasPemeriksaan.errorKC,
                     type: "select",
                     name: "kantorCabang",
                     value: this.state.daftarTugasPemeriksaan[index].kantorCabang,
@@ -435,7 +435,7 @@ export default class FormTambahRencana extends React.Component {
                     type: "select",
                     name: "idQA",
                     required: true,
-                    validation: this.state.errorQA,
+                    validation: this.state.daftarTugasPemeriksaan.errorQA,
                     value: this.state.daftarTugasPemeriksaan[index].idQA,
                     optionList: this.state.employeeOptionList
                 }, {
@@ -444,7 +444,7 @@ export default class FormTambahRencana extends React.Component {
                     index: index,
                     type: "date",
                     required: true,
-                    validation: this.state.errorTM,
+                    validation: this.state.daftarTugasPemeriksaan.errorTM,
                     name: "tanggalMulai",
                     value: this.state.daftarTugasPemeriksaan[index].tanggalMulai
                 }, {
@@ -453,7 +453,7 @@ export default class FormTambahRencana extends React.Component {
                     index: index,
                     type: "date",
                     required: true,
-                    validation: this.state.errorTS,
+                    validation: this.state.daftarTugasPemeriksaan.errorTS,
                     name: "tanggalSelesai",
                     value: this.state.daftarTugasPemeriksaan[index].tanggalSelesai
                 }
@@ -467,7 +467,7 @@ export default class FormTambahRencana extends React.Component {
             <div>
                 <SirioButton purple 
                     recommended={this.state.submitable && this.state.daftarTugasPemeriksaan[0] != null}
-                    disabled={!this.state.submitable || !(this.state.daftarTugasPemeriksaan[0] != null)}  
+                    disabled={!this.state.submitable || this.state.daftarTugasPemeriksaan[0] == null}  
                     classes="mx-1"
                     onClick={(event) => this.handleSubmit(event,"simpan")}>
                     Jalankan

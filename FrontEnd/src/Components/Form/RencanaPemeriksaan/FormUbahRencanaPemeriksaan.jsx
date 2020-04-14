@@ -68,18 +68,6 @@ class FormUbahRencana extends React.Component {
         }
     };
 
-    componentDidUpdate() {
-        var submitable = true;
-
-        submitable = this.validateNama() && this.validateLink();
-
-        if (this.state.submitable !== submitable) {
-            this.setState({
-                submitable: submitable
-            })
-        }
-    }
-
     async renderDataRencana() {
         const response = await RencanaPemeriksaanService.getRencanaPemeriksaanDetail(this.props.location.state.id);
         const result = response.data.result;
@@ -170,6 +158,21 @@ class FormUbahRencana extends React.Component {
         )
     }
 
+    componentDidUpdate() {
+        var submitable = true;
+        if (this.state.daftarTugasPemeriksaan[0] == null){
+            submitable = this.validateNama() && this.validateLink() 
+            
+        }else{
+            submitable = this.validateNama() && this.validateLink() && this.validateKC() && this.validateQA() && this.validateTanggalMulai() && this.validateTanggalSelesai()  
+        }
+        if (this.state.submitable !== submitable) {
+            this.setState({
+                submitable: submitable
+            })
+        }
+    }
+
     validateNama() {
         var submitable = true;
         var errorNama;
@@ -182,6 +185,10 @@ class FormUbahRencana extends React.Component {
             submitable = false;
             errorNama = "Minimal terdapat 2 karakter";
         } 
+        if (fokusNama.length > 50) {
+            submitable = false;
+            errorNama = "Nama rencana tidak boleh lebih dari 50 karakter";
+        }
         if (this.state.errorNama !== errorNama) {
             this.setState({
                 errorNama: errorNama
@@ -201,9 +208,93 @@ class FormUbahRencana extends React.Component {
             submitable = false;
             errorLink = "Lampiran harus berupa link url";
         }
+        if (fokusLink.length > 255) {
+            submitable = false;
+            errorLink = "Link tidak boleh lebih dari 255 karakter";
+        }
         if (this.state.errorLink !== errorLink) {
             this.setState({
                 errorLink: errorLink
+            })
+        }
+        return submitable;
+    }
+
+    validateKC() {
+        var submitable = true;
+        var errorKC;
+        if (this.state.daftarTugasPemeriksaan[0] != null){
+            for (let i = 0; i < this.state.daftarTugasPemeriksaan.length;i++) {
+                const fokusKC = this.state.daftarTugasPemeriksaan[i].kantorCabang
+                if (fokusKC == null) {
+                    submitable = false;
+                    errorKC = "Kantor Cabang harus diisi";
+                } 
+            }
+        }
+        if (this.state.errorKC !== errorKC) {
+            this.setState({
+                errorKC: errorKC
+            })
+        }
+        return submitable;
+    }
+
+    validateQA() {
+        var submitable = true;
+        var errorQA;
+        if (this.state.daftarTugasPemeriksaan[0] != null){
+            for (let i = 0; i < this.state.daftarTugasPemeriksaan.length;i++) {
+                const fokusQA = this.state.daftarTugasPemeriksaan[i].idQA
+                if (fokusQA == null) {
+                    submitable = false;
+                    errorQA = "QA Officer harus diisi";
+                } 
+            }
+        }
+        if (this.state.errorQA !== errorQA) {
+            this.setState({
+                errorQA: errorQA
+            })
+        }
+        return submitable;
+    }
+
+    validateTanggalMulai() {
+        var submitable = true;
+        var errorTM;
+        if (this.state.daftarTugasPemeriksaan[0] != null){
+            for (let i = 0; i < this.state.daftarTugasPemeriksaan.length;i++) {
+                const fokusTM = this.state.daftarTugasPemeriksaan[i].tanggalMulai
+                if (fokusTM == null) {
+                    submitable = false;
+                    errorTM = "Tanggal Mulai harus diisi";
+                } 
+            }
+        }
+        if (this.state.errorTM !== errorTM) {
+            this.setState({
+                errorTM: errorTM
+            })
+        }
+        return submitable;
+    }
+
+    validateTanggalSelesai() {
+        var submitable = true;
+        var errorTS;
+        if (this.state.daftarTugasPemeriksaan[0] != null){
+            for (let i = 0; i < this.state.daftarTugasPemeriksaan.length;i++) {
+                const fokusTS = this.state.daftarTugasPemeriksaan[i].tanggalSelesai
+                if (fokusTS == null) {
+                    submitable = false;
+                    errorTS = "Tanggal Selesai harus diisi";
+                } 
+            }
+        }
+        if (this.state.errorTS !== errorTS) {
+            this.setState({
+                errorTS: errorTS
             })
         }
         return submitable;
@@ -306,11 +397,13 @@ class FormUbahRencana extends React.Component {
     innerInputDefinition(index) {
         return (
             [
+                
                 {
                     label: "Kantor Cabang*",
                     handleChange: this.handleMultipleSelectChange,
                     index: index,
                     required: true,
+                    validation: this.state.daftarTugasPemeriksaan.errorKC,
                     type: "select",
                     name: "kantorCabang",
                     value: this.state.daftarTugasPemeriksaan[index].kantorCabang,
@@ -319,29 +412,30 @@ class FormUbahRencana extends React.Component {
                     label: "QA Officer*",
                     handleChange: this.handleMultipleSelectChange,
                     index: index,
-                    required: true,
                     type: "select",
                     name: "idQA",
+                    required: true,
+                    validation: this.state.daftarTugasPemeriksaan.errorQA,
                     value: this.state.daftarTugasPemeriksaan[index].idQA,
                     optionList: this.state.employeeOptionList
                 }, {
                     label: "Tanggal Mulai*",
                     handleChange: this.handleMultipleChange,
                     index: index,
-                    required: true,
                     type: "date",
+                    required: true,
+                    validation: this.state.daftarTugasPemeriksaan.errorTM,
                     name: "tanggalMulai",
-                    value: this.state.daftarTugasPemeriksaan[index].tanggalMulai,
-                    placeholder: "Masukan tanggal mulai"
+                    value: this.state.daftarTugasPemeriksaan[index].tanggalMulai
                 }, {
                     label: "Tanggal Selesai*",
                     handleChange: this.handleMultipleChange,
                     index: index,
-                    required: true,
                     type: "date",
+                    required: true,
+                    validation: this.state.daftarTugasPemeriksaan.errorTS,
                     name: "tanggalSelesai",
-                    value: this.state.daftarTugasPemeriksaan[index].tanggalSelesai,
-                    placeholder: "Masukan tanggal selesai"
+                    value: this.state.daftarTugasPemeriksaan[index].tanggalSelesai
                 }
 
             ]
@@ -356,7 +450,7 @@ class FormUbahRencana extends React.Component {
                     disabled={!this.state.submitable || !(this.state.daftarTugasPemeriksaan[0] != null)} 
                     classes="mx-1"
                     onClick={(event) => this.handleSubmit(event,"simpan")}>
-                    Simpan
+                    Jalankan
                 </SirioButton>
                 <SirioButton purple
                     classes="mx-1"

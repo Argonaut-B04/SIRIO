@@ -46,7 +46,6 @@ public class KantorCabangRestController {
         return response;
     }
 
-
     /**
      * Mengambil suatu kantor cabang
      *
