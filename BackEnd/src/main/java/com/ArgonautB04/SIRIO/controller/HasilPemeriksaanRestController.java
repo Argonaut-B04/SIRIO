@@ -167,9 +167,11 @@ public class HasilPemeriksaanRestController {
                     komponenPemeriksaanRestService.getByHasilPemeriksaan(hasilPemeriksaan)) {
                 KomponenPemeriksaanDTO komponenPemeriksaanDTO = new KomponenPemeriksaanDTO();
                 komponenPemeriksaanDTO.setId(komponenPemeriksaan.getIdKomponenPemeriksaan());
-                komponenPemeriksaanDTO.setIdRiskLevel(komponenPemeriksaan.getRiskLevel().getIdLevel());
-                komponenPemeriksaanDTO.setNamaRiskLevel(komponenPemeriksaan.getRiskLevel().getNamaLevel());
-                komponenPemeriksaanDTO.setBobotRiskLevel(komponenPemeriksaan.getRiskLevel().getBobotLevel());
+                if (komponenPemeriksaan.getRiskLevel() != null) {
+                    komponenPemeriksaanDTO.setIdRiskLevel(komponenPemeriksaan.getRiskLevel().getIdLevel());
+                    komponenPemeriksaanDTO.setNamaRiskLevel(komponenPemeriksaan.getRiskLevel().getNamaLevel());
+                    komponenPemeriksaanDTO.setBobotRiskLevel(komponenPemeriksaan.getRiskLevel().getBobotLevel());
+                }
                 komponenPemeriksaanDTO.setJumlahSampel(komponenPemeriksaan.getJumlahSampel());
                 komponenPemeriksaanDTO.setKeteranganSampel(komponenPemeriksaan.getKeteranganSampel());
 
