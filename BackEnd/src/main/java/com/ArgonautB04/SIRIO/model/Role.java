@@ -33,6 +33,13 @@ public class Role implements Serializable {
     @JsonIgnore
     private AccessPermissions accessPermissions;
 
+    public Role() {
+    }
+
+    public Role(@NotNull @Size(max = 50) String namaRole) {
+        this.namaRole = namaRole;
+    }
+
     public int getIdRole() {
         return idRole;
     }

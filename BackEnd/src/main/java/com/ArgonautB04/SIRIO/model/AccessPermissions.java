@@ -66,6 +66,13 @@ public class AccessPermissions implements Serializable {
     @Column(columnDefinition = "boolean default false")
     private Boolean aksesPersetujuanBuktiPelaksanaan;
 
+    public AccessPermissions() {
+    }
+
+    public AccessPermissions(Role role) {
+        this.role = role;
+    }
+
     public Boolean getAksesTabelRisiko() {
         return aksesTabelRisiko;
     }
