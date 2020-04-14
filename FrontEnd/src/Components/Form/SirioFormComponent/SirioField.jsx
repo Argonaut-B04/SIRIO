@@ -39,8 +39,6 @@ export default class SirioField extends Component {
                     validationResult: validationResult
                 })
             }
-            // } else {
-            //     console.log("value nya masih kosong")
         }
     }
 
@@ -157,18 +155,18 @@ export default class SirioField extends Component {
         )
     }
 
-
     render() {
-
         if (this.props.fullComponent) {
             return this.props.fullComponent;
         } else {
             const label = this.props.label &&
-                <label className={classes.label}>
-                    {this.props.label}
+                <>
+                    <label className={this.props.required ? [classes.label, classes.required].join(" ") : classes.label}>
+                        {this.props.label}
+                    </label>
                     {this.props.validator && <p className={classes.error}>{this.props.validator}</p>}
                     {this.state.validationResult && <p className={classes.error}>{this.state.validationResult}</p>}
-                </label>
+                </>
             // modifier untuk multiple
             var field;
             if (Array.isArray(this.props.value)) {
