@@ -19,5 +19,7 @@ public interface RiskLevelRestService {
 
     boolean isExistInDatabase(RiskLevel riskLevel);
 
+    boolean isExistInDatabase(String namaRiskLevel);
+
     void nonaktifkan(RiskLevel riskLevel);
 }

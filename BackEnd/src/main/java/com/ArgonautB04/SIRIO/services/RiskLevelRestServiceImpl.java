@@ -60,6 +60,11 @@ public class RiskLevelRestServiceImpl implements RiskLevelRestService {
     }
 
     @Override
+    public boolean isExistInDatabase(String namaRiskLevel) {
+        return riskLevelDB.existsByNamaLevel(namaRiskLevel);
+    }
+
+    @Override
     public void nonaktifkan(RiskLevel riskLevel) {
         RiskLevel target = getById(
                 riskLevel.getIdLevel()
