@@ -16,83 +16,76 @@ import ComponentWrapper from '../../Layout/ComponentWrapper';
 class SirioForm extends Component {
 
     render() {
+        var header;
+        if (this.props.noHeader || this.props.customHeader) {
+            header = this.props.customHeader
+        } else {
+            header = <SirioComponentHeader
+                title={this.props.title}
+                subtitle={this.props.subtitle}
+                betweenTitleSubtitle={this.props.betweenTitleSubtitle}
+            />
+        }
 
-        return (
+        var fields =
             <>
-                {this.props.noHeader || this.props.customHeader ? this.props.customHeader :
-                    <SirioComponentHeader
-                        title={this.props.title}
-                        subtitle={this.props.subtitle}
-                        betweenTitleSubtitle={this.props.betweenTitleSubtitle}
+                {this.props.inputDefinition.map((field, i) =>
+                    <SirioField
+                        key={i}
+                        label={field.label}
+                        handleChange={field.handleChange}
+                        index={field.index}
+                        type={field.type}
+                        name={field.name}
+                        value={field.value}
+                        placeholder={field.placeholder}
+                        optionList={field.optionList}
+                        classes={field.classes}
+                        customInput={field.customInput}
+                        fullComponent={field.fullComponent}
+                        validator={field.validation}
+                        required={field.required}
+                        min={field.min}
+                        afterValidity={field.afterValidity}
+                        multiple={field.multiple}
+                        sideButton={field.sideButton}
+                        modifier={field.modifier}
                     />
-                }
-                {this.props.isInnerForm || this.props.childForm ?
-                    <ComponentWrapper classes={this.props.isInnerForm ? "m-4" : ""}>
-                        {this.props.inputDefinition.map((field, i) =>
-                            <SirioField
-                                key={i}
-                                label={field.label}
-                                handleChange={field.handleChange}
-                                index={field.index}
-                                type={field.type}
-                                name={field.name}
-                                value={field.value}
-                                placeholder={field.placeholder}
-                                optionList={field.optionList}
-                                classes={field.classes}
-                                customInput={field.customInput}
-                                fullComponent={field.fullComponent}
-                                validator={field.validation}
-                                required={field.required}
-                                min={field.min}
-                                afterValidity={field.afterValidity}
-                                multiple={field.multiple}
-                                sideButton={field.sideButton}
-                                modifier={field.modifier}
-                            />
-                        )}
+                )}
+            </>
 
-                        {this.props.footerButton ?
+        if (this.props.isInnerForm || this.props.childForm) {
+            return (
+                <>
+                    {header}
+                    <ComponentWrapper classes="m-4">
+                        {fields}
+
+                        {this.props.footerButton &&
                             <div className="w-100 text-right">
                                 <br />
                                 {this.props.footerButton}
                             </div>
-                            : ""
                         }
                     </ComponentWrapper>
-                    :
+                </>
+            )
+        } else {
+            return (
+                <>
+                    {header}
                     <ComponentWrapper>
                         <form onSubmit={this.props.onSubmit}>
-                            {this.props.inputDefinition.map((field, i) =>
-                                <SirioField
-                                    key={i}
-                                    label={field.label}
-                                    handleChange={field.handleChange}
-                                    index={field.index}
-                                    type={field.type}
-                                    name={field.name}
-                                    value={field.value}
-                                    placeholder={field.placeholder}
-                                    optionList={field.optionList}
-                                    classes={field.classes}
-                                    customInput={field.customInput}
-                                    fullComponent={field.fullComponent}
-                                    validator={field.validation}
-                                    required={field.required}
-                                    afterValidity={field.afterValidity}
-                                    min={field.min}
-                                />
-                            )}
-                            <div className="w-100 text-right">
-                                <br></br>
+                            {fields}
+                            <div className="w-100 text-right mt-5">
                                 {this.props.submitButton}
                             </div>
                         </form>
                     </ComponentWrapper>
-                }
-            </>
-        );
+                </>
+            )
+        }
+
     }
 }
-
 export default SirioForm;

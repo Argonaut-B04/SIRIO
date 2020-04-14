@@ -1,10 +1,11 @@
 import React from 'react';
 import SirioDetailPage from '../SirioDetailPage';
 import SirioButton from '../../Button/SirioButton';
-import SirioConfirmButton from '../../Button/ActionButton/SirioConfirmButton';
+import SirioWarningButton from '../../Button/ActionButton/SirioWarningButton';
 import RegistrasiRisikoService from '../../../Services/RegistrasiRisikoService';
 import { NavLink } from 'react-router-dom';
 import { withRouter } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 
 class DetailRisiko extends React.Component {
 
@@ -12,22 +13,29 @@ class DetailRisiko extends React.Component {
         super(props);
 
         this.state = {
-            risiko: {}
+            idRisiko: "",
+            namaRisiko: "",
+            risikoKategori: "",
+            sop: "",
+            judulSop: "",
+            komponen: "",
+            redirect: false,
+
         }
 
         this.renderDataRisiko = this.renderDataRisiko.bind(this);
+        this.setRedirect = this.setRedirect.bind(this);
     }
 
     componentDidMount() {
         this.renderDataRisiko();
-        console.log(this.props.location)
     }
 
-    parentFormatter() {
-        if (this.state.risiko.parent) {
-            return this.state.risiko.parent
-        } else {
+    komponenFormatter() {
+        if (this.state.komponen === "" | this.state.komponen === null) {
             return "-"
+        } else {
+            return this.state.komponen
         }
     }
 
@@ -35,18 +43,47 @@ class DetailRisiko extends React.Component {
         const response = await RegistrasiRisikoService.getRisiko(this.props.location.state.id);
 
         this.setState({
-            risiko: response.data.result
+            idRisiko: response.data.result.idRisiko,
+            namaRisiko: response.data.result.namaRisiko,
+            risikoKategori: response.data.result.risikoKategori,
+            judulSop: response.data.result.sop.judul,
+            sop: response.data.result.sop.idSop,
+            komponen: response.data.result.komponen,
         })
     }
 
     data() {
         return {
-            "Nama Risiko": this.state.risiko.namaRisiko,
-            "Kategori Risiko": this.state.risiko.risikoKategori,
-            "Referensi SOP": this.state.risiko.sop,
-            "Parent": this.parentFormatter(),
-            "Komponen Risiko": this.state.risiko.komponen
+            "Nama Risiko": this.state.namaRisiko,
+            "Kategori Risiko": this.state.risikoKategori,
+            "Referensi SOP": this.state.judulSop,
+            "Komponen Risiko": this.komponenFormatter()
         };
+    }
+
+    setRedirect = () => {
+        this.setState({
+            redirect: true
+        })
+    };
+
+    renderRedirect = () => {
+        if (this.state.redirect) {
+            return <Redirect to={{
+                pathname: "/registrasi-risiko",
+                state: {
+                    deleteSuccess: true
+                }
+            }} />
+        }
+    };
+
+    hapus(id) {
+        const risiko = {
+            id: id
+        };
+        RegistrasiRisikoService.hapusRisiko(risiko)
+            .then(() => this.setRedirect());
     }
 
     subButton() {
@@ -55,7 +92,7 @@ class DetailRisiko extends React.Component {
                 <NavLink to={{
                     pathname: "/registrasi-risiko/ubah",
                     state: {
-                        id: this.state.risiko.idRisiko,
+                        id: this.state.idRisiko,
                     }
                 }}>
                     <SirioButton
@@ -65,29 +102,31 @@ class DetailRisiko extends React.Component {
                         Ubah
                     </SirioButton>
                 </NavLink>
-                <SirioConfirmButton
+                <SirioWarningButton
                     purple
                     modalTitle="Apa Anda yakin untuk menghapus risiko?"
-                    onConfirm={() => window.location.href = "http://www.google.com"}
+                    onConfirm={() => this.hapus(this.state.idRisiko)}
                     customConfirmText="Ya, hapus"
                     customCancelText="Batal"
                 >
                     Hapus
-                </SirioConfirmButton>
+                </SirioWarningButton>
             </div>
         )
     }
 
     render() {
         return (
+            <>
+            {this.renderRedirect()}
             <SirioDetailPage
                 title="Detail Risiko"
                 data={this.data()}
-                id='id'
-                columnsDefinition={this.columns}
+                id= 'id'
                 subButton={this.subButton()}
                 link="registrasi-risiko"
             />
+            </>
         );
     }
 } 

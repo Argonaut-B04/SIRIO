@@ -6,8 +6,6 @@ import com.ArgonautB04.SIRIO.model.Rekomendasi;
 import com.ArgonautB04.SIRIO.model.StatusBuktiPelaksanaan;
 import com.ArgonautB04.SIRIO.rest.BaseResponse;
 import com.ArgonautB04.SIRIO.rest.BuktiPelaksanaanDTO;
-import com.ArgonautB04.SIRIO.rest.PersetujuanBuktiPelaksanaanDTO;
-import com.ArgonautB04.SIRIO.rest.RekomendasiDTO;
 import com.ArgonautB04.SIRIO.services.BuktiPelaksanaanRestService;
 import com.ArgonautB04.SIRIO.services.EmployeeRestService;
 import com.ArgonautB04.SIRIO.services.RekomendasiRestService;
@@ -88,55 +86,31 @@ public class BuktiPelaksanaanRestController {
      * @return detail bukti pelaksanaan
      */
     @GetMapping("/{idBuktiPelaksanaan}")
-    private BaseResponse<BuktiPelaksanaan> getBuktiPelaksanaan(
+    private BaseResponse<BuktiPelaksanaanDTO> getDetailBuktiPelaksanaan(
             @PathVariable("idBuktiPelaksanaan") int idBuktiPelaksanaan
     ) {
-        BaseResponse<BuktiPelaksanaan> response = new BaseResponse<>();
+        BaseResponse<BuktiPelaksanaanDTO> response = new BaseResponse<>();
         try {
-            BuktiPelaksanaan result = buktiPelaksanaanRestService.getById(idBuktiPelaksanaan);
+            BuktiPelaksanaan buktiPelaksanaan = buktiPelaksanaanRestService.getById(idBuktiPelaksanaan);
+            BuktiPelaksanaanDTO result = new BuktiPelaksanaanDTO();
+            result.setId(buktiPelaksanaan.getIdBuktiPelaksanaan());
+            result.setStatus(buktiPelaksanaan.getStatusBuktiPelaksanaan().getIdStatusBukti());
+            result.setKeterangan(buktiPelaksanaan.getKeterangan());
+            result.setLampiran(buktiPelaksanaan.getLampiran());
+            result.setFeedback(buktiPelaksanaan.getFeedback());
+            result.setNamaPembuat(buktiPelaksanaan.getPembuat().getNama());
+            result.setIdRekomendasi(buktiPelaksanaan.getRekomendasi().getIdRekomendasi());
 
             response.setStatus(200);
             response.setMessage("success");
             response.setResult(result);
         } catch (NoSuchElementException e) {
             throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Bukti Pelaksanaan dengan ID " + idBuktiPelaksanaan + " tidak ditemukan!"
+                    HttpStatus.NOT_FOUND, "Bukti pelaksanaan dengan ID " + idBuktiPelaksanaan + " tidak ditemukan!"
             );
         }
         return response;
     }
-
-//    /**
-//     * Mengambil bukti pelaksanaan yang terhubung dengan rekomendasi spesifik
-//     *
-//     * @param idRekomendasi identifier hasil pemeriksaan
-//     * @return detail bukti pelaksanaan yang terhubung dengan rekomendasi tersebut
-//     */
-//    @GetMapping("/getByRekomendasi/{idRekomendasi}")
-//    private BaseResponse<BuktiPelaksanaanDTO> getBuktiPelaksanaanUntukRekomendasi(
-//            @PathVariable("idRekomendasi") int idRekomendasi
-//    ) {
-//        BaseResponse<BuktiPelaksanaanDTO> response = new BaseResponse<>();
-//        try {
-//            Rekomendasi rekomendasi = rekomendasiRestService.getById(idRekomendasi);
-//            BuktiPelaksanaan buktiPelaksanaan = buktiPelaksanaanRestService.getByRekomendasi(rekomendasi);
-//            BuktiPelaksanaanDTO result = new BuktiPelaksanaanDTO();
-//
-//            result.setNamaPembuat(buktiPelaksanaan.getPembuat().getNama());
-//            result.setId(buktiPelaksanaan.getIdBuktiPelaksanaan());
-//            result.setKeterangan(buktiPelaksanaan.getKeterangan());
-//            result.setLampiran(buktiPelaksanaan.getLampiran());
-//
-//            response.setStatus(200);
-//            response.setMessage("success");
-//            response.setResult(result);
-//        } catch (NoSuchElementException e) {
-//            throw new ResponseStatusException(
-//                    HttpStatus.NOT_FOUND, "Rekomendasi dengan ID " + idRekomendasi + " tidak ditemukan!"
-//            );
-//        }
-//        return response;
-//    }
 
     /**
      * Menambah bukti pelaksanaan baru untuk rekomendasi spesifik
@@ -155,9 +129,32 @@ public class BuktiPelaksanaanRestController {
 
         buktiPelaksanaanTemp.setStatusBuktiPelaksanaan(
                 statusBuktiPelaksanaanRestService.getById(1));
-        buktiPelaksanaanTemp.setKeterangan(buktiPelaksanaanDTO.getKeterangan());
-        buktiPelaksanaanTemp.setLampiran(buktiPelaksanaanDTO.getLampiran());
+
+        if (buktiPelaksanaanDTO.getKeterangan() != null && !buktiPelaksanaanDTO.getKeterangan().equals("")) {
+            buktiPelaksanaanTemp.setKeterangan(buktiPelaksanaanDTO.getKeterangan());
+        } else {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Keterangan bukti pelaksanaan perlu diisi!"
+            );
+        }
+
+        if (buktiPelaksanaanDTO.getLampiran() != null && !buktiPelaksanaanDTO.getLampiran().equals("")) {
+            if (buktiPelaksanaanDTO.getLampiran().contains("https://") |
+                    buktiPelaksanaanDTO.getLampiran().contains("http://")) {
+                buktiPelaksanaanTemp.setLampiran(buktiPelaksanaanDTO.getLampiran());
+            } else {
+                throw new ResponseStatusException(
+                        HttpStatus.FORBIDDEN, "Lampiran bukti pelaksanaan harus berupa link url!"
+                );
+            }
+        } else {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Lampiran bukti pelaksanaan perlu diisi!"
+            );
+        }
+
         buktiPelaksanaanTemp.setPembuat(employee);
+
         try {
             Rekomendasi rekomendasi = rekomendasiRestService.getById(buktiPelaksanaanDTO.getIdRekomendasi());
             buktiPelaksanaanTemp.setRekomendasi(rekomendasi);
@@ -166,6 +163,7 @@ public class BuktiPelaksanaanRestController {
                     HttpStatus.NOT_FOUND, "Rekomendasi dengan ID " + buktiPelaksanaanDTO.getIdRekomendasi() + " tidak ditemukan!"
             );
         }
+
         BuktiPelaksanaan buktiPelaksanaan = buktiPelaksanaanRestService.buatBuktiPelaksanaan(buktiPelaksanaanTemp);
         response.setStatus(200);
         response.setMessage("success");
@@ -179,7 +177,7 @@ public class BuktiPelaksanaanRestController {
      * @param buktiPelaksanaanDTO data transfer object untuk bukti pelaksanaan yang akan diubah
      * @return bukti pelaksanaan yang telah disimpan
      */
-    @PutMapping(value = "/ubah", consumes = {"application/json"})
+    @PostMapping(value = "/ubah", consumes = {"application/json"})
     private BaseResponse<BuktiPelaksanaan> ubahBuktiPelaksanaan(
             @RequestBody BuktiPelaksanaanDTO buktiPelaksanaanDTO
     ) {
@@ -188,8 +186,30 @@ public class BuktiPelaksanaanRestController {
             BuktiPelaksanaan buktiPelaksanaanTemp = buktiPelaksanaanRestService.getById(buktiPelaksanaanDTO.getId());
             buktiPelaksanaanTemp.setStatusBuktiPelaksanaan(
                     statusBuktiPelaksanaanRestService.getById(1));
-            buktiPelaksanaanTemp.setKeterangan(buktiPelaksanaanDTO.getKeterangan());
-            buktiPelaksanaanTemp.setLampiran(buktiPelaksanaanDTO.getLampiran());
+
+            if (buktiPelaksanaanDTO.getKeterangan() != null && !buktiPelaksanaanDTO.getKeterangan().equals("")) {
+                buktiPelaksanaanTemp.setKeterangan(buktiPelaksanaanDTO.getKeterangan());
+            } else {
+                throw new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Keterangan bukti pelaksanaan perlu diisi!"
+                );
+            }
+
+            if (buktiPelaksanaanDTO.getLampiran() != null && !buktiPelaksanaanDTO.getLampiran().equals("")) {
+                if (buktiPelaksanaanDTO.getLampiran().contains("https://") |
+                        buktiPelaksanaanDTO.getLampiran().contains("http://")) {
+                    buktiPelaksanaanTemp.setLampiran(buktiPelaksanaanDTO.getLampiran());
+                } else {
+                    throw new ResponseStatusException(
+                            HttpStatus.FORBIDDEN, "Lampiran bukti pelaksanaan harus berupa link url!"
+                    );
+                }
+            } else {
+                throw new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Lampiran bukti pelaksanaan perlu diisi!"
+                );
+            }
+
             BuktiPelaksanaan buktiPelaksanaan =
                     buktiPelaksanaanRestService.ubahBuktiPelaksanaan(buktiPelaksanaanDTO.getId(), buktiPelaksanaanTemp);
 
@@ -207,23 +227,22 @@ public class BuktiPelaksanaanRestController {
     /**
      * Menyetujui atau menolak bukti pelaksanaan
      *
-     * @param persetujuanBuktiPelaksanaanDTO data transfer object untuk persetujuan bukti pelaksanaan
+     * @param buktiPelaksanaanDTO data transfer object untuk bukti pelaksanaan
      */
-    @PutMapping(value = "/persetujuan", consumes = {"application/json"})
+    @PostMapping(value = "/persetujuan", consumes = {"application/json"})
     private BaseResponse<String> persetujuanBuktiPelaksanaan(
-            @RequestBody PersetujuanBuktiPelaksanaanDTO persetujuanBuktiPelaksanaanDTO,
+            @RequestBody BuktiPelaksanaanDTO buktiPelaksanaanDTO,
             Principal principal, ModelMap model
     ) {
         BaseResponse<String> response = new BaseResponse<>();
         try {
             Employee employee = employeeRestService.getByUsername(principal.getName()).get();
-            BuktiPelaksanaan buktiPelaksanaanTemp = buktiPelaksanaanRestService.getById(
-                    persetujuanBuktiPelaksanaanDTO.getIdBuktiPelaksanaan());
+            BuktiPelaksanaan buktiPelaksanaanTemp = buktiPelaksanaanRestService.getById(buktiPelaksanaanDTO.getId());
             buktiPelaksanaanTemp.setPemeriksa(employee);
 
             try {
                 StatusBuktiPelaksanaan statusBuktiPelaksanaan = statusBuktiPelaksanaanRestService.getById(
-                        persetujuanBuktiPelaksanaanDTO.getStatus());
+                        buktiPelaksanaanDTO.getStatus());
                 if (buktiPelaksanaanTemp.getStatusBuktiPelaksanaan().getIdStatusBukti() != 1 ||
                         (statusBuktiPelaksanaan != statusBuktiPelaksanaanRestService.getById(2) &&
                                 statusBuktiPelaksanaan != statusBuktiPelaksanaanRestService.getById(3)))
@@ -237,35 +256,19 @@ public class BuktiPelaksanaanRestController {
                 );
             }
 
-//            buktiPelaksanaanTemp.setStatusBuktiPelaksanaan(statusBuktiPelaksanaanRestService.getById(
-//                    persetujuanBuktiPelaksanaanDTO.getStatus()));
-
-            if (persetujuanBuktiPelaksanaanDTO.getStatus() == 3 && (persetujuanBuktiPelaksanaanDTO.getFeedback() == null ||
-                    persetujuanBuktiPelaksanaanDTO.getFeedback().equals("")))
+            if (buktiPelaksanaanDTO.getStatus() == 3 && (buktiPelaksanaanDTO.getFeedback() == null ||
+                    buktiPelaksanaanDTO.getFeedback().equals("")))
                 throw new ResponseStatusException(
                         HttpStatus.FORBIDDEN, "Feedback perlu diisi untuk penolakan bukti pelaksanaan!"
                 );
+            buktiPelaksanaanTemp.setFeedback(buktiPelaksanaanDTO.getFeedback());
 
-            buktiPelaksanaanTemp.setFeedback(persetujuanBuktiPelaksanaanDTO.getFeedback());
+            buktiPelaksanaanRestService.ubahBuktiPelaksanaan(buktiPelaksanaanDTO.getId(), buktiPelaksanaanTemp);
 
-//            try {
-//                Rekomendasi rekomendasi = rekomendasiRestService.getById(persetujuanBuktiPelaksanaanDTO.getIdRekomendasi());
-//                buktiPelaksanaanTemp.setRekomendasi(rekomendasi);
-//            } catch (NoSuchElementException e) {
-//                throw new ResponseStatusException(
-//                        HttpStatus.NOT_FOUND, "Rekomendasi dengan ID " + persetujuanBuktiPelaksanaanDTO.getIdRekomendasi() + " tidak ditemukan!"
-//                );
-//            }
-
-            buktiPelaksanaanRestService.ubahBuktiPelaksanaan(
-                    persetujuanBuktiPelaksanaanDTO.getIdBuktiPelaksanaan(), buktiPelaksanaanTemp);
-
-            if (persetujuanBuktiPelaksanaanDTO.getStatus() == 3) {
-                response.setResult("Bukti pelaksanaan dengan id " +
-                        persetujuanBuktiPelaksanaanDTO.getIdBuktiPelaksanaan() + " ditolak!");
+            if (buktiPelaksanaanDTO.getStatus() == 3) {
+                response.setResult("Bukti pelaksanaan dengan id " + buktiPelaksanaanDTO.getId() + " ditolak!");
             } else {
-                response.setResult("Bukti pelaksanaan dengan id " +
-                        persetujuanBuktiPelaksanaanDTO.getIdBuktiPelaksanaan() + " disetujui!");
+                response.setResult("Bukti pelaksanaan dengan id " + buktiPelaksanaanDTO.getId() + " disetujui!");
             }
             response.setStatus(200);
             response.setMessage("success");
@@ -273,7 +276,7 @@ public class BuktiPelaksanaanRestController {
             response.setStatus(404);
             response.setMessage("not found");
             response.setResult("Bukti pelaksanaan dengan id " +
-                    persetujuanBuktiPelaksanaanDTO.getIdBuktiPelaksanaan() + " tidak dapat ditemukan");
+                    buktiPelaksanaanDTO.getId() + " tidak dapat ditemukan");
         }
         return response;
     }
