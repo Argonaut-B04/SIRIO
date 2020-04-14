@@ -25,6 +25,10 @@ class EmployeeService {
         return this.axiosInstance.get(SirioAxiosBase.BASEURL + `/Employee/` + id);
     }
 
+    async checkEmployeeExist(username) {
+        return this.axiosInstance.get(SirioAxiosBase.BASEURL + `/Employee/check/` + username);
+    }
+
     async deleteEmployee(data) {
         return this.axiosInstance.post(SirioAxiosBase.BASEURL + `/Employee/hapus`, data)
     }
