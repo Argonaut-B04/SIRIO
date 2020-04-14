@@ -47,6 +47,9 @@ public class Rekomendasi implements Serializable {
     @JsonIgnore
     private Employee pembuat;
 
+    @OneToOne(mappedBy = "rekomendasi", cascade = CascadeType.ALL)
+    private BuktiPelaksanaan buktiPelaksanaan;
+
     @OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "idRekomendasi")
     private List<Reminder> daftarReminder;
@@ -97,6 +100,14 @@ public class Rekomendasi implements Serializable {
 
     public void setPembuat(Employee pembuat) {
         this.pembuat = pembuat;
+    }
+
+    public BuktiPelaksanaan getBuktiPelaksanaan() {
+        return buktiPelaksanaan;
+    }
+
+    public void setBuktiPelaksanaan(BuktiPelaksanaan buktiPelaksanaan) {
+        this.buktiPelaksanaan = buktiPelaksanaan;
     }
 
     public List<Reminder> getDaftarReminder() {
