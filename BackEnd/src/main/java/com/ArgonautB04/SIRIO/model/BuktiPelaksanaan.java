@@ -14,7 +14,6 @@ import java.io.Serializable;
 public class BuktiPelaksanaan implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idBuktiPelaksanaan;
 
     @NotNull
@@ -37,9 +36,8 @@ public class BuktiPelaksanaan implements Serializable {
     @JsonIgnore
     private StatusBuktiPelaksanaan statusBuktiPelaksanaan;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "rekomendasi", referencedColumnName = "idRekomendasi", nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @OneToOne
+    @MapsId
     @JsonIgnore
     private Rekomendasi rekomendasi;
 
