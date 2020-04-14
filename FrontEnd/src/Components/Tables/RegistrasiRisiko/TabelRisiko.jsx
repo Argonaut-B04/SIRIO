@@ -3,7 +3,7 @@ import SirioButton from '../../Button/SirioButton';
 import classes from '../RegistrasiRisiko/TabelRisiko.module.css';
 import SirioTable from '../SirioTable';
 import RegistrasiRisikoService from '../../../Services/RegistrasiRisikoService';
-import { NavLink } from 'react-router-dom';
+import { NavLink, Redirect } from 'react-router-dom';
 import { withRouter } from 'react-router-dom';
 import SirioMessageButton from "../../Button/ActionButton/SirioMessageButton";
 
@@ -32,11 +32,24 @@ class TabelRisiko extends React.Component {
     }
 
     async renderRows() {
-        const response = await RegistrasiRisikoService.getAllRisiko();
-
-        this.setState({
-            rowList: response.data.result
+        RegistrasiRisikoService.getAllRisiko().then(response => {
+            this.setState({
+                rowList: response.data.result
+            })
         })
+        .catch(error => {
+            if (error.response.data.status == 401) {
+                this.setState({
+                    redirector: <Redirect to={{
+                        pathname: "/401",
+                        state: {
+                            detail: error.response.data.message,
+                        }
+                    }} />
+                })
+            }
+        })
+        ;
     }
 
     getButtons(cell, row) {
@@ -134,7 +147,7 @@ class TabelRisiko extends React.Component {
     }
 
     render() {
-        return (
+        return this.state.redirector || (
             <>
             <SirioTable
                 title="Registrasi Risiko"
