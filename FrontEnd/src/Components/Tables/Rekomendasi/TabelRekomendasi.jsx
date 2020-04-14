@@ -31,7 +31,6 @@ export default class TabelRekomendasi extends React.Component {
 
     async renderRows() {
         const response = await RekomendasiService.getRekomendasiByLoggedInUser();
-
         this.setState({
             rowList: response.data.result
         })
@@ -190,6 +189,7 @@ export default class TabelRekomendasi extends React.Component {
         return (
             <SirioButton
                 purple
+                hover
                 onClick={() => alert("Halaman Hasil Pemeriksaan belum terimplementasi")}
             >
                 Hasil Pemeriksaan
@@ -232,6 +232,7 @@ export default class TabelRekomendasi extends React.Component {
             return (
                 <SirioDatePickerButton
                     purple
+                    hover
                     hyperlink
                     id={row.id}
                     handleChange={(date, id) => this.aturTenggatWaktu(date, id)}
@@ -280,6 +281,7 @@ export default class TabelRekomendasi extends React.Component {
                     }}>
                     <SirioButton
                         purple
+                        hover
                         disabled={!reminderEnable}
                     >
                         Reminder

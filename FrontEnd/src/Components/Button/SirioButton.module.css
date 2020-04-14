@@ -1,31 +1,27 @@
-.purple {
-    --main-color: #7F3F98;
+.sirioButton {
     color: var(--main-color);
-    border: solid var(--main-color) 1.5px;
+    border: solid 1.5px var(--main-color);
     background-color: white;
     font-family: Proxima Nova;
     min-height: 30px;
     min-width: 100px;
 }
 
+.purple {
+    --main-color: #7F3F98;
+}
+
+.hover:hover {
+    color: white;
+    background-color: var(--main-color);
+}
+
 .blue {
     --main-color: #5DBCD2;
-    color: var(--main-color);
-    border: solid var(--main-color) 1.5px;
-    background-color: transparent;
-    font-family: Proxima Nova;
-    min-height: 30px;
-    min-width: 100px;
 }
 
 .red {
     --main-color: #FF0000;
-    color: var(--main-color);
-    border: solid var(--main-color) 1.5px;
-    background-color: transparent;
-    font-family: Proxima Nova;
-    min-height: 30px;
-    min-width: 100px;
 }
 
 .recommended {
@@ -34,30 +30,24 @@
 }
 
 .disabled {
-    color: #878787;
+    --main-color: #878787;
     pointer-events: none;
-    background-color: transparent;
-    border: solid 1.5px #878787;
 }
 
 .hyperlink {
     color: blue;
-    border: none;
-    background-color: transparent;
     border: solid 1.5px #7F3F98;
 }
 
 .hyperlinkLeft {
     color: blue;
     border: none;
-    background-color: transparent;
     text-align: left;
     padding: 0;
 }
 
 .text {
     border: none;
-    background-color: transparent;
     color: #7F3F98;
     pointer-events: none;
 }

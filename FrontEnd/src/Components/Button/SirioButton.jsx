@@ -22,6 +22,8 @@ export default class SirioButton extends React.Component {
             color = classes.red;
         }
 
+        let hover = this.props.hover && classes.hover;
+
         let style;
         if (this.props.recommended) {
             style = classes.recommended;
@@ -42,20 +44,7 @@ export default class SirioButton extends React.Component {
             borderRadius = classes.borderNormal;
         }
 
-        let fullClass;
-        if (color && style) {
-            fullClass = [style, color].join(' ');
-        } else if (color) {
-            fullClass = color;
-        } else if (style) {
-            fullClass = style;
-        }
-
-        fullClass = [fullClass, borderRadius].join(' ');
-
-        if (this.props.classes) {
-            fullClass = [fullClass, this.props.classes].join(' ');
-        }
+        let fullClass = [classes.sirioButton, color, hover, style, borderRadius, this.props.classes].join(' ');
 
         return (
             <button
