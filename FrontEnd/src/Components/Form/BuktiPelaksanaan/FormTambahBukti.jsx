@@ -103,7 +103,7 @@ class FormTambahBukti extends React.Component {
         if (varLampiran.length < 1) {
             submitable = false;
             errorLampiran = "Lampiran wajib diisi";
-        } else if (!(varLampiran.includes("https://")) || !(varLampiran.includes("http://"))) {
+        } else if (!(varLampiran.includes("https://"))) {
             submitable = false;
             errorLampiran = "Lampiran harus berupa link url";
         }
