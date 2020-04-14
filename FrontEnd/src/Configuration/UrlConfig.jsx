@@ -4,12 +4,12 @@ export const halamanUtama = {
 }
 
 export const hasilPemeriksaan = {
-    link: "/hasil",
+    link: "/hasil-pemeriksaan",
     title: "Hasil Pemeriksaan",
 }
 
 export const tugasPemeriksaan = {
-    link: "/tugas",
+    link: "/tugas-pemeriksaan",
     title: "Tugas Pemeriksaan",
 }
 
@@ -19,7 +19,7 @@ export const rekomendasi = {
 }
 
 export const buktiRekomendasi = {
-    link: "/bukti",
+    link: "/bukti-pelaksanaan",
     title: "Bukti Rekomendasi",
 }
 
@@ -29,7 +29,7 @@ export const dashboard = {
 }
 
 export const rencanaPemeriksaan = {
-    link: "/rencana",
+    link: "/rencana-pemeriksaan",
     title: "Rencana Pemeriksaan",
 }
 
@@ -54,7 +54,7 @@ export const konfigurasi = {
 }
 
 export const pengguna = {
-    link: "/pengguna",
+    link: "/employee",
     title: "Pengguna",
 }
 

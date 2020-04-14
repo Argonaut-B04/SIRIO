@@ -123,9 +123,9 @@ public class RekomendasiRestController {
         } catch (NoSuchElementException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Akun anda tidak terdaftar atau tidak ditemukan!");
         }
-        response.setStatus(200);
-        response.setMessage("success");
-        response.setResult(resultDTO);
+//        response.setStatus(200);
+//        response.setMessage("success");
+//        response.setResult(resultDTO);
         return response;
 
     }

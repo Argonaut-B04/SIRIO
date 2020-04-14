@@ -156,6 +156,7 @@ class FormTambahBukti extends React.Component {
                     Simpan
                 </SirioButton>
                 <SirioButton purple
+                             type="button"
                              classes="mx-1"
                              onClick={() => window.location.href = "/bukti-pelaksanaan"}>
                     Batal

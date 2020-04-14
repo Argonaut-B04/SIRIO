@@ -167,6 +167,7 @@ class DetailBuktiPelaksanaan extends React.Component {
                 {this.renderRedirect()}
                 <SirioDetailPage
                     title="Detail Bukti Pelaksanaan"
+                    link="bukti-pelaksanaan"
                     data={this.data()}
                     id='id'
                     subButton={this.subButton()}

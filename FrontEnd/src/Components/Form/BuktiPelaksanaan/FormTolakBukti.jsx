@@ -78,11 +78,8 @@ class FormTolakBukti extends React.Component {
 
     componentDidUpdate(prevProps, prevState) {
         var submitable = true;
-        if (prevState.keterangan !== this.state.keterangan) {
-            submitable = submitable && this.validateKeterangan();
-        }
-        if (prevState.lampiran !== this.state.lampiran) {
-            submitable = submitable && this.validateLampiran();
+        if (prevState.feedback !== this.state.feedback) {
+            submitable = submitable && this.validateFeedback();
         }
         if (this.state.submitable !== submitable) {
             this.setState({
@@ -134,11 +131,11 @@ class FormTolakBukti extends React.Component {
         return rowDefinition;
     }
 
-    submitButton() {
+    submitButton(cell, row) {
         return (
             <div>
                 <SirioConfirmButton
-                    purple 
+                    purple
                     recommended={this.state.submitable}
                     disabled={!this.state.submitable}
                     classes="mx-1"
@@ -150,8 +147,9 @@ class FormTolakBukti extends React.Component {
                     Simpan
                 </SirioConfirmButton>
                 <SirioButton purple
-                             classes="mx-1"
-                             onClick={() => window.location.href = "/bukti-pelaksanaan"}>
+                            type="button"
+                            classes="mx-1"
+                            onClick={() => window.location.href = "/bukti-pelaksanaan"}>
                     Batal
                 </SirioButton>
             </div>

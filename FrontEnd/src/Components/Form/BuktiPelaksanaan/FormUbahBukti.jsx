@@ -119,7 +119,7 @@ class FormUbahBukti extends React.Component {
         if (varLampiran.length < 1) {
             submitable = false;
             errorLampiran = "Lampiran wajib diisi";
-        } else if (!(varLampiran.includes("https://")) || !(varLampiran.includes("http://"))) {
+        } else if (!(varLampiran.includes("https://"))) {
             submitable = false;
             errorLampiran = "Lampiran harus berupa link url";
         }
@@ -172,6 +172,7 @@ class FormUbahBukti extends React.Component {
                     Simpan
                 </SirioButton>
                 <SirioButton purple
+                             type="button"
                              classes="mx-1"
                              onClick={() => window.location.href = "/bukti-pelaksanaan"}>
                     Batal

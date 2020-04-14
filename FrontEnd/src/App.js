@@ -18,9 +18,9 @@ import FormUbahEmployee from "./pages/Administrator/FormUbahEmployee";
 import DetailEmployee from "./pages/Administrator/DetailEmployee";
 import DaftarRekomendasi from "./pages/QAOfficer/DaftarRekomendasi";
 import Reminder from "./pages/QAOfficer/Reminder";
-import DaftarRekomendasiBM from "./pages/BranchManager/DaftarRekomendasi";
 import FormTambahBukti from "./pages/BranchManager/TambahBuktiForm";
 import FormUbahBukti from "./pages/BranchManager/UbahBuktiForm";
+import FormTolakBukti from "./pages/QAOfficer/TolakBuktiForm"
 import DetailBuktiPelaksanaan from "./pages/BranchManager/BuktiPelaksanaanDetail";
 import DaftarBuktiPelaksanaan from "./pages/QAOfficer/DaftarBuktiPelaksanaan";
 import Login from "./pages/login";
@@ -63,11 +63,11 @@ class App extends React.Component {
             <AuthorizedRoute exact path="/rekomendasi/reminder" component={Reminder} />
             <AuthorizedRoute exact path="/risk-level" component={RiskLevel} />
             <AuthorizedRoute exact path="/risk-rating" component={RiskRating} />
-            <Route exact path="/bm/rekomendasi" component={DaftarRekomendasiBM} />
-            <Route exact path="/bukti-pelaksanaan/tambah" component={FormTambahBukti} />
-            <Route exact path="/bukti-pelaksanaan/ubah" component={FormUbahBukti} />
-            <Route exact path="/bukti-pelaksanaan/detail" component={DetailBuktiPelaksanaan} />
-            <Route exact path="/bukti-pelaksanaan" component={DaftarBuktiPelaksanaan} />
+            <AuthorizedRoute exact path="/bukti-pelaksanaan/tambah" component={FormTambahBukti} />
+            <AuthorizedRoute exact path="/bukti-pelaksanaan/ubah" component={FormUbahBukti} />
+            <AuthorizedRoute exact path="/bukti-pelaksanaan/detail" component={DetailBuktiPelaksanaan} />
+            <AuthorizedRoute exact path="/bukti-pelaksanaan/tolak" component={FormTolakBukti} />
+            <AuthorizedRoute exact path="/bukti-pelaksanaan" component={DaftarBuktiPelaksanaan} />
             <AuthorizedRoute exact path="/registrasi-risiko" component={RegistrasiRisiko} />
             <AuthorizedRoute exact path="/registrasi-risiko/detail" component={DetailRisiko} />
             <AuthorizedRoute exact path="/registrasi-risiko/tambah" component={FormRisiko} />
