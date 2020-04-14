@@ -3,7 +3,7 @@ import SirioForm from '../SirioForm';
 import SirioButton from '../../Button/SirioButton';
 import HasilPemeriksaanService from '../../../Services/HasilPemeriksaanService';
 import RisikoService from '../../../Services/RisikoService';
-import { Redirect } from 'react-router-dom';
+import {NavLink, Redirect} from 'react-router-dom';
 import { withRouter } from 'react-router-dom';
 import RiskLevelService from "../../../Services/RiskLevelService";
 import SirioField from "../SirioFormComponent/SirioField";
@@ -15,6 +15,7 @@ class HasilPemeriksaanFormTambah extends React.Component {
         super(props);
 
         this.state = {
+            idCurrentStatus: "",
             daftarKomponenPemeriksaan: [],
             daftarRisikoKategori1: [],
             daftarRisikoKategori2: [],
@@ -26,7 +27,7 @@ class HasilPemeriksaanFormTambah extends React.Component {
         };
 
         this.renderRisikoKategori12 = this.renderRisikoKategori12.bind(this);
-        this.renderRisikoKategori3 = this.renderRisikoKategori3.bind(this);
+        this.renderHasilPemeriksaan = this.renderHasilPemeriksaan.bind(this);
         this.renderRiskLevelOption = this.renderRiskLevelOption.bind(this);
         this.handleChangeKomponen = this.handleChangeKomponen.bind(this);
         this.handleSelectChangeKomponen = this.handleSelectChangeKomponen.bind(this);
@@ -40,7 +41,7 @@ class HasilPemeriksaanFormTambah extends React.Component {
 
     componentDidMount() {
         this.renderRisikoKategori12();
-        this.renderRisikoKategori3();
+        this.renderHasilPemeriksaan();
         this.renderRiskLevelOption();
     }
 
@@ -55,7 +56,7 @@ class HasilPemeriksaanFormTambah extends React.Component {
             return <Redirect to={{
                 pathname: "/hasil-pemeriksaan",
                 state: {
-                    addSuccess: true
+                    editSuccess: true
                 }
             }} />
         }
@@ -109,34 +110,38 @@ class HasilPemeriksaanFormTambah extends React.Component {
         })
     }
 
-    async renderRisikoKategori3() {
-        const response = await RisikoService.getAllChild();
+    async renderHasilPemeriksaan() {
+        const response = await HasilPemeriksaanService.getHasilPemeriksaan(this.props.location.state.id);
 
-        const daftarKomponen = response.data.result
-            .map(risiko => {
+        const idCurrentStatus = response.data.result.idStatus;
+        const daftarKomponen = response.data.result.daftarKomponenPemeriksaan
+            .map(komponen => {
                 return (
                     {
-                        id: risiko.id,
-                        idRiskLevel: "",
-                        risiko:risiko,
-                        jumlahSampel:"",
-                        keteranganSampel:"",
-                        daftarTemuanRisiko:[
-                            {
+                        id: komponen.id,
+                        idRiskLevel: komponen.idRiskLevel,
+                        risiko: komponen.risiko,
+                        jumlahSampel: komponen.jumlahSampel,
+                        keteranganSampel: komponen.keteranganSampel,
+                        daftarTemuanRisiko: (komponen.daftarTemuanRisikoTerdaftar.length > 0) ?
+                            komponen.daftarTemuanRisikoTerdaftar
+                            :
+                            [{
                                 keterangan: ""
-                            }
-                        ],
-                        daftarRekomendasi:[
-                            {
+                            }],
+                        daftarRekomendasi:(komponen.daftarRekomendasiTerdaftar.length > 0) ?
+                            komponen.daftarRekomendasiTerdaftar
+                            :
+                            [{
                                 keterangan: ""
-                            }
-                        ]
+                            }]
                     }
                 )
             });
 
         this.setState({
-            daftarKomponenPemeriksaan: daftarKomponen
+            daftarKomponenPemeriksaan: daftarKomponen,
+            idCurrentStatus: idCurrentStatus
         })
     }
 
@@ -191,7 +196,7 @@ class HasilPemeriksaanFormTambah extends React.Component {
                     type: "textArea",
                     name: "daftarTemuanRisiko",
                     value: komponen.daftarTemuanRisiko.map(temuan => temuan.keterangan),
-                    modifier: (name, newField) => this.modifyFieldCount(name, newField, komponen.id, "keterangan"),
+                    modifier: (name, newField, index) => this.modifyFieldCount(name, newField, index, komponen.id,  komponen.daftarTemuanRisiko,"keterangan"),
                 }, {
                     label: "Rekomendasi",
                     multiple: true,
@@ -200,7 +205,7 @@ class HasilPemeriksaanFormTambah extends React.Component {
                     type: "textArea",
                     name: "daftarRekomendasi",
                     value: komponen.daftarRekomendasi.map(rekomendasi => rekomendasi.keterangan),
-                    modifier: (name, newField) => this.modifyFieldCount(name, newField, komponen.id, "keterangan"),
+                    modifier: (name, newField, index) => this.modifyFieldCount(name, newField, index, komponen.id, komponen.daftarRekomendasi,"keterangan"),
                 }
             ]
         )
@@ -313,18 +318,34 @@ class HasilPemeriksaanFormTambah extends React.Component {
         )
     }
 
-    modifyFieldCount(name, newField, idKomponen, objectKey) {
-        const newArray = [];
-        for(let i = 0; i < newField.length; i++) {
-            newArray.push({
-                [objectKey]: newField[i]
+    modifyFieldCount(name, newField, index, idKomponen, array, objectKey) {
+        // const newArray = [];
+        // const oriArray = array;
+        if (newField.length > array.length) {
+            array.push({
+                [objectKey]: newField[newField.length - 1]
             })
+        } else {
+            array.splice(index+1, 1)
         }
+        // for(let i = 0; i < newField.length; i++) {
+        //     newArray.push({
+        //         [objectKey]: newField[i]
+        //     })
+        // }
+        // oriArray.map((ori, index) => {
+        //     if(ori.keterangan === newField[index]) {
+        //         newArray.push(ori);
+        //     } else {
+        //
+        //     }
+        // });
+
         this.setState(prevState => ({
             ...prevState,
             daftarKomponenPemeriksaan: prevState.daftarKomponenPemeriksaan.map(komponen => ({
                 ...komponen,
-                [name]: komponen.id === idKomponen ? newArray : komponen[name]
+                [name]: komponen.id === idKomponen ? array : komponen[name]
             }))
         }))
     }
@@ -333,9 +354,7 @@ class HasilPemeriksaanFormTambah extends React.Component {
         const targetName = event.target.name;
         const targetValue = event.target.value;
         const targetArray = array;
-        targetArray[index] = {
-            [objectKey]: targetValue
-        };
+        targetArray[index][objectKey] = targetValue;
         this.setState(prevState => ({
             ...prevState,
             daftarKomponenPemeriksaan: prevState.daftarKomponenPemeriksaan.map(komponen => ({
@@ -416,12 +435,47 @@ class HasilPemeriksaanFormTambah extends React.Component {
 
     handleSubmit(event, status) {
         event.preventDefault();
+
         const hasilPemeriksaan = {
+            id: this.props.location.state.id,
             idStatus: status,
-            tugasPemeriksaan:{id: this.props.location.state.id},
-            daftarKomponenPemeriksaan: this.state.daftarKomponenPemeriksaan
+            daftarKomponenPemeriksaan: this.state.daftarKomponenPemeriksaan.map(komponen => {
+                const daftarTemuan = [];
+                const daftarTemuanTerdaftar = [];
+                const daftarRekomendasi = [];
+                const daftarRekomendasiTerdaftar = [];
+                komponen.daftarTemuanRisiko.map(temuan => {
+                    if (temuan.id != null) {
+                        daftarTemuanTerdaftar.push(temuan)
+                    } else {
+                        daftarTemuan.push(temuan)
+                    } return null
+                });
+                komponen.daftarRekomendasi.map(rekomendasi => {
+                    console.log(rekomendasi)
+                    if (rekomendasi.id != null) {
+                        daftarRekomendasiTerdaftar.push(rekomendasi)
+                    } else {
+                        daftarRekomendasi.push(rekomendasi)
+                    } return null
+                });
+                return (
+                    {
+                        id: komponen.id,
+                        idRiskLevel: komponen.idRiskLevel,
+                        risiko: komponen.risiko,
+                        jumlahSampel: komponen.jumlahSampel,
+                        keteranganSampel: komponen.keteranganSampel,
+                        daftarTemuanRisiko: daftarTemuan,
+                        daftarRekomendasi: daftarRekomendasi,
+                        daftarTemuanRisikoTerdaftar: daftarTemuanTerdaftar,
+                        daftarRekomendasiTerdaftar: daftarRekomendasiTerdaftar
+                    }
+                )
+            })
         };
-        HasilPemeriksaanService.addHasilPemeriksaan(hasilPemeriksaan)
+        console.log(hasilPemeriksaan)
+        HasilPemeriksaanService.editHasilPemeriksaan(hasilPemeriksaan)
             .then(() => this.setRedirect());
     }
 
@@ -435,14 +489,21 @@ class HasilPemeriksaanFormTambah extends React.Component {
                 </SirioButton>
                 <SirioButton purple recommended
                              classes="mx-1"
-                             onClick={(event)  => this.handleSubmit(event, 1)}>
+                             onClick={(event)  => this.handleSubmit(event, this.state.idCurrentStatus)}>
                     Draft
                 </SirioButton>
-                <SirioButton purple
-                             classes="mx-1"
-                             onClick={() => window.location.href = "/hasil-pemeriksaan"}>
-                    Batal
-                </SirioButton>
+                <NavLink to={{
+                    pathname: "/hasil-pemeriksaan/detail",
+                    state: {
+                        id: this.props.location.state.id
+                    }
+                }}>
+                    <SirioButton
+                        purple
+                    >
+                        Batal
+                    </SirioButton>
+                </NavLink>
             </div>
         )
     }

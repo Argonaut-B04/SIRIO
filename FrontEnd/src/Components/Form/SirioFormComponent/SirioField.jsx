@@ -6,7 +6,7 @@ import SirioRectangularButton from '../../Button/SirioRectangularButton';
 
 /**
  * Komponen field untuk SirioForm
- * 
+ *
  * Props yang tersedia:
  * - label              : String, judul field
  * - customInput        : Komponen, jika ingin menggunakan selain input tag
