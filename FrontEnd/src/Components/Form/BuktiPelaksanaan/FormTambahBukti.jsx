@@ -152,7 +152,7 @@ class FormTambahBukti extends React.Component {
                     type: "textarea",
                     name: "lampiran",
                     value: this.state.lampiran,
-                    placeholder: "Masukan lampiran bukti"
+                    placeholder: "Masukan lampiran bukti (berupa link url)"
                 }
             ]
         )
