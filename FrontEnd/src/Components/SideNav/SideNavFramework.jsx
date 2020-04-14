@@ -43,7 +43,7 @@ export default class SideNavFramework extends React.Component {
         if (AuthenticationService.isLoggedIn()) {
             logButton =
                 <SirioButton
-                    red
+                    blue
                     recommended
                     circular
                     classes={classes.footerButton}

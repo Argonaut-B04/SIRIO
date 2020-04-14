@@ -14,12 +14,12 @@ export default class DemoForm extends React.Component {
 
         this.state = {
             nama: "",
-            umur: 1,
-            jenis: "neko",
+            umur: 0,
+            jenis: "",
             manusia: true,
-            customDropdown: "Shironeko",
-            customDropdown2: "wanita",
-            submitable: true,
+            customDropdown: "",
+            customDropdown2: "",
+            submitable: false,
             namaMain: ["Chocola", "Vanilla"],
         }
 
@@ -73,20 +73,36 @@ export default class DemoForm extends React.Component {
 
     componentDidUpdate(prevProps, prevState) {
         var submitable = true;
+        var validating = false;
+
+        submitable = this.validateRequired();
 
         if (prevState.nama !== this.state.nama) {
             submitable = submitable && this.validateNama();
+            validating = true;
         }
-
+        
         if (prevState.umur !== this.state.umur) {
             submitable = submitable && this.validateUmur();
+            validating = true;
         }
 
-        if (this.state.submitable !== submitable) {
-            this.setState({
-                submitable: submitable
-            })
+        if (validating) {
+            if (this.state.submitable !== submitable) {
+                this.setState({
+                    submitable: submitable
+                })
+            }
         }
+    }
+
+    validateRequired() {
+        var submitable = true;
+        const required = [this.state.nama, this.state.umur];
+        for (let i = 0; i < required.length; i++) {
+            submitable = submitable && (required[i] !== null && required[i] !== "");
+        }
+        return submitable;
     }
 
     validateNama() {
@@ -189,7 +205,7 @@ export default class DemoForm extends React.Component {
                     type: "text",
                     name: "namaMain",
                     value: this.state.namaMain,
-                    modifier: this.modifyFieldCount
+                    modifier: (name, newArray) => this.modifyFieldCount(name, newArray)
                 }
             ]
         )

@@ -73,7 +73,7 @@ public class RekomendasiRestController {
                     } else {
                         result = rekomendasiRestService.getByPembuat(pengelola);
                     }
-
+                  
                     List<RekomendasiDTO> resultDTO = new ArrayList<>();
                     for (Rekomendasi rekomendasi : result) {
                         RekomendasiDTO rekomendasiDTO = new RekomendasiDTO();
@@ -85,24 +85,26 @@ public class RekomendasiRestController {
                             String tenggatWaktuString = tenggatWaktu.toString();
                             String tenggatWaktuFinal = tenggatWaktuString.substring(0, 10);
                             rekomendasiDTO.setTenggatWaktu(tenggatWaktuFinal);
+                          
+                           DateFormat df = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
+                           Date dateobj = new Date();
+                           String mulai = df.format(dateobj);
+                           String selesai = rekomendasi.getTenggatWaktu().toString();
+                           String tanggalMulai = mulai.substring(0, 2);
+                           String tanggalSelesai = selesai.substring(8, 10);
+                           int tanggalMulaiFinal = Integer.parseInt(tanggalMulai);
+                           int tanggalSelesaiFinal = Integer.parseInt(tanggalSelesai);
+                           int durasi = (tanggalSelesaiFinal - tanggalMulaiFinal) + 1;
+                           if (durasi < 0) {
+                               durasi = 0;
+                           }
+                           String durasiString = Integer.toString(durasi);
+                           String durasiFinal = durasiString + " Hari";
+                           rekomendasiDTO.setDurasi(durasiFinal);
                         }
 
-                        DateFormat df = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
-                        Date dateobj = new Date();
-                        String mulai = df.format(dateobj);
-                        String selesai = rekomendasi.getTenggatWaktu().toString();
-                        String tanggalMulai = mulai.substring(0, 2);
-                        String tanggalSelesai = selesai.substring(8, 10);
-                        int tanggalMulaiFinal = Integer.parseInt(tanggalMulai);
-                        int tanggalSelesaiFinal = Integer.parseInt(tanggalSelesai);
-                        int durasi = (tanggalSelesaiFinal - tanggalMulaiFinal) + 1;
-                        if (durasi < 0) {
-                            durasi = 0;
-                        }
-                        String durasiString = Integer.toString(durasi);
-                        String durasiFinal = durasiString + " Hari";
-                        rekomendasiDTO.setDurasi(durasiFinal);
-
+                        rekomendasiDTO.setStatus(rekomendasi.getStatusRekomendasi().getNamaStatus());
+                      
                         List<BuktiPelaksanaan> buktiList = buktiPelaksanaanRestService.getByDaftarRekomendasi(result);
                         for (BuktiPelaksanaan buktiPelaksanaan : buktiList) {
                             if (buktiPelaksanaan.getRekomendasi().equals(rekomendasi)) {
@@ -113,7 +115,6 @@ public class RekomendasiRestController {
                                 .getTugasPemeriksaan().getKantorCabang().getNamaKantor());
                         resultDTO.add(rekomendasiDTO);
                     }
-
                     response.setStatus(200);
                     response.setMessage("success");
                     response.setResult(resultDTO);

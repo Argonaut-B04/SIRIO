@@ -12,6 +12,7 @@ import DaftarTugasPemeriksaan from "./pages/QAOfficer/DaftarTugasPemeriksaan";
 import DetailHasilPemeriksaan from "./pages/QAOfficer/DetailHasilPemeriksaan";
 import FormTolakHasilPemeriksaan from "./pages/QAOfficer/FormTolakHasilPemeriksaan";
 import FormTambahHasilPemeriksaan from "./pages/QAOfficer/FormTambahHasilPemeriksaan";
+import FormUbahHasilPemeriksaan from "./pages/QAOfficer/FormUbahHasilPemeriksaan";
 import DaftarEmployee from "./pages/Administrator/DaftarEmployee";
 import FormTambahEmployee from "./pages/Administrator/FormTambahEmployee";
 import FormUbahEmployee from "./pages/Administrator/FormUbahEmployee";
@@ -54,6 +55,7 @@ class App extends React.Component {
             <Route exact path="/hasil-pemeriksaan/detail" component={DetailHasilPemeriksaan} />
             <Route exact path="/hasil-pemeriksaan/tolak" component={FormTolakHasilPemeriksaan} />
             <Route exact path="/hasil-pemeriksaan/tambah" component={FormTambahHasilPemeriksaan} />
+            <Route exact path="/hasil-pemeriksaan/ubah" component={FormUbahHasilPemeriksaan} />
             <Route exact path="/tugas-pemeriksaan" component={DaftarTugasPemeriksaan} />
             <Route exact path="/employee" component={DaftarEmployee} />
             <Route exact path="/employee/tambah" component={FormTambahEmployee} />

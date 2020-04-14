@@ -6,7 +6,7 @@ import SirioRectangularButton from '../../Button/SirioRectangularButton';
 
 /**
  * Komponen field untuk SirioForm
- * 
+ *
  * Props yang tersedia:
  * - label              : String, judul field
  * - customInput        : Komponen, jika ingin menggunakan selain input tag
@@ -123,7 +123,7 @@ export default class SirioField extends Component {
                 onClick={
                     () => {
                         const newArray = array.slice(0, index).concat(array.slice(index + 1));
-                        functionToUpdate(name, newArray);
+                        functionToUpdate(name, newArray, index);
                     }
                 }
             />
