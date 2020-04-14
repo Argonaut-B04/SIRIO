@@ -14,13 +14,13 @@ export default class DemoForm extends React.Component {
 
         this.state = {
             nama: "",
-            umur: 0,
+            umur: "",
             jenis: "",
             manusia: true,
             customDropdown: "",
             customDropdown2: "",
-            submitable: false,
             namaMain: ["Chocola", "Vanilla"],
+            submitable: true
         }
 
         this.handleChange = this.handleChange.bind(this);
@@ -29,6 +29,8 @@ export default class DemoForm extends React.Component {
         this.handleMultiFieldChange = this.handleMultiFieldChange.bind(this);
         this.modifyFieldCount = this.modifyFieldCount.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.validateNama = this.validateNama.bind(this);
+        this.validateUmur = this.validateUmur.bind(this);
     }
 
     // Fungsi untuk mengubah state ketika isi dari input diubah
@@ -71,73 +73,43 @@ export default class DemoForm extends React.Component {
         }
     }
 
-    componentDidUpdate(prevProps, prevState) {
+    validateNama(fokusNama) {
         var submitable = true;
-        var validating = false;
-
-        submitable = this.validateRequired();
-
-        if (prevState.nama !== this.state.nama) {
-            submitable = submitable && this.validateNama();
-            validating = true;
-        }
-        
-        if (prevState.umur !== this.state.umur) {
-            submitable = submitable && this.validateUmur();
-            validating = true;
-        }
-
-        if (validating) {
-            if (this.state.submitable !== submitable) {
-                this.setState({
-                    submitable: submitable
-                })
-            }
-        }
-    }
-
-    validateRequired() {
-        var submitable = true;
-        const required = [this.state.nama, this.state.umur];
-        for (let i = 0; i < required.length; i++) {
-            submitable = submitable && (required[i] !== null && required[i] !== "");
-        }
-        return submitable;
-    }
-
-    validateNama() {
-        var submitable = true;
-        const fokusNama = this.state.nama;
         var errorNama;
         if (fokusNama.length < 2) {
             submitable = false;
-            errorNama = "Nama minimal 2 karakter, nd mungkin aku panggil kamu sebagai Tuan/Nyonya " + fokusNama;
+            errorNama = "terlalu pendek ?";
         } else if (fokusNama.length > 10) {
             submitable = false;
             errorNama = "uvuvwevwe osas ?";
         }
-        if (this.state.errorNama !== errorNama) {
+
+        var stateToChange = submitable && this.state.submitable;
+        if (this.state.submitable !== stateToChange) {
             this.setState({
-                errorNama: errorNama
+                submitable: stateToChange
             })
         }
-        return submitable;
+        return errorNama;
     }
 
-    validateUmur() {
+    validateUmur(fokusUmur) {
         var submitable = true;
-        const fokusUmur = this.state.umur;
         var errorUmur;
         if (fokusUmur < 18) {
             submitable = false;
             errorUmur = "Khusus 18 tahun keatas ya ^-^";
+            console.log("umur error")
+        } else {
+            console.log("umur tidak error")
         }
-        if (this.state.errorUmur !== errorUmur) {
+        var stateToChange = submitable && this.state.submitable;
+        if (this.state.submitable !== stateToChange) {
             this.setState({
-                errorUmur: errorUmur
+                submitable: stateToChange
             })
         }
-        return submitable;
+        return errorUmur;
     }
 
     // Fungsi yang akan mengembalikan definisi tiap field pada form
@@ -150,7 +122,7 @@ export default class DemoForm extends React.Component {
                     label: "Nama",
                     required: true,
                     handleChange: this.handleChange,
-                    validation: this.state.errorNama,
+                    validationFunction: this.validateNama,
                     type: "textarea",
                     name: "nama",
                     value: this.state.nama,
@@ -158,7 +130,7 @@ export default class DemoForm extends React.Component {
                 }, {
                     label: "Umur",
                     handleChange: this.handleChange,
-                    validation: this.state.errorUmur,
+                    validationFunction: this.validateUmur,
                     type: "number",
                     name: "umur",
                     min: 1,
@@ -296,15 +268,25 @@ export default class DemoForm extends React.Component {
         )
     }
     submitButton() {
-        return (
-            <div>
+        var tombolSimpan =
+            <SirioButton
+                purple
+                disabled
+            >
+                Simpan
+            </SirioButton>
+        if (this.state.submitable) {
+            tombolSimpan =
                 <SirioButton
                     purple
-                    recommended={this.state.submitable}
-                    disabled={!this.state.submitable}
+                    recommended
                 >
                     Simpan
-                </SirioButton>
+            </SirioButton>
+        }
+        return (
+            <div>
+                {tombolSimpan}
                 <SirioButton purple
                     classes="ml-2"
                     type="button"

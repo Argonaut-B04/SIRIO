@@ -132,6 +132,16 @@ export default class SirioField extends Component {
 
 
     render() {
+        function isFunction(functionToCheck) {
+            return functionToCheck && {}.toString.call(functionToCheck) === '[object Function]';
+        }
+        if (this.props.value !== "") {
+            var validationResult;
+            if (isFunction(this.props.validationFunction)) {
+                validationResult = this.props.validationFunction(this.props.value);
+            }
+        }
+
         if (this.props.fullComponent) {
             return this.props.fullComponent;
         } else {
@@ -139,6 +149,7 @@ export default class SirioField extends Component {
                 <label className={classes.label}>
                     {this.props.label}
                     {this.props.validator && <p className={classes.error}>{this.props.validator}</p>}
+                    {validationResult && <p className={classes.error}>{validationResult}</p>}
                 </label>
             // modifier untuk multiple
             var field;
