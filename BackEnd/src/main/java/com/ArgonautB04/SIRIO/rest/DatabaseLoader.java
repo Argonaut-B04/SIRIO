@@ -33,7 +33,7 @@ public class DatabaseLoader implements CommandLineRunner {
         if (statusRencanaPemeriksaanDB.findAll().isEmpty()) populasiStatusRencanaPemeriksaan();
         if (statusHasilPemeriksaanDB.findAll().isEmpty()) populasiStatusHasilPemeriksaan();
         if (statusRekomendasiDB.findAll().isEmpty()) populasiStatusRekomendasi();
-        if (employeeRestService.getAll().isEmpty()) populasiEmployeedanRole();
+        if (employeeRestService.getAll().isEmpty() && roleDB.findAll().isEmpty() && accessPermissionDB.findAll().isEmpty()) populasiEmployeedanRole();
     }
 
     private void populasiEmployeedanRole() {
@@ -53,12 +53,18 @@ public class DatabaseLoader implements CommandLineRunner {
         // Inisiasi Akses
         // Akses Admin
         AccessPermissions aksesAdmin = new AccessPermissions(roleAdministrator);
-        accessPermissionDB.save(aksesAdmin);
+
+        roleAdministrator.setAccessPermissions(aksesAdmin);
+        roleDB.save(roleAdministrator);
+//        accessPermissionDB.save(aksesAdmin);
         // Akses Admin Selesai
 
         // Akses Supervisor
         AccessPermissions aksesSupervisor = new AccessPermissions(roleSupervisor);
-        accessPermissionDB.save(aksesSupervisor);
+
+        roleSupervisor.setAccessPermissions(aksesSupervisor);
+        roleDB.save(roleSupervisor);
+//        accessPermissionDB.save(aksesSupervisor);
         // Akses Supervisor Selesai
 
         // Akses Manajer
@@ -68,12 +74,18 @@ public class DatabaseLoader implements CommandLineRunner {
 
         aksesManajer.setAksesRiskLevel(true);
         aksesManajer.setUbahRiskLevel(true);
-        accessPermissionDB.save(aksesManajer);
+
+        roleManajer.setAccessPermissions(aksesManajer);
+        roleDB.save(roleManajer);
+//        accessPermissionDB.save(aksesManajer);
         // Akses Manajer Selesai
 
         // Akses Lead
         AccessPermissions aksesLead = new AccessPermissions(roleLead);
-        accessPermissionDB.save(aksesLead);
+
+        roleLead.setAccessPermissions(aksesLead);
+        roleDB.save(roleLead);
+//        accessPermissionDB.save(aksesLead);
         // Akses Lead Selesai
 
         // Akses Officer
@@ -82,12 +94,18 @@ public class DatabaseLoader implements CommandLineRunner {
         aksesOfficer.setAksesTabelRisiko(true);
 
         aksesOfficer.setUbahReminder(true);
-        accessPermissionDB.save(aksesOfficer);
+
+        roleOfficer.setAccessPermissions(aksesOfficer);
+        roleDB.save(roleOfficer);
+//        accessPermissionDB.save(aksesOfficer);
         // Akses Officer Selesai
 
         // Akses BM
         AccessPermissions aksesBM = new AccessPermissions(roleBM);
-        accessPermissionDB.save(aksesBM);
+
+        roleBM.setAccessPermissions(aksesBM);
+        roleDB.save(roleBM);
+//        accessPermissionDB.save(aksesBM);
         // Akses BM Selesai
 
         // Akses SuperQA
@@ -105,7 +123,10 @@ public class DatabaseLoader implements CommandLineRunner {
         aksesSuper.setUbahRiskLevel(true);
 
         aksesSuper.setUbahReminder(true);
-        accessPermissionDB.save(aksesSuper);
+
+        roleSuper.setAccessPermissions(aksesSuper);
+        roleDB.save(roleSuper);
+//        accessPermissionDB.save(aksesSuper);
         // Akses SuperQA Selesai
 
         // Akses Developer
@@ -123,7 +144,10 @@ public class DatabaseLoader implements CommandLineRunner {
         aksesDeveloper.setUbahRiskLevel(true);
 
         aksesDeveloper.setUbahReminder(true);
-        accessPermissionDB.save(aksesDeveloper);
+
+        roleDeveloper.setAccessPermissions(aksesDeveloper);
+        roleDB.save(roleDeveloper);
+//        accessPermissionDB.save(aksesDeveloper);
         // Akses Developer selesai
         // Inisiasi Akses Selesai
 
