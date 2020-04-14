@@ -92,6 +92,7 @@ export default class DemoForm extends React.Component {
             errorNama = "terlalu pendek ?";
         } else if (fokusNama.length > 10) {
             submitable = false;
+            errorNama = "terlalu panjaaaaaaaa aaaaaaaaaa aaaaaa aaaaaaaaang ?";
         }
 
         if (submitable !== this.state.submitableArray[0]) {
