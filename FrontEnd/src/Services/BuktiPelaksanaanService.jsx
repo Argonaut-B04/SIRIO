@@ -9,7 +9,7 @@ class BuktiPelaksanaanService {
         this.axiosInstance.defaults.headers.common['Authorization'] = AuthenticationService.getToken();
     }
 
-    async submitChanges(idRekomendasi, data) {
+    async addBukti(idRekomendasi, data) {
         const dataToPass = {
             idRekomendasi: idRekomendasi,
             keterangan: data.keterangan,
@@ -18,16 +18,21 @@ class BuktiPelaksanaanService {
         return this.axiosInstance.post(SirioAxiosBase.BASEURL + `/BuktiPelaksanaan/tambah`, dataToPass);
     }
 
-    async getBuktiPelaksanaan(id) {
-        return this.axiosInstance.get(SirioAxiosBase.BASEURL + `/BuktiPelaksanaan/` + id);
+    async editBukti(data) {
+        return this.axiosInstance.post(SirioAxiosBase.BASEURL + '/BuktiPelaksanaan/ubah', data)
     }
 
-    async submitPersetujuan(id, data) {
+    async setStatusBukti(idBuktiPelaksanaan, data) {
         const dataToPass = {
-            id: id,
+            id: idBuktiPelaksanaan,
+            status: data.status,
             feedback: data.feedback
         }
-        return this.axiosInstance.put(SirioAxiosBase.BASEURL + `/BuktiPelaksanaan/persetujuan`, dataToPass)
+        return this.axiosInstance.post(SirioAxiosBase.BASEURL + '/BuktiPelaksanaan/persetujuan', dataToPass)
+    }
+
+    async getBuktiPelaksanaan(id) {
+        return this.axiosInstance.get(SirioAxiosBase.BASEURL + `/BuktiPelaksanaan/` + id);
     }
 
 }

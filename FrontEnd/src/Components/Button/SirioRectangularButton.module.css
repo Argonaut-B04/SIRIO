@@ -1,0 +1,25 @@
+.delete {
+    background: rgba(255, 0, 0, 0.85);
+    border-radius: 6px;
+    border: none;
+    height: 30px;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 30px;
+    margin: 10px;
+}
+
+.add {
+    background: #5DBCD2;
+    border-radius: 6px;
+    border: none;
+    height: 30px;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 30px;
+    margin: 10px;
+}

@@ -3,7 +3,7 @@ import SirioButton from '../../Button/SirioButton';
 import SirioDatePickerButton from '../../Button/SirioDatePickerButton';
 import SirioTable from '../SirioTable';
 import RekomendasiService from '../../../Services/RekomendasiService';
-import { NavLink } from 'react-router-dom';
+import { NavLink, Redirect } from 'react-router-dom';
 import classes from './TabelRekomendasi.module.css';
 import SirioAxiosBase from '../../../Services/SirioAxiosBase';
 import SirioMessageButton from '../../Button/ActionButton/SirioMessageButton';
@@ -18,7 +18,7 @@ export default class TabelRekomendasi extends React.Component {
 
         this.state = {
             rowList: [],
-            changeComplete: false
+            changeComplete: false,
         }
 
         this.renderRows = this.renderRows.bind(this);
@@ -30,11 +30,25 @@ export default class TabelRekomendasi extends React.Component {
     }
 
     async renderRows() {
-        const response = await RekomendasiService.getRekomendasiByLoggedInUser();
-
-        this.setState({
-            rowList: response.data.result
-        })
+        RekomendasiService.getRekomendasiByLoggedInUser()
+            .then(response => {
+                this.setState({
+                    rowList: response.data.result
+                })
+            })
+            .catch(error => {
+                if (error.response.data.status == 401) {
+                    this.setState({
+                        redirector: <Redirect to={{
+                            pathname: "/401",
+                            state: {
+                                detail: error.response.data.message,
+                            }
+                        }} />
+                    })
+                }
+            })
+            ;
     }
 
     /**
@@ -190,6 +204,7 @@ export default class TabelRekomendasi extends React.Component {
         return (
             <SirioButton
                 purple
+                hover
                 onClick={() => alert("Halaman Hasil Pemeriksaan belum terimplementasi")}
             >
                 Hasil Pemeriksaan
@@ -232,6 +247,7 @@ export default class TabelRekomendasi extends React.Component {
             return (
                 <SirioDatePickerButton
                     purple
+                    hover
                     hyperlink
                     id={row.id}
                     handleChange={(date, id) => this.aturTenggatWaktu(date, id)}
@@ -280,6 +296,7 @@ export default class TabelRekomendasi extends React.Component {
                     }}>
                     <SirioButton
                         purple
+                        hover
                         disabled={!reminderEnable}
                     >
                         Reminder
@@ -312,7 +329,7 @@ export default class TabelRekomendasi extends React.Component {
 
     // Fungsi render Tabel rekomendasi
     render() {
-        return (
+        return this.state.redirector || (
             <>
                 <SirioTable
                     title="Daftar Rekomendasi"

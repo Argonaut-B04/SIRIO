@@ -167,9 +167,11 @@ public class HasilPemeriksaanRestController {
                     komponenPemeriksaanRestService.getByHasilPemeriksaan(hasilPemeriksaan)) {
                 KomponenPemeriksaanDTO komponenPemeriksaanDTO = new KomponenPemeriksaanDTO();
                 komponenPemeriksaanDTO.setId(komponenPemeriksaan.getIdKomponenPemeriksaan());
-                komponenPemeriksaanDTO.setIdRiskLevel(komponenPemeriksaan.getRiskLevel().getIdLevel());
-                komponenPemeriksaanDTO.setNamaRiskLevel(komponenPemeriksaan.getRiskLevel().getNamaLevel());
-                komponenPemeriksaanDTO.setBobotRiskLevel(komponenPemeriksaan.getRiskLevel().getBobotLevel());
+                if (komponenPemeriksaan.getRiskLevel() != null) {
+                    komponenPemeriksaanDTO.setIdRiskLevel(komponenPemeriksaan.getRiskLevel().getIdLevel());
+                    komponenPemeriksaanDTO.setNamaRiskLevel(komponenPemeriksaan.getRiskLevel().getNamaLevel());
+                    komponenPemeriksaanDTO.setBobotRiskLevel(komponenPemeriksaan.getRiskLevel().getBobotLevel());
+                }
                 komponenPemeriksaanDTO.setJumlahSampel(komponenPemeriksaan.getJumlahSampel());
                 komponenPemeriksaanDTO.setKeteranganSampel(komponenPemeriksaan.getKeteranganSampel());
 
@@ -184,10 +186,20 @@ public class HasilPemeriksaanRestController {
                     if(komponenPemeriksaan.getRisiko().getParent().getParent() != null)
                         komponenPemeriksaanDTO.getRisiko().setGrantParent(komponenPemeriksaan.getRisiko().getParent().getParent().getIdRisiko());
                 }
-                komponenPemeriksaanDTO.setDaftarRekomendasiTerdaftar(
-                        rekomendasiRestService.getByKomponenPemeriksaan(komponenPemeriksaan));
-                komponenPemeriksaanDTO.setDaftarTemuanRisikoTerdaftar(
-                        temuanRisikoRestService.getByKomponenPemeriksaan(komponenPemeriksaan));
+                komponenPemeriksaanDTO.setDaftarRekomendasiTerdaftar(new ArrayList<>());
+                for (Rekomendasi rekomendasi: rekomendasiRestService.getByKomponenPemeriksaan(komponenPemeriksaan)) {
+                    RekomendasiDTO rekomendasiDTO = new RekomendasiDTO();
+                    rekomendasiDTO.setId(rekomendasi.getIdRekomendasi());
+                    rekomendasiDTO.setKeterangan(rekomendasi.getKeterangan());
+                    komponenPemeriksaanDTO.getDaftarRekomendasiTerdaftar().add(rekomendasiDTO);
+                }
+                komponenPemeriksaanDTO.setDaftarTemuanRisikoTerdaftar(new ArrayList<>());
+                for (TemuanRisiko temuanRisiko: temuanRisikoRestService.getByKomponenPemeriksaan(komponenPemeriksaan)) {
+                    TemuanRisikoDTO temuanRisikoDTO = new TemuanRisikoDTO();
+                    temuanRisikoDTO.setId(temuanRisiko.getIdTemuanRisiko());
+                    temuanRisikoDTO.setKeterangan(temuanRisiko.getKeterangan());
+                    komponenPemeriksaanDTO.getDaftarTemuanRisikoTerdaftar().add(temuanRisikoDTO);
+                }
                 result.getDaftarKomponenPemeriksaan().add(komponenPemeriksaanDTO);
             }
 
@@ -337,7 +349,7 @@ public class HasilPemeriksaanRestController {
      * @param hasilPemeriksaanDTO data transfer object untuk hasil pemeriksaan yang akan diubah
      * @return hasil pemeriksaan yang telah disimpan perubahannya
      */
-    @PutMapping(value = "/ubah", consumes = {"application/json"})
+    @PostMapping(value = "/ubah", consumes = {"application/json"})
     private BaseResponse<HasilPemeriksaan> ubahHasilPemeriksaan(
             @RequestBody HasilPemeriksaanDTO hasilPemeriksaanDTO,
             Principal principal, ModelMap model
@@ -451,11 +463,11 @@ public class HasilPemeriksaanRestController {
                     boolean hapusTemuanRisiko = true;
                     if (komponenPemeriksaanData.getDaftarTemuanRisikoTerdaftar() != null &&
                             !komponenPemeriksaanData.getDaftarTemuanRisikoTerdaftar().isEmpty()) {
-                        for(TemuanRisiko temuanRisikoTerdaftar: komponenPemeriksaanData.getDaftarTemuanRisikoTerdaftar()) {
+                        for(TemuanRisikoDTO temuanRisikoTerdaftar: komponenPemeriksaanData.getDaftarTemuanRisikoTerdaftar()) {
                             if (temuanRisikoTerdaftar.getKeterangan() != null &&
                                     !temuanRisikoTerdaftar.getKeterangan().equals("") &&
                                     temuanRisikoTersimpan == temuanRisikoRestService.getById(
-                                            temuanRisikoTerdaftar.getIdTemuanRisiko())) {
+                                            temuanRisikoTerdaftar.getId())) {
                                 hapusTemuanRisiko = false;
                                 temuanRisikoTersimpan.setKeterangan(temuanRisikoTerdaftar.getKeterangan());
                                 temuanRisikoRestService.ubahTemuanRisiko(
@@ -476,11 +488,11 @@ public class HasilPemeriksaanRestController {
                     boolean hapusRekomendasi = true;
                     if (komponenPemeriksaanData.getDaftarRekomendasiTerdaftar() != null &&
                             !komponenPemeriksaanData.getDaftarRekomendasiTerdaftar().isEmpty()) {
-                        for(Rekomendasi rekomendasiTerdaftar: komponenPemeriksaanData.getDaftarRekomendasiTerdaftar()) {
+                        for(RekomendasiDTO rekomendasiTerdaftar: komponenPemeriksaanData.getDaftarRekomendasiTerdaftar()) {
                             if (rekomendasiTerdaftar.getKeterangan() != null &&
                                     !rekomendasiTerdaftar.getKeterangan().equals("") &&
                                     rekomendasiTersimpan == rekomendasiRestService.getById(
-                                            rekomendasiTerdaftar.getIdRekomendasi())) {
+                                            rekomendasiTerdaftar.getId())) {
                                 hapusRekomendasi = false;
                                 rekomendasiTersimpan.setKeterangan(rekomendasiTerdaftar.getKeterangan());
                                 rekomendasiTersimpan.setStatusRekomendasi(

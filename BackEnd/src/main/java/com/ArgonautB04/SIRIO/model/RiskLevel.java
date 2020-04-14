@@ -16,21 +16,26 @@ public class RiskLevel implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idLevel;
+
     @NotNull
     @Size(max = 50)
     @Column(nullable = false)
     private String namaLevel;
+
     @NotNull
     @Column(nullable = false, scale = 3, precision = 6, unique = true)
     private float bobotLevel;
+
     @NotNull
     @Size(max = 125)
     @Column(nullable = false)
     private String keteranganLevel;
+
     @NotNull
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 10)
     private Status status;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "pengelola", referencedColumnName = "idEmployee", nullable = false)
     @OnDelete(action = OnDeleteAction.NO_ACTION)
