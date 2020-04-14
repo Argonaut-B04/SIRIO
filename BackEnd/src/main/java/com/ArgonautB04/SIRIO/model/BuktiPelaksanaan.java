@@ -37,9 +37,8 @@ public class BuktiPelaksanaan implements Serializable {
     @JsonIgnore
     private StatusBuktiPelaksanaan statusBuktiPelaksanaan;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "rekomendasi", referencedColumnName = "idRekomendasi", nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @OneToOne
+    @MapsId
     @JsonIgnore
     private Rekomendasi rekomendasi;
 
