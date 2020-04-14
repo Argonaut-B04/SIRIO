@@ -50,6 +50,7 @@ class SirioForm extends Component {
                         multiple={field.multiple}
                         sideButton={field.sideButton}
                         modifier={field.modifier}
+                        validationFunction={field.validationFunction}
                     />
                 )}
             </>
