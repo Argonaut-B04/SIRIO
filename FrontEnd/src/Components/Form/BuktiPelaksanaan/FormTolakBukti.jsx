@@ -78,14 +78,28 @@ class FormTolakBukti extends React.Component {
 
     componentDidUpdate(prevProps, prevState) {
         var submitable = true;
+        var validating = false;
+        submitable = this.validateRequired();
         if (prevState.feedback !== this.state.feedback) {
-            submitable = submitable && this.validateFeedback();
+            submitable = this.validateFeedback() && submitable;
+            validating = true;
         }
-        if (this.state.submitable !== submitable) {
-            this.setState({
-                submitable: submitable
-            })
+        if (validating) {
+            if (this.state.submitable !== submitable) {
+                this.setState({
+                    submitable: submitable
+                })
+            }
         }
+    }
+
+    validateRequired() {
+        var submitable = true;
+        const required = [this.state.feedback];
+        for (let i = 0; i < required.length; i++) {
+            submitable = submitable && (required[i] !== null && required[i] !== "");
+        }
+        return submitable;
     }
 
     validateFeedback() {
@@ -95,8 +109,7 @@ class FormTolakBukti extends React.Component {
         if (varFeedback.length < 1) {
             submitable = false;
             errorFeedback = "Feedback wajib diisi";
-        }
-        if (varFeedback.length > 125) {
+        } else if (varFeedback.length > 125) {
             submitable = false;
             errorFeedback = "Feedback tidak boleh lebih dari 125 karakter";
         }

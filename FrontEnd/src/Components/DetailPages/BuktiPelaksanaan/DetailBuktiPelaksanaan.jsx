@@ -54,9 +54,9 @@ class DetailBuktiPelaksanaan extends React.Component {
 
     data() {
         return {
-            "Keterangan :": this.state.buktiPelaksanaan.keterangan,
-            "Lampiran   :": this.lampiranFormater(this.state.buktiPelaksanaan.lampiran),
-            "Feedback   :": this.feedbackFormatter(this.state.buktiPelaksanaan.feedback)
+            "Keterangan:": this.state.buktiPelaksanaan.keterangan,
+            "Lampiran:": this.lampiranFormater(this.state.buktiPelaksanaan.lampiran),
+            "Feedback:": this.feedbackFormatter(this.state.buktiPelaksanaan.feedback)
         }
     }
 
