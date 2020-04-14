@@ -20,6 +20,10 @@ class HasilPemeriksaanService {
     async deleteHasilPemeriksaan(data) {
         return this.axiosInstance.post(SirioAxiosBase.BASEURL + `/HasilPemeriksaan/hapus`, data)
     }
+
+    async setujuiHasilPemeriksaan(data) {
+        return this.axiosInstance.post(SirioAxiosBase.BASEURL + '/HasilPemeriksaan/persetujuan', data)
+    }
 }
 
 export default new HasilPemeriksaanService();

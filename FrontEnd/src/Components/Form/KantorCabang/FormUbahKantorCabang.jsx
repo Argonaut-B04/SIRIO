@@ -75,10 +75,18 @@ class FormUbahKantorCabang extends React.Component {
         var submitable = true;
         var errorNama;
         const fokusNama = this.state.namaKantorCabang
+        if(fokusNama.match(".*[1234567890!-@#$%^&*()_+{}:.,[]|>/=<?]+.*")){
+            submitable = false;
+            errorNama = "Hanya boleh mengandung huruf";
+        }
         if (fokusNama.length < 2) {
             submitable = false;
             errorNama = "Minimal terdapat 2 karakter";
         } 
+        if (fokusNama.length > 25) {
+            submitable = false;
+            errorNama = "Nama kantor tidak boleh lebih dari 25 karakter";
+        }
         if (this.state.errorNama !== errorNama) {
             this.setState({
                 errorNama: errorNama
@@ -91,10 +99,18 @@ class FormUbahKantorCabang extends React.Component {
         var submitable = true;
         var errorArea;
         const fokusArea = this.state.area
+        if(fokusArea.match(".*[1234567890!-@#$%^&*()_+{}:.,[]|>/=<?]+.*")){
+            submitable = false;
+            errorArea = "Hanya boleh mengandung huruf";
+        }
         if (fokusArea.length < 2) {
             submitable = false;
             errorArea = "Minimal terdapat 2 karakter";
         } 
+        if (fokusArea.length > 125) {
+            submitable = false;
+            errorArea = "Area tidak boleh lebih dari 125 karakter";
+        }
         if (this.state.errorArea !== errorArea) {
             this.setState({
                 errorArea: errorArea
@@ -107,10 +123,18 @@ class FormUbahKantorCabang extends React.Component {
         var submitable = true;
         var errorReg;
         const fokusReg = this.state.regional
+        if(fokusReg.match(".*[1234567890!-@#$%^&*()_+{}:.,[]|>/=<?]+.*")){
+            submitable = false;
+            errorReg= "Hanya boleh mengandung huruf";
+        }
         if (fokusReg.length < 2) {
             submitable = false;
             errorReg = "Minimal terdapat 2 karakter";
         } 
+        if (fokusReg.length > 125) {
+            submitable = false;
+            errorReg = "Regional tidak boleh lebih dari 50 karakter";
+        }
         if (this.state.errorReg!== errorReg) {
             this.setState({
                 errorReg: errorReg
@@ -123,7 +147,7 @@ class FormUbahKantorCabang extends React.Component {
         var submitable = true;
         var errorBM;
         const fokusBM = this.state.idPemilik
-        if (fokusBM.length < 2) {
+        if (fokusBM.length < 1) {
             submitable = false;
             errorBM = "Branch Manager harus diisi";
         } 
@@ -219,57 +243,102 @@ class FormUbahKantorCabang extends React.Component {
     // Setiap objek {} pada List [] akan menjadi 1 field
     // untuk informasi lebih lengkap, cek SirioForm
     inputDefinition() {
-        return (
-            [
-                {
-                    label: "Nama Point*",
-                    handleChange: this.handleChange,
-                    required: true,
-                    type: "text",
-                    name: "namaKantorCabang",
-                    validation: this.state.errorNama,
-                    value: this.state.namaKantorCabang,
-                    placeholder: "Masukan nama point"
-                }, {
-                    label: "Branch Manger*",
-                    handleChange: this.handleSelectChange,
-                    required: true,
-                    type: "select",
-                    name: "idPemilik",
-                    value: this.state.idPemilik,
-                    validation: this.state.errorBM,
-                    optionList: this.state.employeeOptionList
-                },{
-                    label: "Area*",
-                    handleChange: this.handleChange,
-                    required: true,
-                    type: "text",
-                    name: "area",
-                    validation: this.state.errorArea,
-                    value: this.state.area,
-                    placeholder: "Masukan nama area"
-                },{
-                    label: "Regional*",
-                    handleChange: this.handleChange,
-                    required: true,
-                    type: "text",
-                    name: "regional",
-                    value: this.state.regional,
-                    validation: this.state.errorReg,
-                    placeholder: "Masukan nama regional"
-                },{
-                    label: "Kunjungan Audit*",
-                    handleChange: this.handleInputChange,
-                    required: true,
-                    type: "checkbox",
-                    name: "kunjunganAudit",
-                    value: this.state.kunjunganAudit,
-                    checked: this.state.kunjunganAudit,
-                }
-
-
-            ]
-        )
+        if(this.state.kunjunganAudit){
+            return (
+                [
+                    {
+                        label: "Nama Point*",
+                        handleChange: this.handleChange,
+                        required: true,
+                        type: "text",
+                        name: "namaKantorCabang",
+                        validation: this.state.errorNama,
+                        value: this.state.namaKantorCabang,
+                        placeholder: "Masukan nama point"
+                    }, {
+                        label: "Branch Manger*",
+                        handleChange: this.handleSelectChange,
+                        required: true,
+                        type: "select",
+                        name: "idPemilik",
+                        value: this.state.idPemilik,
+                        validation: this.state.errorBM,
+                        optionList: this.state.employeeOptionList
+                    },{
+                        label: "Area*",
+                        handleChange: this.handleChange,
+                        required: true,
+                        type: "text",
+                        name: "area",
+                        validation: this.state.errorArea,
+                        value: this.state.area,
+                        placeholder: "Masukan nama area"
+                    },{
+                        label: "Regional*",
+                        handleChange: this.handleChange,
+                        required: true,
+                        type: "text",
+                        name: "regional",
+                        value: this.state.regional,
+                        validation: this.state.errorReg,
+                        placeholder: "Masukan nama regional"
+                    }
+                ]
+            )
+        }else{
+            return (
+                [
+                    {
+                        label: "Nama Point*",
+                        handleChange: this.handleChange,
+                        required: true,
+                        type: "text",
+                        name: "namaKantorCabang",
+                        validation: this.state.errorNama,
+                        value: this.state.namaKantorCabang,
+                        placeholder: "Masukan nama point"
+                    }, {
+                        label: "Branch Manger*",
+                        handleChange: this.handleSelectChange,
+                        required: true,
+                        type: "select",
+                        name: "idPemilik",
+                        value: this.state.idPemilik,
+                        validation: this.state.errorBM,
+                        optionList: this.state.employeeOptionList
+                    },{
+                        label: "Area*",
+                        handleChange: this.handleChange,
+                        required: true,
+                        type: "text",
+                        name: "area",
+                        validation: this.state.errorArea,
+                        value: this.state.area,
+                        placeholder: "Masukan nama area"
+                    },{
+                        label: "Regional*",
+                        handleChange: this.handleChange,
+                        required: true,
+                        type: "text",
+                        name: "regional",
+                        value: this.state.regional,
+                        validation: this.state.errorReg,
+                        placeholder: "Masukan nama regional"
+                    },{
+                        label: "Kunjungan Audit*",
+                        handleChange: this.handleInputChange,
+                        required: true,
+                        type: "checkbox",
+                        name: "kunjunganAudit",
+                        value: this.state.kunjunganAudit,
+                        checked: this.state.kunjunganAudit,
+                    }
+    
+    
+                ]
+            )
+        }
+        
     }
 
     submitButton() {

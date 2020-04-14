@@ -68,21 +68,37 @@ class DetailRencanaPemeriksaan extends React.Component {
         this.setState({
            rencanaPemeriksaan: response.data.result,
            dataGeneral: {
-            "Nama Rencana      :": response.data.result.namaRencana,
-            "Link Pemeriksaan  :": response.data.result.linkMajelis,
-            "Status            :": this.statusFormatter(response.data.result.status),
+            "Nama Rencana :": response.data.result.namaRencana,
+            "Link Pemeriksaan :": response.data.result.linkMajelis,
+            "Status :": this.statusFormatter(response.data.result.status),
             },
             daftarTugasPemeriksaan: response.data.result.daftarTugasPemeriksaan.map(tugas => {
                 return (
                     {
-                        "Nama QA": tugas.namaQA,
-                        "Kantor Cabang": tugas.namaKantorCabang,
-                        "Tanggal Mulai": tugas.tanggalMulai,
-                        "Tanggal Selesai": tugas.tanggalSelesai
+                        "Nama QA Officer :": tugas.namaQA,
+                        "Kantor Cabang :": tugas.namaKantorCabang,
+                        "Tanggal Mulai :": this.getTanggalFormatter(tugas.tanggalMulai),
+                        "Tanggal Selesai :": this.getTanggalFormatter(tugas.tanggalSelesai)
                     }
                 )
             })
         })
+    }
+
+    getTanggalFormatter(tanggalString) {
+        if (tanggalString != null ){
+            const tahun = tanggalString.split("-")[0]
+            const bulan = tanggalString.split("-")[1]
+            const tgl = tanggalString.split("-")[2]
+            var tglFix = tgl.split(" ")[0]
+            var namaBulan = ["Januari", "Februari", "Maret", "April", "Mei", "Juni",
+                "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+            return tglFix+ " " + namaBulan[bulan - 1] + " " + tahun;
+        }else{
+            return "-"
+        }
+    
+        
     }
 
     hapus(id) {

@@ -55,7 +55,7 @@ export default class SirioTable extends Component {
         };
         return (
             <li className="page-item" key={page} >
-                <a href="https://www.google.com/" className="sirio-pagination-button" onClick={handleClick}>{page}</a>
+                <p className="sirio-pagination-button" onClick={handleClick}>{page}</p>
             </li>
         );
     };
@@ -70,7 +70,10 @@ export default class SirioTable extends Component {
             paginationTotalRenderer: this.customTotal,
             onPageChange: (page, sizePerPage) => {
                 this.renderRowNumber(page, sizePerPage)
-            }
+            },
+            onSizePerPageChange: (sizePerPage, page) => {
+                this.renderRowNumber(page, sizePerPage)
+            },
         })
 
     // Overlay adalah animasi singkat yang ditampilkan pada tabel ketika isi tabel sedang dirender
@@ -164,12 +167,10 @@ export default class SirioTable extends Component {
                             )
                         }
                     </ToolkitProvider>
-                    {this.props.footerContent ?
+                    {this.props.footerContent &&
                         <div className={classes.footerWrapper}>
                             {this.props.footerContent}
                         </div>
-                        :
-                        null
                     }
                 </ComponentWrapper>
             </div>

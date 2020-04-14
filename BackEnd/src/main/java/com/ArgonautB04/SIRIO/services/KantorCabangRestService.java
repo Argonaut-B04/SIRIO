@@ -24,5 +24,5 @@ public interface KantorCabangRestService {
 
     void hapusKantorCabang(int idKantorCabang);
 
-    List<KantorCabang> getByPembuat(Employee pembuat);
+    //List<KantorCabang> getByPembuat(Employee pembuat);
 }

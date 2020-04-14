@@ -221,15 +221,15 @@ public class KantorCabangRestController {
 
         response.setStatus(200);
         response.setMessage("success");
-        kantorCabangRestService.hapusKantorCabang(kantorCabang.getIdKantor());
+       // kantorCabangRestService.hapusKantorCabang(kantorCabang.getIdKantor());
 
-//        try {
-//            kantorCabangRestService.hapusKantorCabang(kantorCabang.getIdKantor());
-//        } catch (DataIntegrityViolationException e) {
-//            kantorCabangRestService.nonaktifkanKantor(kantorCabang.getIdKantor());
-//            response.setResult("Kantor Cabang dengan id " + kantorCabangDTO.getId() + " dinonaktifkan!");
-//            return response;
-//        }
+        try {
+            kantorCabangRestService.hapusKantorCabang(kantorCabang.getIdKantor());
+        } catch (DataIntegrityViolationException e) {
+            kantorCabangRestService.nonaktifkanKantor(kantorCabang.getIdKantor());
+            response.setResult("Kantor Cabang dengan id " + kantorCabangDTO.getId() + " dinonaktifkan!");
+            return response;
+        }
 
         response.setResult("Kantor Cabang dengan id " + kantorCabangDTO.getId() + " terhapus!");
         return response;

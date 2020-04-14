@@ -61,6 +61,7 @@ class DetailKantorCabang extends React.Component {
             "Branch Manager  :": response.data.result.pemilik.nama,
             "Area            :": response.data.result.area,
             "Regional        :": response.data.result.regional,
+            "Status          :": response.data.result.status,
             "Kunjungan Audit :": this.auditFormatter(response.data.result.kunjunganAudit)
         }
         })
@@ -74,35 +75,45 @@ class DetailKantorCabang extends React.Component {
             .then(() => this.setRedirect());
     }
    
-    subButton() {
-        return (
-            <div>
-                <NavLink to={{
-                    pathname: "/administrator/kantorCabang/ubah",
-                    state: {
-                        id: this.state.kantorCabang.idKantor,
-                    }
-                }}>
-                    <SirioButton
-                        purple
+    subButton(status) {
+        if (status === "AKTIF"){
+            return (
+                <div>
+                    <NavLink to={{
+                        pathname: "/administrator/kantorCabang/ubah",
+                        state: {
+                            id: this.state.kantorCabang.idKantor,
+                        }
+                    }}>
+                        <SirioButton
+                            purple
+                        >
+                            Ubah
+                        </SirioButton>
+                    </NavLink>
+                    <a>  </a>
+                    <SirioWarningButton
+                        red
+                        modalTitle="Konfirmasi Penghapusan"
+                        modalDesc="Apakah anda yakin untuk menghapus kantor cabang?"
+                        onConfirm={() => this.hapus(this.state.kantorCabang.idKantor)}
+                        customConfirmText="Ya, Hapus"
+                        customCancelText="Batal"
                     >
-                        Ubah
-                    </SirioButton>
-                </NavLink>
-                <a>  </a>
-                <SirioWarningButton
-                    red
-                    modalTitle="Konfirmasi Penghapusan"
-                    modalDesc="Apakah anda yakin untuk menghapus kantor cabang?"
-                    onConfirm={() => this.hapus(this.state.kantorCabang.idKantor)}
-                    customConfirmText="Ya, Hapus"
-                    customCancelText="Batal"
-                >
-                    Hapus
-                </SirioWarningButton>
-            </div>
-            
-        )
+                        Hapus
+                    </SirioWarningButton>
+                </div>
+                
+            )
+        }else{
+            return (
+                <div>
+                   
+                </div>
+                
+            )
+        }
+        
     }
 
     render() {
@@ -113,7 +124,7 @@ class DetailKantorCabang extends React.Component {
                     title="Detail Kantor Cabang"
                     data={this.state.dataGeneral}
                     id='id'
-                    subButton={this.subButton()}
+                    subButton={this.subButton(this.state.kantorCabang.status)}
                     link="administrator/kantorCabang"
                 />
             </>

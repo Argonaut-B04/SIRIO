@@ -101,32 +101,27 @@ export default class TabelRekomendasi extends React.Component {
         }, {
             dataField: 'noData 2',
             text: 'Tenggat Waktu',
-            sort: true,
-            // sortFunc: (a, b, order, dataField, rowA, rowB) => {
-            //     const sorter = {
-            //         "Draft": 1,
-            //         "Menunggu Persetujuan": 2,
-            //         "Ditolak": 3,
-            //         "Menunggu Pengaturan Tenggat Waktu": 4,
-            //         "Menunggu Pelaksanaan": 5,
-            //         "Sedang Dilaksanakan": 6,
-            //         "Selesai": 7
-            //     }
-            //     const aNum = sorter[a];
-            //     const bNum = sorter[b];
-            //     if (aNum === bNum) {
-            //         return rowA.keterangan.localeCompare(rowB.keterangan);
-            //     }
-            //     if (order === "asc") {
-            //         return aNum - bNum;
-            //     } else {
-            //         return bNum - aNum;
-            //     }
-            // },
             headerClasses: [classes.colheader, "d-block d-sm-table-cell"].join(" "),
             classes: [classes.rowItem, "d-block d-sm-table-cell"].join(" "),
             style: () => {
                 return { textAlign: 'center' }
+            },
+            sort: true,
+            sortFunc: (a, b, order, dataField, rowA, rowB) => {
+                const tenggatWaktuA = Date.parse(rowA.tenggatWaktu);
+                const tenggatWaktuB = Date.parse(rowB.tenggatWaktu);
+                if (isNaN(tenggatWaktuA) && isNaN(tenggatWaktuB)) {
+                    return rowA.keterangan.localeCompare(rowB.keterangan);
+                } else if (isNaN(tenggatWaktuA)) {
+                    return 1
+                } else if (isNaN(tenggatWaktuB)) {
+                    return -1
+                }
+                if (order === "asc") {
+                    return tenggatWaktuA - tenggatWaktuB;
+                } else {
+                    return tenggatWaktuB - tenggatWaktuA;
+                }
             },
             formatter: (cell, row) => this.getButtonsSecond(cell, row)
         }, {
@@ -138,11 +133,29 @@ export default class TabelRekomendasi extends React.Component {
                 return { textAlign: 'center' }
             },
             formatter: (cell, row) => this.getButtonsThird(cell, row)
+        }, {
+            dataField: 'untukSearchStatus',
+            text: '',
+            hidden: true,
+            formatter: this.statusNoFormatter,
+        }, {
+            dataField: 'untukSearchTanggal',
+            text: '',
+            hidden: true,
+            formatter: this.tanggalNoFormatter,
         }];
 
+    tanggalNoFormatter(cell, row) {
+        return SirioAxiosBase.formatDateFromString(row.tenggatWaktu);
+    }
+
+    statusNoFormatter(cell, row) {
+        return row.status;
+    }
+
     // Formatter untuk kolom status
-    statusFormatter(cell) {
-        switch (cell) {
+    statusFormatter(cell, row) {
+        switch (row.status) {
             case "Draft":
                 return (
                     <span style={{ color: '#7F3F98' }}>{cell}</span>

@@ -22,7 +22,7 @@ export default class FormTambahKantorCabang extends React.Component {
             kunjunganAudit: false,
             employeeOptionList: [],
             redirect: false,
-            submitable: true,
+            submitable: false,
         }
 
         this.renderEmployeeOption = this.renderEmployeeOption.bind(this);
@@ -161,10 +161,18 @@ export default class FormTambahKantorCabang extends React.Component {
         var submitable = true;
         var errorNama;
         const fokusNama = this.state.namaKantorCabang
+        if(fokusNama.match(".*[1234567890!-@#$%^&*()_+{}:.,[]|>/=<?]+.*")){
+            submitable = false;
+            errorNama = "Hanya boleh mengandung huruf";
+        }
         if (fokusNama.length < 2) {
             submitable = false;
             errorNama = "Minimal terdapat 2 karakter";
         } 
+        if (fokusNama.length > 25) {
+            submitable = false;
+            errorNama = "Nama kantor tidak boleh lebih dari 25 karakter";
+        }
         if (this.state.errorNama !== errorNama) {
             this.setState({
                 errorNama: errorNama
@@ -177,13 +185,45 @@ export default class FormTambahKantorCabang extends React.Component {
         var submitable = true;
         var errorArea;
         const fokusArea = this.state.area
+        if(fokusArea.match(".*[1234567890!-@#$%^&*()_+{}:.,[]|>/=<?]+.*")){
+            submitable = false;
+            errorArea = "Hanya boleh mengandung huruf";
+        }
         if (fokusArea.length < 2) {
             submitable = false;
             errorArea = "Minimal terdapat 2 karakter";
         } 
+        if (fokusArea.length > 125) {
+            submitable = false;
+            errorArea = "Area tidak boleh lebih dari 125 karakter";
+        }
         if (this.state.errorArea !== errorArea) {
             this.setState({
                 errorArea: errorArea
+            })
+        }
+        return submitable;
+    }
+
+    validateRegional() {
+        var submitable = true;
+        var errorReg;
+        const fokusReg = this.state.regional
+        if(fokusReg.match(".*[1234567890!-@#$%^&*()_+{}:.,[]|>/=<?]+.*")){
+            submitable = false;
+            errorReg= "Hanya boleh mengandung huruf";
+        }
+        if (fokusReg.length < 2) {
+            submitable = false;
+            errorReg = "Minimal terdapat 2 karakter";
+        } 
+        if (fokusReg.length > 125) {
+            submitable = false;
+            errorReg = "Regional tidak boleh lebih dari 50 karakter";
+        }
+        if (this.state.errorReg!== errorReg) {
+            this.setState({
+                errorReg: errorReg
             })
         }
         return submitable;
@@ -193,7 +233,7 @@ export default class FormTambahKantorCabang extends React.Component {
         var submitable = true;
         var errorBM;
         const fokusBM = this.state.idPemilik
-        if (fokusBM.length < 2) {
+        if (fokusBM.length < 1) {
             submitable = false;
             errorBM = "Branch Manager harus diisi";
         } 
@@ -205,22 +245,6 @@ export default class FormTambahKantorCabang extends React.Component {
         return submitable;
     }
 
-
-    validateRegional() {
-        var submitable = true;
-        var errorReg;
-        const fokusReg = this.state.regional
-        if (fokusReg.length < 2) {
-            submitable = false;
-            errorReg = "Minimal terdapat 2 karakter";
-        } 
-        if (this.state.errorReg!== errorReg) {
-            this.setState({
-                errorReg: errorReg
-            })
-        }
-        return submitable;
-    }
 
     // Fungsi yang akan mengembalikan definisi tiap field pada form
     // Setiap objek {} pada List [] akan menjadi 1 field

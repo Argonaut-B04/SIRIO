@@ -13,9 +13,9 @@ import java.io.Serializable;
 @Table
 public class KantorCabang implements Serializable {
 
-//    public static enum Status {
-//        AKTIF, NONAKTIF
-//    }
+    public static enum Status {
+        AKTIF, NONAKTIF
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,11 +25,11 @@ public class KantorCabang implements Serializable {
     @Size(max = 25)
     @Column(nullable = false, unique = true)
     private String namaKantor;
-//
-//    @NotNull
-//    @Enumerated(EnumType.STRING)
-//    @Column(nullable = false, length = 10)
-//    private Status status;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 10)
+    private Status status;
 
     @NotNull
     @Size(max = 125)
@@ -125,11 +125,11 @@ public class KantorCabang implements Serializable {
         this.pembuat = pembuat;
     }
 
-//    public Status getStatus() {
-//        return status;
-//    }
-//
-//    public void setStatus(Status status) {
-//        this.status = status;
-//    }
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
 }

@@ -82,13 +82,21 @@ class FormUbahRencana extends React.Component {
 
     async renderDataRencana() {
         const response = await RencanaPemeriksaanService.getRencanaPemeriksaanDetail(this.props.location.state.id);
-        console.log(response.data.result)
+        const result = response.data.result;
+
+        for (var i = 0;i < result.daftarTugasPemeriksaan.length; i++) {
+            const tanggalMulai = result.daftarTugasPemeriksaan[i].tanggalMulai;
+            const tanggalSelesai = result.daftarTugasPemeriksaan[i].tanggalSelesai;
+            result.daftarTugasPemeriksaan[i].tanggalMulai = tanggalMulai.split(" ")[0];
+            result.daftarTugasPemeriksaan[i].tanggalSelesai = tanggalSelesai.split(" ")[0];
+        }
+
         this.setState({
             id: response.data.result.id,
             namaRencana: response.data.result.namaRencana,
             linkMajelis: response.data.result.linkMajelis,
             status: response.data.result.status,
-            daftarTugasPemeriksaan: response.data.result.daftarTugasPemeriksaan
+            daftarTugasPemeriksaan: result.daftarTugasPemeriksaan
         })
     }
 
@@ -166,6 +174,10 @@ class FormUbahRencana extends React.Component {
         var submitable = true;
         var errorNama;
         const fokusNama = this.state.namaRencana
+        if(fokusNama.match(".*[1234567890!-@#$%^&*()_+{}:.,[]|>/=<?]+.*")){
+            submitable = false;
+            errorNama = "Hanya boleh mengandung huruf";
+        }
         if (fokusNama.length < 2) {
             submitable = false;
             errorNama = "Minimal terdapat 2 karakter";
@@ -182,10 +194,13 @@ class FormUbahRencana extends React.Component {
         var submitable = true;
         var errorLink;
         const fokusLink = this.state.linkMajelis
-        if (!fokusLink.includes("http://") ) {
+        if (fokusLink.length < 1) {
             submitable = false;
-            errorLink = "Link harus mengandung 'http://' ";
-        } 
+            errorLink = "Lampiran wajib diisi";
+        } else if (!fokusLink.includes("http")) {
+            submitable = false;
+            errorLink = "Lampiran harus berupa link url";
+        }
         if (this.state.errorLink !== errorLink) {
             this.setState({
                 errorLink: errorLink
@@ -202,6 +217,7 @@ class FormUbahRencana extends React.Component {
         if(nama == "simpan"){
             event.preventDefault();
             const rencanaPemeriksaan = {
+                id: this.state.id,
                 namaRencana: this.state.namaRencana,
                 linkMajelis: this.state.linkMajelis,
                 status: 2,
@@ -213,6 +229,7 @@ class FormUbahRencana extends React.Component {
         else if (nama == "draft"){
             event.preventDefault();
             const rencanaPemeriksaan = {
+                id: this.state.id,
                 namaRencana: this.state.namaRencana,
                 linkMajelis: this.state.linkMajelis,
                 status: this.state.status,
@@ -263,7 +280,7 @@ class FormUbahRencana extends React.Component {
                     name: "linkMajelis",
                     validation: this.state.errorLink,
                     value: this.state.linkMajelis,
-                    placeholder: "Masukan link pemeriksaan"
+                    placeholder: "https://drive.google.com/"
                 },{
                     fullComponent:
                         this.tambahTugasButton
@@ -293,6 +310,7 @@ class FormUbahRencana extends React.Component {
                     label: "Kantor Cabang*",
                     handleChange: this.handleMultipleSelectChange,
                     index: index,
+                    required: true,
                     type: "select",
                     name: "kantorCabang",
                     value: this.state.daftarTugasPemeriksaan[index].kantorCabang,
@@ -301,6 +319,7 @@ class FormUbahRencana extends React.Component {
                     label: "QA Officer*",
                     handleChange: this.handleMultipleSelectChange,
                     index: index,
+                    required: true,
                     type: "select",
                     name: "idQA",
                     value: this.state.daftarTugasPemeriksaan[index].idQA,
@@ -309,6 +328,7 @@ class FormUbahRencana extends React.Component {
                     label: "Tanggal Mulai*",
                     handleChange: this.handleMultipleChange,
                     index: index,
+                    required: true,
                     type: "date",
                     name: "tanggalMulai",
                     value: this.state.daftarTugasPemeriksaan[index].tanggalMulai,
@@ -317,6 +337,7 @@ class FormUbahRencana extends React.Component {
                     label: "Tanggal Selesai*",
                     handleChange: this.handleMultipleChange,
                     index: index,
+                    required: true,
                     type: "date",
                     name: "tanggalSelesai",
                     value: this.state.daftarTugasPemeriksaan[index].tanggalSelesai,
@@ -331,8 +352,8 @@ class FormUbahRencana extends React.Component {
         return (
             <div>
                 <SirioButton purple 
-                    recommended={this.state.submitable}
-                    disabled={!this.state.submitable}
+                    recommended={this.state.submitable && this.state.daftarTugasPemeriksaan[0] != null}
+                    disabled={!this.state.submitable || !(this.state.daftarTugasPemeriksaan[0] != null)} 
                     classes="mx-1"
                     onClick={(event) => this.handleSubmit(event,"simpan")}>
                     Simpan

@@ -94,6 +94,7 @@ export default class TabelTugasPemeriksaan extends React.Component {
             text: 'TANGGAL MULAI',
             sort: true,
             classes: classes.rowItem,
+            // formatter: SirioAxiosBase.formatDate,
             headerClasses: classes.colheader,
             headerStyle: (colum, colIndex) => {
                 return { width: "20%", textAlign: 'left' };
@@ -103,6 +104,7 @@ export default class TabelTugasPemeriksaan extends React.Component {
             text: 'TANGGAL SELESAI',
             sort: true,
             classes: classes.rowItem,
+            // formatter: SirioAxiosBase.formatDate,
             headerClasses: classes.colheader,
             headerStyle: (colum, colIndex) => {
                 return { width: "20%", textAlign: 'left' };

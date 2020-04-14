@@ -296,13 +296,17 @@ public class RencanaPemeriksaanRestController {
         }
 
         rencanaPemeriksaanTemp.setStatus(statusRencanaPemeriksaanRestService.getById(rencanaPemeriksaanDTO.getStatus()));
+
+        List<TugasPemeriksaan> tugasLama = tugasPemeriksaanRestService.getByRencana(rencanaPemeriksaanTemp);
         RencanaPemeriksaan rencanaPemeriksaan = rencanaPemeriksaanRestService.ubahRencanaPemeriksaan(rencanaPemeriksaanDTO.getId(), rencanaPemeriksaanTemp);
+        List<TugasPemeriksaan> tugasBaru = new ArrayList<>();
 
         if(rencanaPemeriksaanDTO.getDaftarTugasPemeriksaan() != null &&
                 !rencanaPemeriksaanDTO.getDaftarTugasPemeriksaan().isEmpty()) {
+
             for (TugasPemeriksaanDTO tugasPemeriksaanDTO : rencanaPemeriksaanDTO.getDaftarTugasPemeriksaan()) {
                 TugasPemeriksaan tugasPemeriksaanTemp = new TugasPemeriksaan();
-                tugasPemeriksaanTemp.setRencanaPemeriksaan(rencanaPemeriksaan);
+                tugasPemeriksaanTemp.setRencanaPemeriksaan(rencanaPemeriksaanTemp);
 
                 if (tugasPemeriksaanDTO.getKantorCabang() != null) {
                     tugasPemeriksaanTemp.setKantorCabang(kantorCabangRestService.getById(tugasPemeriksaanDTO.getKantorCabang()));
@@ -334,9 +338,25 @@ public class RencanaPemeriksaanRestController {
                             HttpStatus.NOT_FOUND, "Tanggal belum terisi!"
                     );
                 }
-                tugasPemeriksaanRestService.ubahTugasPemeriksaan(tugasPemeriksaanDTO.getId(), tugasPemeriksaanTemp);
+                //TugasPemeriksaan tugasPemeriksaan1 = tugasPemeriksaanRestService.ubahTugasPemeriksaan(tugasPemeriksaanDTO.getId(), tugasPemeriksaanTemp);
+                //tugasBaru.add(tugasPemeriksaan1);
+
+                if (tugasPemeriksaanRestService.isExistInDatabase(tugasPemeriksaanTemp)) {
+                    tugasBaru.add(tugasPemeriksaanRestService.ubahTugasPemeriksaan(tugasPemeriksaanDTO.getId(), tugasPemeriksaanTemp));
+                }else {
+                    tugasBaru.add(
+                            tugasPemeriksaanRestService.buatTugasPemeriksaan(tugasPemeriksaanTemp)
+                    );
+                }
+
             }
+            tugasLama.removeAll(tugasBaru);
+            for (TugasPemeriksaan tugas: tugasLama){
+                tugasPemeriksaanRestService.hapusTugasPemeriksaan(tugas.getIdTugas());
+            }
+
         }
+
         response.setStatus(200);
         response.setMessage("success");
         response.setResult(rencanaPemeriksaan);

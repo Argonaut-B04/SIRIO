@@ -89,9 +89,9 @@ export default class FormTambahRencana extends React.Component {
 
     componentDidUpdate() {
         var submitable = true;
-
-        submitable = this.validateNama() && this.validateLink();
-
+     
+        submitable = this.validateNama() && this.validateLink()
+        
         if (this.state.submitable !== submitable) {
             this.setState({
                 submitable: submitable
@@ -99,14 +99,71 @@ export default class FormTambahRencana extends React.Component {
         }
     }
 
+
+    // componentDidUpdate() {
+    //     var submitable = true;
+    //     if (this.state.daftarTugasPemeriksaan[0] == null){
+    //         submitable = this.validateNama() && this.validateLink() 
+            
+    //     }else{
+    //         submitable = this.validateNama() && this.validateLink() && this.validateKC() && this.validateQA() && this.validateTanggalMulai() && this.validateTanggalSelesai()  
+    //     }
+    //     if (this.state.submitable !== submitable) {
+    //         this.setState({
+    //             submitable: submitable
+    //         })
+    //     }
+    // }
+
+    // componentDidUpdate(prevProps, prevState) {
+    //     var submitable = true;
+    //     if (prevState.namaRencana!== this.state.namaRencana){
+    //         submitable = submitable && this.validateNama() 
+    //     }
+
+    //     if (prevState.linkMajelis!== this.state.linkMajelis){
+    //         submitable = submitable && this.this.validateLink() 
+    //     }
+
+    //     if (prevState.daftarTugasPemeriksaan.kantorCabang !== this.state.daftarTugasPemeriksaan.kantorCabang){
+    //         submitable = submitable && this.validateKC() 
+    //     }
+
+    //     if (prevState.daftarTugasPemeriksaan.idQA !== this.state.daftarTugasPemeriksaan.idQA){
+    //         submitable = submitable && this.this.validateQA() 
+    //     }
+
+    //     if (prevState.daftarTugasPemeriksaan.kantorCabang !== this.state.daftarTugasPemeriksaan.kantorCabang){
+    //         submitable = submitable && this.validateKC() 
+    //     }
+
+    //     if (prevState.daftarTugasPemeriksaan.idQA !== this.state.daftarTugasPemeriksaan.idQA){
+    //         submitable = submitable && this.this.validateQA() 
+    //     }
+
+    //     if (this.state.submitable !== submitable) {
+    //         this.setState({
+    //             submitable: submitable
+    //         })
+    //     }
+    // }
+
     validateNama() {
         var submitable = true;
         var errorNama;
         const fokusNama = this.state.namaRencana
+        if(fokusNama.match(".*[1234567890!-@#$%^&*()_+{}:.,[]|>/=<?]+.*")){
+            submitable = false;
+            errorNama = "Hanya boleh mengandung huruf";
+        }
         if (fokusNama.length < 2) {
             submitable = false;
             errorNama = "Minimal terdapat 2 karakter";
         } 
+        if (fokusNama.length > 50) {
+            submitable = false;
+            errorNama = "Nama rencana tidak boleh lebih dari 50 karakter";
+        }
         if (this.state.errorNama !== errorNama) {
             this.setState({
                 errorNama: errorNama
@@ -119,10 +176,17 @@ export default class FormTambahRencana extends React.Component {
         var submitable = true;
         var errorLink;
         const fokusLink = this.state.linkMajelis
-        if (!fokusLink.includes("http://") ) {
+        if (fokusLink.length < 1) {
             submitable = false;
-            errorLink = "Link harus mengandung 'http://' ";
-        } 
+            errorLink = "Lampiran wajib diisi";
+        } else if (!fokusLink.includes("http")) {
+            submitable = false;
+            errorLink = "Lampiran harus berupa link url";
+        }
+        if (fokusLink.length > 255) {
+            submitable = false;
+            errorLink = "Link tidak boleh lebih dari 255 karakter";
+        }
         if (this.state.errorLink !== errorLink) {
             this.setState({
                 errorLink: errorLink
@@ -130,6 +194,87 @@ export default class FormTambahRencana extends React.Component {
         }
         return submitable;
     }
+
+    validateKC() {
+        var submitable = true;
+        var errorKC;
+        if (this.state.daftarTugasPemeriksaan[0] != null){
+            for (let i = 0; i < this.state.daftarTugasPemeriksaan.length;i++) {
+                const fokusKC = this.state.daftarTugasPemeriksaan[i].kantorCabang
+                if (fokusKC.length < 1) {
+                    submitable = false;
+                    errorKC = "Kantor Cabang harus diisi";
+                } 
+            }
+        }
+        if (this.state.errorKC !== errorKC) {
+            this.setState({
+                errorKC: errorKC
+            })
+        }
+        return submitable;
+    }
+
+    validateQA() {
+        var submitable = true;
+        var errorQA;
+        if (this.state.daftarTugasPemeriksaan[0] != null){
+            for (let i = 0; i < this.state.daftarTugasPemeriksaan.length;i++) {
+                const fokusQA = this.state.daftarTugasPemeriksaan[i].idQA
+                if (fokusQA.length < 1) {
+                    submitable = false;
+                    errorQA = "QA Officer harus diisi";
+                } 
+            }
+        }
+        if (this.state.errorQA !== errorQA) {
+            this.setState({
+                errorQA: errorQA
+            })
+        }
+        return submitable;
+    }
+
+    validateTanggalMulai() {
+        var submitable = true;
+        var errorTM;
+        if (this.state.daftarTugasPemeriksaan[0] != null){
+            for (let i = 0; i < this.state.daftarTugasPemeriksaan.length;i++) {
+                const fokusTM = this.state.daftarTugasPemeriksaan[i].tanggalMulai
+                if (fokusTM.length < 1) {
+                    submitable = false;
+                    errorTM = "Tanggal Mulai harus diisi";
+                } 
+            }
+        }
+        if (this.state.errorTM !== errorTM) {
+            this.setState({
+                errorTM: errorTM
+            })
+        }
+        return submitable;
+    }
+
+    validateTanggalSelesai() {
+        var submitable = true;
+        var errorTS;
+        if (this.state.daftarTugasPemeriksaan[0] != null){
+            for (let i = 0; i < this.state.daftarTugasPemeriksaan.length;i++) {
+                const fokusTS = this.state.daftarTugasPemeriksaan[i].tanggalSelesai
+                if (fokusTS.length < 1) {
+                    submitable = false;
+                    errorTS = "Tanggal Selesai harus diisi";
+                } 
+            }
+        }
+        if (this.state.errorTS !== errorTS) {
+            this.setState({
+                errorTS: errorTS
+            })
+        }
+        return submitable;
+    }
+
 
     async renderEmployeeOption() {
         const response = await EmployeeService.getAllQAOfficer();
@@ -247,7 +392,7 @@ export default class FormTambahRencana extends React.Component {
                     required: true,
                     validation: this.state.errorLink,
                     value: this.state.linkMajelis,
-                    placeholder: "Masukan link pemeriksaan"
+                    placeholder: "https://drive.google.com/"
                 },{
                     fullComponent:
                         this.tambahTugasButton
@@ -278,6 +423,7 @@ export default class FormTambahRencana extends React.Component {
                     handleChange: this.handleMultipleSelectChange,
                     index: index,
                     required: true,
+                    validation: this.state.errorKC,
                     type: "select",
                     name: "kantorCabang",
                     value: this.state.daftarTugasPemeriksaan[index].kantorCabang,
@@ -289,6 +435,7 @@ export default class FormTambahRencana extends React.Component {
                     type: "select",
                     name: "idQA",
                     required: true,
+                    validation: this.state.errorQA,
                     value: this.state.daftarTugasPemeriksaan[index].idQA,
                     optionList: this.state.employeeOptionList
                 }, {
@@ -297,6 +444,7 @@ export default class FormTambahRencana extends React.Component {
                     index: index,
                     type: "date",
                     required: true,
+                    validation: this.state.errorTM,
                     name: "tanggalMulai",
                     value: this.state.daftarTugasPemeriksaan[index].tanggalMulai
                 }, {
@@ -305,6 +453,7 @@ export default class FormTambahRencana extends React.Component {
                     index: index,
                     type: "date",
                     required: true,
+                    validation: this.state.errorTS,
                     name: "tanggalSelesai",
                     value: this.state.daftarTugasPemeriksaan[index].tanggalSelesai
                 }
@@ -317,11 +466,11 @@ export default class FormTambahRencana extends React.Component {
         return (
             <div>
                 <SirioButton purple 
-                    recommended={this.state.submitable}
-                    disabled={!this.state.submitable}
+                    recommended={this.state.submitable && this.state.daftarTugasPemeriksaan[0] != null}
+                    disabled={!this.state.submitable || !(this.state.daftarTugasPemeriksaan[0] != null)}  
                     classes="mx-1"
                     onClick={(event) => this.handleSubmit(event,"simpan")}>
-                    Simpan
+                    Jalankan
                 </SirioButton>
                 <SirioButton purple
                     classes="mx-1"

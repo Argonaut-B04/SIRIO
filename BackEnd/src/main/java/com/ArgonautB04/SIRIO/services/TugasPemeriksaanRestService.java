@@ -20,6 +20,8 @@ public interface TugasPemeriksaanRestService {
 
     List<TugasPemeriksaan> getByRencana(RencanaPemeriksaan rencanaPemeriksaan);
 
+    boolean isExistInDatabase(TugasPemeriksaan tugasPemeriksaan);
+
     TugasPemeriksaan ubahTugasPemeriksaan(int idTugasPemeriksaan, TugasPemeriksaan tugasPemeriksaan);
 
     void hapusTugasPemeriksaan(int idTugasPemeriksaan);

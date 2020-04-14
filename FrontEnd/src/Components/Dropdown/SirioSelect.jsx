@@ -38,9 +38,9 @@ export default class SirioSelect extends Component {
     render() {
         return (
             <Select
-                value={this.props.options.filter(option => option.value === this.props.value)}
+                value={this.props.options && this.props.options.filter(option => option.value === this.props.value)}
                 onChange={event => this.props.handleChange(this.props.name, event, this.props.index)}
-                components={{ IndicatorSeparator:() => null }}
+                components={{ IndicatorSeparator: () => null }}
                 options={this.props.options}
                 className={this.props.className ? [this.props.className, classes.select].join(" ") : classes.select}
                 styles={this.customStyles}

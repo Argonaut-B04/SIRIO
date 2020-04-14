@@ -6,12 +6,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface KantorCabangDB extends JpaRepository<KantorCabang, Integer> {
 
-    //KantorCabang findKantorCabangByPemilik(Employee pemilik);
-    List<KantorCabang> findAllByPembuat(Employee pembuat);
+    List<KantorCabang> findAllByStatus(KantorCabang.Status status);
+    Optional<KantorCabang> findByIdKantorAndStatus(Integer id, KantorCabang.Status status);
     KantorCabang findAllByPemilik(Employee pemilik);
     KantorCabang findByNamaKantor(String nama);
 

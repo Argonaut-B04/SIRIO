@@ -20,12 +20,13 @@ public class KantorCabangRestServiceImpl implements KantorCabangRestService {
 
     @Override
     public KantorCabang buatKantorCabang(KantorCabang kantorCabang) {
+        kantorCabang.setStatus(KantorCabang.Status.AKTIF);
         return kantorCabangDB.save(kantorCabang);
     }
 
     @Override
     public KantorCabang getById(int idKantorCabang) {
-        Optional<KantorCabang> kantorCabang = kantorCabangDB.findById(idKantorCabang);
+        Optional<KantorCabang> kantorCabang = kantorCabangDB.findByIdKantorAndStatus(idKantorCabang, KantorCabang.Status.AKTIF);
         if (kantorCabang.isPresent()) return kantorCabang.get();
         else throw new NoSuchElementException();
     }
@@ -37,7 +38,7 @@ public class KantorCabangRestServiceImpl implements KantorCabangRestService {
 
     @Override
     public List<KantorCabang> getAll() {
-        return kantorCabangDB.findAll();
+        return kantorCabangDB.findAllByStatus(KantorCabang.Status.AKTIF);
     }
 
     @Override
@@ -64,19 +65,19 @@ public class KantorCabangRestServiceImpl implements KantorCabangRestService {
     @Override
     public KantorCabang nonaktifkanKantor(int idKantor) {
         KantorCabang kantorCabang = getById(idKantor);
-        //kantorCabang.setStatus(KantorCabang.Status.NONAKTIF);
+        kantorCabang.setStatus(KantorCabang.Status.NONAKTIF);
         return kantorCabang;
     }
 
     @Override
     public KantorCabang aktifkanKantor(int idKantor) {
         KantorCabang kantorCabang= getById(idKantor);
-       // kantorCabang.setStatus(KantorCabang.Status.AKTIF);
+        kantorCabang.setStatus(KantorCabang.Status.AKTIF);
         return kantorCabang;
     }
 
-    @Override
-    public List<KantorCabang> getByPembuat(Employee pembuat){
-        return kantorCabangDB.findAllByPembuat(pembuat);
-    }
+//    @Override
+//    public List<KantorCabang> getByPembuat(Employee pembuat){
+//        return kantorCabangDB.findAllByPembuat(pembuat);
+//    }
 }

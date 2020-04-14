@@ -69,17 +69,28 @@ class TabelRencanaPemeriksaan extends React.Component {
     }
 
     getTahunFormatter(cell, row) {
-        const tanggalString = row.daftarTugasPemeriksaan[0].tanggalSelesai;
-        const tahun = tanggalString.split("-")[0]
-        return tahun;
+        if (row.daftarTugasPemeriksaan[0] != null){
+            const tanggalString = row.daftarTugasPemeriksaan[0].tanggalSelesai;
+            const tahun = tanggalString.split("-")[0]
+            return tahun;
+        }else{
+            return "-"
+        }
+    
+        
     }
 
     getBulanFormatter(cell, row) {
-        const tanggalString = row.daftarTugasPemeriksaan[0].tanggalSelesai;
-        const bulan = tanggalString.split("-")[1]
-        var namaBulan = ["Januari", "Februari", "Maret", "April", "Mei", "Juni",
-            "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
-        return namaBulan[bulan - 1];
+        if(row.daftarTugasPemeriksaan[0] != null){
+            const tanggalString = row.daftarTugasPemeriksaan[0].tanggalSelesai;
+            const bulan = tanggalString.split("-")[1]
+            var namaBulan = ["Januari", "Februari", "Maret", "April", "Mei", "Juni",
+                "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+            return namaBulan[bulan - 1];
+        }else{
+            return "-"
+        }
+        
     }
 
     columns = [{
