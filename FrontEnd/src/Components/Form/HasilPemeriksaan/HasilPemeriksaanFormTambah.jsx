@@ -402,6 +402,8 @@ class HasilPemeriksaanFormTambah extends React.Component {
     handleSelectChangeRisiko(name, event) {
         const risiko1 = this.state.daftarRisikoKategori1;
         const risiko2 = this.state.daftarRisikoKategori2;
+        console.log("test")
+        console.log(risiko1)
         if (event.value === "1") {
             this.setState(
                 {

@@ -68,6 +68,8 @@ export default class EmployeeFormTambah extends React.Component {
         }
 
         if (prevState.username !== this.state.username) {
+            const validation = this.validateUsername();
+            submitable = submitable && validation;
             validating = true;
         }
 
@@ -149,6 +151,23 @@ export default class EmployeeFormTambah extends React.Component {
         if (this.state.errorPassword !== errorPassword) {
             this.setState({
                 errorPassword: errorPassword
+            })
+        }
+        return submitable;
+    }
+
+    validateUsername() {
+        var submitable = true;
+        const fokusUsername = this.state.username;
+        var errorUsername;
+        var letterNumber = /^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$/;
+        if (!fokusUsername.match(letterNumber)) {
+            submitable = false;
+            errorUsername = "Username harus mengandung angka dan huruf";
+        }
+        if (this.state.errorUsername !== errorUsername) {
+            this.setState({
+                errorUsername: errorUsername
             })
         }
         return submitable;
