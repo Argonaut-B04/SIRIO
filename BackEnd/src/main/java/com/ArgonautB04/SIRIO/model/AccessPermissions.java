@@ -51,6 +51,20 @@ public class AccessPermissions implements Serializable {
 //    @Column(columnDefinition = "boolean default false")
 //    private Boolean aksesKategoriUbahHierarki;
 
+    @Column(columnDefinition = "boolean default false")
+    private Boolean aksesTabelRekomendasi;
+
+    @Column(columnDefinition = "boolean default false")
+    private Boolean aksesBuktiPelaksanaan;
+
+    @Column(columnDefinition = "boolean default false")
+    private Boolean aksesTambahBuktiPelaksanaan;
+
+    @Column(columnDefinition = "boolean default false")
+    private Boolean aksesUbahBuktiPelaksanaan;
+
+    @Column(columnDefinition = "boolean default false")
+    private Boolean aksesPersetujuanBuktiPelaksanaan;
 
     public Boolean getAksesTabelRisiko() {
         return aksesTabelRisiko;
@@ -154,5 +168,45 @@ public class AccessPermissions implements Serializable {
 
     public void setUbahReminder(Boolean ubahReminder) {
         this.ubahReminder = ubahReminder;
+    }
+
+    public Boolean getAksesTabelRekomendasi() {
+        return aksesTabelRekomendasi;
+    }
+
+    public void setAksesTabelRekomendasi(Boolean aksesTabelRekomendasi) {
+        this.aksesTabelRekomendasi = aksesTabelRekomendasi;
+    }
+
+    public Boolean getAksesBuktiPelaksanaan() {
+        return aksesBuktiPelaksanaan;
+    }
+
+    public void setAksesBuktiPelaksanaan(Boolean aksesBuktiPelaksanaan) {
+        this.aksesBuktiPelaksanaan = aksesBuktiPelaksanaan;
+    }
+
+    public Boolean getAksesTambahBuktiPelaksanaan() {
+        return aksesTambahBuktiPelaksanaan;
+    }
+
+    public void setAksesTambahBuktiPelaksanaan(Boolean aksesTambahBuktiPelaksanaan) {
+        this.aksesTambahBuktiPelaksanaan = aksesTambahBuktiPelaksanaan;
+    }
+
+    public Boolean getAksesUbahBuktiPelaksanaan() {
+        return aksesUbahBuktiPelaksanaan;
+    }
+
+    public void setAksesUbahBuktiPelaksanaan(Boolean aksesUbahBuktiPelaksanaan) {
+        this.aksesUbahBuktiPelaksanaan = aksesUbahBuktiPelaksanaan;
+    }
+
+    public Boolean getAksesPersetujuanBuktiPelaksanaan() {
+        return aksesPersetujuanBuktiPelaksanaan;
+    }
+
+    public void setAksesPersetujuanBuktiPelaksanaan(Boolean aksesPersetujuanBuktiPelaksanaan) {
+        this.aksesPersetujuanBuktiPelaksanaan = aksesPersetujuanBuktiPelaksanaan;
     }
 }

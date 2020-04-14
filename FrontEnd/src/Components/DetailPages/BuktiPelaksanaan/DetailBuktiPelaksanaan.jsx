@@ -54,9 +54,9 @@ class DetailBuktiPelaksanaan extends React.Component {
 
     data() {
         return {
-            "Keterangan :": this.state.buktiPelaksanaan.keterangan,
-            "Lampiran   :": this.lampiranFormater(this.state.buktiPelaksanaan.lampiran),
-            "Feedback   :": this.feedbackFormatter(this.state.buktiPelaksanaan.feedback)
+            "Keterangan:": this.state.buktiPelaksanaan.keterangan,
+            "Lampiran:": this.lampiranFormater(this.state.buktiPelaksanaan.lampiran),
+            "Feedback:": this.feedbackFormatter(this.state.buktiPelaksanaan.feedback)
         }
     }
 
@@ -167,6 +167,7 @@ class DetailBuktiPelaksanaan extends React.Component {
                 {this.renderRedirect()}
                 <SirioDetailPage
                     title="Detail Bukti Pelaksanaan"
+                    link="bukti-pelaksanaan"
                     data={this.data()}
                     id='id'
                     subButton={this.subButton()}

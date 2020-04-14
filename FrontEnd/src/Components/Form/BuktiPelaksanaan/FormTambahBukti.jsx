@@ -63,17 +63,32 @@ class FormTambahBukti extends React.Component {
 
     componentDidUpdate(prevProps, prevState) {
         var submitable = true;
+        var validating = false;
+        submitable = this.validateRequired();
         if (prevState.keterangan !== this.state.keterangan) {
-            submitable = submitable && this.validateKeterangan();
+            submitable = this.validateKeterangan() && submitable;
+            validating = true;
         }
         if (prevState.lampiran !== this.state.lampiran) {
-            submitable = submitable && this.validateLampiran();
+            submitable = this.validateLampiran() && submitable;
+            validating = true;
         }
-        if (this.state.submitable !== submitable) {
-            this.setState({
-                submitable: submitable
-            })
+        if (validating) {
+            if (this.state.submitable !== submitable) {
+                this.setState({
+                    submitable: submitable
+                })
+            }
         }
+    }
+
+    validateRequired() {
+        var submitable = true;
+        const required = [this.state.keterangan, this.state.lampiran];
+        for (let i = 0; i < required.length; i++) {
+            submitable = submitable && (required[i] !== null && required[i] !== "");
+        }
+        return submitable;
     }
 
     validateKeterangan() {
@@ -83,8 +98,7 @@ class FormTambahBukti extends React.Component {
         if (varKeterangan.length < 1) {
             submitable = false;
             errorKeterangan = "Keterangan wajib diisi";
-        }
-        if (varKeterangan.length > 125) {
+        } else if (varKeterangan.length > 125) {
             submitable = false;
             errorKeterangan = "Keterangan tidak boleh lebih dari 125 karakter";
         }
@@ -103,11 +117,10 @@ class FormTambahBukti extends React.Component {
         if (varLampiran.length < 1) {
             submitable = false;
             errorLampiran = "Lampiran wajib diisi";
-        } else if (!(varLampiran.includes("https://")) || !(varLampiran.includes("http://"))) {
+        } else if (!(varLampiran.includes("https://"))) {
             submitable = false;
             errorLampiran = "Lampiran harus berupa link url";
-        }
-        if (varLampiran.length > 255) {
+        } else if (varLampiran.length > 255) {
             submitable = false;
             errorLampiran = "Lampiran tidak boleh lebih dari 255 karakter";
         }
@@ -156,6 +169,7 @@ class FormTambahBukti extends React.Component {
                     Simpan
                 </SirioButton>
                 <SirioButton purple
+                             type="button"
                              classes="mx-1"
                              onClick={() => window.location.href = "/bukti-pelaksanaan"}>
                     Batal

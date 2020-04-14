@@ -78,17 +78,28 @@ class FormTolakBukti extends React.Component {
 
     componentDidUpdate(prevProps, prevState) {
         var submitable = true;
-        if (prevState.keterangan !== this.state.keterangan) {
-            submitable = submitable && this.validateKeterangan();
+        var validating = false;
+        submitable = this.validateRequired();
+        if (prevState.feedback !== this.state.feedback) {
+            submitable = this.validateFeedback() && submitable;
+            validating = true;
         }
-        if (prevState.lampiran !== this.state.lampiran) {
-            submitable = submitable && this.validateLampiran();
+        if (validating) {
+            if (this.state.submitable !== submitable) {
+                this.setState({
+                    submitable: submitable
+                })
+            }
         }
-        if (this.state.submitable !== submitable) {
-            this.setState({
-                submitable: submitable
-            })
+    }
+
+    validateRequired() {
+        var submitable = true;
+        const required = [this.state.feedback];
+        for (let i = 0; i < required.length; i++) {
+            submitable = submitable && (required[i] !== null && required[i] !== "");
         }
+        return submitable;
     }
 
     validateFeedback() {
@@ -98,8 +109,7 @@ class FormTolakBukti extends React.Component {
         if (varFeedback.length < 1) {
             submitable = false;
             errorFeedback = "Feedback wajib diisi";
-        }
-        if (varFeedback.length > 125) {
+        } else if (varFeedback.length > 125) {
             submitable = false;
             errorFeedback = "Feedback tidak boleh lebih dari 125 karakter";
         }
@@ -134,11 +144,11 @@ class FormTolakBukti extends React.Component {
         return rowDefinition;
     }
 
-    submitButton() {
+    submitButton(cell, row) {
         return (
             <div>
                 <SirioConfirmButton
-                    purple 
+                    purple
                     recommended={this.state.submitable}
                     disabled={!this.state.submitable}
                     classes="mx-1"
@@ -150,8 +160,9 @@ class FormTolakBukti extends React.Component {
                     Simpan
                 </SirioConfirmButton>
                 <SirioButton purple
-                             classes="mx-1"
-                             onClick={() => window.location.href = "/bukti-pelaksanaan"}>
+                            type="button"
+                            classes="mx-1"
+                            onClick={() => window.location.href = "/bukti-pelaksanaan"}>
                     Batal
                 </SirioButton>
             </div>

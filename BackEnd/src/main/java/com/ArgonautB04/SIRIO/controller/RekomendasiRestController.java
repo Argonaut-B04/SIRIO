@@ -51,83 +51,83 @@ public class RekomendasiRestController {
     @GetMapping("/getAll")
     private BaseResponse<List<RekomendasiDTO>> getAllRekomendasiUntukLoggedInUser(Principal principal) {
         BaseResponse<List<RekomendasiDTO>> response = new BaseResponse<>();
-        try {
-            Optional<Employee> employeeTarget = employeeRestService.getByUsername(principal.getName());
-            Employee employee;
-            if (employeeTarget.isPresent()) {
-                employee = employeeTarget.get();
-            } else {
-                throw new NoSuchElementException();
-            }
-
-            List<Rekomendasi> result;
-            if (employee.getRole().getNamaRole().equals("Branch Manager")) {
-                KantorCabang kantorCabang = kantorCabangRestService.getByPemilik(employee);
-                List<TugasPemeriksaan> daftarTugasPemeriksaan = tugasPemeriksaanRestService
-                        .getByKantorCabang(kantorCabang);
-                List<HasilPemeriksaan> daftarHasilPemeriksaan = hasilPemeriksaanRestService
-                        .getByDaftarTugasPemeriksaan(daftarTugasPemeriksaan);
-                List<KomponenPemeriksaan> daftarKomponenPemeriksaan = komponenPemeriksaanRestService
-                        .getByDaftarHasilPemeriksaan(daftarHasilPemeriksaan);
-                result = rekomendasiRestService.getByDaftarKomponenPemeriksaan(daftarKomponenPemeriksaan);
-            } else if (employee.getRole().getNamaRole().equals("Super QA Officer Operational Risk")
-                    | employee.getRole().getNamaRole().equals("Manajer Operational Risk")) {
-                result = rekomendasiRestService.getAll();
-            } else {
-                result = rekomendasiRestService.getByPembuat(employee);
-            }
-
-            List<RekomendasiDTO> resultDTO = new ArrayList<>();
-            for (Rekomendasi rekomendasi : result) {
-                RekomendasiDTO rekomendasiDTO = new RekomendasiDTO();
-                rekomendasiDTO.setId(rekomendasi.getIdRekomendasi());
-                rekomendasiDTO.setKeterangan(rekomendasi.getKeterangan());
-
-                Date tenggatWaktu = rekomendasi.getTenggatWaktu();
-                if (tenggatWaktu != null) {
-                    String tenggatWaktuString = tenggatWaktu.toString();
-                    String tenggatWaktuFinal = tenggatWaktuString.substring(0, 10);
-                    rekomendasiDTO.setTenggatWaktu(tenggatWaktuFinal);
-
-                    DateFormat df = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
-                    Date dateobj = new Date();
-                    String mulai = df.format(dateobj);
-
-                    String selesai = rekomendasi.getTenggatWaktu().toString();
-                    String tanggalMulai = mulai.substring(0, 2);
-                    String tanggalSelesai = selesai.substring(8, 10);
-                    int tanggalMulaiFinal = Integer.parseInt(tanggalMulai);
-                    int tanggalSelesaiFinal = Integer.parseInt(tanggalSelesai);
-                    int durasi = (tanggalSelesaiFinal - tanggalMulaiFinal) + 1;
-                    if (durasi < 0) {
-                        durasi = 0;
+        Optional<Employee> pengelolaOptional = employeeRestService.getByUsername(principal.getName());
+        Employee pengelola;
+        if (pengelolaOptional.isPresent()) {
+            pengelola = pengelolaOptional.get();
+            if (pengelola.getRole().getAccessPermissions().getAksesTabelRekomendasi()) {
+                try {
+                    List<Rekomendasi> result;
+                    if (pengelola.getRole().getNamaRole().equals("Branch Manager")) {
+                        KantorCabang kantorCabang = kantorCabangRestService.getByPemilik(pengelola);
+                        List<TugasPemeriksaan> daftarTugasPemeriksaan = tugasPemeriksaanRestService
+                                .getByKantorCabang(kantorCabang);
+                        List<HasilPemeriksaan> daftarHasilPemeriksaan = hasilPemeriksaanRestService
+                                .getByDaftarTugasPemeriksaan(daftarTugasPemeriksaan);
+                        List<KomponenPemeriksaan> daftarKomponenPemeriksaan = komponenPemeriksaanRestService
+                                .getByDaftarHasilPemeriksaan(daftarHasilPemeriksaan);
+                        result = rekomendasiRestService.getByDaftarKomponenPemeriksaan(daftarKomponenPemeriksaan);
+                    } else if (pengelola.getRole().getNamaRole().equals("Super QA Officer Operational Risk")
+                            | pengelola.getRole().getNamaRole().equals("Manajer Operational Risk")) {
+                        result = rekomendasiRestService.getAll();
+                    } else {
+                        result = rekomendasiRestService.getByPembuat(pengelola);
                     }
-                    String durasiString = Integer.toString(durasi);
-                    String durasiFinal = durasiString + " Hari";
-                    rekomendasiDTO.setDurasi(durasiFinal);
-                }
+                  
+                    List<RekomendasiDTO> resultDTO = new ArrayList<>();
+                    for (Rekomendasi rekomendasi : result) {
+                        RekomendasiDTO rekomendasiDTO = new RekomendasiDTO();
+                        rekomendasiDTO.setId(rekomendasi.getIdRekomendasi());
+                        rekomendasiDTO.setKeterangan(rekomendasi.getKeterangan());
 
-                rekomendasiDTO.setStatus(rekomendasi.getStatusRekomendasi().getNamaStatus());
+                        Date tenggatWaktu = rekomendasi.getTenggatWaktu();
+                        if (tenggatWaktu != null) {
+                            String tenggatWaktuString = tenggatWaktu.toString();
+                            String tenggatWaktuFinal = tenggatWaktuString.substring(0, 10);
+                            rekomendasiDTO.setTenggatWaktu(tenggatWaktuFinal);
+                          
+                           DateFormat df = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
+                           Date dateobj = new Date();
+                           String mulai = df.format(dateobj);
+                           String selesai = rekomendasi.getTenggatWaktu().toString();
+                           String tanggalMulai = mulai.substring(0, 2);
+                           String tanggalSelesai = selesai.substring(8, 10);
+                           int tanggalMulaiFinal = Integer.parseInt(tanggalMulai);
+                           int tanggalSelesaiFinal = Integer.parseInt(tanggalSelesai);
+                           int durasi = (tanggalSelesaiFinal - tanggalMulaiFinal) + 1;
+                           if (durasi < 0) {
+                               durasi = 0;
+                           }
+                           String durasiString = Integer.toString(durasi);
+                           String durasiFinal = durasiString + " Hari";
+                           rekomendasiDTO.setDurasi(durasiFinal);
+                        }
 
-                List<BuktiPelaksanaan> buktiList = buktiPelaksanaanRestService.getByDaftarRekomendasi(result);
-                for (BuktiPelaksanaan buktiPelaksanaan : buktiList) {
-                    if (buktiPelaksanaan.getRekomendasi().equals(rekomendasi)) {
-                        rekomendasiDTO.setStatusBukti(buktiPelaksanaan.getStatusBuktiPelaksanaan().getNamaStatus());
+                        rekomendasiDTO.setStatus(rekomendasi.getStatusRekomendasi().getNamaStatus());
+                      
+                        List<BuktiPelaksanaan> buktiList = buktiPelaksanaanRestService.getByDaftarRekomendasi(result);
+                        for (BuktiPelaksanaan buktiPelaksanaan : buktiList) {
+                            if (buktiPelaksanaan.getRekomendasi().equals(rekomendasi)) {
+                                rekomendasiDTO.setStatusBukti(buktiPelaksanaan.getStatusBuktiPelaksanaan().getNamaStatus());
+                            }
+                        }
+                        rekomendasiDTO.setNamaKantorCabang(rekomendasi.getKomponenPemeriksaan().getHasilPemeriksaan()
+                                .getTugasPemeriksaan().getKantorCabang().getNamaKantor());
+                        resultDTO.add(rekomendasiDTO);
                     }
+                    response.setStatus(200);
+                    response.setMessage("success");
+                    response.setResult(resultDTO);
+                } catch (NoSuchElementException e) {
+                    throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Akun anda tidak terdaftar atau tidak ditemukan!");
                 }
-                rekomendasiDTO.setNamaKantorCabang(rekomendasi.getKomponenPemeriksaan().getHasilPemeriksaan()
-                        .getTugasPemeriksaan().getKantorCabang().getNamaKantor());
-                resultDTO.add(rekomendasiDTO);
-            }
-
-            response.setStatus(200);
-            response.setMessage("success");
-            response.setResult(resultDTO);
-        } catch (NoSuchElementException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Akun anda tidak terdaftar atau tidak ditemukan!");
-        }
-        return response;
-
+                return response;
+            } else throw new ResponseStatusException(
+                    HttpStatus.UNAUTHORIZED, "Akun anda tidak memiliki akses ke pengaturan ini"
+            );
+        } else throw new ResponseStatusException(
+                HttpStatus.UNAUTHORIZED, "Akun anda tidak terdaftar dalam Sirio"
+        );
     }
 
     /**
