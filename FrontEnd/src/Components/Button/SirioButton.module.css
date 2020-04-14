@@ -1,7 +1,7 @@
 .sirioButton {
     color: var(--main-color);
     border: solid 1.5px var(--main-color);
-    background-color: transparent;
+    background-color: white;
     font-family: Proxima Nova;
     min-height: 30px;
     min-width: 100px;
