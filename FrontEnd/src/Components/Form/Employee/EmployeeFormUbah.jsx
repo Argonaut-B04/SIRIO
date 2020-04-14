@@ -3,7 +3,7 @@ import SirioForm from '../SirioForm';
 import SirioButton from '../../Button/SirioButton';
 import EmployeeService from '../../../Services/EmployeeService';
 import RoleService from '../../../Services/RoleService';
-import { Redirect } from 'react-router-dom';
+import {NavLink, Redirect} from 'react-router-dom';
 import { withRouter } from 'react-router-dom';
 
 class EmployeeFormUbah extends React.Component {
@@ -177,11 +177,18 @@ class EmployeeFormUbah extends React.Component {
                              onClick={(event)  => this.handleSubmit(event)}>
                     Simpan
                 </SirioButton>
-                <SirioButton purple
-                             classes="mx-1"
-                             onClick={() => window.location.href = "/employee"}>
-                    Batal
-                </SirioButton>
+                <NavLink to={{
+                    pathname: "/employee/detail",
+                    state: {
+                        id: this.props.location.state.id
+                    }
+                }}>
+                    <SirioButton
+                        purple
+                    >
+                        Batal
+                    </SirioButton>
+                </NavLink>
             </div>
         )
     }
