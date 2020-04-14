@@ -36,15 +36,29 @@ export default class SirioSelect extends Component {
     }
 
     render() {
+        var hiddenOne;
+        if (this.props.required) {
+            hiddenOne =
+                <input
+                    tabIndex={-1}
+                    autoComplete="off"
+                    style={{ opacity: 0, height: 0, marginLeft: "-200px", marginTop: "10px" }}
+                    value={this.props.options && this.props.options.filter(option => option.value === this.props.value)}
+                    required
+                />
+        }
         return (
-            <Select
-                value={this.props.options && this.props.options.filter(option => option.value === this.props.value)}
-                onChange={event => this.props.handleChange(this.props.name, event, this.props.index)}
-                components={{ IndicatorSeparator: () => null }}
-                options={this.props.options}
-                className={this.props.className ? [this.props.className, classes.select].join(" ") : classes.select}
-                styles={this.customStyles}
-            />
+            <>
+                <Select
+                    value={this.props.options && this.props.options.filter(option => option.value === this.props.value)}
+                    onChange={event => this.props.handleChange(this.props.name, event, this.props.index)}
+                    components={{ IndicatorSeparator: () => null }}
+                    options={this.props.options}
+                    className={this.props.className ? [this.props.className, classes.select].join(" ") : classes.select}
+                    styles={this.customStyles}
+                />
+                {hiddenOne}
+            </>
         );
     }
 }

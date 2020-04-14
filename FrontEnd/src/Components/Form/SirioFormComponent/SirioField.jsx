@@ -18,6 +18,32 @@ import SirioRectangularButton from '../../Button/SirioRectangularButton';
  */
 export default class SirioField extends Component {
 
+    constructor(props) {
+        super(props)
+        this.state = {}
+    }
+
+    isFunction(functionToCheck) {
+        return functionToCheck && {}.toString.call(functionToCheck) === '[object Function]';
+    }
+
+    componentDidUpdate() {
+        if (this.props.value !== "") {
+            var validationResult;
+            if (this.isFunction(this.props.validationFunction)) {
+                validationResult = this.props.validationFunction(this.props.value);
+            }
+
+            if (this.state.validationResult !== validationResult) {
+                this.setState({
+                    validationResult: validationResult
+                })
+            }
+            // } else {
+            //     console.log("value nya masih kosong")
+        }
+    }
+
     generateField(key, customInput, type, index, name, value, handleChange, optionList, customClass, required, min, max, placeholder) {
         var field;
         if (customInput) {
@@ -31,6 +57,7 @@ export default class SirioField extends Component {
                     value={value}
                     handleChange={handleChange}
                     options={optionList}
+                    required={required}
                     className={[customClass, classes.sirioSelect].join(" ")}
                 />;
         } else if (type === "textarea") {
@@ -132,15 +159,6 @@ export default class SirioField extends Component {
 
 
     render() {
-        function isFunction(functionToCheck) {
-            return functionToCheck && {}.toString.call(functionToCheck) === '[object Function]';
-        }
-        if (this.props.value !== "") {
-            var validationResult;
-            if (isFunction(this.props.validationFunction)) {
-                validationResult = this.props.validationFunction(this.props.value);
-            }
-        }
 
         if (this.props.fullComponent) {
             return this.props.fullComponent;
@@ -149,7 +167,7 @@ export default class SirioField extends Component {
                 <label className={classes.label}>
                     {this.props.label}
                     {this.props.validator && <p className={classes.error}>{this.props.validator}</p>}
-                    {validationResult && <p className={classes.error}>{validationResult}</p>}
+                    {this.state.validationResult && <p className={classes.error}>{this.state.validationResult}</p>}
                 </label>
             // modifier untuk multiple
             var field;

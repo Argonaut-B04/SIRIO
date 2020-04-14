@@ -20,7 +20,8 @@ export default class DemoForm extends React.Component {
             customDropdown: "",
             customDropdown2: "",
             namaMain: ["Chocola", "Vanilla"],
-            submitable: true
+            submitable: true,
+            submitableArray: [false, false],
         }
 
         this.handleChange = this.handleChange.bind(this);
@@ -31,6 +32,7 @@ export default class DemoForm extends React.Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.validateNama = this.validateNama.bind(this);
         this.validateUmur = this.validateUmur.bind(this);
+        this.submitable = this.submitable.bind(this);
     }
 
     // Fungsi untuk mengubah state ketika isi dari input diubah
@@ -68,9 +70,18 @@ export default class DemoForm extends React.Component {
     // Umumnya akan digunakan untuk memanggil service komunikasi ke backend
     handleSubmit(event) {
         event.preventDefault();
-        if (this.state.submitable) {
+        if (this.submitable()) {
             alert("submited");
         }
+    }
+
+    submitable() {
+        var submitable = true;
+        const fokus = this.state.submitableArray;
+        for (let i = 0; i < fokus.length; i++) {
+            submitable = submitable && fokus[i]
+        }
+        return submitable;
     }
 
     validateNama(fokusNama) {
@@ -81,13 +92,13 @@ export default class DemoForm extends React.Component {
             errorNama = "terlalu pendek ?";
         } else if (fokusNama.length > 10) {
             submitable = false;
-            errorNama = "uvuvwevwe osas ?";
         }
 
-        var stateToChange = submitable && this.state.submitable;
-        if (this.state.submitable !== stateToChange) {
+        if (submitable !== this.state.submitableArray[0]) {
+            var stateToChange = this.state.submitableArray;
+            stateToChange[0] = submitable;
             this.setState({
-                submitable: stateToChange
+                submitableArray: stateToChange
             })
         }
         return errorNama;
@@ -99,14 +110,13 @@ export default class DemoForm extends React.Component {
         if (fokusUmur < 18) {
             submitable = false;
             errorUmur = "Khusus 18 tahun keatas ya ^-^";
-            console.log("umur error")
-        } else {
-            console.log("umur tidak error")
         }
-        var stateToChange = submitable && this.state.submitable;
-        if (this.state.submitable !== stateToChange) {
+        
+        if (submitable !== this.state.submitableArray[1]) {
+            var stateToChange = this.state.submitableArray;
+            stateToChange[1] = submitable;
             this.setState({
-                submitable: stateToChange
+                submitableArray: stateToChange
             })
         }
         return errorUmur;
@@ -143,6 +153,7 @@ export default class DemoForm extends React.Component {
                     type: "select",
                     name: "jenis",
                     value: this.state.jenis,
+                    required: true,
                     optionList: [
                         {
                             label: "Pria",
@@ -275,7 +286,7 @@ export default class DemoForm extends React.Component {
             >
                 Simpan
             </SirioButton>
-        if (this.state.submitable) {
+        if (this.submitable()) {
             tombolSimpan =
                 <SirioButton
                     purple
@@ -299,6 +310,7 @@ export default class DemoForm extends React.Component {
     }
     // Fungsi render SirioForm
     render() {
+        console.log(this.state.submitableArray)
         return (
             <SirioForm
                 title="Demo Form"
