@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import classes from "./SirioField.module.css";
 import SirioSelect from '../../Dropdown/SirioSelect';
 import TextareaAutosize from 'react-textarea-autosize';
+import SirioRectangularButton from '../../Button/SirioRectangularButton';
 
 /**
  * Komponen field untuk SirioForm
@@ -100,16 +101,15 @@ export default class SirioField extends Component {
 
     generateAddButton(name, array, functionToUpdate) {
         return (
-            <button
-                type="button"
+            <SirioRectangularButton
+                type="add"
                 onClick={
                     () => {
                         array.push("");
                         functionToUpdate(name, array);
                     }
-                }>
-                Tambah
-            </button>
+                }
+            />
         )
     }
 
@@ -118,18 +118,18 @@ export default class SirioField extends Component {
             return "";
         }
         return (
-            <button
-                type="button"
+            <SirioRectangularButton
+                type="delete"
                 onClick={
                     () => {
                         const newArray = array.slice(0, index).concat(array.slice(index + 1));
-                        functionToUpdate(name, newArray);
+                        functionToUpdate(name, newArray, index);
                     }
-                }>
-                Hapus
-            </button>
+                }
+            />
         )
     }
+
 
     render() {
         if (this.props.fullComponent) {
@@ -166,17 +166,14 @@ export default class SirioField extends Component {
 
                     const fieldFinal =
                         <div className="row" key={i}>
-                            <div className="col-8">
+                            <div className="col-10">
                                 {singleField}
                             </div>
-                            <div className="col-2">
+                            <div className={["col-2", classes.buttonWrapper].join(" ")}>
                                 {deleteButton}
+                                {i === (this.props.value.length - 1) ? sidebutton : ""}
+                                {this.props.sideButton}
                             </div>
-                            {i === (this.props.value.length - 1) &&
-                            <div className="col-2">
-                                {sidebutton}
-                            </div>
-                            }
                         </div>
 
                     fieldList.push(fieldFinal)
@@ -206,14 +203,9 @@ export default class SirioField extends Component {
                         <div className="col-3">
                             {label}
                         </div>
-                        <div className={this.props.sideButton ? "col-8" : "col-9"}>
+                        <div className={"col-9"}>
                             {field}
                         </div>
-                        {this.props.sideButton &&
-                            <div className="col-1">
-                                {this.props.sideButton}
-                            </div>
-                        }
                     </div>
                 </fieldset>
             )

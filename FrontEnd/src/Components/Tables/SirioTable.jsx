@@ -60,6 +60,30 @@ export default class SirioTable extends Component {
         );
     };
 
+    sizePerPageRenderer = ({
+        options,
+        currSizePerPage,
+        onSizePerPageChange
+    }) => (
+            <div className="btn-group" role="group">
+                {
+                    options.map((option) => {
+                        const isSelect = currSizePerPage === `${option.page}`;
+                        return (
+                            <button
+                                key={option.text}
+                                type="button"
+                                onClick={() => onSizePerPageChange(option.page)}
+                                className={`btn ${isSelect ? 'btn-primary' : 'btn-outline-primary'}`}
+                            >
+                                {option.text}
+                            </button>
+                        );
+                    })
+                }
+            </div>
+        );
+
     // Definisi kustomisasi Pagination
     pagination =
         paginationFactory({
@@ -67,6 +91,7 @@ export default class SirioTable extends Component {
             prePageText: "Previous",
             nextPageText: "Next",
             showTotal: true,
+            hidePageListOnlyOnePage: true,
             paginationTotalRenderer: this.customTotal,
             onPageChange: (page, sizePerPage) => {
                 this.renderRowNumber(page, sizePerPage)
@@ -74,6 +99,7 @@ export default class SirioTable extends Component {
             onSizePerPageChange: (sizePerPage, page) => {
                 this.renderRowNumber(page, sizePerPage)
             },
+            sizePerPageRenderer: this.sizePerPageRenderer
         })
 
     // Overlay adalah animasi singkat yang ditampilkan pada tabel ketika isi tabel sedang dirender

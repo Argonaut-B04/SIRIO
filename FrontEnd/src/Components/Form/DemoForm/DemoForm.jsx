@@ -14,12 +14,12 @@ export default class DemoForm extends React.Component {
 
         this.state = {
             nama: "",
-            umur: 1,
-            jenis: "neko",
+            umur: 0,
+            jenis: "",
             manusia: true,
-            customDropdown: "Shironeko",
-            customDropdown2: "wanita",
-            submitable: true,
+            customDropdown: "",
+            customDropdown2: "",
+            submitable: false,
             namaMain: ["Chocola", "Vanilla"],
         }
 
@@ -73,20 +73,36 @@ export default class DemoForm extends React.Component {
 
     componentDidUpdate(prevProps, prevState) {
         var submitable = true;
+        var validating = false;
+
+        submitable = this.validateRequired();
 
         if (prevState.nama !== this.state.nama) {
             submitable = submitable && this.validateNama();
+            validating = true;
         }
-
+        
         if (prevState.umur !== this.state.umur) {
             submitable = submitable && this.validateUmur();
+            validating = true;
         }
 
-        if (this.state.submitable !== submitable) {
-            this.setState({
-                submitable: submitable
-            })
+        if (validating) {
+            if (this.state.submitable !== submitable) {
+                this.setState({
+                    submitable: submitable
+                })
+            }
         }
+    }
+
+    validateRequired() {
+        var submitable = true;
+        const required = [this.state.nama, this.state.umur];
+        for (let i = 0; i < required.length; i++) {
+            submitable = submitable && (required[i] !== null && required[i] !== "");
+        }
+        return submitable;
     }
 
     validateNama() {
@@ -112,10 +128,7 @@ export default class DemoForm extends React.Component {
         var submitable = true;
         const fokusUmur = this.state.umur;
         var errorUmur;
-        if (fokusUmur === "") {
-            submitable = false;
-            errorUmur = "Maaf, umurnya tolong jangan kosongin";
-        } else if (fokusUmur < 18) {
+        if (fokusUmur < 18) {
             submitable = false;
             errorUmur = "Khusus 18 tahun keatas ya ^-^";
         }
@@ -170,6 +183,21 @@ export default class DemoForm extends React.Component {
                             value: "neko"
                         }
                     ]
+                }
+            ]
+        )
+    }
+
+    outerInputDefinition() {
+        return (
+            [
+                {
+                    fullComponent:
+                        <SirioForm
+                            noHeader
+                            isInnerForm
+                            inputDefinition={this.innerInputDefinition()}
+                        />
                 }, {
                     label: "Nama Mereka",
                     multiple: true,
@@ -177,7 +205,7 @@ export default class DemoForm extends React.Component {
                     type: "text",
                     name: "namaMain",
                     value: this.state.namaMain,
-                    modifier: this.modifyFieldCount
+                    modifier: (name, newArray) => this.modifyFieldCount(name, newArray)
                 }
             ]
         )
@@ -201,28 +229,6 @@ export default class DemoForm extends React.Component {
                 [event.target.name]
                     : targetArray
             }
-        )
-    }
-
-
-    outerInputDefinition() {
-        return (
-            [
-                {
-                    fullComponent:
-                        <SirioForm
-                            noHeader
-                            isInnerForm
-                            inputDefinition={this.innerInputDefinition()}
-                        />
-                }, {
-                    label: "Manusia?",
-                    handleChange: this.handleChange,
-                    type: "checkbox",
-                    name: "manusia",
-                    value: this.state.manusia,
-                }
-            ]
         )
     }
 
@@ -289,7 +295,6 @@ export default class DemoForm extends React.Component {
             </>
         )
     }
-
     submitButton() {
         return (
             <div>
@@ -310,7 +315,6 @@ export default class DemoForm extends React.Component {
             </div>
         )
     }
-
     // Fungsi render SirioForm
     render() {
         return (

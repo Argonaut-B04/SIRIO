@@ -10,11 +10,20 @@ public class RisikoDTO {
     private Integer kategori;
     private String komponen;
     private Integer parent;
+    private String namaParent;
     private Integer grantParent;
     private List<Risiko> child;
     private Integer sop;
     private String namaSop;
     private String linkSop;
+
+    public String getNamaParent() {
+        return namaParent;
+    }
+
+    public void setNamaParent(String namaParent) {
+        this.namaParent = namaParent;
+    }
 
     public Integer getGrantParent() {
         return grantParent;

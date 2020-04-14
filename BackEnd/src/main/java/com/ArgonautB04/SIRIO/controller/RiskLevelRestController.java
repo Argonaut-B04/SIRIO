@@ -26,6 +26,31 @@ public class RiskLevelRestController {
     @Autowired
     private EmployeeRestService employeeRestService;
 
+    @PostMapping("/nama")
+    private BaseResponse<Boolean> isExistInDatabase(
+            @RequestBody String namaRiskLevelBaru,
+            Principal principal
+    ) {
+        BaseResponse<Boolean> response = new BaseResponse<>();
+        Optional<Employee> pengelolaOptional = employeeRestService.getByUsername(principal.getName());
+        Employee pengelola;
+        if (pengelolaOptional.isPresent()) {
+            pengelola = pengelolaOptional.get();
+            if (pengelola.getRole().getAccessPermissions().getAksesRiskLevel()) {
+                response.setStatus(200);
+                response.setMessage("success");
+                response.setResult(
+                        riskLevelRestService.isExistInDatabase(namaRiskLevelBaru)
+                );
+            } else throw new ResponseStatusException(
+                    HttpStatus.UNAUTHORIZED, "Akun anda tidak memiliki akses ke pengaturan ini"
+            );
+        } else throw new ResponseStatusException(
+                HttpStatus.UNAUTHORIZED, "Akun anda tidak terdaftar dalam Sirio"
+        );
+        return response;
+    }
+
     @GetMapping("/Aktif")
     private BaseResponse<List<RiskLevel>> getAllAktifRiskLevel(
             Principal principal

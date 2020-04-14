@@ -25,7 +25,7 @@ public class KomponenPemeriksaan implements Serializable {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "risiko", referencedColumnName = "idRisiko", nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @OnDelete(action = OnDeleteAction.NO_ACTION)
     @JsonIgnore
     private Risiko risiko;
 
