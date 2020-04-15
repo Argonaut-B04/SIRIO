@@ -5,16 +5,17 @@ import SirioAxiosBase from '../../Services/SirioAxiosBase';
 class SirioDatePickerCustomInput extends Component {
 
     render() {
-        var content = null;
-        if (this.props.unchangedContent) {
+        const { value, unchangedContent, onClick } = this.props;
+        var content;
+        if (unchangedContent) {
             content = this.props.children;
         } else {
-            content = this.props.value ? SirioAxiosBase.formatDateFromSirioDatePicker(this.props.value) : this.props.children;
+            content = value ? SirioAxiosBase.formatDateFromSirioDatePicker(value) : this.props.children;
         }
 
         return (
             <SirioButton
-                onClick={this.props.onClick}
+                onClick={onClick}
                 {...this.props}
             >
                 {content}

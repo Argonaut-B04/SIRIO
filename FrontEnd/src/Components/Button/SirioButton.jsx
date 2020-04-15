@@ -5,14 +5,18 @@ import classes from './SirioButton.module.css';
  * Komponen Button untuk Sirio secara Umum
  * 
  * Props yang tersedia:
- * - purple / blue
+ * - purple / blue / red
+ * - hover
  * - recommended / hyperlink / hyperlinkLeft / text / disabled
  * - circular (optional)
  * - classes                : cssClass, kelas tambahan untuk SirioButton
+ * - onClick                : function, fungsi yang akan dijalankan ketika button di klik
+ * - type                   : String, tipe button
  */
 export default class SirioButton extends React.Component {
 
     render() {
+        // Prioritas warna: purple -> blue -> red
         let color;
         if (this.props.purple) {
             color = classes.purple;
@@ -22,8 +26,10 @@ export default class SirioButton extends React.Component {
             color = classes.red;
         }
 
+        // Hover atau non Hover
         let hover = this.props.hover && classes.hover;
 
+        // Prioritas style: recommended => hyperlink => hyperlinkLeft => text => disabled
         let style;
         if (this.props.recommended) {
             style = classes.recommended;
@@ -37,15 +43,10 @@ export default class SirioButton extends React.Component {
             style = classes.disabled;
         }
 
-        let borderRadius;
-        if (this.props.circular) {
-            borderRadius = classes.borderCircular;
-        } else {
-            borderRadius = classes.borderNormal;
-        }
+        // Border radius circular atau normal
+        let borderRadius = this.props.circular && classes.borderCircular;
 
         let fullClass = [classes.sirioButton, color, hover, style, borderRadius, this.props.classes].join(' ');
-
         return (
             <button
                 onClick={this.props.onClick}
