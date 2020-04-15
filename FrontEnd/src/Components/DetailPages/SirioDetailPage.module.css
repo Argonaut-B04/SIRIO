@@ -1,7 +1,3 @@
-/* .title {
-    font-weight: bold;
-} */
-
 .headerWrapper {
     display: flex;
     align-items: center;
@@ -30,3 +26,15 @@
     height: 50px;
     font-size: 16px !important;
 }
+
+.rowItem:first-child{
+    width: 30%;
+}
+
+.rowItem:last-child{
+    width: 70%;
+}
+
+/* .rowItem:last-child::before{
+    content: ":  ";
+} */

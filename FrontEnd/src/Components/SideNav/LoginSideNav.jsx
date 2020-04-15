@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import classes from "./SideNavFramework.module.css"
+import classes from "./SideNavFramework.module.css";
 
 /**
  * Komponen Side Nav untuk bagian kiri halaman login
@@ -10,7 +10,7 @@ import classes from "./SideNavFramework.module.css"
 export default class LoginSideNav extends Component {
     render() {
         return (
-            <div className={this.props.classes ? [this.props.classes, classes.loginModeSideBar].join(' ') : classes.loginModeSideBar}>
+            <div className={[this.props.classes, classes.loginModeSideBar].join(' ')}>
 
             </div>
         );

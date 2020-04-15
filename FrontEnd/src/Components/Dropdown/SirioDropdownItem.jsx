@@ -11,9 +11,10 @@ import React, { Component } from 'react';
  */
 export default class SirioDropdownItem extends Component {
     render() {
+        const { classes, clickArgument, children, onClick } = this.props;
         return (
-            <div className={this.props.classes} onClick={() => this.props.onClick(this.props.clickArgument)} >
-                {this.props.children}
+            <div className={classes} onClick={() => onClick(clickArgument)} >
+                {children}
             </div>
         );
     }

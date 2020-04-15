@@ -10,6 +10,7 @@ import SirioMessageButton from '../../Button/ActionButton/SirioMessageButton';
 import SirioWarningButton from '../../Button/ActionButton/SirioWarningButton';
 import SirioAxiosBase from '../../../Services/SirioAxiosBase';
 
+
 /**
  * Kelas untuk membuat komponen tabel reminder
  */
@@ -55,8 +56,11 @@ class TabelReminder extends React.Component {
             id: this.props.location.state.id
         });
 
+        const theDate = this.props.location.state.deadline;
+
         this.setState({
-            rowList: response.data.result
+            rowList: response.data.result,
+            deadline: new Date(theDate)
         })
     }
 
@@ -182,6 +186,7 @@ class TabelReminder extends React.Component {
                 id={row.idReminder}
                 handleChange={(date, id) => this.ubah(date, id)}
                 minDate={currentDate}
+                maxDate={this.state.deadline}
             >
                 Ubah
             </SirioDatePickerButton>
@@ -205,18 +210,73 @@ class TabelReminder extends React.Component {
         );
     }
 
+    addDays(date, days) {
+        var result = new Date(date);
+        result.setDate(result.getDate() + days);
+        return result;
+    }
+
+    generateHarian(hari) {
+        const deadline = this.state.deadline;
+        const newDateList = [];
+        for (var hariIni = new Date(); hariIni < deadline; hariIni = this.addDays(hariIni, hari)) {
+            const newDate = [(hariIni.getFullYear()), (hariIni.getMonth() + 1), hariIni.getDate()];
+            newDateList.push({
+                idReminder: Math.floor(Math.random() * 100) + 100,
+                tanggalPengiriman: newDate
+            })
+        }
+        this.setState({
+            rowList: newDateList
+        })
+    }
+
     // Fungsi untuk mendapatkan tombol di sisi kanan title
     headerButton() {
         return (
-            <SirioDatePickerButton
-                purple
-                recommended
-                unchangedContent
-                handleChange={(date, id) => this.tambah(date, id)}
-                popper="top-end"
-            >
-                Tambah
-            </SirioDatePickerButton>
+            <>
+                <div className="d-flex flex-row align-items-center">
+                    <div className="m-1 d-flex flex-row align-items-center">
+                        <small className="m-1">generate Harian  </small>
+                        <SirioButton
+                            blue
+                            hover
+                            square
+                            onClick={() => this.generateHarian(1)}
+                        >
+                            1
+                        </SirioButton>
+                        <SirioButton
+                            blue
+                            hover
+                            square
+                            onClick={() => this.generateHarian(2)}
+                        >
+                            2
+                        </SirioButton>
+                        <SirioButton
+                            blue
+                            hover
+                            square
+                            onClick={() => this.generateHarian(3)}
+                        >
+                            3
+                        </SirioButton>
+                    </div>
+                    <div className="m-1">
+                        <SirioDatePickerButton
+                            purple
+                            recommended
+                            unchangedContent
+                            handleChange={(date, id) => this.tambah(date, id)}
+                            maxDate={this.state.deadline}
+                            popper="top-end"
+                        >
+                            Tambah
+                    </SirioDatePickerButton>
+                    </div>
+                </div>
+            </>
         )
     }
 

@@ -13,16 +13,14 @@
 }
 
 .logoName {
-    position: absolute;
-    font-size: 35px;
-    color: white;
-    top: calc(1.5rem + 5px);
+    --color: white !important;
 }
 
 .logoNameDark {
     position: absolute;
     font-size: 35px;
-    color: black;
+    --color: black;
+    color: var(--color);
     top: calc(1.5rem + 5px);
 }
 

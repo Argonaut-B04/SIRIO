@@ -1,6 +1,6 @@
 export const halamanUtama = {
-    link: "/",
     exact: true,
+    link: "/",
     title: "Halaman Utama",
 }
 

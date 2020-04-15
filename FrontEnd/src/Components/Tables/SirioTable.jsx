@@ -37,7 +37,7 @@ export default class SirioTable extends Component {
     // Fungsi untuk menampilkan informasi jumlah entry tabel
     // TODO: Ubah menjadi sesuai dengan desain
     customTotal = (from, to, size) => (
-        <span className="react-bootstrap-table-pagination-total text-secondary ml-5">
+        <span className="text-secondary ml-5">
             Show {from} to {to} of {size} entries
         </span>
     );
@@ -141,24 +141,29 @@ export default class SirioTable extends Component {
 
     // Fungsi render SirioTable
     render() {
+        const { columns, props, pagination, overlay } = this;
+        const { noHeader, customHeader, headerButton, title, subtitle, betweenTitleSubtitle, id, data, columnsDefinition, includeSearchBar, cellEdit, defaultSorted, indication, footerContent } = props;
         const { SearchBar } = Search;
-        const columnsDefinition = this.columns.concat(this.props.columnsDefinition);
+        
+        // eslint-disable-next-line
+        var { node } = this;
+        const finalColumnsDefinition = columns.concat(columnsDefinition);
         return (
             <div>
-                {this.props.noHeader || this.props.customHeader ? this.props.customHeader :
+                {noHeader || customHeader ? customHeader :
                     <SirioComponentHeader
-                        headerButton={this.props.headerButton}
-                        title={this.props.title}
-                        subtitle={this.props.subtitle}
-                        betweenTitleSubtitle={this.props.betweenTitleSubtitle}
+                        headerButton={headerButton}
+                        title={title}
+                        subtitle={subtitle}
+                        betweenTitleSubtitle={betweenTitleSubtitle}
                     />
                 }
                 <ComponentWrapper>
                     <ToolkitProvider
                         bootstrap4
-                        keyField={this.props.id}
-                        data={this.props.data}
-                        columns={columnsDefinition}
+                        keyField={id}
+                        data={data}
+                        columns={finalColumnsDefinition}
                         search={{
                             searchFormatted: true
                         }}
@@ -166,7 +171,7 @@ export default class SirioTable extends Component {
                         {
                             props => (
                                 <div>
-                                    {this.props.includeSearchBar ?
+                                    {includeSearchBar ?
                                         <div className="text-right">
                                             <label className="m-2">Search: </label>
                                             <SearchBar
@@ -179,23 +184,23 @@ export default class SirioTable extends Component {
                                     }
                                     <BootstrapTable
                                         {...props.baseProps}
-                                        ref={n => this.node = n}
+                                        ref={n => node = n}
                                         striped
-                                        cellEdit={this.props.cellEdit}
+                                        cellEdit={cellEdit}
                                         hover
-                                        defaultSorted={this.props.defaultSorted}
-                                        noDataIndication={this.props.indication ? this.props.indication : "No Data"}
-                                        pagination={this.pagination}
-                                        overlay={this.overlay}
+                                        defaultSorted={defaultSorted}
+                                        noDataIndication={indication || "No Data"}
+                                        pagination={pagination}
+                                        overlay={overlay}
                                         classes="table-responsive-lg"
                                     />
                                 </div>
                             )
                         }
                     </ToolkitProvider>
-                    {this.props.footerContent &&
+                    {footerContent &&
                         <div className={classes.footerWrapper}>
-                            {this.props.footerContent}
+                            {footerContent}
                         </div>
                     }
                 </ComponentWrapper>
