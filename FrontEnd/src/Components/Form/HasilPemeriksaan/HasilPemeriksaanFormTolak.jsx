@@ -4,7 +4,6 @@ import SirioButton from '../../Button/SirioButton';
 import HasilPemeriksaanService from '../../../Services/HasilPemeriksaanService';
 import {NavLink, Redirect} from 'react-router-dom';
 import { withRouter } from 'react-router-dom';
-import SirioConfirmButton from "../../Button/ActionButton/SirioConfirmButton";
 
 class HasilPemeriksaanFormTolak extends React.Component {
 
