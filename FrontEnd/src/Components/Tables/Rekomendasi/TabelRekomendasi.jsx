@@ -329,24 +329,27 @@ export default class TabelRekomendasi extends React.Component {
 
     // Fungsi render Tabel rekomendasi
     render() {
-        return this.state.redirector || (
+        const { defaultSorted, columns, endNotification, state } = this;
+        const { redirector, rowList, changeComplete } = state;
+        
+        return redirector || (
             <>
                 <SirioTable
                     title="Daftar Rekomendasi"
-                    data={this.state.rowList}
-                    defaultSorted={this.defaultSorted}
+                    data={rowList}
+                    defaultSorted={defaultSorted}
                     id='id'
-                    columnsDefinition={this.columns}
+                    columnsDefinition={columns}
                     includeSearchBar
                     indication="Tidak Terdapat Data Rekomendasi"
                 />
-                {this.state.changeComplete &&
+                {changeComplete &&
                     <SirioMessageButton
                         show
                         classes="d-none"
                         modalTitle="Tenggat Waktu berhasil Disimpan"
                         customConfirmText="Kembali"
-                        onClick={this.endNotification}
+                        onClick={endNotification}
                     />
                 }
             </>

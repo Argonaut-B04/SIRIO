@@ -27,10 +27,11 @@ class AuthenticationService {
 
     // Simpan informasi username dan role user yang sudah login kedalam sessionstorage
     registerSuccessfulLogin(username, password, role) {
-        sessionStorage.setItem(SirioAxiosBase.USERNAME_NAME_SESSION_ATTRIBUTE_NAME, username);
-        sessionStorage.setItem(SirioAxiosBase.ROLE_NAME_SESSION_ATTRIBUTE_NAME, role);
+        const { USERNAME_NAME_SESSION_ATTRIBUTE_NAME, ROLE_NAME_SESSION_ATTRIBUTE_NAME, TOKEN_SESSION_ATTRIBUTE_NAME } = SirioAxiosBase;
+        sessionStorage.setItem(USERNAME_NAME_SESSION_ATTRIBUTE_NAME, username);
+        sessionStorage.setItem(ROLE_NAME_SESSION_ATTRIBUTE_NAME, role);
         const token = this.createBasicAuthToken(username, password);
-        sessionStorage.setItem(SirioAxiosBase.TOKEN_SESSION_ATTRIBUTE_NAME, token)
+        sessionStorage.setItem(TOKEN_SESSION_ATTRIBUTE_NAME, token)
     }
 
     /**
@@ -67,19 +68,21 @@ class AuthenticationService {
      * Fungsi untuk cek apakah user sudah login (username, role, dan token) valid
      */
     isLoggedIn() {
-        return (this.getUsername() && this.getRole() && this.getToken);
+        return (this.getToken() && this.getUsername() && this.getRole());
     }
 
-    /**x
+    /**
     * Fungsi untuk logout
     * 
     * cara menggunakan:
     * - window.location.href="/logout"
     */
     logout() {
-        sessionStorage.removeItem(SirioAxiosBase.USERNAME_NAME_SESSION_ATTRIBUTE_NAME);
-        sessionStorage.removeItem(SirioAxiosBase.ROLE_NAME_SESSION_ATTRIBUTE_NAME);
-        sessionStorage.removeItem(SirioAxiosBase.TOKEN_SESSION_ATTRIBUTE_NAME);
+        const { USERNAME_NAME_SESSION_ATTRIBUTE_NAME, ROLE_NAME_SESSION_ATTRIBUTE_NAME, TOKEN_SESSION_ATTRIBUTE_NAME } = SirioAxiosBase;
+
+        sessionStorage.removeItem(USERNAME_NAME_SESSION_ATTRIBUTE_NAME);
+        sessionStorage.removeItem(ROLE_NAME_SESSION_ATTRIBUTE_NAME);
+        sessionStorage.removeItem(TOKEN_SESSION_ATTRIBUTE_NAME);
     }
 }
 

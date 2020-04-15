@@ -58,7 +58,7 @@ export default class SirioSelect extends Component {
                     onChange={event => handleChange(name, event, index)}
                     components={{ IndicatorSeparator: () => null }}
                     options={options}
-                    className={[classes.select, className].join(" ")}
+                    className={[select, className].join(" ")}
                     styles={customStyles}
                 />
             </>
