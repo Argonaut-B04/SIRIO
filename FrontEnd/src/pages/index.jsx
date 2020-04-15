@@ -29,12 +29,12 @@ export default class MainPage extends React.Component {
                 <h3>Welcome to SIRIO</h3>
 
                 {/* Contoh cara menampilkan username dan role */}
-                {this.state.username && <h4>Username: {this.state.username}</h4>}
-                {this.state.role && <h4>Role: {this.state.role}</h4>}
+                {/* {this.state.username && <h4>Username: {this.state.username}</h4>}
+                {this.state.role && <h4>Role: {this.state.role}</h4>} */}
 
                 {/* Contoh cara menampilkan tombol redirect */}
                 {/* Alternatif lain: href="/tujuan" */}
-                <Link to="/rekomendasi" className="btn btn-primary">Tabel Rekomendasi</Link>
+                {/* <Link to="/rekomendasi" className="btn btn-primary">Tabel Rekomendasi</Link>
                 <br />
                 <Link to="/risk-level" className="btn btn-primary">Risk Level</Link>
                 <br />
@@ -47,9 +47,9 @@ export default class MainPage extends React.Component {
                 <Link to="/Form" className="btn btn-primary">Demo Form</Link>
                 <br />
                 <Link to="/Form-Multi" className="btn btn-primary">Demo Multi Form</Link>
-                <br />
+                <br /> */}
                 {/* Contoh button yang mengeluarkan popup berupa message */}
-                <SirioMessageButton
+                {/* <SirioMessageButton
                     purple
                     circular
                     modalTitle="Anda telah berhasil membuka popup berhasil"
@@ -57,11 +57,11 @@ export default class MainPage extends React.Component {
                     customCancelText="Tombol Tidak"
                 >
                     test popup pesan berhasil
-                </SirioMessageButton>
-                <br />
+                </SirioMessageButton> 
+                <br /> */}
 
                 {/* Contoh button yang mengeluarkan popup berupa warning */}
-                <SirioWarningButton
+                {/* <SirioWarningButton
                     purple
                     circular
                     modalTitle="Ini modal warning"
@@ -72,10 +72,10 @@ export default class MainPage extends React.Component {
                 >
                     Test Popup Warning
                 </SirioWarningButton>
-                <br />
+                <br /> */}
 
                 {/* Contoh button yang mengeluarkan popup konfirmasi */}
-                <SirioConfirmButton
+                {/* <SirioConfirmButton
                     purple
                     circular
                     modalTitle="ini pesan konfirmasi, apa anda mau ke google sekarang?"
@@ -84,7 +84,7 @@ export default class MainPage extends React.Component {
                     customCancelText="Tombol Tidak"
                 >
                     Test Popup Konfirmasi
-                </SirioConfirmButton>
+                </SirioConfirmButton> */}
             </SirioMainLayout>
         )
     }

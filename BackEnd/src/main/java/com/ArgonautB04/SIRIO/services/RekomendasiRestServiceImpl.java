@@ -51,6 +51,7 @@ public class RekomendasiRestServiceImpl implements RekomendasiRestService {
         target.setPembuat(rekomendasi.getPembuat());
 //        target.setNama(rekomendasi.getNama());
         target.setKomponenPemeriksaan(rekomendasi.getKomponenPemeriksaan());
+        target.setBuktiPelaksanaan(rekomendasi.getBuktiPelaksanaan());
         return rekomendasiDB.save(target);
     }
 
