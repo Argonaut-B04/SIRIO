@@ -16,45 +16,47 @@ import classes from './SirioButton.module.css';
 export default class SirioButton extends React.Component {
 
     render() {
+        const { purple, blue, red, hover, recommended, hyperlink, hyperlinkLeft, text, disabled, circular, onClick, type, children } = this.props;
+
         // Prioritas warna: purple -> blue -> red
         let color;
-        if (this.props.purple) {
+        if (purple) {
             color = classes.purple;
-        } else if (this.props.blue) {
+        } else if (blue) {
             color = classes.blue;
-        } else if (this.props.red) {
+        } else if (red) {
             color = classes.red;
         }
 
         // Hover atau non Hover
-        let hover = this.props.hover && classes.hover;
+        let hoverStyle = hover && classes.hover;
 
         // Prioritas style: recommended => hyperlink => hyperlinkLeft => text => disabled
         let style;
-        if (this.props.recommended) {
+        if (recommended) {
             style = classes.recommended;
-        } else if (this.props.hyperlink) {
+        } else if (hyperlink) {
             style = classes.hyperlink;
-        } else if (this.props.hyperlinkLeft) {
+        } else if (hyperlinkLeft) {
             style = classes.hyperlinkLeft;
-        } else if (this.props.text) {
+        } else if (text) {
             style = classes.text;
-        } else if (this.props.disabled) {
+        } else if (disabled) {
             style = classes.disabled;
         }
 
         // Border radius circular atau normal
-        let borderRadius = this.props.circular && classes.borderCircular;
+        let borderRadius = circular && classes.borderCircular;
 
-        let fullClass = [classes.sirioButton, color, hover, style, borderRadius, this.props.classes].join(' ');
+        let fullClass = [classes.sirioButton, color, hoverStyle, style, borderRadius, this.props.classes].join(' ');
         return (
             <button
-                onClick={this.props.onClick}
+                onClick={onClick}
                 className={fullClass}
-                type={this.props.type}
+                type={type}
             >
                 <h6 className={classes.buttonTitle}>
-                    {this.props.children}
+                    {children}
                 </h6>
             </button>
         )
