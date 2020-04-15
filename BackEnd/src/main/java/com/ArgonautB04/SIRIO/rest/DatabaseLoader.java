@@ -91,6 +91,7 @@ public class DatabaseLoader implements CommandLineRunner {
         aksesManajer.setAksesRiskLevel(true);
         aksesManajer.setUbahRiskLevel(true);
 
+        aksesManajer.setAksesTabelRekomendasi(true);
         aksesManajer.setUbahReminder(true);
 
         aksesManajer.setAksesBuktiPelaksanaan(true);
@@ -114,6 +115,7 @@ public class DatabaseLoader implements CommandLineRunner {
         aksesLead.setAksesRiskLevel(true);
         aksesLead.setUbahRiskLevel(true);
 
+        aksesLead.setAksesTabelRekomendasi(true);
         aksesLead.setUbahReminder(true);
 
         aksesLead.setAksesTambahBuktiPelaksanaan(true);
@@ -136,6 +138,7 @@ public class DatabaseLoader implements CommandLineRunner {
 
         aksesOfficer.setAksesRiskLevel(true);
 
+        aksesOfficer.setAksesTabelRekomendasi(true);
         aksesOfficer.setUbahReminder(true);
 
         aksesOfficer.setAksesTambahBuktiPelaksanaan(true);
@@ -151,6 +154,7 @@ public class DatabaseLoader implements CommandLineRunner {
         aksesBM.setAksesTambahBuktiPelaksanaan(true);
         aksesBM.setAksesBuktiPelaksanaan(true);
         aksesBM.setAksesUbahBuktiPelaksanaan(true);
+        aksesBM.setAksesTabelRekomendasi(true);
         roleBM.setAccessPermissions(aksesBM);
         roleDB.save(roleBM);
         // Akses BM Selesai
@@ -170,6 +174,7 @@ public class DatabaseLoader implements CommandLineRunner {
         aksesSuper.setAksesRiskLevel(true);
         aksesSuper.setUbahRiskLevel(true);
 
+        aksesSuper.setAksesTabelRekomendasi(true);
         aksesSuper.setUbahReminder(true);
 
         aksesSuper.setAksesTambahBuktiPelaksanaan(true);
@@ -195,6 +200,7 @@ public class DatabaseLoader implements CommandLineRunner {
         aksesDeveloper.setAksesRiskLevel(true);
         aksesDeveloper.setUbahRiskLevel(true);
 
+        aksesDeveloper.setAksesTabelRekomendasi(true);
         aksesDeveloper.setUbahReminder(true);
 
         aksesDeveloper.setAksesTambahBuktiPelaksanaan(true);
