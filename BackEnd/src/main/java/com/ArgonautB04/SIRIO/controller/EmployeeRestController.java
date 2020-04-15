@@ -20,6 +20,7 @@ import java.security.Principal;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @CrossOrigin(origins = {"http://localhost:3000"})
 @RestController
@@ -243,6 +244,31 @@ public class EmployeeRestController {
                     HttpStatus.NOT_FOUND, "Employee dengan ID " + idEmployee + " tidak ditemukan!"
             );
         }
+        return response;
+    }
+
+    /**
+     * Mengecek username employee
+     *
+     * @param username identifier employee
+     * @return Boolean checker
+     */
+    @GetMapping("/check/{username}")
+    private BaseResponse<Boolean> checkUsernameEmployee(
+            @PathVariable("username") String username
+    ) {
+        BaseResponse<Boolean> response = new BaseResponse<>();
+
+        Optional<Employee> employeeOptional = employeeRestService.getByUsername(username);
+        if (employeeOptional.isEmpty()) {
+            response.setResult(false);
+        } else {
+            response.setResult(true);
+        }
+
+        response.setStatus(200);
+        response.setMessage("success");
+
         return response;
     }
 

@@ -151,9 +151,10 @@ class FormTolakBukti extends React.Component {
                     purple
                     recommended={this.state.submitable}
                     disabled={!this.state.submitable}
+                    type="button"
                     classes="mx-1"
                     modalTitle="Apakah anda yakin untuk menolak bukti pelaksanaan?"
-                    onConfirm={(event)  => this.handleSubmit(event)}
+                    onConfirm={this.handleSubmit}
                     customConfirmText="Ya, Tolak"
                     customCancelText="Batal"
                 >

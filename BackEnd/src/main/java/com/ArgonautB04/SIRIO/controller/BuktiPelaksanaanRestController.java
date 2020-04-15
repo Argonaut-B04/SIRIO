@@ -172,16 +172,17 @@ public class BuktiPelaksanaanRestController {
                 try {
                     Rekomendasi rekomendasi = rekomendasiRestService.getById(buktiPelaksanaanDTO.getIdRekomendasi());
                     buktiPelaksanaanTemp.setRekomendasi(rekomendasi);
+                    rekomendasi.setBuktiPelaksanaan(buktiPelaksanaanTemp);
+                    rekomendasiRestService.buatRekomendasi(rekomendasi);
                 } catch (NoSuchElementException e) {
                     throw new ResponseStatusException(
                             HttpStatus.NOT_FOUND, "Rekomendasi dengan ID " + buktiPelaksanaanDTO.getIdRekomendasi() + " tidak ditemukan!"
                     );
                 }
 
-                BuktiPelaksanaan buktiPelaksanaan = buktiPelaksanaanRestService.buatBuktiPelaksanaan(buktiPelaksanaanTemp);
                 response.setStatus(200);
                 response.setMessage("success");
-                response.setResult(buktiPelaksanaan);
+                response.setResult(buktiPelaksanaanTemp);
                 return response;
             } else throw new ResponseStatusException(
                     HttpStatus.UNAUTHORIZED, "Akun anda tidak memiliki akses ke pengaturan ini"

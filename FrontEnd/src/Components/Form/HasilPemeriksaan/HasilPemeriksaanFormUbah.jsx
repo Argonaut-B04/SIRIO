@@ -23,6 +23,8 @@ class HasilPemeriksaanFormTambah extends React.Component {
             kategoriType: "",
             riskLevelOptionList: [],
             riskOptionList: [],
+            submitableDraft: false,
+            submitable: false,
             redirect: false
         };
 
@@ -37,12 +39,63 @@ class HasilPemeriksaanFormTambah extends React.Component {
         this.modifyFieldCount = this.modifyFieldCount.bind(this);
         this.setRedirect = this.setRedirect.bind(this);
         this.innerInputDefinition = this.innerInputDefinition.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     componentDidMount() {
         this.renderRisikoKategori12();
         this.renderHasilPemeriksaan();
         this.renderRiskLevelOption();
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        var submitable = true;
+        var submitableDraft = true;
+
+        submitable = this.validateRequired();
+        prevState.daftarKomponenPemeriksaan.map((prevKomponen, index) => {
+                const validation = this.validateKeteranganSampel();
+                submitable = submitable && validation;
+                submitableDraft = submitableDraft && validation;
+            // if (prevKomponen.keteranganSampel !== this.state.daftarKomponenPemeriksaan[index].keteranganSampel) {
+            //     const validation = this.validateKeteranganSampel();
+            //     submitable = submitable && validation;
+            //     submitableDraft = submitableDraft && validation;
+            //     validating = true;
+            // }
+            //
+            // if (prevKomponen.jumlahSampel !== this.state.daftarKomponenPemeriksaan[index].jumlahSampel) {
+            //     validating = true;
+            // }
+            //
+            // if (prevKomponen.idRiskLevel !== this.state.daftarKomponenPemeriksaan[index].idRiskLevel) {
+            //     validating = true;
+            // }
+
+            // prevKomponen.daftarTemuanRisiko.map((prevTemuanRisiko, indexY) => {
+            //     if (prevTemuanRisiko.keterangan !== this.state.daftarKomponenPemeriksaan[index].daftarTemuanRisiko[indexY].keterangan) {
+            //         validating = true;
+            //     }
+            // });
+            //
+            // prevKomponen.daftarRekomendasi.map((prevRekomendasi, indexY) => {
+            //     if (prevRekomendasi.keterangan !== this.state.daftarKomponenPemeriksaan[index].daftarRekomendasi[indexY].keterangan) {
+            //         validating = true;
+            //     }
+            // });
+        });
+
+        if (this.state.submitable !== submitable) {
+            this.setState({
+                submitable: submitable
+            })
+        }
+
+        if (this.state.submitableDraft !== submitableDraft) {
+            this.setState({
+                submitableDraft: submitableDraft
+            })
+        }
     }
 
     setRedirect = () => {
@@ -120,9 +173,12 @@ class HasilPemeriksaanFormTambah extends React.Component {
                     {
                         id: komponen.id,
                         idRiskLevel: komponen.idRiskLevel,
+                        errorIdRiskLevel: "",
                         risiko: komponen.risiko,
                         jumlahSampel: komponen.jumlahSampel,
+                        errorJumlahSampel:"",
                         keteranganSampel: komponen.keteranganSampel,
+                        errorKeteranganSampel:"",
                         daftarTemuanRisiko: (komponen.daftarTemuanRisikoTerdaftar.length > 0) ?
                             komponen.daftarTemuanRisikoTerdaftar
                             :
@@ -173,14 +229,16 @@ class HasilPemeriksaanFormTambah extends React.Component {
                     name: "jumlahSampel",
                     min: 0,
                     value: komponen.jumlahSampel,
-                    placeholder: "0"
+                    placeholder: "0",
+                    validation: komponen.errorJumlahSampel
                 }, {
                     label: "Keterangan Sampel",
                     handleChange: (event) => this.handleChangeKomponen(event, komponen.id),
                     type: "textarea",
                     name: "keteranganSampel",
                     value: komponen.keteranganSampel,
-                    placeholder: "Keterangan sampel"
+                    placeholder: "Keterangan sampel",
+                    validation: komponen.errorKeteranganSampel
                 }, {
                     label: "Risk Level",
                     handleChange: (name, event) => this.handleSelectChangeKomponen(name, event, komponen.id),
@@ -326,7 +384,7 @@ class HasilPemeriksaanFormTambah extends React.Component {
                 [objectKey]: newField[newField.length - 1]
             })
         } else {
-            array.splice(index+1, 1)
+            array.splice(index, 1)
         }
         // for(let i = 0; i < newField.length; i++) {
         //     newArray.push({
@@ -474,22 +532,62 @@ class HasilPemeriksaanFormTambah extends React.Component {
                 )
             })
         };
-        console.log(hasilPemeriksaan)
-        HasilPemeriksaanService.editHasilPemeriksaan(hasilPemeriksaan)
-            .then(() => this.setRedirect());
+        if ((status === 1 && this.state.submitableDraft) || ((status === 2 || status === 3) && this.state.submitable)) {
+            HasilPemeriksaanService.editHasilPemeriksaan(hasilPemeriksaan)
+                .then(() => this.setRedirect());
+        }
+    }
+
+    validateRequired() {
+        var submitable = true;
+        this.state.daftarKomponenPemeriksaan.map(komponen => {
+            submitable = submitable &&
+                (komponen.jumlahSampel !== null && komponen.jumlahSampel !== "") &&
+                (komponen.keteranganSampel !== null && komponen.keteranganSampel !== "") &&
+                (komponen.idRiskLevel !== null && komponen.idRiskLevel !== "");
+            return null
+        });
+        return submitable;
+    }
+
+    validateKeteranganSampel() {
+        var submitable = true;
+        this.state.daftarKomponenPemeriksaan.map((komponen, index) => {
+            const fokusKeteranganSampel = komponen.keteranganSampel;
+            var errorKeteranganSampel;
+
+            if (!isNaN(fokusKeteranganSampel) && fokusKeteranganSampel !== "") {
+                submitable = false;
+                errorKeteranganSampel = "Ketarangan perlu mengandung huruf";
+            }
+            if (komponen.errorKeteranganSampel !== errorKeteranganSampel) {
+                this.setState(prevState => ({
+                    ...prevState,
+                    daftarKomponenPemeriksaan: prevState.daftarKomponenPemeriksaan.map(komponenState => ({
+                        ...komponenState,
+                        errorKeteranganSampel: komponenState.id === komponen.id ? errorKeteranganSampel : komponenState.errorKeteranganSampel
+                    }))
+                }))
+            } return null
+        });
+        return submitable;
     }
 
     submitButton() {
         return (
             <div>
-                <SirioButton purple recommended
+                <SirioButton purple
+                             recommended={this.state.submitable}
+                             disabled={!this.state.submitable}
                              classes="mx-1"
                              onClick={(event)  => this.handleSubmit(event, 2)}>
                     Simpan
                 </SirioButton>
-                <SirioButton purple recommended
+                <SirioButton purple
+                             recommended={this.state.idCurrentStatus === 1 ? this.state.submitableDraft : this.state.submitable}
+                             disabled={this.state.idCurrentStatus === 1 ? !this.state.submitableDraft : !this.state.submitable}
                              classes="mx-1"
-                             onClick={(event)  => this.handleSubmit(event, this.state.idCurrentStatus)}>
+                             onClick={(event) => this.handleSubmit(event, this.state.idCurrentStatus)}>
                     Draft
                 </SirioButton>
                 <NavLink to={{
@@ -514,7 +612,7 @@ class HasilPemeriksaanFormTambah extends React.Component {
             <>
                 {this.renderRedirect()}
                 <SirioForm
-                    title="Form Tambah Hasil Pemeriksaan"
+                    title="Form Ubah Hasil Pemeriksaan"
                     betweenTitleSubtitle={this.getBetween()}
                     inputDefinition={this.outerInputDefinition()}
                     onSubmit={this.handleSubmit}
