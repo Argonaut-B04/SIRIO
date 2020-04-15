@@ -1,5 +1,6 @@
 export const halamanUtama = {
     link: "/",
+    exact: true,
     title: "Halaman Utama",
 }
 
@@ -39,13 +40,13 @@ export const konfigurasi = {
     dropdown: [
         {
             title: "Risk Rating",
-            link: "#"
+            link: "/risk-rating"
         }, {
             title: "Registrasi Risiko",
             link: "/registrasi-risiko"
         }, {
             title: "Risk Level",
-            link: "#"
+            link: "/risk-level"
         }, {
             title: "SOP",
             link: "#"
