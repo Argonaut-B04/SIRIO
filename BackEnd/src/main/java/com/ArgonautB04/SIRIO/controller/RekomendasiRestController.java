@@ -130,6 +130,34 @@ public class RekomendasiRestController {
     }
 
     /**
+     * Mengambil suatu rekomendasi
+     *
+     * @param idRekomendasi identifier rekomendasi
+     * @return detail rekomendasi
+     */
+    @GetMapping("/{idRekomendasi}")
+    private BaseResponse<RekomendasiDTO> getDetailRekomendasi(
+            @PathVariable("idRekomendasi") int idRekomendasi, Principal principal
+    ) {
+        BaseResponse<RekomendasiDTO> response = new BaseResponse<>();
+        try {
+            Rekomendasi rekomendasi = rekomendasiRestService.getById(idRekomendasi);
+            RekomendasiDTO result = new RekomendasiDTO();
+            result.setId(rekomendasi.getIdRekomendasi());
+            result.setKeterangan(rekomendasi.getKeterangan());
+
+            response.setStatus(200);
+            response.setMessage("success");
+            response.setResult(result);
+        } catch (NoSuchElementException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Rekomendasi dengan ID " + idRekomendasi + " tidak ditemukan!"
+            );
+        }
+        return response;
+    }
+
+    /**
      * Mengambil seluruh rekomendasi yang terhubung dengan suatu kantor cabang
      *
      * @param idKantor identifier kantor cabang
