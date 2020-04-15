@@ -48,7 +48,10 @@ export default class SirioButton extends React.Component {
         // Border radius circular atau normal
         let borderRadius = circular && classes.borderCircular;
 
-        let fullClass = [classes.sirioButton, color, hoverStyle, style, borderRadius, this.props.classes].join(' ');
+        var fullClass = [classes.sirioButton, color, hoverStyle, style, borderRadius, this.props.classes].join(' ');
+        if (this.props.square) {
+            fullClass = [classes.sirioButton, color, hoverStyle, classes.square].join(" ");
+        }
         return (
             <button
                 onClick={onClick}

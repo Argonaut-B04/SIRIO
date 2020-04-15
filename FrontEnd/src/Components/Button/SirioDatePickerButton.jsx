@@ -25,7 +25,7 @@ export default class SirioDatePickerButton extends React.Component {
 
     render() {
         const { selectedDate } = this.state;
-        const { id, minDate, popper } = this.props;
+        const { id, minDate, popper, maxDate } = this.props;
         const { panel } = classes;
         return (
             <DatePicker
@@ -38,6 +38,7 @@ export default class SirioDatePickerButton extends React.Component {
                 popperPlacement={popper}
                 dateFormat="yyyy-MM-dd"
                 minDate={minDate ? minDate : new Date()}
+                maxDate={maxDate}
                 showMonthDropdown
                 showYearDropdown
                 dropdownMode="select"

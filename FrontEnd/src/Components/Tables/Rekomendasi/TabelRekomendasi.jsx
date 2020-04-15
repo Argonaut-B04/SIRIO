@@ -291,7 +291,8 @@ export default class TabelRekomendasi extends React.Component {
                         pathname: "/rekomendasi/reminder",
                         state: {
                             id: row.id,
-                            keterangan: row.keterangan
+                            keterangan: row.keterangan,
+                            deadline: row.tenggatWaktu
                         }
                     }}>
                     <SirioButton

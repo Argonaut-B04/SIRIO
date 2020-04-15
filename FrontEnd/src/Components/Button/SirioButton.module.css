@@ -71,3 +71,10 @@
     border-radius: 20px;
 }
 /* Border Radius End */
+
+.square {
+    height: 40px !important;
+    width: 40px !important;
+    min-height: 0;
+    min-width: 0;
+}
