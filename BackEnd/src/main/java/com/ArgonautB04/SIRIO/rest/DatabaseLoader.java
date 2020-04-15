@@ -53,35 +53,16 @@ public class DatabaseLoader implements CommandLineRunner {
         // Inisiasi Akses
         // Akses Admin
         AccessPermissions aksesAdmin = new AccessPermissions(roleAdministrator);
-        aksesAdmin.setAksesTambahRisiko(true);
-        aksesAdmin.setAksesHapusRisiko(true);
-        aksesAdmin.setAksesRisiko(true);
-        aksesAdmin.setAksesUbahRisiko(true);
-        aksesAdmin.setAksesTabelRisiko(true);
-        aksesAdmin.setAksesUbahHierarki(true);
-
         aksesAdmin.setAksesRiskRating(true);
-        aksesAdmin.setUbahRiskRating(true);
-
         aksesAdmin.setAksesRiskLevel(true);
-        aksesAdmin.setUbahRiskLevel(true);
 
-        aksesAdmin.setUbahReminder(true);
-
-        aksesAdmin.setAksesTambahBuktiPelaksanaan(true);
-        aksesAdmin.setAksesBuktiPelaksanaan(true);
-        aksesAdmin.setAksesPersetujuanBuktiPelaksanaan(true);
-        aksesAdmin.setAksesUbahBuktiPelaksanaan(true);
         roleAdministrator.setAccessPermissions(aksesAdmin);
         roleDB.save(roleAdministrator);
         // Akses Admin Selesai
 
         // Akses Supervisor
         AccessPermissions aksesSupervisor = new AccessPermissions(roleSupervisor);
-        aksesSupervisor.setAksesTambahRisiko(true);
-        aksesSupervisor.setAksesHapusRisiko(true);
         aksesSupervisor.setAksesRisiko(true);
-        aksesSupervisor.setAksesUbahRisiko(true);
         aksesSupervisor.setAksesTabelRisiko(true);
         aksesSupervisor.setAksesUbahHierarki(true);
 
@@ -91,22 +72,16 @@ public class DatabaseLoader implements CommandLineRunner {
         aksesSupervisor.setAksesRiskLevel(true);
         aksesSupervisor.setUbahRiskLevel(true);
 
-        aksesSupervisor.setUbahReminder(true);
-
         aksesSupervisor.setAksesTambahBuktiPelaksanaan(true);
         aksesSupervisor.setAksesBuktiPelaksanaan(true);
         aksesSupervisor.setAksesPersetujuanBuktiPelaksanaan(true);
-        aksesSupervisor.setAksesUbahBuktiPelaksanaan(true);
         roleSupervisor.setAccessPermissions(aksesSupervisor);
         roleDB.save(roleSupervisor);
         // Akses Supervisor Selesai
 
         // Akses Manajer
         AccessPermissions aksesManajer = new AccessPermissions(roleManajer);
-        aksesManajer.setAksesTambahRisiko(true);
-        aksesManajer.setAksesHapusRisiko(true);
         aksesManajer.setAksesRisiko(true);
-        aksesManajer.setAksesUbahRisiko(true);
         aksesManajer.setAksesTabelRisiko(true);
         aksesManajer.setAksesUbahHierarki(true);
 
@@ -118,10 +93,8 @@ public class DatabaseLoader implements CommandLineRunner {
 
         aksesManajer.setUbahReminder(true);
 
-        aksesManajer.setAksesTambahBuktiPelaksanaan(true);
         aksesManajer.setAksesBuktiPelaksanaan(true);
         aksesManajer.setAksesPersetujuanBuktiPelaksanaan(true);
-        aksesManajer.setAksesUbahBuktiPelaksanaan(true);
         roleManajer.setAccessPermissions(aksesManajer);
         roleDB.save(roleManajer);
         // Akses Manajer Selesai
@@ -158,13 +131,10 @@ public class DatabaseLoader implements CommandLineRunner {
         aksesOfficer.setAksesRisiko(true);
         aksesOfficer.setAksesUbahRisiko(true);
         aksesOfficer.setAksesTabelRisiko(true);
-        aksesOfficer.setAksesUbahHierarki(true);
 
         aksesOfficer.setAksesRiskRating(true);
-        aksesOfficer.setUbahRiskRating(true);
 
         aksesOfficer.setAksesRiskLevel(true);
-        aksesOfficer.setUbahRiskLevel(true);
 
         aksesOfficer.setUbahReminder(true);
 
@@ -178,24 +148,8 @@ public class DatabaseLoader implements CommandLineRunner {
 
         // Akses BM
         AccessPermissions aksesBM = new AccessPermissions(roleBM);
-        aksesBM.setAksesTambahRisiko(true);
-        aksesBM.setAksesHapusRisiko(true);
-        aksesBM.setAksesRisiko(true);
-        aksesBM.setAksesUbahRisiko(true);
-        aksesBM.setAksesTabelRisiko(true);
-        aksesBM.setAksesUbahHierarki(true);
-
-        aksesBM.setAksesRiskRating(true);
-        aksesBM.setUbahRiskRating(true);
-
-        aksesBM.setAksesRiskLevel(true);
-        aksesBM.setUbahRiskLevel(true);
-
-        aksesBM.setUbahReminder(true);
-
         aksesBM.setAksesTambahBuktiPelaksanaan(true);
         aksesBM.setAksesBuktiPelaksanaan(true);
-        aksesBM.setAksesPersetujuanBuktiPelaksanaan(true);
         aksesBM.setAksesUbahBuktiPelaksanaan(true);
         roleBM.setAccessPermissions(aksesBM);
         roleDB.save(roleBM);
