@@ -160,7 +160,7 @@ class TabelReminder extends React.Component {
         const originalRow = this.state.rowList;
 
         const changedRow = this.insertItem(originalRow, {
-            idReminder: Math.floor(Math.random() * 100) + 100,
+            idReminder: Math.floor(Math.random() * 1000) + 1,
             tanggalPengiriman: newDate
         })
 
@@ -268,7 +268,7 @@ class TabelReminder extends React.Component {
         for (var hariIni = new Date(); hariIni < deadline; hariIni = this.addDays(hariIni, hari)) {
             const newDate = [(hariIni.getFullYear()), (hariIni.getMonth() + 1), hariIni.getDate()];
             newDateList.push({
-                idReminder: Math.floor(Math.random() * 100) + 100,
+                idReminder: Math.floor(Math.random() * 1000) + 1,
                 tanggalPengiriman: newDate
             })
         }
