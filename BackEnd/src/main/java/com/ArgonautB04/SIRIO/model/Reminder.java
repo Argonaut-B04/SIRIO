@@ -29,13 +29,31 @@ public class Reminder implements Serializable {
     @JsonIgnore
     private Employee pembuat;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "rekomendasi", referencedColumnName = "idRekomendasi", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private Rekomendasi rekomendasi;
 
     @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "reminderMailFormat", referencedColumnName = "idReminderMailFormat")
+    @OnDelete(action = OnDeleteAction.NO_ACTION)
     @JsonIgnore
     private ReminderMailFormat reminderMailFormat;
+
+    @NotNull
+    @Column
+    private boolean terkirim = false;
+
+    public Reminder() {
+    }
+
+    public Reminder(@NotNull LocalDate tanggalPengiriman, Employee pembuat, Rekomendasi rekomendasi, ReminderMailFormat reminderMailFormat) {
+        this.tanggalPengiriman = tanggalPengiriman;
+        this.pembuat = pembuat;
+        this.rekomendasi = rekomendasi;
+        this.reminderMailFormat = reminderMailFormat;
+    }
 
     public int getIdReminder() {
         return idReminder;
@@ -75,5 +93,13 @@ public class Reminder implements Serializable {
 
     public void setReminderMailFormat(ReminderMailFormat reminderMailFormat) {
         this.reminderMailFormat = reminderMailFormat;
+    }
+
+    public boolean isTerkirim() {
+        return terkirim;
+    }
+
+    public void setTerkirim(boolean terkirim) {
+        this.terkirim = terkirim;
     }
 }

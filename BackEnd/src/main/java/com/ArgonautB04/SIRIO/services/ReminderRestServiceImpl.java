@@ -1,6 +1,7 @@
 package com.ArgonautB04.SIRIO.services;
 
 import com.ArgonautB04.SIRIO.model.Reminder;
+import com.ArgonautB04.SIRIO.model.ReminderMailFormat;
 import com.ArgonautB04.SIRIO.repository.ReminderDB;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,9 +27,14 @@ public class ReminderRestServiceImpl implements ReminderRestService {
 
     @Override
     public Reminder getById(int idReminder) {
-        Optional<Reminder> reminder = reminderDB.findById(idReminder);
+        Optional<Reminder> reminder = getOptionalById(idReminder);
         if (reminder.isPresent()) return reminder.get();
         else throw new NoSuchElementException();
+    }
+
+    @Override
+    public Optional<Reminder> getOptionalById(int idReminder) {
+        return reminderDB.findById(idReminder);
     }
 
     @Override
@@ -42,6 +48,11 @@ public class ReminderRestServiceImpl implements ReminderRestService {
     }
 
     @Override
+    public List<Reminder> getByReminderMailFormat(ReminderMailFormat reminderMailFormat) {
+        return reminderDB.findAllByReminderMailFormat(reminderMailFormat);
+    }
+
+    @Override
     public Reminder ubahReminder(int idReminder, LocalDate tanggalReminder) {
         Reminder target = getById(idReminder);
         target.setTanggalPengiriman(tanggalReminder);
@@ -49,8 +60,22 @@ public class ReminderRestServiceImpl implements ReminderRestService {
     }
 
     @Override
+    public void telahTerkirim(Reminder reminder) {
+        Reminder reminder1 = reminderDB.findById(reminder.getIdReminder()).get();
+        reminder1.setTerkirim(true);
+        reminderDB.save(reminder1);
+    }
+
+    @Override
     public void hapusReminder(int idReminder) {
         reminderDB.deleteById(idReminder);
+    }
+
+    @Override
+    public void ubahTemplateReminder(Reminder reminder) {
+        Reminder reminder1 = reminderDB.findById(reminder.getIdReminder()).get();
+        reminder1.setReminderMailFormat(reminder.getReminderMailFormat());
+        reminderDB.save(reminder1);
     }
 
     @Override

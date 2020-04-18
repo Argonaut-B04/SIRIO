@@ -23,6 +23,17 @@ public class ReminderMailFormat implements Serializable {
     @Column(columnDefinition = "TEXT")
     private String mailFormat;
 
+    @Column
+    private Boolean global = false;
+
+    public ReminderMailFormat() {
+    }
+
+    public ReminderMailFormat(@NotNull @Size(max = 75) String subjects, String mailFormat) {
+        this.subjects = subjects;
+        this.mailFormat = mailFormat;
+    }
+
     public int getIdReminderMailFormat() {
         return idReminderMailFormat;
     }
@@ -45,5 +56,13 @@ public class ReminderMailFormat implements Serializable {
 
     public void setMailFormat(String mailFormat) {
         this.mailFormat = mailFormat;
+    }
+
+    public boolean isGlobal() {
+        return global;
+    }
+
+    public void setGlobal(Boolean global) {
+        this.global = global;
     }
 }

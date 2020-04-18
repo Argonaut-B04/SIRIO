@@ -10,6 +10,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -31,13 +32,13 @@ public class Rekomendasi implements Serializable {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "status", referencedColumnName = "idStatusRekomendasi", nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @OnDelete(action = OnDeleteAction.NO_ACTION)
     @JsonIgnore
     private StatusRekomendasi statusRekomendasi;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "komponen_pemeriksaan", referencedColumnName = "idKomponenPemeriksaan", nullable = true)
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @OnDelete(action = OnDeleteAction.NO_ACTION)
     @JsonIgnore
     private KomponenPemeriksaan komponenPemeriksaan;
 
@@ -50,8 +51,10 @@ public class Rekomendasi implements Serializable {
     @OneToOne(mappedBy = "rekomendasi", cascade = CascadeType.ALL)
     private BuktiPelaksanaan buktiPelaksanaan;
 
-    @OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY, orphanRemoval = true)
-    private List<Reminder> daftarReminder;
+    @OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @JoinColumn(name = "rekomendasi", referencedColumnName = "idRekomendasi", nullable = true)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private List<Reminder> daftarReminder = new ArrayList<>();
 
     public Integer getIdRekomendasi() {
         return idRekomendasi;

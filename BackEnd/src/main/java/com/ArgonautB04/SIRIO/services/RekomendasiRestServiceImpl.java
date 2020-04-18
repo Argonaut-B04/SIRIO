@@ -3,7 +3,6 @@ package com.ArgonautB04.SIRIO.services;
 import com.ArgonautB04.SIRIO.model.Employee;
 import com.ArgonautB04.SIRIO.model.KomponenPemeriksaan;
 import com.ArgonautB04.SIRIO.model.Rekomendasi;
-import com.ArgonautB04.SIRIO.model.Reminder;
 import com.ArgonautB04.SIRIO.repository.RekomendasiDB;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,9 +30,14 @@ public class RekomendasiRestServiceImpl implements RekomendasiRestService {
 
     @Override
     public Rekomendasi getById(int idRekomendasi) {
-        Optional<Rekomendasi> rekomendasi = rekomendasiDB.findById(idRekomendasi);
+        Optional<Rekomendasi> rekomendasi = getOptionalById(idRekomendasi);
         if (rekomendasi.isPresent()) return rekomendasi.get();
         else throw new NoSuchElementException();
+    }
+
+    @Override
+    public Optional<Rekomendasi> getOptionalById(int idRekomendasi) {
+        return rekomendasiDB.findById(idRekomendasi);
     }
 
     @Override
@@ -42,16 +46,15 @@ public class RekomendasiRestServiceImpl implements RekomendasiRestService {
     }
 
     @Override
-    public Rekomendasi ubahRekomendasi(int idRekomendasi, Rekomendasi rekomendasi) {
+    public void ubahRekomendasi(int idRekomendasi, Rekomendasi rekomendasi) {
         Rekomendasi target = getById(idRekomendasi);
         target.setKeterangan(rekomendasi.getKeterangan());
         target.setTenggatWaktu(rekomendasi.getTenggatWaktu());
         target.setStatusRekomendasi(rekomendasi.getStatusRekomendasi());
         target.setPembuat(rekomendasi.getPembuat());
-//        target.setNama(rekomendasi.getNama());
         target.setKomponenPemeriksaan(rekomendasi.getKomponenPemeriksaan());
         target.setBuktiPelaksanaan(rekomendasi.getBuktiPelaksanaan());
-        return rekomendasiDB.save(target);
+        rekomendasiDB.save(target);
     }
 
     @Override
@@ -60,13 +63,10 @@ public class RekomendasiRestServiceImpl implements RekomendasiRestService {
     }
 
     @Override
-    public Rekomendasi ubahTenggatWaktu(int idRekomendasi, Date tenggatWaktuDate) throws IllegalAccessError {
-        Rekomendasi target = getById(idRekomendasi);
-        if (target.getStatusRekomendasi().isDapatSetTenggatWaktu()) {
-            target.setTenggatWaktu(tenggatWaktuDate);
-            target.setStatusRekomendasi(statusRekomendasiRestService.getByNamaStatus("Menunggu Pelaksanaan"));
-            return rekomendasiDB.save(target);
-        } else throw new IllegalAccessError();
+    public Rekomendasi ubahTenggatWaktu(Rekomendasi rekomendasi, Date tenggatWaktuDate) {
+        rekomendasi.setTenggatWaktu(tenggatWaktuDate);
+        rekomendasi.setStatusRekomendasi(statusRekomendasiRestService.getByNamaStatus("Menunggu Pelaksanaan"));
+        return rekomendasiDB.save(rekomendasi);
     }
 
     @Override
