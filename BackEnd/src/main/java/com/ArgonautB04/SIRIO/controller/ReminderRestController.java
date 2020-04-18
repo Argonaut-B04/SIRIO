@@ -88,7 +88,7 @@ public class ReminderRestController {
         }
         // Validasi selesai
 
-        List<Reminder> result = rekomendasi.getDaftarReminder();
+        List<Reminder> result = reminderRestService.getByRekomendasi(rekomendasi);
         List<ReminderDTO> resultDTO = new ArrayList<>();
         for (Reminder reminder : result) {
             ReminderDTO instance = new ReminderDTO();
@@ -112,46 +112,17 @@ public class ReminderRestController {
             @RequestBody RekomendasiDTO rekomendasiDTO,
             Principal principal
     ) {
-        Optional<Employee> employeeOptional = employeeRestService.getByUsername(principal.getName());
-        Employee employee;
-
-        // Validasi : user berhasil login dengan valid
-        if (employeeOptional.isEmpty()) {
-            throw new ResponseStatusException(
-                    HttpStatus.UNAUTHORIZED,
-                    "Akun anda tidak terdaftar dalam Sirio"
-            );
-        } else {
-            employee = employeeOptional.get();
-        }
-        // Validasi selesai
-
-        // Validasi : role user memperbolehkan pengaturan tenggat waktu
-        if (!employee.getRole().getAccessPermissions().getAksesTabelRekomendasi()) {
-            throw new ResponseStatusException(
-                    HttpStatus.UNAUTHORIZED,
-                    "Akun anda tidak memiliki akses ke pengaturan tenggat waktu"
-            );
-        }
-        // Validasi selesai
+        Employee employee = employeeRestService.validateEmployeeExistByPrincipal(principal);
+        employeeRestService.validateRolePermission(employee, "tabel rekomendasi");
 
         Integer idRekomendasi = rekomendasiDTO.getId();
-        Optional<Rekomendasi> rekomendasiOptional = rekomendasiRestService.getOptionalById(idRekomendasi);
-        Rekomendasi rekomendasi;
+        Rekomendasi rekomendasi = rekomendasiRestService.validateExistInDatabase(idRekomendasi);
 
-        // Validasi : rekomendasi harus ada dalam basis data
-        if (rekomendasiOptional.isEmpty()) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND,
-                    "Rekomendasi dengan ID " + idRekomendasi + " tidak ditemukan!"
-            );
-        } else {
-            rekomendasi = rekomendasiOptional.get();
+        List<Reminder> oldList = reminderRestService.getByRekomendasi(rekomendasi);
+        for (Reminder reminder : oldList) {
+            reminderRestService.hapusReminder(reminder.getIdReminder());
         }
-        // Validasi selesai
 
-
-        List<Reminder> daftarReminderBaru = new ArrayList<>();
         List<ReminderDTO> daftarReminderDTOBaru = new ArrayList<>();
 
         ReminderMailFormat reminderMailFormatGlobal = reminderMailFormatRestService.getGlobal();
@@ -160,38 +131,20 @@ public class ReminderRestController {
 
             LocalDate tanggalDate = reminder.getTanggalPengiriman();
 
-            if (reminderRestService.isExistById(reminder.getIdReminder())) {
-                // Jika id ada di database, mekanisme ubah (est 1000 reminder dalam database)
-                Reminder reminderTarget = reminderRestService.ubahReminder(
-                        reminder.getIdReminder(),
-                        tanggalDate
-                );
-                ReminderDTO newReminder = new ReminderDTO();
-                newReminder.setIdReminder(reminderTarget.getIdReminder());
-                newReminder.setTanggalPengiriman(reminder.getTanggalPengiriman());
+            // Jika id tidak ada dalam database, mekanisme tambah
+            Reminder newReminder = reminderRestService.buatReminder(
+                    new Reminder(
+                            tanggalDate,
+                            employee,
+                            rekomendasi,
+                            reminderMailFormatGlobal
+                    )
+            );
 
-                daftarReminderDTOBaru.add(newReminder);
-                daftarReminderBaru.add(reminderTarget);
-            } else {
-                // Jika id tidak ada dalam database, mekanisme tambah
-                Reminder newReminder = reminderRestService.buatReminder(
-                        new Reminder(
-                                tanggalDate,
-                                employee,
-                                rekomendasi,
-                                reminderMailFormatGlobal
-                        )
-                );
+            reminder.setIdReminder(newReminder.getIdReminder());
 
-                reminder.setIdReminder(newReminder.getIdReminder());
-
-                daftarReminderDTOBaru.add(reminder);
-                daftarReminderBaru.add(newReminder);
-            }
+            daftarReminderDTOBaru.add(reminder);
         }
-
-        rekomendasi.setDaftarReminder(daftarReminderBaru);
-        rekomendasiRestService.ubahRekomendasi(idRekomendasi, rekomendasi);
 
         return new BaseResponse<>(200, "success", daftarReminderDTOBaru);
     }
@@ -305,7 +258,7 @@ public class ReminderRestController {
             case "rekomendasi":
                 assert reminder != null;
                 Rekomendasi rekomendasiTarget = reminder.getRekomendasi();
-                List<Reminder> daftarReminder = rekomendasiTarget.getDaftarReminder();
+                List<Reminder> daftarReminder = reminderRestService.getByRekomendasi(rekomendasiTarget);
 
                 for (Reminder reminder1 : daftarReminder) {
                     reminder1.setReminderMailFormat(reminderMailFormat);
@@ -322,7 +275,7 @@ public class ReminderRestController {
             case "akun":
                 List<Rekomendasi> dibuat = rekomendasiRestService.getByPembuat(employee);
                 for (Rekomendasi rekomendasi : dibuat) {
-                    List<Reminder> reminderRekomendasi = rekomendasi.getDaftarReminder();
+                    List<Reminder> reminderRekomendasi = reminderRestService.getByRekomendasi(rekomendasi);
                     for (Reminder reminder1 : reminderRekomendasi) {
                         reminder1.setReminderMailFormat(reminderMailFormat);
                         reminderRestService.ubahTemplateReminder(reminder1);

@@ -29,9 +29,8 @@ public class Reminder implements Serializable {
     @JsonIgnore
     private Employee pembuat;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
-    @JoinColumn(name = "rekomendasi", referencedColumnName = "idRekomendasi", nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @ManyToOne
+    @JoinColumn(name = "rekomendasi", referencedColumnName = "idRekomendasi")
     @JsonIgnore
     private Rekomendasi rekomendasi;
 

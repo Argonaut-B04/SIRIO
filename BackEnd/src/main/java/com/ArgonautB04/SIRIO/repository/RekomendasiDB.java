@@ -16,6 +16,4 @@ public interface RekomendasiDB extends JpaRepository<Rekomendasi, Integer> {
     List<Rekomendasi> findAllByKomponenPemeriksaan(KomponenPemeriksaan komponenPemeriksaan);
 
     List<Rekomendasi> findAllByKomponenPemeriksaanIn(Collection<KomponenPemeriksaan> komponenPemeriksaan);
-
-    Rekomendasi findByDaftarReminderIsIn(Collection<List<Reminder>> daftarReminder);
 }
