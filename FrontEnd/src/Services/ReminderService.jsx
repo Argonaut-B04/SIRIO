@@ -21,6 +21,14 @@ class ReminderService {
 
         return this.axiosInstance.post(SirioAxiosBase.BASEURL + '/Reminder/konfigurasi', dataToPass)
     }
+
+    async changeTemplate(data) {
+        return this.axiosInstance.post(SirioAxiosBase.BASEURL + '/Reminder/atur-template-email', data)
+    }
+
+    async getTemplateByIdReminder(id) {
+        return this.axiosInstance.get(SirioAxiosBase.BASEURL + '/Reminder/get-template-email/' + id)
+    }
 }
 
 export default new ReminderService();

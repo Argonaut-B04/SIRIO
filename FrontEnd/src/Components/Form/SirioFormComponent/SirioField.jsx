@@ -28,17 +28,15 @@ export default class SirioField extends Component {
     }
 
     componentDidUpdate() {
-        if (this.props.value !== "") {
-            var validationResult;
-            if (this.isFunction(this.props.validationFunction)) {
-                validationResult = this.props.validationFunction(this.props.value);
-            }
+        var validationResult;
+        if (this.isFunction(this.props.validationFunction)) {
+            validationResult = this.props.validationFunction(this.props.value);
+        }
 
-            if (this.state.validationResult !== validationResult) {
-                this.setState({
-                    validationResult: validationResult
-                })
-            }
+        if (this.state.validationResult !== validationResult) {
+            this.setState({
+                validationResult: validationResult
+            })
         }
     }
 
@@ -68,8 +66,8 @@ export default class SirioField extends Component {
 
                     placeholder={placeholder}
                     className={[customClass, classes.input].join(" ")}
-                    minRows={3}
-                    maxRows={6}
+                    minRows={6}
+                    maxRows={12}
 
                     required={required}
                 />

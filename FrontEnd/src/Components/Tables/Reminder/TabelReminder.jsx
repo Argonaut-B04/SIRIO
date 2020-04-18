@@ -3,7 +3,7 @@ import SirioButton from '../../Button/SirioButton';
 import SirioDatePickerButton from '../../Button/SirioDatePickerButton';
 import ReminderService from '../../../Services/ReminderService';
 import SirioTable from '../SirioTable';
-import { withRouter, Prompt } from 'react-router-dom';
+import { withRouter, Prompt, NavLink } from 'react-router-dom';
 import classes from '../Rekomendasi/TabelRekomendasi.module.css';
 import SirioConfirmButton from '../../Button/ActionButton/SirioConfirmButton';
 import SirioMessageButton from '../../Button/ActionButton/SirioMessageButton';
@@ -48,7 +48,8 @@ class TabelReminder extends React.Component {
                     changeComplete: true,
                     changed: false
                 })
-            });
+            })
+            .catch(error => console.log(error.response.data));
     }
 
     async renderRows() {
@@ -64,41 +65,87 @@ class TabelReminder extends React.Component {
         })
     }
 
-    columns = [{
-        dataField: 'tanggalPengiriman',
-        text: 'TANGGAL',
-        sort: true,
-        classes: classes.rowItem,
-        headerClasses: classes.colheader,
-        headerStyle: (colum, colIndex) => {
-            return { width: "200px", textAlign: 'left' };
-        },
-        formatter: SirioAxiosBase.formatDate
-    }, {
-        dataField: 'noData 1',
-        text: 'Aksi Ubah',
-        headerClasses: classes.colheader,
-        classes: classes.rowItem,
-        headerStyle: () => {
-            return { width: "200px" }
-        },
-        style: () => {
-            return { textAlign: 'center' }
-        },
-        formatter: (cell, row) => this.getButtonsFirst(cell, row)
-    }, {
-        dataField: 'noData 2',
-        text: 'Aksi Hapus',
-        headerClasses: classes.colheader,
-        classes: classes.rowItem,
-        headerStyle: () => {
-            return { width: "200px" }
-        },
-        style: () => {
-            return { textAlign: 'center' }
-        },
-        formatter: (cell, row) => this.getButtonsSecond(cell, row)
-    }];
+    columns() {
+        return [{
+            dataField: 'tanggalPengiriman',
+            text: 'TANGGAL',
+            sort: true,
+            classes: classes.rowItem,
+            headerClasses: classes.colheader,
+            headerStyle: (colum, colIndex) => {
+                return { width: "200px", textAlign: 'left' };
+            },
+            formatter: SirioAxiosBase.formatDate
+        }, {
+            dataField: 'noData 1',
+            text: 'Aksi Ubah Tanggal',
+            headerClasses: classes.colheader,
+            classes: classes.rowItem,
+            headerStyle: () => {
+                return { width: "200px" }
+            },
+            style: () => {
+                return { textAlign: 'center' }
+            },
+            formatter: (cell, row) => this.getButtonsFirst(cell, row)
+        }, {
+            dataField: 'noData 2',
+            text: 'Aksi Hapus',
+            headerClasses: classes.colheader,
+            classes: classes.rowItem,
+            headerStyle: () => {
+                return { width: "200px" }
+            },
+            style: () => {
+                return { textAlign: 'center' }
+            },
+            formatter: (cell, row) => this.getButtonsSecond(cell, row)
+        }, {
+            dataField: 'noData 3',
+            text: 'Pengaturan Reminder',
+            headerClasses: classes.colheader,
+            classes: classes.rowItem,
+            headerStyle: () => {
+                return { width: "100px" }
+            },
+            style: () => {
+                return { textAlign: 'center' }
+            },
+            formatter: (cell, row) => this.getPengaturanButton(cell, row)
+        }];
+    }
+
+    getPengaturanButton(cell, row) {
+        if (this.state.changed) {
+            return (
+                <SirioButton
+                    purple
+                    disabled
+                    square
+                    hover
+                >
+                    ➤
+                </SirioButton>
+            )
+        }
+        return (
+            <NavLink
+                to={{
+                    pathname: "/rekomendasi/reminder/pengaturan",
+                    state: {
+                        idReminder: row.idReminder,
+                    }
+                }}>
+                <SirioButton
+                    purple
+                    square
+                    hover
+                >
+                    ➤
+                </SirioButton>
+            </NavLink>
+        )
+    }
 
     insertItem(array, action) {
         return [
@@ -227,7 +274,8 @@ class TabelReminder extends React.Component {
             })
         }
         this.setState({
-            rowList: newDateList
+            rowList: newDateList,
+            changed: true
         })
     }
 
@@ -312,13 +360,14 @@ class TabelReminder extends React.Component {
 
     // Fungsi render Tabel rekomendasi
     render() {
+        const column = this.columns();
         return (
             <>
                 <SirioTable
                     title={"Daftar Reminder untuk Rekomendasi " + this.props.location.state.keterangan}
                     data={this.state.rowList}
                     id='idReminder'
-                    columnsDefinition={this.columns}
+                    columnsDefinition={column}
                     includeSearchBar
                     headerButton={this.headerButton()}
                     footerContent={this.footerContent()}

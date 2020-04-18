@@ -298,7 +298,6 @@ export default class TabelRekomendasi extends React.Component {
                     <SirioButton
                         purple
                         hover
-                        disabled={!reminderEnable}
                     >
                         Reminder
                     </SirioButton>
