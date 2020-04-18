@@ -16,7 +16,7 @@ import classes from './SirioButton.module.css';
 export default class SirioButton extends React.Component {
 
     render() {
-        const { purple, blue, red, hover, recommended, hyperlink, hyperlinkLeft, text, disabled, circular, onClick, type, children } = this.props;
+        const { purple, blue, red, hover, recommended, hyperlink, hyperlinkLeft, text, disabled, circular, onClick, title, type, children } = this.props;
 
         // Prioritas warna: purple -> blue -> red
         let color;
@@ -50,13 +50,14 @@ export default class SirioButton extends React.Component {
 
         var fullClass = [classes.sirioButton, color, hoverStyle, style, borderRadius, this.props.classes].join(' ');
         if (this.props.square) {
-            fullClass = [classes.sirioButton, color, hoverStyle, classes.square].join(" ");
+            fullClass = [classes.sirioButton, color, hoverStyle, style, classes.square].join(" ");
         }
         return (
             <button
                 onClick={onClick}
                 className={fullClass}
                 type={type}
+                title={title}
             >
                 <h6 className={classes.buttonTitle}>
                     {children}

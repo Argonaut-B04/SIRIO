@@ -65,11 +65,36 @@ public class AccessPermissions implements Serializable {
     @Column
     private Boolean aksesPersetujuanBuktiPelaksanaan = false;
 
+    @Column
+    private Boolean aturTenggatWaktu = false;
+
     public AccessPermissions() {
     }
 
     public AccessPermissions(Role role) {
         this.role = role;
+    }
+
+    public AccessPermissions(Role role, boolean trueDefault) {
+        this.role = role;
+        if (!trueDefault) return;
+        this.aksesRiskRating = true;
+        this.ubahRiskRating = true;
+        this.aksesRiskLevel = true;
+        this.ubahRiskLevel = true;
+        this.ubahReminder = true;
+        this.aksesTabelRisiko = true;
+        this.aksesRisiko = true;
+        this.aksesTambahRisiko = true;
+        this.aksesUbahRisiko = true;
+        this.aksesHapusRisiko = true;
+        this.aksesUbahHierarki = true;
+        this.aksesTabelRekomendasi = true;
+        this.aksesBuktiPelaksanaan = true;
+        this.aksesTambahBuktiPelaksanaan = true;
+        this.aksesUbahBuktiPelaksanaan = true;
+        this.aksesPersetujuanBuktiPelaksanaan = true;
+        this.aturTenggatWaktu = true;
     }
 
     public Boolean getAksesTabelRisiko() {
@@ -214,5 +239,13 @@ public class AccessPermissions implements Serializable {
 
     public void setAksesPersetujuanBuktiPelaksanaan(Boolean aksesPersetujuanBuktiPelaksanaan) {
         this.aksesPersetujuanBuktiPelaksanaan = aksesPersetujuanBuktiPelaksanaan;
+    }
+
+    public Boolean getAturTenggatWaktu() {
+        return aturTenggatWaktu;
+    }
+
+    public void setAturTenggatWaktu(Boolean aturTenggatWaktu) {
+        this.aturTenggatWaktu = aturTenggatWaktu;
     }
 }

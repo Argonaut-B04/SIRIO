@@ -12,9 +12,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.*;
 
 @CrossOrigin(origins = "*")
@@ -73,7 +71,7 @@ public class RekomendasiRestController {
                     } else {
                         result = rekomendasiRestService.getByPembuat(pengelola);
                     }
-                  
+
                     List<RekomendasiDTO> resultDTO = new ArrayList<>();
                     for (Rekomendasi rekomendasi : result) {
                         RekomendasiDTO rekomendasiDTO = new RekomendasiDTO();
@@ -85,25 +83,25 @@ public class RekomendasiRestController {
                             String tenggatWaktuString = tenggatWaktu.toString();
                             String tenggatWaktuFinal = tenggatWaktuString.substring(0, 10);
                             rekomendasiDTO.setTenggatWaktu(tenggatWaktuFinal);
-                          
-                           DateFormat df = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
-                           Date dateobj = new Date();
-                           String mulai = df.format(dateobj);
-                           String tanggalMulai = mulai.substring(0, 2);
-                           String tanggalSelesai = tenggatWaktuString.substring(8, 10);
-                           int tanggalMulaiFinal = Integer.parseInt(tanggalMulai);
-                           int tanggalSelesaiFinal = Integer.parseInt(tanggalSelesai);
-                           int durasi = (tanggalSelesaiFinal - tanggalMulaiFinal) + 1;
-                           if (durasi < 0) {
-                               durasi = 0;
-                           }
-                           String durasiString = Integer.toString(durasi);
-                           String durasiFinal = durasiString + " Hari";
-                           rekomendasiDTO.setDurasi(durasiFinal);
+
+                            DateFormat df = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
+                            Date dateobj = new Date();
+                            String mulai = df.format(dateobj);
+                            String tanggalMulai = mulai.substring(0, 2);
+                            String tanggalSelesai = tenggatWaktuString.substring(8, 10);
+                            int tanggalMulaiFinal = Integer.parseInt(tanggalMulai);
+                            int tanggalSelesaiFinal = Integer.parseInt(tanggalSelesai);
+                            int durasi = (tanggalSelesaiFinal - tanggalMulaiFinal) + 1;
+                            if (durasi < 0) {
+                                durasi = 0;
+                            }
+                            String durasiString = Integer.toString(durasi);
+                            String durasiFinal = durasiString + " Hari";
+                            rekomendasiDTO.setDurasi(durasiFinal);
                         }
 
                         rekomendasiDTO.setStatus(rekomendasi.getStatusRekomendasi().getNamaStatus());
-                      
+
                         List<BuktiPelaksanaan> buktiList = buktiPelaksanaanRestService.getByDaftarRekomendasi(result);
                         for (BuktiPelaksanaan buktiPelaksanaan : buktiList) {
                             if (buktiPelaksanaan.getRekomendasi().equals(rekomendasi)) {
@@ -158,28 +156,75 @@ public class RekomendasiRestController {
     }
 
     /**
-     * Mengubah tenggat waktu untuk rekomendasi spesifik. (UNTESTED)
+     * Mengubah tenggat waktu untuk rekomendasi spesifik.
      *
      * @return objek rekomendasi yang telah diubah
      */
     @PostMapping("/tenggatWaktu")
-    private BaseResponse<Rekomendasi> ubahTenggatWaktu(@RequestBody RekomendasiDTO rekomendasiDTO) {
-        BaseResponse<Rekomendasi> response = new BaseResponse<>();
-        Integer idRekomendasi = rekomendasiDTO.getId();
-        try {
-            Rekomendasi result = rekomendasiRestService.ubahTenggatWaktu(idRekomendasi,
-                    Settings.convertToDateViaInstant(rekomendasiDTO.getTenggatWaktuDate()));
+    private BaseResponse<Rekomendasi> ubahTenggatWaktu(
+            @RequestBody RekomendasiDTO rekomendasiDTO,
+            Principal principal
+    ) {
+        Optional<Employee> employeeOptional = employeeRestService.getByUsername(principal.getName());
+        Employee employee;
 
-            response.setStatus(200);
-            response.setMessage("success");
-            response.setResult(result);
-        } catch (NoSuchElementException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-                    "Rekomendasi dengan ID " + idRekomendasi + " tidak ditemukan!");
-        } catch (IllegalAccessError e) {
-            throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED,
-                    "Tenggat waktu rekomendasi belum dapat diatur!");
+        // Validasi : user berhasil login dengan valid
+        if (employeeOptional.isEmpty()) {
+            throw new ResponseStatusException(
+                    HttpStatus.UNAUTHORIZED,
+                    "Akun anda tidak terdaftar dalam Sirio"
+            );
+        } else {
+            employee = employeeOptional.get();
         }
-        return response;
+        // Validasi selesai
+
+        // Validasi : role user memperbolehkan pengaturan tenggat waktu
+        if (!employee.getRole().getAccessPermissions().getAturTenggatWaktu()) {
+            throw new ResponseStatusException(
+                    HttpStatus.UNAUTHORIZED,
+                    "Akun anda tidak memiliki akses ke pengaturan tenggat waktu"
+            );
+        }
+        // Validasi selesai
+
+        Integer idRekomendasi = rekomendasiDTO.getId();
+        Optional<Rekomendasi> rekomendasiOptional = rekomendasiRestService.getOptionalById(idRekomendasi);
+        Rekomendasi rekomendasi;
+
+        // Validasi : rekomendasi harus ada dalam basis data
+        if (rekomendasiOptional.isEmpty()) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    "Rekomendasi dengan ID " + idRekomendasi + " tidak ditemukan!"
+            );
+        } else {
+            rekomendasi = rekomendasiOptional.get();
+        }
+        // Validasi selesai
+
+        Date tenggatWaktuBaru = Settings.convertToDateViaInstant(rekomendasiDTO.getTenggatWaktuDate());
+
+        // Validasi : Tanggal tenggat waktu harus melebihi tanggal hari ini
+        if (tenggatWaktuBaru.compareTo(new Date()) < 1) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Pastikan tenggat waktu yang anda masukan belum terlewat"
+            );
+        }
+        // Validasi selesai
+
+        // Validasi : Status rekomendasi harus memungkinkan pengubahan tenggat waktu
+        if (!rekomendasi.getStatusRekomendasi().isDapatSetTenggatWaktu()) {
+            throw new ResponseStatusException(
+                    HttpStatus.METHOD_NOT_ALLOWED,
+                    "Tenggat waktu rekomendasi belum dapat diatur!"
+            );
+        }
+        // Validasi selesai
+
+        Rekomendasi result = rekomendasiRestService.ubahTenggatWaktu(rekomendasi, tenggatWaktuBaru);
+
+        return new BaseResponse<>(200, "success", result);
     }
 }

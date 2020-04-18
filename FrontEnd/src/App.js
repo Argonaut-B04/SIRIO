@@ -39,6 +39,7 @@ import FormRisikoUbah from './pages/ManagerOR/FormRisikoUbah';
 import FormMultiPage from './pages/formMultiPage';
 import Error401 from './pages/Errors/Error401';
 import Error404 from './pages/Errors/Error404';
+import TemplateReminder from './pages/QAOfficer/TemplateReminder';
 
 /**
  * Router utama yang memetakan url ke controller
@@ -63,6 +64,7 @@ class App extends React.Component {
             <Route exact path="/employee/detail" component={DetailEmployee} />
             <AuthorizedRoute exact path="/rekomendasi" component={DaftarRekomendasi} />
             <AuthorizedRoute exact path="/rekomendasi/reminder" component={Reminder} />
+            <AuthorizedRoute exact path="/rekomendasi/reminder/pengaturan" component={TemplateReminder} />
             <AuthorizedRoute exact path="/risk-level" component={RiskLevel} />
             <AuthorizedRoute exact path="/risk-rating" component={RiskRating} />
             <AuthorizedRoute exact path="/bukti-pelaksanaan/tambah" component={FormTambahBukti} />

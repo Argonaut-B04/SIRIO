@@ -4,6 +4,8 @@ import com.ArgonautB04.SIRIO.model.Employee;
 import com.ArgonautB04.SIRIO.model.Reminder;
 import com.ArgonautB04.SIRIO.model.ReminderMailFormat;
 import com.ArgonautB04.SIRIO.services.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -35,10 +37,10 @@ public class MailScheduler {
     @Autowired
     EmailRestService emailRestService;
 
+    Logger logger = LoggerFactory.getLogger(MailScheduler.class);
+
     @Scheduled(fixedRate = 3600000)
     public void testSSchedule() {
-        // TODO: bikin laporan harian kalau pengiriman untuk tanggal segini udah selesai atau belum
-        // Concern : kalau server di restart 2x, atau direstart diwaktu yang tidak tepat, reminder bisa saja tidak terkirim
         if (!startMe) return;
         Calendar todayCalender = Calendar.getInstance();
         todayCalender.set(Calendar.HOUR_OF_DAY, 0);
@@ -55,8 +57,12 @@ public class MailScheduler {
         tommorowData.add(Calendar.DATE, 1);
         LocalDate tommorow = LocalDateTime.ofInstant(tommorowData.toInstant(), tommorowData.getTimeZone().toZoneId()).toLocalDate();
 
+        logger.info("Mengirim reminders untuk tanggal " + today);
+
         List<Reminder> reminders = reminderRestService.getByDay(today, tommorow);
+        if (reminders.size() == 0) logger.warn("Tidak ada reminder terdaftar untuk hari ini");
         for (Reminder reminder : reminders) {
+            if (reminder.isTerkirim()) continue;
             Employee penerima =
                     reminder.getRekomendasi()
                             .getKomponenPemeriksaan()
@@ -71,6 +77,9 @@ public class MailScheduler {
             }
 
             emailRestService.sendEmail(penerima.getEmail(), reminderMailFormatSingleReminder.getSubjects(), reminderMailFormatSingleReminder.getMailFormat());
+            reminderRestService.telahTerkirim(reminder);
+            logger.info("Reminder terkirim kepada " + penerima.getNama());
         }
+        logger.info("Pengiriman reminders selesai");
     }
 }

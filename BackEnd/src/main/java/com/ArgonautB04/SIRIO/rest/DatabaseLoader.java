@@ -49,6 +49,7 @@ public class DatabaseLoader implements CommandLineRunner {
         ReminderMailFormat reminderMailFormatGlobal = new ReminderMailFormat();
         reminderMailFormatGlobal.setMailFormat("An global template for your email");
         reminderMailFormatGlobal.setSubjects("Final tesrt");
+        reminderMailFormatGlobal.setGlobal(true);
         reminderMailFormatDB.save(reminderMailFormatGlobal);
     }
 
