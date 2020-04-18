@@ -102,8 +102,6 @@ export default class EmployeeFormTambah extends React.Component {
         var errorName;
         var letterOnly = /^[a-zA-Z\s]*$/;
         if (!fokusName.match(letterOnly)) {
-            console.log("sfa")
-            console.log(fokusName)
             submitable = false;
             errorName = "Nama hanya boleh mengandung huruf";
         }
@@ -138,7 +136,6 @@ export default class EmployeeFormTambah extends React.Component {
         var errorPassword;
         var letterNumber = /^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$/;
         if (!fokusPassword.match(letterNumber)) {
-            console.log("test")
             submitable = false;
             errorPassword = "Password harus mengandung angka dan huruf";
         } else if (fokusPassword.length < 8) {
@@ -235,7 +232,6 @@ export default class EmployeeFormTambah extends React.Component {
                     })
                 }
             } else {
-                console.log("yet")
                 const employee = {
                     username: this.state.username,
                     password: this.state.password,

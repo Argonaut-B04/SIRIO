@@ -78,16 +78,13 @@ class ReminderTemplateForm extends Component {
             effectArea: area
         }
 
-        console.log(data);
-
         ReminderService.changeTemplate(data)
             .then((response) => {
-                console.log(response);
                 this.setState({
                     changeComplete: true,
                     changed: false
                 })
-            }).catch(error => console.log(error.response.data));
+            });
     }
 
     submitable() {

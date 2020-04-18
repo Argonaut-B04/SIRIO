@@ -96,19 +96,14 @@ class FormRisiko extends React.Component {
         var submitable = true;
         const fokusNama = this.state.nama;
         var errorNama;
-        console.log(fokusNama.length)
-        console.log(fokusNama)
         if (fokusNama.length < 1 || fokusNama === null || fokusNama === "") {
-            console.log("masuk jg")
             submitable = false;
             errorNama = "Nama tidak boleh kosong";
         } else if (fokusNama.length > 50) {
-            console.log("masuk sini gasi")
             submitable = false;
             errorNama = "Nama terlalu panjang";
         }
         if (this.state.errorNama !== errorNama) {
-            console.log("masuk sini")
             this.setState({
                 errorNama: errorNama
             })

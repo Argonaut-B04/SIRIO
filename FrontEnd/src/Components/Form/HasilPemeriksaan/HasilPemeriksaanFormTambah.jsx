@@ -511,9 +511,7 @@ class HasilPemeriksaanFormTambah extends React.Component {
     //         const fokusJumlahSampel = komponen.jumlahSampel;
     //         var errorJumlahSampel;
     //
-    //         console.log("yey")
     //         if (isNaN(parseFloat(fokusJumlahSampel)) && fokusJumlahSampel !== "") {
-    //             console.log("masukEu")
     //             submitable = false;
     //             errorJumlahSampel = "Jumlah harus angka";
     //         }
