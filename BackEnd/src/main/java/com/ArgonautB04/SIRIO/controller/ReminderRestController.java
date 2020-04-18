@@ -6,7 +6,6 @@ import com.ArgonautB04.SIRIO.model.Reminder;
 import com.ArgonautB04.SIRIO.rest.BaseResponse;
 import com.ArgonautB04.SIRIO.rest.RekomendasiDTO;
 import com.ArgonautB04.SIRIO.rest.ReminderDTO;
-import com.ArgonautB04.SIRIO.rest.Settings;
 import com.ArgonautB04.SIRIO.services.EmployeeRestService;
 import com.ArgonautB04.SIRIO.services.RekomendasiRestService;
 import com.ArgonautB04.SIRIO.services.ReminderRestService;
@@ -19,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
+import java.time.LocalDate;
 import java.util.*;
 
 @RestController
@@ -54,11 +54,7 @@ public class ReminderRestController {
                 ReminderDTO instance = new ReminderDTO();
                 instance.setIdPembuat(reminder.getPembuat().getIdEmployee());
                 instance.setIdReminder(reminder.getIdReminder());
-                instance.setTanggalPengiriman(
-                        Settings.convertToLocalDateViaInstant(
-                                reminder.getTanggalPengiriman()
-                        )
-                );
+                instance.setTanggalPengiriman(reminder.getTanggalPengiriman());
                 resultDTO.add(instance);
             }
 
@@ -102,9 +98,7 @@ public class ReminderRestController {
                     List<ReminderDTO> daftarReminderDTOBaru = new ArrayList<>();
 
                     for (ReminderDTO reminder : rekomendasiDTO.getReminder()) {
-                        Date tanggalDate = Settings.convertToDateViaInstant(
-                                reminder.getTanggalPengiriman()
-                        );
+                        LocalDate tanggalDate = reminder.getTanggalPengiriman();
                         if (reminderRestService.isExistById(reminder.getIdReminder())) {
                             Reminder reminderTarget = reminderRestService.ubahReminder(
                                     reminder.getIdReminder(),
@@ -120,6 +114,8 @@ public class ReminderRestController {
                             Reminder newReminder = new Reminder();
                             newReminder.setPembuat(employee);
                             newReminder.setTanggalPengiriman(tanggalDate);
+                            newReminder.setRekomendasi(rekomendasi);
+//                            newReminder.setReminderMailFormat();
                             newReminder = reminderRestService.buatReminder(newReminder);
 
                             reminder.setIdReminder(newReminder.getIdReminder());

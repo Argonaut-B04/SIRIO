@@ -9,7 +9,6 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.Date;
 
 @Entity
 @Table
@@ -22,13 +21,21 @@ public class Reminder implements Serializable {
     @NotNull
     @DateTimeFormat(pattern = "MM-dd-yyyy")
     @Column(nullable = false)
-    private Date tanggalPengiriman;
+    private LocalDate tanggalPengiriman;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "pembuat", referencedColumnName = "idEmployee", nullable = false)
     @OnDelete(action = OnDeleteAction.NO_ACTION)
     @JsonIgnore
     private Employee pembuat;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JsonIgnore
+    private Rekomendasi rekomendasi;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JsonIgnore
+    private ReminderMailFormat reminderMailFormat;
 
     public int getIdReminder() {
         return idReminder;
@@ -38,11 +45,11 @@ public class Reminder implements Serializable {
         this.idReminder = idReminder;
     }
 
-    public Date getTanggalPengiriman() {
+    public LocalDate getTanggalPengiriman() {
         return tanggalPengiriman;
     }
 
-    public void setTanggalPengiriman(Date tanggalPengiriman) {
+    public void setTanggalPengiriman(LocalDate tanggalPengiriman) {
         this.tanggalPengiriman = tanggalPengiriman;
     }
 
@@ -52,5 +59,21 @@ public class Reminder implements Serializable {
 
     public void setPembuat(Employee pembuat) {
         this.pembuat = pembuat;
+    }
+
+    public Rekomendasi getRekomendasi() {
+        return rekomendasi;
+    }
+
+    public void setRekomendasi(Rekomendasi rekomendasi) {
+        this.rekomendasi = rekomendasi;
+    }
+
+    public ReminderMailFormat getReminderMailFormat() {
+        return reminderMailFormat;
+    }
+
+    public void setReminderMailFormat(ReminderMailFormat reminderMailFormat) {
+        this.reminderMailFormat = reminderMailFormat;
     }
 }

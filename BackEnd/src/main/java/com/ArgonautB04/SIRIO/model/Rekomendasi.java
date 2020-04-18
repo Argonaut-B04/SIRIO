@@ -51,7 +51,6 @@ public class Rekomendasi implements Serializable {
     private BuktiPelaksanaan buktiPelaksanaan;
 
     @OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY, orphanRemoval = true)
-    @JoinColumn(name = "idRekomendasi")
     private List<Reminder> daftarReminder;
 
     public Integer getIdRekomendasi() {
