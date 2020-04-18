@@ -2,7 +2,7 @@ package com.ArgonautB04.SIRIO.services;
 
 import com.ArgonautB04.SIRIO.model.Reminder;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 public interface ReminderRestService {
@@ -12,9 +12,11 @@ public interface ReminderRestService {
 
     List<Reminder> getAll();
 
-    Reminder ubahReminder(int idReminder, Date tanggalReminder);
+    List<Reminder> getByDay(LocalDate date, LocalDate secondDate);
 
     void hapusReminder(int idReminder);
 
     Boolean isExistById(int idReminder);
+
+    Reminder ubahReminder(int idReminder, LocalDate tanggalDate);
 }

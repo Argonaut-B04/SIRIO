@@ -39,6 +39,7 @@ public class Employee implements Serializable {
     @NotNull
     @Size(max = 70)
     @Column(nullable = false)
+    @JsonIgnore
     private String password;
 
     @Size(max = 20)

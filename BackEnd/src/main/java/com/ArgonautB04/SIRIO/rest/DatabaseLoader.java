@@ -1,10 +1,13 @@
 package com.ArgonautB04.SIRIO.rest;
 
+import com.ArgonautB04.SIRIO.scheduled.MailScheduler;
 import com.ArgonautB04.SIRIO.model.*;
 import com.ArgonautB04.SIRIO.repository.*;
 import com.ArgonautB04.SIRIO.services.EmployeeRestService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+
+import java.util.TimeZone;
 
 @Component
 public class DatabaseLoader implements CommandLineRunner {
@@ -16,8 +19,9 @@ public class DatabaseLoader implements CommandLineRunner {
     private final EmployeeRestService employeeRestService;
     private final RoleDB roleDB;
     private final AccessPermissionDB accessPermissionDB;
+    private final ReminderMailFormatDB reminderMailFormatDB;
 
-    public DatabaseLoader(StatusBuktiPelaksanaanDB statusBuktiPelaksanaanDB, StatusHasilPemeriksaanDB statusHasilPemeriksaanDB, StatusRencanaPemeriksaanDB statusRencanaPemeriksaanDB, StatusRisikoDB statusRisikoDB, StatusRekomendasiDB statusRekomendasiDB, EmployeeRestService employeeRestService, RoleDB roleDB, AccessPermissionDB accessPermissionDB) {
+    public DatabaseLoader(StatusBuktiPelaksanaanDB statusBuktiPelaksanaanDB, StatusHasilPemeriksaanDB statusHasilPemeriksaanDB, StatusRencanaPemeriksaanDB statusRencanaPemeriksaanDB, StatusRisikoDB statusRisikoDB, StatusRekomendasiDB statusRekomendasiDB, EmployeeRestService employeeRestService, RoleDB roleDB, AccessPermissionDB accessPermissionDB, ReminderMailFormatDB reminderMailFormatDB) {
         this.statusBuktiPelaksanaanDB = statusBuktiPelaksanaanDB;
         this.statusHasilPemeriksaanDB = statusHasilPemeriksaanDB;
         this.statusRencanaPemeriksaanDB = statusRencanaPemeriksaanDB;
@@ -25,15 +29,27 @@ public class DatabaseLoader implements CommandLineRunner {
         this.employeeRestService = employeeRestService;
         this.roleDB = roleDB;
         this.accessPermissionDB = accessPermissionDB;
+        this.reminderMailFormatDB = reminderMailFormatDB;
     }
 
     @Override
     public void run(String... args) throws Exception {
+        TimeZone.setDefault(TimeZone.getTimeZone("Asia/Jakarta"));
+        System.out.println("Database setted");
         if (statusBuktiPelaksanaanDB.findAll().isEmpty()) populasiStatusBuktiPelaksanaan();
         if (statusRencanaPemeriksaanDB.findAll().isEmpty()) populasiStatusRencanaPemeriksaan();
         if (statusHasilPemeriksaanDB.findAll().isEmpty()) populasiStatusHasilPemeriksaan();
         if (statusRekomendasiDB.findAll().isEmpty()) populasiStatusRekomendasi();
         if (employeeRestService.getAll().isEmpty() && roleDB.findAll().isEmpty() && accessPermissionDB.findAll().isEmpty()) populasiEmployeedanRole();
+        if (reminderMailFormatDB.findAll().isEmpty()) populasiReminderMailFormat();
+        MailScheduler.startMe = true;
+    }
+
+    private void populasiReminderMailFormat() {
+        ReminderMailFormat reminderMailFormatGlobal = new ReminderMailFormat();
+        reminderMailFormatGlobal.setMailFormat("An global template for your email");
+        reminderMailFormatGlobal.setSubjects("Final tesrt");
+        reminderMailFormatDB.save(reminderMailFormatGlobal);
     }
 
     private void populasiEmployeedanRole() {
