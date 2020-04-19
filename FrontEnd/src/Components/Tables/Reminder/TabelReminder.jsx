@@ -48,7 +48,8 @@ class TabelReminder extends React.Component {
                     changeComplete: true,
                     changed: false
                 })
-            });
+            })
+            .catch(error => console.log(error.response.data));
     }
 
     async renderRows() {

@@ -131,7 +131,6 @@ public class ReminderRestController {
 
             LocalDate tanggalDate = reminder.getTanggalPengiriman();
 
-            // Jika id tidak ada dalam database, mekanisme tambah
             Reminder newReminder = reminderRestService.buatReminder(
                     new Reminder(
                             tanggalDate,
@@ -145,7 +144,6 @@ public class ReminderRestController {
 
             daftarReminderDTOBaru.add(reminder);
         }
-
         return new BaseResponse<>(200, "success", daftarReminderDTOBaru);
     }
 
@@ -183,7 +181,7 @@ public class ReminderRestController {
 
         return new BaseResponse<>(200, "success", reminder.getReminderMailFormat());
     }
-
+  
     @PostMapping(value = "/atur-template-email", consumes = {"application/json"})
     private BaseResponse<String> aturEmailFormat(
             @RequestBody ReminderTemplateDTO reminderTemplateDTO,

@@ -53,11 +53,6 @@ public class ReminderRestServiceImpl implements ReminderRestService {
     }
 
     @Override
-    public List<Reminder> getByRekomendasi(Rekomendasi rekomendasi) {
-        return reminderDB.findAllByRekomendasi(rekomendasi);
-    }
-
-    @Override
     public Reminder ubahReminder(int idReminder, LocalDate tanggalReminder) {
         Reminder target = getById(idReminder);
         target.setTanggalPengiriman(tanggalReminder);

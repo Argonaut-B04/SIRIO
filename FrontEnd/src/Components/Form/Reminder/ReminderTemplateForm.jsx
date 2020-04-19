@@ -77,7 +77,7 @@ class ReminderTemplateForm extends Component {
             content: this.state.content,
             effectArea: area
         }
-
+        
         ReminderService.changeTemplate(data)
             .then((response) => {
                 this.setState({
@@ -282,7 +282,6 @@ class ReminderTemplateForm extends Component {
             <>
                 <SirioForm
                     title="Pengaturan Surel Reminder"
-                    // subtitle=""
                     inputDefinition={this.inputDefinition()}
                     submitButton={this.submitButton()}
                     onSubmit={this.handleSubmit}
