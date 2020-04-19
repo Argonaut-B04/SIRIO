@@ -3,7 +3,6 @@
     justify-content: space-between;
     flex-direction: column;
     margin-top: 2rem;
-    margin-bottom: 1.5rem;
 }
 
 .headerWithButton {
@@ -15,4 +14,12 @@
 
 .headerWrapper>* {
     margin: 5px 0;
+}
+
+.logoImage {
+    position: static;
+    display: flex;
+    margin-bottom: 0.5rem !important;
+    margin-right: 1rem !important;
+    height: 28px;
 }

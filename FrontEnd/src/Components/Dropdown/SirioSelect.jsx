@@ -27,12 +27,11 @@ export default class SirioSelect extends Component {
         }),
         option: (base, state) => ({
             ...base,
-            padding: "0.5rem",
+            paddingLeft: "0.5rem",
             fontFamily: "Nunito",
-            color: state.isFocused ? "black" : "rgba(127, 63, 152, 0.9)",
-            backgroundColor: "white",
-            borderRadius: "20px"
-        })
+            color: state.isFocused ? "white" : "rgba(127, 63, 152, 0.9)",
+            backgroundColor: state.isFocused ? "rgba(127, 63, 152, 0.9)" : "white",
+        }),
     }
 
     render() {

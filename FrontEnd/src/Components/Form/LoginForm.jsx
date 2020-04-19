@@ -69,9 +69,14 @@ class LoginForm extends Component {
                 }
             )
             .catch(
-                () => {
+                (error) => {
+                    var errInfo = error.response ? error.response.data.message : "Sambungan ke server terputus";
+                    if (error.response) {
+                        errInfo = error.response.status === 401 ? "Username dan Password tidak sesuai" : errInfo;
+                    }
                     this.setState({
-                        hasLoginFailed: true
+                        hasLoginFailed: true,
+                        errInfo: errInfo
                     })
                 }
             )
@@ -80,13 +85,13 @@ class LoginForm extends Component {
     render() {
         const { handleChange, loginClicked, state } = this;
         const { loginFormContainer } = classes;
-        const { source, hasLoginFailed, username, password } = state;
+        const { source, hasLoginFailed, errInfo, username, password } = state;
         return (
             <div className={loginFormContainer}>
                 <h2>Selamat datang kembali!</h2>
                 <div>
                     {source === 401 && <div className="alert alert-warning">You need to login first</div>}
-                    {hasLoginFailed && <div className="alert alert-warning">Invalid Credentials</div>}
+                    {hasLoginFailed && <div className="alert alert-warning">{errInfo}</div>}
                     <fieldset className="form-group">
                         <label>Username</label>
                         <input

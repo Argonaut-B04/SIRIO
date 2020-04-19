@@ -9,6 +9,10 @@
     border-radius: 6px;
 }
 
+.sirioButton:focus{
+    outline: none;
+}
+
 .buttonTitle {
     margin: 0;
 }

@@ -68,7 +68,7 @@ class ReminderTemplateForm extends Component {
 
     handleSubmit(event, area) {
         event && event.preventDefault();
-        if (!this.submitable()) return;
+        if (this && !this.submitable()) return;
 
         const data = {
             id: this.state.id,
@@ -154,6 +154,14 @@ class ReminderTemplateForm extends Component {
         return (
             [
                 {
+                    fullComponent: <p>
+                    Masukan subject dan isi dari email yang akan dikirimkan sebagai reminder<br />
+                        <small>
+                            Cantumkan nama penerima dengan <code>!!nama!!</code>
+                            Cantumkan tanggal tenggat waktu dengan <code>!!tanggal!!</code>
+                        </small>
+                    </p>
+                }, {
                     label: "Subject",
                     required: true,
                     handleChange: this.handleChange,
@@ -274,6 +282,7 @@ class ReminderTemplateForm extends Component {
             <>
                 <SirioForm
                     title="Pengaturan Surel Reminder"
+                    // subtitle=""
                     inputDefinition={this.inputDefinition()}
                     submitButton={this.submitButton()}
                     onSubmit={this.handleSubmit}

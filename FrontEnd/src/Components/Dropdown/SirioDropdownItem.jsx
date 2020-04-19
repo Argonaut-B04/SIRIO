@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import classes from './SirioDropdownItem.module.css';
 
 /**
  * Komponen Item dari SirioDropdown
@@ -11,9 +12,9 @@ import React, { Component } from 'react';
  */
 export default class SirioDropdownItem extends Component {
     render() {
-        const { classes, clickArgument, children, onClick } = this.props;
+        const { clickArgument, children, onClick } = this.props;
         return (
-            <div className={classes} onClick={() => onClick(clickArgument)} >
+            <div className={[this.props.classes, classes.item].join(" ")} onClick={() => onClick(clickArgument)} >
                 {children}
             </div>
         );
