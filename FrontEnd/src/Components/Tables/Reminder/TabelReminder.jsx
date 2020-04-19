@@ -229,6 +229,7 @@ class TabelReminder extends React.Component {
         return (
             <SirioDatePickerButton
                 purple
+                hover
                 id={row.idReminder}
                 handleChange={(date, id) => this.ubah(date, id)}
                 minDate={currentDate}
@@ -249,6 +250,7 @@ class TabelReminder extends React.Component {
         return (
             <SirioButton
                 red
+                hover
                 onClick={() => this.hapus(row.idReminder)}
             >
                 Hapus
