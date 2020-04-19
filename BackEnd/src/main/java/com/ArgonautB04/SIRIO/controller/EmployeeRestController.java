@@ -20,6 +20,7 @@ import java.security.Principal;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @CrossOrigin(origins = {"http://localhost:3000"})
 @RestController
@@ -247,6 +248,31 @@ public class EmployeeRestController {
     }
 
     /**
+     * Mengecek username employee
+     *
+     * @param username identifier employee
+     * @return Boolean checker
+     */
+    @GetMapping("/check/{username}")
+    private BaseResponse<Boolean> checkUsernameEmployee(
+            @PathVariable("username") String username
+    ) {
+        BaseResponse<Boolean> response = new BaseResponse<>();
+
+        Optional<Employee> employeeOptional = employeeRestService.getByUsername(username);
+        if (employeeOptional.isEmpty()) {
+            response.setResult(false);
+        } else {
+            response.setResult(true);
+        }
+
+        response.setStatus(200);
+        response.setMessage("success");
+
+        return response;
+    }
+
+    /**
      * Mengambil profile employee yang login
      *
      * @return detail employee yang login
@@ -300,12 +326,7 @@ public class EmployeeRestController {
 
     @GetMapping("/login")
     public BaseResponse<Employee> authenticate(Principal principal) {
-        BaseResponse<Employee> response = new BaseResponse<>();
-        Employee target = employeeRestService.getByUsername(principal.getName()).get();
-
-        response.setStatus(200);
-        response.setMessage("success");
-        response.setResult(target);
-        return response;
+        Employee target = employeeRestService.validateEmployeeExistByPrincipal(principal);
+        return new BaseResponse<>(200, "success", target);
     }
 }

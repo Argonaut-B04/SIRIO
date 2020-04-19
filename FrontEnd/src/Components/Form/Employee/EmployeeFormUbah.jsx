@@ -3,7 +3,7 @@ import SirioForm from '../SirioForm';
 import SirioButton from '../../Button/SirioButton';
 import EmployeeService from '../../../Services/EmployeeService';
 import RoleService from '../../../Services/RoleService';
-import {NavLink, Redirect} from 'react-router-dom';
+import { NavLink, Redirect } from 'react-router-dom';
 import { withRouter } from 'react-router-dom';
 
 class EmployeeFormUbah extends React.Component {
@@ -20,7 +20,8 @@ class EmployeeFormUbah extends React.Component {
             email: "",
             noHp: "",
             roleOptionList: [],
-            redirect: false
+            redirect: false,
+            submitable: false,
         };
 
         this.renderRoleOption = this.renderRoleOption.bind(this);
@@ -29,11 +30,113 @@ class EmployeeFormUbah extends React.Component {
         this.handleSelectChange = this.handleSelectChange.bind(this);
         this.setRedirect = this.setRedirect.bind(this);
         this.renderDataEmployee = this.renderDataEmployee.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     componentDidMount() {
         this.renderRoleOption();
         this.renderDataEmployee();
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        var submitable = true;
+        var validating = false;
+
+        submitable = this.validateRequired();
+
+        if (prevState.nama !== this.state.nama) {
+            const validation = this.validateNama();
+            submitable = submitable && validation;
+            validating = true;
+        }
+
+        if (prevState.email !== this.state.email) {
+            const validation = this.validateEmail();
+            submitable = submitable && validation;
+            validating = true;
+        }
+
+        if (prevState.noHp !== this.state.noHp) {
+            const validation = this.validateNomorHp();
+            submitable = submitable && validation;
+            validating = true;
+        }
+
+        if (validating) {
+            if (this.state.submitable !== submitable) {
+                this.setState({
+                    submitable: submitable
+                })
+            }
+        }
+    }
+
+    validateRequired() {
+        var submitable = true;
+        const required = [
+            this.state.idRole,
+            this.state.nama,
+            this.state.jabatan,
+            this.state.email
+        ];
+
+        for (let i = 0; i < required.length; i++) {
+            submitable = submitable && (required[i] !== null && required[i] !== "");
+        }
+        return submitable;
+    }
+
+    validateNama() {
+        var submitable = true;
+        const fokusName = this.state.nama;
+        var errorName;
+        var letterOnly = /^[a-zA-Z\s]*$/;
+        if (!fokusName.match(letterOnly)) {
+            submitable = false;
+            errorName = "Nama hanya boleh mengandung huruf";
+        }
+        if (this.state.errorName !== errorName) {
+            this.setState({
+                errorName: errorName
+            })
+        }
+        return submitable;
+    }
+
+    validateNomorHp() {
+        var submitable = true;
+        const fokusNoHp = this.state.noHp;
+        var errorNoHp;
+        var numberOnly = /^[0-9]*$/;
+        if (!fokusNoHp.match(numberOnly)) {
+            submitable = false;
+            errorNoHp = "Nomor HP hanya boleh mengandung angka";
+        }
+        if (this.state.errorNoHp !== errorNoHp) {
+            this.setState({
+                errorNoHp: errorNoHp
+            })
+        }
+        return submitable;
+    }
+
+    validateEmail() {
+        var submitable = true;
+        const fokusEmail = this.state.email;
+        var errorEmail;
+        // eslint-disable-next-line
+        var email = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        if (!fokusEmail.match(email)) {
+
+            submitable = false;
+            errorEmail = "Email tidak sesuai format";
+        }
+        if (this.state.errorEmail !== errorEmail) {
+            this.setState({
+                errorEmail: errorEmail
+            })
+        }
+        return submitable;
     }
 
     setRedirect = () => {
@@ -119,9 +222,10 @@ class EmployeeFormUbah extends React.Component {
             email: this.state.email,
             noHp: this.state.noHp
         };
-        console.log("test");
-        EmployeeService.editEmployee(employee)
-            .then(() => this.setRedirect());
+        if (this.state.submitable) {
+            EmployeeService.editEmployee(employee)
+                .then(() => this.setRedirect());
+        }
     }
 
     // Fungsi yang akan mengembalikan definisi tiap field pada form
@@ -131,50 +235,55 @@ class EmployeeFormUbah extends React.Component {
         return (
             [
                 {
-                label: "Role",
-                handleChange: this.handleSelectChange,
-                type: "select",
-                name: "idRole",
-                value: this.state.idRole,
-                optionList: this.state.roleOptionList
-            }, {
-                label: "Nama",
-                handleChange: this.handleChange,
-                type: "text",
-                name: "nama",
-                value: this.state.nama,
-                placeholder: "Nama"
-            }, {
-                label: "Jabatan",
-                handleChange: this.handleChange,
-                type: "text",
-                name: "jabatan",
-                value: this.state.jabatan,
-                placeholder: "Jabatan"
-            }, {
-                label: "Email",
-                handleChange: this.handleChange,
-                type: "text",
-                name: "email",
-                value: this.state.email,
-                placeholder: "email@email.com"
-            }, {
-                label: "Nomor Telepon",
-                handleChange: this.handleChange,
-                type: "text",
-                name: "noHp",
-                value: this.state.noHp,
-                placeholder: "08123456789"
-            }]
+                    label: "Role",
+                    handleChange: this.handleSelectChange,
+                    type: "select",
+                    name: "idRole",
+                    value: this.state.idRole,
+                    optionList: this.state.roleOptionList
+                }, {
+                    label: "Nama",
+                    handleChange: this.handleChange,
+                    type: "text",
+                    name: "nama",
+                    value: this.state.nama,
+                    placeholder: "Nama",
+                    validation: this.state.errorName
+                }, {
+                    label: "Jabatan",
+                    handleChange: this.handleChange,
+                    type: "text",
+                    name: "jabatan",
+                    value: this.state.jabatan,
+                    placeholder: "Jabatan"
+                }, {
+                    label: "Email",
+                    handleChange: this.handleChange,
+                    type: "text",
+                    name: "email",
+                    value: this.state.email,
+                    placeholder: "email@email.com",
+                    validation: this.state.errorEmail
+                }, {
+                    label: "Nomor Telepon",
+                    handleChange: this.handleChange,
+                    type: "text",
+                    name: "noHp",
+                    value: this.state.noHp,
+                    placeholder: "08123456789",
+                    validation: this.state.errorNoHp
+                }]
         )
     }
 
     submitButton() {
         return (
             <div>
-                <SirioButton purple recommended
-                             classes="mx-1"
-                             onClick={(event)  => this.handleSubmit(event)}>
+                <SirioButton purple
+                    recommended={this.state.submitable}
+                    disabled={!this.state.submitable}
+                    classes="mx-1"
+                    onClick={(event) => this.handleSubmit(event)}>
                     Simpan
                 </SirioButton>
                 <NavLink to={{

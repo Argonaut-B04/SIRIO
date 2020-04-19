@@ -17,6 +17,7 @@ export default class Logout extends Component {
         super(props);
         AuthenticationService.logout();
     }
+
     render() {
         return (
             <Redirect to="/" />

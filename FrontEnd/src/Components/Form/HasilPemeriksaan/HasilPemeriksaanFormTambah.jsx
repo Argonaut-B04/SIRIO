@@ -22,6 +22,8 @@ class HasilPemeriksaanFormTambah extends React.Component {
             kategoriType: "",
             riskLevelOptionList: [],
             riskOptionList: [],
+            submitableDraft: false,
+            submitable: false,
             redirect: false
         };
 
@@ -33,6 +35,7 @@ class HasilPemeriksaanFormTambah extends React.Component {
         this.handleSelectChange = this.handleSelectChange.bind(this);
         this.handleSelectChangeRisiko = this.handleSelectChangeRisiko.bind(this);
         this.handleMultiFieldChange = this.handleMultiFieldChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
         this.modifyFieldCount = this.modifyFieldCount.bind(this);
         this.setRedirect = this.setRedirect.bind(this);
         this.innerInputDefinition = this.innerInputDefinition.bind(this);
@@ -42,6 +45,30 @@ class HasilPemeriksaanFormTambah extends React.Component {
         this.renderRisikoKategori12();
         this.renderRisikoKategori3();
         this.renderRiskLevelOption();
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        var submitable = true;
+        var submitableDraft = true;
+
+        submitable = this.validateRequired();
+        prevState.daftarKomponenPemeriksaan.map((prevKomponen, index) => {
+            const validation = this.validateKeteranganSampel();
+            submitable = submitable && validation;
+            submitableDraft = submitableDraft && validation;
+        });
+
+        if (this.state.submitable !== submitable) {
+            this.setState({
+                submitable: submitable
+            })
+        }
+
+        if (this.state.submitableDraft !== submitableDraft) {
+            this.setState({
+                submitableDraft: submitableDraft
+            })
+        }
     }
 
     setRedirect = () => {
@@ -118,9 +145,12 @@ class HasilPemeriksaanFormTambah extends React.Component {
                     {
                         id: risiko.id,
                         idRiskLevel: "",
+                        errorIdRiskLevel: "",
                         risiko:risiko,
                         jumlahSampel:"",
+                        errorJumlahSampel:"",
                         keteranganSampel:"",
+                        errorKeteranganSampel:"",
                         daftarTemuanRisiko:[
                             {
                                 keterangan: ""
@@ -168,14 +198,16 @@ class HasilPemeriksaanFormTambah extends React.Component {
                     name: "jumlahSampel",
                     min: 0,
                     value: komponen.jumlahSampel,
-                    placeholder: "0"
+                    placeholder: "0",
+                    validation: komponen.errorJumlahSampel
                 }, {
                     label: "Keterangan Sampel",
                     handleChange: (event) => this.handleChangeKomponen(event, komponen.id),
                     type: "textarea",
                     name: "keteranganSampel",
                     value: komponen.keteranganSampel,
-                    placeholder: "Keterangan sampel"
+                    placeholder: "Keterangan sampel",
+                    validation: komponen.errorKeteranganSampel
                 }, {
                     label: "Risk Level",
                     handleChange: (name, event) => this.handleSelectChangeKomponen(name, event, komponen.id),
@@ -419,21 +451,96 @@ class HasilPemeriksaanFormTambah extends React.Component {
         const hasilPemeriksaan = {
             idStatus: status,
             tugasPemeriksaan:{id: this.props.location.state.id},
-            daftarKomponenPemeriksaan: this.state.daftarKomponenPemeriksaan
+            daftarKomponenPemeriksaan: this.state.daftarKomponenPemeriksaan.map(komponen => {
+                return (
+                    {
+                        idRiskLevel: komponen.idRiskLevel,
+                        risiko: komponen.risiko,
+                        jumlahSampel: komponen.jumlahSampel,
+                        keteranganSampel: komponen.keteranganSampel,
+                        daftarTemuanRisiko: komponen.daftarTemuanRisiko,
+                        daftarRekomendasi: komponen.daftarRekomendasi
+                    }
+                )
+            })
         };
-        HasilPemeriksaanService.addHasilPemeriksaan(hasilPemeriksaan)
-            .then(() => this.setRedirect());
+        if ((status === 1 && this.state.submitableDraft) || (status === 2 && this.state.submitable)) {
+            HasilPemeriksaanService.addHasilPemeriksaan(hasilPemeriksaan)
+                .then(() => this.setRedirect());
+        }
     }
+
+    validateRequired() {
+        var submitable = true;
+        this.state.daftarKomponenPemeriksaan.map(komponen => {
+            submitable = submitable &&
+                (komponen.jumlahSampel !== null && komponen.jumlahSampel !== "") &&
+                (komponen.keteranganSampel !== null && komponen.keteranganSampel !== "") &&
+                (komponen.idRiskLevel !== null && komponen.idRiskLevel !== "");
+            return null
+        });
+        return submitable;
+    }
+
+    validateKeteranganSampel() {
+        var submitable = true;
+        this.state.daftarKomponenPemeriksaan.map((komponen, index) => {
+            const fokusKeteranganSampel = komponen.keteranganSampel;
+            var errorKeteranganSampel;
+
+            if (!isNaN(fokusKeteranganSampel) && fokusKeteranganSampel !== "") {
+                submitable = false;
+                errorKeteranganSampel = "Ketarangan perlu mengandung huruf";
+            }
+            if (komponen.errorKeteranganSampel !== errorKeteranganSampel) {
+                this.setState(prevState => ({
+                    ...prevState,
+                    daftarKomponenPemeriksaan: prevState.daftarKomponenPemeriksaan.map(komponenState => ({
+                        ...komponenState,
+                        errorKeteranganSampel: komponenState.id === komponen.id ? errorKeteranganSampel : komponenState.errorKeteranganSampel
+                    }))
+                }))
+            } return null
+        });
+        return submitable;
+    }
+
+    // validateJumlahSampel() {
+    //     var submitable = true;
+    //     this.state.daftarKomponenPemeriksaan.map((komponen, index) => {
+    //         const fokusJumlahSampel = komponen.jumlahSampel;
+    //         var errorJumlahSampel;
+    //
+    //         if (isNaN(parseFloat(fokusJumlahSampel)) && fokusJumlahSampel !== "") {
+    //             submitable = false;
+    //             errorJumlahSampel = "Jumlah harus angka";
+    //         }
+    //         if (komponen.errorJumlahSampel !== errorJumlahSampel) {
+    //             this.setState(prevState => ({
+    //                 ...prevState,
+    //                 daftarKomponenPemeriksaan: prevState.daftarKomponenPemeriksaan.map(komponenState => ({
+    //                     ...komponenState,
+    //                     errorJumlahSampel: komponenState.id === komponen.id ? errorJumlahSampel : komponenState.errorJumlahSampel
+    //                 }))
+    //             }))
+    //         } return null
+    //     });
+    //     return submitable;
+    // }
 
     submitButton() {
         return (
             <div>
-                <SirioButton purple recommended
+                <SirioButton purple
+                             recommended={this.state.submitable}
+                             disabled={!this.state.submitable}
                              classes="mx-1"
                              onClick={(event)  => this.handleSubmit(event, 2)}>
                     Simpan
                 </SirioButton>
-                <SirioButton purple recommended
+                <SirioButton purple
+                             recommended={this.state.submitableDraft}
+                             disabled={!this.state.submitableDraft}
                              classes="mx-1"
                              onClick={(event)  => this.handleSubmit(event, 1)}>
                     Draft

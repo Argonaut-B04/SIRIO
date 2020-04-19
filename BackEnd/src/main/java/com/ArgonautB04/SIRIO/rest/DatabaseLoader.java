@@ -1,10 +1,13 @@
 package com.ArgonautB04.SIRIO.rest;
 
+import com.ArgonautB04.SIRIO.scheduled.MailScheduler;
 import com.ArgonautB04.SIRIO.model.*;
 import com.ArgonautB04.SIRIO.repository.*;
 import com.ArgonautB04.SIRIO.services.EmployeeRestService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+
+import java.util.TimeZone;
 
 @Component
 public class DatabaseLoader implements CommandLineRunner {
@@ -16,8 +19,9 @@ public class DatabaseLoader implements CommandLineRunner {
     private final EmployeeRestService employeeRestService;
     private final RoleDB roleDB;
     private final AccessPermissionDB accessPermissionDB;
+    private final ReminderMailFormatDB reminderMailFormatDB;
 
-    public DatabaseLoader(StatusBuktiPelaksanaanDB statusBuktiPelaksanaanDB, StatusHasilPemeriksaanDB statusHasilPemeriksaanDB, StatusRencanaPemeriksaanDB statusRencanaPemeriksaanDB, StatusRisikoDB statusRisikoDB, StatusRekomendasiDB statusRekomendasiDB, EmployeeRestService employeeRestService, RoleDB roleDB, AccessPermissionDB accessPermissionDB) {
+    public DatabaseLoader(StatusBuktiPelaksanaanDB statusBuktiPelaksanaanDB, StatusHasilPemeriksaanDB statusHasilPemeriksaanDB, StatusRencanaPemeriksaanDB statusRencanaPemeriksaanDB, StatusRisikoDB statusRisikoDB, StatusRekomendasiDB statusRekomendasiDB, EmployeeRestService employeeRestService, RoleDB roleDB, AccessPermissionDB accessPermissionDB, ReminderMailFormatDB reminderMailFormatDB) {
         this.statusBuktiPelaksanaanDB = statusBuktiPelaksanaanDB;
         this.statusHasilPemeriksaanDB = statusHasilPemeriksaanDB;
         this.statusRencanaPemeriksaanDB = statusRencanaPemeriksaanDB;
@@ -25,15 +29,28 @@ public class DatabaseLoader implements CommandLineRunner {
         this.employeeRestService = employeeRestService;
         this.roleDB = roleDB;
         this.accessPermissionDB = accessPermissionDB;
+        this.reminderMailFormatDB = reminderMailFormatDB;
     }
 
     @Override
     public void run(String... args) throws Exception {
+        TimeZone.setDefault(TimeZone.getTimeZone("Asia/Jakarta"));
+        System.out.println("Database setted");
         if (statusBuktiPelaksanaanDB.findAll().isEmpty()) populasiStatusBuktiPelaksanaan();
         if (statusRencanaPemeriksaanDB.findAll().isEmpty()) populasiStatusRencanaPemeriksaan();
         if (statusHasilPemeriksaanDB.findAll().isEmpty()) populasiStatusHasilPemeriksaan();
         if (statusRekomendasiDB.findAll().isEmpty()) populasiStatusRekomendasi();
         if (employeeRestService.getAll().isEmpty() && roleDB.findAll().isEmpty() && accessPermissionDB.findAll().isEmpty()) populasiEmployeedanRole();
+        if (reminderMailFormatDB.findAll().isEmpty()) populasiReminderMailFormat();
+        MailScheduler.startMe = true;
+    }
+
+    private void populasiReminderMailFormat() {
+        ReminderMailFormat reminderMailFormatGlobal = new ReminderMailFormat();
+        reminderMailFormatGlobal.setMailFormat("An global template for your email");
+        reminderMailFormatGlobal.setSubjects("Final test");
+        reminderMailFormatGlobal.setGlobal(true);
+        reminderMailFormatDB.save(reminderMailFormatGlobal);
     }
 
     private void populasiEmployeedanRole() {
@@ -53,59 +70,110 @@ public class DatabaseLoader implements CommandLineRunner {
         // Inisiasi Akses
         // Akses Admin
         AccessPermissions aksesAdmin = new AccessPermissions(roleAdministrator);
+        aksesAdmin.setAksesRiskRating(true);
+        aksesAdmin.setAksesRiskLevel(true);
 
         roleAdministrator.setAccessPermissions(aksesAdmin);
         roleDB.save(roleAdministrator);
-//        accessPermissionDB.save(aksesAdmin);
         // Akses Admin Selesai
 
         // Akses Supervisor
         AccessPermissions aksesSupervisor = new AccessPermissions(roleSupervisor);
+        aksesSupervisor.setAksesRisiko(true);
+        aksesSupervisor.setAksesTabelRisiko(true);
+        aksesSupervisor.setAksesUbahHierarki(true);
 
+        aksesSupervisor.setAksesRiskRating(true);
+        aksesSupervisor.setUbahRiskRating(true);
+
+        aksesSupervisor.setAksesRiskLevel(true);
+        aksesSupervisor.setUbahRiskLevel(true);
+
+        aksesSupervisor.setAksesTambahBuktiPelaksanaan(true);
+        aksesSupervisor.setAksesBuktiPelaksanaan(true);
+        aksesSupervisor.setAksesPersetujuanBuktiPelaksanaan(true);
         roleSupervisor.setAccessPermissions(aksesSupervisor);
         roleDB.save(roleSupervisor);
-//        accessPermissionDB.save(aksesSupervisor);
         // Akses Supervisor Selesai
 
         // Akses Manajer
         AccessPermissions aksesManajer = new AccessPermissions(roleManajer);
+        aksesManajer.setAksesRisiko(true);
+        aksesManajer.setAksesTabelRisiko(true);
+        aksesManajer.setAksesUbahHierarki(true);
+
         aksesManajer.setAksesRiskRating(true);
         aksesManajer.setUbahRiskRating(true);
 
         aksesManajer.setAksesRiskLevel(true);
         aksesManajer.setUbahRiskLevel(true);
 
+        aksesManajer.setAksesTabelRekomendasi(true);
+        aksesManajer.setUbahReminder(true);
+
+        aksesManajer.setAksesBuktiPelaksanaan(true);
+        aksesManajer.setAksesPersetujuanBuktiPelaksanaan(true);
         roleManajer.setAccessPermissions(aksesManajer);
         roleDB.save(roleManajer);
-//        accessPermissionDB.save(aksesManajer);
         // Akses Manajer Selesai
 
         // Akses Lead
         AccessPermissions aksesLead = new AccessPermissions(roleLead);
+        aksesLead.setAksesTambahRisiko(true);
+        aksesLead.setAksesHapusRisiko(true);
+        aksesLead.setAksesRisiko(true);
+        aksesLead.setAksesUbahRisiko(true);
+        aksesLead.setAksesTabelRisiko(true);
+        aksesLead.setAksesUbahHierarki(true);
 
+        aksesLead.setAksesRiskRating(true);
+        aksesLead.setUbahRiskRating(true);
+
+        aksesLead.setAksesRiskLevel(true);
+        aksesLead.setUbahRiskLevel(true);
+
+        aksesLead.setAksesTabelRekomendasi(true);
+        aksesLead.setUbahReminder(true);
+
+        aksesLead.setAksesTambahBuktiPelaksanaan(true);
+        aksesLead.setAksesBuktiPelaksanaan(true);
+        aksesLead.setAksesPersetujuanBuktiPelaksanaan(true);
+        aksesLead.setAksesUbahBuktiPelaksanaan(true);
         roleLead.setAccessPermissions(aksesLead);
         roleDB.save(roleLead);
-//        accessPermissionDB.save(aksesLead);
         // Akses Lead Selesai
 
         // Akses Officer
         AccessPermissions aksesOfficer = new AccessPermissions(roleOfficer);
+        aksesOfficer.setAksesTambahRisiko(true);
+        aksesOfficer.setAksesHapusRisiko(true);
         aksesOfficer.setAksesRisiko(true);
+        aksesOfficer.setAksesUbahRisiko(true);
         aksesOfficer.setAksesTabelRisiko(true);
 
+        aksesOfficer.setAksesRiskRating(true);
+
+        aksesOfficer.setAksesRiskLevel(true);
+
+        aksesOfficer.setAksesTabelRekomendasi(true);
         aksesOfficer.setUbahReminder(true);
 
+        aksesOfficer.setAksesTambahBuktiPelaksanaan(true);
+        aksesOfficer.setAksesBuktiPelaksanaan(true);
+        aksesOfficer.setAksesPersetujuanBuktiPelaksanaan(true);
+        aksesOfficer.setAksesUbahBuktiPelaksanaan(true);
         roleOfficer.setAccessPermissions(aksesOfficer);
         roleDB.save(roleOfficer);
-//        accessPermissionDB.save(aksesOfficer);
         // Akses Officer Selesai
 
         // Akses BM
         AccessPermissions aksesBM = new AccessPermissions(roleBM);
-
+        aksesBM.setAksesTambahBuktiPelaksanaan(true);
+        aksesBM.setAksesBuktiPelaksanaan(true);
+        aksesBM.setAksesUbahBuktiPelaksanaan(true);
+        aksesBM.setAksesTabelRekomendasi(true);
         roleBM.setAccessPermissions(aksesBM);
         roleDB.save(roleBM);
-//        accessPermissionDB.save(aksesBM);
         // Akses BM Selesai
 
         // Akses SuperQA
@@ -115,6 +183,7 @@ public class DatabaseLoader implements CommandLineRunner {
         aksesSuper.setAksesRisiko(true);
         aksesSuper.setAksesUbahRisiko(true);
         aksesSuper.setAksesTabelRisiko(true);
+        aksesSuper.setAksesUbahHierarki(true);
 
         aksesSuper.setAksesRiskRating(true);
         aksesSuper.setUbahRiskRating(true);
@@ -122,32 +191,21 @@ public class DatabaseLoader implements CommandLineRunner {
         aksesSuper.setAksesRiskLevel(true);
         aksesSuper.setUbahRiskLevel(true);
 
+        aksesSuper.setAksesTabelRekomendasi(true);
         aksesSuper.setUbahReminder(true);
 
+        aksesSuper.setAksesTambahBuktiPelaksanaan(true);
+        aksesSuper.setAksesBuktiPelaksanaan(true);
+        aksesSuper.setAksesPersetujuanBuktiPelaksanaan(true);
+        aksesSuper.setAksesUbahBuktiPelaksanaan(true);
         roleSuper.setAccessPermissions(aksesSuper);
         roleDB.save(roleSuper);
-//        accessPermissionDB.save(aksesSuper);
         // Akses SuperQA Selesai
 
         // Akses Developer
-        AccessPermissions aksesDeveloper = new AccessPermissions(roleDeveloper);
-        aksesDeveloper.setAksesTambahRisiko(true);
-        aksesDeveloper.setAksesHapusRisiko(true);
-        aksesDeveloper.setAksesRisiko(true);
-        aksesDeveloper.setAksesUbahRisiko(true);
-        aksesDeveloper.setAksesTabelRisiko(true);
-
-        aksesDeveloper.setAksesRiskRating(true);
-        aksesDeveloper.setUbahRiskRating(true);
-
-        aksesDeveloper.setAksesRiskLevel(true);
-        aksesDeveloper.setUbahRiskLevel(true);
-
-        aksesDeveloper.setUbahReminder(true);
-
+        AccessPermissions aksesDeveloper = new AccessPermissions(roleDeveloper, true);
         roleDeveloper.setAccessPermissions(aksesDeveloper);
         roleDB.save(roleDeveloper);
-//        accessPermissionDB.save(aksesDeveloper);
         // Akses Developer selesai
         // Inisiasi Akses Selesai
 

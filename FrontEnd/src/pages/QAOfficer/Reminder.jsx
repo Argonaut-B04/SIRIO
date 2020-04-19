@@ -3,7 +3,7 @@ import TabelReminder from "../../Components/Tables/Reminder/TabelReminder";
 import SirioMainLayout from "../../Layout/SirioMainLayout";
 
 /**
- * Controller yang menampilkan halaman daftar rekomendasi
+ * Controller yang menampilkan halaman daftar remidner
  */
 export default class Reminder extends React.Component {
     render() {

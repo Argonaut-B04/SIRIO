@@ -13,15 +13,46 @@ class HasilPemeriksaanFormTolak extends React.Component {
 
         this.state = {
             feedback: "",
-            redirect: false
+            redirect: false,
+            submitable: false,
+            errorFeedback: "",
         };
 
         this.handleChange = this.handleChange.bind(this);
         this.inputDefinition = this.inputDefinition.bind(this);
         this.setRedirect = this.setRedirect.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     componentDidMount() {
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        var submitable = this.state.feedback !== null && this.state.feedback !== "";
+
+        submitable = submitable && this.validateFeedback();
+
+        if (this.state.submitable !== submitable) {
+            this.setState({
+                submitable: submitable
+            })
+        }
+    }
+
+    validateFeedback() {
+        var submitable = true;
+        var errorFeedback;
+        if (!isNaN(this.state.feedback) && this.state.feedback !== "") {
+            submitable = false;
+            errorFeedback = "Feedback perlu mengandung huruf";
+        }
+
+        if (this.state.errorFeedback !== errorFeedback) {
+            this.setState({
+                errorFeedback: errorFeedback
+            })
+        }
+        return submitable;
     }
 
     setRedirect = () => {
@@ -57,8 +88,11 @@ class HasilPemeriksaanFormTolak extends React.Component {
             status: "3",
             feedback: this.state.feedback
         };
-        HasilPemeriksaanService.setujuiHasilPemeriksaan(persetujuan)
-            .then(() => this.setRedirect());
+
+        if (this.state.submitable) {
+            HasilPemeriksaanService.setujuiHasilPemeriksaan(persetujuan)
+                .then(() => this.setRedirect());
+        }
     }
 
     // Fungsi yang akan mengembalikan definisi tiap field pada form
@@ -68,12 +102,13 @@ class HasilPemeriksaanFormTolak extends React.Component {
         return (
             [
                 {
-                label: "Feedback",
-                handleChange: this.handleChange,
-                type: "textarea",
-                name: "feedback",
-                value: this.state.feedback,
-                placeholder: "Feedback hasil pemeriksaan"
+                    label: "Feedback",
+                    handleChange: this.handleChange,
+                    type: "textarea",
+                    name: "feedback",
+                    value: this.state.feedback,
+                    placeholder: "Feedback hasil pemeriksaan",
+                    validation: this.state.errorFeedback
                 }
             ]
         )
@@ -82,7 +117,22 @@ class HasilPemeriksaanFormTolak extends React.Component {
     submitButton() {
         return (
             <div>
-                <SirioButton purple recommended
+                {/*<SirioConfirmButton*/}
+                {/*    purple*/}
+                {/*    recommended={this.state.submitable}*/}
+                {/*    disabled={!this.state.submitable}*/}
+                {/*    classes="m-1"*/}
+                {/*    modalTitle="Apakah anda yakin untuk menolak hasil pemeriksaan?"*/}
+                {/*    onConfirm={(event) => this.handleSubmit(event)}*/}
+                {/*    customConfirmText="Ya, Setujui"*/}
+                {/*    customCancelText="Batal"*/}
+                {/*    closeOnConfirm*/}
+                {/*>*/}
+                {/*    Simpan*/}
+                {/*</SirioConfirmButton>*/}
+                <SirioButton purple
+                             recommended={this.state.submitable}
+                             disabled={!this.state.submitable}
                              classes="mx-1"
                              onClick={(event)  => this.handleSubmit(event)}>
                     Simpan

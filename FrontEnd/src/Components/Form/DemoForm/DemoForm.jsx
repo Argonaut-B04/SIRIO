@@ -14,13 +14,14 @@ export default class DemoForm extends React.Component {
 
         this.state = {
             nama: "",
-            umur: 0,
+            umur: "",
             jenis: "",
             manusia: true,
             customDropdown: "",
             customDropdown2: "",
-            submitable: false,
             namaMain: ["Chocola", "Vanilla"],
+            submitable: true,
+            submitableArray: [false, false],
         }
 
         this.handleChange = this.handleChange.bind(this);
@@ -29,6 +30,9 @@ export default class DemoForm extends React.Component {
         this.handleMultiFieldChange = this.handleMultiFieldChange.bind(this);
         this.modifyFieldCount = this.modifyFieldCount.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.validateNama = this.validateNama.bind(this);
+        this.validateUmur = this.validateUmur.bind(this);
+        this.submitable = this.submitable.bind(this);
     }
 
     // Fungsi untuk mengubah state ketika isi dari input diubah
@@ -66,78 +70,57 @@ export default class DemoForm extends React.Component {
     // Umumnya akan digunakan untuk memanggil service komunikasi ke backend
     handleSubmit(event) {
         event.preventDefault();
-        if (this.state.submitable) {
+        if (this.submitable()) {
             alert("submited");
         }
     }
 
-    componentDidUpdate(prevProps, prevState) {
+    submitable() {
         var submitable = true;
-        var validating = false;
-
-        submitable = this.validateRequired();
-
-        if (prevState.nama !== this.state.nama) {
-            submitable = submitable && this.validateNama();
-            validating = true;
-        }
-        
-        if (prevState.umur !== this.state.umur) {
-            submitable = submitable && this.validateUmur();
-            validating = true;
-        }
-
-        if (validating) {
-            if (this.state.submitable !== submitable) {
-                this.setState({
-                    submitable: submitable
-                })
-            }
-        }
-    }
-
-    validateRequired() {
-        var submitable = true;
-        const required = [this.state.nama, this.state.umur];
-        for (let i = 0; i < required.length; i++) {
-            submitable = submitable && (required[i] !== null && required[i] !== "");
+        const fokus = this.state.submitableArray;
+        for (let i = 0; i < fokus.length; i++) {
+            submitable = submitable && fokus[i]
         }
         return submitable;
     }
 
-    validateNama() {
+    validateNama(fokusNama) {
         var submitable = true;
-        const fokusNama = this.state.nama;
         var errorNama;
         if (fokusNama.length < 2) {
             submitable = false;
-            errorNama = "Nama minimal 2 karakter, nd mungkin aku panggil kamu sebagai Tuan/Nyonya " + fokusNama;
+            errorNama = "terlalu pendek ?";
         } else if (fokusNama.length > 10) {
             submitable = false;
-            errorNama = "uvuvwevwe osas ?";
+            errorNama = "terlalu panjaaaaaaaa aaaaaaaaaa aaaaaa aaaaaaaaang ?";
         }
-        if (this.state.errorNama !== errorNama) {
+
+        if (submitable !== this.state.submitableArray[0]) {
+            var stateToChange = this.state.submitableArray;
+            stateToChange[0] = submitable;
             this.setState({
-                errorNama: errorNama
+                submitableArray: stateToChange
             })
         }
-        return submitable;
+        return errorNama;
     }
 
-    validateUmur() {
+    validateUmur(fokusUmur) {
         var submitable = true;
-        const fokusUmur = this.state.umur;
         var errorUmur;
         if (fokusUmur < 18) {
             submitable = false;
             errorUmur = "Khusus 18 tahun keatas ya ^-^";
         }
-        if (this.state.errorUmur !== errorUmur) {
+        
+        if (submitable !== this.state.submitableArray[1]) {
+            var stateToChange = this.state.submitableArray;
+            stateToChange[1] = submitable;
             this.setState({
-                errorUmur: errorUmur
+                submitableArray: stateToChange
             })
         }
-        return submitable;
+        return errorUmur;
     }
 
     // Fungsi yang akan mengembalikan definisi tiap field pada form
@@ -150,7 +133,7 @@ export default class DemoForm extends React.Component {
                     label: "Nama",
                     required: true,
                     handleChange: this.handleChange,
-                    validation: this.state.errorNama,
+                    validationFunction: this.validateNama,
                     type: "textarea",
                     name: "nama",
                     value: this.state.nama,
@@ -158,7 +141,7 @@ export default class DemoForm extends React.Component {
                 }, {
                     label: "Umur",
                     handleChange: this.handleChange,
-                    validation: this.state.errorUmur,
+                    validationFunction: this.validateUmur,
                     type: "number",
                     name: "umur",
                     min: 1,
@@ -171,6 +154,7 @@ export default class DemoForm extends React.Component {
                     type: "select",
                     name: "jenis",
                     value: this.state.jenis,
+                    required: true,
                     optionList: [
                         {
                             label: "Pria",
@@ -296,15 +280,25 @@ export default class DemoForm extends React.Component {
         )
     }
     submitButton() {
-        return (
-            <div>
+        var tombolSimpan =
+            <SirioButton
+                purple
+                disabled
+            >
+                Simpan
+            </SirioButton>
+        if (this.submitable()) {
+            tombolSimpan =
                 <SirioButton
                     purple
-                    recommended={this.state.submitable}
-                    disabled={!this.state.submitable}
+                    recommended
                 >
                     Simpan
-                </SirioButton>
+            </SirioButton>
+        }
+        return (
+            <div>
+                {tombolSimpan}
                 <SirioButton purple
                     classes="ml-2"
                     type="button"

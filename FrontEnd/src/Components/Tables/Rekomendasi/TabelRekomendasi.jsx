@@ -37,7 +37,7 @@ export default class TabelRekomendasi extends React.Component {
                 })
             })
             .catch(error => {
-                if (error.response.data.status == 401) {
+                if (error.response.data.status === 401) {
                     this.setState({
                         redirector: <Redirect to={{
                             pathname: "/401",
@@ -46,6 +46,8 @@ export default class TabelRekomendasi extends React.Component {
                             }
                         }} />
                     })
+                } else {
+                    console.log(error.response.data);
                 }
             })
             ;
@@ -222,13 +224,13 @@ export default class TabelRekomendasi extends React.Component {
             this.setState({
                 changeComplete: true
             })
-        });
+        }).catch(error => console.log(error.response.data));
     }
 
     // Formatter untuk render button kedua
     getButtonsSecond(cell, row) {
         const status = row.status;
-        const tenggatWaktu = SirioAxiosBase.formatDateFromString(row.tenggatWaktu);
+        const tenggatWaktu = row.tenggatWaktuDate ? SirioAxiosBase.formatDate(row.tenggatWaktuDate) : "Tenggat Waktu";
         const recommended = status === "Menunggu Pengaturan Tenggat Waktu";
         const hyperlink = status === "Menunggu Pelaksanaan";
         const text = status === "Selesai" || status === "Sedang Dilaksanakan";
@@ -291,13 +293,13 @@ export default class TabelRekomendasi extends React.Component {
                         pathname: "/rekomendasi/reminder",
                         state: {
                             id: row.id,
-                            keterangan: row.keterangan
+                            keterangan: row.keterangan,
+                            deadline: row.tenggatWaktuDate
                         }
                     }}>
                     <SirioButton
                         purple
                         hover
-                        disabled={!reminderEnable}
                     >
                         Reminder
                     </SirioButton>
@@ -329,24 +331,27 @@ export default class TabelRekomendasi extends React.Component {
 
     // Fungsi render Tabel rekomendasi
     render() {
-        return this.state.redirector || (
+        const { defaultSorted, columns, endNotification, state } = this;
+        const { redirector, rowList, changeComplete } = state;
+        
+        return redirector || (
             <>
                 <SirioTable
                     title="Daftar Rekomendasi"
-                    data={this.state.rowList}
-                    defaultSorted={this.defaultSorted}
+                    data={rowList}
+                    defaultSorted={defaultSorted}
                     id='id'
-                    columnsDefinition={this.columns}
+                    columnsDefinition={columns}
                     includeSearchBar
                     indication="Tidak Terdapat Data Rekomendasi"
                 />
-                {this.state.changeComplete &&
+                {changeComplete &&
                     <SirioMessageButton
                         show
                         classes="d-none"
                         modalTitle="Tenggat Waktu berhasil Disimpan"
                         customConfirmText="Kembali"
-                        onClick={this.endNotification}
+                        onClick={endNotification}
                     />
                 }
             </>
