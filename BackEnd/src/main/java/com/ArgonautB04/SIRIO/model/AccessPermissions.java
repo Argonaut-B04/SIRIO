@@ -55,6 +55,9 @@ public class AccessPermissions implements Serializable {
     private Boolean aksesTabelRekomendasi;
 
     @Column(columnDefinition = "boolean default false")
+    private Boolean aksesRekomendasi;
+
+    @Column(columnDefinition = "boolean default false")
     private Boolean aksesBuktiPelaksanaan;
 
     @Column(columnDefinition = "boolean default false")
@@ -183,6 +186,14 @@ public class AccessPermissions implements Serializable {
 
     public void setAksesTabelRekomendasi(Boolean aksesTabelRekomendasi) {
         this.aksesTabelRekomendasi = aksesTabelRekomendasi;
+    }
+
+    public Boolean getAksesRekomendasi() {
+        return aksesRekomendasi;
+    }
+
+    public void setAksesRekomendasi(Boolean aksesRekomendasi) {
+        this.aksesRekomendasi = aksesRekomendasi;
     }
 
     public Boolean getAksesBuktiPelaksanaan() {

@@ -140,21 +140,32 @@ public class RekomendasiRestController {
             @PathVariable("idRekomendasi") int idRekomendasi, Principal principal
     ) {
         BaseResponse<RekomendasiDTO> response = new BaseResponse<>();
-        try {
-            Rekomendasi rekomendasi = rekomendasiRestService.getById(idRekomendasi);
-            RekomendasiDTO result = new RekomendasiDTO();
-            result.setId(rekomendasi.getIdRekomendasi());
-            result.setKeterangan(rekomendasi.getKeterangan());
+        Optional<Employee> pengelolaOptional = employeeRestService.getByUsername(principal.getName());
+        Employee pengelola;
+        if (pengelolaOptional.isPresent()) {
+            pengelola = pengelolaOptional.get();
+            if (pengelola.getRole().getAccessPermissions().getAksesRekomendasi()) {
+                try {
+                    Rekomendasi rekomendasi = rekomendasiRestService.getById(idRekomendasi);
+                    RekomendasiDTO result = new RekomendasiDTO();
+                    result.setId(rekomendasi.getIdRekomendasi());
+                    result.setKeterangan(rekomendasi.getKeterangan());
 
-            response.setStatus(200);
-            response.setMessage("success");
-            response.setResult(result);
-        } catch (NoSuchElementException e) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Rekomendasi dengan ID " + idRekomendasi + " tidak ditemukan!"
+                    response.setStatus(200);
+                    response.setMessage("success");
+                    response.setResult(result);
+                } catch (NoSuchElementException e) {
+                    throw new ResponseStatusException(
+                            HttpStatus.NOT_FOUND, "Rekomendasi dengan ID " + idRekomendasi + " tidak ditemukan!"
+                    );
+                }
+                return response;
+            } else throw new ResponseStatusException(
+                    HttpStatus.UNAUTHORIZED, "Akun anda tidak memiliki akses ke pengaturan ini"
             );
-        }
-        return response;
+        } else throw new ResponseStatusException(
+                HttpStatus.UNAUTHORIZED, "Akun anda tidak terdaftar dalam Sirio"
+        );
     }
 
     /**
