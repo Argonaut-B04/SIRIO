@@ -106,6 +106,7 @@ public class BuktiPelaksanaanRestController {
                     result.setFeedback(buktiPelaksanaan.getFeedback());
                     result.setNamaPembuat(buktiPelaksanaan.getPembuat().getNama());
                     result.setIdRekomendasi(buktiPelaksanaan.getRekomendasi().getIdRekomendasi());
+                    result.setKeteranganRekomendasi(buktiPelaksanaan.getRekomendasi().getKeterangan());
 
                     response.setStatus(200);
                     response.setMessage("success");
