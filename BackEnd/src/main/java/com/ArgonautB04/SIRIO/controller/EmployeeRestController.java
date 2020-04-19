@@ -326,12 +326,7 @@ public class EmployeeRestController {
 
     @GetMapping("/login")
     public BaseResponse<Employee> authenticate(Principal principal) {
-        BaseResponse<Employee> response = new BaseResponse<>();
-        Employee target = employeeRestService.getByUsername(principal.getName()).get();
-
-        response.setStatus(200);
-        response.setMessage("success");
-        response.setResult(target);
-        return response;
+        Employee target = employeeRestService.validateEmployeeExistByPrincipal(principal);
+        return new BaseResponse<>(200, "success", target);
     }
 }
