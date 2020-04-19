@@ -48,7 +48,7 @@ public class DatabaseLoader implements CommandLineRunner {
     private void populasiReminderMailFormat() {
         ReminderMailFormat reminderMailFormatGlobal = new ReminderMailFormat();
         reminderMailFormatGlobal.setMailFormat("An global template for your email");
-        reminderMailFormatGlobal.setSubjects("Final tesrt");
+        reminderMailFormatGlobal.setSubjects("Final test");
         reminderMailFormatGlobal.setGlobal(true);
         reminderMailFormatDB.save(reminderMailFormatGlobal);
     }
@@ -203,27 +203,7 @@ public class DatabaseLoader implements CommandLineRunner {
         // Akses SuperQA Selesai
 
         // Akses Developer
-        AccessPermissions aksesDeveloper = new AccessPermissions(roleDeveloper);
-        aksesDeveloper.setAksesTambahRisiko(true);
-        aksesDeveloper.setAksesHapusRisiko(true);
-        aksesDeveloper.setAksesRisiko(true);
-        aksesDeveloper.setAksesUbahRisiko(true);
-        aksesDeveloper.setAksesTabelRisiko(true);
-        aksesDeveloper.setAksesUbahHierarki(true);
-
-        aksesDeveloper.setAksesRiskRating(true);
-        aksesDeveloper.setUbahRiskRating(true);
-
-        aksesDeveloper.setAksesRiskLevel(true);
-        aksesDeveloper.setUbahRiskLevel(true);
-
-        aksesDeveloper.setAksesTabelRekomendasi(true);
-        aksesDeveloper.setUbahReminder(true);
-
-        aksesDeveloper.setAksesTambahBuktiPelaksanaan(true);
-        aksesDeveloper.setAksesBuktiPelaksanaan(true);
-        aksesDeveloper.setAksesPersetujuanBuktiPelaksanaan(true);
-        aksesDeveloper.setAksesUbahBuktiPelaksanaan(true);
+        AccessPermissions aksesDeveloper = new AccessPermissions(roleDeveloper, true);
         roleDeveloper.setAccessPermissions(aksesDeveloper);
         roleDB.save(roleDeveloper);
         // Akses Developer selesai

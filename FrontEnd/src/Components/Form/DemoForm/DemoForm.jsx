@@ -311,7 +311,6 @@ export default class DemoForm extends React.Component {
     }
     // Fungsi render SirioForm
     render() {
-        console.log(this.state.submitableArray)
         return (
             <SirioForm
                 title="Demo Form"

@@ -16,4 +16,6 @@ public interface ReminderDB extends JpaRepository<Reminder, Integer> {
     List<Reminder> findAllByTanggalPengirimanBetween(@NotNull LocalDate tanggalPengiriman, @NotNull LocalDate tanggalPengiriman2);
 
     List<Reminder> findAllByReminderMailFormat(ReminderMailFormat reminderMailFormat);
+
+    List<Reminder> findAllByRekomendasi(Rekomendasi rekomendasi);
 }

@@ -1,5 +1,6 @@
 package com.ArgonautB04.SIRIO.services;
 
+import com.ArgonautB04.SIRIO.model.Rekomendasi;
 import com.ArgonautB04.SIRIO.model.Reminder;
 import com.ArgonautB04.SIRIO.model.ReminderMailFormat;
 
@@ -19,6 +20,8 @@ public interface ReminderRestService {
     List<Reminder> getByDay(LocalDate date, LocalDate secondDate);
 
     List<Reminder> getByReminderMailFormat(ReminderMailFormat reminderMailFormat);
+
+    List<Reminder> getByRekomendasi(Rekomendasi rekomendasi);
 
     void hapusReminder(int idReminder);
 

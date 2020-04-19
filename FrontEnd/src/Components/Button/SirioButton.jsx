@@ -50,7 +50,7 @@ export default class SirioButton extends React.Component {
 
         var fullClass = [classes.sirioButton, color, hoverStyle, style, borderRadius, this.props.classes].join(' ');
         if (this.props.square) {
-            fullClass = [classes.sirioButton, color, hoverStyle, style, classes.square].join(" ");
+            fullClass = [classes.sirioButton, color, hoverStyle, style, classes.square, this.props.classes].join(" ");
         }
         return (
             <button

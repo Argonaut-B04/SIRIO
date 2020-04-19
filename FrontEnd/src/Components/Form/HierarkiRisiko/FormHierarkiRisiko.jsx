@@ -191,7 +191,6 @@ class FormHierarkiRisiko extends React.Component {
     }
 
     handleSubmit() {
-        console.log(this.state.rowList)
         HierarkiRisikoService.submitChanges(this.state.rowList)
             .then(() => this.setRedirect());
     }
@@ -203,7 +202,6 @@ class FormHierarkiRisiko extends React.Component {
     };
 
     renderRedirect = () => {
-        console.log(this.state.redirect)
         if (this.state.redirect) {
             return <Redirect to={{
                 pathname: "/registrasi-risiko",

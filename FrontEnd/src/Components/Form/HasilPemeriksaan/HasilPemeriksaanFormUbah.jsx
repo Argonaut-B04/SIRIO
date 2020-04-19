@@ -510,7 +510,6 @@ class HasilPemeriksaanFormTambah extends React.Component {
                     } return null
                 });
                 komponen.daftarRekomendasi.map(rekomendasi => {
-                    console.log(rekomendasi)
                     if (rekomendasi.id != null) {
                         daftarRekomendasiTerdaftar.push(rekomendasi)
                     } else {

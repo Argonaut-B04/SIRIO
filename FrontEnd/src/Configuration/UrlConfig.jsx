@@ -50,6 +50,9 @@ export const konfigurasi = {
         }, {
             title: "SOP",
             link: "#"
+        }, {
+            title: "Template Reminder",
+            link: "/pengaturan-reminder"
         }
     ]
 }

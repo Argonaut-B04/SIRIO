@@ -161,7 +161,7 @@ class TabelReminder extends React.Component {
         const originalRow = this.state.rowList;
 
         const changedRow = this.insertItem(originalRow, {
-            idReminder: Math.floor(Math.random() * 100) + 100,
+            idReminder: Math.floor(Math.random() * 1000) + 1,
             tanggalPengiriman: newDate
         })
 
@@ -230,6 +230,7 @@ class TabelReminder extends React.Component {
         return (
             <SirioDatePickerButton
                 purple
+                hover
                 id={row.idReminder}
                 handleChange={(date, id) => this.ubah(date, id)}
                 minDate={currentDate}
@@ -250,6 +251,7 @@ class TabelReminder extends React.Component {
         return (
             <SirioButton
                 red
+                hover
                 onClick={() => this.hapus(row.idReminder)}
             >
                 Hapus
@@ -269,7 +271,7 @@ class TabelReminder extends React.Component {
         for (var hariIni = new Date(); hariIni < deadline; hariIni = this.addDays(hariIni, hari)) {
             const newDate = [(hariIni.getFullYear()), (hariIni.getMonth() + 1), hariIni.getDate()];
             newDateList.push({
-                idReminder: Math.floor(Math.random() * 100) + 100,
+                idReminder: Math.floor(Math.random() * 1000) + 1,
                 tanggalPengiriman: newDate
             })
         }
@@ -284,33 +286,6 @@ class TabelReminder extends React.Component {
         return (
             <>
                 <div className="d-flex flex-row align-items-center">
-                    <div className="m-1 d-flex flex-row align-items-center">
-                        <small className="m-1">generate Harian  </small>
-                        <SirioButton
-                            blue
-                            hover
-                            square
-                            onClick={() => this.generateHarian(1)}
-                        >
-                            1
-                        </SirioButton>
-                        <SirioButton
-                            blue
-                            hover
-                            square
-                            onClick={() => this.generateHarian(2)}
-                        >
-                            2
-                        </SirioButton>
-                        <SirioButton
-                            blue
-                            hover
-                            square
-                            onClick={() => this.generateHarian(3)}
-                        >
-                            3
-                        </SirioButton>
-                    </div>
                     <div className="m-1">
                         <SirioDatePickerButton
                             purple
@@ -325,6 +300,43 @@ class TabelReminder extends React.Component {
                     </div>
                 </div>
             </>
+        )
+    }
+
+    searchLeftButton() {
+        return (
+            <div className="d-flex flex-row align-items-center">
+                <p className="m-1">Reminder Harian </p>
+                <div>
+                    <SirioButton
+                        purple
+                        hover
+                        square
+                        onClick={() => this.generateHarian(1)}
+                        classes={classes.sizeperpage}
+                    >
+                        1
+                        </SirioButton>
+                    <SirioButton
+                        purple
+                        hover
+                        square
+                        onClick={() => this.generateHarian(2)}
+                        classes={classes.sizeperpage}
+                    >
+                        2
+                        </SirioButton>
+                    <SirioButton
+                        purple
+                        hover
+                        square
+                        onClick={() => this.generateHarian(3)}
+                        classes={classes.sizeperpage}
+                    >
+                        3
+                        </SirioButton>
+                </div>
+            </div>
         )
     }
 
@@ -366,6 +378,7 @@ class TabelReminder extends React.Component {
                 <SirioTable
                     title={"Daftar Reminder untuk Rekomendasi " + this.props.location.state.keterangan}
                     data={this.state.rowList}
+                    leftSearch={this.searchLeftButton()}
                     id='idReminder'
                     columnsDefinition={column}
                     includeSearchBar

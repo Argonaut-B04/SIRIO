@@ -25,7 +25,13 @@ public interface RekomendasiRestService {
 
     void hapusRekomendasi(int idRekomendasi);
 
-    Rekomendasi ubahTenggatWaktu(Rekomendasi rekomendasi, Date tenggatWaktuDate);
-
     List<Rekomendasi> getByPembuat(Employee pembuat);
+
+    Rekomendasi validateExistInDatabase(int idRekomendasi);
+
+    void validateDateInputMoreThanToday(LocalDate localDate);
+
+    void validateDeadlineCanBeSet(Rekomendasi rekomendasi);
+
+    Rekomendasi buatAtauSimpanPerubahanRekomendasi(Rekomendasi rekomendasi);
 }

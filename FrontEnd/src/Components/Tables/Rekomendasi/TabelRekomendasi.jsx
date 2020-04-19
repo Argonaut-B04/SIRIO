@@ -46,6 +46,8 @@ export default class TabelRekomendasi extends React.Component {
                             }
                         }} />
                     })
+                } else {
+                    console.log(error.response.data);
                 }
             })
             ;
@@ -222,13 +224,13 @@ export default class TabelRekomendasi extends React.Component {
             this.setState({
                 changeComplete: true
             })
-        });
+        }).catch(error => console.log(error.response.data));
     }
 
     // Formatter untuk render button kedua
     getButtonsSecond(cell, row) {
         const status = row.status;
-        const tenggatWaktu = SirioAxiosBase.formatDateFromString(row.tenggatWaktu);
+        const tenggatWaktu = row.tenggatWaktuDate ? SirioAxiosBase.formatDate(row.tenggatWaktuDate) : "Tenggat Waktu";
         const recommended = status === "Menunggu Pengaturan Tenggat Waktu";
         const hyperlink = status === "Menunggu Pelaksanaan";
         const text = status === "Selesai" || status === "Sedang Dilaksanakan";
@@ -292,7 +294,7 @@ export default class TabelRekomendasi extends React.Component {
                         state: {
                             id: row.id,
                             keterangan: row.keterangan,
-                            deadline: row.tenggatWaktu
+                            deadline: row.tenggatWaktuDate
                         }
                     }}>
                     <SirioButton

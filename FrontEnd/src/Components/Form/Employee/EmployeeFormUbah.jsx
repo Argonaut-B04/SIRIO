@@ -92,8 +92,6 @@ class EmployeeFormUbah extends React.Component {
         var errorName;
         var letterOnly = /^[a-zA-Z\s]*$/;
         if (!fokusName.match(letterOnly)) {
-            console.log("sfa")
-            console.log(fokusName)
             submitable = false;
             errorName = "Nama hanya boleh mengandung huruf";
         }
