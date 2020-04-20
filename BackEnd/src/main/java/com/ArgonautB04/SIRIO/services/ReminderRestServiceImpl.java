@@ -82,4 +82,9 @@ public class ReminderRestServiceImpl implements ReminderRestService {
     public Boolean isExistById(int idReminder) {
         return reminderDB.findById(idReminder).isPresent();
     }
+
+    @Override
+    public List<Reminder> getByRekomendasi(Rekomendasi rekomendasi) {
+        return reminderDB.findAllByRekomendasi(rekomendasi);
+    };
 }

@@ -34,7 +34,15 @@ public class Risiko implements Serializable {
 
     @Size(max = 500)
     @Column
-    private String komponen;
+    private String detailUraian;
+
+    @Size(max = 500)
+    @Column
+    private String deskripsi;
+
+    @Size(max = 50)
+    @Column
+    private String metologi;
 
     @NotNull
     @Enumerated(EnumType.STRING)
