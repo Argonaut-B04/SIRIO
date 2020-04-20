@@ -5,7 +5,11 @@ public class BuktiPelaksanaanDTO {
     private String keterangan;
     private String lampiran;
     private String namaPembuat;
+    private String namaPemeriksa;
     private Integer idRekomendasi;
+    private Integer status;
+    private String feedback;
+    private String keteranganRekomendasi;
 
     public Integer getId() {
         return id;
@@ -45,5 +49,37 @@ public class BuktiPelaksanaanDTO {
 
     public void setIdRekomendasi(Integer idRekomendasi) {
         this.idRekomendasi = idRekomendasi;
+    }
+
+    public String getNamaPemeriksa() {
+        return namaPemeriksa;
+    }
+
+    public void setNamaPemeriksa(String namaPemeriksa) {
+        this.namaPemeriksa = namaPemeriksa;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public String getFeedback() {
+        return feedback;
+    }
+
+    public void setFeedback(String feedback) {
+        this.feedback = feedback;
+    }
+
+    public String getKeteranganRekomendasi() {
+        return keteranganRekomendasi;
+    }
+
+    public void setKeteranganRekomendasi(String keteranganRekomendasi) {
+        this.keteranganRekomendasi = keteranganRekomendasi;
     }
 }

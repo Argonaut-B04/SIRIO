@@ -4,7 +4,9 @@ import com.ArgonautB04.SIRIO.model.Employee;
 import com.ArgonautB04.SIRIO.model.KantorCabang;
 import com.ArgonautB04.SIRIO.repository.KantorCabangDB;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -73,6 +75,7 @@ public class KantorCabangRestServiceImpl implements KantorCabangRestService {
     }
 
     @Override
+<<<<<<< HEAD
     public KantorCabang nonaktifkanKantor(int idKantor) {
         KantorCabang kantorCabang = getById(idKantor);
         kantorCabang.setStatus(KantorCabang.Status.NONAKTIF);
@@ -90,4 +93,17 @@ public class KantorCabangRestServiceImpl implements KantorCabangRestService {
 //    public List<KantorCabang> getByPembuat(Employee pembuat){
 //        return kantorCabangDB.findAllByPembuat(pembuat);
 //    }
+=======
+    public KantorCabang validateExistInDatabase(int idKantorCabang) {
+        Optional<KantorCabang> kantorCabang = kantorCabangDB.findById(idKantorCabang);
+        if (kantorCabang.isPresent()) {
+            return kantorCabang.get();
+        } else {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    "Kantor Cabang dengan ID " + idKantorCabang + " tidak ditemukan!"
+            );
+        }
+    }
+>>>>>>> 3d62f554b8f925e99d1cc0922aa6f9b35cccd47d
 }

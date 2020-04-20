@@ -3,39 +3,61 @@ import SirioButton from '../../Button/SirioButton';
 import classes from '../RegistrasiRisiko/TabelRisiko.module.css';
 import SirioTable from '../SirioTable';
 import RegistrasiRisikoService from '../../../Services/RegistrasiRisikoService';
-import { NavLink } from 'react-router-dom';
+import { NavLink, Redirect } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
+import SirioMessageButton from "../../Button/ActionButton/SirioMessageButton";
 
-export default class TabelRisiko extends React.Component {
+class TabelRisiko extends React.Component {
 
     constructor(props) {
         super(props);
 
         this.state = {
-            rowList: []
+            rowList: [],
+            openNotification: true,
         }
 
         this.renderRows = this.renderRows.bind(this);
+        this.endNotification = this.endNotification(this);
     }
 
     componentDidMount() {
         this.renderRows();
     }
 
-    async renderRows() {
-        const response = await RegistrasiRisikoService.getAllRisiko();
-
+    endNotification() {
         this.setState({
-            rowList: response.data.result
+            openNotification: false
         })
     }
 
+    async renderRows() {
+        RegistrasiRisikoService.getAllRisiko().then(response => {
+            this.setState({
+                rowList: response.data.result
+            })
+        })
+        .catch(error => {
+            if (error.response.data.status === 401) {
+                this.setState({
+                    redirector: <Redirect to={{
+                        pathname: "/401",
+                        state: {
+                            detail: error.response.data.message,
+                        }
+                    }} />
+                })
+            }
+        })
+        ;
+    }
+
     getButtons(cell, row) {
-        console.log(row)
         return (
             <NavLink to={{
                 pathname: "/registrasi-risiko/detail",
                 state: {
-                    id: row.idRisiko,
+                    id: row.id,
                 }
             }}>
                 <SirioButton
@@ -47,16 +69,16 @@ export default class TabelRisiko extends React.Component {
         )
     }
 
-    parentFormatter() {
-        if (this.parent) {
-            return this.parent
-        } else {
+    parentFormatter(cell, row) {
+        if (row.parent === null) {
             return "-"
+        } else {
+            return row.namaParent
         }
     }
 
     columns = [{
-        dataField: 'namaRisiko',
+        dataField: 'nama',
         text: 'NAMA',
         sort: true,
         classes: classes.rowItem,
@@ -65,14 +87,17 @@ export default class TabelRisiko extends React.Component {
             return { width: "30%", textAlign: 'left' };
         }
     }, {
-        dataField: 'risikoKategori',
+        dataField: 'kategori',
         text: 'KATEGORI',
         sort: true,
         classes: classes.rowItem,
         headerClasses: classes.colheader,
         headerStyle: (colum, colIndex) => {
-            return { width: "25%", textAlign: 'center' };
-        }
+            return { width: "20%", textAlign: 'center' };
+        },
+        style: () => {
+            return { textAlign: 'center' }
+        },
     }, {
         dataField: 'parent',
         text: 'PARENT',
@@ -81,11 +106,11 @@ export default class TabelRisiko extends React.Component {
         classes: classes.rowItem,
         headerClasses: classes.colheader,
         headerStyle: (colum, colIndex) => {
-            return { width: "20%", textAlign: 'center' };
+            return { width: "25%", textAlign: 'center' };
         }
     }, {
         dataField: 'noData 1',
-        text: '',
+        text: 'AKSI',
         headerClasses: classes.colheader,
         classes: classes.rowItem,
         style: () => {
@@ -122,7 +147,8 @@ export default class TabelRisiko extends React.Component {
     }
 
     render() {
-        return (
+        return this.state.redirector || (
+            <>
             <SirioTable
                 title="Registrasi Risiko"
                 data={this.state.rowList}
@@ -131,6 +157,45 @@ export default class TabelRisiko extends React.Component {
                 includeSearchBar
                 headerButton={this.headerButton()}
             />
+            {this.props.location.state && this.props.location.state.addSuccess && this.state.openNotification &&
+                <SirioMessageButton
+                    show
+                    classes="d-none"
+                    modalTitle="Risiko berhasil Disimpan"
+                    customConfirmText="Tutup"
+                    onClick={this.endNotification}
+                />
+                }
+                {this.props.location.state && this.props.location.state.deleteSuccess && this.state.openNotification &&
+                <SirioMessageButton
+                    show
+                    classes="d-none"
+                    modalTitle="Risiko berhasil Dihapus"
+                    customConfirmText="Tutup"
+                    onClick={this.endNotification}
+                />
+                }
+                {this.props.location.state && this.props.location.state.editSuccess && this.state.openNotification &&
+                <SirioMessageButton
+                    show
+                    classes="d-none"
+                    modalTitle="Risiko berhasil Diubah"
+                    customConfirmText="Tutup"
+                    onClick={this.endNotification}
+                />
+                }
+                {this.props.location.state && this.props.location.state.editHierarkiSuccess && this.state.openNotification &&
+                <SirioMessageButton
+                    show
+                    classes="d-none"
+                    modalTitle="Hierarki Risiko berhasil Diubah"
+                    customConfirmText="Tutup"
+                    onClick={this.endNotification}
+                />
+                }
+            </>
         );
     }
 } 
+
+export default withRouter(TabelRisiko);

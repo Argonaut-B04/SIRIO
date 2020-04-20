@@ -29,6 +29,18 @@ public class AccessPermissionRestServiceImpl implements AccessPermissionRestServ
                 return accessPermissions.getAksesRiskRating();
             case "konfigurasi risk rating":
                 return accessPermissions.getUbahRiskRating();
+            case "akses tabel rekomendasi":
+                return accessPermissions.getAksesTabelRekomendasi();
+            case "detail rekomendasi":
+                return accessPermissions.getAksesRekomendasi();
+            case "detail bukti pelaksanaan":
+                return accessPermissions.getAksesBuktiPelaksanaan();
+            case "tambah bukti pelaksanaan":
+                return accessPermissions.getAksesTambahBuktiPelaksanaan();
+            case "ubah bukti pelaksanaan":
+                return accessPermissions.getAksesUbahBuktiPelaksanaan();
+            case "persetujuan bukti pelaksanaan":
+                return accessPermissions.getAksesPersetujuanBuktiPelaksanaan();
             default:
                 return false;
         }

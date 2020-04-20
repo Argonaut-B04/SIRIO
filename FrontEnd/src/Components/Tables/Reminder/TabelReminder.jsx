@@ -3,12 +3,13 @@ import SirioButton from '../../Button/SirioButton';
 import SirioDatePickerButton from '../../Button/SirioDatePickerButton';
 import ReminderService from '../../../Services/ReminderService';
 import SirioTable from '../SirioTable';
-import { withRouter, Prompt } from 'react-router-dom';
+import { withRouter, Prompt, NavLink } from 'react-router-dom';
 import classes from '../Rekomendasi/TabelRekomendasi.module.css';
 import SirioConfirmButton from '../../Button/ActionButton/SirioConfirmButton';
 import SirioMessageButton from '../../Button/ActionButton/SirioMessageButton';
 import SirioWarningButton from '../../Button/ActionButton/SirioWarningButton';
 import SirioAxiosBase from '../../../Services/SirioAxiosBase';
+
 
 /**
  * Kelas untuk membuat komponen tabel reminder
@@ -47,7 +48,8 @@ class TabelReminder extends React.Component {
                     changeComplete: true,
                     changed: false
                 })
-            });
+            })
+            .catch(error => console.log(error.response.data));
     }
 
     async renderRows() {
@@ -55,46 +57,95 @@ class TabelReminder extends React.Component {
             id: this.props.location.state.id
         });
 
+        const theDate = this.props.location.state.deadline;
+
         this.setState({
-            rowList: response.data.result
+            rowList: response.data.result,
+            deadline: new Date(theDate)
         })
     }
 
-    columns = [{
-        dataField: 'tanggalPengiriman',
-        text: 'TANGGAL',
-        sort: true,
-        classes: classes.rowItem,
-        headerClasses: classes.colheader,
-        headerStyle: (colum, colIndex) => {
-            return { width: "200px", textAlign: 'left' };
-        },
-        formatter: SirioAxiosBase.formatDate
-    }, {
-        dataField: 'noData 1',
-        text: 'Aksi Ubah',
-        headerClasses: classes.colheader,
-        classes: classes.rowItem,
-        headerStyle: () => {
-            return { width: "200px" }
-        },
-        style: () => {
-            return { textAlign: 'center' }
-        },
-        formatter: (cell, row) => this.getButtonsFirst(cell, row)
-    }, {
-        dataField: 'noData 2',
-        text: 'Aksi Hapus',
-        headerClasses: classes.colheader,
-        classes: classes.rowItem,
-        headerStyle: () => {
-            return { width: "200px" }
-        },
-        style: () => {
-            return { textAlign: 'center' }
-        },
-        formatter: (cell, row) => this.getButtonsSecond(cell, row)
-    }];
+    columns() {
+        return [{
+            dataField: 'tanggalPengiriman',
+            text: 'TANGGAL',
+            sort: true,
+            classes: classes.rowItem,
+            headerClasses: classes.colheader,
+            headerStyle: (colum, colIndex) => {
+                return { width: "200px", textAlign: 'left' };
+            },
+            formatter: SirioAxiosBase.formatDate
+        }, {
+            dataField: 'noData 1',
+            text: 'Aksi Ubah Tanggal',
+            headerClasses: classes.colheader,
+            classes: classes.rowItem,
+            headerStyle: () => {
+                return { width: "200px" }
+            },
+            style: () => {
+                return { textAlign: 'center' }
+            },
+            formatter: (cell, row) => this.getButtonsFirst(cell, row)
+        }, {
+            dataField: 'noData 2',
+            text: 'Aksi Hapus',
+            headerClasses: classes.colheader,
+            classes: classes.rowItem,
+            headerStyle: () => {
+                return { width: "200px" }
+            },
+            style: () => {
+                return { textAlign: 'center' }
+            },
+            formatter: (cell, row) => this.getButtonsSecond(cell, row)
+        }, {
+            dataField: 'noData 3',
+            text: 'Pengaturan Reminder',
+            headerClasses: classes.colheader,
+            classes: classes.rowItem,
+            headerStyle: () => {
+                return { width: "100px" }
+            },
+            style: () => {
+                return { textAlign: 'center' }
+            },
+            formatter: (cell, row) => this.getPengaturanButton(cell, row)
+        }];
+    }
+
+    getPengaturanButton(cell, row) {
+        if (this.state.changed) {
+            return (
+                <SirioButton
+                    purple
+                    disabled
+                    square
+                    hover
+                >
+                    ➤
+                </SirioButton>
+            )
+        }
+        return (
+            <NavLink
+                to={{
+                    pathname: "/rekomendasi/reminder/pengaturan",
+                    state: {
+                        idReminder: row.idReminder,
+                    }
+                }}>
+                <SirioButton
+                    purple
+                    square
+                    hover
+                >
+                    ➤
+                </SirioButton>
+            </NavLink>
+        )
+    }
 
     insertItem(array, action) {
         return [
@@ -110,7 +161,7 @@ class TabelReminder extends React.Component {
         const originalRow = this.state.rowList;
 
         const changedRow = this.insertItem(originalRow, {
-            idReminder: Math.floor(Math.random() * 100) + 100,
+            idReminder: Math.floor(Math.random() * 1000) + 1,
             tanggalPengiriman: newDate
         })
 
@@ -172,16 +223,19 @@ class TabelReminder extends React.Component {
     // Formatter untuk render button pertama
     getButtonsFirst(cell, row) {
         const date = row.tanggalPengiriman;
+        const dateOld = new Date(date);
         const currentDate = new Date();
-        if (date[0] < currentDate.getFullYear() || date[1] < currentDate.getMonth() || date[2] < currentDate.getDate()) {
+        if (dateOld <= currentDate) {
             return "";
         }
         return (
             <SirioDatePickerButton
                 purple
+                hover
                 id={row.idReminder}
                 handleChange={(date, id) => this.ubah(date, id)}
                 minDate={currentDate}
+                maxDate={this.state.deadline}
             >
                 Ubah
             </SirioDatePickerButton>
@@ -191,13 +245,16 @@ class TabelReminder extends React.Component {
     // Formatter untuk render button kedua
     getButtonsSecond(cell, row) {
         const date = row.tanggalPengiriman;
+        const dateOld = new Date(date);
         const currentDate = new Date();
-        if (date[0] < currentDate.getFullYear() || date[1] < currentDate.getMonth() || date[2] < currentDate.getDate()) {
+        if (dateOld <= currentDate) {
             return "";
         }
         return (
             <SirioButton
                 red
+                hover
+                id={row.idReminder}
                 onClick={() => this.hapus(row.idReminder)}
             >
                 Hapus
@@ -205,18 +262,84 @@ class TabelReminder extends React.Component {
         );
     }
 
+    addDays(date, days) {
+        var result = new Date(date);
+        result.setDate(result.getDate() + days);
+        return result;
+    }
+
+    generateHarian(hari) {
+        const deadline = this.state.deadline;
+        const newDateList = [];
+        for (var hariIni = new Date(); hariIni < deadline; hariIni = this.addDays(hariIni, hari)) {
+            const newDate = [(hariIni.getFullYear()), (hariIni.getMonth() + 1), hariIni.getDate()];
+            newDateList.push({
+                idReminder: Math.floor(Math.random() * 1000) + 1,
+                tanggalPengiriman: newDate
+            })
+        }
+        this.setState({
+            rowList: newDateList,
+            changed: true
+        })
+    }
+
     // Fungsi untuk mendapatkan tombol di sisi kanan title
     headerButton() {
         return (
-            <SirioDatePickerButton
-                purple
-                recommended
-                unchangedContent
-                handleChange={(date, id) => this.tambah(date, id)}
-                popper="top-end"
-            >
-                Tambah
-            </SirioDatePickerButton>
+            <>
+                <div className="d-flex flex-row align-items-center">
+                    <div className="m-1">
+                        <SirioDatePickerButton
+                            purple
+                            recommended
+                            unchangedContent
+                            handleChange={(date, id) => this.tambah(date, id)}
+                            maxDate={this.state.deadline}
+                            popper="top-end"
+                        >
+                            Tambah
+                    </SirioDatePickerButton>
+                    </div>
+                </div>
+            </>
+        )
+    }
+
+    searchLeftButton() {
+        return (
+            <div className="d-flex flex-row align-items-center">
+                <p className="m-1">Reminder Harian </p>
+                <div>
+                    <SirioButton
+                        purple
+                        hover
+                        square
+                        onClick={() => this.generateHarian(1)}
+                        classes={classes.sizeperpage}
+                    >
+                        1
+                        </SirioButton>
+                    <SirioButton
+                        purple
+                        hover
+                        square
+                        onClick={() => this.generateHarian(2)}
+                        classes={classes.sizeperpage}
+                    >
+                        2
+                        </SirioButton>
+                    <SirioButton
+                        purple
+                        hover
+                        square
+                        onClick={() => this.generateHarian(3)}
+                        classes={classes.sizeperpage}
+                    >
+                        3
+                        </SirioButton>
+                </div>
+            </div>
         )
     }
 
@@ -225,6 +348,7 @@ class TabelReminder extends React.Component {
             <div>
                 <SirioConfirmButton
                     purple
+                    hover
                     classes="m-1"
                     modalTitle="Anda akan menyimpan perubahan pada tabel reminder"
                     onConfirm={this.handleSubmit}
@@ -236,6 +360,7 @@ class TabelReminder extends React.Component {
                 </SirioConfirmButton>
                 <SirioWarningButton
                     red
+                    hover
                     modalTitle="Konfirmasi Pembatalan"
                     modalDesc="Seluruh perubahan reminder yang belum tersimpan akan dihapus. Konfirmasi?"
                     onConfirm={() => window.location.href = "/rekomendasi"}
@@ -250,13 +375,15 @@ class TabelReminder extends React.Component {
 
     // Fungsi render Tabel rekomendasi
     render() {
+        const column = this.columns();
         return (
             <>
                 <SirioTable
                     title={"Daftar Reminder untuk Rekomendasi " + this.props.location.state.keterangan}
                     data={this.state.rowList}
+                    leftSearch={this.searchLeftButton()}
                     id='idReminder'
-                    columnsDefinition={this.columns}
+                    columnsDefinition={column}
                     includeSearchBar
                     headerButton={this.headerButton()}
                     footerContent={this.footerContent()}

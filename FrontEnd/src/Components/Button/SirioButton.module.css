@@ -1,75 +1,84 @@
-.purple {
-    --main-color: #7F3F98;
+/* General Style */
+.sirioButton {
     color: var(--main-color);
-    border: solid var(--main-color) 1.5px;
+    border: solid 1.5px var(--main-color);
     background-color: white;
     font-family: Proxima Nova;
     min-height: 30px;
     min-width: 100px;
+    border-radius: 6px;
+}
+
+.sirioButton:focus{
+    outline: none;
+}
+
+.buttonTitle {
+    margin: 0;
+}
+/* General Style End */
+
+/* Color */
+.purple {
+    --main-color: #7F3F98;
 }
 
 .blue {
     --main-color: #5DBCD2;
-    color: var(--main-color);
-    border: solid var(--main-color) 1.5px;
-    background-color: transparent;
-    font-family: Proxima Nova;
-    min-height: 30px;
-    min-width: 100px;
 }
 
 .red {
     --main-color: #FF0000;
-    color: var(--main-color);
-    border: solid var(--main-color) 1.5px;
-    background-color: transparent;
-    font-family: Proxima Nova;
-    min-height: 30px;
-    min-width: 100px;
 }
+/* Color End */
 
+/* Hover */
+.hover:hover {
+    color: white;
+    background-color: var(--main-color);
+}
+/* Hover End */
+
+/* Component Style */
 .recommended {
     color: white;
     background-color: var(--main-color);
 }
 
 .disabled {
-    color: #878787;
+    --main-color: #878787;
     pointer-events: none;
-    background-color: transparent;
-    border: solid 1.5px #878787;
 }
 
 .hyperlink {
     color: blue;
-    border: none;
-    background-color: transparent;
     border: solid 1.5px #7F3F98;
 }
 
 .hyperlinkLeft {
     color: blue;
     border: none;
-    background-color: transparent;
     text-align: left;
     padding: 0;
 }
 
 .text {
     border: none;
-    background-color: transparent;
     color: #7F3F98;
     pointer-events: none;
+    background-color: transparent;
 }
+/* Component Style End */
 
+/* Border Radius */
 .borderCircular {
     border-radius: 20px;
 }
+/* Border Radius End */
 
-.borderNormal {
-    border-radius: 6px;
-}
-
-.buttonTitle {
-    margin: 0;
+.square {
+    height: 40px !important;
+    width: 40px !important;
+    min-height: 0;
+    min-width: 0;
 }

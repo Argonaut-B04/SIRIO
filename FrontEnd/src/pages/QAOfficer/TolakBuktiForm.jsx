@@ -1,12 +1,12 @@
 import React from "react";
-import TableRekomendasiBM from "../../Components/Tables/Rekomendasi/TabelRekomendasiBM";
+import FormTolakBukti from "../../Components/Form/BuktiPelaksanaan/FormTolakBukti";
 import SirioMainLayout from "../../Layout/SirioMainLayout";
 
-export default class DaftarRekomendasi extends React.Component {
+export default class TolakBuktiForm extends React.Component {
     render() {
         return (
             <SirioMainLayout>
-                <TableRekomendasiBM />
+                <FormTolakBukti />
             </SirioMainLayout>
         );
     }

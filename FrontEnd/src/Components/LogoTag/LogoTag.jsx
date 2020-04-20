@@ -9,13 +9,15 @@ import classes from './LogoTag.module.css';
  */
 export default class LogoTag extends React.Component {
     render() {
+        const { logo, logoImage, logoName, logoNameDark, logoDesc } = classes;
+        const { light } = this.props;
         return (
             <>
-                <div className={classes.logo}>
-                    <img src={process.env.PUBLIC_URL + '/logo.png'} className={classes.logoImage} alt="SIRIO Logo" />
-                    <h1 className={this.props.light ? classes.logoName : classes.logoNameDark}>SIRIO</h1>
+                <div className={logo}>
+                    <img src={process.env.PUBLIC_URL + '/logo.png'} className={logoImage} alt="SIRIO Logo" />
+                    <h1 className={light ? [logoNameDark, logoName].join(" ") : logoNameDark}>SIRIO</h1>
                 </div>
-                <h4 className={classes.logoDesc}>
+                <h4 className={logoDesc}>
                     Sistem Informasi Risiko Operasional
                 </h4>
             </>

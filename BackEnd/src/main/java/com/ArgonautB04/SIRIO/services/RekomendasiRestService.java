@@ -2,19 +2,19 @@ package com.ArgonautB04.SIRIO.services;
 
 import com.ArgonautB04.SIRIO.model.Employee;
 import com.ArgonautB04.SIRIO.model.KomponenPemeriksaan;
-import com.ArgonautB04.SIRIO.model.KantorCabang;
 import com.ArgonautB04.SIRIO.model.Rekomendasi;
-import com.ArgonautB04.SIRIO.model.Reminder;
-import org.springframework.web.server.MethodNotAllowedException;
 
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 public interface RekomendasiRestService {
     Rekomendasi buatRekomendasi(Rekomendasi rekomendasi);
 
     Rekomendasi getById(int idRekomendasi);
+
+    Optional<Rekomendasi> getOptionalById(int idRekomendasi);
 
     List<Rekomendasi> getAll();
 
@@ -22,11 +22,17 @@ public interface RekomendasiRestService {
   
     List<Rekomendasi> getByDaftarKomponenPemeriksaan(List<KomponenPemeriksaan> komponenPemeriksaanList);
 
-    Rekomendasi ubahRekomendasi(int idRekomendasi, Rekomendasi rekomendasi);
+    void ubahRekomendasi(int idRekomendasi, Rekomendasi rekomendasi);
 
     void hapusRekomendasi(int idRekomendasi);
 
-    Rekomendasi ubahTenggatWaktu(int idRekomendasi, Date tenggatWaktuDate) throws IllegalAccessError;
-
     List<Rekomendasi> getByPembuat(Employee pembuat);
+
+    Rekomendasi validateExistInDatabase(int idRekomendasi);
+
+    void validateDateInputMoreThanToday(LocalDate localDate);
+
+    void validateDeadlineCanBeSet(Rekomendasi rekomendasi);
+
+    Rekomendasi buatAtauSimpanPerubahanRekomendasi(Rekomendasi rekomendasi, boolean tenggatWaktuTerubah);
 }

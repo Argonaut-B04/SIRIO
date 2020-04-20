@@ -39,7 +39,7 @@ public class RisikoRestServiceImpl implements RisikoRestService {
 
     @Override
     public List<Risiko> getAll() {
-        return risikoDB.findAll();
+        return risikoDB.findAllByStatus(Risiko.Status.AKTIF);
     }
 
     @Override
@@ -79,7 +79,7 @@ public class RisikoRestServiceImpl implements RisikoRestService {
         risiko.setKomponen(risikoDTO.getKomponen());
         risiko.setRisikoKategori(risikoDTO.getKategori());
         risiko.setNamaRisiko(risikoDTO.getNama());
-        if (risikoDTO.getParent() != 0) {
+        if (risikoDTO.getParent() != null) {
             risiko.setParent(getById(risikoDTO.getId()));
         } else {
             risiko.setParent(null);
@@ -97,7 +97,30 @@ public class RisikoRestServiceImpl implements RisikoRestService {
 
     @Override
     public List<Risiko> getByKategori(Integer kategori) {
-        return risikoDB.findAllByRisikoKategori(kategori);
+        return risikoDB.findAllByRisikoKategoriAndStatus(kategori, Risiko.Status.AKTIF);
+    }
+
+    @Override
+    public boolean isExistInDatabase(Risiko risiko) {
+        return risikoDB.findById(risiko.getIdRisiko()).isPresent();
+    }
+
+    @Override
+    public RisikoDTO ubahHierarki(Risiko risikoAwal, RisikoDTO risikoBaru) {
+        risikoAwal.setParent(getById(risikoBaru.getParent()));
+        risikoDB.save(risikoAwal);
+        return risikoBaru;
+    }
+
+    @Override
+    public List<Risiko> getParentByKategori(Integer kategori) {
+        if (kategori == 2) {
+            return getByKategori(1);
+        } else if (kategori == 3) {
+            return getByKategori(2);
+        } else {
+            throw new NoSuchElementException("");
+        }
     }
 
 }

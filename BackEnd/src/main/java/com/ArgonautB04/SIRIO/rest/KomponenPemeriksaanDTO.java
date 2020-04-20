@@ -14,8 +14,8 @@ public class KomponenPemeriksaanDTO {
     private String namaRiskLevel;
     private List<TemuanRisikoDTO> daftarTemuanRisiko;
     private List<RekomendasiDTO> daftarRekomendasi;
-    private List<TemuanRisiko> daftarTemuanRisikoTerdaftar;
-    private List<Rekomendasi> daftarRekomendasiTerdaftar;
+    private List<TemuanRisikoDTO> daftarTemuanRisikoTerdaftar;
+    private List<RekomendasiDTO> daftarRekomendasiTerdaftar;
     private RisikoDTO risiko;
 
     public Float getBobotRiskLevel() {
@@ -34,19 +34,19 @@ public class KomponenPemeriksaanDTO {
         this.namaRiskLevel = namaRiskLevel;
     }
 
-    public List<TemuanRisiko> getDaftarTemuanRisikoTerdaftar() {
+    public List<TemuanRisikoDTO> getDaftarTemuanRisikoTerdaftar() {
         return daftarTemuanRisikoTerdaftar;
     }
 
-    public void setDaftarTemuanRisikoTerdaftar(List<TemuanRisiko> daftarTemuanRisikoTerdaftar) {
+    public void setDaftarTemuanRisikoTerdaftar(List<TemuanRisikoDTO> daftarTemuanRisikoTerdaftar) {
         this.daftarTemuanRisikoTerdaftar = daftarTemuanRisikoTerdaftar;
     }
 
-    public List<Rekomendasi> getDaftarRekomendasiTerdaftar() {
+    public List<RekomendasiDTO> getDaftarRekomendasiTerdaftar() {
         return daftarRekomendasiTerdaftar;
     }
 
-    public void setDaftarRekomendasiTerdaftar(List<Rekomendasi> daftarRekomendasiTerdaftar) {
+    public void setDaftarRekomendasiTerdaftar(List<RekomendasiDTO> daftarRekomendasiTerdaftar) {
         this.daftarRekomendasiTerdaftar = daftarRekomendasiTerdaftar;
     }
 

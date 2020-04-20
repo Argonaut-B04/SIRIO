@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import classes from "./SirioField.module.css";
 import SirioSelect from '../../Dropdown/SirioSelect';
 import TextareaAutosize from 'react-textarea-autosize';
+import SirioRectangularButton from '../../Button/SirioRectangularButton';
 
 /**
  * Komponen field untuk SirioForm
- * 
+ *
  * Props yang tersedia:
  * - label              : String, judul field
  * - customInput        : Komponen, jika ingin menggunakan selain input tag
@@ -16,6 +17,28 @@ import TextareaAutosize from 'react-textarea-autosize';
  * - placeholder        : String, placeholder dari input tag
  */
 export default class SirioField extends Component {
+
+    constructor(props) {
+        super(props)
+        this.state = {}
+    }
+
+    isFunction(functionToCheck) {
+        return functionToCheck && {}.toString.call(functionToCheck) === '[object Function]';
+    }
+
+    componentDidUpdate() {
+        var validationResult;
+        if (this.isFunction(this.props.validationFunction)) {
+            validationResult = this.props.validationFunction(this.props.value);
+        }
+
+        if (this.state.validationResult !== validationResult) {
+            this.setState({
+                validationResult: validationResult
+            })
+        }
+    }
 
     generateField(key, customInput, type, index, name, value, handleChange, optionList, customClass, required, min, max, placeholder) {
         var field;
@@ -30,6 +53,7 @@ export default class SirioField extends Component {
                     value={value}
                     handleChange={handleChange}
                     options={optionList}
+                    required={required}
                     className={[customClass, classes.sirioSelect].join(" ")}
                 />;
         } else if (type === "textarea") {
@@ -42,8 +66,8 @@ export default class SirioField extends Component {
 
                     placeholder={placeholder}
                     className={[customClass, classes.input].join(" ")}
-                    minRows={3}
-                    maxRows={6}
+                    minRows={6}
+                    maxRows={12}
 
                     required={required}
                 />
@@ -100,16 +124,15 @@ export default class SirioField extends Component {
 
     generateAddButton(name, array, functionToUpdate) {
         return (
-            <button
-                type="button"
+            <SirioRectangularButton
+                type="add"
                 onClick={
                     () => {
                         array.push("");
                         functionToUpdate(name, array);
                     }
-                }>
-                Tambah
-            </button>
+                }
+            />
         )
     }
 
@@ -118,28 +141,31 @@ export default class SirioField extends Component {
             return "";
         }
         return (
-            <button
-                type="button"
+            <SirioRectangularButton
+                type="delete"
                 onClick={
                     () => {
                         const newArray = array.slice(0, index).concat(array.slice(index + 1));
-                        functionToUpdate(name, newArray);
+                        functionToUpdate(name, newArray, index);
                     }
-                }>
-                Hapus
-            </button>
+                }
+            />
         )
     }
 
     render() {
+
         if (this.props.fullComponent) {
             return this.props.fullComponent;
         } else {
             const label = this.props.label &&
-                <label className={classes.label}>
-                    {this.props.label}
+                <>
+                    <label className={this.props.required ? [classes.label, classes.required].join(" ") : classes.label}>
+                        {this.props.label}
+                    </label>
                     {this.props.validator && <p className={classes.error}>{this.props.validator}</p>}
-                </label>
+                    {this.state.validationResult && <p className={classes.error}>{this.state.validationResult}</p>}
+                </>
             // modifier untuk multiple
             var field;
             if (Array.isArray(this.props.value)) {
@@ -166,17 +192,14 @@ export default class SirioField extends Component {
 
                     const fieldFinal =
                         <div className="row" key={i}>
-                            <div className="col-8">
+                            <div className="col-10">
                                 {singleField}
                             </div>
-                            <div className="col-2">
+                            <div className={["col-2", classes.buttonWrapper].join(" ")}>
                                 {deleteButton}
+                                {i === (this.props.value.length - 1) ? sidebutton : ""}
+                                {this.props.sideButton}
                             </div>
-                            {i === (this.props.value.length - 1) &&
-                                <div className="col-2">
-                                    {sidebutton}
-                                </div>
-                            }
                         </div>
 
                     fieldList.push(fieldFinal)
@@ -206,14 +229,9 @@ export default class SirioField extends Component {
                         <div className="col-3">
                             {label}
                         </div>
-                        <div className={this.props.sideButton ? "col-8" : "col-9"}>
+                        <div className={"col-9"}>
                             {field}
                         </div>
-                        {this.props.sideButton &&
-                            <div className="col-1">
-                                {this.props.sideButton}
-                            </div>
-                        }
                     </div>
                 </fieldset>
             )
