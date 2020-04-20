@@ -5,13 +5,17 @@ import com.ArgonautB04.SIRIO.rest.BaseResponse;
 import com.ArgonautB04.SIRIO.rest.RekomendasiDTO;
 import com.ArgonautB04.SIRIO.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -226,8 +230,7 @@ public class RekomendasiRestController {
         rekomendasiRestService.validateDeadlineCanBeSet(rekomendasi);
 
         rekomendasi.setTenggatWaktu(tenggatWaktuBaru);
-        Rekomendasi result = rekomendasiRestService.buatAtauSimpanPerubahanRekomendasi(rekomendasi);
-
+        Rekomendasi result = rekomendasiRestService.buatAtauSimpanPerubahanRekomendasi(rekomendasi, true);
         return new BaseResponse<>(200, "success", result);
     }
 }
