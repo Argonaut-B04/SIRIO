@@ -4,6 +4,8 @@ import SirioButton from '../../Button/SirioButton';
 import HasilPemeriksaanService from '../../../Services/HasilPemeriksaanService';
 import {NavLink, Redirect} from 'react-router-dom';
 import { withRouter } from 'react-router-dom';
+import SirioConfirmButton from "../../Button/ActionButton/SirioConfirmButton";
+import SirioWarningButton from "../../Button/ActionButton/SirioWarningButton";
 
 class HasilPemeriksaanFormTolak extends React.Component {
 
@@ -16,15 +18,40 @@ class HasilPemeriksaanFormTolak extends React.Component {
             redirect: false,
             submitable: false,
             errorFeedback: "",
+            daftarKomponen: "",
         };
 
         this.handleChange = this.handleChange.bind(this);
         this.inputDefinition = this.inputDefinition.bind(this);
         this.setRedirect = this.setRedirect.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.renderDataHasilPemeriksaan = this.renderDataHasilPemeriksaan.bind(this);
+        this.submitButton = this.submitButton.bind(this);
     }
 
     componentDidMount() {
+        this.renderDataHasilPemeriksaan();
+    }
+
+    async renderDataHasilPemeriksaan() {
+        const response = await HasilPemeriksaanService.getHasilPemeriksaan(this.props.location.state.id);
+
+        var daftarKomponen = <p>
+                {response.data.result.daftarKomponenPemeriksaan.map((komponen, index) =>
+                    <p className="text-center p-0 m-0">{index+1}. {komponen.risiko.nama} </p>
+                )}
+            </p>;
+
+        // var daftarKomponen = "";
+        // response.data.result.daftarKomponenPemeriksaan.map((komponen, index) => {
+        //     const indexX = index + 1;
+        //     const kata = "(" + indexX + ") " + komponen.risiko.nama + "; ";
+        //     daftarKomponen += "\n\n" + kata;
+        // });
+
+        this.setState({
+            daftarKomponen: daftarKomponen
+        })
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -41,10 +68,15 @@ class HasilPemeriksaanFormTolak extends React.Component {
 
     validateFeedback() {
         var submitable = true;
+        var fokusFeedback = this.state.feedback;
         var errorFeedback;
-        if (!isNaN(this.state.feedback) && this.state.feedback !== "") {
+        var containLetter = /.*[a-zA-Z].*/;
+        if (!fokusFeedback.match(containLetter)) {
             submitable = false;
             errorFeedback = "Feedback perlu mengandung huruf";
+        } else if (fokusFeedback.length > 500) {
+            submitable = false;
+            errorFeedback = "Feedback maksimal 500 karakter";
         }
 
         if (this.state.errorFeedback !== errorFeedback) {
@@ -83,16 +115,12 @@ class HasilPemeriksaanFormTolak extends React.Component {
 
     handleSubmit(event) {
         event.preventDefault();
-        const persetujuan = {
-            id: this.props.location.state.id,
-            status: "3",
-            feedback: this.state.feedback
-        };
-
-        if (this.state.submitable) {
-            HasilPemeriksaanService.setujuiHasilPemeriksaan(persetujuan)
-                .then(() => this.setRedirect());
-        }
+        this.setState(
+            {
+                [event.target.name]
+                    : event.target.value
+            }
+        )
     }
 
     // Fungsi yang akan mengembalikan definisi tiap field pada form
@@ -117,19 +145,17 @@ class HasilPemeriksaanFormTolak extends React.Component {
     submitButton() {
         return (
             <div>
-                {/*<SirioConfirmButton*/}
-                {/*    purple*/}
-                {/*    recommended={this.state.submitable}*/}
-                {/*    disabled={!this.state.submitable}*/}
-                {/*    classes="m-1"*/}
-                {/*    modalTitle="Apakah anda yakin untuk menolak hasil pemeriksaan?"*/}
-                {/*    onConfirm={(event) => this.handleSubmit(event)}*/}
-                {/*    customConfirmText="Ya, Setujui"*/}
-                {/*    customCancelText="Batal"*/}
-                {/*    closeOnConfirm*/}
-                {/*>*/}
-                {/*    Simpan*/}
-                {/*</SirioConfirmButton>*/}
+                <SirioConfirmButton
+                    purple recommended
+                    classes="m-1"
+                    modalTitle= "Daftar Komponen Pemeriksaan"
+                    modalDesc={this.state.daftarKomponen}
+                    customConfirmText=" "
+                    closeOnConfirm
+                    confirmDisable
+                >
+                    Daftar Komponen Pemeriksaan
+                </SirioConfirmButton>
                 <SirioButton purple
                              recommended={this.state.submitable}
                              disabled={!this.state.submitable}

@@ -1,8 +1,7 @@
 package com.ArgonautB04.SIRIO.services;
 
-import com.ArgonautB04.SIRIO.model.KomponenPemeriksaan;
-import com.ArgonautB04.SIRIO.model.TemuanRisiko;
-import com.ArgonautB04.SIRIO.repository.TemuanRisikoDB;
+import com.ArgonautB04.SIRIO.model.*;
+import com.ArgonautB04.SIRIO.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +16,18 @@ public class TemuanRisikoRestServiceImpl implements TemuanRisikoRestService {
 
     @Autowired
     private TemuanRisikoDB temuanRisikoDB;
+
+    @Autowired
+    private KomponenPemeriksaanDB komponenPemeriksaanDB;
+
+    @Autowired
+    private HasilPemeriksaanDB hasilPemeriksaanDB;
+
+    @Autowired
+    private TugasPemeriksaanDB tugasPemeriksaanDB;
+
+    @Autowired
+    private StatusHasilPemeriksaanDB statusHasilPemeriksaanDB;
 
     @Override
     public TemuanRisiko buatTemuanRisiko(TemuanRisiko temuanRisiko) {
@@ -38,6 +49,18 @@ public class TemuanRisikoRestServiceImpl implements TemuanRisikoRestService {
     @Override
     public List<TemuanRisiko> getByKomponenPemeriksaan(KomponenPemeriksaan komponenPemeriksaan) {
         return temuanRisikoDB.findAllByKomponenPemeriksaan(komponenPemeriksaan);
+    }
+
+    @Override
+    public List<TemuanRisiko> getHistoriTemuanRisikoKantorCabang(TugasPemeriksaan tugasPemeriksaan, Risiko risiko) {
+        StatusHasilPemeriksaan statusHasilPemeriksaan = statusHasilPemeriksaanDB.findById(5).get();
+        List<TugasPemeriksaan> tugasPemeriksaans = tugasPemeriksaanDB.findAllByKantorCabang(
+                tugasPemeriksaan.getKantorCabang());
+        List<HasilPemeriksaan> hasilPemeriksaans = hasilPemeriksaanDB.findAllByTugasPemeriksaanInAndStatusHasilPemeriksaan(
+                tugasPemeriksaans, statusHasilPemeriksaan);
+        List<KomponenPemeriksaan> komponenPemeriksaans = komponenPemeriksaanDB.findAllByHasilPemeriksaanInAndRisiko(hasilPemeriksaans, risiko);
+
+        return temuanRisikoDB.findAllByKomponenPemeriksaanIn(komponenPemeriksaans);
     }
 
     @Override

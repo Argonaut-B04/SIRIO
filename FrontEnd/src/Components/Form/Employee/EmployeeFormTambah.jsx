@@ -67,6 +67,18 @@ export default class EmployeeFormTambah extends React.Component {
         }
 
         if (prevState.username !== this.state.username) {
+            const validation = this.validateUsername();
+            submitable = submitable && validation;
+            validating = true;
+        }
+
+        if (prevState.jabatan !== this.state.jabatan) {
+            const validation = this.validateJabatan();
+            submitable = submitable && validation;
+            validating = true;
+        }
+
+        if (prevState.idRole !== this.state.idRole) {
             validating = true;
         }
 
@@ -96,6 +108,22 @@ export default class EmployeeFormTambah extends React.Component {
         return submitable;
     }
 
+    validateJabatan() {
+        var submitable = true;
+        const fokusJabatan = this.state.jabatan;
+        var errorJabatan;
+        if (fokusJabatan.length > 30) {
+            submitable = false;
+            errorJabatan = "Jabatan maksimal 30 karakter";
+        }
+        if (this.state.errorJabatan !== errorJabatan) {
+            this.setState({
+                errorJabatan: errorJabatan
+            })
+        }
+        return submitable;
+    }
+
     validateNama() {
         var submitable = true;
         const fokusName = this.state.nama;
@@ -104,6 +132,9 @@ export default class EmployeeFormTambah extends React.Component {
         if (!fokusName.match(letterOnly)) {
             submitable = false;
             errorName = "Nama hanya boleh mengandung huruf";
+        } else if (fokusName.length > 50) {
+            submitable = false;
+            errorName = "Nama maksimal 50 karakter";
         }
         if (this.state.errorName !== errorName) {
             this.setState({
@@ -121,6 +152,9 @@ export default class EmployeeFormTambah extends React.Component {
         if (!fokusNoHp.match(numberOnly)) {
             submitable = false;
             errorNoHp = "Nomor HP hanya boleh mengandung angka";
+        } else if (fokusNoHp.length > 20) {
+            submitable = false;
+            errorNoHp = "Nomor HP maksimal 20 karakter";
         }
         if (this.state.errorNoHp !== errorNoHp) {
             this.setState({
@@ -134,17 +168,40 @@ export default class EmployeeFormTambah extends React.Component {
         var submitable = true;
         const fokusPassword = this.state.password;
         var errorPassword;
-        var letterNumber = /^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$/;
+        var letterNumber = /[^\w\d]*(([0-9]+.*[A-Za-z]+.*)|[A-Za-z]+.*([0-9]+.*))/;
         if (!fokusPassword.match(letterNumber)) {
             submitable = false;
             errorPassword = "Password harus mengandung angka dan huruf";
         } else if (fokusPassword.length < 8) {
             submitable = false;
             errorPassword = "Password minimal 8 karakter";
+        } else if (fokusPassword.length > 70) {
+            submitable = false;
+            errorPassword = "Password maksimal 70 karakter";
         }
         if (this.state.errorPassword !== errorPassword) {
             this.setState({
                 errorPassword: errorPassword
+            })
+        }
+        return submitable;
+    }
+
+    validateUsername() {
+        var submitable = true;
+        const fokusUsername = this.state.username;
+        var errorUsername;
+        var letterNumber = /^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$/;
+        if (!fokusUsername.match(letterNumber)) {
+            submitable = false;
+            errorUsername = "Username mengandung angka dan huruf";
+        } else if (fokusUsername.length > 20) {
+            submitable = false;
+            errorUsername = "Username maksimal 20 karakter";
+        }
+        if (this.state.errorUsername !== errorUsername) {
+            this.setState({
+                errorUsername: errorUsername
             })
         }
         return submitable;
@@ -290,7 +347,8 @@ export default class EmployeeFormTambah extends React.Component {
                     type: "text",
                     name: "jabatan",
                     value: this.state.jabatan,
-                    placeholder: "Jabatan"
+                    placeholder: "Jabatan",
+                    validation: this.state.errorJabatan
                 }, {
                     label: "Email",
                     handleChange: this.handleChange,
@@ -311,6 +369,20 @@ export default class EmployeeFormTambah extends React.Component {
         )
     }
 
+    handleReset(event) {
+        event.preventDefault();
+        this.setState({
+            username: "",
+            password: "",
+            idRole: "",
+            nama: "",
+            jabatan: "",
+            email: "",
+            noHp: "",
+            submitable: false,
+        })
+    }
+
     submitButton() {
         return (
             <div>
@@ -325,6 +397,12 @@ export default class EmployeeFormTambah extends React.Component {
                     classes="mx-1"
                     onClick={() => window.location.href = "/employee"}>
                     Batal
+                </SirioButton>
+                <SirioButton
+                    purple
+                    classess="mx-1"
+                    onClick={(event)  => this.handleReset(event)}>
+                    Reset
                 </SirioButton>
             </div>
         )

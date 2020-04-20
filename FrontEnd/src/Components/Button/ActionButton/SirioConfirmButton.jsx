@@ -78,10 +78,16 @@ export default class SirioWarningButton extends React.Component {
                             <h3 >{modalTitle}</h3>
                         </div>
 
+                        <div className="text-center px-0 mx-0 w-75">
+                            <div>{this.props.modalDesc}</div>
+                        </div>
+
                         <div className="d-flex justify-content-center align-items-center w-100">
                             <SirioButton
                                 purple
-                                recommended
+                                recommended={!this.props.confirmDisable}
+                                text={this.props.confirmDisable}
+                                disable={this.props.confirmDisable}
                                 circular
                                 onClick={onConfirmFunction}
                                 classes={modalButton}
