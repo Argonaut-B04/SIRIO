@@ -223,8 +223,9 @@ class TabelReminder extends React.Component {
     // Formatter untuk render button pertama
     getButtonsFirst(cell, row) {
         const date = row.tanggalPengiriman;
+        const dateOld = new Date(date);
         const currentDate = new Date();
-        if (date[0] < currentDate.getFullYear() || date[1] < currentDate.getMonth() || date[2] < currentDate.getDate()) {
+        if (dateOld <= currentDate) {
             return "";
         }
         return (
@@ -244,14 +245,16 @@ class TabelReminder extends React.Component {
     // Formatter untuk render button kedua
     getButtonsSecond(cell, row) {
         const date = row.tanggalPengiriman;
+        const dateOld = new Date(date);
         const currentDate = new Date();
-        if (date[0] < currentDate.getFullYear() || date[1] < currentDate.getMonth() || date[2] < currentDate.getDate()) {
+        if (dateOld <= currentDate) {
             return "";
         }
         return (
             <SirioButton
                 red
                 hover
+                id={row.idReminder}
                 onClick={() => this.hapus(row.idReminder)}
             >
                 Hapus

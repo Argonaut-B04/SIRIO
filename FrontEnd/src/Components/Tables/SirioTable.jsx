@@ -48,6 +48,7 @@ export default class SirioTable extends Component {
         };
         return (
             <SirioButton
+                key={page}
                 purple
                 recommended={active}
                 square={typeof page !== "string" || page === ">>" || page === "<<"}
