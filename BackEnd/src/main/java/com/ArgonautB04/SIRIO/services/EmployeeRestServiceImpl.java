@@ -120,6 +120,7 @@ public class EmployeeRestServiceImpl implements EmployeeRestService {
                             "Akun anda tidak memiliki akses ke pengaturan tenggat waktu"
                     );
                 }
+                break;
             case "tabel rekomendasi":
                 if (!employee.getRole().getAccessPermissions().getAksesTabelRekomendasi()) {
                     throw new ResponseStatusException(
@@ -127,6 +128,7 @@ public class EmployeeRestServiceImpl implements EmployeeRestService {
                             "Akun anda tidak memiliki akses ke daftar rekomendasi"
                     );
                 }
+                break;
             case "akses risk rating":
                 if (!employee.getRole().getAccessPermissions().getAksesRiskRating()) {
                     throw new ResponseStatusException(
@@ -134,6 +136,7 @@ public class EmployeeRestServiceImpl implements EmployeeRestService {
                             "Akun anda tidak memiliki akses ke daftar risk rating"
                     );
                 }
+                break;
             case "ubah risk rating":
                 if (!employee.getRole().getAccessPermissions().getUbahRiskRating()) {
                     throw new ResponseStatusException(
@@ -141,6 +144,7 @@ public class EmployeeRestServiceImpl implements EmployeeRestService {
                             "Akun anda tidak memiliki akses untuk melakukan perubahan daftar risk rating"
                     );
                 }
+                break;
             case "akses risk level":
                 if (!employee.getRole().getAccessPermissions().getAksesRiskRating()) {
                     throw new ResponseStatusException(
@@ -148,6 +152,7 @@ public class EmployeeRestServiceImpl implements EmployeeRestService {
                             "Akun anda tidak memiliki akses ke daftar risk level"
                     );
                 }
+                break;
             case "ubah risk level":
                 if (!employee.getRole().getAccessPermissions().getUbahRiskLevel()) {
                     throw new ResponseStatusException(
@@ -155,6 +160,7 @@ public class EmployeeRestServiceImpl implements EmployeeRestService {
                             "Akun anda tidak memiliki akses untuk melakukan perubahan daftar risk level"
                     );
                 }
+                break;
             case "tambah risiko":
                 if (!employee.getRole().getAccessPermissions().getAksesTambahRisiko()) {
                     throw new ResponseStatusException(
@@ -162,6 +168,7 @@ public class EmployeeRestServiceImpl implements EmployeeRestService {
                             "Akun anda tidak memiliki akses untuk melakukan penambahan risiko"
                     );
                 }
+                break;
             case "akses risiko":
                 if (!employee.getRole().getAccessPermissions().getAksesRisiko()) {
                     throw new ResponseStatusException(
@@ -169,6 +176,7 @@ public class EmployeeRestServiceImpl implements EmployeeRestService {
                             "Akun anda tidak memiliki akses ke daftar risiko"
                     );
                 }
+                break;
             case "hapus risiko":
                 if (!employee.getRole().getAccessPermissions().getAksesHapusRisiko()) {
                     throw new ResponseStatusException(
@@ -176,6 +184,7 @@ public class EmployeeRestServiceImpl implements EmployeeRestService {
                             "Akun anda tidak memiliki akses untuk menghapus risiko"
                     );
                 }
+                break;
             case "ubah risiko":
                 if (!employee.getRole().getAccessPermissions().getAksesUbahRisiko()) {
                     throw new ResponseStatusException(
@@ -183,6 +192,7 @@ public class EmployeeRestServiceImpl implements EmployeeRestService {
                             "Akun anda tidak memiliki akses untuk mengubah risiko"
                     );
                 }
+                break;
             case "tabel risiko":
                 if (!employee.getRole().getAccessPermissions().getAksesTabelRisiko()) {
                     throw new ResponseStatusException(
@@ -190,6 +200,7 @@ public class EmployeeRestServiceImpl implements EmployeeRestService {
                             "Akun anda tidak memiliki akses ke tabel risiko"
                     );
                 }
+                break;
         }
     }
 }
