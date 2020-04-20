@@ -7,7 +7,6 @@ import {
 } from "react-router-dom";
 import MainPage from "./pages";
 
-// import DaftarRekomendasi from "./pages/DaftarRekomendasi";
 import DaftarRencanaPemeriksaan from './pages/Manager/DaftarRencanaPemeriksaan';
 import DetailRencanaPemeriksaan from "./pages/Manager/DetailRencanaPemeriksaan";
 import FormTambahRencanaPemeriksaan from "./pages/Manager/FormTambahRencanaPemeriksaan";
@@ -17,8 +16,6 @@ import DaftarKantorCabang from './pages/Administrator/DaftarKantorCabang';
 import DetailKantorCabang from "./pages/Administrator/DetailKantorCabang";
 import FormTambahKantorCabang from "./pages/Administrator/FormTambahKantorCabang";
 import FormUbahKantorCabang from "./pages/Administrator/FormUbahKantorCabang.jsx";
-
-// import DaftarHasilPemeriksaan from "./pages/DaftarHasilPemeriksaan";
 
 import DaftarHasilPemeriksaan from "./pages/QAOfficer/DaftarHasilPemeriksaan";
 import DaftarTugasPemeriksaan from "./pages/QAOfficer/DaftarTugasPemeriksaan";
@@ -33,9 +30,6 @@ import FormUbahEmployee from "./pages/Administrator/FormUbahEmployee";
 import DetailEmployee from "./pages/Administrator/DetailEmployee";
 import DaftarRekomendasi from "./pages/QAOfficer/DaftarRekomendasi";
 import Reminder from "./pages/QAOfficer/Reminder";
-// import DaftarRekomendasiBM from "./pages/BranchManager/DaftarRekomendasi";
-// import FormBuktiBM from "./pages/BranchManager/FormBuktiPelaksanaan";
-// import DetailBuktiBM from "./pages/BranchManager/DetailBuktiPelaksanaan";
 
 import FormTambahBukti from "./pages/BranchManager/TambahBuktiForm";
 import FormUbahBukti from "./pages/BranchManager/UbahBuktiForm";
@@ -55,6 +49,7 @@ import RiskLevel from './pages/ManagerOR/RiskLevel';
 import RiskRating from './pages/ManagerOR/RiskRating';
 import FormRisikoUbah from './pages/ManagerOR/FormRisikoUbah';
 import Error401 from './pages/Errors/Error401';
+import ErrorPage from './pages/Errors/Error';
 import Error404 from './pages/Errors/Error404';
 import TemplateReminder from './pages/QAOfficer/TemplateReminder';
 
@@ -69,7 +64,6 @@ class App extends React.Component {
         <Router>
           <Switch>
             <Route exact path="/" component={MainPage} />
-            <Route exact path="/rekomendasi" component={DaftarRekomendasi} />
             <Route exact path="/manager/rencanaPemeriksaan" component={DaftarRencanaPemeriksaan} />
             <Route exact path="/manager/rencanaPemeriksaan/detail" component={DetailRencanaPemeriksaan} />
             <Route exact path="/manager/rencanaPemeriksaan/tambah" component={FormTambahRencanaPemeriksaan} />
@@ -117,6 +111,7 @@ class App extends React.Component {
             <Route exact path="/logout" component={Logout} />
 
             <Route exact path="/401" component={Error401} />
+            <Route exact path="/error" component={ErrorPage} />
             <Route path="" component={Error404} />
           </Switch>
         </Router>

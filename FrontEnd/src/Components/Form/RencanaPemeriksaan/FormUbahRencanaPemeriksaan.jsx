@@ -305,7 +305,7 @@ class FormUbahRencana extends React.Component {
     // Fungsi yang akan dijalankan ketika user submit
     // Umumnya akan digunakan untuk memanggil service komunikasi ke backend
     async handleSubmit(event, nama) {
-        if(nama == "simpan"){
+        if(nama === "simpan"){
             event.preventDefault();
             for (let i = 0; i < this.state.daftarTugasPemeriksaan.length;i++){
                 console.log(this.state.daftarTugasPemeriksaan[i].tanggalMulai)
@@ -344,7 +344,7 @@ class FormUbahRencana extends React.Component {
             // RencanaPemeriksaanService.editRencanaPemeriksaan(rencanaPemeriksaan)
             // .then(() => this.setRedirect());
         }
-        else if (nama == "draft"){
+        else if (nama === "draft"){
             event.preventDefault();
             const rencanaPemeriksaan = {
                 id: this.state.id,

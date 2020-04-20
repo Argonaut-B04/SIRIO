@@ -5,7 +5,7 @@ import KantorCabangService from '../../../Services/KantorCabangService';
 import EmployeeService from '../../../Services/EmployeeService';
 import { Redirect } from 'react-router-dom';
 import { withRouter } from 'react-router-dom';
-import {OverlayTrigger, Button, Tooltip} from 'react-bootstrap'
+import {OverlayTrigger, Tooltip} from 'react-bootstrap'
 /**
  * Kelas untuk membuat form demo
  */

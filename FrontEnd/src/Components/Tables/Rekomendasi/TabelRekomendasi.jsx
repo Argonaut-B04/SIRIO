@@ -36,18 +36,16 @@ export default class TabelRekomendasi extends React.Component {
                     rowList: response.data.result
                 })
             })
-            .catch(error => {
-                if (error.response.data.status === 401) {
-                    this.setState({
-                        redirector: <Redirect to={{
-                            pathname: "/401",
-                            state: {
-                                detail: error.response.data.message,
-                            }
-                        }} />
-                    })
+            .catch((error) => {
+                if (!error.response) {
+                    window.location.href = "/error";
                 } else {
                     console.log(error.response.data);
+                    this.setState({
+                        redirector: true,
+                        code: error.response.data.status,
+                        detail: error.response.data.message,
+                    })
                 }
             })
             ;
@@ -332,9 +330,20 @@ export default class TabelRekomendasi extends React.Component {
     // Fungsi render Tabel rekomendasi
     render() {
         const { defaultSorted, columns, endNotification, state } = this;
-        const { redirector, rowList, changeComplete } = state;
-        
-        return redirector || (
+        const { redirector, rowList, changeComplete, detail, code } = state;
+
+        if (redirector) {
+            return (
+                <Redirect to={{
+                    pathname: "/error",
+                    state: {
+                        detail: detail,
+                        code: code
+                    }
+                }} />
+            )
+        }
+        return (
             <>
                 <SirioTable
                     title="Daftar Rekomendasi"

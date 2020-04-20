@@ -44,9 +44,9 @@ class DetailKantorCabang extends React.Component {
     };
 
     auditFormatter(kunjunganAudit){
-        if (kunjunganAudit == false){
+        if (kunjunganAudit === false){
             return "Belum Pernah"
-        }else if (kunjunganAudit == true){
+        }else if (kunjunganAudit === true){
             return "Sudah Pernah"
         }
     }
@@ -91,7 +91,6 @@ class DetailKantorCabang extends React.Component {
                             Ubah
                         </SirioButton>
                     </NavLink>
-                    <a>  </a>
                     <SirioWarningButton
                         red
                         modalTitle="Konfirmasi Penghapusan"
