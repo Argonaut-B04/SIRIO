@@ -34,5 +34,5 @@ public interface RekomendasiRestService {
 
     void validateDeadlineCanBeSet(Rekomendasi rekomendasi);
 
-    Rekomendasi buatAtauSimpanPerubahanRekomendasi(Rekomendasi rekomendasi);
+    Rekomendasi buatAtauSimpanPerubahanRekomendasi(Rekomendasi rekomendasi, boolean tenggatWaktuTerubah);
 }

@@ -230,8 +230,7 @@ public class RekomendasiRestController {
         rekomendasiRestService.validateDeadlineCanBeSet(rekomendasi);
 
         rekomendasi.setTenggatWaktu(tenggatWaktuBaru);
-        Rekomendasi result = rekomendasiRestService.buatAtauSimpanPerubahanRekomendasi(rekomendasi);
-
+        Rekomendasi result = rekomendasiRestService.buatAtauSimpanPerubahanRekomendasi(rekomendasi, true);
         return new BaseResponse<>(200, "success", result);
     }
 }
