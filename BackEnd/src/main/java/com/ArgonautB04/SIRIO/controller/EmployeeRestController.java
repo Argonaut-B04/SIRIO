@@ -301,19 +301,8 @@ public class EmployeeRestController {
     private BaseResponse<Boolean> checkUsernameEmployee(
             @PathVariable("username") String username
     ) {
-        BaseResponse<Boolean> response = new BaseResponse<>();
-
         Optional<Employee> employeeOptional = employeeRestService.getByUsername(username);
-        if (employeeOptional.isEmpty()) {
-            response.setResult(false);
-        } else {
-            response.setResult(true);
-        }
-
-        response.setStatus(200);
-        response.setMessage("success");
-
-        return response;
+        return new BaseResponse<>(200, "success", employeeOptional.isPresent());
     }
 
     /**
@@ -324,13 +313,8 @@ public class EmployeeRestController {
     @GetMapping("/profile")
     private BaseResponse<Employee> getProfileEmployee(Principal principal) {
         BaseResponse<Employee> response = new BaseResponse<>();
-
-        Employee result = employeeRestService.getByUsername(principal.getName()).get();
-
-        response.setStatus(200);
-        response.setMessage("success");
-        response.setResult(result);
-        return response;
+        Employee result = employeeRestService.validateEmployeeExistByPrincipal(principal);
+        return new BaseResponse<>(200, "success", result);
     }
 
     /**

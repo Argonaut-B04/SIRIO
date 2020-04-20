@@ -24,7 +24,7 @@ public class RekomendasiRestServiceImpl implements RekomendasiRestService {
     private RekomendasiDB rekomendasiDB;
 
     @Autowired
-    private StatusRekomendasiDB statusRekomendasiDB;
+    private StatusRekomendasiRestService statusRekomendasiRestService;
 
     @Override
     public Rekomendasi buatRekomendasi(Rekomendasi rekomendasi) {
@@ -107,7 +107,7 @@ public class RekomendasiRestServiceImpl implements RekomendasiRestService {
     public Rekomendasi buatAtauSimpanPerubahanRekomendasi(Rekomendasi rekomendasi, boolean tenggatWaktuTerubah) {
         if (tenggatWaktuTerubah) {
             rekomendasi.setStatusRekomendasi(
-                    statusRekomendasiDB.findByNamaStatus("Menunggu Pelaksanaan").get()
+                    statusRekomendasiRestService.getByNamaStatus("Menunggu Pelaksanaan")
             );
         }
         return rekomendasiDB.save(rekomendasi);

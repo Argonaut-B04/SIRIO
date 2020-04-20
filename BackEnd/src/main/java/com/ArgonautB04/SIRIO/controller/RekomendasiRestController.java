@@ -187,7 +187,7 @@ public class RekomendasiRestController {
         Employee employee = employeeRestService.validateEmployeeExistByPrincipal(principal);
         employeeRestService.validateRolePermission(employee, "tabel rekomendasi");
 
-        KantorCabang kantorCabang = kantorCabangRestService.validateExistInDatabase(idKantor);
+        KantorCabang kantorCabang = kantorCabangRestService.validateExistById(idKantor);
 
         List<TugasPemeriksaan> daftarTugasPemeriksaan =
                 tugasPemeriksaanRestService.

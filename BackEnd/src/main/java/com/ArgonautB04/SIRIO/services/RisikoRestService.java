@@ -29,4 +29,6 @@ public interface RisikoRestService {
     RisikoDTO ubahHierarki(Risiko risikoAwal, RisikoDTO risikoBaru);
 
     List<Risiko> getParentByKategori(Integer kategori);
+
+    Risiko validateExistById(int idRisiko);
 }

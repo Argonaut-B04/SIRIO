@@ -46,12 +46,7 @@ public class BuktiPelaksanaanRestController {
      */
     @GetMapping("/getAll")
     private BaseResponse<List<BuktiPelaksanaan>> getAllBuktiPelaksanaan() {
-        BaseResponse<List<BuktiPelaksanaan>> response = new BaseResponse<>();
-        List<BuktiPelaksanaan> result = buktiPelaksanaanRestService.getAll();
-        response.setStatus(200);
-        response.setMessage("success");
-        response.setResult(result);
-        return response;
+        return new BaseResponse<>(200, "success", buktiPelaksanaanRestService.getAll());
     }
 
     /**

@@ -25,4 +25,6 @@ public interface TugasPemeriksaanRestService {
     TugasPemeriksaan ubahTugasPemeriksaan(int idTugasPemeriksaan, TugasPemeriksaan tugasPemeriksaan);
 
     void hapusTugasPemeriksaan(int idTugasPemeriksaan);
+
+    TugasPemeriksaan validateExistById(int idTugasPemeriksaan);
 }
