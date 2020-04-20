@@ -82,6 +82,7 @@ export default class SirioTable extends Component {
                                 classes={classes.sizeperpage}
                             >
                                 {option.text}
+                                <br /><small>size</small>
                             </SirioButton>
                         );
                     })
