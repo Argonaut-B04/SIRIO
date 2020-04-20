@@ -4,6 +4,7 @@ import com.ArgonautB04.SIRIO.model.Employee;
 import com.ArgonautB04.SIRIO.model.KomponenPemeriksaan;
 import com.ArgonautB04.SIRIO.model.Rekomendasi;
 import com.ArgonautB04.SIRIO.repository.RekomendasiDB;
+import com.ArgonautB04.SIRIO.repository.StatusRekomendasiDB;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,9 @@ public class RekomendasiRestServiceImpl implements RekomendasiRestService {
 
     @Autowired
     private RekomendasiDB rekomendasiDB;
+
+    @Autowired
+    private StatusRekomendasiRestService statusRekomendasiRestService;
 
     @Override
     public Rekomendasi buatRekomendasi(Rekomendasi rekomendasi) {
@@ -100,7 +104,12 @@ public class RekomendasiRestServiceImpl implements RekomendasiRestService {
     }
 
     @Override
-    public Rekomendasi buatAtauSimpanPerubahanRekomendasi(Rekomendasi rekomendasi) {
+    public Rekomendasi buatAtauSimpanPerubahanRekomendasi(Rekomendasi rekomendasi, boolean tenggatWaktuTerubah) {
+        if (tenggatWaktuTerubah) {
+            rekomendasi.setStatusRekomendasi(
+                    statusRekomendasiRestService.getByNamaStatus("Menunggu Pelaksanaan")
+            );
+        }
         return rekomendasiDB.save(rekomendasi);
     }
 

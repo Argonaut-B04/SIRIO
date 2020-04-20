@@ -86,5 +86,5 @@ public class ReminderRestServiceImpl implements ReminderRestService {
     @Override
     public List<Reminder> getByRekomendasi(Rekomendasi rekomendasi) {
         return reminderDB.findAllByRekomendasi(rekomendasi);
-    };
+    }
 }

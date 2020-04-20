@@ -187,7 +187,7 @@ public class RekomendasiRestController {
         Employee employee = employeeRestService.validateEmployeeExistByPrincipal(principal);
         employeeRestService.validateRolePermission(employee, "tabel rekomendasi");
 
-        KantorCabang kantorCabang = kantorCabangRestService.validateExistInDatabase(idKantor);
+        KantorCabang kantorCabang = kantorCabangRestService.validateExistById(idKantor);
 
         List<TugasPemeriksaan> daftarTugasPemeriksaan =
                 tugasPemeriksaanRestService.
@@ -230,8 +230,7 @@ public class RekomendasiRestController {
         rekomendasiRestService.validateDeadlineCanBeSet(rekomendasi);
 
         rekomendasi.setTenggatWaktu(tenggatWaktuBaru);
-        Rekomendasi result = rekomendasiRestService.buatAtauSimpanPerubahanRekomendasi(rekomendasi);
-
+        Rekomendasi result = rekomendasiRestService.buatAtauSimpanPerubahanRekomendasi(rekomendasi, true);
         return new BaseResponse<>(200, "success", result);
     }
 }

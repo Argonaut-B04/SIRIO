@@ -8,6 +8,7 @@ public class KantorCabangDTO {
     private Integer idRiskRating;
     private String regional;
     private String area;
+
     private boolean kunjunganAudit;
 
     public Integer getIdRiskRating() {

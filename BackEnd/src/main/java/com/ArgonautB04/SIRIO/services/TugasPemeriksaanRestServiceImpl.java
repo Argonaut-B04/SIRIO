@@ -6,7 +6,9 @@ import com.ArgonautB04.SIRIO.model.RencanaPemeriksaan;
 import com.ArgonautB04.SIRIO.model.TugasPemeriksaan;
 import com.ArgonautB04.SIRIO.repository.TugasPemeriksaanDB;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -64,7 +66,25 @@ public class TugasPemeriksaanRestServiceImpl implements TugasPemeriksaanRestServ
     }
 
     @Override
+    public boolean isExistInDatabase(TugasPemeriksaan tugasPemeriksaan) {
+        return tugasPemeriksaanDB.findById(tugasPemeriksaan.getIdTugas()).isPresent();
+    }
+
+    @Override
     public void hapusTugasPemeriksaan(int idTugasPemeriksaan) {
         tugasPemeriksaanDB.deleteById(idTugasPemeriksaan);
+    }
+
+    @Override
+    public TugasPemeriksaan validateExistById(int idTugasPemeriksaan) {
+        Optional<TugasPemeriksaan> target = tugasPemeriksaanDB.findById(idTugasPemeriksaan);
+        if (target.isPresent()) {
+            return target.get();
+        } else {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    "Tugas pemeriksaan dengan id " + idTugasPemeriksaan + "tidak dapat ditemukan"
+            );
+        }
     }
 }
