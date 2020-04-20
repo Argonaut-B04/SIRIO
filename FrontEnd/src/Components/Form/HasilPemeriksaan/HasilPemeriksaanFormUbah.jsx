@@ -7,6 +7,8 @@ import {NavLink, Redirect} from 'react-router-dom';
 import { withRouter } from 'react-router-dom';
 import RiskLevelService from "../../../Services/RiskLevelService";
 import SirioField from "../SirioFormComponent/SirioField";
+import TemuanRisikoService from "../../../Services/TemuanRisikoService";
+import SirioConfirmButton from "../../Button/ActionButton/SirioConfirmButton";
 
 class HasilPemeriksaanFormTambah extends React.Component {
 
@@ -19,6 +21,7 @@ class HasilPemeriksaanFormTambah extends React.Component {
             daftarKomponenPemeriksaan: [],
             daftarRisikoKategori1: [],
             daftarRisikoKategori2: [],
+            daftarHistoriTemuan: [],
             filterKategori: "",
             kategoriType: "",
             riskLevelOptionList: [],
@@ -31,6 +34,7 @@ class HasilPemeriksaanFormTambah extends React.Component {
         this.renderRisikoKategori12 = this.renderRisikoKategori12.bind(this);
         this.renderHasilPemeriksaan = this.renderHasilPemeriksaan.bind(this);
         this.renderRiskLevelOption = this.renderRiskLevelOption.bind(this);
+        this.renderHistoriTemuan = this.renderHistoriTemuan.bind(this);
         this.handleChangeKomponen = this.handleChangeKomponen.bind(this);
         this.handleSelectChangeKomponen = this.handleSelectChangeKomponen.bind(this);
         this.handleSelectChange = this.handleSelectChange.bind(this);
@@ -46,6 +50,7 @@ class HasilPemeriksaanFormTambah extends React.Component {
         this.renderRisikoKategori12();
         this.renderHasilPemeriksaan();
         this.renderRiskLevelOption();
+        this.renderHistoriTemuan();
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -132,6 +137,16 @@ class HasilPemeriksaanFormTambah extends React.Component {
         })
     }
 
+    async renderHistoriTemuan() {
+        const response = await TemuanRisikoService.getHistoriTemuanRisikoKantorCabang(this.props.location.state.idTugasPemeriksaan);
+
+        const daftarHistoriTemuan = response.data.result;
+
+        this.setState({
+            daftarHistoriTemuan: daftarHistoriTemuan
+        })
+    }
+
     async renderRisikoKategori12() {
         const response = await RisikoService.getAll();
 
@@ -213,6 +228,30 @@ class HasilPemeriksaanFormTambah extends React.Component {
         )
     }
 
+    getHistoriTemuanButton(idRisiko) {
+        const histori = <p>
+            {this.state.daftarHistoriTemuan
+                .filter(temuan => temuan.idRisiko === idRisiko)
+                .map((temuan, index) =>
+                    <p className="text-center p-0 m-0">{index+1}. {temuan.keterangan} </p>
+                )}
+        </p>;
+
+        return (
+            <SirioConfirmButton
+                purple recommended
+                classes="m-1"
+                modalTitle= "Riwayat Temuan Risiko"
+                modalDesc={histori}
+                customConfirmText=" "
+                closeOnConfirm
+                confirmDisable
+            >
+                Riwayat Temuan
+            </SirioConfirmButton>
+        )
+    }
+
     innerInputDefinition(komponen) {
         return (
             [
@@ -255,6 +294,9 @@ class HasilPemeriksaanFormTambah extends React.Component {
                     name: "daftarTemuanRisiko",
                     value: komponen.daftarTemuanRisiko.map(temuan => temuan.keterangan),
                     modifier: (name, newField, index) => this.modifyFieldCount(name, newField, index, komponen.id,  komponen.daftarTemuanRisiko,"keterangan"),
+                }, {
+                    label: "",
+                    customInput: this.getHistoriTemuanButton(komponen.risiko.id)
                 }, {
                     label: "Rekomendasi",
                     multiple: true,
@@ -555,8 +597,9 @@ class HasilPemeriksaanFormTambah extends React.Component {
         this.state.daftarKomponenPemeriksaan.map((komponen, index) => {
             const fokusKeteranganSampel = komponen.keteranganSampel;
             var errorKeteranganSampel;
+            var letter = /.*[a-zA-Z].*/;
 
-            if (!isNaN(fokusKeteranganSampel) && fokusKeteranganSampel !== "") {
+            if (!fokusKeteranganSampel.match(letter) && fokusKeteranganSampel !== "") {
                 submitable = false;
                 errorKeteranganSampel = "Ketarangan perlu mengandung huruf";
             }

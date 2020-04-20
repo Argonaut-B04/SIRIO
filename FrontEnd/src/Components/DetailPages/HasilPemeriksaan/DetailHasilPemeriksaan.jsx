@@ -145,13 +145,14 @@ class DetailHasilPemeriksaan extends React.Component {
             .then(() => this.setRedirectSetuju());
     }
 
-    buttonUbah(id, status) {
+    buttonUbah(id, idTugasPemeriksaan, status) {
         if(status === "Draft" || status === "Menunggu Persetujuan" || status === "Ditolak") {
             return (
                 <NavLink to={{
                     pathname: "/hasil-pemeriksaan/ubah",
                     state: {
-                        id: id
+                        id: id,
+                        idTugasPemeriksaan: idTugasPemeriksaan
                     }
                 }}>
                     <SirioButton
@@ -231,7 +232,7 @@ class DetailHasilPemeriksaan extends React.Component {
             case "Super QA Officer Operational Risk":
                 return (
                     <div>
-                        {this.buttonUbah(this.state.hasilPemeriksaan.id, this.state.hasilPemeriksaan.namaStatus)}
+                        {this.buttonUbah(this.state.hasilPemeriksaan.id, this.state.hasilPemeriksaan.tugasPemeriksaan.id, this.state.hasilPemeriksaan.namaStatus)}
                         {this.buttonHapus(this.state.hasilPemeriksaan.id, this.state.hasilPemeriksaan.namaStatus)}
                         {this.buttonSetuju(this.state.hasilPemeriksaan.id, this.state.hasilPemeriksaan.namaStatus)}
                         {this.buttonTolak(this.state.hasilPemeriksaan.id, this.state.hasilPemeriksaan.namaStatus)}
@@ -240,7 +241,7 @@ class DetailHasilPemeriksaan extends React.Component {
             case "admin":
                 return (
                     <div>
-                        {this.buttonUbah(this.state.hasilPemeriksaan.id, this.state.hasilPemeriksaan.namaStatus)}
+                        {this.buttonUbah(this.state.hasilPemeriksaan.id, this.state.hasilPemeriksaan.tugasPemeriksaan.id, this.state.hasilPemeriksaan.namaStatus)}
                         {this.buttonHapus(this.state.hasilPemeriksaan.id, this.state.hasilPemeriksaan.namaStatus)}
                         {this.buttonSetuju(this.state.hasilPemeriksaan.id, this.state.hasilPemeriksaan.namaStatus)}
                         {this.buttonTolak(this.state.hasilPemeriksaan.id, this.state.hasilPemeriksaan.namaStatus)}
@@ -250,7 +251,7 @@ class DetailHasilPemeriksaan extends React.Component {
                 if (this.state.yangDitugaskan) {
                     return (
                         <div>
-                            {this.buttonUbah(this.state.hasilPemeriksaan.id, this.state.hasilPemeriksaan.namaStatus)}
+                            {this.buttonUbah(this.state.hasilPemeriksaan.id, this.state.hasilPemeriksaan.tugasPemeriksaan.id, this.state.hasilPemeriksaan.namaStatus)}
                             {this.buttonHapus(this.state.hasilPemeriksaan.id, this.state.hasilPemeriksaan.namaStatus)}
                         </div>
                     )

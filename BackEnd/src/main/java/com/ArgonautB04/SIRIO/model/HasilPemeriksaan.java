@@ -16,7 +16,7 @@ public class HasilPemeriksaan implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idHasilPemeriksaan;
 
-    @Size(max = 125)
+    @Size(max = 500)
     @Column
     private String feedback;
 

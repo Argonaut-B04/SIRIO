@@ -62,6 +62,16 @@ class EmployeeFormUbah extends React.Component {
             validating = true;
         }
 
+        if (prevState.jabatan !== this.state.jabatan) {
+            const validation = this.validateJabatan();
+            submitable = submitable && validation;
+            validating = true;
+        }
+
+        if (prevState.idRole !== this.state.idRole) {
+            validating = true;
+        }
+
         if (validating) {
             if (this.state.submitable !== submitable) {
                 this.setState({
@@ -86,16 +96,33 @@ class EmployeeFormUbah extends React.Component {
         return submitable;
     }
 
+    validateJabatan() {
+        var submitable = true;
+        const fokusJabatan = this.state.jabatan;
+        var errorJabatan;
+        if (fokusJabatan.length > 30) {
+            submitable = false;
+            errorJabatan = "Jabatan maksimal 30 karakter";
+        }
+        if (this.state.errorJabatan !== errorJabatan) {
+            this.setState({
+                errorJabatan: errorJabatan
+            })
+        }
+        return submitable;
+    }
+
     validateNama() {
         var submitable = true;
         const fokusName = this.state.nama;
         var errorName;
         var letterOnly = /^[a-zA-Z\s]*$/;
         if (!fokusName.match(letterOnly)) {
-            console.log("sfa")
-            console.log(fokusName)
             submitable = false;
             errorName = "Nama hanya boleh mengandung huruf";
+        } else if (fokusName.length > 50) {
+            submitable = false;
+            errorName = "Nama maksimal 50 karakter";
         }
         if (this.state.errorName !== errorName) {
             this.setState({
@@ -113,6 +140,9 @@ class EmployeeFormUbah extends React.Component {
         if (!fokusNoHp.match(numberOnly)) {
             submitable = false;
             errorNoHp = "Nomor HP hanya boleh mengandung angka";
+        } else if (fokusNoHp.length > 20) {
+            submitable = false;
+            errorNoHp = "Nomor HP maksimal 20 karakter";
         }
         if (this.state.errorNoHp !== errorNoHp) {
             this.setState({
@@ -256,7 +286,8 @@ class EmployeeFormUbah extends React.Component {
                 type: "text",
                 name: "jabatan",
                 value: this.state.jabatan,
-                placeholder: "Jabatan"
+                placeholder: "Jabatan",
+                validation: this.state.errorJabatan
             }, {
                 label: "Email",
                 handleChange: this.handleChange,

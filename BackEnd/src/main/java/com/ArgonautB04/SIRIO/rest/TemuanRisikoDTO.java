@@ -4,6 +4,15 @@ public class TemuanRisikoDTO {
     private Integer id;
     private Integer idPembuat;
     private String keterangan;
+    private Integer idRisiko;
+
+    public Integer getIdRisiko() {
+        return idRisiko;
+    }
+
+    public void setIdRisiko(Integer idRisiko) {
+        this.idRisiko = idRisiko;
+    }
 
     public Integer getId() {
         return id;
