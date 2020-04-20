@@ -1,7 +1,6 @@
 package com.ArgonautB04.SIRIO.rest;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 public class RekomendasiDTO {
@@ -15,6 +14,7 @@ public class RekomendasiDTO {
     private String statusBukti;
     private String namaKantorCabang;
     private List<ReminderDTO> reminderDTO;
+
     public List<ReminderDTO> getReminder() {
         return reminderDTO;
     }
@@ -94,6 +94,5 @@ public class RekomendasiDTO {
     public void setTenggatWaktuDate(LocalDate tenggatWaktuDate) {
         this.tenggatWaktuDate = tenggatWaktuDate;
     }
-
 
 }

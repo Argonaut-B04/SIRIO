@@ -1,5 +1,7 @@
 package com.ArgonautB04.SIRIO.model;
 
+import org.springframework.beans.factory.annotation.Value;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -15,42 +17,89 @@ public class AccessPermissions implements Serializable {
     @MapsId
     private Role role;
 
-    @Column(columnDefinition = "boolean default false")
-    private Boolean aksesRiskRating;
+    @Column
+    private Boolean aksesRiskRating = false;
 
-    @Column(columnDefinition = "boolean default false")
-    private Boolean ubahRiskRating;
+    @Column
+    private Boolean ubahRiskRating = false;
 
-    @Column(columnDefinition = "boolean default false")
-    private Boolean aksesRiskLevel;
+    @Column
+    private Boolean aksesRiskLevel = false;
 
-    @Column(columnDefinition = "boolean default false")
-    private Boolean ubahRiskLevel;
+    @Column
+    private Boolean ubahRiskLevel = false;
 
-    @Column(columnDefinition = "boolean default false")
-    private Boolean ubahReminder;
+    @Column
+    private Boolean ubahReminder = false;
 
-    @Column(columnDefinition = "boolean default false")
-    private Boolean aksesTabelRisiko;
+    @Column
+    private Boolean aksesTabelRisiko = false;
 
-    @Column(columnDefinition = "boolean default false")
-    private Boolean aksesRisiko;
+    @Column
+    private Boolean aksesRisiko = false;
 
-    @Column(columnDefinition = "boolean default false")
-    private Boolean aksesTambahRisiko;
+    @Column
+    private Boolean aksesTambahRisiko = false;
 
-    @Column(columnDefinition = "boolean default false")
-    private Boolean aksesUbahRisiko;
+    @Column
+    private Boolean aksesUbahRisiko = false;
 
-    @Column(columnDefinition = "boolean default false")
-    private Boolean aksesHapusRisiko;
+    @Column
+    private Boolean aksesHapusRisiko = false;
 
-    @Column(columnDefinition = "boolean default false")
-    private Boolean aksesUbahHierarki;
+    @Column
+    private Boolean aksesUbahHierarki = false;
 
-//    @Column(columnDefinition = "boolean default false")
-//    private Boolean aksesKategoriUbahHierarki;
+    @Column
+    private Boolean aksesTabelRekomendasi = false;
 
+    @Column
+    private Boolean aksesRekomendasi = false;
+
+    @Column
+    private Boolean aksesBuktiPelaksanaan = false;
+
+    @Column
+    private Boolean aksesTambahBuktiPelaksanaan = false;
+
+    @Column
+    private Boolean aksesUbahBuktiPelaksanaan = false;
+
+    @Column
+    private Boolean aksesPersetujuanBuktiPelaksanaan = false;
+
+    @Column
+    private Boolean aturTenggatWaktu = false;
+
+    public AccessPermissions() {
+    }
+
+    public AccessPermissions(Role role) {
+        this.role = role;
+    }
+
+    public AccessPermissions(Role role, boolean trueDefault) {
+        this.role = role;
+        if (!trueDefault) return;
+        this.aksesRiskRating = true;
+        this.ubahRiskRating = true;
+        this.aksesRiskLevel = true;
+        this.ubahRiskLevel = true;
+        this.ubahReminder = true;
+        this.aksesTabelRisiko = true;
+        this.aksesRisiko = true;
+        this.aksesTambahRisiko = true;
+        this.aksesUbahRisiko = true;
+        this.aksesHapusRisiko = true;
+        this.aksesUbahHierarki = true;
+        this.aksesTabelRekomendasi = true;
+        this.aksesRekomendasi = true;
+        this.aksesBuktiPelaksanaan = true;
+        this.aksesTambahBuktiPelaksanaan = true;
+        this.aksesUbahBuktiPelaksanaan = true;
+        this.aksesPersetujuanBuktiPelaksanaan = true;
+        this.aturTenggatWaktu = true;
+    }
 
     public Boolean getAksesTabelRisiko() {
         return aksesTabelRisiko;
@@ -154,5 +203,61 @@ public class AccessPermissions implements Serializable {
 
     public void setUbahReminder(Boolean ubahReminder) {
         this.ubahReminder = ubahReminder;
+    }
+
+    public Boolean getAksesTabelRekomendasi() {
+        return aksesTabelRekomendasi;
+    }
+
+    public void setAksesTabelRekomendasi(Boolean aksesTabelRekomendasi) {
+        this.aksesTabelRekomendasi = aksesTabelRekomendasi;
+    }
+
+    public Boolean getAksesRekomendasi() {
+        return aksesRekomendasi;
+    }
+
+    public void setAksesRekomendasi(Boolean aksesRekomendasi) {
+        this.aksesRekomendasi = aksesRekomendasi;
+    }
+
+    public Boolean getAksesBuktiPelaksanaan() {
+        return aksesBuktiPelaksanaan;
+    }
+
+    public void setAksesBuktiPelaksanaan(Boolean aksesBuktiPelaksanaan) {
+        this.aksesBuktiPelaksanaan = aksesBuktiPelaksanaan;
+    }
+
+    public Boolean getAksesTambahBuktiPelaksanaan() {
+        return aksesTambahBuktiPelaksanaan;
+    }
+
+    public void setAksesTambahBuktiPelaksanaan(Boolean aksesTambahBuktiPelaksanaan) {
+        this.aksesTambahBuktiPelaksanaan = aksesTambahBuktiPelaksanaan;
+    }
+
+    public Boolean getAksesUbahBuktiPelaksanaan() {
+        return aksesUbahBuktiPelaksanaan;
+    }
+
+    public void setAksesUbahBuktiPelaksanaan(Boolean aksesUbahBuktiPelaksanaan) {
+        this.aksesUbahBuktiPelaksanaan = aksesUbahBuktiPelaksanaan;
+    }
+
+    public Boolean getAksesPersetujuanBuktiPelaksanaan() {
+        return aksesPersetujuanBuktiPelaksanaan;
+    }
+
+    public void setAksesPersetujuanBuktiPelaksanaan(Boolean aksesPersetujuanBuktiPelaksanaan) {
+        this.aksesPersetujuanBuktiPelaksanaan = aksesPersetujuanBuktiPelaksanaan;
+    }
+
+    public Boolean getAturTenggatWaktu() {
+        return aturTenggatWaktu;
+    }
+
+    public void setAturTenggatWaktu(Boolean aturTenggatWaktu) {
+        this.aturTenggatWaktu = aturTenggatWaktu;
     }
 }

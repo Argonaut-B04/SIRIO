@@ -96,7 +96,7 @@ export default class SideNavFramework extends React.Component {
                                 )}
                             </SirioDropdown>
                             :
-                            <NavLink to={menu.link} key={i} exact activeClassName={classes.active} className={classes.clickableNavigation}>
+                            <NavLink to={menu.link} key={i} exact={menu.exact} activeClassName={classes.active} className={classes.clickableNavigation}>
                                 {menu.title}
                             </NavLink>
                     )}

@@ -26,7 +26,7 @@ class DetailHasilPemeriksaan extends React.Component {
             hapus: false,
             setuju: false,
         };
-            
+
         this.renderDataHasilPemeriksaan = this.renderDataHasilPemeriksaan.bind(this);
         this.reduceRiskScore = this.reduceRiskScore.bind(this);
         this.setRedirectHapus = this.setRedirectHapus.bind(this);
@@ -112,7 +112,7 @@ class DetailHasilPemeriksaan extends React.Component {
             })
         })
     }
-    
+
     reduceRiskScore(deductionPoint) {
         const original = this.state.riskScore;
         this.setState({
@@ -168,7 +168,7 @@ class DetailHasilPemeriksaan extends React.Component {
     }
 
     buttonHapus(id, status) {
-        if(status === "Draft" || status === "Menunggu Persetujuan" || status === "Ditolak") {
+        if (status === "Draft" || status === "Menunggu Persetujuan" || status === "Ditolak") {
             return (
                 <SirioWarningButton
                     red
@@ -187,7 +187,7 @@ class DetailHasilPemeriksaan extends React.Component {
     }
 
     buttonSetuju(id, status) {
-        if(status === "Menunggu Persetujuan") {
+        if (status === "Menunggu Persetujuan") {
             return (
                 <SirioConfirmButton
                     purple
@@ -207,7 +207,7 @@ class DetailHasilPemeriksaan extends React.Component {
     }
 
     buttonTolak(id, status) {
-        if(status === "Menunggu Persetujuan") {
+        if (status === "Menunggu Persetujuan") {
             return (
                 <NavLink to={{
                     pathname: "/hasil-pemeriksaan/tolak",
@@ -311,11 +311,13 @@ class DetailHasilPemeriksaan extends React.Component {
                 {this.renderRedirectHapus()}
                 {this.renderRedirectSetuju()}
                 <SirioDetailPage
+                    link="hasil-pemeriksaan"
                     title="Detail Hasil Pemeriksaan"
                     data={this.state.dataGeneral}
                     id='id'
                 />
                 <SirioDetailPage
+                    noBack
                     data={{
                         "Risk Score": this.state.riskScore,
                         "Feedback": this.state.hasilPemeriksaan.feedback
@@ -324,6 +326,7 @@ class DetailHasilPemeriksaan extends React.Component {
                 />
                 {this.state.dataKomponen.map(komponen =>
                     <SirioDetailPage
+                        noBack
                         data={komponen}
                         id='id'
                     />

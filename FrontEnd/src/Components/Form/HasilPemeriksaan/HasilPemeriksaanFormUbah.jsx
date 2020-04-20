@@ -3,7 +3,7 @@ import SirioForm from '../SirioForm';
 import SirioButton from '../../Button/SirioButton';
 import HasilPemeriksaanService from '../../../Services/HasilPemeriksaanService';
 import RisikoService from '../../../Services/RisikoService';
-import {NavLink, Redirect} from 'react-router-dom';
+import { NavLink, Redirect } from 'react-router-dom';
 import { withRouter } from 'react-router-dom';
 import RiskLevelService from "../../../Services/RiskLevelService";
 import SirioField from "../SirioFormComponent/SirioField";
@@ -59,9 +59,9 @@ class HasilPemeriksaanFormTambah extends React.Component {
 
         submitable = this.validateRequired();
         prevState.daftarKomponenPemeriksaan.map((prevKomponen, index) => {
-                const validation = this.validateKeteranganSampel();
-                submitable = submitable && validation;
-                submitableDraft = submitableDraft && validation;
+            const validation = this.validateKeteranganSampel();
+            submitable = submitable && validation;
+            submitableDraft = submitableDraft && validation;
             // if (prevKomponen.keteranganSampel !== this.state.daftarKomponenPemeriksaan[index].keteranganSampel) {
             //     const validation = this.validateKeteranganSampel();
             //     submitable = submitable && validation;
@@ -191,16 +191,16 @@ class HasilPemeriksaanFormTambah extends React.Component {
                         errorIdRiskLevel: "",
                         risiko: komponen.risiko,
                         jumlahSampel: komponen.jumlahSampel,
-                        errorJumlahSampel:"",
+                        errorJumlahSampel: "",
                         keteranganSampel: komponen.keteranganSampel,
-                        errorKeteranganSampel:"",
+                        errorKeteranganSampel: "",
                         daftarTemuanRisiko: (komponen.daftarTemuanRisikoTerdaftar.length > 0) ?
                             komponen.daftarTemuanRisikoTerdaftar
                             :
                             [{
                                 keterangan: ""
                             }],
-                        daftarRekomendasi:(komponen.daftarRekomendasiTerdaftar.length > 0) ?
+                        daftarRekomendasi: (komponen.daftarRekomendasiTerdaftar.length > 0) ?
                             komponen.daftarRekomendasiTerdaftar
                             :
                             [{
@@ -293,7 +293,7 @@ class HasilPemeriksaanFormTambah extends React.Component {
                     type: "textArea",
                     name: "daftarTemuanRisiko",
                     value: komponen.daftarTemuanRisiko.map(temuan => temuan.keterangan),
-                    modifier: (name, newField, index) => this.modifyFieldCount(name, newField, index, komponen.id,  komponen.daftarTemuanRisiko,"keterangan"),
+                    modifier: (name, newField, index) => this.modifyFieldCount(name, newField, index, komponen.id, komponen.daftarTemuanRisiko, "keterangan"),
                 }, {
                     label: "",
                     customInput: this.getHistoriTemuanButton(komponen.risiko.id)
@@ -305,14 +305,14 @@ class HasilPemeriksaanFormTambah extends React.Component {
                     type: "textArea",
                     name: "daftarRekomendasi",
                     value: komponen.daftarRekomendasi.map(rekomendasi => rekomendasi.keterangan),
-                    modifier: (name, newField, index) => this.modifyFieldCount(name, newField, index, komponen.id, komponen.daftarRekomendasi,"keterangan"),
+                    modifier: (name, newField, index) => this.modifyFieldCount(name, newField, index, komponen.id, komponen.daftarRekomendasi, "keterangan"),
                 }
             ]
         )
     }
 
     outerInputDefinition() {
-        if(this.state.daftarKomponenPemeriksaan.length > 0) {
+        if (this.state.daftarKomponenPemeriksaan.length > 0) {
             if (this.state.kategoriType === "1") {
                 return (
                     this.state.daftarKomponenPemeriksaan
@@ -552,7 +552,6 @@ class HasilPemeriksaanFormTambah extends React.Component {
                     } return null
                 });
                 komponen.daftarRekomendasi.map(rekomendasi => {
-                    console.log(rekomendasi)
                     if (rekomendasi.id != null) {
                         daftarRekomendasiTerdaftar.push(rekomendasi)
                     } else {
@@ -620,17 +619,17 @@ class HasilPemeriksaanFormTambah extends React.Component {
         return (
             <div>
                 <SirioButton purple
-                             recommended={this.state.submitable}
-                             disabled={!this.state.submitable}
-                             classes="mx-1"
-                             onClick={(event)  => this.handleSubmit(event, 2)}>
+                    recommended={this.state.submitable}
+                    disabled={!this.state.submitable}
+                    classes="mx-1"
+                    onClick={(event) => this.handleSubmit(event, 2)}>
                     Simpan
                 </SirioButton>
                 <SirioButton purple
-                             recommended={this.state.idCurrentStatus === 1 ? this.state.submitableDraft : this.state.submitable}
-                             disabled={this.state.idCurrentStatus === 1 ? !this.state.submitableDraft : !this.state.submitable}
-                             classes="mx-1"
-                             onClick={(event) => this.handleSubmit(event, this.state.idCurrentStatus)}>
+                    recommended={this.state.idCurrentStatus === 1 ? this.state.submitableDraft : this.state.submitable}
+                    disabled={this.state.idCurrentStatus === 1 ? !this.state.submitableDraft : !this.state.submitable}
+                    classes="mx-1"
+                    onClick={(event) => this.handleSubmit(event, this.state.idCurrentStatus)}>
                     Draft
                 </SirioButton>
                 <NavLink to={{

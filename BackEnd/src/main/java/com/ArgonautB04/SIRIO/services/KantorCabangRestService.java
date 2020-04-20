@@ -17,4 +17,6 @@ public interface KantorCabangRestService {
     KantorCabang ubahKantorCabang(int idKantorCabang, KantorCabang kantorCabang);
 
     void hapusKantorCabang(int idKantorCabang);
+
+    KantorCabang validateExistInDatabase(int idKantorCabang);
 }

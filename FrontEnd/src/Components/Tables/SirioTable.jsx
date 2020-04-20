@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
+import SirioComponentHeader from '../Header/SirioComponentHeader';
 import BootstrapTable from "react-bootstrap-table-next";
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
 import overlayFactory from 'react-bootstrap-table2-overlay';
+import ComponentWrapper from '../../Layout/ComponentWrapper';
 import classes from './SirioTable.module.css';
+import SirioButton from "../Button/SirioButton";
 import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css"
 import 'react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.min.css';
-import SirioComponentHeader from '../Header/SirioComponentHeader';
-import ComponentWrapper from '../../Layout/ComponentWrapper';
 
 /**
  * Kelas komponen tabel untuk Sirio secara umum
@@ -34,14 +35,6 @@ export default class SirioTable extends Component {
         this.numberFormatter = this.numberFormatter.bind(this);
     }
 
-    // Fungsi untuk menampilkan informasi jumlah entry tabel
-    // TODO: Ubah menjadi sesuai dengan desain
-    customTotal = (from, to, size) => (
-        <span className="react-bootstrap-table-pagination-total text-secondary ml-5">
-            Show {from} to {to} of {size} entries
-        </span>
-    );
-
     pageButtonRenderer = ({
         page,
         active,
@@ -54,9 +47,16 @@ export default class SirioTable extends Component {
             onPageChange(page);
         };
         return (
-            <li className="page-item" key={page} >
-                <p className="sirio-pagination-button" onClick={handleClick}>{page}</p>
-            </li>
+            <SirioButton
+                purple
+                recommended={active}
+                square={typeof page !== "string" || page === ">>" || page === "<<"}
+                hover
+                onClick={handleClick}
+                classes={classes.sizeperpage}
+            >
+                {page}
+            </SirioButton>
         );
     };
 
@@ -70,14 +70,18 @@ export default class SirioTable extends Component {
                     options.map((option) => {
                         const isSelect = currSizePerPage === `${option.page}`;
                         return (
-                            <button
+                            <SirioButton
                                 key={option.text}
+                                purple
+                                recommended={isSelect}
+                                hover={!isSelect}
+                                square
                                 type="button"
                                 onClick={() => onSizePerPageChange(option.page)}
-                                className={`btn ${isSelect ? 'btn-primary' : 'btn-outline-primary'}`}
+                                classes={classes.sizeperpage}
                             >
                                 {option.text}
-                            </button>
+                            </SirioButton>
                         );
                     })
                 }
@@ -92,14 +96,14 @@ export default class SirioTable extends Component {
             nextPageText: "Next",
             showTotal: true,
             hidePageListOnlyOnePage: true,
-            paginationTotalRenderer: this.customTotal,
             onPageChange: (page, sizePerPage) => {
                 this.renderRowNumber(page, sizePerPage)
             },
             onSizePerPageChange: (sizePerPage, page) => {
                 this.renderRowNumber(page, sizePerPage)
             },
-            sizePerPageRenderer: this.sizePerPageRenderer
+            sizePerPageRenderer: this.sizePerPageRenderer,
+            pageButtonRenderer: this.pageButtonRenderer
         })
 
     // Overlay adalah animasi singkat yang ditampilkan pada tabel ketika isi tabel sedang dirender
@@ -118,7 +122,7 @@ export default class SirioTable extends Component {
     renderRowNumber(pageNum, pageSize) {
         this.setState({
             pageNum: pageNum,
-            pageSize: pageSize
+            pageSize: pageSize,
         })
     }
 
@@ -141,24 +145,29 @@ export default class SirioTable extends Component {
 
     // Fungsi render SirioTable
     render() {
+        const { columns, props, pagination, overlay } = this;
+        const { noHeader, customHeader, leftSearch, headerButton, title, subtitle, betweenTitleSubtitle, id, data, columnsDefinition, includeSearchBar, cellEdit, defaultSorted, indication, footerContent } = props;
         const { SearchBar } = Search;
-        const columnsDefinition = this.columns.concat(this.props.columnsDefinition);
+
+        // eslint-disable-next-line
+        var { node } = this;
+        const finalColumnsDefinition = columns.concat(columnsDefinition);
         return (
             <div>
-                {this.props.noHeader || this.props.customHeader ? this.props.customHeader :
+                {noHeader || customHeader ? customHeader :
                     <SirioComponentHeader
-                        headerButton={this.props.headerButton}
-                        title={this.props.title}
-                        subtitle={this.props.subtitle}
-                        betweenTitleSubtitle={this.props.betweenTitleSubtitle}
+                        headerButton={headerButton}
+                        title={title}
+                        subtitle={subtitle}
+                        betweenTitleSubtitle={betweenTitleSubtitle}
                     />
                 }
                 <ComponentWrapper>
                     <ToolkitProvider
                         bootstrap4
-                        keyField={this.props.id}
-                        data={this.props.data}
-                        columns={columnsDefinition}
+                        keyField={id}
+                        data={data}
+                        columns={finalColumnsDefinition}
                         search={{
                             searchFormatted: true
                         }}
@@ -166,36 +175,37 @@ export default class SirioTable extends Component {
                         {
                             props => (
                                 <div>
-                                    {this.props.includeSearchBar ?
-                                        <div className="text-right">
-                                            <label className="m-2">Search: </label>
-                                            <SearchBar
-                                                {...props.searchProps}
-                                                placeholder=""
-                                            />
-                                        </div>
-                                        :
-                                        null
-                                    }
+                                    <div className="row mx-1 d-flex justify-content-center align-items-center mb-1">
+                                        {leftSearch}
+                                        {includeSearchBar &&
+                                            <div className="ml-auto">
+                                                <label className="m-2">Search: </label>
+                                                <SearchBar
+                                                    {...props.searchProps}
+                                                    placeholder=""
+                                                />
+                                            </div>
+                                        }
+                                    </div>
                                     <BootstrapTable
                                         {...props.baseProps}
-                                        ref={n => this.node = n}
+                                        ref={n => node = n}
                                         striped
-                                        cellEdit={this.props.cellEdit}
+                                        cellEdit={cellEdit}
                                         hover
-                                        defaultSorted={this.props.defaultSorted}
-                                        noDataIndication={this.props.indication ? this.props.indication : "No Data"}
-                                        pagination={this.pagination}
-                                        overlay={this.overlay}
+                                        defaultSorted={defaultSorted}
+                                        noDataIndication={indication || "No Data"}
+                                        pagination={pagination}
+                                        overlay={overlay}
                                         classes="table-responsive-lg"
                                     />
                                 </div>
                             )
                         }
                     </ToolkitProvider>
-                    {this.props.footerContent &&
+                    {footerContent &&
                         <div className={classes.footerWrapper}>
-                            {this.props.footerContent}
+                            {footerContent}
                         </div>
                     }
                 </ComponentWrapper>

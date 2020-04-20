@@ -10,7 +10,7 @@ export default class Login extends React.Component {
     render() {
         return (
             <div className="d-flex w-100">
-                <SirioSideNav loginMode={true} classes="d-md-block d-none" />
+                <SirioSideNav loginMode classes="d-md-block d-none" />
                 <div className="flex-grow-1 p-5 bg-light">
                     <div className="p-5">
                         <LogoTag dark />

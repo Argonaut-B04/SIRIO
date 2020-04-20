@@ -4,7 +4,6 @@ import SirioButton from '../../Button/SirioButton';
 import EmployeeService from '../../../Services/EmployeeService';
 import RoleService from '../../../Services/RoleService';
 import { Redirect } from 'react-router-dom';
-import HasilPemeriksaanService from "../../../Services/HasilPemeriksaanService";
 
 export default class EmployeeFormTambah extends React.Component {
 
@@ -212,8 +211,8 @@ export default class EmployeeFormTambah extends React.Component {
         var submitable = true;
         const fokusEmail = this.state.email;
         var errorEmail;
-        var email =
-            /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        // eslint-disable-next-line
+        var email = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         if (!fokusEmail.match(email)) {
             submitable = false;
             errorEmail = "Email tidak sesuai format";
@@ -259,7 +258,7 @@ export default class EmployeeFormTambah extends React.Component {
             roleOptionList: roleOptionList
         })
     }
-    
+
     handleChange(event) {
         this.setState(
             {
@@ -268,7 +267,7 @@ export default class EmployeeFormTambah extends React.Component {
             }
         )
     }
-    
+
     handleSelectChange(name, event) {
         this.setState(
             {
@@ -277,7 +276,7 @@ export default class EmployeeFormTambah extends React.Component {
             }
         )
     }
-    
+
     async handleSubmit(event) {
         event.preventDefault();
         if (this.state.submitable) {
@@ -290,7 +289,6 @@ export default class EmployeeFormTambah extends React.Component {
                     })
                 }
             } else {
-                console.log("yet")
                 const employee = {
                     username: this.state.username,
                     password: this.state.password,
@@ -389,15 +387,15 @@ export default class EmployeeFormTambah extends React.Component {
         return (
             <div>
                 <SirioButton purple
-                             recommended={this.state.submitable}
-                             disabled={!this.state.submitable}
-                             classes="mx-1"
-                             onClick={(event)  => this.handleSubmit(event)}>
+                    recommended={this.state.submitable}
+                    disabled={!this.state.submitable}
+                    classes="mx-1"
+                    onClick={(event) => this.handleSubmit(event)}>
                     Simpan
                 </SirioButton>
                 <SirioButton purple
-                             classes="mx-1"
-                             onClick={() => window.location.href = "/employee"}>
+                    classes="mx-1"
+                    onClick={() => window.location.href = "/employee"}>
                     Batal
                 </SirioButton>
                 <SirioButton
