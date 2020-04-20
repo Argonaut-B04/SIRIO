@@ -36,6 +36,11 @@ public class RencanaPemeriksaanRestServiceImpl implements RencanaPemeriksaanRest
     }
 
     @Override
+    public Optional<RencanaPemeriksaan> getByNama (String nama){
+        return rencanaPemeriksaanDB.findByNamaRencana(nama);
+    }
+
+    @Override
     public List<RencanaPemeriksaan> getAll() {
         return rencanaPemeriksaanDB.findAll();
     }

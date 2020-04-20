@@ -99,6 +99,24 @@ public class RencanaPemeriksaanRestController {
         return response;
     }
 
+    @GetMapping("/check/{namaRencana}")
+    private BaseResponse<Boolean> isExistInDatabase(
+            @PathVariable("namaRencana") String namaRencana
+    ) {
+        BaseResponse<Boolean> response = new BaseResponse<>();
+
+        Optional<RencanaPemeriksaan> rencanaPemeriksaan = rencanaPemeriksaanRestService.getByNama(namaRencana);
+
+        if (rencanaPemeriksaan.isEmpty()) {
+            response.setResult(false);
+        } else {
+            response.setResult(true);
+        }
+
+        response.setStatus(200);
+        response.setMessage("success");
+        return response;
+    }
 
     /**
      * Mengambil seluruh rencana pemeriksaan yang terhubung dengan pembuat
@@ -240,6 +258,10 @@ public class RencanaPemeriksaanRestController {
                     if (tanggalMulaiLocalDate.compareTo(tanggalSelesaiLocalDate) < 0) {
                         tugasPemeriksaanTemp.setTanggalMulai(tanggalMulaiLocalDate);
                         tugasPemeriksaanTemp.setTanggalSelesai(tanggalSelesaiLocalDate);
+                    }else {
+                        throw new ResponseStatusException(
+                                HttpStatus.CONFLICT, "Tanggal mulai harus lebih kecil daripada tanggal selesai!"
+                        );
                     }
                 } else {
                     throw new ResponseStatusException(

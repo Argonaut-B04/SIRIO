@@ -47,36 +47,24 @@ public class KantorCabangRestController {
         return response;
     }
 
-//    @PostMapping("/nama")
-//    private BaseResponse<Boolean> isExistInDatabase(
-//            @RequestBody String namaKantorBaru,
-//            Principal principal
-//    ) {
-//        System.out.println(namaKantorBaru);
-//        BaseResponse<Boolean> response = new BaseResponse<>();
-//        Optional<Employee> pengelolaOptional = employeeRestService.getByUsername(principal.getName());
-//
-//        if (pengelolaOptional.isPresent()) {
-//            Employee pengelola;
-//            Boolean exist = false;
-//            try{
-//                KantorCabang ada = kantorCabangRestService.isExistInDatabase(namaKantorBaru);
-//                System.out.println(ada.getNamaKantor() + "iniii");
-//                if (ada != null ){
-//                    exist = true;
-//                }
-//            }catch (NullPointerException e) {
-//                exist = false;
-//            }
-//                response.setStatus(200);
-//                response.setMessage("success");
-//                response.setResult(exist);
-//
-//        } else throw new ResponseStatusException(
-//                HttpStatus.UNAUTHORIZED, "Akun anda tidak terdaftar dalam Sirio"
-//        );
-//        return response;
-//    }
+    @GetMapping("/check/{namaKantor}")
+    private BaseResponse<Boolean> isExistInDatabase(
+            @PathVariable("namaKantor") String namaKantor
+    ) {
+        BaseResponse<Boolean> response = new BaseResponse<>();
+
+        Optional<KantorCabang> kantorCabang = kantorCabangRestService.getByNama(namaKantor);
+
+        if (kantorCabang.isEmpty()) {
+            response.setResult(false);
+        } else {
+            response.setResult(true);
+        }
+
+        response.setStatus(200);
+        response.setMessage("success");
+        return response;
+    }
 
     /**
      * Mengambil suatu kantor cabang
@@ -137,14 +125,14 @@ public class KantorCabangRestController {
         }
 
         if (kantorCabangDTO.getNamaKantorCabang() != null && !kantorCabangDTO.getNamaKantorCabang().equals("")) {
-            if (kantorCabangRestService.getByNama(kantorCabangDTO.getNamaKantorCabang()) != null)
+            if (kantorCabangRestService.getByNama(kantorCabangDTO.getNamaKantorCabang()).isPresent())
                 throw new ResponseStatusException(
                         HttpStatus.CONFLICT, "Kantor Cabang " + kantorCabangDTO.getNamaKantorCabang() + " sudah ada pada database!"
                 );
             kantorCabangTemp.setNamaKantor(kantorCabangDTO.getNamaKantorCabang());
         } else {
             throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Kantor Cabang tidak ditemukan!"
+                    HttpStatus.NOT_FOUND, "Kantor Cabang belum diisi!"
             );
         }
 
@@ -195,6 +183,18 @@ public class KantorCabangRestController {
                     HttpStatus.NOT_FOUND, "Nama kantor belum diisi!"
             );
         }
+
+//        if (kantorCabangDTO.getNamaKantorCabang() != null && !kantorCabangDTO.getNamaKantorCabang().equals("")) {
+//            if (kantorCabangRestService.getByNama(kantorCabangDTO.getNamaKantorCabang()).isPresent())
+//                throw new ResponseStatusException(
+//                        HttpStatus.CONFLICT, "Kantor Cabang " + kantorCabangDTO.getNamaKantorCabang() + " sudah ada pada database!"
+//                );
+//            kantorCabang.setNamaKantor(kantorCabangDTO.getNamaKantorCabang());
+//        } else {
+//            throw new ResponseStatusException(
+//                    HttpStatus.NOT_FOUND, "Kantor Cabang belum diisi!"
+//            );
+//        }
 
         if (kantorCabangDTO.getRegional() != null && !kantorCabangDTO.getRegional().equals("")) {
             kantorCabang.setRegional(kantorCabangDTO.getRegional());

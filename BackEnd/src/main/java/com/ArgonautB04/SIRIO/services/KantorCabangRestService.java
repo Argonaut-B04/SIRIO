@@ -4,13 +4,14 @@ import com.ArgonautB04.SIRIO.model.Employee;
 import com.ArgonautB04.SIRIO.model.KantorCabang;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface KantorCabangRestService {
     KantorCabang buatKantorCabang(KantorCabang kantorCabang);
 
     KantorCabang getById(int idKantorCabang);
 
-    KantorCabang getByNama (String nama);
+    Optional<KantorCabang> getByNama (String nama);
 
     KantorCabang getByPemilik(Employee pemilik);
 
@@ -20,9 +21,9 @@ public interface KantorCabangRestService {
 
     List<KantorCabang> getAll();
 
-    boolean isExistInDatabase(KantorCabang kantorCabang);
+   // boolean isExistInDatabase(KantorCabang kantorCabang);
 
-    KantorCabang isExistInDatabase(String namaRiskLevel);
+    //KantorCabang isExistInDatabase(String namaRiskLevel);
 
     KantorCabang ubahKantorCabang(int idKantorCabang, KantorCabang kantorCabang);
 

@@ -5,6 +5,7 @@ import KantorCabangService from '../../../Services/KantorCabangService';
 import EmployeeService from '../../../Services/EmployeeService';
 import { Redirect } from 'react-router-dom';
 import { withRouter } from 'react-router-dom';
+import {OverlayTrigger, Button, Tooltip} from 'react-bootstrap'
 /**
  * Kelas untuk membuat form demo
  */
@@ -105,18 +106,6 @@ class FormTambahKantorCabang extends React.Component {
         });
     }
 
-    // componentDidUpdate() {
-    //     var submitable = true;
-
-    //     submitable = this.validateKantor() && this.validateArea() && this.validateRegional() && this.validateBM();
-
-    //     if (this.state.submitable !== submitable) {
-    //         this.setState({
-    //             submitable: submitable
-    //         })
-    //     }
-    // }
-
     componentDidUpdate(prevProps, prevState) {
         var submitable = true;
         var validating = false;
@@ -162,46 +151,43 @@ class FormTambahKantorCabang extends React.Component {
 
     // Fungsi yang akan dijalankan ketika user submit
     // Umumnya akan digunakan untuk memanggil service komunikasi ke backend
-    handleSubmit(event) {
+    async handleSubmit(event) {
         event.preventDefault();
-        const kantorCabang = {
-            namaKantorCabang: this.state.namaKantorCabang,
-            idPemilik: this.state.idPemilik,
-            area: this.state.area,
-            regional: this.state.regional,
-            kunjunganAudit: this.state.kunjunganAudit
+        if(this.state.submitable){
+            const response = await KantorCabangService.isExistKantorCabang(this.state.namaKantorCabang);
+            if(response.data.result){
+                const errorNama = "Nama kantor sudah ada di database";
+                if (this.state.errorNama !== errorNama) {
+                    this.setState({
+                        errorNama: errorNama
+                    })
+                }
+            }
+            else{
+                const kantorCabang = {
+                    namaKantorCabang: this.state.namaKantorCabang,
+                    idPemilik: this.state.idPemilik,
+                    area: this.state.area,
+                    regional: this.state.regional,
+                    kunjunganAudit: this.state.kunjunganAudit
+                }
+                KantorCabangService.addKantorCabang(kantorCabang)
+                .then(() => this.setRedirect());
+            }
         }
-        KantorCabangService.addKantorCabang(kantorCabang)
-        .then(() => this.setRedirect());
     }
 
-    async validateKantor() {
+    validateKantor() {
         var submitable = true;
         var errorNama;
         const fokusNama = this.state.namaKantorCabang
-        //const response1 = await KantorCabangService.isExistKantorCabang(fokusNama)
-        // KantorCabangService.isExistKantorCabang(fokusNama).then (
-        //     response => { 
-        //         console.log(response)
-        //         if(!response.result){
-        //             submitable = false;
-        //             errorNama = "Nama kantor sudah ada di database";
-        //         }
-        //     }
-            
-        // )
-        // console.log(response1.data.result)
-        // if(response1.data.result){
-        //     submitable = false;
-        //     errorNama = "Nama kantor sudah ada di database";
-        // }
-        if(fokusNama.match(".*[1234567890!-@#$%^&*()_+{}:.,[]|>/=<?]+.*")){
+        if(fokusNama.match(".*[-@#!$%^&*()_+{}:.,[]|>/=<?]+.*")){
             submitable = false;
             errorNama = "Hanya boleh mengandung huruf";
         }
         if (fokusNama.length < 2) {
             submitable = false;
-            errorNama = "Minimal terdapat 2 karakter";
+            errorNama = "Nama kantor harus diisi";
         } 
         if (fokusNama.length > 25) {
             submitable = false;
@@ -219,13 +205,13 @@ class FormTambahKantorCabang extends React.Component {
         var submitable = true;
         var errorArea;
         const fokusArea = this.state.area
-        if(fokusArea.match(".*[1234567890!-@#$%^&*()_+{}:.,[]|>/=<?]+.*")){
+        if(fokusArea.match(".*[-@#!$%^&*()_+{}:.,[]|>/=<?]+.*")){
             submitable = false;
             errorArea = "Hanya boleh mengandung huruf";
         }
         if (fokusArea.length < 2) {
             submitable = false;
-            errorArea = "Minimal terdapat 2 karakter";
+            errorArea = "Area harus diisi";
         } 
         if (fokusArea.length > 125) {
             submitable = false;
@@ -249,7 +235,7 @@ class FormTambahKantorCabang extends React.Component {
         }
         if (fokusReg.length < 2) {
             submitable = false;
-            errorReg = "Minimal terdapat 2 karakter";
+            errorReg = "Regional harus diisi";
         } 
         if (fokusReg.length > 125) {
             submitable = false;
@@ -279,7 +265,6 @@ class FormTambahKantorCabang extends React.Component {
         return submitable;
     }
 
-
     // Fungsi yang akan mengembalikan definisi tiap field pada form
     // Setiap objek {} pada List [] akan menjadi 1 field
     // untuk informasi lebih lengkap, cek SirioForm
@@ -296,7 +281,7 @@ class FormTambahKantorCabang extends React.Component {
                     value: this.state.namaKantorCabang,
                     placeholder: "Masukan nama point"
                 }, {
-                    label: "Branch Manger*",
+                    label: "Branch Manager*",
                     required: true,
                     validation: this.state.errorBM,
                     handleChange: this.handleSelectChange,
@@ -323,17 +308,27 @@ class FormTambahKantorCabang extends React.Component {
                     value: this.state.regional,
                     placeholder: "Masukan nama regional"
                 },{
-                    label: "Kunjungan Audit",
+                    label: <OverlayTrigger
+                    placement="right"
+                    overlay={<Tooltip id="button-tooltip">
+                    Sudah pernah atau belum pernah dikunjungi audit
+                    </Tooltip>}
+                    >
+                    <p variant="success">Kunjungan Audit</p>
+                    </OverlayTrigger>,
                     handleChange: this.handleInputChange,
                     type: "checkbox",
                     name: "kunjunganAudit",
                     value: this.state.kunjunganAudit,
-                    checked: this.state.kunjunganAudit,
-                }
-
+                    checked: this.state.kunjunganAudit
+                } 
 
             ]
+           
+            
         )
+
+        
     }
 
     submitButton() {

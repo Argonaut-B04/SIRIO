@@ -22,6 +22,10 @@ class RencanaPemeriksaanService {
         return this.axiosInstance.post(SirioAxiosBase.BASEURL + `/RencanaPemeriksaan/tambah`, data);
     }
 
+    async isExistRencana(string) {
+        return this.axiosInstance.get(SirioAxiosBase.BASEURL + `/RencanaPemeriksaan/check/` + string);
+    }
+
     async editRencanaPemeriksaan(data) {
         console.log(data);
         console.log(SirioAxiosBase.BASEURL + '/RencanaPemeriksaan/ubah');

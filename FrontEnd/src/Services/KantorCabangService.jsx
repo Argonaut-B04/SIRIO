@@ -22,7 +22,7 @@ class KantorCabangService {
     }
 
     async isExistKantorCabang(string) {
-        return this.axiosInstance.post(SirioAxiosBase.BASEURL + `/KantorCabang/nama`, string);
+        return this.axiosInstance.get(SirioAxiosBase.BASEURL + `/KantorCabang/check/` + string);
     }
 
     async editKantorCabang(data) {

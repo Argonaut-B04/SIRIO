@@ -24,16 +24,16 @@ public class KantorCabangRestServiceImpl implements KantorCabangRestService {
         return kantorCabangDB.save(kantorCabang);
     }
 
-    @Override
-    public boolean isExistInDatabase(KantorCabang kantorCabang) {
-        return kantorCabangDB.findById(kantorCabang.getIdKantor()).isPresent();
-    }
+//    @Override
+//    public boolean isExistInDatabase(KantorCabang kantorCabang) {
+//        return kantorCabangDB.findById(kantorCabang.getIdKantor()).isPresent();
+//    }
 
-    @Override
-    public KantorCabang isExistInDatabase(String namaKantor) {
-        return kantorCabangDB.findByNamaKantor(namaKantor);
-    }
-
+//    @Override
+//    public KantorCabang isExistInDatabase(String namaKantor) {
+//        return kantorCabangDB.findByNamaKantor(namaKantor);
+//    }
+//
     @Override
     public KantorCabang getById(int idKantorCabang) {
         Optional<KantorCabang> kantorCabang = kantorCabangDB.findByIdKantorAndStatus(idKantorCabang, KantorCabang.Status.AKTIF);
@@ -52,7 +52,7 @@ public class KantorCabangRestServiceImpl implements KantorCabangRestService {
     }
 
     @Override
-    public KantorCabang getByNama(String nama){ return kantorCabangDB.findByNamaKantor(nama);}
+    public Optional<KantorCabang> getByNama(String nama){ return kantorCabangDB.findByNamaKantor(nama);}
 
     @Override
     public KantorCabang ubahKantorCabang(int idKantorCabang, KantorCabang kantorCabang) {

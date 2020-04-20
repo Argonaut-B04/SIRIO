@@ -5,6 +5,7 @@ import KantorCabangService from '../../../Services/KantorCabangService';
 import EmployeeService from '../../../Services/EmployeeService';
 import { Redirect } from 'react-router-dom';
 import { withRouter } from 'react-router-dom';
+import {OverlayTrigger, Button, Tooltip} from 'react-bootstrap'
 
 /**
  * Kelas untuk membuat form demo
@@ -75,7 +76,7 @@ class FormUbahKantorCabang extends React.Component {
         var submitable = true;
         var errorNama;
         const fokusNama = this.state.namaKantorCabang
-        if(fokusNama.match(".*[1234567890!-@#$%^&*()_+{}:.,[]|>/=<?]+.*")){
+        if(fokusNama.match(".*[-@#!$%^&*()_+{}:.,[]|>/=<?]+.*")){
             submitable = false;
             errorNama = "Hanya boleh mengandung huruf";
         }
@@ -99,7 +100,7 @@ class FormUbahKantorCabang extends React.Component {
         var submitable = true;
         var errorArea;
         const fokusArea = this.state.area
-        if(fokusArea.match(".*[1234567890!-@#$%^&*()_+{}:.,[]|>/=<?]+.*")){
+        if(fokusArea.match(".*[-@#!$%^&*()_+{}:.,[]|>/=<?]+.*")){
             submitable = false;
             errorArea = "Hanya boleh mengandung huruf";
         }
@@ -226,66 +227,27 @@ class FormUbahKantorCabang extends React.Component {
 
     // Fungsi yang akan dijalankan ketika user submit
     // Umumnya akan digunakan untuk memanggil service komunikasi ke backend
-    handleSubmit(event) {
+    async handleSubmit(event) {
         event.preventDefault();
-        const kantorCabang = {
-            id: this.state.id,
-            namaKantorCabang: this.state.namaKantorCabang,
-            idPemilik: this.state.idPemilik,
-            area: this.state.area,
-            regional: this.state.regional,
-            kunjunganAudit: this.state.kunjunganAudit
+        if(this.state.submitable){
+            const kantorCabang = {
+                id: this.state.id,
+                namaKantorCabang: this.state.namaKantorCabang,
+                idPemilik: this.state.idPemilik,
+                area: this.state.area,
+                regional: this.state.regional,
+                kunjunganAudit: this.state.kunjunganAudit
+            }
+            KantorCabangService.editKantorCabang(kantorCabang)
+            .then(() => this.setRedirect());
+            
         }
-        KantorCabangService.editKantorCabang(kantorCabang)
-        .then(() => this.setRedirect());
     }
+
     // Fungsi yang akan mengembalikan definisi tiap field pada form
     // Setiap objek {} pada List [] akan menjadi 1 field
     // untuk informasi lebih lengkap, cek SirioForm
     inputDefinition() {
-        // if(this.state.kunjunganAudit){
-        //     return (
-        //         [
-        //             {
-        //                 label: "Nama Point*",
-        //                 handleChange: this.handleChange,
-        //                 required: true,
-        //                 type: "text",
-        //                 name: "namaKantorCabang",
-        //                 validation: this.state.errorNama,
-        //                 value: this.state.namaKantorCabang,
-        //                 placeholder: "Masukan nama point"
-        //             }, {
-        //                 label: "Branch Manger*",
-        //                 handleChange: this.handleSelectChange,
-        //                 required: true,
-        //                 type: "select",
-        //                 name: "idPemilik",
-        //                 value: this.state.idPemilik,
-        //                 validation: this.state.errorBM,
-        //                 optionList: this.state.employeeOptionList
-        //             },{
-        //                 label: "Area*",
-        //                 handleChange: this.handleChange,
-        //                 required: true,
-        //                 type: "text",
-        //                 name: "area",
-        //                 validation: this.state.errorArea,
-        //                 value: this.state.area,
-        //                 placeholder: "Masukan nama area"
-        //             },{
-        //                 label: "Regional*",
-        //                 handleChange: this.handleChange,
-        //                 required: true,
-        //                 type: "text",
-        //                 name: "regional",
-        //                 value: this.state.regional,
-        //                 validation: this.state.errorReg,
-        //                 placeholder: "Masukan nama regional"
-        //             }
-        //         ]
-        //     )
-        // }else{
             return (
                 [
                     {
@@ -298,7 +260,7 @@ class FormUbahKantorCabang extends React.Component {
                         value: this.state.namaKantorCabang,
                         placeholder: "Masukan nama point"
                     }, {
-                        label: "Branch Manger*",
+                        label: "Branch Manager*",
                         handleChange: this.handleSelectChange,
                         required: true,
                         type: "select",
@@ -325,7 +287,14 @@ class FormUbahKantorCabang extends React.Component {
                         validation: this.state.errorReg,
                         placeholder: "Masukan nama regional"
                     },{
-                        label: "Kunjungan Audit",
+                        label: <OverlayTrigger
+                        placement="right"
+                        overlay={<Tooltip id="button-tooltip">
+                        Sudah pernah atau belum pernah dikunjungi audit
+                        </Tooltip>}
+                        >
+                        <p variant="success">Kunjungan Audit</p>
+                        </OverlayTrigger>,
                         handleChange: this.handleInputChange,
                         required: true,
                         type: "checkbox",

@@ -304,20 +304,45 @@ class FormUbahRencana extends React.Component {
 
     // Fungsi yang akan dijalankan ketika user submit
     // Umumnya akan digunakan untuk memanggil service komunikasi ke backend
-    // Fungsi yang akan dijalankan ketika user submit
-    // Umumnya akan digunakan untuk memanggil service komunikasi ke backend
-    handleSubmit(event, nama) {
+    async handleSubmit(event, nama) {
         if(nama == "simpan"){
             event.preventDefault();
-            const rencanaPemeriksaan = {
-                id: this.state.id,
-                namaRencana: this.state.namaRencana,
-                linkMajelis: this.state.linkMajelis,
-                status: 2,
-                daftarTugasPemeriksaan: this.state.daftarTugasPemeriksaan
+            for (let i = 0; i < this.state.daftarTugasPemeriksaan.length;i++){
+                console.log(this.state.daftarTugasPemeriksaan[i].tanggalMulai)
+                const isTglError = this.state.daftarTugasPemeriksaan[i].tanggalMulai > this.state.daftarTugasPemeriksaan[i].tanggalSelesai;
+                if(isTglError){
+                    const errorTM = "Tanggal mulai harus lebih kecil daripada tanggal selesai";
+                    this.state.submitable = false
+                    if (this.state.errorTM !== errorTM) {
+                        this.state.submitable = false
+                        this.setState({
+                            errorTM: errorTM
+
+                        })
+                    }
+                }
+                else if(this.state.submitable){
+                        const rencanaPemeriksaan = {
+                            id: this.state.id,
+                            namaRencana: this.state.namaRencana,
+                            linkMajelis: this.state.linkMajelis,
+                            status: 2,
+                            daftarTugasPemeriksaan: this.state.daftarTugasPemeriksaan
+                        }
+                        RencanaPemeriksaanService.editRencanaPemeriksaan(rencanaPemeriksaan)
+                        .then(() => this.setRedirect());
+                }
             }
-            RencanaPemeriksaanService.editRencanaPemeriksaan(rencanaPemeriksaan)
-            .then(() => this.setRedirect());
+            // event.preventDefault();
+            // const rencanaPemeriksaan = {
+            //     id: this.state.id,
+            //     namaRencana: this.state.namaRencana,
+            //     linkMajelis: this.state.linkMajelis,
+            //     status: 2,
+            //     daftarTugasPemeriksaan: this.state.daftarTugasPemeriksaan
+            // }
+            // RencanaPemeriksaanService.editRencanaPemeriksaan(rencanaPemeriksaan)
+            // .then(() => this.setRedirect());
         }
         else if (nama == "draft"){
             event.preventDefault();
@@ -405,7 +430,7 @@ class FormUbahRencana extends React.Component {
                     handleChange: this.handleMultipleSelectChange,
                     index: index,
                     required: true,
-                    validation: this.state.daftarTugasPemeriksaan.errorKC,
+                    validation: this.state.errorKC,
                     type: "select",
                     name: "kantorCabang",
                     value: this.state.daftarTugasPemeriksaan[index].kantorCabang,
@@ -417,7 +442,7 @@ class FormUbahRencana extends React.Component {
                     type: "select",
                     name: "idQA",
                     required: true,
-                    validation: this.state.daftarTugasPemeriksaan.errorQA,
+                    validation: this.state.errorQA,
                     value: this.state.daftarTugasPemeriksaan[index].idQA,
                     optionList: this.state.employeeOptionList
                 }, {
@@ -426,7 +451,7 @@ class FormUbahRencana extends React.Component {
                     index: index,
                     type: "date",
                     required: true,
-                    validation: this.state.daftarTugasPemeriksaan.errorTM,
+                    validation: this.state.errorTM,
                     name: "tanggalMulai",
                     value: this.state.daftarTugasPemeriksaan[index].tanggalMulai
                 }, {
@@ -435,7 +460,7 @@ class FormUbahRencana extends React.Component {
                     index: index,
                     type: "date",
                     required: true,
-                    validation: this.state.daftarTugasPemeriksaan.errorTS,
+                    validation: this.state.errorTS,
                     name: "tanggalSelesai",
                     value: this.state.daftarTugasPemeriksaan[index].tanggalSelesai
                 }
