@@ -322,15 +322,15 @@ class FormUbahRencana extends React.Component {
                     }
                 }
                 else if(this.state.submitable){
-                        const rencanaPemeriksaan = {
-                            id: this.state.id,
-                            namaRencana: this.state.namaRencana,
-                            linkMajelis: this.state.linkMajelis,
-                            status: 2,
-                            daftarTugasPemeriksaan: this.state.daftarTugasPemeriksaan
-                        }
-                        RencanaPemeriksaanService.editRencanaPemeriksaan(rencanaPemeriksaan)
-                        .then(() => this.setRedirect());
+                    const rencanaPemeriksaan = {
+                        id: this.state.id,
+                        namaRencana: this.state.namaRencana,
+                        linkMajelis: this.state.linkMajelis,
+                        status: 2,
+                        daftarTugasPemeriksaan: this.state.daftarTugasPemeriksaan
+                    }
+                    RencanaPemeriksaanService.editRencanaPemeriksaan(rencanaPemeriksaan)
+                    .then(() => this.setRedirect());
                 }
             }
             // event.preventDefault();
