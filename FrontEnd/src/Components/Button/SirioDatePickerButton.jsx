@@ -17,24 +17,28 @@ export default class SirioDatePickerButton extends React.Component {
         this.handleChange = this.handleChange.bind(this);
     }
 
-    handleChange(date, id) {
+    handleChange(date) {
         this.setState({
             selectedDate: date
         });
     };
 
     render() {
+        const { selectedDate } = this.state;
+        const { id, minDate, popper, maxDate } = this.props;
+        const { panel } = classes;
         return (
             <DatePicker
-                selected={this.state.selectedDate}
+                selected={selectedDate}
                 onChange={date => {
-                    this.handleChange(date, this.props.id);
-                    this.props.handleChange(date, this.props.id);
+                    this.handleChange(date);
+                    this.props.handleChange(date, id);
                 }}
-                popperClassName={classes.panel}
-                popperPlacement={this.props.popper}
+                popperClassName={panel}
+                popperPlacement={popper}
                 dateFormat="yyyy-MM-dd"
-                minDate={this.props.minDate ? this.props.minDate : new Date()}
+                minDate={minDate ? minDate : new Date()}
+                maxDate={maxDate}
                 showMonthDropdown
                 showYearDropdown
                 dropdownMode="select"

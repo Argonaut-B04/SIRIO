@@ -4,10 +4,13 @@ import com.ArgonautB04.SIRIO.model.Employee;
 import com.ArgonautB04.SIRIO.repository.EmployeeDB;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
+import java.security.Principal;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -79,5 +82,38 @@ public class EmployeeRestServiceImpl implements EmployeeRestService {
     @Override
     public void hapusEmployee(int idEmployee) throws DataIntegrityViolationException {
         employeeDb.deleteById(idEmployee);
+    }
+
+    @Override
+    public Employee validateEmployeeExistByPrincipal(Principal principal) {
+        Optional<Employee> employeeOptional = getByUsername(principal.getName());
+        if (employeeOptional.isEmpty()) {
+            throw new ResponseStatusException(
+                    HttpStatus.UNAUTHORIZED,
+                    "Akun anda tidak terdaftar dalam Sirio"
+            );
+        } else {
+            return employeeOptional.get();
+        }
+    }
+
+    @Override
+    public void validateRolePermission(Employee employee, String requestedPermissions) {
+        switch (requestedPermissions) {
+            case "tenggat waktu":
+                if (!employee.getRole().getAccessPermissions().getAturTenggatWaktu()) {
+                    throw new ResponseStatusException(
+                            HttpStatus.UNAUTHORIZED,
+                            "Akun anda tidak memiliki akses ke pengaturan tenggat waktu"
+                    );
+                }
+            case "tabel rekomendasi":
+                if (!employee.getRole().getAccessPermissions().getAksesTabelRekomendasi()) {
+                    throw new ResponseStatusException(
+                            HttpStatus.UNAUTHORIZED,
+                            "Akun anda tidak memiliki akses ke daftar rekomendasi"
+                    );
+                }
+        }
     }
 }

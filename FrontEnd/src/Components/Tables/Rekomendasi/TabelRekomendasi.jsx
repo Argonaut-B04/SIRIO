@@ -3,7 +3,7 @@ import SirioButton from '../../Button/SirioButton';
 import SirioDatePickerButton from '../../Button/SirioDatePickerButton';
 import SirioTable from '../SirioTable';
 import RekomendasiService from '../../../Services/RekomendasiService';
-import { NavLink } from 'react-router-dom';
+import { NavLink, Redirect } from 'react-router-dom';
 import classes from './TabelRekomendasi.module.css';
 import SirioAxiosBase from '../../../Services/SirioAxiosBase';
 import SirioMessageButton from '../../Button/ActionButton/SirioMessageButton';
@@ -18,7 +18,7 @@ export default class TabelRekomendasi extends React.Component {
 
         this.state = {
             rowList: [],
-            changeComplete: false
+            changeComplete: false,
         }
 
         this.renderRows = this.renderRows.bind(this);
@@ -30,10 +30,27 @@ export default class TabelRekomendasi extends React.Component {
     }
 
     async renderRows() {
-        const response = await RekomendasiService.getRekomendasiByLoggedInUser();
-        this.setState({
-            rowList: response.data.result
-        })
+        RekomendasiService.getRekomendasiByLoggedInUser()
+            .then(response => {
+                this.setState({
+                    rowList: response.data.result
+                })
+            })
+            .catch(error => {
+                if (error.response.data.status === 401) {
+                    this.setState({
+                        redirector: <Redirect to={{
+                            pathname: "/401",
+                            state: {
+                                detail: error.response.data.message,
+                            }
+                        }} />
+                    })
+                } else {
+                    console.log(error.response.data);
+                }
+            })
+            ;
     }
 
     /**
@@ -207,13 +224,13 @@ export default class TabelRekomendasi extends React.Component {
             this.setState({
                 changeComplete: true
             })
-        });
+        }).catch(error => console.log(error.response.data));
     }
 
     // Formatter untuk render button kedua
     getButtonsSecond(cell, row) {
         const status = row.status;
-        const tenggatWaktu = SirioAxiosBase.formatDateFromString(row.tenggatWaktu);
+        const tenggatWaktu = row.tenggatWaktuDate ? SirioAxiosBase.formatDate(row.tenggatWaktuDate) : "Tenggat Waktu";
         const recommended = status === "Menunggu Pengaturan Tenggat Waktu";
         const hyperlink = status === "Menunggu Pelaksanaan";
         const text = status === "Selesai" || status === "Sedang Dilaksanakan";
@@ -276,13 +293,13 @@ export default class TabelRekomendasi extends React.Component {
                         pathname: "/rekomendasi/reminder",
                         state: {
                             id: row.id,
-                            keterangan: row.keterangan
+                            keterangan: row.keterangan,
+                            deadline: row.tenggatWaktuDate
                         }
                     }}>
                     <SirioButton
                         purple
                         hover
-                        disabled={!reminderEnable}
                     >
                         Reminder
                     </SirioButton>
@@ -314,24 +331,27 @@ export default class TabelRekomendasi extends React.Component {
 
     // Fungsi render Tabel rekomendasi
     render() {
-        return (
+        const { defaultSorted, columns, endNotification, state } = this;
+        const { redirector, rowList, changeComplete } = state;
+        
+        return redirector || (
             <>
                 <SirioTable
                     title="Daftar Rekomendasi"
-                    data={this.state.rowList}
-                    defaultSorted={this.defaultSorted}
+                    data={rowList}
+                    defaultSorted={defaultSorted}
                     id='id'
-                    columnsDefinition={this.columns}
+                    columnsDefinition={columns}
                     includeSearchBar
                     indication="Tidak Terdapat Data Rekomendasi"
                 />
-                {this.state.changeComplete &&
+                {changeComplete &&
                     <SirioMessageButton
                         show
                         classes="d-none"
                         modalTitle="Tenggat Waktu berhasil Disimpan"
                         customConfirmText="Kembali"
-                        onClick={this.endNotification}
+                        onClick={endNotification}
                     />
                 }
             </>

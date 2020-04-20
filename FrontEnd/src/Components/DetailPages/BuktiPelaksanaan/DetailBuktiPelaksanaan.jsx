@@ -54,9 +54,9 @@ class DetailBuktiPelaksanaan extends React.Component {
 
     data() {
         return {
-            "Keterangan :": this.state.buktiPelaksanaan.keterangan,
-            "Lampiran   :": this.lampiranFormater(this.state.buktiPelaksanaan.lampiran),
-            "Feedback   :": this.feedbackFormatter(this.state.buktiPelaksanaan.feedback)
+            "Keterangan:": this.state.buktiPelaksanaan.keterangan,
+            "Lampiran:": this.lampiranFormater(this.state.buktiPelaksanaan.lampiran),
+            "Feedback:": this.feedbackFormatter(this.state.buktiPelaksanaan.feedback)
         }
     }
 
@@ -133,31 +133,35 @@ class DetailBuktiPelaksanaan extends React.Component {
 
     subButton() {
         const status = this.state.buktiPelaksanaan.status;
-        const menungguPersetujuan = status === 1;
-        const sudahPersetujuan = status === 2 || status === 3;
+        const menungguPersetujuan = status === 1 
+        const diTolak = status === 3;
+        const diSetujui = status === 2;
         const role = this.state.role;
-        const satuButton = role === "Branch Manager";
-        const tigaButton = role === "admin" || role === "Manajer Operational Risk" ||
-                                role === "QA Operational Risk" || role === "Super QA Operational Risk";
+        const bm = role === "Branch Manager";
+        const nonBm = role === "admin" || role === "Manajer Operational Risk" ||
+                                role === "QA Officer Operational Risk" || role === "Super QA Officer Operational Risk";
 
-        if (menungguPersetujuan) {
-            if (satuButton) {
+        if (bm) {
+            if (menungguPersetujuan || diTolak) {
                 return (
                     <div>
                         {this.buttonUbah(this.state.buktiPelaksanaan.id)}
                     </div>
                 );
-            } else if (tigaButton) {
+            } else if (diSetujui) {
+                return ("")
+            }
+        } else if (nonBm) {
+            if (menungguPersetujuan) {
                 return (
                     <div>
-                        {this.buttonUbah(this.state.buktiPelaksanaan.id)}
                         {this.buttonSetuju()}
                         {this.buttonTolak(this.state.buktiPelaksanaan.id)}
                     </div>
                 );
+            } else if (diSetujui || diTolak) {
+                return ("")
             }
-        } else if (sudahPersetujuan) {
-            return ("")
         }
     }
 
@@ -167,6 +171,7 @@ class DetailBuktiPelaksanaan extends React.Component {
                 {this.renderRedirect()}
                 <SirioDetailPage
                     title="Detail Bukti Pelaksanaan"
+                    link="bukti-pelaksanaan"
                     data={this.data()}
                     id='id'
                     subButton={this.subButton()}

@@ -1,3 +1,4 @@
+/* General Style */
 .sirioButton {
     color: var(--main-color);
     border: solid 1.5px var(--main-color);
@@ -5,15 +6,21 @@
     font-family: Proxima Nova;
     min-height: 30px;
     min-width: 100px;
+    border-radius: 6px;
 }
 
+.sirioButton:focus{
+    outline: none;
+}
+
+.buttonTitle {
+    margin: 0;
+}
+/* General Style End */
+
+/* Color */
 .purple {
     --main-color: #7F3F98;
-}
-
-.hover:hover {
-    color: white;
-    background-color: var(--main-color);
 }
 
 .blue {
@@ -23,7 +30,16 @@
 .red {
     --main-color: #FF0000;
 }
+/* Color End */
 
+/* Hover */
+.hover:hover {
+    color: white;
+    background-color: var(--main-color);
+}
+/* Hover End */
+
+/* Component Style */
 .recommended {
     color: white;
     background-color: var(--main-color);
@@ -52,15 +68,17 @@
     pointer-events: none;
     background-color: transparent;
 }
+/* Component Style End */
 
+/* Border Radius */
 .borderCircular {
     border-radius: 20px;
 }
+/* Border Radius End */
 
-.borderNormal {
-    border-radius: 6px;
-}
-
-.buttonTitle {
-    margin: 0;
+.square {
+    height: 40px !important;
+    width: 40px !important;
+    min-height: 0;
+    min-width: 0;
 }
