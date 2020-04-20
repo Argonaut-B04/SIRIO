@@ -177,27 +177,7 @@ public class DatabaseLoader implements CommandLineRunner {
         // Akses BM Selesai
 
         // Akses SuperQA
-        AccessPermissions aksesSuper = new AccessPermissions(roleSuper);
-        aksesSuper.setAksesTambahRisiko(true);
-        aksesSuper.setAksesHapusRisiko(true);
-        aksesSuper.setAksesRisiko(true);
-        aksesSuper.setAksesUbahRisiko(true);
-        aksesSuper.setAksesTabelRisiko(true);
-        aksesSuper.setAksesUbahHierarki(true);
-
-        aksesSuper.setAksesRiskRating(true);
-        aksesSuper.setUbahRiskRating(true);
-
-        aksesSuper.setAksesRiskLevel(true);
-        aksesSuper.setUbahRiskLevel(true);
-
-        aksesSuper.setAksesTabelRekomendasi(true);
-        aksesSuper.setUbahReminder(true);
-
-        aksesSuper.setAksesTambahBuktiPelaksanaan(true);
-        aksesSuper.setAksesBuktiPelaksanaan(true);
-        aksesSuper.setAksesPersetujuanBuktiPelaksanaan(true);
-        aksesSuper.setAksesUbahBuktiPelaksanaan(true);
+        AccessPermissions aksesSuper = new AccessPermissions(roleSuper, true);
         roleSuper.setAccessPermissions(aksesSuper);
         roleDB.save(roleSuper);
         // Akses SuperQA Selesai

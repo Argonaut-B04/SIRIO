@@ -3,13 +3,12 @@ import SirioButton from '../../Button/SirioButton';
 import SirioDatePickerButton from '../../Button/SirioDatePickerButton';
 import ReminderService from '../../../Services/ReminderService';
 import SirioTable from '../SirioTable';
-import { withRouter, Prompt, NavLink } from 'react-router-dom';
+import { withRouter, Prompt, NavLink, Redirect } from 'react-router-dom';
 import classes from '../Rekomendasi/TabelRekomendasi.module.css';
 import SirioConfirmButton from '../../Button/ActionButton/SirioConfirmButton';
 import SirioMessageButton from '../../Button/ActionButton/SirioMessageButton';
 import SirioWarningButton from '../../Button/ActionButton/SirioWarningButton';
 import SirioAxiosBase from '../../../Services/SirioAxiosBase';
-
 
 /**
  * Kelas untuk membuat komponen tabel reminder
@@ -31,7 +30,9 @@ class TabelReminder extends React.Component {
     }
 
     componentDidMount() {
-        this.renderRows();
+        if (this.props.location.state) {
+            this.renderRows();
+        }
     }
 
     endNotification() {
@@ -49,7 +50,18 @@ class TabelReminder extends React.Component {
                     changed: false
                 })
             })
-            .catch(error => console.log(error.response.data));
+            .catch(error => {
+                if (!error.response) {
+                    window.location.href = "/error";
+                } else {
+                    console.log(error.response.data);
+                    this.setState({
+                        redirector: true,
+                        code: error.response.data.status,
+                        detail: error.response.data.message,
+                    })
+                }
+            });
     }
 
     async renderRows() {
@@ -63,6 +75,7 @@ class TabelReminder extends React.Component {
             rowList: response.data.result,
             deadline: new Date(theDate)
         })
+
     }
 
     columns() {
@@ -271,7 +284,8 @@ class TabelReminder extends React.Component {
     generateHarian(hari) {
         const deadline = this.state.deadline;
         const newDateList = [];
-        for (var hariIni = new Date(); hariIni < deadline; hariIni = this.addDays(hariIni, hari)) {
+        const nextday = this.addDays(new Date(), 1);
+        for (var hariIni = nextday; hariIni < deadline; hariIni = this.addDays(hariIni, hari)) {
             const newDate = [(hariIni.getFullYear()), (hariIni.getMonth() + 1), hariIni.getDate()];
             newDateList.push({
                 idReminder: Math.floor(Math.random() * 1000) + 1,
@@ -373,14 +387,40 @@ class TabelReminder extends React.Component {
         )
     }
 
-    // Fungsi render Tabel rekomendasi
     render() {
+        if (!this.props.location.state) {
+            return (
+                <Redirect to={{
+                    pathname: "/error",
+                    state: {
+                        detail: "Halaman ini tidak dapat diakses secara langsung dari URL",
+                        code: "401"
+                    }
+                }} />
+            )
+        }
+
+        const { detail, code, redirector, rowList, changed, changeComplete } = this.state;
+        if (redirector) {
+            return (
+                <Redirect to={{
+                    pathname: "/error",
+                    state: {
+                        detail: detail,
+                        code: code
+                    }
+                }} />
+            )
+        }
+
+        const { keterangan } = this.props.location.state;
+        var keteranganHeader = keterangan.length > 20 ? keterangan.substring(0, 20) + "..." : keterangan;
         const column = this.columns();
         return (
             <>
                 <SirioTable
-                    title={"Daftar Reminder untuk Rekomendasi " + this.props.location.state.keterangan}
-                    data={this.state.rowList}
+                    title={"Daftar Reminder untuk Rekomendasi " + keteranganHeader}
+                    data={rowList}
                     leftSearch={this.searchLeftButton()}
                     id='idReminder'
                     columnsDefinition={column}
@@ -389,10 +429,10 @@ class TabelReminder extends React.Component {
                     footerContent={this.footerContent()}
                 />
                 <Prompt
-                    when={this.state.changed}
+                    when={changed}
                     message={`Anda akan membatalkan perubahan pengaturan, konfirmasi ?`}
                 />
-                {this.state.changeComplete &&
+                {changeComplete &&
                     <SirioMessageButton
                         show
                         classes="d-none"
