@@ -38,32 +38,15 @@ public class KantorCabangRestController {
      */
     @GetMapping("/getAll")
     private BaseResponse<List<KantorCabang>> getAllKantorCabang() {
-        BaseResponse<List<KantorCabang>> response = new BaseResponse<>();
-        List<KantorCabang> result = kantorCabangRestService.getAll();
-        response.setStatus(200);
-        response.setMessage("success");
-        response.setResult(result);
-
-        return response;
+        return new BaseResponse<>(200, "success", kantorCabangRestService.getAll());
     }
 
     @GetMapping("/check/{namaKantor}")
     private BaseResponse<Boolean> isExistInDatabase(
             @PathVariable("namaKantor") String namaKantor
     ) {
-        BaseResponse<Boolean> response = new BaseResponse<>();
-
         Optional<KantorCabang> kantorCabang = kantorCabangRestService.getByNama(namaKantor);
-
-        if (kantorCabang.isEmpty()) {
-            response.setResult(false);
-        } else {
-            response.setResult(true);
-        }
-
-        response.setStatus(200);
-        response.setMessage("success");
-        return response;
+        return new BaseResponse<>(200, "success", kantorCabang.isPresent());
     }
 
     /**

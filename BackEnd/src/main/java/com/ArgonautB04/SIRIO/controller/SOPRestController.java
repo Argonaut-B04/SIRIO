@@ -26,12 +26,7 @@ public class SOPRestController {
      */
     @GetMapping("/getAll")
     private BaseResponse<List<SOP>> getAllSop() {
-        BaseResponse<List<SOP>> response = new BaseResponse<>();
-        List<SOP> result = sopRestService.getAll();
-        response.setStatus(200);
-        response.setMessage("success");
-        response.setResult(result);
-        return response;
+        return new BaseResponse<>(200, "success", sopRestService.getAll());
     }
 
 }

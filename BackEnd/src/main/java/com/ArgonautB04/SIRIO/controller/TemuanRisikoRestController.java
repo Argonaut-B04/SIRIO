@@ -45,17 +45,9 @@ public class TemuanRisikoRestController {
     private BaseResponse<List<TemuanRisikoDTO>> getHistoriTemuanRisikoKantorCabang(
             @PathVariable("idTugasPemeriksaan") int idTugasPemeriksaan
     ) {
-        BaseResponse<List<TemuanRisikoDTO>> response = new BaseResponse<>();
         List<TemuanRisikoDTO> result = new ArrayList<>();
 
-        TugasPemeriksaan tugasPemeriksaan;
-        try {
-            tugasPemeriksaan = tugasPemeriksaanRestService.getById(idTugasPemeriksaan);
-        } catch (NoSuchElementException e) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Tugas Pemeriksaan dengan ID " + idTugasPemeriksaan + " tidak ditemukan!"
-            );
-        }
+        TugasPemeriksaan tugasPemeriksaan = tugasPemeriksaanRestService.validateExistById(idTugasPemeriksaan);
 
         List<Risiko> daftarRisiko = risikoRestService.getByKategori(3);
         for (Risiko risiko : daftarRisiko) {
@@ -69,9 +61,6 @@ public class TemuanRisikoRestController {
             }
         }
 
-        response.setStatus(200);
-        response.setMessage("success");
-        response.setResult(result);
-        return response;
+        return new BaseResponse<>(200, "success", result);
     }
 }
