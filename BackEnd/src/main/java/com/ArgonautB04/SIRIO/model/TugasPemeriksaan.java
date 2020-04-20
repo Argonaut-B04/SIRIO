@@ -9,6 +9,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Date;
 
 @Entity
 @Table
@@ -19,18 +20,18 @@ public class TugasPemeriksaan implements Serializable {
     private int idTugas;
 
     @NotNull
-    @DateTimeFormat(pattern = "MM-dd-yyy")
-    @Column(name = "tanggal_mulai", nullable = false)
-    private LocalDate tanggalMulai;
+    @DateTimeFormat(pattern = "MM-dd-yyyy")
+    @Column(nullable = false)
+    private Date tanggalMulai;
 
     @NotNull
-    @DateTimeFormat(pattern = "MM-dd-yyy")
-    @Column(name = "tanggal_selesai", nullable = false)
-    private LocalDate tanggalSelesai;
+    @DateTimeFormat(pattern = "MM-dd-yyyy")
+    @Column(nullable = false)
+    private Date tanggalSelesai;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "kantor_cabang", referencedColumnName = "idKantor", nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @OnDelete(action = OnDeleteAction.NO_ACTION)
     private KantorCabang kantorCabang;
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -51,19 +52,19 @@ public class TugasPemeriksaan implements Serializable {
         this.idTugas = idTugas;
     }
 
-    public LocalDate getTanggalMulai() {
+    public Date getTanggalMulai() {
         return tanggalMulai;
     }
 
-    public void setTanggalMulai(LocalDate tanggalMulai) {
+    public void setTanggalMulai(Date tanggalMulai) {
         this.tanggalMulai = tanggalMulai;
     }
 
-    public LocalDate getTanggalSelesai() {
+    public Date getTanggalSelesai() {
         return tanggalSelesai;
     }
 
-    public void setTanggalSelesai(LocalDate tanggalSelesai) {
+    public void setTanggalSelesai(Date tanggalSelesai) {
         this.tanggalSelesai = tanggalSelesai;
     }
 

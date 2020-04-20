@@ -11,7 +11,8 @@ import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.time.LocalDate;
+import java.text.ParseException;
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -171,8 +172,8 @@ public class TugasPemeriksaanRestController {
                 tugasPemeriksaanTemp.setKantorCabang(kantorCabangRestService.getById(tugasPemeriksaanDTO.getKantorCabang()));
                 tugasPemeriksaanTemp.setPelaksana(employeeRestService.getById(tugasPemeriksaanDTO.getIdQA()));
 
-                LocalDate tanggalMulaiLocalDate = Settings.stringToLocalDate(tugasPemeriksaanDTO.getTanggalMulai());
-                LocalDate tanggalSelesaiLocalDate = Settings.stringToLocalDate(tugasPemeriksaanDTO.getTanggalSelesai());
+                Date tanggalMulaiLocalDate = Settings.stringToDate(tugasPemeriksaanDTO.getTanggalMulai());
+                Date tanggalSelesaiLocalDate = Settings.stringToDate(tugasPemeriksaanDTO.getTanggalSelesai());
 
                 if (tanggalMulaiLocalDate.compareTo(tanggalSelesaiLocalDate) < 0) {
                     tugasPemeriksaanTemp.setTanggalMulai(tanggalMulaiLocalDate);
@@ -184,7 +185,7 @@ public class TugasPemeriksaanRestController {
                 response.setMessage("success");
                 response.setResult(tugasPemeriksaan);
 
-        } catch (NoSuchElementException e) {
+        } catch (NoSuchElementException | ParseException e) {
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND, "Tugas Pemeriksaan dengan ID " + tugasPemeriksaanDTO.getId() + " tidak ditemukan!"
             );

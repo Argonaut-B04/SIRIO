@@ -64,6 +64,11 @@ public class TugasPemeriksaanRestServiceImpl implements TugasPemeriksaanRestServ
     }
 
     @Override
+    public boolean isExistInDatabase(TugasPemeriksaan tugasPemeriksaan) {
+        return tugasPemeriksaanDB.findById(tugasPemeriksaan.getIdTugas()).isPresent();
+    }
+
+    @Override
     public void hapusTugasPemeriksaan(int idTugasPemeriksaan) {
         tugasPemeriksaanDB.deleteById(idTugasPemeriksaan);
     }
