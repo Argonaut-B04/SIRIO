@@ -22,6 +22,13 @@ public class StatusHasilPemeriksaan implements Serializable {
     @Column
     private String keteranganStatus;
 
+    public StatusHasilPemeriksaan() {
+    }
+
+    public StatusHasilPemeriksaan(@NotNull @Size(max = 50) String namaStatus) {
+        this.namaStatus = namaStatus;
+    }
+
     public int getIdStatusHasil() {
         return idStatusHasil;
     }

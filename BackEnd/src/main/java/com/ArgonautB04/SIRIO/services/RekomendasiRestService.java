@@ -28,7 +28,7 @@ public interface RekomendasiRestService {
 
     List<Rekomendasi> getByPembuat(Employee pembuat);
 
-    Rekomendasi validateExistInDatabase(int idRekomendasi);
+    Rekomendasi validateExistInById(int idRekomendasi);
 
     void validateDateInputMoreThanToday(LocalDate localDate);
 

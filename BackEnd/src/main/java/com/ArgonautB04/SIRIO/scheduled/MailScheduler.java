@@ -20,7 +20,7 @@ import java.util.List;
 @EnableScheduling
 public class MailScheduler {
 
-    public static boolean startMe = false;
+    public static boolean startService = false;
 
     @Autowired
     ReminderRestService reminderRestService;
@@ -41,7 +41,7 @@ public class MailScheduler {
 
     @Scheduled(fixedRate = 3600000)
     public void testSSchedule() {
-        if (!startMe) return;
+        if (!startService) return;
         Calendar todayCalender = Calendar.getInstance();
         todayCalender.set(Calendar.HOUR_OF_DAY, 0);
         todayCalender.set(Calendar.MINUTE, 0);

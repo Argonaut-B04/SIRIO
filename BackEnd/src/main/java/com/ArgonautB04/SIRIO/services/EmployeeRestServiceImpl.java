@@ -201,6 +201,38 @@ public class EmployeeRestServiceImpl implements EmployeeRestService {
                     );
                 }
                 break;
+            case "bukti pelaksanaan":
+                if (!employee.getRole().getAccessPermissions().getAksesBuktiPelaksanaan()) {
+                    throw new ResponseStatusException(
+                            HttpStatus.UNAUTHORIZED,
+                            "Akun anda tidak memiliki akses ke bukti pelaksanaan"
+                    );
+                }
+                break;
+            case "tambah bukti pelaksanaan":
+                if (!employee.getRole().getAccessPermissions().getAksesTambahBuktiPelaksanaan()) {
+                    throw new ResponseStatusException(
+                            HttpStatus.UNAUTHORIZED,
+                            "Akun anda tidak memiliki akses untuk menambah bukti pelaksanaan"
+                    );
+                }
+                break;
+            case "ubah bukti pelaksanaan":
+                if (!employee.getRole().getAccessPermissions().getAksesUbahBuktiPelaksanaan()) {
+                    throw new ResponseStatusException(
+                            HttpStatus.UNAUTHORIZED,
+                            "Akun anda tidak memiliki akses untuk mengubah bukti pelaksanaan"
+                    );
+                }
+                break;
+            case "persetujuan bukti pelaksanaan":
+                if (!employee.getRole().getAccessPermissions().getAksesPersetujuanBuktiPelaksanaan()) {
+                    throw new ResponseStatusException(
+                            HttpStatus.UNAUTHORIZED,
+                            "Akun anda tidak memiliki akses persetujuan bukti"
+                    );
+                }
+                break;
         }
     }
 }
