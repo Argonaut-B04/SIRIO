@@ -116,7 +116,7 @@ public class ReminderRestController {
         employeeRestService.validateRolePermission(employee, "tabel rekomendasi");
 
         Integer idRekomendasi = rekomendasiDTO.getId();
-        Rekomendasi rekomendasi = rekomendasiRestService.validateExistInDatabase(idRekomendasi);
+        Rekomendasi rekomendasi = rekomendasiRestService.validateExistInById(idRekomendasi);
 
         List<Reminder> oldList = reminderRestService.getByRekomendasi(rekomendasi);
         for (Reminder reminder : oldList) {

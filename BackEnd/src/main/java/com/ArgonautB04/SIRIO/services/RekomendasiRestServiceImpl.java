@@ -71,7 +71,7 @@ public class RekomendasiRestServiceImpl implements RekomendasiRestService {
     }
 
     @Override
-    public Rekomendasi validateExistInDatabase(int idRekomendasi) {
+    public Rekomendasi validateExistInById(int idRekomendasi) {
         Optional<Rekomendasi> rekomendasiOptional = getOptionalById(idRekomendasi);
         if (rekomendasiOptional.isEmpty()) {
             throw new ResponseStatusException(

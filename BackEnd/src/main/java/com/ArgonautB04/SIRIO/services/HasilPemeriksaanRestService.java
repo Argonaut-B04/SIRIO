@@ -25,4 +25,6 @@ public interface HasilPemeriksaanRestService {
     HasilPemeriksaan ubahStatus(int idHasilPemeriksaan, int idStatus);
 
     void hapusHasilPemeriksaan(int idHasilPemeriksaan);
+
+    HasilPemeriksaan validateExistById(int idHasilPemeriksaan);
 }

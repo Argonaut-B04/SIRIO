@@ -11,16 +11,13 @@ import com.ArgonautB04.SIRIO.services.EmployeeRestService;
 import com.ArgonautB04.SIRIO.services.RekomendasiRestService;
 import com.ArgonautB04.SIRIO.services.StatusBuktiPelaksanaanRestService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -59,20 +56,9 @@ public class BuktiPelaksanaanRestController {
     private BaseResponse<List<BuktiPelaksanaan>> getAllBuktiPelaksanaanUntukPembuat(
             @PathVariable("idPembuat") int idPembuat
     ) {
-        BaseResponse<List<BuktiPelaksanaan>> response = new BaseResponse<>();
-        try {
-            Employee pembuat = employeeRestService.getById(idPembuat);
-            List<BuktiPelaksanaan> result = buktiPelaksanaanRestService.getByPembuat(pembuat);
-
-            response.setStatus(200);
-            response.setMessage("success");
-            response.setResult(result);
-        } catch (NoSuchElementException e) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Employee dengan ID " + idPembuat + " tidak ditemukan!"
-            );
-        }
-        return response;
+        Employee pembuat = employeeRestService.validateEmployeeExistById(idPembuat);
+        List<BuktiPelaksanaan> result = buktiPelaksanaanRestService.getByPembuat(pembuat);
+        return new BaseResponse<>(200, "success", result);
     }
 
     /**
@@ -85,39 +71,22 @@ public class BuktiPelaksanaanRestController {
     private BaseResponse<BuktiPelaksanaanDTO> getDetailBuktiPelaksanaan(
             @PathVariable("idBuktiPelaksanaan") int idBuktiPelaksanaan, Principal principal
     ) {
-        BaseResponse<BuktiPelaksanaanDTO> response = new BaseResponse<>();
-        Optional<Employee> pengelolaOptional = employeeRestService.getByUsername(principal.getName());
-        Employee pengelola;
-        if (pengelolaOptional.isPresent()) {
-            pengelola = pengelolaOptional.get();
-            if (pengelola.getRole().getAccessPermissions().getAksesBuktiPelaksanaan()) {
-                try {
-                    BuktiPelaksanaan buktiPelaksanaan = buktiPelaksanaanRestService.getById(idBuktiPelaksanaan);
-                    BuktiPelaksanaanDTO result = new BuktiPelaksanaanDTO();
-                    result.setId(buktiPelaksanaan.getIdBuktiPelaksanaan());
-                    result.setStatus(buktiPelaksanaan.getStatusBuktiPelaksanaan().getIdStatusBukti());
-                    result.setKeterangan(buktiPelaksanaan.getKeterangan());
-                    result.setLampiran(buktiPelaksanaan.getLampiran());
-                    result.setFeedback(buktiPelaksanaan.getFeedback());
-                    result.setNamaPembuat(buktiPelaksanaan.getPembuat().getNama());
-                    result.setIdRekomendasi(buktiPelaksanaan.getRekomendasi().getIdRekomendasi());
-                    result.setKeteranganRekomendasi(buktiPelaksanaan.getRekomendasi().getKeterangan());
+        Employee pengelola = employeeRestService.validateEmployeeExistByPrincipal(principal);
+        employeeRestService.validateRolePermission(pengelola, "bukti pelaksanaan");
 
-                    response.setStatus(200);
-                    response.setMessage("success");
-                    response.setResult(result);
-                } catch (NoSuchElementException e) {
-                    throw new ResponseStatusException(
-                            HttpStatus.NOT_FOUND, "Bukti pelaksanaan dengan ID " + idBuktiPelaksanaan + " tidak ditemukan!"
-                    );
-                }
-                return response;
-            } else throw new ResponseStatusException(
-                    HttpStatus.UNAUTHORIZED, "Akun anda tidak memiliki akses ke pengaturan ini"
-            );
-        } else throw new ResponseStatusException(
-                HttpStatus.UNAUTHORIZED, "Akun anda tidak terdaftar dalam Sirio"
-        );
+        BuktiPelaksanaan buktiPelaksanaan = buktiPelaksanaanRestService.validateExistById(idBuktiPelaksanaan);
+
+        BuktiPelaksanaanDTO result = new BuktiPelaksanaanDTO();
+        result.setId(buktiPelaksanaan.getIdBuktiPelaksanaan());
+        result.setStatus(buktiPelaksanaan.getStatusBuktiPelaksanaan().getIdStatusBukti());
+        result.setKeterangan(buktiPelaksanaan.getKeterangan());
+        result.setLampiran(buktiPelaksanaan.getLampiran());
+        result.setFeedback(buktiPelaksanaan.getFeedback());
+        result.setNamaPembuat(buktiPelaksanaan.getPembuat().getNama());
+        result.setIdRekomendasi(buktiPelaksanaan.getRekomendasi().getIdRekomendasi());
+        result.setKeteranganRekomendasi(buktiPelaksanaan.getRekomendasi().getKeterangan());
+
+        return new BaseResponse<>(200, "success", result);
     }
 
     /**
@@ -129,63 +98,44 @@ public class BuktiPelaksanaanRestController {
     @PostMapping(value = "/tambah", consumes = {"application/json"})
     private BaseResponse<BuktiPelaksanaan> tambahBuktiPelaksanaan(
             @RequestBody BuktiPelaksanaanDTO buktiPelaksanaanDTO,
-            Principal principal, ModelMap model
+            Principal principal
     ) {
-        BaseResponse<BuktiPelaksanaan> response = new BaseResponse<>();
-        Optional<Employee> pengelolaOptional = employeeRestService.getByUsername(principal.getName());
-        Employee pengelola;
-        if (pengelolaOptional.isPresent()) {
-            pengelola = pengelolaOptional.get();
-            if (pengelola.getRole().getAccessPermissions().getAksesTambahBuktiPelaksanaan()) {
-                BuktiPelaksanaan buktiPelaksanaanTemp = new BuktiPelaksanaan();
-                buktiPelaksanaanTemp.setStatusBuktiPelaksanaan(
-                        statusBuktiPelaksanaanRestService.getById(1));
+        Employee pengelola = employeeRestService.validateEmployeeExistByPrincipal(principal);
+        employeeRestService.validateRolePermission(pengelola, "tambah bukti pelaksanaan");
 
-                if (buktiPelaksanaanDTO.getKeterangan() != null && !buktiPelaksanaanDTO.getKeterangan().equals("")) {
-                    buktiPelaksanaanTemp.setKeterangan(buktiPelaksanaanDTO.getKeterangan());
-                } else {
-                    throw new ResponseStatusException(
-                            HttpStatus.NOT_FOUND, "Keterangan bukti pelaksanaan perlu diisi!"
-                    );
-                }
-                if (buktiPelaksanaanDTO.getLampiran() != null && !buktiPelaksanaanDTO.getLampiran().equals("")) {
-                    if (buktiPelaksanaanDTO.getLampiran().contains("https://") |
-                            buktiPelaksanaanDTO.getLampiran().contains("http://")) {
-                        buktiPelaksanaanTemp.setLampiran(buktiPelaksanaanDTO.getLampiran());
-                    } else {
-                        throw new ResponseStatusException(
-                                HttpStatus.FORBIDDEN, "Lampiran bukti pelaksanaan harus berupa link url!"
-                        );
-                    }
-                } else {
-                    throw new ResponseStatusException(
-                            HttpStatus.NOT_FOUND, "Lampiran bukti pelaksanaan perlu diisi!"
-                    );
-                }
+        BuktiPelaksanaan buktiPelaksanaanTemp = new BuktiPelaksanaan();
+        buktiPelaksanaanTemp.setStatusBuktiPelaksanaan(statusBuktiPelaksanaanRestService.getById(1));
 
-                buktiPelaksanaanTemp.setPembuat(pengelola);
-
-                try {
-                    Rekomendasi rekomendasi = rekomendasiRestService.getById(buktiPelaksanaanDTO.getIdRekomendasi());
-                    buktiPelaksanaanTemp.setRekomendasi(rekomendasi);
-                    rekomendasi.setBuktiPelaksanaan(buktiPelaksanaanTemp);
-                    rekomendasiRestService.buatRekomendasi(rekomendasi);
-                } catch (NoSuchElementException e) {
-                    throw new ResponseStatusException(
-                            HttpStatus.NOT_FOUND, "Rekomendasi dengan ID " + buktiPelaksanaanDTO.getIdRekomendasi() + " tidak ditemukan!"
-                    );
-                }
-
-                response.setStatus(200);
-                response.setMessage("success");
-                response.setResult(buktiPelaksanaanTemp);
-                return response;
-            } else throw new ResponseStatusException(
-                    HttpStatus.UNAUTHORIZED, "Akun anda tidak memiliki akses ke pengaturan ini"
+        if (buktiPelaksanaanDTO.getKeterangan() != null && !buktiPelaksanaanDTO.getKeterangan().equals("")) {
+            buktiPelaksanaanTemp.setKeterangan(buktiPelaksanaanDTO.getKeterangan());
+        } else {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Keterangan bukti pelaksanaan perlu diisi!"
             );
-        } else throw new ResponseStatusException(
-                HttpStatus.UNAUTHORIZED, "Akun anda tidak terdaftar dalam Sirio"
-        );
+        }
+        if (buktiPelaksanaanDTO.getLampiran() != null && !buktiPelaksanaanDTO.getLampiran().equals("")) {
+            if (buktiPelaksanaanDTO.getLampiran().contains("https://") |
+                    buktiPelaksanaanDTO.getLampiran().contains("http://")) {
+                buktiPelaksanaanTemp.setLampiran(buktiPelaksanaanDTO.getLampiran());
+            } else {
+                throw new ResponseStatusException(
+                        HttpStatus.FORBIDDEN, "Lampiran bukti pelaksanaan harus berupa link url!"
+                );
+            }
+        } else {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Lampiran bukti pelaksanaan perlu diisi!"
+            );
+        }
+
+        buktiPelaksanaanTemp.setPembuat(pengelola);
+
+        Rekomendasi rekomendasi = rekomendasiRestService.validateExistInById(buktiPelaksanaanDTO.getIdRekomendasi());
+        buktiPelaksanaanTemp.setRekomendasi(rekomendasi);
+        rekomendasi.setBuktiPelaksanaan(buktiPelaksanaanTemp);
+        rekomendasiRestService.buatRekomendasi(rekomendasi);
+
+        return new BaseResponse<>(200, "success", buktiPelaksanaanTemp);
     }
 
     /**
@@ -198,58 +148,40 @@ public class BuktiPelaksanaanRestController {
     private BaseResponse<BuktiPelaksanaan> ubahBuktiPelaksanaan(
             @RequestBody BuktiPelaksanaanDTO buktiPelaksanaanDTO, Principal principal
     ) {
-        BaseResponse<BuktiPelaksanaan> response = new BaseResponse<>();
-        Optional<Employee> pengelolaOptional = employeeRestService.getByUsername(principal.getName());
-        Employee pengelola;
-        if (pengelolaOptional.isPresent()) {
-            pengelola = pengelolaOptional.get();
-            if (pengelola.getRole().getAccessPermissions().getAksesUbahBuktiPelaksanaan()) {
-                try {
-                    BuktiPelaksanaan buktiPelaksanaanTemp = buktiPelaksanaanRestService.getById(buktiPelaksanaanDTO.getId());
-                    buktiPelaksanaanTemp.setStatusBuktiPelaksanaan(
-                            statusBuktiPelaksanaanRestService.getById(1));
+        Employee pengelola = employeeRestService.validateEmployeeExistByPrincipal(principal);
+        employeeRestService.validateRolePermission(pengelola, "ubah bukti pelaksanaan");
 
-                    if (buktiPelaksanaanDTO.getKeterangan() != null && !buktiPelaksanaanDTO.getKeterangan().equals("")) {
-                        buktiPelaksanaanTemp.setKeterangan(buktiPelaksanaanDTO.getKeterangan());
-                    } else {
-                        throw new ResponseStatusException(
-                                HttpStatus.NOT_FOUND, "Keterangan bukti pelaksanaan perlu diisi!"
-                        );
-                    }
+        BuktiPelaksanaan buktiPelaksanaanTemp = buktiPelaksanaanRestService.validateExistById(buktiPelaksanaanDTO.getId());
+        buktiPelaksanaanTemp.setStatusBuktiPelaksanaan(
+                statusBuktiPelaksanaanRestService.getById(1));
 
-                    if (buktiPelaksanaanDTO.getLampiran() != null && !buktiPelaksanaanDTO.getLampiran().equals("")) {
-                        if (buktiPelaksanaanDTO.getLampiran().contains("https://") |
-                                buktiPelaksanaanDTO.getLampiran().contains("http://")) {
-                            buktiPelaksanaanTemp.setLampiran(buktiPelaksanaanDTO.getLampiran());
-                        } else {
-                            throw new ResponseStatusException(
-                                    HttpStatus.FORBIDDEN, "Lampiran bukti pelaksanaan harus berupa link url!"
-                            );
-                        }
-                    } else {
-                        throw new ResponseStatusException(
-                                HttpStatus.NOT_FOUND, "Lampiran bukti pelaksanaan perlu diisi!"
-                        );
-                    }
-
-                    BuktiPelaksanaan buktiPelaksanaan =
-                            buktiPelaksanaanRestService.ubahBuktiPelaksanaan(buktiPelaksanaanDTO.getId(), buktiPelaksanaanTemp);
-
-                    response.setStatus(200);
-                    response.setMessage("success");
-                    response.setResult(buktiPelaksanaan);
-                } catch (NoSuchElementException e) {
-                    throw new ResponseStatusException(
-                            HttpStatus.NOT_FOUND, "Bukti Pelaksanaan dengan ID " + buktiPelaksanaanDTO.getId() + " tidak ditemukan!"
-                    );
-                }
-                return response;
-            } else throw new ResponseStatusException(
-                    HttpStatus.UNAUTHORIZED, "Akun anda tidak memiliki akses ke pengaturan ini"
+        if (buktiPelaksanaanDTO.getKeterangan() != null && !buktiPelaksanaanDTO.getKeterangan().equals("")) {
+            buktiPelaksanaanTemp.setKeterangan(buktiPelaksanaanDTO.getKeterangan());
+        } else {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Keterangan bukti pelaksanaan perlu diisi!"
             );
-        } else throw new ResponseStatusException(
-                HttpStatus.UNAUTHORIZED, "Akun anda tidak terdaftar dalam Sirio"
-        );
+        }
+
+        if (buktiPelaksanaanDTO.getLampiran() != null && !buktiPelaksanaanDTO.getLampiran().equals("")) {
+            if (buktiPelaksanaanDTO.getLampiran().contains("https://") |
+                    buktiPelaksanaanDTO.getLampiran().contains("http://")) {
+                buktiPelaksanaanTemp.setLampiran(buktiPelaksanaanDTO.getLampiran());
+            } else {
+                throw new ResponseStatusException(
+                        HttpStatus.FORBIDDEN, "Lampiran bukti pelaksanaan harus berupa link url!"
+                );
+            }
+        } else {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Lampiran bukti pelaksanaan perlu diisi!"
+            );
+        }
+
+        BuktiPelaksanaan buktiPelaksanaan =
+                buktiPelaksanaanRestService.ubahBuktiPelaksanaan(buktiPelaksanaanDTO.getId(), buktiPelaksanaanTemp);
+
+        return new BaseResponse<>(200, "success", buktiPelaksanaan);
     }
 
     /**
@@ -260,62 +192,44 @@ public class BuktiPelaksanaanRestController {
     @PostMapping(value = "/persetujuan", consumes = {"application/json"})
     private BaseResponse<String> persetujuanBuktiPelaksanaan(
             @RequestBody BuktiPelaksanaanDTO buktiPelaksanaanDTO,
-            Principal principal, ModelMap model
+            Principal principal
     ) {
-        BaseResponse<String> response = new BaseResponse<>();
-        Optional<Employee> pengelolaOptional = employeeRestService.getByUsername(principal.getName());
-        Employee pengelola;
-        if (pengelolaOptional.isPresent()) {
-            pengelola = pengelolaOptional.get();
-            if (pengelola.getRole().getAccessPermissions().getAksesPersetujuanBuktiPelaksanaan()) {
-                try {
-                    BuktiPelaksanaan buktiPelaksanaanTemp = buktiPelaksanaanRestService.getById(buktiPelaksanaanDTO.getId());
-                    buktiPelaksanaanTemp.setPemeriksa(pengelola);
+        Employee pengelola = employeeRestService.validateEmployeeExistByPrincipal(principal);
+        employeeRestService.validateRolePermission(pengelola, "persetujuan bukti pelaksanaan");
+        BuktiPelaksanaan buktiPelaksanaanTemp = buktiPelaksanaanRestService.validateExistById(buktiPelaksanaanDTO.getId());
+        buktiPelaksanaanTemp.setPemeriksa(pengelola);
 
-                    try {
-                        StatusBuktiPelaksanaan statusBuktiPelaksanaan = statusBuktiPelaksanaanRestService.getById(
-                                buktiPelaksanaanDTO.getStatus());
-                        if (buktiPelaksanaanTemp.getStatusBuktiPelaksanaan().getIdStatusBukti() != 1 ||
-                                (statusBuktiPelaksanaan != statusBuktiPelaksanaanRestService.getById(2) &&
-                                        statusBuktiPelaksanaan != statusBuktiPelaksanaanRestService.getById(3)))
-                            throw new ResponseStatusException(
-                                    HttpStatus.FORBIDDEN, "Pengajuan persetujuan tidak diperbolehkan!"
-                            );
-                        buktiPelaksanaanTemp.setStatusBuktiPelaksanaan(statusBuktiPelaksanaan);
-                    } catch (NoSuchElementException e) {
-                        throw new ResponseStatusException(
-                                HttpStatus.NOT_FOUND, "Status bukti pelaksanaan tidak ditemukan!"
-                        );
-                    }
-
-                    if (buktiPelaksanaanDTO.getStatus() == 3 && (buktiPelaksanaanDTO.getFeedback() == null ||
-                            buktiPelaksanaanDTO.getFeedback().equals("")))
-                        throw new ResponseStatusException(
-                                HttpStatus.FORBIDDEN, "Feedback perlu diisi untuk penolakan bukti pelaksanaan!"
-                        );
-                    buktiPelaksanaanTemp.setFeedback(buktiPelaksanaanDTO.getFeedback());
-
-                    buktiPelaksanaanRestService.ubahBuktiPelaksanaan(buktiPelaksanaanDTO.getId(), buktiPelaksanaanTemp);
-
-                    if (buktiPelaksanaanDTO.getStatus() == 3) {
-                        response.setResult("Bukti pelaksanaan dengan id " + buktiPelaksanaanDTO.getId() + " ditolak!");
-                    } else {
-                        response.setResult("Bukti pelaksanaan dengan id " + buktiPelaksanaanDTO.getId() + " disetujui!");
-                    }
-                    response.setStatus(200);
-                    response.setMessage("success");
-                } catch (EmptyResultDataAccessException e) {
-                    response.setStatus(404);
-                    response.setMessage("not found");
-                    response.setResult("Bukti pelaksanaan dengan id " +
-                            buktiPelaksanaanDTO.getId() + " tidak dapat ditemukan");
-                }
-                return response;
-            } else throw new ResponseStatusException(
-                    HttpStatus.UNAUTHORIZED, "Akun anda tidak memiliki akses ke pengaturan ini"
+        try {
+            StatusBuktiPelaksanaan statusBuktiPelaksanaan = statusBuktiPelaksanaanRestService.getById(
+                    buktiPelaksanaanDTO.getStatus());
+            if (buktiPelaksanaanTemp.getStatusBuktiPelaksanaan().getIdStatusBukti() != 1 ||
+                    (statusBuktiPelaksanaan != statusBuktiPelaksanaanRestService.getById(2) &&
+                            statusBuktiPelaksanaan != statusBuktiPelaksanaanRestService.getById(3)))
+                throw new ResponseStatusException(
+                        HttpStatus.FORBIDDEN, "Pengajuan persetujuan tidak diperbolehkan!"
+                );
+            buktiPelaksanaanTemp.setStatusBuktiPelaksanaan(statusBuktiPelaksanaan);
+        } catch (NoSuchElementException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Status bukti pelaksanaan tidak ditemukan!"
             );
-        } else throw new ResponseStatusException(
-                HttpStatus.UNAUTHORIZED, "Akun anda tidak terdaftar dalam Sirio"
-        );
+        }
+
+        if (buktiPelaksanaanDTO.getStatus() == 3 && (buktiPelaksanaanDTO.getFeedback() == null ||
+                buktiPelaksanaanDTO.getFeedback().equals("")))
+            throw new ResponseStatusException(
+                    HttpStatus.FORBIDDEN, "Feedback perlu diisi untuk penolakan bukti pelaksanaan!"
+            );
+        buktiPelaksanaanTemp.setFeedback(buktiPelaksanaanDTO.getFeedback());
+
+        buktiPelaksanaanRestService.ubahBuktiPelaksanaan(buktiPelaksanaanDTO.getId(), buktiPelaksanaanTemp);
+
+        String result;
+        if (buktiPelaksanaanDTO.getStatus() == 3) {
+            result = "Bukti pelaksanaan dengan id " + buktiPelaksanaanDTO.getId() + " ditolak!";
+        } else {
+            result = "Bukti pelaksanaan dengan id " + buktiPelaksanaanDTO.getId() + " disetujui!";
+        }
+        return new BaseResponse<>(200, "success", result);
     }
 }
