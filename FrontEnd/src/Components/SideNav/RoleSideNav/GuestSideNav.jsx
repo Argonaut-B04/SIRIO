@@ -8,9 +8,12 @@ import { halamanUtama } from '../../../Configuration/UrlConfig';
 export default class GuestSideNav extends Component {
     render() {
         return (
-            <SideNavFramework links={[
-                halamanUtama
-            ]}/>
+            <SideNavFramework
+                links={[
+                    halamanUtama
+                ]}
+                {...this.props}
+            />
         );
     }
 }

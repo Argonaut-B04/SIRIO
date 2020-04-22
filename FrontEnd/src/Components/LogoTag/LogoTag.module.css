@@ -6,6 +6,19 @@
     padding: 1.5rem;
 }
 
+.back {
+    top: calc(1.5rem + 5px);
+    position: absolute;
+    height: 38px;
+    left: -20px;
+    opacity: 0.5;
+    cursor: pointer;
+}
+
+.back:hover {
+    opacity: 1;
+}
+
 .logoImage {
     position: absolute;
     right: 0;

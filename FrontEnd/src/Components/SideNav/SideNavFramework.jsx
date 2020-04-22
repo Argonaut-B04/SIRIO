@@ -63,8 +63,9 @@ export default class SideNavFramework extends React.Component {
                     {login.title}
                 </SirioButton>
         }
+
         return (
-            <nav className={this.props.classes ? [this.props.classes, classes.sidebar].join(' ') : classes.sidebar}>
+            <nav className={this.props.disableSideNav ? [this.props.classes, classes.sidebar, classes.hidden].join(' ') : [this.props.classes, classes.sidebar].join(" ")}>
                 <LogoTag light />
                 <div className={classes.identity}>
                     <h3 className={classes.username}>

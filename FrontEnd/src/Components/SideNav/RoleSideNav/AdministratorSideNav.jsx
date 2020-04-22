@@ -9,6 +9,7 @@ export default class AdministratorSideNav extends Component {
     render() {
         return (
             <SideNavFramework
+                {...this.props}
                 links={
                     [
                         halamanUtama,
