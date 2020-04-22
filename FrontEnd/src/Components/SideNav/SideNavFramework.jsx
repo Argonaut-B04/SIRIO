@@ -100,7 +100,6 @@ export default class SideNavFramework extends React.Component {
                                 {menu.title}
                             </NavLink>
                     )}
-
                 </div>
                 <div className={classes.sideFooter}>
                     <div className={classes.footerButtonContainer}>
