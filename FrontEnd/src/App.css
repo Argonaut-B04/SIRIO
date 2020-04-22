@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css?family=Nunito:600,700&display=swap');
 * {
-    transition: 0.2s ease-in-out;
-    transition-property: background-color, color, width, height, opacity;
+    transition: 0.3s ease-in-out;
+    transition-property: background-color, color, width, height, opacity, display, margin, left, top, bottom, right;
 }
 
 a {
