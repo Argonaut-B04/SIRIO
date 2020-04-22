@@ -1,6 +1,10 @@
 @import url('https://fonts.googleapis.com/css?family=Nunito:600,700&display=swap');
 * {
+<<<<<<< HEAD
     transition: 0.3s ease-in-out;
+=======
+    transition: 0.5s ease-in-out;
+>>>>>>> f3d10b135f389ade648c6bca0316d51d1fdf4cf7
     transition-property: background-color, color, width, height, opacity, display, margin, left, top, bottom, right;
 }
 
