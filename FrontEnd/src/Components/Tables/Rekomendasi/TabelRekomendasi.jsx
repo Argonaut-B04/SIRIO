@@ -30,8 +30,15 @@ export default class TabelRekomendasi extends React.Component {
     }
 
     async renderRows() {
+        // Mengubah isi dari loader
+        this.props.contentStartLoading();
+        this.props.changeLoadingBody("Mengambil data dari server");
+
         RekomendasiService.getRekomendasiByLoggedInUser()
             .then(response => {
+
+                // Mengubah isi dari loader
+                this.props.changeLoadingBody("Menampilkan data");
                 this.setState({
                     rowList: response.data.result
                 })
@@ -47,8 +54,9 @@ export default class TabelRekomendasi extends React.Component {
                         detail: error.response.data.message,
                     })
                 }
-            })
-            ;
+            });
+
+        this.props.contentFinishLoading(); // Setelah jeda waktu, hentikan loader
     }
 
     /**
