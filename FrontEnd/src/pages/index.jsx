@@ -32,19 +32,20 @@ class MainPage extends React.Component {
                     this.setState({
                         loadingBody: response.data.result
                     })
+                    
                     PollingService.connected();
+
+                    setTimeout(function () { // Memberikan jeda waktu 0.5 detik
+                        this.setState({
+                            contentLoading: false
+                        })
+                    }.bind(this), 500)
                 })
                 .catch(error => {
                     this.setState({
                         loadingBody: "Gagal menghubungi server, harap refresh halaman ini"
                     })
                 })
-
-            setTimeout(function () { // Memberikan jeda waktu 0.5 detik
-                this.setState({
-                    contentLoading: false
-                })
-            }.bind(this), 500)
         } else {
             this.setState({
                 preloader: false,
