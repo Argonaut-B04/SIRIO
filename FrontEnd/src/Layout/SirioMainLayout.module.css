@@ -1,12 +1,10 @@
 .mainContent {
     background-color: white;
-    margin-left: 300px;
+    margin-left: 0px;
     min-height: 100vh;
     display: flex;
     align-items: center;
     flex-direction: column;
-    padding-top: 30px;
-    transition: 1s ease-in-out;
 }
 
 .mainContentTransparent {
@@ -16,17 +14,52 @@
     z-index: 0;
 }
 
+.burgerButton {
+    font-size: 30px;
+}
+
 .fullWidth {
     margin-left: 0px !important;
+}
+
+.topbar {
+    display: flex;
+    position: absolute;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.7rem;
+    background-image: url(/sidePattern.png);
+    background-attachment: fixed;
+    background-position: center;
+    width: 100vw;
+    top: 0px;
+    transition: all 1s ease;
 }
 
 .pageContent {
     height: 100%;
     width: 90%;
+    padding-top: 70px;
+    transition: all 1s ease;
+    opacity: 1;
 }
 
-@media only screen and (max-width: 1200px) {
-    .mainContent {
-        margin-left: 0px;
-    }
+.pageContentHidden {
+    opacity: 0;
+}
+
+.show {
+    margin-left: 300px;
+}
+
+.hiddenBar+.pageContent {
+    transition: all 0.2s ease;
+    padding-top: 40px;
+}
+
+.hiddenBar {
+    top: -50px;
+    width: 0;
+    padding: 0;
+    transition: all 0.2s ease;
 }

@@ -52,6 +52,7 @@ export default class SirioButton extends React.Component {
         if (this.props.square) {
             fullClass = [classes.sirioButton, color, hoverStyle, style, classes.square, this.props.classes].join(" ");
         }
+
         return (
             <button
                 onClick={onClick}
@@ -59,7 +60,7 @@ export default class SirioButton extends React.Component {
                 type={type}
                 title={title}
             >
-                <h6 className={classes.buttonTitle}>
+                <h6 className={[classes.buttonTitle, this.props.insideClass].join(" ")}>
                     {children}
                 </h6>
             </button>

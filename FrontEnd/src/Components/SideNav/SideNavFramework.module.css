@@ -7,17 +7,23 @@
     overflow-y: auto;
     overflow-x: hidden;
     z-index: 1;
-    transition: 1s ease-in-out;
+    left: -300px;
 }
 
-.hidden {
-    width: 0;
+.show {
+    left: 0px !important;
 }
 
-@media only screen and (max-width: 1200px) {
-    .sidebar {
-        width: 0;
-    }
+.burgerButtonOnSideNav {
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    font-size: 30px;
+}
+
+.buttonInsideNav {
+    position: relative;
+    float: right;
 }
 
 .loginModeSideBar {
@@ -27,6 +33,14 @@
 
 .identity {
     padding: 1.5rem;
+}
+
+.smallLogo {
+    justify-content: space-between;
+    text-align: center;
+    align-items: center;
+    padding: 0.7rem;
+    display: flex;
 }
 
 .username {
@@ -112,6 +126,8 @@ a {
     width: 100%;
     display: flex;
     justify-content: center;
+    align-items: center;
+    flex-direction: column;
 }
 
 .footerButton {
