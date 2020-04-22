@@ -7,11 +7,16 @@
     overflow-y: auto;
     overflow-x: hidden;
     z-index: 1;
+    transition: 1s ease-in-out;
+}
+
+.hidden {
+    width: 0;
 }
 
 @media only screen and (max-width: 1200px) {
     .sidebar {
-        display: none;
+        width: 0;
     }
 }
 

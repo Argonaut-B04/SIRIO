@@ -6,13 +6,18 @@
     align-items: center;
     flex-direction: column;
     padding-top: 30px;
+    transition: 1s ease-in-out;
 }
 
-.mainContentTransparent{
+.mainContentTransparent {
     display: flex;
     align-items: center;
     flex-direction: column;
     z-index: 0;
+}
+
+.fullWidth {
+    margin-left: 0px !important;
 }
 
 .pageContent {

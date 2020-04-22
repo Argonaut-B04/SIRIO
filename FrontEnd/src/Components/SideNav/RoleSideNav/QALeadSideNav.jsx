@@ -9,6 +9,7 @@ export default class QALeadSideNav extends Component {
     render() {
         return (
             <SideNavFramework
+                {...this.props}
                 links={
                     [
                         halamanUtama,
