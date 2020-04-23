@@ -237,6 +237,7 @@ export default class TabelRekomendasi extends React.Component {
     getButtonsSecond(cell, row) {
         const status = row.status;
         const tenggatWaktu = row.tenggatWaktuDate ? SirioAxiosBase.formatDate(row.tenggatWaktuDate) : "Tenggat Waktu";
+        const tenggatWaktuDate = row.tenggatWaktuDate ? new Date(row.tenggatWaktuDate) : null;
         const recommended = status === "Menunggu Pengaturan Tenggat Waktu";
         const hyperlink = status === "Menunggu Pelaksanaan";
         const text = status === "Selesai" || status === "Sedang Dilaksanakan";
@@ -258,6 +259,7 @@ export default class TabelRekomendasi extends React.Component {
                     hover
                     hyperlink
                     id={row.id}
+                    selectedDate={tenggatWaktuDate}
                     handleChange={(date, id) => this.aturTenggatWaktu(date, id)}
                     minDate={new Date()}
                 >
@@ -270,6 +272,7 @@ export default class TabelRekomendasi extends React.Component {
                     purple
                     recommended
                     id={row.id}
+                    selectedDate={tenggatWaktuDate}
                     handleChange={(date, id) => this.aturTenggatWaktu(date, id)}
                 >
                     Tenggat Waktu

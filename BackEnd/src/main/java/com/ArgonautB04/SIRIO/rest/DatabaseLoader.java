@@ -162,6 +162,7 @@ public class DatabaseLoader implements CommandLineRunner {
         aksesOfficer.setAksesRiskLevel(true);
 
         aksesOfficer.setAksesTabelRekomendasi(true);
+        aksesOfficer.setAturTenggatWaktu(true);
         aksesOfficer.setUbahReminder(true);
 
         aksesOfficer.setAksesTambahBuktiPelaksanaan(true);

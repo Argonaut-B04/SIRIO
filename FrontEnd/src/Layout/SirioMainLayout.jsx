@@ -59,7 +59,7 @@ export default class SirioMainLayout extends Component {
 
         return (
             <>
-                {/* {preloader} */}
+                {preloader}
                 <SirioSideNav disableSideNav={this.props.disableSideNav} shouldShow={this.state.showing} toggleNav={this.toggleNav} />
 
                 {/* Jika props contentLoading tersedia, maka komponen akan menggunakan loader content */}

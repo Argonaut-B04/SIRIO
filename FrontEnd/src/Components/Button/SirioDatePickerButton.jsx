@@ -2,6 +2,7 @@ import React from "react";
 import DatePicker from "react-datepicker";
 import SirioDatePickerCustomInput from "./SirioDatePickerCustomInput";
 import classes from "./SirioDatePickerButton.module.css";
+import { enGB } from 'date-fns/locale'
 import "react-datepicker/dist/react-datepicker.css";
 
 export default class SirioDatePickerButton extends React.Component {
@@ -24,8 +25,7 @@ export default class SirioDatePickerButton extends React.Component {
     };
 
     render() {
-        const { selectedDate } = this.state;
-        const { id, minDate, popper, maxDate } = this.props;
+        const { id, minDate, popper, maxDate, selectedDate } = this.props;
         const { panel } = classes;
         return (
             <DatePicker
@@ -35,12 +35,12 @@ export default class SirioDatePickerButton extends React.Component {
                     this.props.handleChange(date, id);
                 }}
                 popperClassName={panel}
-                popperPlacement={popper}
+                headerClassName="BAMBANG"
+                locale={enGB}
+                popperPlacement={popper || "bottom-end"}
                 dateFormat="yyyy-MM-dd"
                 minDate={minDate ? minDate : new Date()}
                 maxDate={maxDate}
-                showMonthDropdown
-                showYearDropdown
                 dropdownMode="select"
                 customInput={<SirioDatePickerCustomInput {...this.props} />}
             />
