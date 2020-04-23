@@ -16,8 +16,8 @@ public class HasilPemeriksaan implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idHasilPemeriksaan;
 
-    @Size(max = 500)
-    @Column
+    @Lob
+    @Column(columnDefinition = "TEXT")
     private String feedback;
 
     @ManyToOne(fetch = FetchType.EAGER)

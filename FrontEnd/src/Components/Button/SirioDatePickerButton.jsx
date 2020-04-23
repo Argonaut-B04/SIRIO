@@ -35,7 +35,7 @@ export default class SirioDatePickerButton extends React.Component {
                     this.props.handleChange(date, id);
                 }}
                 popperClassName={panel}
-                headerClassName="BAMBANG"
+                disabledKeyboardNavigation
                 locale={enGB}
                 popperPlacement={popper || "bottom-end"}
                 dateFormat="yyyy-MM-dd"

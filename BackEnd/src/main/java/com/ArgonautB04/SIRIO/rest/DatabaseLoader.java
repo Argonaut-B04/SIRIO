@@ -24,9 +24,9 @@ public class DatabaseLoader implements CommandLineRunner {
     private final EmployeeRestService employeeRestService;
     private final RoleDB roleDB;
     private final AccessPermissionDB accessPermissionDB;
-    private final ReminderMailFormatDB reminderMailFormatDB;
+    private final ReminderTemplateDB reminderTemplateDB;
 
-    public DatabaseLoader(StatusBuktiPelaksanaanDB statusBuktiPelaksanaanDB, StatusHasilPemeriksaanDB statusHasilPemeriksaanDB, StatusRencanaPemeriksaanDB statusRencanaPemeriksaanDB, StatusRisikoDB statusRisikoDB, StatusRekomendasiDB statusRekomendasiDB, EmployeeRestService employeeRestService, RoleDB roleDB, AccessPermissionDB accessPermissionDB, ReminderMailFormatDB reminderMailFormatDB) {
+    public DatabaseLoader(StatusBuktiPelaksanaanDB statusBuktiPelaksanaanDB, StatusHasilPemeriksaanDB statusHasilPemeriksaanDB, StatusRencanaPemeriksaanDB statusRencanaPemeriksaanDB, StatusRisikoDB statusRisikoDB, StatusRekomendasiDB statusRekomendasiDB, EmployeeRestService employeeRestService, RoleDB roleDB, AccessPermissionDB accessPermissionDB, ReminderTemplateDB reminderTemplateDB) {
         this.statusBuktiPelaksanaanDB = statusBuktiPelaksanaanDB;
         this.statusHasilPemeriksaanDB = statusHasilPemeriksaanDB;
         this.statusRencanaPemeriksaanDB = statusRencanaPemeriksaanDB;
@@ -34,7 +34,7 @@ public class DatabaseLoader implements CommandLineRunner {
         this.employeeRestService = employeeRestService;
         this.roleDB = roleDB;
         this.accessPermissionDB = accessPermissionDB;
-        this.reminderMailFormatDB = reminderMailFormatDB;
+        this.reminderTemplateDB = reminderTemplateDB;
     }
 
     @Override
@@ -48,17 +48,17 @@ public class DatabaseLoader implements CommandLineRunner {
         if (statusRekomendasiDB.findAll().isEmpty()) populasiStatusRekomendasi();
         if (employeeRestService.getAll().isEmpty() && roleDB.findAll().isEmpty() && accessPermissionDB.findAll().isEmpty())
             populasiEmployeedanRole();
-        if (reminderMailFormatDB.findAll().isEmpty()) populasiReminderMailFormat();
+        if (reminderTemplateDB.findAll().isEmpty()) populasiReminderTemplate();
         MailScheduler.startService = true;
     }
 
-    private void populasiReminderMailFormat() {
-        ReminderMailFormat reminderMailFormatGlobal = new ReminderMailFormat();
-        reminderMailFormatGlobal.setMailFormat("An global template for your email");
-        reminderMailFormatGlobal.setSubjects("Final test");
-        reminderMailFormatGlobal.setGlobal(true);
-        reminderMailFormatDB.save(reminderMailFormatGlobal);
-        logger.info("Generated Reminder Mail Format Entries: 1");
+    private void populasiReminderTemplate() {
+        ReminderTemplate reminderTemplateGlobal = new ReminderTemplate();
+        reminderTemplateGlobal.setSubjects("Final test");
+        reminderTemplateGlobal.setBody("An global template for your email");
+        reminderTemplateGlobal.setGlobal(true);
+        reminderTemplateDB.save(reminderTemplateGlobal);
+        logger.info("Generated Reminder Template: 1");
     }
 
     private void populasiEmployeedanRole() {
