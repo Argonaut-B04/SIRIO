@@ -4,15 +4,14 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
-import java.util.List;
 
 @Entity
 @Table
-public class ReminderMailFormat implements Serializable {
+public class ReminderTemplate implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int idReminderMailFormat;
+    private int idReminderTemplate;
 
     @NotNull
     @Size(max = 75)
@@ -21,21 +20,21 @@ public class ReminderMailFormat implements Serializable {
 
     @Lob
     @Column(columnDefinition = "TEXT")
-    private String mailFormat;
+    private String body;
 
     @Column
     private Boolean global = false;
 
-    public ReminderMailFormat() {
+    public ReminderTemplate() {
     }
 
-    public ReminderMailFormat(@NotNull @Size(max = 75) String subjects, String mailFormat) {
+    public ReminderTemplate(@NotNull @Size(max = 75) String subjects, String mailFormat) {
         this.subjects = subjects;
-        this.mailFormat = mailFormat;
+        this.body = mailFormat;
     }
 
-    public int getIdReminderMailFormat() {
-        return idReminderMailFormat;
+    public int getIdReminderTemplate() {
+        return idReminderTemplate;
     }
 
     public String getSubjects() {
@@ -46,16 +45,16 @@ public class ReminderMailFormat implements Serializable {
         this.subjects = subjects;
     }
 
-    public void setIdReminderMailFormat(int idReminderMailFormat) {
-        this.idReminderMailFormat = idReminderMailFormat;
+    public void setIdReminderTemplate(int idReminderMailFormat) {
+        this.idReminderTemplate = idReminderMailFormat;
     }
 
-    public String getMailFormat() {
-        return mailFormat;
+    public String getBody() {
+        return body;
     }
 
-    public void setMailFormat(String mailFormat) {
-        this.mailFormat = mailFormat;
+    public void setBody(String mailFormat) {
+        this.body = mailFormat;
     }
 
     public boolean isGlobal() {

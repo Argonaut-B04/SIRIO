@@ -1,8 +1,9 @@
 package com.ArgonautB04.SIRIO.services;
 
+import com.ArgonautB04.SIRIO.model.Employee;
 import com.ArgonautB04.SIRIO.model.Rekomendasi;
 import com.ArgonautB04.SIRIO.model.Reminder;
-import com.ArgonautB04.SIRIO.model.ReminderMailFormat;
+import com.ArgonautB04.SIRIO.model.ReminderTemplate;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -19,7 +20,7 @@ public interface ReminderRestService {
 
     List<Reminder> getByDay(LocalDate date, LocalDate secondDate);
 
-    List<Reminder> getByReminderMailFormat(ReminderMailFormat reminderMailFormat);
+    List<Reminder> getByReminderTemplate(ReminderTemplate reminderTemplate);
 
     List<Reminder> getByRekomendasi(Rekomendasi rekomendasi);
 
@@ -32,4 +33,10 @@ public interface ReminderRestService {
     Reminder ubahReminder(int idReminder, LocalDate tanggalDate);
 
     void telahTerkirim(Reminder reminder);
+
+    Optional<Reminder> isExistByIdReminderDanPembuat(int idReminder, Rekomendasi rekomendasi, Employee pembuat);
+
+    void simpanReminder(Reminder akanDiperbarui);
+
+    Reminder validateExistById(int idReminder);
 }

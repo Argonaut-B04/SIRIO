@@ -241,13 +241,14 @@ class TabelReminder extends React.Component {
         if (dateOld <= currentDate) {
             return "";
         }
+        const minDate = this.addDays(currentDate, 1);
         return (
             <SirioDatePickerButton
                 purple
                 hover
                 id={row.idReminder}
                 handleChange={(date, id) => this.ubah(date, id)}
-                minDate={currentDate}
+                minDate={minDate}
                 maxDate={this.state.deadline}
             >
                 Ubah
@@ -300,6 +301,7 @@ class TabelReminder extends React.Component {
 
     // Fungsi untuk mendapatkan tombol di sisi kanan title
     headerButton() {
+        const minDate = this.addDays(new Date(), 1);
         return (
             <>
                 <div className="d-flex flex-row align-items-center">
@@ -309,6 +311,7 @@ class TabelReminder extends React.Component {
                             recommended
                             unchangedContent
                             handleChange={(date, id) => this.tambah(date, id)}
+                            minDate={minDate}
                             maxDate={this.state.deadline}
                             popper="top-end"
                         >

@@ -35,10 +35,10 @@ public class Reminder implements Serializable {
     private Rekomendasi rekomendasi;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "reminderMailFormat", referencedColumnName = "idReminderMailFormat")
+    @JoinColumn(name = "reminderMailFormat", referencedColumnName = "idReminderTemplate")
     @OnDelete(action = OnDeleteAction.NO_ACTION)
     @JsonIgnore
-    private ReminderMailFormat reminderMailFormat;
+    private ReminderTemplate reminderTemplate;
 
     @NotNull
     @Column
@@ -47,11 +47,11 @@ public class Reminder implements Serializable {
     public Reminder() {
     }
 
-    public Reminder(@NotNull LocalDate tanggalPengiriman, Employee pembuat, Rekomendasi rekomendasi, ReminderMailFormat reminderMailFormat) {
+    public Reminder(@NotNull LocalDate tanggalPengiriman, Employee pembuat, Rekomendasi rekomendasi, ReminderTemplate reminderTemplate) {
         this.tanggalPengiriman = tanggalPengiriman;
         this.pembuat = pembuat;
         this.rekomendasi = rekomendasi;
-        this.reminderMailFormat = reminderMailFormat;
+        this.reminderTemplate = reminderTemplate;
     }
 
     public int getIdReminder() {
@@ -86,12 +86,12 @@ public class Reminder implements Serializable {
         this.rekomendasi = rekomendasi;
     }
 
-    public ReminderMailFormat getReminderMailFormat() {
-        return reminderMailFormat;
+    public ReminderTemplate getReminderTemplate() {
+        return reminderTemplate;
     }
 
-    public void setReminderMailFormat(ReminderMailFormat reminderMailFormat) {
-        this.reminderMailFormat = reminderMailFormat;
+    public void setReminderTemplate(ReminderTemplate reminderTemplate) {
+        this.reminderTemplate = reminderTemplate;
     }
 
     public boolean isTerkirim() {

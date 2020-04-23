@@ -29,4 +29,6 @@ public interface EmployeeRestService {
     Employee validateEmployeeExistById(Integer id);
 
     void validateRolePermission(Employee employee, String requestedPermissions);
+
+    void simpanPerubahan(Employee employee);
 }

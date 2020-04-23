@@ -9,6 +9,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.swing.text.html.Option;
 import javax.transaction.Transactional;
 import java.security.Principal;
 import java.util.List;
@@ -233,6 +234,16 @@ public class EmployeeRestServiceImpl implements EmployeeRestService {
                     );
                 }
                 break;
+        }
+    }
+
+    @Override
+    public void simpanPerubahan(Employee employee) {
+        Optional<Employee> target = employeeDb.findById(employee.getIdEmployee());
+        if (target.isPresent()) {
+            Employee fokus = target.get();
+            fokus.setReminderTemplatePilihan(employee.getReminderTemplatePilihan());
+            employeeDb.save(employee);
         }
     }
 }

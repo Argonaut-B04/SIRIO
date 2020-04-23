@@ -2,7 +2,7 @@ package com.ArgonautB04.SIRIO.scheduled;
 
 import com.ArgonautB04.SIRIO.model.Employee;
 import com.ArgonautB04.SIRIO.model.Reminder;
-import com.ArgonautB04.SIRIO.model.ReminderMailFormat;
+import com.ArgonautB04.SIRIO.model.ReminderTemplate;
 import com.ArgonautB04.SIRIO.services.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +32,7 @@ public class MailScheduler {
     RekomendasiRestService rekomendasiRestService;
 
     @Autowired
-    ReminderMailFormatRestService reminderMailFormatRestService;
+    ReminderTemplateRestService reminderTemplateRestService;
 
     @Autowired
     EmailRestService emailRestService;
@@ -71,12 +71,12 @@ public class MailScheduler {
                             .getKantorCabang()
                             .getPemilik();
 
-            ReminderMailFormat reminderMailFormatSingleReminder = reminder.getReminderMailFormat();
+            ReminderTemplate reminderMailFormatSingleReminder = reminder.getReminderTemplate();
             if (reminderMailFormatSingleReminder == null) {
-                reminderMailFormatSingleReminder = reminderMailFormatRestService.getGlobal();
+                reminderMailFormatSingleReminder = reminderTemplateRestService.getGlobal();
             }
 
-            emailRestService.sendEmail(penerima.getEmail(), reminderMailFormatSingleReminder.getSubjects(), reminderMailFormatSingleReminder.getMailFormat());
+            emailRestService.sendEmail(penerima.getEmail(), reminderMailFormatSingleReminder.getSubjects(), reminderMailFormatSingleReminder.getBody());
             reminderRestService.telahTerkirim(reminder);
             logger.info("Reminder terkirim kepada " + penerima.getNama());
         }
