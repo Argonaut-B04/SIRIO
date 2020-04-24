@@ -210,14 +210,21 @@ export default class TabelRekomendasi extends React.Component {
     // Formatter untuk render button pertama
     getButtonsFirst(cell, row) {
         return (
-            <SirioButton
-                purple
-                hover
-                onClick={() => alert("Halaman Hasil Pemeriksaan belum terimplementasi")}
-                tooltip="Pergi ke halaman hasil pemeriksaan dari rekomendasi ini"
-            >
-                Hasil Pemeriksaan
-            </SirioButton>
+            <NavLink
+                to={{
+                    pathname: "/hasil-pemeriksaan/detail",
+                    state: {
+                        id: row.idHasilPemeriksaan,
+                    }
+                }}>
+                <SirioButton
+                    purple
+                    hover
+                    tooltip="Pergi ke halaman hasil pemeriksaan dari rekomendasi ini"
+                >
+                    Hasil Pemeriksaan
+                </SirioButton>
+            </NavLink>
         )
     }
 

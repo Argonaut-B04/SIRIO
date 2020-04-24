@@ -37,8 +37,6 @@ class TabelBuktiPelaksanaan extends React.Component {
     async renderRows() {
         const response = await RekomendasiService.getRekomendasiByLoggedInUser();
 
-        console.log(response.data.result);
-
         this.setState({
             rowList: response.data.result
         })
@@ -130,14 +128,15 @@ class TabelBuktiPelaksanaan extends React.Component {
                         return { width: "15%", textAlign: 'left' };
                     }
                 }, {
-                    dataField: 'tenggatWaktu',
+                    dataField: 'tenggatWaktuDate',
                     text: 'TENGGAT WAKTU',
                     sort: true,
                     classes: classes.rowItem,
                     headerClasses: classes.colheader,
                     headerStyle: (colum, colIndex) => {
                         return { width: "15%", textAlign: 'left' };
-                    }
+                    },
+                    formatter: SirioAxiosBase.formatDate
                 }, {
                     dataField: 'durasi',
                     text: 'DURASI',

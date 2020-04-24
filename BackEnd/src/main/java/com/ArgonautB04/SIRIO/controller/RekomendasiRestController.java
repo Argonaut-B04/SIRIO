@@ -87,12 +87,15 @@ public class RekomendasiRestController {
         for (Rekomendasi rekomendasi : daftarRekomendasi) {
             RekomendasiDTO rekomendasiDTO = new RekomendasiDTO();
 
+            // Memasukan id dan keterangan
             rekomendasiDTO.setId(rekomendasi.getIdRekomendasi());
             rekomendasiDTO.setKeterangan(rekomendasi.getKeterangan());
 
+            // Memasukan tenggat waktu
             LocalDate tenggatWaktu = rekomendasi.getTenggatWaktu();
             rekomendasiDTO.setTenggatWaktuDate(tenggatWaktu);
 
+            // Memasukan durasi hingga tenggat waktu
             if (tenggatWaktu != null) {
                 int durasi = (int) ChronoUnit.DAYS.between(waktuSaatIni, tenggatWaktu);
                 if (durasi < 0) {
@@ -102,8 +105,10 @@ public class RekomendasiRestController {
                 rekomendasiDTO.setDurasi(durasiFinal);
             }
 
+            // Memasukan status rekomendasi
             rekomendasiDTO.setStatus(rekomendasi.getStatusRekomendasi().getNamaStatus());
 
+            // Memasukan status bukti untuk rekomendasi
             List<BuktiPelaksanaan> buktiList = buktiPelaksanaanRestService.getByDaftarRekomendasi(daftarRekomendasi);
             for (BuktiPelaksanaan buktiPelaksanaan : buktiList) {
                 if (buktiPelaksanaan.getRekomendasi().equals(rekomendasi)) {
@@ -115,6 +120,7 @@ public class RekomendasiRestController {
                 }
             }
 
+            // Memasukan daftar kantor cabang setiap rekomendasi
             rekomendasiDTO
                     .setNamaKantorCabang(
                             rekomendasi
@@ -123,6 +129,14 @@ public class RekomendasiRestController {
                                     .getTugasPemeriksaan()
                                     .getKantorCabang()
                                     .getNamaKantor());
+
+            // Memasukan id hasil pemeriksaan setiap rekomendasi
+            rekomendasiDTO.setIdHasilPemeriksaan(
+                    rekomendasi
+                            .getKomponenPemeriksaan()
+                            .getHasilPemeriksaan()
+                            .getIdHasilPemeriksaan()
+            );
 
             resultDTO.add(rekomendasiDTO);
         }

@@ -55,10 +55,16 @@ export default class SirioMainLayout extends Component {
             targetClass = classes.mainContentTransparent;
         }
 
+        const shouldShow = this.props.active ? (this.props.active && this.state.showing) : this.state.showing;
+
+        var pageContentClass = classes.pageContent;
+        if (window.innerWidth < 1000) {
+            pageContentClass = shouldShow ? "d-none" : pageContentClass;
+        }
         return (
             <>
                 {preloader}
-                <SirioSideNav shouldShow={this.props.active ? (this.props.active && this.state.showing) : this.state.showing} toggleNav={this.toggleNav} />
+                <SirioSideNav shouldShow={shouldShow} toggleNav={this.toggleNav} />
 
                 {/* Jika props contentLoading tersedia, maka komponen akan menggunakan loader content */}
                 <LoadingOverlay
@@ -80,7 +86,7 @@ export default class SirioMainLayout extends Component {
                         </SirioButton>
                         <img src={process.env.PUBLIC_URL + '/fullLogoLight.png'} alt="SIRIO Logo" height="30px" />
                     </div>
-                    <div className={classes.pageContent}>
+                    <div className={pageContentClass}>
                         {this.props.children}
                     </div>
                 </LoadingOverlay>
