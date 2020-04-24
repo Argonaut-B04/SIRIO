@@ -15,6 +15,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
 import java.text.ParseException;
+import java.time.LocalDate;
 import java.util.*;
 
 @CrossOrigin(origins = "*")
@@ -193,8 +194,8 @@ public class RencanaPemeriksaanRestController {
                 }
 
                 if (tugasPemeriksaanDTO.getTanggalMulai() != null && tugasPemeriksaanDTO.getTanggalSelesai() != null) {
-                    Date tanggalMulaiLocalDate = Settings.stringToDate(tugasPemeriksaanDTO.getTanggalMulai());
-                    Date tanggalSelesaiLocalDate = Settings.stringToDate(tugasPemeriksaanDTO.getTanggalSelesai());
+                    LocalDate tanggalMulaiLocalDate = Settings.stringToLocalDate(tugasPemeriksaanDTO.getTanggalMulai());
+                    LocalDate tanggalSelesaiLocalDate = Settings.stringToLocalDate(tugasPemeriksaanDTO.getTanggalSelesai());
 
                     if (tanggalMulaiLocalDate.compareTo(tanggalSelesaiLocalDate) < 0) {
                         tugasPemeriksaanTemp.setTanggalMulai(tanggalMulaiLocalDate);
@@ -278,8 +279,8 @@ public class RencanaPemeriksaanRestController {
                 }
 
                 if (tugasPemeriksaanDTO.getTanggalMulai() != null && tugasPemeriksaanDTO.getTanggalSelesai() != null) {
-                    Date tanggalMulaiLocalDate = Settings.stringToDate(tugasPemeriksaanDTO.getTanggalMulai());
-                    Date tanggalSelesaiLocalDate = Settings.stringToDate(tugasPemeriksaanDTO.getTanggalSelesai());
+                    LocalDate tanggalMulaiLocalDate = Settings.stringToLocalDate(tugasPemeriksaanDTO.getTanggalMulai());
+                    LocalDate tanggalSelesaiLocalDate = Settings.stringToLocalDate(tugasPemeriksaanDTO.getTanggalSelesai());
 
                     if (tanggalMulaiLocalDate.compareTo(tanggalSelesaiLocalDate) < 0) {
                         tugasPemeriksaanTemp.setTanggalMulai(tanggalMulaiLocalDate);

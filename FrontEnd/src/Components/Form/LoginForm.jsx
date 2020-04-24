@@ -81,13 +81,13 @@ class LoginForm extends Component {
                     if (error.response) {
                         errInfo = error.response.status === 401 ? "Username dan Password tidak sesuai" : errInfo;
                     }
+                    this.props.changeLoadingBody("Gagal");
+                    this.props.contentFinishLoading();
+
                     this.setState({
                         hasLoginFailed: true,
                         errInfo: errInfo
                     })
-
-                    this.props.changeLoadingBody("Gagal");
-                    this.props.contentFinishLoading();
                 }
             )
     }

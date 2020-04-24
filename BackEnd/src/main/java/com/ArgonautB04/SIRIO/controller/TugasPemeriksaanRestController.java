@@ -9,14 +9,11 @@ import com.ArgonautB04.SIRIO.rest.Settings;
 import com.ArgonautB04.SIRIO.rest.TugasPemeriksaanDTO;
 import com.ArgonautB04.SIRIO.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
-import java.text.ParseException;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -131,20 +128,14 @@ public class TugasPemeriksaanRestController {
         tugasPemeriksaanTemp.setKantorCabang(kantorCabangRestService.getById(tugasPemeriksaanDTO.getKantorCabang()));
         tugasPemeriksaanTemp.setPelaksana(employeeRestService.getById(tugasPemeriksaanDTO.getIdQA()));
 
-        try {
-            Date tanggalMulaiLocalDate = Settings.stringToDate(tugasPemeriksaanDTO.getTanggalMulai());
-            Date tanggalSelesaiLocalDate = Settings.stringToDate(tugasPemeriksaanDTO.getTanggalSelesai());
+        LocalDate tanggalMulaiLocalDate = Settings.stringToLocalDate(tugasPemeriksaanDTO.getTanggalMulai());
+        LocalDate tanggalSelesaiLocalDate = Settings.stringToLocalDate(tugasPemeriksaanDTO.getTanggalSelesai());
 
-            if (tanggalMulaiLocalDate.compareTo(tanggalSelesaiLocalDate) < 0) {
-                tugasPemeriksaanTemp.setTanggalMulai(tanggalMulaiLocalDate);
-                tugasPemeriksaanTemp.setTanggalSelesai(tanggalSelesaiLocalDate);
-            }
-        } catch (ParseException e) {
-            throw new ResponseStatusException(
-                    HttpStatus.EXPECTATION_FAILED,
-                    "Terjadi kesalahan implementasi pada server"
-            );
+        if (tanggalMulaiLocalDate.compareTo(tanggalSelesaiLocalDate) < 0) {
+            tugasPemeriksaanTemp.setTanggalMulai(tanggalMulaiLocalDate);
+            tugasPemeriksaanTemp.setTanggalSelesai(tanggalSelesaiLocalDate);
         }
+
         TugasPemeriksaan tugasPemeriksaan = tugasPemeriksaanRestService.ubahTugasPemeriksaan(tugasPemeriksaanDTO.getId(), tugasPemeriksaanTemp);
         return new BaseResponse<>(200, "success", tugasPemeriksaan);
     }
