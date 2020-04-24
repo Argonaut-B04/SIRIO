@@ -32,7 +32,7 @@ class MainPage extends React.Component {
                     this.setState({
                         loadingBody: response.data.result
                     })
-                    
+
                     PollingService.connected();
 
                     setTimeout(function () { // Memberikan jeda waktu 0.5 detik
