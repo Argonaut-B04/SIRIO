@@ -56,7 +56,7 @@ class MainPage extends React.Component {
     render() {
         const { preloader, contentLoading, loadingBody } = this.state;
         return (
-            <SirioMainLayout preloader={preloader} contentLoading={contentLoading} loadingBody={loadingBody} disableSideNav={typeof contentLoading === "undefined" ? true : contentLoading}>
+            <SirioMainLayout preloader={preloader} contentLoading={contentLoading} loadingBody={loadingBody} active={!contentLoading}>
                 <h3>Welcome to SIRIO</h3>
             </SirioMainLayout>
         )

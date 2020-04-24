@@ -48,11 +48,9 @@ export default class SirioMainLayout extends Component {
         // Untuk menampilkan, navigasi apa yang harus ditampilkan
         var targetClass = classes.mainContent;
         var topbar = classes.topbar;
-        if (this.state.showing) {
+        if (this.props.active ? (this.props.active && this.state.showing) : this.state.showing) {
             targetClass = [targetClass, classes.show].join(" ");
             topbar = [topbar, classes.hiddenBar].join(" ");
-        } else if (this.props.disableSideNav) {
-            targetClass = [targetClass, classes.fullWidth].join(" ");
         } else if (this.props.transparent) {
             targetClass = classes.mainContentTransparent;
         }
@@ -60,7 +58,7 @@ export default class SirioMainLayout extends Component {
         return (
             <>
                 {preloader}
-                <SirioSideNav disableSideNav={this.props.disableSideNav} shouldShow={this.state.showing} toggleNav={this.toggleNav} />
+                <SirioSideNav shouldShow={this.props.active ? (this.props.active && this.state.showing) : this.state.showing} toggleNav={this.toggleNav} />
 
                 {/* Jika props contentLoading tersedia, maka komponen akan menggunakan loader content */}
                 <LoadingOverlay
