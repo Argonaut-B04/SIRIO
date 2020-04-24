@@ -214,6 +214,7 @@ export default class TabelRekomendasi extends React.Component {
                 purple
                 hover
                 onClick={() => alert("Halaman Hasil Pemeriksaan belum terimplementasi")}
+                tooltip="Pergi ke halaman hasil pemeriksaan dari rekomendasi ini"
             >
                 Hasil Pemeriksaan
             </SirioButton>
@@ -248,6 +249,7 @@ export default class TabelRekomendasi extends React.Component {
                 <SirioButton
                     purple
                     text
+                    tooltip="Tidak dapat mengatur tenggat waktu untuk rekomendasi yang sedang atau sudah dijalankan"
                 >
                     {tenggatWaktu}
                 </SirioButton>
@@ -261,7 +263,7 @@ export default class TabelRekomendasi extends React.Component {
                     id={row.id}
                     selectedDate={tenggatWaktuDate}
                     handleChange={(date, id) => this.aturTenggatWaktu(date, id)}
-                    minDate={new Date()}
+                    tooltip="Ubah tenggat waktu"
                 >
                     {tenggatWaktu}
                 </SirioDatePickerButton>
@@ -274,6 +276,7 @@ export default class TabelRekomendasi extends React.Component {
                     id={row.id}
                     selectedDate={tenggatWaktuDate}
                     handleChange={(date, id) => this.aturTenggatWaktu(date, id)}
+                    tooltip="Atur tenggat waktu"
                 >
                     Tenggat Waktu
                 </SirioDatePickerButton>
@@ -283,6 +286,7 @@ export default class TabelRekomendasi extends React.Component {
                 <SirioButton
                     purple
                     disabled
+                    tooltip="Tenggat waktu belum dapat diatur"
                 >
                     Tenggat Waktu
                 </SirioButton>
@@ -309,6 +313,7 @@ export default class TabelRekomendasi extends React.Component {
                     <SirioButton
                         purple
                         hover
+                        tooltip="Buka pengaturan reminder"
                     >
                         Reminder
                     </SirioButton>
@@ -319,6 +324,7 @@ export default class TabelRekomendasi extends React.Component {
                 <SirioButton
                     purple
                     disabled
+                    tooltip="Reminder belum dapat diatur"
                 >
                     Reminder
                 </SirioButton>

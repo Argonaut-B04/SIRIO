@@ -34,7 +34,7 @@ class SirioDropdown extends Component {
         const { headerClass, activeClass, menuClass, headerTitle } = props;
         return (
             <>
-                <div className={listOpen ? [headerClass, activeClass].join(' ') : headerClass} onClick={toggleOpen}>
+                <div className={listOpen ? [headerClass, activeClass].join(' ') : headerClass} onClick={toggleOpen} data-tip={listOpen ? "Klik untuk menutup" : "Klik untuk melihat lebih"}>
                     <span>{headerTitle}</span> <span className="ml-auto"> ▼ </span>
                 </div>
                 {listOpen && <div className={menuClass}>

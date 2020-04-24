@@ -20,14 +20,14 @@ public class TugasPemeriksaan implements Serializable {
     private int idTugas;
 
     @NotNull
-    @DateTimeFormat(pattern = "MM-dd-yyyy")
+    @DateTimeFormat
     @Column(nullable = false)
-    private Date tanggalMulai;
+    private LocalDate tanggalMulai;
 
     @NotNull
-    @DateTimeFormat(pattern = "MM-dd-yyyy")
+    @DateTimeFormat
     @Column(nullable = false)
-    private Date tanggalSelesai;
+    private LocalDate tanggalSelesai;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "kantor_cabang", referencedColumnName = "idKantor", nullable = false)
@@ -52,19 +52,19 @@ public class TugasPemeriksaan implements Serializable {
         this.idTugas = idTugas;
     }
 
-    public Date getTanggalMulai() {
+    public LocalDate getTanggalMulai() {
         return tanggalMulai;
     }
 
-    public void setTanggalMulai(Date tanggalMulai) {
+    public void setTanggalMulai(LocalDate tanggalMulai) {
         this.tanggalMulai = tanggalMulai;
     }
 
-    public Date getTanggalSelesai() {
+    public LocalDate getTanggalSelesai() {
         return tanggalSelesai;
     }
 
-    public void setTanggalSelesai(Date tanggalSelesai) {
+    public void setTanggalSelesai(LocalDate tanggalSelesai) {
         this.tanggalSelesai = tanggalSelesai;
     }
 

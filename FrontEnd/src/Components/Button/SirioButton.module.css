@@ -51,6 +51,10 @@
     pointer-events: none;
 }
 
+.disableWithTooltip {
+    --main-color: #878787;
+}
+
 .hyperlink {
     color: blue;
     border: solid 1.5px #7F3F98;
@@ -69,6 +73,13 @@
     pointer-events: none;
     background-color: transparent;
 }
+
+.textWithTooltip {
+    border: none;
+    color: #7F3F98;
+    background-color: transparent;
+}
+
 /* Component Style End */
 
 /* Border Radius */

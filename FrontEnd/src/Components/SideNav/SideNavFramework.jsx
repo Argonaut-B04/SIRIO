@@ -72,7 +72,7 @@ export default class SideNavFramework extends React.Component {
                 </SirioButton>
         }
 
-        var className = this.props.disableSideNav ? [this.props.classes, classes.sidebar, classes.hidden].join(' ') : [this.props.classes, classes.sidebar].join(" ");
+        var className = [this.props.classes, classes.sidebar].join(" ");
         if (this.props.shouldShow) {
             className = [className, classes.show].join(" ");
         }

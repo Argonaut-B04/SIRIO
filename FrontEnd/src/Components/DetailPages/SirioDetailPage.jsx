@@ -12,7 +12,7 @@ class SirioDetailPage extends Component {
                 <div className={headerWrapper}>
                     {!noBack &&
                         <a href={'/' + link}>
-                            <img src={process.env.PUBLIC_URL + '/backLogo.png'} className={logoImage} alt="Back Logo" />
+                            <img src={process.env.PUBLIC_URL + '/backLogo.png'} className={logoImage} alt="Back Logo" data-tip="Kembali"/>
                         </a>
                     }
                     <h2 className={classes.title}>
@@ -25,7 +25,11 @@ class SirioDetailPage extends Component {
                             {Object.keys(data).map((key, i) =>
                                 <tr key={i}>
                                     <td className={rowItem}>{key}</td>
-                                    <td className={rowItem}>{data[key]}</td>
+                                    <td className={rowItem}>
+                                        <div className="w-100">
+                                            {data[key]}
+                                        </div>
+                                    </td>
                                 </tr>
                             )}
                         </tbody>

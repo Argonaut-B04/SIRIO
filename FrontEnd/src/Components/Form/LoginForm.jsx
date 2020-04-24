@@ -65,7 +65,7 @@ class LoginForm extends Component {
                 (response) => {
                     AuthenticationService.registerSuccessfulLogin(username, password, response.data.result.role.namaRole);
 
-                    this.props.changeLoadingBody("Berhasil Masuk");
+                    this.props.changeLoadingBody("Berhasil masuk, mengarahkan anda ke halaman selanjutnya");
                     this.props.contentFinishLoading();
 
                     if (target) {
@@ -81,13 +81,13 @@ class LoginForm extends Component {
                     if (error.response) {
                         errInfo = error.response.status === 401 ? "Username dan Password tidak sesuai" : errInfo;
                     }
+                    this.props.changeLoadingBody("Gagal");
+                    this.props.contentFinishLoading();
+
                     this.setState({
                         hasLoginFailed: true,
                         errInfo: errInfo
                     })
-
-                    this.props.changeLoadingBody("Gagal");
-                    this.props.contentFinishLoading();
                 }
             )
     }

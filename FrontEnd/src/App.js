@@ -5,6 +5,8 @@ import {
   Route,
   Switch,
 } from "react-router-dom";
+import ReactTooltip from 'react-tooltip';
+
 import MainPage from "./pages";
 
 import DaftarRencanaPemeriksaan from './pages/Manager/DaftarRencanaPemeriksaan';
@@ -61,6 +63,8 @@ class App extends React.Component {
   render() {
     return (
       <>
+        <ReactTooltip place="top" type="dark" effect="solid" className="sirio_tooltip" />
+
         <Router>
           <Switch>
             <Route exact path="/" component={MainPage} />
@@ -68,7 +72,7 @@ class App extends React.Component {
             <Route exact path="/manager/rencanaPemeriksaan/detail" component={DetailRencanaPemeriksaan} />
             <Route exact path="/manager/rencanaPemeriksaan/tambah" component={FormTambahRencanaPemeriksaan} />
             <Route exact path="/manager/rencanaPemeriksaan/ubah" component={FormUbahRencanaPemeriksaan} />
-            
+
             <Route exact path="/administrator/kantorCabang/ubah" component={FormUbahKantorCabang} />
             <Route exact path="/administrator/kantorCabang/tambah" component={FormTambahKantorCabang} />
             <Route exact path="/administrator/kantorCabang" component={DaftarKantorCabang} />

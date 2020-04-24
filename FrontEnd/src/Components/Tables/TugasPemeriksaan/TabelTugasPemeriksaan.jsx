@@ -5,6 +5,7 @@ import SirioTable from '../SirioTable';
 import TugasPemeriksaanService from '../../../Services/TugasPemeriksaanService';
 import AuthenticationService from '../../../Services/AuthenticationService';
 import { NavLink } from 'react-router-dom';
+import SirioAxiosBase from '../../../Services/SirioAxiosBase';
 
 export default class TabelTugasPemeriksaan extends React.Component {
 
@@ -79,14 +80,14 @@ export default class TabelTugasPemeriksaan extends React.Component {
 
     columns = [
         {
-            dataField: '',
+            dataField: 'namaKantorCabang',
             isDummyField: true,
             text: 'TUGAS PEMERIKSAAN',
             sort: true,
             classes: classes.rowItem,
-            formatter: (cell,  row) => this.namaTugasPemeriksaanFormatter(cell, row),
+            formatter: (cell, row) => this.namaTugasPemeriksaanFormatter(cell, row),
             headerClasses: classes.colheader,
-            headerStyle: (colum, colIndex) => {
+            headerStyle: () => {
                 return { width: "25%", textAlign: 'left' };
             }
         }, {
@@ -94,24 +95,24 @@ export default class TabelTugasPemeriksaan extends React.Component {
             text: 'TANGGAL MULAI',
             sort: true,
             classes: classes.rowItem,
-            // formatter: SirioAxiosBase.formatDate,
             headerClasses: classes.colheader,
-            headerStyle: (colum, colIndex) => {
-                return { width: "20%", textAlign: 'left' };
-            }
+            headerStyle: () => {
+                return { width: "20%" };
+            },
+            formatter: SirioAxiosBase.formatDateFromSirioDatePicker
         }, {
             dataField: 'tanggalSelesai',
             text: 'TANGGAL SELESAI',
             sort: true,
             classes: classes.rowItem,
-            // formatter: SirioAxiosBase.formatDate,
             headerClasses: classes.colheader,
-            headerStyle: (colum, colIndex) => {
-                return { width: "20%", textAlign: 'left' };
-            }
+            headerStyle: () => {
+                return { width: "20%" };
+            },
+            formatter: SirioAxiosBase.formatDateFromSirioDatePicker
         }, {
             dataField: 'noData 1',
-            text: '',
+            text: 'Aksi Hasil',
             headerClasses: classes.colheader,
             classes: classes.rowItem,
             formatter: this.getButtonsFirst,
@@ -121,7 +122,7 @@ export default class TabelTugasPemeriksaan extends React.Component {
         }];
 
     defaultSorted = [{
-        dataField: 'id',
+        dataField: 'tanggalMulai',
         order: 'asc'
     }];
 
