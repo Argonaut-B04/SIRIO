@@ -120,13 +120,15 @@ export default class SideNavFramework extends React.Component {
                             {logButton}
                         </div>
                     </div>
-                    <SirioButton
-                        blue
-                        hover
-                        classes="m-2"
-                        onClick={() => { this.toggleNav() }}>
-                        Tutup Menu
-                    </SirioButton>
+                    {!this.props.noToggle &&
+                        <SirioButton
+                            blue
+                            hover
+                            classes="m-2"
+                            onClick={() => { this.toggleNav() }}>
+                            Tutup Menu
+                        </SirioButton>
+                    }
                 </nav>
             </>
         );

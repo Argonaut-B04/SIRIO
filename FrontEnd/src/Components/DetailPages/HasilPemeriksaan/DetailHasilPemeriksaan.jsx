@@ -196,7 +196,6 @@ class DetailHasilPemeriksaan extends React.Component {
                     onConfirm={() => this.setuju(id)}
                     customConfirmText="Ya, Setujui"
                     customCancelText="Batal"
-                    closeOnConfirm
                 >
                     Setuju
                 </SirioConfirmButton>

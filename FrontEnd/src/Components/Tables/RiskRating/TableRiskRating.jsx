@@ -219,7 +219,6 @@ class TableRiskRating extends React.Component {
                         onConfirm={this.handleSubmit}
                         customConfirmText="Konfirmasi"
                         customCancelText="Batal"
-                        closeOnConfirm
                     >
                         Simpan
                 </SirioConfirmButton>

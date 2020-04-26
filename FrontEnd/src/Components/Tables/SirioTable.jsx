@@ -123,6 +123,7 @@ export default class SirioTable extends Component {
         dataField: 'noData',
         text: 'NO',
         isDummyField: true,
+        editable: false,
         searchable: false,
         classes: [classes.rowNumber, "d-none d-sm-table-cell"].join(" "),
         headerClasses: [classes.colheader, "d-none d-sm-table-cell"].join(" "),

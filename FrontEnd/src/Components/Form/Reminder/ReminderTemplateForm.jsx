@@ -208,7 +208,6 @@ class ReminderTemplateForm extends Component {
                             onConfirm={() => this.handleSubmit(null, "reminder")}
                             customConfirmText="Konfirmasi"
                             customCancelText="Batal"
-                            closeOnConfirm
                         >
                             Reminder
                         </SirioConfirmButton>
@@ -223,7 +222,6 @@ class ReminderTemplateForm extends Component {
                             onConfirm={() => this.handleSubmit(null, "rekomendasi")}
                             customConfirmText="Konfirmasi"
                             customCancelText="Batal"
-                            closeOnConfirm
                         >
                             Rekomendasi
                         </SirioConfirmButton>
@@ -241,7 +239,6 @@ class ReminderTemplateForm extends Component {
                         onConfirm={() => this.handleSubmit(null, "global")}
                         customConfirmText="Konfirmasi"
                         customCancelText="Batal"
-                        closeOnConfirm
                     >
                         Global
                     </SirioConfirmButton>
@@ -257,7 +254,6 @@ class ReminderTemplateForm extends Component {
                         onConfirm={() => this.handleSubmit(null, "akun")}
                         customConfirmText="Konfirmasi"
                         customCancelText="Batal"
-                        closeOnConfirm
                     >
                         Akun
                     </SirioConfirmButton>

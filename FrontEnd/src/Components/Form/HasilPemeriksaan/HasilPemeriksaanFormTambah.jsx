@@ -217,7 +217,6 @@ class HasilPemeriksaanFormTambah extends React.Component {
                 modalTitle= "Riwayat Temuan Risiko"
                 modalDesc={histori}
                 customConfirmText=" "
-                closeOnConfirm
                 confirmDisable
             >
                 Riwayat Temuan

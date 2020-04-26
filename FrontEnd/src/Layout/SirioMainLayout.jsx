@@ -64,7 +64,7 @@ export default class SirioMainLayout extends Component {
         return (
             <>
                 {preloader}
-                <SirioSideNav shouldShow={shouldShow} toggleNav={this.toggleNav} />
+                <SirioSideNav shouldShow={shouldShow} toggleNav={this.toggleNav} noToggle={window.innerWidth > 1000}/>
 
                 {/* Jika props contentLoading tersedia, maka komponen akan menggunakan loader content */}
                 <LoadingOverlay
