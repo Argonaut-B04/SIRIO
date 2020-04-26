@@ -29,6 +29,7 @@ class TableRiskLevel extends React.Component {
         this.endNotification = this.endNotification.bind(this);
         this.toggleEditMode = this.toggleEditMode.bind(this);
         this.tambah = this.tambah.bind(this);
+        this.columns = this.columns.bind(this);
     }
 
     componentDidMount() {
@@ -42,6 +43,7 @@ class TableRiskLevel extends React.Component {
     }
 
     toggleEditMode() {
+        this.clearEmptyRow();
         this.setState({
             editMode: !this.state.editMode
         })
@@ -53,7 +55,8 @@ class TableRiskLevel extends React.Component {
                 this.renderRows()
                 this.setState({
                     changeComplete: true,
-                    editMode: false
+                    editMode: false,
+                    rowChanged: false
                 })
             });
     }
@@ -64,6 +67,43 @@ class TableRiskLevel extends React.Component {
         this.setState({
             rowList: response.data.result
         })
+    }
+
+    validate(newValue, row, column) {
+        this.setState({
+            rowChanged: true
+        })
+        if (newValue === "") {
+            return {
+                valid: false,
+                message: 'Tidak boleh dikosongkan'
+            }
+        }
+        if (column.dataField === "namaLevel") {
+            const daftarNamaLevel = this.state.rowList.map(singleRow => singleRow.namaLevel);
+            if (daftarNamaLevel.includes(newValue)) {
+                return {
+                    valid: false,
+                    message: 'Nama level harus unik'
+                }
+            }
+        } else if (column.dataField === "bobotLevel") {
+            // harus numerik
+            if (isNaN(newValue)) {
+                return {
+                    valid: false,
+                    message: 'Bobot level harus berupa angka'
+                }
+            }
+
+            const daftarBobotLevel = this.state.rowList.map(singleRow => singleRow.bobotLevel);
+            if (daftarBobotLevel.includes(newValue)) {
+                return {
+                    valid: false,
+                    message: 'Bobot level harus unik'
+                }
+            }
+        }
     }
 
     columns() {
@@ -78,6 +118,9 @@ class TableRiskLevel extends React.Component {
                 headerStyle: (colum, colIndex) => {
                     return { width: "200px", textAlign: 'left' };
                 },
+                validator: (newValue, row, column) => {
+                    return this.validate(newValue, row, column);
+                }
             }, {
                 dataField: 'bobotLevel',
                 editable: this.state.editMode,
@@ -88,6 +131,9 @@ class TableRiskLevel extends React.Component {
                 headerStyle: (colum, colIndex) => {
                     return { width: "200px", textAlign: 'left' };
                 },
+                validator: (newValue, row, column) => {
+                    return this.validate(newValue, row, column);
+                }
             }, {
                 dataField: 'keteranganLevel',
                 editable: this.state.editMode,
@@ -100,7 +146,7 @@ class TableRiskLevel extends React.Component {
                 },
             }, {
                 dataField: 'noData 1',
-                text: '',
+                text: 'Aksi Hapus',
                 editable: false,
                 hidden: this.state ? !this.state.editMode : false,
                 headerClasses: classes.colheader,
@@ -141,7 +187,8 @@ class TableRiskLevel extends React.Component {
         })
 
         this.setState({
-            rowList: changedRow
+            rowList: changedRow,
+            rowChanged: true
         })
     }
 
@@ -154,7 +201,8 @@ class TableRiskLevel extends React.Component {
         })
 
         this.setState({
-            rowList: changedRow
+            rowList: changedRow,
+            rowChanged: true
         })
     }
 
@@ -162,6 +210,7 @@ class TableRiskLevel extends React.Component {
         return (
             <SirioButton
                 red
+                hover
                 onClick={() => this.hapus(row.idLevel)}
             >
                 Hapus
@@ -169,30 +218,82 @@ class TableRiskLevel extends React.Component {
         );
     }
 
+    hasEmptyRow() {
+        const row = this.state.rowList;
+        for (let i = 0; i < row.length; i++) {
+            if (row[i].namaLevel === "") {
+                return true;
+            }
+            if (row[i].bobotLevel === "") {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    clearEmptyRow() {
+        const row = this.state.rowList;
+        const modifiedRow = [];
+        for (let i = 0; i < row.length; i++) {
+            if (row[i].namaLevel !== "" && row[i].bobotLevel !== "") {
+                modifiedRow.push(row[i]);
+            }
+        }
+        this.setState({
+            rowList: modifiedRow
+        })
+    }
+
     // Fungsi untuk mendapatkan tombol di sisi kanan title
     headerButton() {
-        return (
-            <>
+        var addButton;
+        if (this.state.editMode) {
+            addButton = (
                 <SirioButton
                     purple
-                    recommended={!this.state.editMode}
-                    onClick={this.toggleEditMode}
+                    recommended={!this.hasEmptyRow()}
+                    disabled={this.hasEmptyRow()}
+                    tooltip={this.hasEmptyRow() ? "Masih terdapat baris kosong" : undefined}
+                    onClick={!this.hasEmptyRow() ? this.tambah : undefined}
                     classes="mx-1"
                 >
-                    {this.state.editMode ? "Nonaktifkan " : "Aktifkan "} Mode Edit
+                    Tambah
                 </SirioButton>
-                {this.state.editMode ?
-                    <SirioButton
-                        purple
-                        recommended
-                        onClick={this.tambah}
-                        classes="mx-1"
-                    >
-                        Tambah
-                    </SirioButton>
-                    :
-                    ""
-                }
+            )
+        }
+
+        var toggleButton = (
+            <SirioButton
+                purple
+                recommended={!this.state.editMode}
+                hover
+                onClick={this.toggleEditMode}
+                classes="mx-1"
+            >
+                {this.state.editMode ? "Nonaktifkan " : "Aktifkan "} Mode Edit
+            </SirioButton>
+        )
+        if (this.state.rowChanged) {
+            toggleButton = (
+                <SirioWarningButton
+                    purple
+                    hover
+                    recommended={!this.state.editMode}
+                    modalTitle="Konfirmasi Pembatalan"
+                    modalDesc="Seluruh perubahan konfigurasi Risk Level yang belum tersimpan akan dihapus. Konfirmasi?"
+                    onConfirm={() => window.location.reload(false)}
+                    customConfirmText="Konfirmasi"
+                    customCancelText="Kembali"
+                >
+                    Nonaktifkan Mode Edit
+                </SirioWarningButton>
+            )
+        }
+
+        return (
+            <>
+                {toggleButton}
+                {addButton}
             </>
         )
     }
@@ -200,20 +301,23 @@ class TableRiskLevel extends React.Component {
     footerContent() {
         if (this.state.editMode) {
             return (
-                <div>
+                <div className="pr-3">
                     <SirioConfirmButton
                         purple
+                        disabled={this.hasEmptyRow()}
+                        tooltip={this.hasEmptyRow() ? "Masih terdapat baris yang kosong" : undefined}
+                        hover={!this.hasEmptyRow()}
                         classes="m-1"
                         modalTitle="Anda akan menyimpan perubahan konfigurasi Risk Level"
                         onConfirm={this.handleSubmit}
                         customConfirmText="Konfirmasi"
                         customCancelText="Batal"
-                        closeOnConfirm
                     >
                         Simpan
-                </SirioConfirmButton>
+                    </SirioConfirmButton>
                     <SirioWarningButton
                         red
+                        hover
                         modalTitle="Konfirmasi Pembatalan"
                         modalDesc="Seluruh perubahan konfigurasi Risk Level yang belum tersimpan akan dihapus. Konfirmasi?"
                         onConfirm={() => window.location.href = "/"}
@@ -221,7 +325,7 @@ class TableRiskLevel extends React.Component {
                         customCancelText="Kembali"
                     >
                         Batal
-                </SirioWarningButton>
+                    </SirioWarningButton>
                 </div>
             )
         } else return "";
@@ -238,14 +342,18 @@ class TableRiskLevel extends React.Component {
             <>
                 <SirioTable
                     title={(this.state.editMode ? "Konfigurasi " : "Daftar ") + "Risk Level"}
+                    subtitle={this.state.editMode && "Klik pada cell yang ingin anda ubah"}
                     data={this.state.rowList}
                     id='idLevel'
                     columnsDefinition={column}
                     includeSearchBar
                     headerButton={this.headerButton()}
-                    footerContent={this.footerContent()}
                     cellEdit={this.cellEdit}
+                    indication="Belum ada Risk Level aktif yang terdaftar"
                 />
+                <div className="w-100 text-right">
+                    {this.footerContent()}
+                </div>
                 {this.state.changeComplete &&
                     <SirioMessageButton
                         show
