@@ -22,6 +22,12 @@ export default class SirioButton extends React.Component {
         }
     }
 
+    componentDidUpdate() {
+        if (this.props.tooltip) {
+            ReactTooltip.rebuild()
+        }
+    }
+
     componentWillUnmount() {
         ReactTooltip.hide()
     }
