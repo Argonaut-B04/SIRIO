@@ -72,7 +72,12 @@ export default class SirioMessageButton extends React.Component {
                                 purple
                                 recommended
                                 circular
-                                onClick={onClick ? onClick : handleClose}
+                                onClick={() => {
+                                    if (onClick) {
+                                        onClick()
+                                    }
+                                    handleClose()
+                                }}
                                 classes={modalButton}
                             >
                                 {customConfirmText ? customConfirmText : "oke"}
