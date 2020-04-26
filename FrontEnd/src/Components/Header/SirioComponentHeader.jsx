@@ -8,27 +8,24 @@ class SirioComponentHeader extends Component {
 
         return (
             <div className={headerWrapper}>
-                {title &&
-                    <div className="row">
-                        <h2 className={classes.title}>
-                            {title}
-                        </h2>
+                <div className="row">
+                    <div className="col-6">
+                        {title &&
+                            <h2 className={classes.title}>
+                                {title}
+                            </h2>
+                        }
+                        {betweenTitleSubtitle}
+                        {subtitle &&
+                            <h5 className={classes.subtitle}>
+                                {subtitle}
+                            </h5>
+                        }
+                    </div>
+                    <div className="col-6 d-flex justify-content-end align-items-center">
                         {headerButton && <div className="ml-auto">{headerButton}</div>}
                     </div>
-                }
-                {betweenTitleSubtitle &&
-                    <div className="row">
-                        {betweenTitleSubtitle}
-                    </div>
-                }
-
-                {subtitle &&
-                    <div className="row">
-                        <h5 className={classes.subtitle}>
-                            {subtitle}
-                        </h5>
-                    </div>
-                }
+                </div>
             </div>
         );
     }
