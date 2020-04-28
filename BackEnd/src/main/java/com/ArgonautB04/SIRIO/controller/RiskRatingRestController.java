@@ -4,6 +4,7 @@ import com.ArgonautB04.SIRIO.model.Employee;
 import com.ArgonautB04.SIRIO.model.RiskRating;
 import com.ArgonautB04.SIRIO.rest.BaseResponse;
 import com.ArgonautB04.SIRIO.services.EmployeeRestService;
+import com.ArgonautB04.SIRIO.services.KantorCabangRestService;
 import com.ArgonautB04.SIRIO.services.RiskRatingRestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +21,9 @@ public class RiskRatingRestController {
 
     @Autowired
     private EmployeeRestService employeeRestService;
+
+    @Autowired
+    private KantorCabangRestService kantorCabangRestService;
 
     @GetMapping("")
     private BaseResponse<List<RiskRating>> getAllAktifRiskRating(
@@ -38,12 +42,15 @@ public class RiskRatingRestController {
         Employee pengelola = employeeRestService.validateEmployeeExistByPrincipal(principal);
         employeeRestService.validateRolePermission(pengelola, "ubah risk rating");
 
+        kantorCabangRestService.nullifiedRiskRating();
         riskRatingRestService.clear();
 
         for (RiskRating riskRating : riskRatingList) {
             riskRating.setPengelola(pengelola);
             riskRatingRestService.buatRiskRating(riskRating);
         }
+
+        kantorCabangRestService.recalculateRiskRating();
 
         return new BaseResponse<>(200, "success", riskRatingRestService.getAll());
 

@@ -26,4 +26,8 @@ public interface KantorCabangRestService {
     void hapusKantorCabang(int idKantorCabang);
 
     KantorCabang validateExistById(int idKantorCabang);
+
+    void nullifiedRiskRating();
+
+    void recalculateRiskRating();
 }
