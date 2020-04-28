@@ -80,6 +80,9 @@ class TableRiskLevel extends React.Component {
             }
         }
         if (column.dataField === "namaLevel") {
+            if (newValue === row.namaLevel) {
+                return true;
+            }
             const daftarNamaLevel = this.state.rowList.map(singleRow => singleRow.namaLevel);
             if (daftarNamaLevel.includes(newValue)) {
                 return {
@@ -88,6 +91,10 @@ class TableRiskLevel extends React.Component {
                 }
             }
         } else if (column.dataField === "bobotLevel") {
+            if (newValue === row.bobotLevel) {
+                return true;
+            }
+
             // harus numerik
             if (isNaN(newValue)) {
                 return {
@@ -154,7 +161,17 @@ class TableRiskLevel extends React.Component {
                 style: () => {
                     return { textAlign: 'center' }
                 },
-                formatter: (cell, row) => this.getButtonsFirst(row)
+                formatter: (cell, row) => {
+                    return (
+                        <SirioButton
+                            red
+                            hover
+                            onClick={() => this.hapus(row.idLevel)}
+                        >
+                            Hapus
+                        </SirioButton>
+                    )
+                }
             }]
         )
     }
@@ -204,18 +221,6 @@ class TableRiskLevel extends React.Component {
             rowList: changedRow,
             rowChanged: true
         })
-    }
-
-    getButtonsFirst(row) {
-        return (
-            <SirioButton
-                red
-                hover
-                onClick={() => this.hapus(row.idLevel)}
-            >
-                Hapus
-            </SirioButton>
-        );
     }
 
     hasEmptyRow() {
