@@ -21,7 +21,7 @@ public class Rekomendasi implements Serializable {
 
     @NotNull
     @Size(max = 125)
-    @Column(nullable = true)
+    @Column(nullable = false)
     private String keterangan;
 
     @DateTimeFormat

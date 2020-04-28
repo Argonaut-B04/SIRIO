@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -31,7 +32,7 @@ public class KantorCabangRestServiceImpl implements KantorCabangRestService {
 //        return kantorCabangDB.findById(kantorCabang.getIdKantor()).isPresent();
 //    }
 
-//    @Override
+    //    @Override
 //    public KantorCabang isExistInDatabase(String namaKantor) {
 //        return kantorCabangDB.findByNamaKantor(namaKantor);
 //    }
@@ -54,7 +55,9 @@ public class KantorCabangRestServiceImpl implements KantorCabangRestService {
     }
 
     @Override
-    public Optional<KantorCabang> getByNama(String nama){ return kantorCabangDB.findByNamaKantor(nama);}
+    public Optional<KantorCabang> getByNama(String nama) {
+        return kantorCabangDB.findByNamaKantor(nama);
+    }
 
     @Override
     public KantorCabang ubahKantorCabang(int idKantorCabang, KantorCabang kantorCabang) {
@@ -83,10 +86,11 @@ public class KantorCabangRestServiceImpl implements KantorCabangRestService {
 
     @Override
     public KantorCabang aktifkanKantor(int idKantor) {
-        KantorCabang kantorCabang= getById(idKantor);
+        KantorCabang kantorCabang = getById(idKantor);
         kantorCabang.setStatus(KantorCabang.Status.AKTIF);
         return kantorCabang;
     }
+
     public KantorCabang validateExistById(int idKantorCabang) {
         Optional<KantorCabang> kantorCabang = kantorCabangDB.findById(idKantorCabang);
         if (kantorCabang.isPresent()) {
@@ -97,5 +101,28 @@ public class KantorCabangRestServiceImpl implements KantorCabangRestService {
                     "Kantor Cabang dengan ID " + idKantorCabang + " tidak ditemukan!"
             );
         }
+    }
+
+    @Override
+    public void nullifiedRiskRating() {
+        List<KantorCabang> daftarKantorCabang = kantorCabangDB.findAll();
+        List<KantorCabang> nullified = new ArrayList<>();
+        for (KantorCabang kantorCabang : daftarKantorCabang) {
+            kantorCabang.setRiskRating(null);
+            nullified.add(kantorCabang);
+        }
+        kantorCabangDB.saveAll(nullified);
+    }
+
+    @Override
+    public void recalculateRiskRating() {
+//        List<KantorCabang> daftarKantorCabang = kantorCabangDB.findAll();
+//        List<KantorCabang> calculated = new ArrayList<>();
+//        for (KantorCabang kantorCabang : daftarKantorCabang) {
+//             nanti disini akan masukin perhitungan risk rating nya
+//             kantorCabang.setRiskRating(null);
+//             calculated.add(kantorCabang);
+//        }
+//        kantorCabangDB.saveAll(calculated);
     }
 }
