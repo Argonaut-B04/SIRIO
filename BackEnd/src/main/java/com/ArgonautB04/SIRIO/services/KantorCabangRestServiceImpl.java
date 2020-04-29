@@ -75,7 +75,7 @@ public class KantorCabangRestServiceImpl implements KantorCabangRestService {
     }
 
     @Override
-<<<<<<< HEAD
+
     public KantorCabang nonaktifkanKantor(int idKantor) {
         KantorCabang kantorCabang = getById(idKantor);
         kantorCabang.setStatus(KantorCabang.Status.NONAKTIF);
@@ -93,7 +93,7 @@ public class KantorCabangRestServiceImpl implements KantorCabangRestService {
 //    public List<KantorCabang> getByPembuat(Employee pembuat){
 //        return kantorCabangDB.findAllByPembuat(pembuat);
 //    }
-=======
+
     public KantorCabang validateExistInDatabase(int idKantorCabang) {
         Optional<KantorCabang> kantorCabang = kantorCabangDB.findById(idKantorCabang);
         if (kantorCabang.isPresent()) {
@@ -105,5 +105,4 @@ public class KantorCabangRestServiceImpl implements KantorCabangRestService {
             );
         }
     }
->>>>>>> 3d62f554b8f925e99d1cc0922aa6f9b35cccd47d
 }

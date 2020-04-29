@@ -157,7 +157,7 @@ class TabelRencanaPemeriksaan extends React.Component {
                 pathname: "/manager/rencanaPemeriksaan/tambah"
             }}>
                 <SirioButton
-                    purple
+                    purple recommended
                 >
                     Tambah Rencana Pemeriksaan
                 </SirioButton>

@@ -521,13 +521,7 @@ export default class FormTambahRencana extends React.Component {
                         Hapus
                     </SirioWarningButton>
                     <a>  </a>
-                    <SirioButton purple
-                        classes="mr-3"
-                        onClick={(index) => this.dupForm(index)}
-                        type="button"
-                    >
-                        Duplikat Tugas
-                    </SirioButton>
+                    
                     
             </div>
         )
@@ -542,21 +536,6 @@ export default class FormTambahRencana extends React.Component {
                 daftarTugasPemeriksaan: daftarTugasPemeriksaan
             }
         )
-    }
-
-    dupForm(index){
-        const daftarTugasPemeriksaan = this.state.daftarTugasPemeriksaan
-        const daftarTugasPemeriksaan1 = this.state.daftarTugasPemeriksaan[index]
-        
-        this.setState(
-            {
-                kantorCabang: daftarTugasPemeriksaan1.kantorCabang,
-                idQA: daftarTugasPemeriksaan1.idQA,
-                tanggalMulai: daftarTugasPemeriksaan1.tanggalMulai,
-                tanggalSelesai: daftarTugasPemeriksaan1.tanggalSelesai,
-            }
-        )
-        daftarTugasPemeriksaan.push({});
     }
 
     render() {

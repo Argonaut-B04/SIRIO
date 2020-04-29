@@ -119,7 +119,7 @@ class TabelKantorCabang extends React.Component {
                 pathname: "/administrator/kantorCabang/tambah"
             }}>
                 <SirioButton
-                    purple
+                    purple recommended
                 >
                     Tambah Kantor Cabang
                 </SirioButton>

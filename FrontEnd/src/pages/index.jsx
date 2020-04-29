@@ -12,8 +12,8 @@ export default class MainPage extends React.Component {
 
 
                 {/* Contoh cara menampilkan username dan role */}
-                {this.state.username && <h4>Username: {this.state.username}</h4>}
-                {this.state.role && <h4>Role: {this.state.role}</h4>}
+                {/* {this.state.username && <h4>Username: {this.state.username}</h4>}
+                {this.state.role && <h4>Role: {this.state.role}</h4>} */}
 
                 {/* Contoh cara menampilkan tombol redirect */}
                 {/* Alternatif lain: href="/tujuan" */}
