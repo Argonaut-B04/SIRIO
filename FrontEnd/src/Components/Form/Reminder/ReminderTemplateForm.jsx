@@ -158,8 +158,8 @@ class ReminderTemplateForm extends Component {
                     fullComponent: <p>
                     Masukan subject dan isi dari email yang akan dikirimkan sebagai reminder<br />
                         <small>
-                            Cantumkan nama penerima dengan <code>!!nama!!</code>
-                            Cantumkan tanggal tenggat waktu dengan <code>!!tanggal!!</code>
+                            Cantumkan nama penerima dengan <code>!!nama!! </code>
+                            dan tanggal tenggat waktu dengan <code>!!tanggal!!</code>
                         </small>
                     </p>
                 }, {

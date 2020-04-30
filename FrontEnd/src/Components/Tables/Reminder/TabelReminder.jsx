@@ -415,13 +415,11 @@ class TabelReminder extends React.Component {
             )
         }
 
-        const { keterangan } = this.props.location.state;
-        var keteranganHeader = keterangan.length > 20 ? keterangan.substring(0, 20) + "..." : keterangan;
         const column = this.columns();
         return (
             <>
                 <SirioTable
-                    title={"Daftar Reminder untuk Rekomendasi " + keteranganHeader}
+                    title={"Daftar Reminder"}
                     data={rowList}
                     leftSearch={this.searchLeftButton()}
                     id='idReminder'
