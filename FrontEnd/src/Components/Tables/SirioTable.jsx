@@ -82,7 +82,6 @@ export default class SirioTable extends Component {
                                 tooltip={"Tampilkan " + option.text + " data"}
                             >
                                 {option.text}
-                                <br /><small>size</small>
                             </SirioButton>
                         );
                     })
