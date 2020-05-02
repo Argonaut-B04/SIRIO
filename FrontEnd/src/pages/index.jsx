@@ -3,7 +3,10 @@ import SirioMainLayout from "../Layout/SirioMainLayout";
 import PollingService from "../Services/PollingService";
 import { withRouter } from "react-router-dom";
 import SirioBarChart from "../Components/Chart/SirioBarChart";
+<<<<<<< HEAD
 import SirioDashboardBox from "../Components/Box/SirioDashboardBox";
+=======
+>>>>>>> 562e14a52eed03052f3fea637d77232c419a3bad
 
 /**
  * Controller untuk menampilkan halaman utama
