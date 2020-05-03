@@ -1,4 +1,5 @@
 export const halamanUtama = {
+    exact: true,
     link: "/",
     title: "Halaman Utama",
 }
@@ -29,7 +30,7 @@ export const dashboard = {
 }
 
 export const rencanaPemeriksaan = {
-    link: "/rencana-pemeriksaan",
+    link: "/manager/rencanaPemeriksaan",
     title: "Rencana Pemeriksaan",
 }
 
@@ -39,16 +40,19 @@ export const konfigurasi = {
     dropdown: [
         {
             title: "Risk Rating",
-            link: "#"
+            link: "/risk-rating"
         }, {
             title: "Registrasi Risiko",
             link: "/registrasi-risiko"
         }, {
             title: "Risk Level",
-            link: "#"
+            link: "/risk-level"
         }, {
             title: "SOP",
             link: "#"
+        }, {
+            title: "Template Reminder",
+            link: "/pengaturan-reminder"
         }
     ]
 }
@@ -59,7 +63,7 @@ export const pengguna = {
 }
 
 export const kantorCabang = {
-    link: "/kantor-cabang",
+    link: "/administrator/kantorCabang",
     title: "Kantor Cabang",
 }
 

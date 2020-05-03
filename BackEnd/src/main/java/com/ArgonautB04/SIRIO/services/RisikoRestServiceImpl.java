@@ -94,7 +94,6 @@ public class RisikoRestServiceImpl implements RisikoRestService {
 
     @Override
     public Risiko transformasidto(Risiko risiko, RisikoDTO risikoDTO) {
-        System.out.println(risikoDTO.getKategori());
         if (risikoDTO.getKategori() == 3) {
             if (risikoDTO.getDetailUraian() != null) {
                 risiko.setDetailUraian(risikoDTO.getDetailUraian());
@@ -165,4 +164,15 @@ public class RisikoRestServiceImpl implements RisikoRestService {
         return risikoDB.findByNamaRisikoAndStatus(nama, Risiko.Status.AKTIF);
     }
 
+    public Risiko validateExistById(int idRisiko) {
+        Optional<Risiko> target = risikoDB.findById(idRisiko);
+        if (target.isPresent()) {
+            return target.get();
+        } else {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    "ID Risiko " + idRisiko + " Tidak Ditemukan"
+            );
+        }
+    }
 }

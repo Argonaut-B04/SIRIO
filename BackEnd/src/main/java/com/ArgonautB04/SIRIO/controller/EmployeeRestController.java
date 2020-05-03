@@ -18,8 +18,10 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
 import java.sql.SQLIntegrityConstraintViolationException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @CrossOrigin(origins = {"http://localhost:3000"})
 @RestController
@@ -222,6 +224,49 @@ public class EmployeeRestController {
     }
 
     /**
+     * Mengambil seluruh branch manager
+     *
+     * @return daftar hasil employee
+     */
+    @GetMapping("/getAllBranchManager")
+    private BaseResponse<List<Employee>> getAllBM() {
+        BaseResponse<List<Employee>> response = new BaseResponse<>();
+        ArrayList<Employee> result = new ArrayList<>();
+        List<Employee> emp = employeeRestService.getAll();
+        for (Employee e: emp){
+            if (e.getRole().getIdRole() == 7){
+                result.add(e);
+            }
+        }
+        response.setStatus(200);
+        response.setMessage("success");
+        response.setResult(result);
+        return response;
+    }
+
+    /**
+     * Mengambil seluruh QA Officer
+     *
+     * @return daftar hasil employee
+     */
+    @GetMapping("/getAllQAOfficer")
+    private BaseResponse<List<Employee>> getAllQAOfficer() {
+        BaseResponse<List<Employee>> response = new BaseResponse<>();
+        ArrayList<Employee> result = new ArrayList<>();
+        List<Employee> emp = employeeRestService.getAll();
+        for (Employee e: emp){
+            if (e.getRole().getIdRole() == 6 || e.getRole().getIdRole() == 8){
+                result.add(e);
+            }
+        }
+        response.setStatus(200);
+        response.setMessage("success");
+        response.setResult(result);
+        return response;
+    }
+
+
+    /**
      * Mengambil suatu employee
      *
      * @param idEmployee identifier employee
@@ -247,6 +292,20 @@ public class EmployeeRestController {
     }
 
     /**
+     * Mengecek username employee
+     *
+     * @param username identifier employee
+     * @return Boolean checker
+     */
+    @GetMapping("/check/{username}")
+    private BaseResponse<Boolean> checkUsernameEmployee(
+            @PathVariable("username") String username
+    ) {
+        Optional<Employee> employeeOptional = employeeRestService.getByUsername(username);
+        return new BaseResponse<>(200, "success", employeeOptional.isPresent());
+    }
+
+    /**
      * Mengambil profile employee yang login
      *
      * @return detail employee yang login
@@ -254,13 +313,8 @@ public class EmployeeRestController {
     @GetMapping("/profile")
     private BaseResponse<Employee> getProfileEmployee(Principal principal) {
         BaseResponse<Employee> response = new BaseResponse<>();
-
-        Employee result = employeeRestService.getByUsername(principal.getName()).get();
-
-        response.setStatus(200);
-        response.setMessage("success");
-        response.setResult(result);
-        return response;
+        Employee result = employeeRestService.validateEmployeeExistByPrincipal(principal);
+        return new BaseResponse<>(200, "success", result);
     }
 
     /**
@@ -300,12 +354,7 @@ public class EmployeeRestController {
 
     @GetMapping("/login")
     public BaseResponse<Employee> authenticate(Principal principal) {
-        BaseResponse<Employee> response = new BaseResponse<>();
-        Employee target = employeeRestService.getByUsername(principal.getName()).get();
-
-        response.setStatus(200);
-        response.setMessage("success");
-        response.setResult(target);
-        return response;
+        Employee target = employeeRestService.validateEmployeeExistByPrincipal(principal);
+        return new BaseResponse<>(200, "success", target);
     }
 }

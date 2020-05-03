@@ -54,7 +54,7 @@ public class Risiko implements Serializable {
     private Status status;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "parent", referencedColumnName = "idRisiko", nullable = true)
+    @JoinColumn(name = "parent", referencedColumnName = "idRisiko")
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private Risiko parent;

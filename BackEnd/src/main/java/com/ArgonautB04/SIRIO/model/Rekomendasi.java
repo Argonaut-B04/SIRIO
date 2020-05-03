@@ -10,8 +10,6 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.Date;
-import java.util.List;
 
 @Entity
 @Table
@@ -23,36 +21,37 @@ public class Rekomendasi implements Serializable {
 
     @NotNull
     @Size(max = 125)
-    @Column(nullable = true)
+    @Column(nullable = false)
     private String keterangan;
 
-    @DateTimeFormat(pattern = "MM-dd-yyyy")
-    private Date tenggatWaktu;
+    @DateTimeFormat
+    private LocalDate tenggatWaktu;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "status", referencedColumnName = "idStatusRekomendasi", nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @OnDelete(action = OnDeleteAction.NO_ACTION)
     @JsonIgnore
     private StatusRekomendasi statusRekomendasi;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "komponen_pemeriksaan", referencedColumnName = "idKomponenPemeriksaan", nullable = true)
+    @JoinColumn(name = "komponen_pemeriksaan", referencedColumnName = "idKomponenPemeriksaan", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private KomponenPemeriksaan komponenPemeriksaan;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "pembuat", referencedColumnName = "idEmployee", nullable = true)
+    @JoinColumn(name = "pembuat", referencedColumnName = "idEmployee")
     @OnDelete(action = OnDeleteAction.NO_ACTION)
     @JsonIgnore
     private Employee pembuat;
 
+    @ManyToOne
+    @JoinColumn(name = "reminderTemplate", referencedColumnName = "idReminderTemplate")
+    @JsonIgnore
+    private ReminderTemplate reminderTemplatePilihan;
+
     @OneToOne(mappedBy = "rekomendasi", cascade = CascadeType.ALL)
     private BuktiPelaksanaan buktiPelaksanaan;
-
-    @OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY, orphanRemoval = true)
-    @JoinColumn(name = "idRekomendasi")
-    private List<Reminder> daftarReminder;
 
     public Integer getIdRekomendasi() {
         return idRekomendasi;
@@ -70,11 +69,11 @@ public class Rekomendasi implements Serializable {
         this.keterangan = keterangan;
     }
 
-    public Date getTenggatWaktu() {
+    public LocalDate getTenggatWaktu() {
         return tenggatWaktu;
     }
 
-    public void setTenggatWaktu(Date tenggatWaktu) {
+    public void setTenggatWaktu(LocalDate tenggatWaktu) {
         this.tenggatWaktu = tenggatWaktu;
     }
 
@@ -110,12 +109,11 @@ public class Rekomendasi implements Serializable {
         this.buktiPelaksanaan = buktiPelaksanaan;
     }
 
-    public List<Reminder> getDaftarReminder() {
-        return daftarReminder;
+    public ReminderTemplate getReminderTemplatePilihan() {
+        return reminderTemplatePilihan;
     }
 
-    public void setDaftarReminder(List<Reminder> daftarReminder) {
-        this.daftarReminder.retainAll(daftarReminder);
-        this.daftarReminder.addAll(daftarReminder);
+    public void setReminderTemplatePilihan(ReminderTemplate reminderTemplatePilihan) {
+        this.reminderTemplatePilihan = reminderTemplatePilihan;
     }
 }

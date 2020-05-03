@@ -6,6 +6,7 @@
     flex-direction: column;
     color: white;
 }
+
 .errorDetailMainWrapper>* {
     padding: 1rem;
     text-align: center;
@@ -14,8 +15,11 @@
 
 .errorTitle {
     font-size: 6rem;
+    width: 500px;
 }
 
 .errorDetail {
     font-size: 2rem;
+    width: 500px;
+    line-height: 1;
 }

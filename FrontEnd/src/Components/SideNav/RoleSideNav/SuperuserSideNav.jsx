@@ -9,6 +9,7 @@ export default class SuperuserSideNav extends Component {
     render() {
         return (
             <SideNavFramework
+                {...this.props}
                 links={
                     [
                         dashboardEmployee,

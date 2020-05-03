@@ -8,6 +8,9 @@
         "@testing-library/user-event": "^7.2.1",
         "axios": "^0.19.2",
         "bootstrap": "^4.4.1",
+        "chart.js": "^2.9.3",
+        "date-fns": "^2.12.0",
+        "moment": "^2.18.1",
         "react": "^16.13.0",
         "react-bootstrap": "^1.0.0-beta.17",
         "react-bootstrap-table-next": "^4.0.0",
@@ -16,12 +19,16 @@
         "react-bootstrap-table2-overlay": "^2.0.0",
         "react-bootstrap-table2-paginator": "^2.1.1",
         "react-bootstrap-table2-toolkit": "^2.1.2",
+        "react-chartjs-2": "^2.9.0",
         "react-datepicker": "^2.14.0",
         "react-dom": "^16.13.0",
+        "react-loading-overlay": "^1.0.1",
+        "react-preloaders": "^3.0.3",
         "react-router-dom": "^5.1.2",
         "react-scripts": "3.4.0",
         "react-select": "^3.1.0",
-        "react-textarea-autosize": "^7.1.2"
+        "react-textarea-autosize": "^7.1.2",
+        "react-tooltip": "^4.2.5"
     },
     "scripts": {
         "start": "react-scripts start",
@@ -32,6 +39,7 @@
     "eslintConfig": {
         "extends": "react-app"
     },
+    "homepage": "./",
     "browserslist": {
         "production": [
             ">0.2%",

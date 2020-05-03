@@ -331,15 +331,16 @@ class FormRisiko extends React.Component {
         return (
             [
                 {
-                    label: "Nama Risiko*",
+                    label: "Nama Risiko",
                     handleChange: this.handleChange,
                     type: "text",
+                    required: true,
                     validation: this.state.errorNama,
                     name: "nama",
                     value: this.state.nama,
                     placeholder: "Masukan nama risiko"
                 }, {
-                    label: "Kategori Risiko*",
+                    label: "Kategori Risiko",
                     handleChange: this.handleSelectChange,
                     type: "select",
                     required: true,
@@ -359,7 +360,7 @@ class FormRisiko extends React.Component {
                         }
                     ]
                 }, {
-                    label: "Referensi SOP*",
+                    label: "Referensi SOP",
                     handleChange: this.handleSelectChange,
                     type: "select",
                     validation: this.state.errorSop,

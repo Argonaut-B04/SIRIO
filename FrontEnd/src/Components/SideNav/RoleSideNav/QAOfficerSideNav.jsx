@@ -9,6 +9,7 @@ export default class QAOfficerSideNav extends Component {
     render() {
         return (
             <SideNavFramework
+                {...this.props}
                 links={
                     [
                         halamanUtama,

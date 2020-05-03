@@ -9,6 +9,7 @@ public class BuktiPelaksanaanDTO {
     private Integer idRekomendasi;
     private Integer status;
     private String feedback;
+    private String keteranganRekomendasi;
 
     public Integer getId() {
         return id;
@@ -72,5 +73,13 @@ public class BuktiPelaksanaanDTO {
 
     public void setFeedback(String feedback) {
         this.feedback = feedback;
+    }
+
+    public String getKeteranganRekomendasi() {
+        return keteranganRekomendasi;
+    }
+
+    public void setKeteranganRekomendasi(String keteranganRekomendasi) {
+        this.keteranganRekomendasi = keteranganRekomendasi;
     }
 }

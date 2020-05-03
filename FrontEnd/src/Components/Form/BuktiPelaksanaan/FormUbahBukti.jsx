@@ -15,6 +15,7 @@ class FormUbahBukti extends React.Component {
             keterangan: "",
             lampiran: "",
             id: "",
+            keteranganRekomendasi: "",
             submitable: true,
             redirect: false
         };
@@ -53,7 +54,8 @@ class FormUbahBukti extends React.Component {
         this.setState({
             id: response.data.result.id,
             keterangan: response.data.result.keterangan,
-            lampiran: response.data.result.lampiran
+            lampiran: response.data.result.lampiran,
+            keteranganRekomendasi: response.data.result.keteranganRekomendasi
         })
     }
 
@@ -149,29 +151,33 @@ class FormUbahBukti extends React.Component {
     }
 
     inputDefinition() {
-        return (
-            [
-                {
-                    label: "Keterangan*",
-                    required: true,
-                    handleChange: this.handleChange,
-                    validation: this.state.errorKeterangan,
-                    type: "textarea",
-                    name: "keterangan",
-                    value: this.state.keterangan,
-                    placeholder: "Masukan keterangan bukti"
-                }, {
-                    label: "Lampiran*",
-                    required: true,
-                    handleChange: this.handleChange,
-                    validation: this.state.errorLampiran,
-                    type: "textarea",
-                    name: "lampiran",
-                    value: this.state.lampiran,
-                    placeholder: "Masukan lampiran bukti"
-                }
-            ]
+        var rowDefinition = [];
+        rowDefinition.push(
+            {
+                label: "Rekomendasi",
+                customInput: <p>{this.state.keteranganRekomendasi}</p>
+            }, {
+                label: "Keterangan*",
+                required: true,
+                handleChange: this.handleChange,
+                validation: this.state.errorKeterangan,
+                type: "textarea",
+                name: "keterangan",
+                value: this.state.keterangan,
+                placeholder: "Masukan keterangan bukti"
+            }, {
+                label: "Lampiran*",
+                required: true,
+                handleChange: this.handleChange,
+                validation: this.state.errorLampiran,
+                type: "textarea",
+                name: "lampiran",
+                value: this.state.lampiran,
+                placeholder: "Masukan lampiran bukti"
+            }
+            
         )
+        return rowDefinition;
     }
 
     submitButton() {
@@ -201,6 +207,8 @@ class FormUbahBukti extends React.Component {
                 {this.renderRedirect()}
                 <SirioForm
                     title="Form Ubah Bukti Pelaksanaan"
+                    data={this.data}
+                    id='id'
                     inputDefinition={this.inputDefinition()}
                     onSubmit={this.handleSubmit}
                     submitButton={this.submitButton()}

@@ -13,4 +13,7 @@ Pengerjaan ``SIRIO`` dimulai dengan mata kuliah Propensi pada Januari 2020 dan m
 ## Developing / Contributing to SIRIO 
 Semua kontribusi, laporan bug, perbaikan bug, perbaikan dokumentasi, dan ide pengembangan dikembangkan oleh Tim Argonaut-B04.
 
+## Issues and Project Logs
+Issues secara detail dapat dilihat melalui [Trello Argonaut](https://trello.com/b/fr7lCWoG/sirio-project-management).
+
 Penjelasan mendetil mengenai Guideline kode dapat ditemukan di [Contibuting Guideline](.github/CONTRIBUTING.md) pada Github.

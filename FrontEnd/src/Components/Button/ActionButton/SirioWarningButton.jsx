@@ -44,26 +44,31 @@ export default class SirioWarningButton extends React.Component {
     }
 
     render() {
+        const { handleClose, handleShow } = this;
+        const { show } = this.state;
+        const { modalTitle, modalDesc, onConfirm, customConfirmText, customCancelText } = this.props;
+        const { modalButton } = classes;
+
         return (
             <>
                 <SirioButton
                     {...this.props}
-                    onClick={this.handleShow}
+                    onClick={handleShow}
                 >
                     {this.props.children}
                 </SirioButton>
 
                 <Modal
                     size="md"
-                    show={this.state.show}
-                    onHide={this.handleClose}
+                    show={show}
+                    onHide={handleClose}
                     centered>
                     <Modal.Body className="d-flex justify-content-center align-items-center flex-column py-5">
                         <img src={process.env.PUBLIC_URL + '/trashbin.svg'} width="200px" alt="trashbin" />
 
                         <div className="text-center p-3 w-75">
-                            <h2 >{this.props.modalTitle}</h2>
-                            <h5 >{this.props.modalDesc}</h5>
+                            <h2>{modalTitle}</h2>
+                            <h5>{modalDesc}</h5>
                         </div>
 
                         <div className="d-flex justify-content-center align-items-center w-100">
@@ -71,18 +76,23 @@ export default class SirioWarningButton extends React.Component {
                                 purple
                                 recommended
                                 circular
-                                onClick={this.props.onConfirm ? this.props.onConfirm : this.handleClose}
-                                classes={classes.modalButton}
+                                onClick={() => {
+                                    if (onConfirm) {
+                                        onConfirm()
+                                    }
+                                    handleClose()
+                                }}
+                                classes={modalButton}
                             >
-                                {this.props.customConfirmText ? this.props.customConfirmText : "Lanjutkan"}
+                                {customConfirmText ? customConfirmText : "Lanjutkan"}
                             </SirioButton>
                             <SirioButton
                                 purple
                                 circular
-                                onClick={this.handleClose}
-                                classes={classes.modalButton}
+                                onClick={handleClose}
+                                classes={modalButton}
                             >
-                                {this.props.customCancelText ? this.props.customCancelText : "Kembali"}
+                                {customCancelText ? customCancelText : "Kembali"}
                             </SirioButton>
                         </div>
                     </Modal.Body>

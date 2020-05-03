@@ -7,6 +7,7 @@ import { withRouter } from 'react-router-dom';
 import classes from '../Rekomendasi/TabelRekomendasi.module.css';
 import SirioMessageButton from '../../Button/ActionButton/SirioMessageButton';
 import AuthenticationService from "../../../Services/AuthenticationService";
+import SirioAxiosBase from '../../../Services/SirioAxiosBase';
 
 class TabelBuktiPelaksanaan extends React.Component {
 
@@ -75,6 +76,7 @@ class TabelBuktiPelaksanaan extends React.Component {
                 }}>
                     <SirioButton
                         purple
+                        hover
                     >
                         Tambah Bukti
                     </SirioButton>
@@ -90,6 +92,7 @@ class TabelBuktiPelaksanaan extends React.Component {
                 }}>
                     <SirioButton
                         purple
+                        hover
                     >
                         Detail Bukti
                     </SirioButton>
@@ -101,7 +104,7 @@ class TabelBuktiPelaksanaan extends React.Component {
     getColumns() {
         const role = this.state.role;
         const firstColumn = role === "admin" || role === "Manajer Operational Risk" ||
-                            role === "QA Operational Risk" || role === "Super QA Operational Risk";
+            role === "QA Officer Operational Risk" || role === "Super QA Officer Operational Risk";
         const secondColumn = role === "Branch Manager";
 
         if (firstColumn) {
@@ -125,15 +128,15 @@ class TabelBuktiPelaksanaan extends React.Component {
                         return { width: "15%", textAlign: 'left' };
                     }
                 }, {
-                    dataField: 'tenggatWaktu',
+                    dataField: 'tenggatWaktuDate',
                     text: 'TENGGAT WAKTU',
                     sort: true,
                     classes: classes.rowItem,
                     headerClasses: classes.colheader,
                     headerStyle: (colum, colIndex) => {
                         return { width: "15%", textAlign: 'left' };
-                    }
-                    
+                    },
+                    formatter: SirioAxiosBase.formatDate
                 }, {
                     dataField: 'durasi',
                     text: 'DURASI',
@@ -143,9 +146,9 @@ class TabelBuktiPelaksanaan extends React.Component {
                     headerStyle: (colum, colIndex) => {
                         return { width: "10%", textAlign: 'left' };
                     }
-                    
+
                 }, {
-                    dataField: 'statusBukti',
+                    dataField: 'status',
                     text: 'STATUS BUKTI',
                     sort: true,
                     classes: classes.rowItem,
@@ -176,17 +179,17 @@ class TabelBuktiPelaksanaan extends React.Component {
                     headerStyle: (colum, colIndex) => {
                         return { width: "25%", textAlign: 'left' };
                     }
-            
+
                 }, {
-                    dataField: 'tenggatWaktu',
+                    dataField: 'tenggatWaktuDate',
                     text: 'TENGGAT WAKTU',
                     sort: true,
                     classes: classes.rowItem,
                     headerClasses: classes.colheader,
                     headerStyle: (colum, colIndex) => {
                         return { width: "20%", textAlign: 'left' };
-                    }
-                    
+                    },
+                    formatter: (cell) => SirioAxiosBase.formatDate(cell)
                 }, {
                     dataField: 'durasi',
                     text: 'DURASI',
@@ -196,9 +199,9 @@ class TabelBuktiPelaksanaan extends React.Component {
                     headerStyle: (colum, colIndex) => {
                         return { width: "12%", textAlign: 'left' };
                     }
-                    
+
                 }, {
-                    dataField: 'statusBukti',
+                    dataField: 'status',
                     text: 'STATUS BUKTI',
                     sort: true,
                     classes: classes.rowItem,
@@ -237,44 +240,44 @@ class TabelBuktiPelaksanaan extends React.Component {
                     includeSearchBar
                 />
                 {this.props.location.state && this.props.location.state.addSuccess && this.state.openNotification &&
-                <SirioMessageButton
-                    show
-                    classes="d-none"
-                    modalTitle="Bukti pelaksanaan berhasil ditambahkan"
-                    customConfirmText="Tutup"
-                    onClick={this.endNotification}
-                />
+                    <SirioMessageButton
+                        show
+                        classes="d-none"
+                        modalTitle="Bukti pelaksanaan berhasil ditambahkan"
+                        customConfirmText="Tutup"
+                        onClick={this.endNotification}
+                    />
                 }
                 {this.props.location.state && this.props.location.state.editSuccess && this.state.openNotification &&
-                <SirioMessageButton
-                    show
-                    classes="d-none"
-                    modalTitle="Bukti pelaksanaan berhasil diubah"
-                    customConfirmText="Tutup"
-                    onClick={this.endNotification}
-                />
+                    <SirioMessageButton
+                        show
+                        classes="d-none"
+                        modalTitle="Bukti pelaksanaan berhasil diubah"
+                        customConfirmText="Tutup"
+                        onClick={this.endNotification}
+                    />
                 }
                 {this.props.location.state && this.props.location.state.approveSuccess && this.state.openNotification &&
-                <SirioMessageButton
-                    show
-                    classes="d-none"
-                    modalTitle="Bukti pelaksanaan berhasil disetujui"
-                    customConfirmText="Tutup"
-                    onClick={this.endNotification}
-                />
+                    <SirioMessageButton
+                        show
+                        classes="d-none"
+                        modalTitle="Bukti pelaksanaan berhasil disetujui"
+                        customConfirmText="Tutup"
+                        onClick={this.endNotification}
+                    />
                 }
                 {this.props.location.state && this.props.location.state.rejectSuccess && this.state.openNotification &&
-                <SirioMessageButton
-                    show
-                    classes="d-none"
-                    modalTitle="Bukti pelaksanaan berhasil ditolak"
-                    customConfirmText="Tutup"
-                    onClick={this.endNotification}
-                />
+                    <SirioMessageButton
+                        show
+                        classes="d-none"
+                        modalTitle="Bukti pelaksanaan berhasil ditolak"
+                        customConfirmText="Tutup"
+                        onClick={this.endNotification}
+                    />
                 }
             </>
         );
     }
-} 
+}
 
 export default withRouter(TabelBuktiPelaksanaan);

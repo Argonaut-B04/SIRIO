@@ -32,4 +32,6 @@ public interface RisikoRestService {
     List<Risiko> getParentByKategori(Integer kategori);
 
     Optional<Risiko> getByNama(String nama);
+
+    Risiko validateExistById(int idRisiko);
 }

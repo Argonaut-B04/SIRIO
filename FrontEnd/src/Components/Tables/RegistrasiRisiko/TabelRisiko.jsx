@@ -38,7 +38,7 @@ class TabelRisiko extends React.Component {
             })
         })
         .catch(error => {
-            if (error.response.data.status == 401) {
+            if (error.response.data.status === 401) {
                 this.setState({
                     redirector: <Redirect to={{
                         pathname: "/401",

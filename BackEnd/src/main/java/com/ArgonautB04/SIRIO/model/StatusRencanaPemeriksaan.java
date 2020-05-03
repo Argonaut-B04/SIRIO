@@ -22,6 +22,13 @@ public class StatusRencanaPemeriksaan implements Serializable {
     @Column
     private String keteranganStatus;
 
+    public StatusRencanaPemeriksaan() {
+    }
+
+    public StatusRencanaPemeriksaan(@NotNull @Size(max = 50) String namaStatus) {
+        this.namaStatus = namaStatus;
+    }
+
     public int getIdStatusRencana() {
         return idStatusRencana;
     }

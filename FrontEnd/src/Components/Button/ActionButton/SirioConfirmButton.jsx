@@ -1,7 +1,6 @@
 import React from "react";
 import Modal from "react-bootstrap/Modal";
 import SirioButton from "../SirioButton";
-import "bootstrap/dist/css/bootstrap.min.css";
 import classes from "./ActionButton.module.css";
 
 /**
@@ -25,7 +24,7 @@ export default class SirioWarningButton extends React.Component {
         this.handleShow = this.handleShow.bind(this);
         this.handleClose = this.handleClose.bind(this);
     }
-    
+
     componentDidMount() {
         if (this.props.show) {
             this.handleShow();
@@ -41,54 +40,60 @@ export default class SirioWarningButton extends React.Component {
     }
 
     render() {
-        var onConfirm;
+        const { handleClose, handleShow } = this;
+        const { show } = this.state;
+        const { onConfirm, modalTitle, customConfirmText } = this.props;
+        const { modalButton } = classes;
 
-        if (this.props.onConfirm) {
-            if (this.props.closeOnConfirm) {
-                onConfirm = () => {
-                    this.handleClose();
-                    this.props.onConfirm();
-                }
-            } else {
-                onConfirm = this.props.onConfirm;
-            }
-        } else {
-            onConfirm = this.handleClose;
-        }
         return (
             <>
                 <SirioButton
                     {...this.props}
-                    onClick={this.handleShow}
+                    onClick={handleShow}
                 >
                     {this.props.children}
                 </SirioButton>
 
                 <Modal
                     size="md"
-                    show={this.state.show}
-                    onHide={this.handleClose}
+                    show={show}
+                    onHide={handleClose}
                     centered>
                     <Modal.Body className="d-flex justify-content-center align-items-center flex-column py-5">
                         <div className="text-center p-3 w-75">
-                            <h3 >{this.props.modalTitle}</h3>
+                            <h3 >{modalTitle}</h3>
+                        </div>
+
+                        <div className="text-center px-0 mx-0 w-75">
+                            <div>{this.props.modalDesc}</div>
+                        </div>
+
+                        <div className="text-center px-0 mx-0 w-75">
+                            <div>{this.props.modalDesc}</div>
                         </div>
 
                         <div className="d-flex justify-content-center align-items-center w-100">
                             <SirioButton
                                 purple
-                                recommended
+                                recommended={!this.props.confirmDisable}
+                                text={this.props.confirmDisable}
+                                disable={this.props.confirmDisable}
                                 circular
-                                onClick={onConfirm}
-                                classes={classes.modalButton}
+                                onClick={() => {
+                                    if (onConfirm) {
+                                        onConfirm()
+                                    }
+                                    handleClose()
+                                }}
+                                classes={modalButton}
                             >
-                                {this.props.customConfirmText ? this.props.customConfirmText : "Konfirmasi"}
+                                {customConfirmText ? customConfirmText : "Konfirmasi"}
                             </SirioButton>
                             <SirioButton
                                 purple
                                 circular
-                                onClick={this.handleClose}
-                                classes={classes.modalButton}
+                                onClick={handleClose}
+                                classes={modalButton}
                             >
                                 Batal
                             </SirioButton>

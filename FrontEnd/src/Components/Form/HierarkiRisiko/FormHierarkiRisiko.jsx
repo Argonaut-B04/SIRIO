@@ -108,6 +108,8 @@ class FormHierarkiRisiko extends React.Component {
         if (row.changeable == undefined) {
             row.changeable = false;
         }
+        console.log(row.changeable + "hehe")
+
 
         if (row.kategori === 1) {
             return "";
@@ -172,7 +174,6 @@ class FormHierarkiRisiko extends React.Component {
                     onConfirm={this.handleSubmit}
                     customConfirmText="Konfirmasi"
                     customCancelText="Batal"
-                    closeOnConfirm
                 >
                     Simpan
             </SirioConfirmButton>
@@ -191,7 +192,6 @@ class FormHierarkiRisiko extends React.Component {
     }
 
     handleSubmit() {
-        console.log(this.state.rowList)
         HierarkiRisikoService.submitChanges(this.state.rowList)
             .then(() => this.setRedirect());
     }
@@ -203,7 +203,6 @@ class FormHierarkiRisiko extends React.Component {
     };
 
     renderRedirect = () => {
-        console.log(this.state.redirect)
         if (this.state.redirect) {
             return <Redirect to={{
                 pathname: "/registrasi-risiko",
@@ -225,7 +224,6 @@ class FormHierarkiRisiko extends React.Component {
                     onConfirm={this.handleSubmit}
                     customConfirmText="Konfirmasi"
                     customCancelText="Batal"
-                    closeOnConfirm
                 >
                     Simpan
             </SirioConfirmButton>

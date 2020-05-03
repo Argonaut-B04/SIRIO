@@ -26,7 +26,7 @@ class DetailHasilPemeriksaan extends React.Component {
             hapus: false,
             setuju: false,
         };
-            
+
         this.renderDataHasilPemeriksaan = this.renderDataHasilPemeriksaan.bind(this);
         this.reduceRiskScore = this.reduceRiskScore.bind(this);
         this.setRedirectHapus = this.setRedirectHapus.bind(this);
@@ -97,14 +97,14 @@ class DetailHasilPemeriksaan extends React.Component {
                         "Risk Level": komponen.namaRiskLevel,
                         "Hasil Temuan": !(komponen.daftarTemuanRisikoTerdaftar.length > 0) ? "-" :
                             <div>
-                                {komponen.daftarTemuanRisikoTerdaftar.map(temuanRisiko =>
-                                    <p>- {temuanRisiko.keterangan}</p>
+                                {komponen.daftarTemuanRisikoTerdaftar.map((temuanRisiko, i) =>
+                                    <p key={i}>- {temuanRisiko.keterangan}</p>
                                 )}
                             </div>,
                         "Rekomendasi": !(komponen.daftarRekomendasiTerdaftar.length > 0) ? "-" :
                             <div>
-                                {komponen.daftarRekomendasiTerdaftar.map(rekomendasi =>
-                                    <p>- {rekomendasi.keterangan}</p>
+                                {komponen.daftarRekomendasiTerdaftar.map((rekomendasi, i) =>
+                                    <p key={i}>- {rekomendasi.keterangan}</p>
                                 )}
                             </div>
                     }
@@ -112,7 +112,7 @@ class DetailHasilPemeriksaan extends React.Component {
             })
         })
     }
-    
+
     reduceRiskScore(deductionPoint) {
         const original = this.state.riskScore;
         this.setState({
@@ -145,13 +145,14 @@ class DetailHasilPemeriksaan extends React.Component {
             .then(() => this.setRedirectSetuju());
     }
 
-    buttonUbah(id, status) {
-        if(status === "Draft" || status === "Menunggu Persetujuan" || status === "Ditolak") {
+    buttonUbah(id, idTugasPemeriksaan, status) {
+        if (status === "Draft" || status === "Menunggu Persetujuan" || status === "Ditolak") {
             return (
                 <NavLink to={{
                     pathname: "/hasil-pemeriksaan/ubah",
                     state: {
-                        id: id
+                        id: id,
+                        idTugasPemeriksaan: idTugasPemeriksaan
                     }
                 }}>
                     <SirioButton
@@ -167,7 +168,7 @@ class DetailHasilPemeriksaan extends React.Component {
     }
 
     buttonHapus(id, status) {
-        if(status === "Draft" || status === "Menunggu Persetujuan" || status === "Ditolak") {
+        if (status === "Draft" || status === "Menunggu Persetujuan" || status === "Ditolak") {
             return (
                 <SirioWarningButton
                     red
@@ -186,7 +187,7 @@ class DetailHasilPemeriksaan extends React.Component {
     }
 
     buttonSetuju(id, status) {
-        if(status === "Menunggu Persetujuan") {
+        if (status === "Menunggu Persetujuan") {
             return (
                 <SirioConfirmButton
                     purple
@@ -195,7 +196,6 @@ class DetailHasilPemeriksaan extends React.Component {
                     onConfirm={() => this.setuju(id)}
                     customConfirmText="Ya, Setujui"
                     customCancelText="Batal"
-                    closeOnConfirm
                 >
                     Setuju
                 </SirioConfirmButton>
@@ -206,7 +206,7 @@ class DetailHasilPemeriksaan extends React.Component {
     }
 
     buttonTolak(id, status) {
-        if(status === "Menunggu Persetujuan") {
+        if (status === "Menunggu Persetujuan") {
             return (
                 <NavLink to={{
                     pathname: "/hasil-pemeriksaan/tolak",
@@ -231,7 +231,7 @@ class DetailHasilPemeriksaan extends React.Component {
             case "Super QA Officer Operational Risk":
                 return (
                     <div>
-                        {this.buttonUbah(this.state.hasilPemeriksaan.id, this.state.hasilPemeriksaan.namaStatus)}
+                        {this.buttonUbah(this.state.hasilPemeriksaan.id, this.state.hasilPemeriksaan.tugasPemeriksaan.id, this.state.hasilPemeriksaan.namaStatus)}
                         {this.buttonHapus(this.state.hasilPemeriksaan.id, this.state.hasilPemeriksaan.namaStatus)}
                         {this.buttonSetuju(this.state.hasilPemeriksaan.id, this.state.hasilPemeriksaan.namaStatus)}
                         {this.buttonTolak(this.state.hasilPemeriksaan.id, this.state.hasilPemeriksaan.namaStatus)}
@@ -240,7 +240,7 @@ class DetailHasilPemeriksaan extends React.Component {
             case "admin":
                 return (
                     <div>
-                        {this.buttonUbah(this.state.hasilPemeriksaan.id, this.state.hasilPemeriksaan.namaStatus)}
+                        {this.buttonUbah(this.state.hasilPemeriksaan.id, this.state.hasilPemeriksaan.tugasPemeriksaan.id, this.state.hasilPemeriksaan.namaStatus)}
                         {this.buttonHapus(this.state.hasilPemeriksaan.id, this.state.hasilPemeriksaan.namaStatus)}
                         {this.buttonSetuju(this.state.hasilPemeriksaan.id, this.state.hasilPemeriksaan.namaStatus)}
                         {this.buttonTolak(this.state.hasilPemeriksaan.id, this.state.hasilPemeriksaan.namaStatus)}
@@ -250,7 +250,7 @@ class DetailHasilPemeriksaan extends React.Component {
                 if (this.state.yangDitugaskan) {
                     return (
                         <div>
-                            {this.buttonUbah(this.state.hasilPemeriksaan.id, this.state.hasilPemeriksaan.namaStatus)}
+                            {this.buttonUbah(this.state.hasilPemeriksaan.id, this.state.hasilPemeriksaan.tugasPemeriksaan.id, this.state.hasilPemeriksaan.namaStatus)}
                             {this.buttonHapus(this.state.hasilPemeriksaan.id, this.state.hasilPemeriksaan.namaStatus)}
                         </div>
                     )
@@ -310,11 +310,13 @@ class DetailHasilPemeriksaan extends React.Component {
                 {this.renderRedirectHapus()}
                 {this.renderRedirectSetuju()}
                 <SirioDetailPage
+                    link="hasil-pemeriksaan"
                     title="Detail Hasil Pemeriksaan"
                     data={this.state.dataGeneral}
                     id='id'
                 />
                 <SirioDetailPage
+                    noBack
                     data={{
                         "Risk Score": this.state.riskScore,
                         "Feedback": this.state.hasilPemeriksaan.feedback
@@ -323,8 +325,10 @@ class DetailHasilPemeriksaan extends React.Component {
                 />
                 {this.state.dataKomponen.map(komponen =>
                     <SirioDetailPage
+                        noBack
                         data={komponen}
                         id='id'
+                        key='id'
                     />
                 )}
                 <div className="w-100 text-right">

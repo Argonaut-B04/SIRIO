@@ -3,39 +3,29 @@ import classes from './SirioComponentHeader.module.css';
 
 class SirioComponentHeader extends Component {
     render() {
+        const { headerWrapper } = classes;
+        const { title, headerButton, betweenTitleSubtitle, subtitle } = this.props;
+
         return (
-            <div className={classes.headerWrapper}>
-                {this.props.title ?
-                    <div className="row">
-                        <h2 className={classes.title}>
-                            {this.props.title}
-                        </h2>
-                        {this.props.headerButton ?
-                            <div className="ml-auto">{this.props.headerButton}</div>
-                            :
-                            ""
+            <div className={headerWrapper}>
+                <div className="row">
+                    <div className="col-6">
+                        {title &&
+                            <h2 className={classes.title}>
+                                {title}
+                            </h2>
+                        }
+                        {betweenTitleSubtitle}
+                        {subtitle &&
+                            <h5 className={classes.subtitle}>
+                                {subtitle}
+                            </h5>
                         }
                     </div>
-                    :
-                    ""
-                }
-                {this.props.betweenTitleSubtitle ?
-                    <div className="row">
-                        {this.props.betweenTitleSubtitle}
+                    <div className="col-6 d-flex justify-content-end align-items-center">
+                        {headerButton && <div className="ml-auto">{headerButton}</div>}
                     </div>
-                    :
-                    ""
-                }
-
-                {this.props.subtitle ?
-                    <div className="row">
-                        <h5 className={classes.subtitle}>
-                            {this.props.subtitle}
-                        </h5>
-                    </div>
-                    :
-                    ""
-                }
+                </div>
             </div>
         );
     }

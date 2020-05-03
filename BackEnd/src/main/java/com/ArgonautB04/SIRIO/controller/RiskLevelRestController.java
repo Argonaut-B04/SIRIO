@@ -6,15 +6,11 @@ import com.ArgonautB04.SIRIO.rest.BaseResponse;
 import com.ArgonautB04.SIRIO.services.EmployeeRestService;
 import com.ArgonautB04.SIRIO.services.RiskLevelRestService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/RiskLevel")
@@ -31,48 +27,18 @@ public class RiskLevelRestController {
             @RequestBody String namaRiskLevelBaru,
             Principal principal
     ) {
-        BaseResponse<Boolean> response = new BaseResponse<>();
-        Optional<Employee> pengelolaOptional = employeeRestService.getByUsername(principal.getName());
-        Employee pengelola;
-        if (pengelolaOptional.isPresent()) {
-            pengelola = pengelolaOptional.get();
-            if (pengelola.getRole().getAccessPermissions().getAksesRiskLevel()) {
-                response.setStatus(200);
-                response.setMessage("success");
-                response.setResult(
-                        riskLevelRestService.isExistInDatabase(namaRiskLevelBaru)
-                );
-            } else throw new ResponseStatusException(
-                    HttpStatus.UNAUTHORIZED, "Akun anda tidak memiliki akses ke pengaturan ini"
-            );
-        } else throw new ResponseStatusException(
-                HttpStatus.UNAUTHORIZED, "Akun anda tidak terdaftar dalam Sirio"
-        );
-        return response;
+        Employee pengelola = employeeRestService.validateEmployeeExistByPrincipal(principal);
+        employeeRestService.validateRolePermission(pengelola, "akses risk level");
+        return new BaseResponse<>(200, "success", riskLevelRestService.isExistInDatabase(namaRiskLevelBaru));
     }
 
     @GetMapping("/Aktif")
     private BaseResponse<List<RiskLevel>> getAllAktifRiskLevel(
             Principal principal
     ) {
-        BaseResponse<List<RiskLevel>> response = new BaseResponse<>();
-        Optional<Employee> pengelolaOptional = employeeRestService.getByUsername(principal.getName());
-        Employee pengelola;
-        if (pengelolaOptional.isPresent()) {
-            pengelola = pengelolaOptional.get();
-            if (pengelola.getRole().getAccessPermissions().getAksesRiskLevel()) {
-                response.setStatus(200);
-                response.setMessage("success");
-                response.setResult(
-                        riskLevelRestService.getAktif()
-                );
-            } else throw new ResponseStatusException(
-                    HttpStatus.UNAUTHORIZED, "Akun anda tidak memiliki akses ke pengaturan ini"
-            );
-        } else throw new ResponseStatusException(
-                HttpStatus.UNAUTHORIZED, "Akun anda tidak terdaftar dalam Sirio"
-        );
-        return response;
+        Employee employee = employeeRestService.validateEmployeeExistByPrincipal(principal);
+        employeeRestService.validateRolePermission(employee, "akses risk level");
+        return new BaseResponse<>(200, "success", riskLevelRestService.getAktif());
     }
 
     @PostMapping("")
@@ -80,45 +46,31 @@ public class RiskLevelRestController {
             @RequestBody List<RiskLevel> riskLevelList,
             Principal principal
     ) {
-        BaseResponse<List<RiskLevel>> response = new BaseResponse<>();
-        Optional<Employee> pengelolaOptional = employeeRestService.getByUsername(principal.getName());
-        Employee pengelola;
-        if (pengelolaOptional.isPresent()) {
-            pengelola = pengelolaOptional.get();
-            if (pengelola.getRole().getAccessPermissions().getUbahRiskLevel()) {
+        Employee pengelola = employeeRestService.validateEmployeeExistByPrincipal(principal);
+        employeeRestService.validateRolePermission(pengelola, "ubah risk level");
 
-                List<RiskLevel> currentRiskLevel = riskLevelRestService.getAktif();
-                List<RiskLevel> newRiskLevelList = new ArrayList<>();
+        List<RiskLevel> currentRiskLevel = riskLevelRestService.getAktif();
+        List<RiskLevel> newRiskLevelList = new ArrayList<>();
 
-                for (RiskLevel riskLevel : riskLevelList) {
-                    if (riskLevelRestService.isExistInDatabase(riskLevel)) {
-                        newRiskLevelList.add(
-                                riskLevelRestService.ubahRiskLevel(riskLevel.getIdLevel(), riskLevel)
-                        );
-                    } else {
-                        riskLevel.setPengelola(pengelola);
-                        newRiskLevelList.add(
-                                riskLevelRestService.buatRiskLevel(riskLevel)
-                        );
-                    }
-                }
+        for (RiskLevel riskLevel : riskLevelList) {
+            if (riskLevelRestService.isExistInDatabase(riskLevel)) {
+                newRiskLevelList.add(
+                        riskLevelRestService.ubahRiskLevel(riskLevel.getIdLevel(), riskLevel)
+                );
+            } else {
+                riskLevel.setPengelola(pengelola);
+                newRiskLevelList.add(
+                        riskLevelRestService.buatRiskLevel(riskLevel)
+                );
+            }
+        }
 
-                currentRiskLevel.removeAll(newRiskLevelList);
+        currentRiskLevel.removeAll(newRiskLevelList);
 
-                for (RiskLevel riskLevel : currentRiskLevel) {
-                    riskLevelRestService.nonaktifkan(riskLevel);
-                }
+        for (RiskLevel riskLevel : currentRiskLevel) {
+            riskLevelRestService.nonaktifkan(riskLevel);
+        }
 
-                response.setStatus(200);
-                response.setMessage("success");
-                response.setResult(newRiskLevelList);
-                return response;
-
-            } else throw new ResponseStatusException(
-                    HttpStatus.UNAUTHORIZED, "Akun anda tidak memiliki akses ke pengaturan ini"
-            );
-        } else throw new ResponseStatusException(
-                HttpStatus.UNAUTHORIZED, "Akun anda tidak terdaftar dalam Sirio"
-        );
+        return new BaseResponse<>(200, "success", newRiskLevelList);
     }
 }

@@ -1,9 +1,7 @@
 package com.ArgonautB04.SIRIO.controller;
 
-import com.ArgonautB04.SIRIO.model.Role;
 import com.ArgonautB04.SIRIO.model.SOP;
 import com.ArgonautB04.SIRIO.rest.BaseResponse;
-import com.ArgonautB04.SIRIO.services.RoleRestService;
 import com.ArgonautB04.SIRIO.services.SOPRestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,12 +24,7 @@ public class SOPRestController {
      */
     @GetMapping("/getAll")
     private BaseResponse<List<SOP>> getAllSop() {
-        BaseResponse<List<SOP>> response = new BaseResponse<>();
-        List<SOP> result = sopRestService.getAll();
-        response.setStatus(200);
-        response.setMessage("success");
-        response.setResult(result);
-        return response;
+        return new BaseResponse<>(200, "success", sopRestService.getAll());
     }
 
 }

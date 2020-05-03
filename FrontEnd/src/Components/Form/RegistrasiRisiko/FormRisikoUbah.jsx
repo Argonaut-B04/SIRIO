@@ -263,7 +263,7 @@ class FormRisikoUbah extends React.Component {
         return (
             [
                 {
-                    label: "Nama Risiko*",
+                    label: "Nama Risiko",
                     handleChange: this.handleChange,
                     type: "textarea",
                     name: "nama",
@@ -272,7 +272,7 @@ class FormRisikoUbah extends React.Component {
                     value: this.state.nama,
                     placeholder: "Masukan nama risiko"
                 }, {
-                    label: "Kategori Risiko*",
+                    label: "Kategori Risiko",
                     handleChange: this.handleSelectChange,
                     type: "select",
                     name: "kategori",
@@ -291,7 +291,7 @@ class FormRisikoUbah extends React.Component {
                         }
                     ]
                 }, {
-                    label: "Referensi SOP*",
+                    label: "Referensi SOP",
                     handleChange: this.handleSelectChange,
                     type: "select",
                     name: "sop",

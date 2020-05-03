@@ -2,6 +2,7 @@ import React from 'react';
 import SirioForm from '../SirioForm';
 import SirioButton from '../../Button/SirioButton';
 import BuktiPelaksanaanService from '../../../Services/BuktiPelaksanaanService';
+import RekomendasiService from '../../../Services/RekomendasiService';
 import { Redirect } from 'react-router-dom';
 import { withRouter } from 'react-router-dom';
 
@@ -15,6 +16,7 @@ class FormTambahBukti extends React.Component {
             keterangan: "",
             lampiran: "",
             id: "",
+            ketRekomendasi: "",
             submitable: false,
             redirect: false
         };
@@ -23,6 +25,10 @@ class FormTambahBukti extends React.Component {
         this.inputDefinition = this.inputDefinition.bind(this);
         this.setRedirect = this.setRedirect.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    componentDidMount() {
+        this.renderRekomendasi();
     }
 
     setRedirect = () => {
@@ -41,6 +47,15 @@ class FormTambahBukti extends React.Component {
             }} />
         }
     };
+
+    async renderRekomendasi() {
+        const response = await RekomendasiService.getRekomendasi(this.props.location.state.id);
+        console.log(response);
+        this.setState({
+            id: response.data.result.id,
+            ketRekomendasi: response.data.result.keterangan
+        })
+    }
     
     handleChange(event) {
         this.setState(
@@ -133,29 +148,32 @@ class FormTambahBukti extends React.Component {
     }
 
     inputDefinition() {
-        return (
-            [
-                {
-                    label: "Keterangan*",
-                    required: true,
-                    handleChange: this.handleChange,
-                    validation: this.state.errorKeterangan,
-                    type: "textarea",
-                    name: "keterangan",
-                    value: this.state.keterangan,
-                    placeholder: "Masukan keterangan bukti"
-                }, {
-                    label: "Lampiran*",
-                    required: true,
-                    handleChange: this.handleChange,
-                    validation: this.state.errorLampiran,
-                    type: "textarea",
-                    name: "lampiran",
-                    value: this.state.lampiran,
-                    placeholder: "Masukan lampiran bukti"
-                }
-            ]
+        var rowDefinition = [];
+        rowDefinition.push(
+            {
+                label: "Rekomendasi",
+                customInput: <p>{this.state.ketRekomendasi}</p>
+            }, {
+                label: "Keterangan*",
+                required: true,
+                handleChange: this.handleChange,
+                validation: this.state.errorKeterangan,
+                type: "textarea",
+                name: "keterangan",
+                value: this.state.keterangan,
+                placeholder: "Masukan keterangan bukti"
+            }, {
+                label: "Lampiran*",
+                required: true,
+                handleChange: this.handleChange,
+                validation: this.state.errorLampiran,
+                type: "textarea",
+                name: "lampiran",
+                value: this.state.lampiran,
+                placeholder: "Masukan lampiran bukti (berupa link url)"
+            }
         )
+        return rowDefinition;
     }
 
     submitButton() {
@@ -185,6 +203,8 @@ class FormTambahBukti extends React.Component {
                 {this.renderRedirect()}
                 <SirioForm
                     title="Form Tambah Bukti Pelaksanaan"
+                    data={this.data}
+                    id='id'
                     inputDefinition={this.inputDefinition()}
                     onSubmit={this.handleSubmit}
                     submitButton={this.submitButton()}
