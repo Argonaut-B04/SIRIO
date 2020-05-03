@@ -333,7 +333,7 @@ class FormRisiko extends React.Component {
                 {
                     label: "Nama Risiko",
                     handleChange: this.handleChange,
-                    type: "textarea",
+                    type: "text",
                     required: true,
                     // validation: this.state.errorNama,
                     name: "nama",
