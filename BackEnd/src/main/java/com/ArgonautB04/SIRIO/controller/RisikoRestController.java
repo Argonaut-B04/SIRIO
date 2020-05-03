@@ -256,7 +256,7 @@ public class RisikoRestController {
     @GetMapping("/ubah-hierarki/kategori")
     private BaseResponse<List<List<Risiko>>> getByKategori(Principal principal) {
         Employee employee = employeeRestService.validateEmployeeExistByPrincipal(principal);
-        employeeRestService.validateRolePermission(employee, "tambah risiko");
+        employeeRestService.validateRolePermission(employee, "akses risiko");
 
         List<List<Risiko>> listOfOptionList = new ArrayList<>();
         listOfOptionList.add(
@@ -265,7 +265,6 @@ public class RisikoRestController {
         listOfOptionList.add(
                 risikoRestService.getByKategori(2)
         );
-
         return new BaseResponse<>(200, "success", listOfOptionList);
     }
 }

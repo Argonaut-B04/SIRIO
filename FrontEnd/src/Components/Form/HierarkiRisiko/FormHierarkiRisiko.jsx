@@ -24,6 +24,7 @@ class FormHierarkiRisiko extends React.Component {
         this.activeUbah = this.activeUbah.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.setRedirect = this.setRedirect.bind(this);
+        this.toggleEdit = this.toggleEdit.bind(this);
     }
 
     componentDidMount() {
@@ -120,14 +121,28 @@ class FormHierarkiRisiko extends React.Component {
 
                 purple
                 recommended
-                onClick={() => {
-                    row.changeable = !row.changeable;
-                    this.forceUpdate();
-                }}
+                onClick={() => this.toggleEdit(row.id)}
             >
                 {row.changeable ? "Selesai" : "Ubah Hierarki"}
             </SirioButton>
         )
+    }
+
+    toggleEdit(id) {
+        let rowListLocal = [...this.state.rowList];
+        rowListLocal = rowListLocal.map((item) => {
+            if (item.id === id) {
+                return {
+                    ...item,
+                    changeable: item.changeable ? !item.changeable : true
+                }
+            }
+            return item;
+        })
+        this.setState(curr => ({
+            ...curr,
+            rowList: rowListLocal
+        }));
     }
 
     getOptions(row) {
