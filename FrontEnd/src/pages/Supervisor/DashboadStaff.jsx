@@ -4,6 +4,8 @@ import PollingService from "../../Services/PollingService";
 import { withRouter } from "react-router-dom";
 import SirioBarChart from "../../Components/Chart/SirioBarChart";
 import SirioDashboardBox from "../../Components/Box/SirioDashboardBox";
+import DashboardStaffService from '../../Services/DashboardStaffService';
+import { NavLink, Redirect } from 'react-router-dom';
 
 /**
  * Controller untuk menampilkan halaman utama
@@ -15,13 +17,45 @@ class DashboardStaff extends React.Component {
 
         // state untuk menjalankan preloader saat halaman diakses
         this.state = {
+            jumlahRekomendasi: "",
+            jumlahTemuan: "",
+            jumlahRekomendasiOverdue: "",
+            jumlahRekomendasiBelumDiimplementasi: "",
+            jumlahRekomendasiDiimplementasi: "",
             preloader: true,
             contentLoading: !PollingService.isConnected()
         }
+        this.renderRows = this.renderRows.bind(this);
+    }
+
+    async renderRows() {
+        DashboardStaffService.getAllData().then(response => {
+            this.setState({
+                jumlahRekomendasi: response.data.result.jumlahRekomendasi,
+                jumlahTemuan: response.data.result.jumlahTemuan,
+                jumlahRekomendasiOverdue: response.data.result.jumlahRekomendasiOverdue,
+                jumlahRekomendasiBelumDiimplementasi: response.data.result.jumlahRekomendasiBelumDiimplementasi,
+                jumlahRekomendasiDiimplementasi: response.data.result.jumlahRekomendasiDiimplementasi
+            })
+        })
+        .catch(error => {
+            if (error.response.data.status === 401) {
+                this.setState({
+                    redirector: <Redirect to={{
+                        pathname: "/401",
+                        state: {
+                            detail: error.response.data.message,
+                        }
+                    }} />
+                })
+            }
+        })
+        ;
     }
 
     // jika sudah selesai dirender, hentikan preloader
     componentDidMount() {
+        this.renderRows();
         if (!PollingService.isConnected()) {
             this.setState({
                 preloader: false,
@@ -58,69 +92,71 @@ class DashboardStaff extends React.Component {
     render() {
         const { preloader, contentLoading, loadingBody } = this.state;
         const data = {
-            labels: ['Dapet PR', 'Dapet PR Besok Deadline', 'Besok Kuis', 'Haaa? Hari ini ada kuis?', '"Aku cuma liat kamu sebagai teman"'],
+            labels: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni'],
             datasets: [
                 {
-                    label: 'Total Responden',
+                    label: 'Jumlah Temuan',
                     backgroundColor: 'rgba(251, 251, 181, 0.6)',
                     borderColor: 'rgba(244, 244, 35, 0.96)',
                     stack: 'Stack 0',
                     borderWidth: 1,
                     hoverBackgroundColor: 'rgba(252, 252, 7, 0.6)',
                     hoverBorderColor: 'rgba(234, 234, 46, 0.96)',
-                    data: [150, 150, 150, 150, 150]
+                    data: [this.state.jumlahTemuan,12,14,14,43,32]
                 },
                 {
-                    label: 'Masih ada jalan keluar',
+                    label: 'Jumlah Rekomendasi Diimplementasi',
                     backgroundColor: 'rgba(34, 245, 34, 0.3)',
                     borderColor: 'rgba(46, 234, 46, 0.96)',
                     stack: 'Stack 1',
                     borderWidth: 1,
                     hoverBackgroundColor: 'rgba(34, 245, 34, 0.96)',
                     hoverBorderColor: 'rgba(46, 234, 46, 0.96)',
-                    data: [125, 95, 90, 40, 10]
+                    data: [this.state.jumlahRekomendasiDiimplementasi, 95, 90, 40, 10,2]
                 },
                 {
-                    label: 'Hilang harapan',
+                    label: 'Jumlah Rekomendasi Belum Diimplementasi',
                     stack: 'Stack 1',
                     backgroundColor: 'rgba(255,99,132,0.2)',
                     borderColor: 'rgba(255,99,132,1)',
                     borderWidth: 1,
                     hoverBackgroundColor: 'rgba(255,99,132,0.4)',
                     hoverBorderColor: 'rgba(255,99,132,1)',
-                    data: [25, 55, 60, 110, 140]
+                    data: [this.state.jumlahRekomendasiBelumDiimplementasi, 55, 60, 110, 140,10]
+                },
+                {
+                    label: 'Jumlah Rekomendasi Overdue',
+                    stack: 'Stack 1',
+                    backgroundColor: 'rgba(254,99,132,0.2)',
+                    borderColor: 'rgba(255,99,132,1)',
+                    borderWidth: 1,
+                    hoverBackgroundColor: 'rgba(255,99,132,0.4)',
+                    hoverBorderColor: 'rgba(255,99,132,1)',
+                    data: [this.state.jumlahRekomendasiOverdue, 55, 60, 110, 140,40]
                 }
             ]
         };
 
         const boxData = [
             {
-                title: "Taylor Swift",
-                value: 22
+                title: "Rekomendasi",
+                value: this.state.jumlahRekomendasi
             },
             {
-                title: "6 Digit yang mungkin Cloud tau",
-                value: 177013
+                title: "Rekomendasi Diimplementasi",
+                value: this.state.jumlahRekomendasiDiimplementasi
             },
             {
-                title: "Angka Meme di Facebook",
-                value: 69420
+                title: "Rekomendasi Belum Diimplementasi",
+                value: this.state.jumlahRekomendasiBelumDiimplementasi
             },
             {
-                title: "Jumlah anggota kelompok",
-                value: 5
+                title: "Rekomendasi Overdue",
+                value: this.state.jumlahRekomendasiOverdue
             },
             {
-                title: "Angka di peer review",
-                value: 4
-            },
-            {
-                title: "Aku tidak tau ini angka apa",
-                value: 9995
-            },
-            {
-                title: "ini supaya box nya ada 7",
-                value: 10020
+                title: "Temuan",
+                value: this.state.jumlahTemuan
             }
         ]
         return (

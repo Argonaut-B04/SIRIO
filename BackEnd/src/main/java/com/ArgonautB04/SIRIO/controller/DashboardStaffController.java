@@ -58,10 +58,14 @@ public class DashboardStaffController {
         DashboardDTO result = new DashboardDTO();
         Integer jumlahRekomendasi = rekomendasiRestService.getAll().size();
         Integer jumlahTemuan = temuanRisikoRestService.getAll().size();
-        Integer jumlahRekomendasiDiimplementasi =
+        Integer jumlahRekomendasiBelumDiimplementasi = rekomendasiRestService.getRekomendasiBelumDiimplementasi().size();
+        Integer jumlahRekomendasiOverdue = rekomendasiRestService.getRekomendasiOverdue().size();
+        Integer jumlahRekomendasiDiimplementasi = jumlahRekomendasi - jumlahRekomendasiBelumDiimplementasi - jumlahRekomendasiOverdue;
+        result.setJumlahRekomendasiBelumDiimplementasi(jumlahRekomendasiBelumDiimplementasi);
+        result.setJumlahRekomendasiDiimplementasi(jumlahRekomendasiDiimplementasi);
+        result.setJumlahRekomendasiOverdue(jumlahRekomendasiOverdue);
         result.setJumlahRekomendasi(jumlahRekomendasi);
         result.setJumlahTemuan(jumlahTemuan);
-        System.out.println(result);
         response.setStatus(200);
         response.setMessage("success");
         response.setResult(result);
