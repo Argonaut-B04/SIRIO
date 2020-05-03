@@ -9,7 +9,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import javax.swing.text.html.Option;
 import javax.transaction.Transactional;
 import java.security.Principal;
 import java.util.List;
@@ -231,6 +230,14 @@ public class EmployeeRestServiceImpl implements EmployeeRestService {
                     throw new ResponseStatusException(
                             HttpStatus.UNAUTHORIZED,
                             "Akun anda tidak memiliki akses persetujuan bukti"
+                    );
+                }
+                break;
+            case "atur hierarki risiko":
+                if (!employee.getRole().getAccessPermissions().getAksesUbahHierarki()) {
+                    throw new ResponseStatusException(
+                            HttpStatus.UNAUTHORIZED,
+                            "Akun anda tidak memiliki akses untuk mengatur hierarki risiko"
                     );
                 }
                 break;
