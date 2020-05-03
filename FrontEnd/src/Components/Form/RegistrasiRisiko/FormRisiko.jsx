@@ -333,9 +333,9 @@ class FormRisiko extends React.Component {
                 {
                     label: "Nama Risiko",
                     handleChange: this.handleChange,
-                    type: "text",
+                    type: "textarea",
                     required: true,
-                    validation: this.state.errorNama,
+                    // validation: this.state.errorNama,
                     name: "nama",
                     value: this.state.nama,
                     placeholder: "Masukan nama risiko"
@@ -372,7 +372,7 @@ class FormRisiko extends React.Component {
                     label: "Detail Uraian Risiko",
                     handleChange: this.handleChange,
                     validation: this.state.errorDU,
-                    // disabled: {this.state.kategori != 3 ? disabled : enabled},
+                    disabled: this.state.kategori != 3,
                     type: "textarea",
                     name: "detailUraian",
                     value: this.state.detailUraian,
@@ -380,8 +380,9 @@ class FormRisiko extends React.Component {
                 }, {
                     label: "Metodologi",
                     handleChange: this.handleChange,
-                    validation: this.state.errorMetod,
-                    type: "text",
+                    // validation: this.state.errorMetod,
+                    disabled: this.state.kategori != 3,
+                    type: "textarea",
                     name: "metodologi",
                     value: this.state.metodologi,
                     placeholder: "Masukan metodologi risiko"
@@ -389,6 +390,7 @@ class FormRisiko extends React.Component {
                     label: "Deskripsi",
                     handleChange: this.handleChange,
                     validation: this.state.errorDesc,
+                    disabled: this.state.kategori != 3,
                     type: "textarea",
                     name: "deskripsi",
                     value: this.state.deskripsi,
@@ -397,6 +399,7 @@ class FormRisiko extends React.Component {
                     label: "Ketentuan Sampel",
                     handleChange: this.handleChange,
                     validation: this.state.errorKS,
+                    disabled: this.state.kategori != 3,
                     type: "textarea",
                     name: "ketentuanSampel",
                     value: this.state.ketentuanSampel,
