@@ -6,6 +6,7 @@ import com.ArgonautB04.SIRIO.repository.RisikoDB;
 import com.ArgonautB04.SIRIO.rest.RisikoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -47,10 +48,28 @@ public class RisikoRestServiceImpl implements RisikoRestService {
         Risiko target = getById(idRisiko);
         target.setChildList(risiko.getChildList());
         target.setSop(risiko.getSop());
-        target.setRisikoKategori(risiko.getRisikoKategori());
         target.setParent(risiko.getParent());
         target.setNamaRisiko(risiko.getNamaRisiko());
-        target.setKomponen(risiko.getKomponen());
+        target.setRisikoKategori(risiko.getRisikoKategori());
+        if (risiko.getRisikoKategori() == 3) {
+            if (risiko.getDetailUraian() != null) {
+                target.setDetailUraian(risiko.getDetailUraian());
+            }
+            if (risiko.getDeskripsi() != null) {
+                target.setDeskripsi(risiko.getDeskripsi());
+            }
+            if (risiko.getMetodologi() != null) {
+                target.setMetodologi(risiko.getMetodologi());
+            }
+            if(risiko.getKetentuanSampel() != null) {
+                target.setKetentuanSampel(risiko.getKetentuanSampel());
+            }
+        } else {
+            target.setDeskripsi(null);
+            target.setMetodologi(null);
+            target.setKetentuanSampel(null);
+            target.setDetailUraian(null);
+        }
         return risikoDB.save(target);
     }
 
@@ -75,8 +94,26 @@ public class RisikoRestServiceImpl implements RisikoRestService {
 
     @Override
     public Risiko transformasidto(Risiko risiko, RisikoDTO risikoDTO) {
-        risiko.setChildList(risikoDTO.getChild());
-        risiko.setKomponen(risikoDTO.getKomponen());
+        System.out.println(risikoDTO.getKategori());
+        if (risikoDTO.getKategori() == 3) {
+            if (risikoDTO.getDetailUraian() != null) {
+                risiko.setDetailUraian(risikoDTO.getDetailUraian());
+            }
+            if (risikoDTO.getDeskripsi() != null) {
+                risiko.setDeskripsi(risikoDTO.getDeskripsi());
+            }
+            if (risikoDTO.getMetodologi() != null) {
+                risiko.setMetodologi(risikoDTO.getMetodologi());
+            }
+            if(risikoDTO.getKetentuanSampel() != null) {
+                risiko.setKetentuanSampel(risikoDTO.getKetentuanSampel());
+            }
+        } else {
+            risiko.setDetailUraian(null);
+            risiko.setKetentuanSampel(null);
+            risiko.setMetodologi(null);
+            risiko.setDeskripsi(null);
+        }
         risiko.setRisikoKategori(risikoDTO.getKategori());
         risiko.setNamaRisiko(risikoDTO.getNama());
         if (risikoDTO.getParent() != null) {
@@ -121,6 +158,11 @@ public class RisikoRestServiceImpl implements RisikoRestService {
         } else {
             throw new NoSuchElementException("");
         }
+    }
+
+    @Override
+    public Optional<Risiko> getByNama(String nama) {
+        return risikoDB.findByNamaRisikoAndStatus(nama, Risiko.Status.AKTIF);
     }
 
 }

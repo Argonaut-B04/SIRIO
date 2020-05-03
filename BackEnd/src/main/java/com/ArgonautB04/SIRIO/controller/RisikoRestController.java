@@ -61,8 +61,8 @@ public class RisikoRestController {
 
                 return response;
             } else throw new ResponseStatusException(
-                        HttpStatus.UNAUTHORIZED, "Akun anda tidak memiliki akses ke pengaturan ini"
-                );
+                    HttpStatus.UNAUTHORIZED, "Akun anda tidak memiliki akses ke pengaturan ini"
+            );
         } else throw new ResponseStatusException(
                 HttpStatus.UNAUTHORIZED, "Akun anda tidak terdaftar dalam Sirio"
         );
@@ -205,10 +205,25 @@ public class RisikoRestController {
                     risikoDTO.setNama(risiko.getNamaRisiko());
                     risikoDTO.setKategori(risiko.getRisikoKategori());
                     risikoDTO.setSop(risiko.getSop().getIdSop());
-                    if (risiko.getKomponen() == null || risiko.getKomponen().equals("")) {
-                        risikoDTO.setKomponen(null);
+                    if (risiko.getDetailUraian() == null || risiko.getDetailUraian().equals("")) {
+                        risikoDTO.setDetailUraian(null);
                     } else {
-                        risikoDTO.setKomponen(risiko.getKomponen());
+                        risikoDTO.setDetailUraian(risiko.getDetailUraian());
+                    }
+                    if (risiko.getDeskripsi() == null || risiko.getDeskripsi().equals("")) {
+                        risikoDTO.setDeskripsi(null);
+                    } else {
+                        risikoDTO.setDeskripsi(risiko.getDeskripsi());
+                    }
+                    if (risiko.getKetentuanSampel() == null || risiko.getKetentuanSampel().equals("")) {
+                        risikoDTO.setKetentuanSampel(null);
+                    } else {
+                        risikoDTO.setKetentuanSampel(risiko.getKetentuanSampel());
+                    }
+                    if (risiko.getMetodologi() == null || risiko.getMetodologi().equals("")) {
+                        risikoDTO.setMetodologi(null);
+                    } else {
+                        risikoDTO.setMetodologi(risiko.getMetodologi());
                     }
                     if (risiko.getParent() != null) {
                         risikoDTO.setParent(risiko.getParent().getIdRisiko());
@@ -243,7 +258,26 @@ public class RisikoRestController {
             RisikoDTO risikoDTO = new RisikoDTO();
             risikoDTO.setId(risiko.getIdRisiko());
             risikoDTO.setNama(risiko.getNamaRisiko());
-            risikoDTO.setKomponen(risiko.getKomponen());
+            if (risiko.getDetailUraian() == null || risiko.getDetailUraian().equals("")) {
+                risikoDTO.setDetailUraian(null);
+            } else {
+                risikoDTO.setDetailUraian(risiko.getDetailUraian());
+            }
+            if (risiko.getDeskripsi() == null || risiko.getDeskripsi().equals("")) {
+                risikoDTO.setDeskripsi(null);
+            } else {
+                risikoDTO.setDeskripsi(risiko.getDeskripsi());
+            }
+            if (risiko.getKetentuanSampel() == null || risiko.getKetentuanSampel().equals("")) {
+                risikoDTO.setKetentuanSampel(null);
+            } else {
+                risikoDTO.setKetentuanSampel(risiko.getKetentuanSampel());
+            }
+            if (risiko.getMetodologi() == null || risiko.getMetodologi().equals("")) {
+                risikoDTO.setMetodologi(null);
+            } else {
+                risikoDTO.setMetodologi(risiko.getMetodologi());
+            }
             if (risiko.getParent() != null) {
                 risikoDTO.setParent(risiko.getParent().getIdRisiko());
                 if (risiko.getParent().getParent() != null)
@@ -313,19 +347,19 @@ public class RisikoRestController {
 //        if (pengelolaOptional.isPresent()) {
 //            pengelola = pengelolaOptional.get();
 //            if (pengelola.getRole().getAccessPermissions().getAksesTambahRisiko()) {
-                List<List<Risiko>> listOfOptionList = new ArrayList<>();
-                listOfOptionList.add(
-                        risikoRestService.getByKategori(1)
-                );
-                listOfOptionList.add(
-                        risikoRestService.getByKategori(2)
-                );
-                response.setStatus(200);
-                response.setMessage("success");
-                response.setResult(listOfOptionList);
-                return response;
-            }
+            List<List<Risiko>> listOfOptionList = new ArrayList<>();
+            listOfOptionList.add(
+                    risikoRestService.getByKategori(1)
+            );
+            listOfOptionList.add(
+                    risikoRestService.getByKategori(2)
+            );
+            response.setStatus(200);
+            response.setMessage("success");
+            response.setResult(listOfOptionList);
+            return response;
         }
+//}
 //        else throw new ResponseStatusException(
 //                HttpStatus.UNAUTHORIZED, "Akun anda tidak memiliki akses ke pengaturan ini"
 //                );
@@ -333,3 +367,23 @@ public class RisikoRestController {
 //                HttpStatus.UNAUTHORIZED, "Akun anda tidak terdaftar dalam Sirio"
 //                );
 //                }
+
+    @GetMapping("/check/{nama}")
+    private BaseResponse<Boolean> checkNamaRisiko(
+            @PathVariable("nama") String nama
+    ) {
+        BaseResponse<Boolean> response = new BaseResponse<>();
+
+        Optional<Risiko> risikoOptional = risikoRestService.getByNama(nama);
+        if (risikoOptional.isEmpty()) {
+            response.setResult(false);
+        } else {
+            response.setResult(true);
+        }
+
+        response.setStatus(200);
+        response.setMessage("success");
+
+        return response;
+    }
+}

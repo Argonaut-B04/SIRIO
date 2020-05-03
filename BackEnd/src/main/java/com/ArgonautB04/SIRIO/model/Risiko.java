@@ -34,7 +34,19 @@ public class Risiko implements Serializable {
 
     @Size(max = 500)
     @Column
-    private String komponen;
+    private String detailUraian;
+
+    @Size(max = 500)
+    @Column
+    private String deskripsi;
+
+    @Size(max = 50)
+    @Column
+    private String metodologi;
+
+    @Size(max = 500)
+    @Column
+    private String ketentuanSampel;
 
     @NotNull
     @Enumerated(EnumType.STRING)
@@ -81,12 +93,36 @@ public class Risiko implements Serializable {
         this.risikoKategori = risikoKategori;
     }
 
-    public String getKomponen() {
-        return komponen;
+    public String getDetailUraian() {
+        return detailUraian;
     }
 
-    public void setKomponen(String indikator) {
-        this.komponen = indikator;
+    public void setDetailUraian(String detailUraian) {
+        this.detailUraian = detailUraian;
+    }
+
+    public String getDeskripsi() {
+        return deskripsi;
+    }
+
+    public void setDeskripsi(String deskripsi) {
+        this.deskripsi = deskripsi;
+    }
+
+    public String getMetodologi() {
+        return metodologi;
+    }
+
+    public void setMetodologi(String metodologi) {
+        this.metodologi = metodologi;
+    }
+
+    public String getKetentuanSampel() {
+        return ketentuanSampel;
+    }
+
+    public void setKetentuanSampel(String ketentuanSampel) {
+        this.ketentuanSampel = ketentuanSampel;
     }
 
     public Status getStatus() {

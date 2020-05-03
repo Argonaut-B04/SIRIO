@@ -16,7 +16,10 @@ class FormRisiko extends React.Component {
             nama: "",
             kategori: "",
             sop: "",
-            komponen: "",
+            detailUraian: "",
+            ketentuanSampel: "",
+            metodologi: "",
+            deskripsi: "",
             sopOptionList: [],
             redirect: false,
             submitable: false,
@@ -51,6 +54,7 @@ class FormRisiko extends React.Component {
         var validating = false;
 
         submitable = this.validateRequired();
+        console.log(submitable)
         if (prevState.nama !== this.state.nama) {
             submitable = this.validateNama() && submitable;
             validating = true;
@@ -68,8 +72,33 @@ class FormRisiko extends React.Component {
 
         }
 
-        if (prevState.komponen !== this.state.komponen) {
-            submitable = this.validateKomponen() && submitable;
+        if (prevState.detailUraian !== this.state.detailUraian) {
+            submitable = this.validateDetailUraian() && submitable;
+            console.log(submitable)
+            validating = true;
+
+        }
+
+        if (prevState.metodologi !== this.state.metodologi) {
+            submitable = this.validateMetodologi() && submitable;
+            console.log(submitable)
+
+            validating = true;
+
+        }
+
+        if (prevState.deskripsi !== this.state.deskripsi) {
+            submitable = this.validateDeskripsi() && submitable;
+            console.log(submitable)
+
+            validating = true;
+
+        }
+
+        if (prevState.ketentuanSampel !== this.state.ketentuanSampel) {
+            submitable = this.validateKetentuanSampel() && submitable;
+            console.log(submitable)
+
             validating = true;
 
         }
@@ -96,19 +125,18 @@ class FormRisiko extends React.Component {
         var submitable = true;
         const fokusNama = this.state.nama;
         var errorNama;
-        console.log(fokusNama.length)
-        console.log(fokusNama)
         if (fokusNama.length < 1 || fokusNama === null || fokusNama === "") {
-            console.log("masuk jg")
             submitable = false;
             errorNama = "Nama tidak boleh kosong";
         } else if (fokusNama.length > 50) {
-            console.log("masuk sini gasi")
             submitable = false;
-            errorNama = "Nama terlalu panjang";
+            errorNama = "Nama melebihi 50 karakter";
         }
+        // if(fokusNama.match(".*[1234567890!-@#$%^&*()_+{}:.,[]|>/=<?]+.*")){
+        //     submitable = false;
+        //     errorNama = "Nama hanya boleh mengandung huruf";
+        // }
         if (this.state.errorNama !== errorNama) {
-            console.log("masuk sini")
             this.setState({
                 errorNama: errorNama
             })
@@ -148,17 +176,65 @@ class FormRisiko extends React.Component {
         return submitable;
     }
 
-    validateKomponen() {
+    validateDetailUraian() {
         var submitable = true;
-        const fokusKomponen = this.state.komponen;
-        var errorKomponen;
-        if (fokusKomponen.length > 500) {
+        const fokusDU = this.state.detailUraian;
+        var errorDU;
+        if (fokusDU.length > 500) {
             submitable = false;
-            errorKomponen = "Komponen Risiko terlalu panjang!";
+            errorDU = "Detail Uraian Risiko terlalu panjang!";
         }
-        if (this.state.errorKomponen !== errorKomponen) {
+        if (this.state.errorDU !== errorDU) {
             this.setState({
-                errorKomponen: errorKomponen
+                errorDU: errorDU
+            })
+        }
+        return submitable;
+    }
+
+    validateKetentuanSampel() {
+        var submitable = true;
+        const fokusKS = this.state.ketentuanSampel;
+        var errorKS;
+        if (fokusKS.length > 500) {
+            submitable = false;
+            errorKS = "Ketentuan Sampel terlalu panjang!";
+        }
+        if (this.state.errorKS !== errorKS) {
+            this.setState({
+                errorKS: errorKS
+            })
+        }
+        return submitable;
+    }
+
+    validateDeskripsi() {
+        var submitable = true;
+        const fokusDesc = this.state.deskripsi;
+        var errorDesc;
+        if (fokusDesc.length > 500) {
+            submitable = false;
+            errorDesc = "Deskripsi terlalu panjang!";
+        }
+        if (this.state.errorDesc !== errorDesc) {
+            this.setState({
+                errorDesc: errorDesc
+            })
+        }
+        return submitable;
+    }
+
+    validateMetodologi() {
+        var submitable = true;
+        const fokusMetod = this.state.metodologi;
+        var errorMetod;
+        if (fokusMetod.length > 50) {
+            submitable = false;
+            errorMetod = "Metodologi terlalu panjang!";
+        }
+        if (this.state.errorMetod !== errorMetod) {
+            this.setState({
+                errorMetod: errorMetod
             })
         }
         return submitable;
@@ -221,15 +297,32 @@ class FormRisiko extends React.Component {
     handleSubmit(event) {
         // event.preventDefault wajib ada
         event.preventDefault();
-        const risiko = {
-            nama: this.state.nama,
-            kategori: this.state.kategori,
-            sop: this.state.sop,
-            komponen: this.state.komponen
-        }
-        RegistrasiRisikoService.submitChanges(risiko)
-            .then(() => this.setRedirect());
-    }
+        // if (this.state.submitable) {
+        //     const response = await RegistrasiRisikoService.checkRisikoExist(this.state.nama);
+        //     console.log(response.data.result)
+        //     if (response.data.result) {
+        //         const errorNama = "Nama sudah terdaftar";
+        //         if (this.state.errorNama !== errorNama) {
+        //             console.log("masuk")
+        //             this.setState({
+        //                 errorNama: errorNama
+        //             })
+        //         }
+        //     } else {
+                const risiko = {
+                    nama: this.state.nama,
+                    kategori: this.state.kategori,
+                    sop: this.state.sop,
+                    detailUraian: this.state.detailUraian,
+                    metodologi: this.state.metodologi,
+                    deskripsi: this.state.deskripsi,
+                    ketentuanSampel: this.state.ketentuanSampel
+                }
+                RegistrasiRisikoService.submitChanges(risiko)
+                    .then(() => this.setRedirect());
+            }
+    //     }
+    // }
 
     // Fungsi yang akan mengembalikan definisi tiap field pada form
     // Setiap objek {} pada List [] akan menjadi 1 field
@@ -240,8 +333,7 @@ class FormRisiko extends React.Component {
                 {
                     label: "Nama Risiko*",
                     handleChange: this.handleChange,
-                    type: "textarea",
-                    required: true,
+                    type: "text",
                     validation: this.state.errorNama,
                     name: "nama",
                     value: this.state.nama,
@@ -276,13 +368,38 @@ class FormRisiko extends React.Component {
                     value: this.state.sop,
                     optionList: this.state.sopOptionList
                 }, {
-                    label: "Komponen Risiko",
+                    label: "Detail Uraian Risiko",
                     handleChange: this.handleChange,
-                    validation: this.state.errorKomponen,
+                    validation: this.state.errorDU,
+                    // disabled: {this.state.kategori != 3 ? disabled : enabled},
                     type: "textarea",
-                    name: "komponen",
-                    value: this.state.komponen,
-                    placeholder: "Masukan komponen risiko"
+                    name: "detailUraian",
+                    value: this.state.detailUraian,
+                    placeholder: "Masukan detail uraian risiko"
+                }, {
+                    label: "Metodologi",
+                    handleChange: this.handleChange,
+                    validation: this.state.errorMetod,
+                    type: "text",
+                    name: "metodologi",
+                    value: this.state.metodologi,
+                    placeholder: "Masukan metodologi risiko"
+                }, {
+                    label: "Deskripsi",
+                    handleChange: this.handleChange,
+                    validation: this.state.errorDesc,
+                    type: "textarea",
+                    name: "deskripsi",
+                    value: this.state.deskripsi,
+                    placeholder: "Masukan deskripsi risiko"
+                }, {
+                    label: "Ketentuan Sampel",
+                    handleChange: this.handleChange,
+                    validation: this.state.errorKS,
+                    type: "textarea",
+                    name: "ketentuanSampel",
+                    value: this.state.ketentuanSampel,
+                    placeholder: "Masukan ketentuan sampel risiko"
                 }
             ]
         )
