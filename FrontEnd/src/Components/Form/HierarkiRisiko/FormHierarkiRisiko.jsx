@@ -25,6 +25,7 @@ class FormHierarkiRisiko extends React.Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.setRedirect = this.setRedirect.bind(this);
         this.toggleEdit = this.toggleEdit.bind(this);
+        this.getOptions = this.getOptions.bind(this);
     }
 
     componentDidMount() {
@@ -109,7 +110,6 @@ class FormHierarkiRisiko extends React.Component {
         if (row.changeable == undefined) {
             row.changeable = false;
         }
-        console.log(row.changeable + "hehe")
 
 
         if (row.kategori === 1) {
@@ -168,7 +168,6 @@ class FormHierarkiRisiko extends React.Component {
                         handleChange={(name, event) => {
                             row.parent = event.value;
                             row.namaParent = event.label;
-                            this.forceUpdate();
                         }}
                         options={optionList}
                     />
