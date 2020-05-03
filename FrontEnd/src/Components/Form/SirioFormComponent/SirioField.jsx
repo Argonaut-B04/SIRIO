@@ -55,6 +55,7 @@ export default class SirioField extends Component {
                     options={optionList}
                     required={required}
                     className={[customClass, classes.sirioSelect].join(" ")}
+                    disabled={this.props.disabled}
                 />;
         } else if (type === "textarea") {
             field =
@@ -63,6 +64,8 @@ export default class SirioField extends Component {
                     name={name}
                     value={value}
                     onChange={(event) => handleChange(event, index)}
+
+                    disabled={this.props.disabled}
 
                     placeholder={placeholder}
                     className={[customClass, classes.input].join(" ")}
@@ -76,6 +79,8 @@ export default class SirioField extends Component {
                 field =
                     <input
                         type={this.props.type}
+
+                        disabled={this.props.disabled}
 
                         checked
 
@@ -91,6 +96,8 @@ export default class SirioField extends Component {
                 field =
                     <input
                         type={this.props.type}
+
+                        disabled={this.props.disabled}
 
                         name={this.props.name}
                         defaultChecked={this.props.value}
@@ -110,6 +117,8 @@ export default class SirioField extends Component {
                     name={name}
                     value={value}
                     onChange={(event) => handleChange(event, index)}
+
+                    disabled={this.props.disabled}
 
                     min={min}
 
