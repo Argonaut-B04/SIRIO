@@ -82,10 +82,6 @@ export default class SirioWarningButton extends React.Component {
                             <div>{this.props.modalDesc}</div>
                         </div>
 
-                        <div className="text-center px-0 mx-0 w-75">
-                            <div>{this.props.modalDesc}</div>
-                        </div>
-
                         <div className="d-flex justify-content-center align-items-center w-100">
                             <SirioButton
                                 purple

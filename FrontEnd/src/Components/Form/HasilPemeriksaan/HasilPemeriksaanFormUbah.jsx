@@ -231,13 +231,11 @@ class HasilPemeriksaanFormTambah extends React.Component {
     getHistoriTemuanButton(idRisiko) {
         const histori = <p>
             {this.state.daftarHistoriTemuan
-                .filter(temuan => temuan.idRisiko === idRisiko)
+                .filter(x => x.idRisiko === idRisiko)
                 .map((temuan, index) =>
                     <p className="text-center p-0 m-0">{index+1}. {temuan.keterangan} </p>
                 )}
         </p>;
-
-        console.log(histori)
 
         return (
             <SirioConfirmButton
