@@ -73,6 +73,7 @@ class DetailHasilPemeriksaan extends React.Component {
 
     async renderDataHasilPemeriksaan() {
         const response = await HasilPemeriksaanService.getHasilPemeriksaan(this.props.location.state.id);
+        console.log(response.data.result)
 
         this.setState({
             hasilPemeriksaan: response.data.result,
@@ -230,25 +231,34 @@ class DetailHasilPemeriksaan extends React.Component {
     subButton() {
         switch (this.state.role) {
             case "Super QA Officer Operational Risk":
-                return (
-                    <div>
-                        {this.buttonUbah(this.state.hasilPemeriksaan.id, this.state.hasilPemeriksaan.tugasPemeriksaan.id, this.state.hasilPemeriksaan.namaStatus)}
-                        {this.buttonHapus(this.state.hasilPemeriksaan.id, this.state.hasilPemeriksaan.namaStatus)}
-                        {this.buttonSetuju(this.state.hasilPemeriksaan.id, this.state.hasilPemeriksaan.namaStatus)}
-                        {this.buttonTolak(this.state.hasilPemeriksaan.id, this.state.hasilPemeriksaan.namaStatus)}
-                    </div>
-                );
-            case "admin":
-                return (
-                    <div>
-                        {this.buttonUbah(this.state.hasilPemeriksaan.id, this.state.hasilPemeriksaan.tugasPemeriksaan.id, this.state.hasilPemeriksaan.namaStatus)}
-                        {this.buttonHapus(this.state.hasilPemeriksaan.id, this.state.hasilPemeriksaan.namaStatus)}
-                        {this.buttonSetuju(this.state.hasilPemeriksaan.id, this.state.hasilPemeriksaan.namaStatus)}
-                        {this.buttonTolak(this.state.hasilPemeriksaan.id, this.state.hasilPemeriksaan.namaStatus)}
-                    </div>
-                );
+                if (this.state.hasilPemeriksaan.tugasPemeriksaan) {
+                    console.log(this.state.hasilPemeriksaan.tugasPemeriksaan)
+                    return (
+                        <div>
+                            {this.buttonUbah(this.state.hasilPemeriksaan.id, this.state.hasilPemeriksaan.tugasPemeriksaan.id, this.state.hasilPemeriksaan.namaStatus)}
+                            {this.buttonHapus(this.state.hasilPemeriksaan.id, this.state.hasilPemeriksaan.namaStatus)}
+                            {this.buttonSetuju(this.state.hasilPemeriksaan.id, this.state.hasilPemeriksaan.namaStatus)}
+                            {this.buttonTolak(this.state.hasilPemeriksaan.id, this.state.hasilPemeriksaan.namaStatus)}
+                        </div>
+                    );
+                } else {
+                    return null
+                }
+            case "dev":
+                if (this.state.hasilPemeriksaan.tugasPemeriksaan) {
+                    return (
+                        <div>
+                            {this.buttonUbah(this.state.hasilPemeriksaan.id, this.state.hasilPemeriksaan.tugasPemeriksaan.id, this.state.hasilPemeriksaan.namaStatus)}
+                            {this.buttonHapus(this.state.hasilPemeriksaan.id, this.state.hasilPemeriksaan.namaStatus)}
+                            {this.buttonSetuju(this.state.hasilPemeriksaan.id, this.state.hasilPemeriksaan.namaStatus)}
+                            {this.buttonTolak(this.state.hasilPemeriksaan.id, this.state.hasilPemeriksaan.namaStatus)}
+                        </div>
+                    );
+                } else {
+                    return null
+                }
             case "QA Officer Operational Risk":
-                if (this.state.yangDitugaskan) {
+                if (this.state.yangDitugaskan && this.state.hasilPemeriksaan.tugasPemeriksaan) {
                     return (
                         <div>
                             {this.buttonUbah(this.state.hasilPemeriksaan.id, this.state.hasilPemeriksaan.tugasPemeriksaan.id, this.state.hasilPemeriksaan.namaStatus)}

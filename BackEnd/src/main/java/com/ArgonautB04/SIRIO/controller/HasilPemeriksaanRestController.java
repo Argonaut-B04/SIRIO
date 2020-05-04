@@ -104,7 +104,7 @@ public class HasilPemeriksaanRestController {
         BaseResponse<List<HasilPemeriksaanDTO>> response = new BaseResponse<>();
         Employee employee = employeeRestService.getByUsername(principal.getName()).get();
 
-        List<HasilPemeriksaan> daftarHasilPemeriksaan = employee.getRole() == roleRestService.getById(6) ?
+        List<HasilPemeriksaan> daftarHasilPemeriksaan = employee.getRole() == roleRestService.getById(5) ?
                 hasilPemeriksaanRestService.getByDaftarTugasPemeriksaan(
                         tugasPemeriksaanRestService.getByPelaksana(employee)) : hasilPemeriksaanRestService.getAll();
 
@@ -263,7 +263,7 @@ public class HasilPemeriksaanRestController {
             );
         }
 
-        if (employee != tugasPemeriksaan.getPelaksana() && employee.getRole() == roleRestService.getById(6))
+        if (employee != tugasPemeriksaan.getPelaksana() && employee.getRole() == roleRestService.getById(5))
             throw new ResponseStatusException(
                     HttpStatus.FORBIDDEN, "Employee dengan ID " + employee.getIdEmployee() +
                     " tidak ditugaskan untuk membuat hasil pemeriksaan ini!"
@@ -385,7 +385,7 @@ public class HasilPemeriksaanRestController {
         }
 
         if (employee != hasilPemeriksaanTemp.getTugasPemeriksaan().getPelaksana() &&
-                employee.getRole() == roleRestService.getById(6))
+                employee.getRole() == roleRestService.getById(5))
             throw new ResponseStatusException(
                     HttpStatus.FORBIDDEN, "Employee dengan ID " + employee.getIdEmployee() +
                     " tidak ditugaskan untuk mengubah hasil pemeriksaan ini!"
@@ -580,7 +580,7 @@ public class HasilPemeriksaanRestController {
             );
 
         if (employee != hasilPemeriksaan.getTugasPemeriksaan().getPelaksana() &&
-                employee.getRole() == roleRestService.getById(6))
+                employee.getRole() == roleRestService.getById(5))
             throw new ResponseStatusException(
                     HttpStatus.FORBIDDEN, "Employee dengan ID " + employee.getIdEmployee() +
                     " tidak ditugaskan untuk menghapus hasil pemeriksaan ini!"
