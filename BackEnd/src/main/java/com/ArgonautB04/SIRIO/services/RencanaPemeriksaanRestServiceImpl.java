@@ -4,7 +4,9 @@ import com.ArgonautB04.SIRIO.model.RencanaPemeriksaan;
 import com.ArgonautB04.SIRIO.model.Employee;
 import com.ArgonautB04.SIRIO.repository.RencanaPemeriksaanDB;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -33,6 +35,24 @@ public class RencanaPemeriksaanRestServiceImpl implements RencanaPemeriksaanRest
     @Override
     public List<RencanaPemeriksaan> getByPembuat(Employee pembuat) {
         return rencanaPemeriksaanDB.findAllByPembuat(pembuat);
+    }
+
+    @Override
+    public Optional<RencanaPemeriksaan> getByNama (String nama){
+        return rencanaPemeriksaanDB.findByNamaRencana(nama);
+    }
+
+    @Override
+    public RencanaPemeriksaan validateExistById(int idRencanaPemeriksaan) {
+        Optional<RencanaPemeriksaan> target = rencanaPemeriksaanDB.findById(idRencanaPemeriksaan);
+        if (target.isPresent()) {
+            return target.get();
+        } else {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    "Rencana dengan ID " + idRencanaPemeriksaan + " tidak ditemukan!"
+            );
+        }
     }
 
     @Override

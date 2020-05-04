@@ -7,7 +7,6 @@ import com.ArgonautB04.SIRIO.rest.RisikoDTO;
 import com.ArgonautB04.SIRIO.services.EmployeeRestService;
 import com.ArgonautB04.SIRIO.services.KomponenPemeriksaanRestService;
 import com.ArgonautB04.SIRIO.services.RisikoRestService;
-import com.ArgonautB04.SIRIO.services.SOPRestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -30,9 +29,6 @@ public class RisikoRestController {
     private KomponenPemeriksaanRestService komponenPemeriksaanRestService;
 
     @Autowired
-    private SOPRestService sopRestService;
-
-    @Autowired
     private EmployeeRestService employeeRestService;
 
     /**
@@ -43,29 +39,16 @@ public class RisikoRestController {
      */
     @PostMapping(value = "/tambah", consumes = {"application/json"})
     private BaseResponse<Risiko> tambahRisiko(
-            @RequestBody RisikoDTO risikoDTO, Principal principal
+            @RequestBody RisikoDTO risikoDTO,
+            Principal principal
     ) {
-        BaseResponse<Risiko> response = new BaseResponse<>();
-        Optional<Employee> pengelolaOptional = employeeRestService.getByUsername(principal.getName());
-        Employee pengelola;
-        if (pengelolaOptional.isPresent()) {
-            pengelola = pengelolaOptional.get();
-            if (pengelola.getRole().getAccessPermissions().getAksesTambahRisiko()) {
-                Risiko risikoTemp = new Risiko();
-                risikoTemp = risikoRestService.transformasidto(risikoTemp, risikoDTO);
+        Employee pengelola = employeeRestService.validateEmployeeExistByPrincipal(principal);
+        employeeRestService.validateRolePermission(pengelola, "tambah risiko");
+        Risiko risikoTemp = risikoRestService.transformasidto(new Risiko(), risikoDTO);
 
-                Risiko risiko = risikoRestService.buatRisiko(risikoTemp);
-                response.setStatus(200);
-                response.setMessage("success");
-                response.setResult(risiko);
+        Risiko risiko = risikoRestService.buatRisiko(risikoTemp);
 
-                return response;
-            } else throw new ResponseStatusException(
-                        HttpStatus.UNAUTHORIZED, "Akun anda tidak memiliki akses ke pengaturan ini"
-                );
-        } else throw new ResponseStatusException(
-                HttpStatus.UNAUTHORIZED, "Akun anda tidak terdaftar dalam Sirio"
-        );
+        return new BaseResponse<>(200, "success", risiko);
     }
 
     /**
@@ -75,30 +58,14 @@ public class RisikoRestController {
      * @return object risiko beserta atribut yang sesuai dengan idRisiko tersebut
      */
     @GetMapping(value = "/{idRisiko}")
-    private BaseResponse<Risiko> getRisiko(@PathVariable("idRisiko") int idRisiko, Principal principal) {
-        BaseResponse<Risiko> response = new BaseResponse<>();
-        Optional<Employee> pengelolaOptional = employeeRestService.getByUsername(principal.getName());
-        Employee pengelola;
-        if (pengelolaOptional.isPresent()) {
-            pengelola = pengelolaOptional.get();
-            if (pengelola.getRole().getAccessPermissions().getAksesRisiko()) {
-                try {
-                    Risiko result = risikoRestService.getById(idRisiko);
-
-                    response.setStatus(200);
-                    response.setMessage("success");
-                    response.setResult(result);
-                } catch (NoSuchElementException e) {
-                    throw new ResponseStatusException(
-                            HttpStatus.NOT_FOUND, "ID Risiko " + String.valueOf(idRisiko) + " Tidak Ditemukan");
-                }
-                return response;
-            } else throw new ResponseStatusException(
-                    HttpStatus.UNAUTHORIZED, "Akun anda tidak memiliki akses ke pengaturan ini"
-            );
-        } else throw new ResponseStatusException(
-                HttpStatus.UNAUTHORIZED, "Akun anda tidak terdaftar dalam Sirio"
-        );
+    private BaseResponse<Risiko> getRisiko(
+            @PathVariable("idRisiko") int idRisiko,
+            Principal principal
+    ) {
+        Employee pengelola = employeeRestService.validateEmployeeExistByPrincipal(principal);
+        employeeRestService.validateRolePermission(pengelola, "akses risiko");
+        Risiko risiko = risikoRestService.validateExistById(idRisiko);
+        return new BaseResponse<>(200, "success", risiko);
     }
 
     /**
@@ -110,39 +77,16 @@ public class RisikoRestController {
     @PostMapping(value = "/hapus")
     private BaseResponse<String> hapusRisiko(@RequestBody RisikoDTO risikoDTO, Principal principal
     ) {
-        BaseResponse<String> response = new BaseResponse<>();
-        Optional<Employee> pengelolaOptional = employeeRestService.getByUsername(principal.getName());
-        Employee pengelola;
-        if (pengelolaOptional.isPresent()) {
-            pengelola = pengelolaOptional.get();
-            if (pengelola.getRole().getAccessPermissions().getAksesHapusRisiko()) {
-                Risiko risiko;
-                try {
-                    risiko = risikoRestService.getById(risikoDTO.getId());
-                    if (komponenPemeriksaanRestService.getByRisiko(risiko) != null) {
-                        response.setStatus(403);
-                        response.setMessage("failed");
-                        risikoRestService.nonaktifkanRisiko(risiko.getIdRisiko());
-                        response.setResult("Risiko dengan id " + risiko.getIdRisiko() + " dinonaktifkan!");
-                        return response;
-                    } else {
-                        risikoRestService.hapusRisiko(risiko.getIdRisiko());
-                    }
-                } catch (NoSuchElementException | NullPointerException e) {
-                    response.setStatus(404);
-                    response.setMessage("not found");
-                    response.setResult("Risiko dengan id " + risikoDTO.getId() + " tidak dapat ditemukan");
-                }
-                response.setStatus(200);
-                response.setMessage("success");
-                response.setResult("Risiko dengan id " + risikoDTO.getId() + " terhapus!");
-                return response;
-            } else throw new ResponseStatusException(
-                    HttpStatus.UNAUTHORIZED, "Akun anda tidak memiliki akses ke pengaturan ini"
-            );
-        } else throw new ResponseStatusException(
-                HttpStatus.UNAUTHORIZED, "Akun anda tidak terdaftar dalam Sirio"
-        );
+        Employee pengelola = employeeRestService.validateEmployeeExistByPrincipal(principal);
+        employeeRestService.validateRolePermission(pengelola, "hapus risiko");
+        Risiko risiko = risikoRestService.validateExistById(risikoDTO.getId());
+        if (komponenPemeriksaanRestService.getByRisiko(risiko) != null) {
+            risikoRestService.nonaktifkanRisiko(risiko.getIdRisiko());
+            return new BaseResponse<>(403, "failed", "Risiko dengan id " + risiko.getIdRisiko() + " dinonaktifkan!");
+        } else {
+            risikoRestService.hapusRisiko(risiko.getIdRisiko());
+        }
+        return new BaseResponse<>(200, "success", "RIsiko dengan id " + risikoDTO.getId() + " terhapus!");
     }
 
     /**
@@ -155,33 +99,14 @@ public class RisikoRestController {
     private BaseResponse<Risiko> ubahRisiko(
             @RequestBody RisikoDTO risikoDTO, Principal principal
     ) {
-        BaseResponse<Risiko> response = new BaseResponse<>();
-        Optional<Employee> pengelolaOptional = employeeRestService.getByUsername(principal.getName());
-        Employee pengelola;
-        if (pengelolaOptional.isPresent()) {
-            pengelola = pengelolaOptional.get();
-            if (pengelola.getRole().getAccessPermissions().getAksesUbahRisiko()) {
-                try {
-                    Risiko risikoTemp = risikoRestService.getById(risikoDTO.getId());
-                    risikoTemp = risikoRestService.transformasidto(risikoTemp, risikoDTO);
-                    Risiko result = risikoRestService.ubahRisiko(risikoTemp.getIdRisiko(), risikoTemp);
+        Employee pengelola = employeeRestService.validateEmployeeExistByPrincipal(principal);
+        employeeRestService.validateRolePermission(pengelola, "ubah risiko");
 
-                    response.setStatus(200);
-                    response.setMessage("success");
-                    response.setResult(result);
-                } catch (NoSuchElementException e) {
-                    throw new ResponseStatusException(
-                            HttpStatus.NOT_FOUND, "ID Risiko " + risikoDTO.getId() + " Tidak Ditemukan");
-                }
+        Risiko risikoTemp = risikoRestService.validateExistById(risikoDTO.getId());
+        risikoTemp = risikoRestService.transformasidto(risikoTemp, risikoDTO);
 
-                return response;
-
-            } else throw new ResponseStatusException(
-                    HttpStatus.UNAUTHORIZED, "Akun anda tidak memiliki akses ke pengaturan ini"
-            );
-        } else throw new ResponseStatusException(
-                HttpStatus.UNAUTHORIZED, "Akun anda tidak terdaftar dalam Sirio"
-        );
+        Risiko result = risikoRestService.ubahRisiko(risikoTemp.getIdRisiko(), risikoTemp);
+        return new BaseResponse<>(200, "success", result);
     }
 
     /**
@@ -191,41 +116,31 @@ public class RisikoRestController {
      */
     @GetMapping("/getAll")
     private BaseResponse<List<RisikoDTO>> getAllRisiko(Principal principal) {
-        BaseResponse<List<RisikoDTO>> response = new BaseResponse<>();
-        Optional<Employee> pengelolaOptional = employeeRestService.getByUsername(principal.getName());
-        Employee pengelola;
-        if (pengelolaOptional.isPresent()) {
-            pengelola = pengelolaOptional.get();
-            if (pengelola.getRole().getAccessPermissions().getAksesTabelRisiko()) {
-                List<Risiko> daftarRisiko = risikoRestService.getAll();
-                List<RisikoDTO> daftarRisikoDTO = new ArrayList<>();
-                for (Risiko risiko : daftarRisiko) {
-                    RisikoDTO risikoDTO = new RisikoDTO();
-                    risikoDTO.setId(risiko.getIdRisiko());
-                    risikoDTO.setNama(risiko.getNamaRisiko());
-                    risikoDTO.setKategori(risiko.getRisikoKategori());
-                    risikoDTO.setSop(risiko.getSop().getIdSop());
-                    if (risiko.getKomponen() == null || risiko.getKomponen().equals("")) {
-                        risikoDTO.setKomponen(null);
-                    } else {
-                        risikoDTO.setKomponen(risiko.getKomponen());
-                    }
-                    if (risiko.getParent() != null) {
-                        risikoDTO.setParent(risiko.getParent().getIdRisiko());
-                        risikoDTO.setNamaParent(risiko.getParent().getNamaRisiko());
-                    }
-                    daftarRisikoDTO.add(risikoDTO);
-                }
-                response.setStatus(200);
-                response.setMessage("success");
-                response.setResult(daftarRisikoDTO);
-                return response;
-            } else throw new ResponseStatusException(
-                    HttpStatus.UNAUTHORIZED, "Akun anda tidak memiliki akses ke pengaturan ini"
-            );
-        } else throw new ResponseStatusException(
-                HttpStatus.UNAUTHORIZED, "Akun anda tidak terdaftar dalam Sirio"
-        );
+        Employee pengelola = employeeRestService.validateEmployeeExistByPrincipal(principal);
+        employeeRestService.validateRolePermission(pengelola, "tabel risiko");
+
+        List<Risiko> daftarRisiko = risikoRestService.getAll();
+        List<RisikoDTO> daftarRisikoDTO = new ArrayList<>();
+
+        for (Risiko risiko : daftarRisiko) {
+            RisikoDTO risikoDTO = new RisikoDTO();
+            risikoDTO.setId(risiko.getIdRisiko());
+            risikoDTO.setNama(risiko.getNamaRisiko());
+            risikoDTO.setKategori(risiko.getRisikoKategori());
+            risikoDTO.setSop(risiko.getSop().getIdSop());
+            if (risiko.getKomponen() == null || risiko.getKomponen().equals("")) {
+                risikoDTO.setKomponen(null);
+            } else {
+                risikoDTO.setKomponen(risiko.getKomponen());
+            }
+            if (risiko.getParent() != null) {
+                risikoDTO.setParent(risiko.getParent().getIdRisiko());
+                risikoDTO.setNamaParent(risiko.getParent().getNamaRisiko());
+            }
+            daftarRisikoDTO.add(risikoDTO);
+        }
+
+        return new BaseResponse<>(200, "success", daftarRisikoDTO);
     }
 
     /**
@@ -235,7 +150,9 @@ public class RisikoRestController {
      */
     @GetMapping("/getAll/child")
     private BaseResponse<List<RisikoDTO>> getAllRisikoChild(Principal principal) {
-        BaseResponse<List<RisikoDTO>> response = new BaseResponse<>();
+        Employee employee = employeeRestService.validateEmployeeExistByPrincipal(principal);
+        employeeRestService.validateRolePermission(employee, "akses risiko");
+
         List<RisikoDTO> result = new ArrayList<>();
 
         List<Risiko> daftarRisiko = risikoRestService.getByKategori(3);
@@ -254,10 +171,7 @@ public class RisikoRestController {
             result.add(risikoDTO);
         }
 
-        response.setResult(result);
-        response.setStatus(200);
-        response.setMessage("success");
-        return response;
+        return new BaseResponse<>(200, "success", result);
     }
 
     @PostMapping("/ubah-hierarki")
@@ -307,29 +221,17 @@ public class RisikoRestController {
 
     @GetMapping("/ubah-hierarki/kategori")
     private BaseResponse<List<List<Risiko>>> getByKategori(Principal principal) {
-        BaseResponse<List<List<Risiko>>> response = new BaseResponse<>();
-//        Optional<Employee> pengelolaOptional = employeeRestService.getByUsername(principal.getName());
-//        Employee pengelola;
-//        if (pengelolaOptional.isPresent()) {
-//            pengelola = pengelolaOptional.get();
-//            if (pengelola.getRole().getAccessPermissions().getAksesTambahRisiko()) {
-                List<List<Risiko>> listOfOptionList = new ArrayList<>();
-                listOfOptionList.add(
-                        risikoRestService.getByKategori(1)
-                );
-                listOfOptionList.add(
-                        risikoRestService.getByKategori(2)
-                );
-                response.setStatus(200);
-                response.setMessage("success");
-                response.setResult(listOfOptionList);
-                return response;
-            }
-        }
-//        else throw new ResponseStatusException(
-//                HttpStatus.UNAUTHORIZED, "Akun anda tidak memiliki akses ke pengaturan ini"
-//                );
-//                } else throw new ResponseStatusException(
-//                HttpStatus.UNAUTHORIZED, "Akun anda tidak terdaftar dalam Sirio"
-//                );
-//                }
+        Employee employee = employeeRestService.validateEmployeeExistByPrincipal(principal);
+        employeeRestService.validateRolePermission(employee, "tambah risiko");
+
+        List<List<Risiko>> listOfOptionList = new ArrayList<>();
+        listOfOptionList.add(
+                risikoRestService.getByKategori(1)
+        );
+        listOfOptionList.add(
+                risikoRestService.getByKategori(2)
+        );
+
+        return new BaseResponse<>(200, "success", listOfOptionList);
+    }
+}

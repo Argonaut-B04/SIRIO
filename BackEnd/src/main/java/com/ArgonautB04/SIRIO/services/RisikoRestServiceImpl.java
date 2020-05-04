@@ -123,4 +123,16 @@ public class RisikoRestServiceImpl implements RisikoRestService {
         }
     }
 
+    @Override
+    public Risiko validateExistById(int idRisiko) {
+        Optional<Risiko> target = risikoDB.findById(idRisiko);
+        if (target.isPresent()) {
+            return target.get();
+        } else {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    "ID Risiko " + idRisiko + " Tidak Ditemukan"
+            );
+        }
+    }
 }

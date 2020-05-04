@@ -54,4 +54,9 @@ public class RiskRatingRestServiceImpl implements RiskRatingRestService {
     public boolean isExistInDatabase(RiskRating riskRating) {
         return riskRatingDB.existsById(riskRating.getIdRating());
     }
+
+    @Override
+    public void clear() {
+        riskRatingDB.deleteAll();
+    }
 }

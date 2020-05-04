@@ -24,12 +24,6 @@ public class RoleRestController {
      */
     @GetMapping("/getAll")
     private BaseResponse<List<Role>> getAllRole() {
-        BaseResponse<List<Role>> response = new BaseResponse<>();
-        List<Role> result = roleRestService.getAll();
-        response.setStatus(200);
-        response.setMessage("success");
-        response.setResult(result);
-        return response;
+        return new BaseResponse<>(200, "success", roleRestService.getAll());
     }
-
 }

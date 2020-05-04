@@ -98,6 +98,19 @@ public class EmployeeRestServiceImpl implements EmployeeRestService {
     }
 
     @Override
+    public Employee validateEmployeeExistById(Integer id) {
+        Optional<Employee> target = employeeDb.findByIdEmployeeAndStatus(id, Employee.Status.AKTIF);
+        if (target.isPresent()) {
+            return target.get();
+        } else {
+            throw new ResponseStatusException(
+                    HttpStatus.UNAUTHORIZED,
+                    "Tidak ditemukan employee aktif dengan id " + id
+            );
+        }
+    }
+
+    @Override
     public void validateRolePermission(Employee employee, String requestedPermissions) {
         switch (requestedPermissions) {
             case "tenggat waktu":
@@ -112,6 +125,69 @@ public class EmployeeRestServiceImpl implements EmployeeRestService {
                     throw new ResponseStatusException(
                             HttpStatus.UNAUTHORIZED,
                             "Akun anda tidak memiliki akses ke daftar rekomendasi"
+                    );
+                }
+            case "akses risk rating":
+                if (!employee.getRole().getAccessPermissions().getAksesRiskRating()) {
+                    throw new ResponseStatusException(
+                            HttpStatus.UNAUTHORIZED,
+                            "Akun anda tidak memiliki akses ke daftar risk rating"
+                    );
+                }
+            case "ubah risk rating":
+                if (!employee.getRole().getAccessPermissions().getUbahRiskRating()) {
+                    throw new ResponseStatusException(
+                            HttpStatus.UNAUTHORIZED,
+                            "Akun anda tidak memiliki akses untuk melakukan perubahan daftar risk rating"
+                    );
+                }
+            case "akses risk level":
+                if (!employee.getRole().getAccessPermissions().getAksesRiskRating()) {
+                    throw new ResponseStatusException(
+                            HttpStatus.UNAUTHORIZED,
+                            "Akun anda tidak memiliki akses ke daftar risk level"
+                    );
+                }
+            case "ubah risk level":
+                if (!employee.getRole().getAccessPermissions().getUbahRiskLevel()) {
+                    throw new ResponseStatusException(
+                            HttpStatus.UNAUTHORIZED,
+                            "Akun anda tidak memiliki akses untuk melakukan perubahan daftar risk level"
+                    );
+                }
+            case "tambah risiko":
+                if (!employee.getRole().getAccessPermissions().getAksesTambahRisiko()) {
+                    throw new ResponseStatusException(
+                            HttpStatus.UNAUTHORIZED,
+                            "Akun anda tidak memiliki akses untuk melakukan penambahan risiko"
+                    );
+                }
+            case "akses risiko":
+                if (!employee.getRole().getAccessPermissions().getAksesRisiko()) {
+                    throw new ResponseStatusException(
+                            HttpStatus.UNAUTHORIZED,
+                            "Akun anda tidak memiliki akses ke daftar risiko"
+                    );
+                }
+            case "hapus risiko":
+                if (!employee.getRole().getAccessPermissions().getAksesHapusRisiko()) {
+                    throw new ResponseStatusException(
+                            HttpStatus.UNAUTHORIZED,
+                            "Akun anda tidak memiliki akses untuk menghapus risiko"
+                    );
+                }
+            case "ubah risiko":
+                if (!employee.getRole().getAccessPermissions().getAksesUbahRisiko()) {
+                    throw new ResponseStatusException(
+                            HttpStatus.UNAUTHORIZED,
+                            "Akun anda tidak memiliki akses untuk mengubah risiko"
+                    );
+                }
+            case "tabel risiko":
+                if (!employee.getRole().getAccessPermissions().getAksesTabelRisiko()) {
+                    throw new ResponseStatusException(
+                            HttpStatus.UNAUTHORIZED,
+                            "Akun anda tidak memiliki akses ke tabel risiko"
                     );
                 }
         }
