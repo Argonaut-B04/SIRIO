@@ -585,13 +585,13 @@ class HasilPemeriksaanFormTambah extends React.Component {
             >
                 Simpan
             </SirioButton>;
-        if (this.submitable) {
+        if (this.submitable()) {
             tombolSimpan =
                 <SirioButton
                     purple
                     recommended
                     classes="mx-1"
-                    onClick={(event)  => this.handleSubmit(event, 2)}>
+                    onClick={(event)  => this.handleSubmit(event, 2)}
                 >
                     Simpan
                 </SirioButton>
@@ -604,14 +604,14 @@ class HasilPemeriksaanFormTambah extends React.Component {
             >
                 Draft
             </SirioButton>;
-        if (this.submitableDraft) {
+        if (this.submitableDraft()) {
             tombolDraft =
                 <SirioButton
                     purple
                     recommended
                     classes="mx-1"
-                    onClick={(event)  => this.handleSubmit(event, 1)}>
-                    >
+                    onClick={(event)  => this.handleSubmit(event, 1)}
+                >
                     Draft
                 </SirioButton>
         }
