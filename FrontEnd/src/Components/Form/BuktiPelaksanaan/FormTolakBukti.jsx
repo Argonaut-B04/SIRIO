@@ -67,7 +67,7 @@ class FormTolakBukti extends React.Component {
     }
 
     handleSubmit(event) {
-        event.preventDefault();
+        event && event.preventDefault();
         const buktiPelaksanaan = {
             status: 3,
             feedback: this.state.feedback
