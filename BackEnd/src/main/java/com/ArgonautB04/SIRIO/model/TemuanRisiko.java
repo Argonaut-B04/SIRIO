@@ -18,8 +18,8 @@ public class TemuanRisiko implements Serializable {
     private Integer idTemuanRisiko;
 
     @NotNull
-    @Size(max = 125)
-    @Column(nullable = false)
+    @Lob
+    @Column(columnDefinition = "TEXT", nullable = false)
     private String keterangan;
 
     @ManyToOne(fetch = FetchType.EAGER)
