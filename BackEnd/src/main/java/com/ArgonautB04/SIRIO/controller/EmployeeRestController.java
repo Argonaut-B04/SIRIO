@@ -82,6 +82,10 @@ public class EmployeeRestController {
         }
 
         if (employeeDTO.getEmail() != null && !employeeDTO.getEmail().equals("")) {
+            if (employeeRestService.getByEmail(employeeDTO.getEmail()).isPresent())
+                throw new ResponseStatusException(
+                        HttpStatus.CONFLICT, "Email " + employeeDTO.getEmail() + " sudah ada pada database!"
+                );
             employee.setEmail(employeeDTO.getEmail());
         } else {
             throw new ResponseStatusException(
@@ -149,6 +153,10 @@ public class EmployeeRestController {
         }
 
         if (employeeDTO.getEmail() != null && !employeeDTO.getEmail().equals("")) {
+            if (employeeRestService.getByEmail(employeeDTO.getEmail()).isPresent())
+                throw new ResponseStatusException(
+                        HttpStatus.CONFLICT, "Email " + employeeDTO.getEmail() + " sudah ada pada database!"
+                );
             employee.setEmail(employeeDTO.getEmail());
         } else {
             throw new ResponseStatusException(
@@ -292,7 +300,7 @@ public class EmployeeRestController {
     }
 
     /**
-     * Mengecek username employee
+     * Mengecek apakah username employee sudah terdapat di sistem
      *
      * @param username identifier employee
      * @return Boolean checker
@@ -302,6 +310,20 @@ public class EmployeeRestController {
             @PathVariable("username") String username
     ) {
         Optional<Employee> employeeOptional = employeeRestService.getByUsername(username);
+        return new BaseResponse<>(200, "success", employeeOptional.isPresent());
+    }
+
+    /**
+     * Mengecek apakah email employee sudah terdapat di sistem
+     *
+     * @param email identifier employee
+     * @return Boolean checker
+     */
+    @GetMapping("/check/{email}")
+    private BaseResponse<Boolean> checkEmailEmployee(
+            @PathVariable("email") String email
+    ) {
+        Optional<Employee> employeeOptional = employeeRestService.getByEmail(email);
         return new BaseResponse<>(200, "success", employeeOptional.isPresent());
     }
 
