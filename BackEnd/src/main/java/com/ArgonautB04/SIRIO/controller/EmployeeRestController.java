@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
-@CrossOrigin(origins = {"http://localhost:3000"})
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/v1/Employee")
 public class EmployeeRestController {

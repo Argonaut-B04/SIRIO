@@ -12,6 +12,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -46,6 +47,29 @@ public class RekomendasiRestServiceImpl implements RekomendasiRestService {
     @Override
     public List<Rekomendasi> getAll() {
         return rekomendasiDB.findAll();
+    }
+
+    @Override
+    public List<Rekomendasi> getRekomendasiBelumDiimplementasi() {
+        List<Rekomendasi> belumImpl = new ArrayList<>();
+        for (Rekomendasi r : getAll()) {
+            if (r.getBuktiPelaksanaan() != null && r.getBuktiPelaksanaan().getStatusBuktiPelaksanaan().equals(1)) {
+                belumImpl.add(r);
+            }
+        }
+        return belumImpl;
+    }
+
+    @Override
+    public List<Rekomendasi> getRekomendasiOverdue() {
+        List<Rekomendasi> overdue = new ArrayList<>();
+        for (Rekomendasi r : getAll()) {
+            if (r.getTenggatWaktu() != null && LocalDate.now().isAfter(r.getTenggatWaktu()) && r.getStatusRekomendasi() != null
+                    && !r.getStatusRekomendasi().equals(7)) {
+                overdue.add(r);
+            }
+        }
+        return overdue;
     }
 
     @Override

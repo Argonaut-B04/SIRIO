@@ -40,7 +40,8 @@ public class EmployeeRestServiceImpl implements EmployeeRestService {
         target.setEmail(employee.getEmail());
         target.setNama(employee.getNama());
         target.setNoHp(employee.getNoHp());
-        target.setPassword(employee.getPassword());
+//        password harus di encrypt
+//        target.setPassword(employee.getPassword());
         target.setRole(employee.getRole());
         target.setUsername(employee.getUsername());
         target.setJabatan(employee.getJabatan());
@@ -90,7 +91,12 @@ public class EmployeeRestServiceImpl implements EmployeeRestService {
 
     @Override
     public Employee validateEmployeeExistByPrincipal(Principal principal) {
-        Optional<Employee> employeeOptional = getByUsername(principal.getName());
+        return validateEmployeeExistByUsername(principal.getName());
+    }
+
+    @Override
+    public Employee validateEmployeeExistByUsername(String username) {
+        Optional<Employee> employeeOptional = getByUsername(username);
         if (employeeOptional.isEmpty()) {
             throw new ResponseStatusException(
                     HttpStatus.UNAUTHORIZED,
@@ -256,5 +262,14 @@ public class EmployeeRestServiceImpl implements EmployeeRestService {
             fokus.setReminderTemplatePilihan(employee.getReminderTemplatePilihan());
             employeeDb.save(employee);
         }
+    }
+
+    @Override
+    public void changePassword(String username, String newPassword) {
+        Employee target = validateEmployeeExistByUsername(username);
+        target.setPassword(
+            encrypt(newPassword)
+        );
+        employeeDb.save(target);
     }
 }

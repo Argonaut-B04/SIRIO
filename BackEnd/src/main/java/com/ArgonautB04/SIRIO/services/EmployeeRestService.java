@@ -28,9 +28,14 @@ public interface EmployeeRestService {
 
     Employee validateEmployeeExistByPrincipal(Principal principal);
 
+    Employee validateEmployeeExistByUsername(String username);
+
+
     Employee validateEmployeeExistById(Integer id);
 
     void validateRolePermission(Employee employee, String requestedPermissions);
 
     void simpanPerubahan(Employee employee);
+
+    void changePassword(String username, String newPassword);
 }
