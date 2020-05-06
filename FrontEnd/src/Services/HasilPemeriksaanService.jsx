@@ -26,6 +26,7 @@ class HasilPemeriksaanService {
     }
 
     async addHasilPemeriksaan(data) {
+        console.log(data)
         return this.axiosInstance.post(SirioAxiosBase.BASEURL + '/HasilPemeriksaan/tambah', data)
     }
 

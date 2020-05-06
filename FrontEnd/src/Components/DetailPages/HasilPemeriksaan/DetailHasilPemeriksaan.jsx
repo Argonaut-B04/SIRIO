@@ -93,7 +93,9 @@ class DetailHasilPemeriksaan extends React.Component {
                     {
                         "Komponen Risiko": komponen.risiko.nama,
                         "SOP": this.getSOPButton(komponen.risiko.namaSop, komponen.risiko.linkSop),
+                        "Jumlah Populasi": komponen.jumlahPopulasi,
                         "Jumlah Sampel": komponen.jumlahSampel,
+                        "Jumlah Sampel Error": komponen.jumlahSampelError,
                         "Keterangan Sampel": komponen.keteranganSampel,
                         "Risk Level": komponen.namaRiskLevel,
                         "Hasil Temuan": !(komponen.daftarTemuanRisikoTerdaftar.length > 0) ? "-" :
