@@ -8,11 +8,14 @@ public class RisikoDTO {
     private Integer id;
     private String nama;
     private Integer kategori;
-    private String komponen;
+    private String detailUraian;
+    private String deskripsi;
+    private String metodologi;
+    private String ketentuanSampel;
     private Integer parent;
     private String namaParent;
     private Integer grantParent;
-    private List<Risiko> child;
+    private List<RisikoDTO> child;
     private Integer sop;
     private String namaSop;
     private String linkSop;
@@ -73,12 +76,36 @@ public class RisikoDTO {
         this.kategori = kategori;
     }
 
-    public String getKomponen() {
-        return komponen;
+    public String getDetailUraian() {
+        return detailUraian;
     }
 
-    public void setKomponen(String komponen) {
-        this.komponen = komponen;
+    public void setDetailUraian(String detailUraian) {
+        this.detailUraian = detailUraian;
+    }
+
+    public String getDeskripsi() {
+        return deskripsi;
+    }
+
+    public void setDeskripsi(String deskripsi) {
+        this.deskripsi = deskripsi;
+    }
+
+    public String getMetodologi() {
+        return metodologi;
+    }
+
+    public void setMetodologi(String metodologi) {
+        this.metodologi = metodologi;
+    }
+
+    public String getKetentuanSampel() {
+        return ketentuanSampel;
+    }
+
+    public void setKetentuanSampel(String ketentuanSampel) {
+        this.ketentuanSampel = ketentuanSampel;
     }
 
     public Integer getParent() {
@@ -89,11 +116,11 @@ public class RisikoDTO {
         this.parent = parent;
     }
 
-    public List<Risiko> getChild() {
+    public List<RisikoDTO> getChild() {
         return child;
     }
 
-    public void setChild(List<Risiko> child) {
+    public void setChild(List<RisikoDTO> child) {
         this.child = child;
     }
 

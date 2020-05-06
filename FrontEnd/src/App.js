@@ -54,6 +54,7 @@ import Error401 from './pages/Errors/Error401';
 import ErrorPage from './pages/Errors/Error';
 import Error404 from './pages/Errors/Error404';
 import TemplateReminder from './pages/QAOfficer/TemplateReminder';
+import DashboadStaff from './pages/Supervisor/DashboadStaff';
 
 /**
  * Router utama yang memetakan url ke controller
@@ -110,6 +111,8 @@ class App extends React.Component {
             <AuthorizedRoute exact path="/registrasi-risiko/tambah" component={FormRisiko} />
             <AuthorizedRoute exact path="/registrasi-risiko/ubah" component={FormRisikoUbah} />
             <AuthorizedRoute exact path="/registrasi-risiko/ubah-hierarki" component={HierarkiRisiko} />
+
+            <AuthorizedRoute exact path="/dashboard-staff" component= {DashboadStaff} />
 
             <Route exact path="/login" component={Login} />
             <Route exact path="/logout" component={Logout} />

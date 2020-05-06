@@ -25,6 +25,7 @@ class FormHierarkiRisiko extends React.Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.setRedirect = this.setRedirect.bind(this);
         this.toggleEdit = this.toggleEdit.bind(this);
+        this.getOptions = this.getOptions.bind(this);
     }
 
     componentDidMount() {
@@ -110,6 +111,7 @@ class FormHierarkiRisiko extends React.Component {
             row.changeable = false;
         }
 
+
         if (row.kategori === 1) {
             return "";
         }
@@ -162,12 +164,12 @@ class FormHierarkiRisiko extends React.Component {
                 return (
                     <SirioSelect
                         name="parent"
-                        value={row.parent}
+                        
                         handleChange={(name, event) => {
                             row.parent = event.value;
                             row.namaParent = event.label;
-                            this.forceUpdate();
                         }}
+                        value = {row.parent}
                         options={optionList}
                     />
                 )
@@ -225,6 +227,26 @@ class FormHierarkiRisiko extends React.Component {
             }} />
         }
     };
+
+    // hierarkiFormatter() {
+    //     var list = [];
+    //     console.log(this.state.rowList)
+    //     for (let i = 0; i < this.state.rowList.length; i++) {
+    //         if (rowList[i].namaParent != this.state.rowList[i].namaParent) {
+    //             const nama = this.state.rowList[i].namaParent;
+    //             list.push(nama);
+    //         }
+    //     }
+    //     return ( 
+    //     <> 
+    //     {list.map(parent => 
+    //     <li>
+    //         {parent}
+    //     </li>
+    //     )} 
+    //     </> 
+    //     )
+    // }
 
     // Fungsi untuk mendapatkan tombol di sisi kanan title
     headerButton() {

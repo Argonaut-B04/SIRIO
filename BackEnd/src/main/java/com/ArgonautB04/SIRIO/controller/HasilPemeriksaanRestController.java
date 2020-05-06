@@ -163,7 +163,7 @@ public class HasilPemeriksaanRestController {
 
             komponenPemeriksaanDTO.setRisiko(new RisikoDTO());
             komponenPemeriksaanDTO.getRisiko().setId(komponenPemeriksaan.getRisiko().getIdRisiko());
-            komponenPemeriksaanDTO.getRisiko().setKomponen(komponenPemeriksaan.getRisiko().getKomponen());
+            komponenPemeriksaanDTO.getRisiko().setDetailUraian(komponenPemeriksaan.getRisiko().getDetailUraian());
             komponenPemeriksaanDTO.getRisiko().setNama(komponenPemeriksaan.getRisiko().getNamaRisiko());
             komponenPemeriksaanDTO.getRisiko().setNamaSop(komponenPemeriksaan.getRisiko().getSop().getJudul());
             komponenPemeriksaanDTO.getRisiko().setLinkSop(komponenPemeriksaan.getRisiko().getSop().getLinkDokumen());
