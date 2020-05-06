@@ -57,8 +57,12 @@ public class EmployeeRestServiceImpl implements EmployeeRestService {
 
     @Override
     public Optional<Employee> getByUsername(String username) {
-//        return employeeDb.findByUsernameAndStatus(username, Employee.Status.AKTIF);
         return employeeDb.findByUsername(username);
+    }
+
+    @Override
+    public Optional<Employee> getByEmail(String email) {
+        return employeeDb.findByEmail(email);
     }
 
     @Override

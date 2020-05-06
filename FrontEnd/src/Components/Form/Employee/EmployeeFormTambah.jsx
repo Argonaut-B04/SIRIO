@@ -289,17 +289,27 @@ export default class EmployeeFormTambah extends React.Component {
                     })
                 }
             } else {
-                const employee = {
-                    username: this.state.username,
-                    password: this.state.password,
-                    idRole: this.state.idRole,
-                    nama: this.state.nama,
-                    jabatan: this.state.jabatan,
-                    email: this.state.email,
-                    noHp: this.state.noHp
-                };
-                EmployeeService.addEmployee(employee)
-                    .then(() => this.setRedirect());
+                const response = await EmployeeService.checkEmailExist({email: this.state.email});
+                if (response.data.result) {
+                    const errorEmail = "Email sudah terdaftar";
+                    if (this.state.errorEmail !== errorEmail) {
+                        this.setState({
+                            errorEmail: errorEmail
+                        })
+                    }
+                } else {
+                    const employee = {
+                        username: this.state.username,
+                        password: this.state.password,
+                        idRole: this.state.idRole,
+                        nama: this.state.nama,
+                        jabatan: this.state.jabatan,
+                        email: this.state.email,
+                        noHp: this.state.noHp
+                    };
+                    EmployeeService.addEmployee(employee)
+                        .then(() => this.setRedirect());
+                }
             }
         }
     }

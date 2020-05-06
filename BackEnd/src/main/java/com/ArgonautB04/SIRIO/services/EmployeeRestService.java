@@ -14,6 +14,8 @@ public interface EmployeeRestService {
 
     Optional<Employee> getByUsername(String username);
 
+    Optional<Employee> getByEmail(String email);
+
     List<Employee> getAll();
 
     Employee ubahEmployee(int idEmployee, Employee employee);
