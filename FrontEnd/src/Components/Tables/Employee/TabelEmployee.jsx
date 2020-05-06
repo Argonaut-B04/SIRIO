@@ -131,7 +131,7 @@ class TabelEmployee extends React.Component {
         return (
             <>
                 <SirioTable
-                    title="Daftar Employee"
+                    title="Daftar Staff"
                     data={this.state.rowList}
                     id='id'
                     columnsDefinition={this.columns}
