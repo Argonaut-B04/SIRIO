@@ -64,7 +64,7 @@ VALUES
 
 INSERT IGNORE INTO `sop` (`id_sop`, `judul`, `kategori`, `link_dokumen`, `pembuat`) VALUES ('1', 'test', 'test', 'test', '1');
 
-INSERT IGNORE INTO `risiko` (`id_risiko`, `komponen`, `nama_risiko`, `risiko_kategori`, `status`, `parent`, `sop`) 
+INSERT IGNORE INTO `risiko` (`id_risiko`, `detail_uraian`, `nama_risiko`, `risiko_kategori`, `status`, `parent`, `sop`) 
 VALUES 
 ('1', NULL, 'Administrasi', '1', 'AKTIF', NULL, '1'),
 ('2', NULL, 'Proses', '1', 'AKTIF', NULL, '1'),
