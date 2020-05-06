@@ -313,7 +313,8 @@ class HasilPemeriksaanFormTambah extends React.Component {
                 return (
                     this.state.daftarKomponenPemeriksaan
                         .reduce((accumulator, currentValue, currentIndex) => {
-                            if(currentValue.risiko.grantParent === this.state.filterKategori) {
+                            if(currentValue.risiko.grantParent === this.state.filterKategori ||
+                                    currentValue.risiko.parent === this.state.filterKategori) {
                                 accumulator.push(
                                     {
                                         fullComponent:

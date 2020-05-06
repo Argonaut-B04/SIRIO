@@ -305,7 +305,7 @@ public class EmployeeRestController {
      * @param username identifier employee
      * @return Boolean checker
      */
-    @GetMapping("/check/{username}")
+    @GetMapping("/check/username/{username}")
     private BaseResponse<Boolean> checkUsernameEmployee(
             @PathVariable("username") String username
     ) {
@@ -316,14 +316,13 @@ public class EmployeeRestController {
     /**
      * Mengecek apakah email employee sudah terdapat di sistem
      *
-     * @param email identifier employee
      * @return Boolean checker
      */
-    @GetMapping("/check/{email}")
+    @PostMapping("/check/email")
     private BaseResponse<Boolean> checkEmailEmployee(
-            @PathVariable("email") String email
+            @RequestBody EmployeeDTO employeeDTO
     ) {
-        Optional<Employee> employeeOptional = employeeRestService.getByEmail(email);
+        Optional<Employee> employeeOptional = employeeRestService.getByEmail(employeeDTO.getEmail());
         return new BaseResponse<>(200, "success", employeeOptional.isPresent());
     }
 
