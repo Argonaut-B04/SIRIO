@@ -227,6 +227,18 @@ class HasilPemeriksaanFormTambah extends React.Component {
                     label: "SOP",
                     customInput: this.getSOPButton(indexKomponen)
                 }, {
+                    label: "Deskripsi",
+                    customInput: <p style={{ whiteSpace: 'pre-line' }}>{this.state.daftarKomponenPemeriksaan[indexKomponen].risiko.deskripsi}</p>
+                }, {
+                    label: "Metodologi",
+                    customInput: <p style={{ whiteSpace: 'pre-line' }}>{this.state.daftarKomponenPemeriksaan[indexKomponen].risiko.metodologi}</p>
+                }, {
+                    label: "Ketentuan Sampel",
+                    customInput: this.state.daftarKomponenPemeriksaan[indexKomponen].risiko.ketentuanSampel?
+                        <p style={{ whiteSpace: 'pre-line' }}>{this.state.daftarKomponenPemeriksaan[indexKomponen].risiko.ketentuanSampel}</p>
+                        :
+                        <p>N/A</p>
+                }, {
                     label: "Jumlah Populasi",
                     handleChange: (event) => this.handleChangeKomponen(event, indexKomponen),
                     type: "number",
