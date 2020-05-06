@@ -10,7 +10,7 @@ import SirioField from "../SirioFormComponent/SirioField";
 import TemuanRisikoService from "../../../Services/TemuanRisikoService";
 import SirioConfirmButton from "../../Button/ActionButton/SirioConfirmButton";
 
-class HasilPemeriksaanFormTambah extends React.Component {
+class HasilPemeriksaanFormUbah extends React.Component {
 
     // Masukan user disimpan kedalam state sebelum dikirim ke backend
     constructor(props) {
@@ -664,4 +664,4 @@ class HasilPemeriksaanFormTambah extends React.Component {
     }
 }
 
-export default withRouter(HasilPemeriksaanFormTambah);
+export default withRouter(HasilPemeriksaanFormUbah);
