@@ -41,14 +41,14 @@ class DetailRencanaPemeriksaan extends React.Component {
     };
 
     renderRedirect = () => {
-        if (this.state.redirect == 1) {
+        if (this.state.redirect === 1) {
             return <Redirect to={{
                 pathname: "/manager/rencanaPemeriksaan",
                 state: {
                     deleteSuccess: true
                 }
             }} />
-        }else if (this.state.redirect == 2) {
+        }else if (this.state.redirect === 2) {
             return <Redirect to={{
                 pathname: "/manager/rencanaPemeriksaan",
                 state: {
@@ -72,6 +72,8 @@ class DetailRencanaPemeriksaan extends React.Component {
                 return (
                     <span style={{ color: '#6FCF97' }}>Sedang Dijalankan</span>
                 );
+            default:
+                return ""
         }
     }
 
@@ -152,7 +154,6 @@ class DetailRencanaPemeriksaan extends React.Component {
                             Ubah
                         </SirioButton>
                     </NavLink>
-                    <a>  </a>
                     <SirioWarningButton
                         red
                         modalTitle="Konfirmasi Penghapusan"

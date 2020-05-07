@@ -21,16 +21,18 @@ public interface KantorCabangRestService {
 
     List<KantorCabang> getAll();
 
-   // boolean isExistInDatabase(KantorCabang kantorCabang);
-
-    //KantorCabang isExistInDatabase(String namaRiskLevel);
-
     KantorCabang ubahKantorCabang(int idKantorCabang, KantorCabang kantorCabang);
 
     void hapusKantorCabang(int idKantorCabang);
 
     //List<KantorCabang> getByPembuat(Employee pembuat);
 
-    KantorCabang validateExistInDatabase(int idKantorCabang);
+   // KantorCabang validateExistInDatabase(int idKantorCabang);
+
+    KantorCabang validateExistById(int idKantorCabang);
+
+    void nullifiedRiskRating();
+
+    void recalculateRiskRating();
 
 }

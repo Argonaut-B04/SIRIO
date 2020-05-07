@@ -6,7 +6,9 @@ import com.ArgonautB04.SIRIO.model.TugasPemeriksaan;
 import com.ArgonautB04.SIRIO.repository.HasilPemeriksaanDB;
 import com.ArgonautB04.SIRIO.repository.StatusHasilPemeriksaanDB;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -76,5 +78,18 @@ public class HasilPemeriksaanRestServiceImpl implements HasilPemeriksaanRestServ
     @Override
     public void hapusHasilPemeriksaan(int idHasilPemeriksaan) {
         hasilPemeriksaanDB.deleteById(idHasilPemeriksaan);
+    }
+
+    @Override
+    public HasilPemeriksaan validateExistById(int idHasilPemeriksaan) {
+        Optional<HasilPemeriksaan> target = hasilPemeriksaanDB.findById(idHasilPemeriksaan);
+        if (target.isPresent()) {
+            return target.get();
+        } else {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    "Hasil pemeriksaan dengan id " + idHasilPemeriksaan + " tidak ditemukan"
+            );
+        }
     }
 }

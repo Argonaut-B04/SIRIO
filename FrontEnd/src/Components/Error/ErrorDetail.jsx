@@ -14,7 +14,7 @@ export default class ErrorDetail extends Component {
                     {detail}
                 </h5>
                 <small>
-                    Jika anda menemukan halaman ini saat menggunakan Sirio dengan baik, hubungi Developer
+                    Jika anda menemukan halaman ini saat menggunakan Sirio dengan benar, hubungi Developer
                 </small>
             </div>
         )

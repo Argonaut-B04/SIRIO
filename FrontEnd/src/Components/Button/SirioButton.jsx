@@ -1,5 +1,6 @@
 import React from 'react';
 import classes from './SirioButton.module.css';
+import ReactTooltip from 'react-tooltip';
 
 /**
  * Komponen Button untuk Sirio secara Umum
@@ -15,8 +16,24 @@ import classes from './SirioButton.module.css';
  */
 export default class SirioButton extends React.Component {
 
+    componentDidMount() {
+        if (this.props.tooltip) {
+            ReactTooltip.rebuild()
+        }
+    }
+
+    componentDidUpdate() {
+        if (this.props.tooltip) {
+            ReactTooltip.rebuild()
+        }
+    }
+
+    componentWillUnmount() {
+        ReactTooltip.hide()
+    }
+
     render() {
-        const { purple, blue, red, hover, recommended, hyperlink, hyperlinkLeft, text, disabled, circular, onClick, title, type, children } = this.props;
+        const { purple, blue, red, hover, recommended, hyperlink, hyperlinkLeft, text, disabled, circular, onClick, title, type, children, tooltip } = this.props;
 
         // Prioritas warna: purple -> blue -> red
         let color;
@@ -40,9 +57,17 @@ export default class SirioButton extends React.Component {
         } else if (hyperlinkLeft) {
             style = classes.hyperlinkLeft;
         } else if (text) {
-            style = classes.text;
+            if (tooltip) {
+                style = classes.textWithTooltip;
+            } else {
+                style = classes.text;
+            }
         } else if (disabled) {
-            style = classes.disabled;
+            if (tooltip) {
+                style = classes.disableWithTooltip;
+            } else {
+                style = classes.disabled;
+            }
         }
 
         // Border radius circular atau normal
@@ -52,14 +77,16 @@ export default class SirioButton extends React.Component {
         if (this.props.square) {
             fullClass = [classes.sirioButton, color, hoverStyle, style, classes.square, this.props.classes].join(" ");
         }
+
         return (
             <button
                 onClick={onClick}
                 className={fullClass}
                 type={type}
                 title={title}
+                data-tip={tooltip}
             >
-                <h6 className={classes.buttonTitle}>
+                <h6 className={[classes.buttonTitle, this.props.insideClass].join(" ")}>
                     {children}
                 </h6>
             </button>

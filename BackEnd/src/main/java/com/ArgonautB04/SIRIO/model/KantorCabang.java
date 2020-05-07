@@ -29,7 +29,7 @@ public class KantorCabang implements Serializable {
     @NotNull
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 10)
-    private Status status;
+    private Status status = Status.AKTIF;
 
     @NotNull
     @Size(max = 125)

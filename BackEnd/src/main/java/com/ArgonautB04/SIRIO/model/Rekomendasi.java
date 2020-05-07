@@ -10,8 +10,6 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table
@@ -23,7 +21,7 @@ public class Rekomendasi implements Serializable {
 
     @NotNull
     @Size(max = 125)
-    @Column(nullable = true)
+    @Column(nullable = false)
     private String keterangan;
 
     @DateTimeFormat
@@ -36,8 +34,8 @@ public class Rekomendasi implements Serializable {
     private StatusRekomendasi statusRekomendasi;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "komponen_pemeriksaan", referencedColumnName = "idKomponenPemeriksaan", nullable = true)
-    @OnDelete(action = OnDeleteAction.NO_ACTION)
+    @JoinColumn(name = "komponen_pemeriksaan", referencedColumnName = "idKomponenPemeriksaan", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private KomponenPemeriksaan komponenPemeriksaan;
 
@@ -46,6 +44,11 @@ public class Rekomendasi implements Serializable {
     @OnDelete(action = OnDeleteAction.NO_ACTION)
     @JsonIgnore
     private Employee pembuat;
+
+    @ManyToOne
+    @JoinColumn(name = "reminderTemplate", referencedColumnName = "idReminderTemplate")
+    @JsonIgnore
+    private ReminderTemplate reminderTemplatePilihan;
 
     @OneToOne(mappedBy = "rekomendasi", cascade = CascadeType.ALL)
     private BuktiPelaksanaan buktiPelaksanaan;
@@ -104,5 +107,13 @@ public class Rekomendasi implements Serializable {
 
     public void setBuktiPelaksanaan(BuktiPelaksanaan buktiPelaksanaan) {
         this.buktiPelaksanaan = buktiPelaksanaan;
+    }
+
+    public ReminderTemplate getReminderTemplatePilihan() {
+        return reminderTemplatePilihan;
+    }
+
+    public void setReminderTemplatePilihan(ReminderTemplate reminderTemplatePilihan) {
+        this.reminderTemplatePilihan = reminderTemplatePilihan;
     }
 }

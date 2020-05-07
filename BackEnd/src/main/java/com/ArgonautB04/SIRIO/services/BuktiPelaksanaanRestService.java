@@ -21,4 +21,6 @@ public interface BuktiPelaksanaanRestService {
     List<BuktiPelaksanaan> getByPembuat(Employee pembuat);
 
     List<BuktiPelaksanaan> getByDaftarRekomendasi(List<Rekomendasi> rekomendasiList);
+
+    BuktiPelaksanaan validateExistById(int idBuktiPelaksanaan);
 }

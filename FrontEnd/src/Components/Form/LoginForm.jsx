@@ -18,8 +18,6 @@ class LoginForm extends Component {
             username: '',
             password: '',
             hasLoginFailed: false,
-            source: null,
-            target: null
         }
 
         this.handleChange = this.handleChange.bind(this);
@@ -47,7 +45,8 @@ class LoginForm extends Component {
         this.setState(
             {
                 [name]
-                    : value
+                    : value,
+                hasLoginFailed: false
             }
         )
     }
@@ -56,11 +55,19 @@ class LoginForm extends Component {
     // Komunikasi dengan SirioBackend melalui AuthenticationService
     loginClicked() {
         const { username, password, target } = this.state
+
+        this.props.contentStartLoading();
+        this.props.changeLoadingBody("Mencoba untuk masuk");
+
         AuthenticationService
             .executeBasicAuthenticationService(username, password)
             .then(
                 (response) => {
                     AuthenticationService.registerSuccessfulLogin(username, password, response.data.result.role.namaRole);
+
+                    this.props.changeLoadingBody("Berhasil masuk, mengarahkan anda ke halaman selanjutnya");
+                    this.props.contentFinishLoading();
+
                     if (target) {
                         window.location.href = target;
                     } else {
@@ -74,6 +81,9 @@ class LoginForm extends Component {
                     if (error.response) {
                         errInfo = error.response.status === 401 ? "Username dan Password tidak sesuai" : errInfo;
                     }
+                    this.props.changeLoadingBody("Gagal");
+                    this.props.contentFinishLoading();
+
                     this.setState({
                         hasLoginFailed: true,
                         errInfo: errInfo
@@ -127,7 +137,7 @@ class LoginForm extends Component {
                     <fieldset className="w-100 text-right">
                         <SirioButton
                             blue
-                            recommended
+                            hover
                             onClick={loginClicked}
                         >
                             Login

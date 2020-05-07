@@ -20,4 +20,6 @@ public interface RencanaPemeriksaanRestService {
     List<RencanaPemeriksaan> getByPembuat(Employee pembuat);
 
     Optional<RencanaPemeriksaan> getByNama (String nama);
+
+    RencanaPemeriksaan validateExistById(int idRencanaPemeriksaan);
 }

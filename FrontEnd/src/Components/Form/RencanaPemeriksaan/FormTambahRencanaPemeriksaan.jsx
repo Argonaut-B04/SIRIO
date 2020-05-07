@@ -90,16 +90,13 @@ export default class FormTambahRencana extends React.Component {
 
     componentDidUpdate(prevProps, prevState) {
         var submitable = true;
-        var validating = false;
         submitable = this.validateRequired();
         if (prevState.namaRencana!== this.state.namaRencana){
             submitable = this.validateNama() && submitable
-            validating = true;
         }
 
         if (prevState.linkMajelis!== this.state.linkMajelis){
             submitable = this.validateLink() && submitable
-            validating = true;
         }
 
         if (this.state.submitable !== submitable) {
@@ -295,7 +292,7 @@ export default class FormTambahRencana extends React.Component {
     // Fungsi yang akan dijalankan ketika user submit
     // Umumnya akan digunakan untuk memanggil service komunikasi ke backend
     async handleSubmit(event, nama) {
-        if(nama == "simpan"){
+        if(nama === "simpan"){
             event.preventDefault();
             for (let i = 0; i < this.state.daftarTugasPemeriksaan.length;i++){
                 console.log(this.state.daftarTugasPemeriksaan[i].tanggalMulai)
@@ -334,7 +331,7 @@ export default class FormTambahRencana extends React.Component {
             }
            
         }
-        else if (nama == "draft"){
+        else if (nama === "draft"){
             event.preventDefault();
             const rencanaPemeriksaan = {
                 namaRencana: this.state.namaRencana,
@@ -487,7 +484,7 @@ export default class FormTambahRencana extends React.Component {
     deleteItem(array, index) {
         const toReturn = []
         for (var row in array) {
-            if (row != index) {
+            if (row !== index) {
                 toReturn.push(array[row]);
             }
         }
@@ -520,8 +517,6 @@ export default class FormTambahRencana extends React.Component {
                     >
                         Hapus
                     </SirioWarningButton>
-                    <a>  </a>
-                    
                     
             </div>
         )

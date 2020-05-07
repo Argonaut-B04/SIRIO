@@ -1,16 +1,21 @@
 package com.ArgonautB04.SIRIO.rest;
 
-import com.ArgonautB04.SIRIO.scheduled.MailScheduler;
 import com.ArgonautB04.SIRIO.model.*;
 import com.ArgonautB04.SIRIO.repository.*;
+import com.ArgonautB04.SIRIO.scheduled.MailScheduler;
 import com.ArgonautB04.SIRIO.services.EmployeeRestService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.TimeZone;
 
 @Component
 public class DatabaseLoader implements CommandLineRunner {
+
+    Logger logger = LoggerFactory.getLogger(DatabaseLoader.class);
 
     private final StatusBuktiPelaksanaanDB statusBuktiPelaksanaanDB;
     private final StatusHasilPemeriksaanDB statusHasilPemeriksaanDB;
@@ -19,9 +24,9 @@ public class DatabaseLoader implements CommandLineRunner {
     private final EmployeeRestService employeeRestService;
     private final RoleDB roleDB;
     private final AccessPermissionDB accessPermissionDB;
-    private final ReminderMailFormatDB reminderMailFormatDB;
+    private final ReminderTemplateDB reminderTemplateDB;
 
-    public DatabaseLoader(StatusBuktiPelaksanaanDB statusBuktiPelaksanaanDB, StatusHasilPemeriksaanDB statusHasilPemeriksaanDB, StatusRencanaPemeriksaanDB statusRencanaPemeriksaanDB, StatusRisikoDB statusRisikoDB, StatusRekomendasiDB statusRekomendasiDB, EmployeeRestService employeeRestService, RoleDB roleDB, AccessPermissionDB accessPermissionDB, ReminderMailFormatDB reminderMailFormatDB) {
+    public DatabaseLoader(StatusBuktiPelaksanaanDB statusBuktiPelaksanaanDB, StatusHasilPemeriksaanDB statusHasilPemeriksaanDB, StatusRencanaPemeriksaanDB statusRencanaPemeriksaanDB, StatusRekomendasiDB statusRekomendasiDB, EmployeeRestService employeeRestService, RoleDB roleDB, AccessPermissionDB accessPermissionDB, ReminderTemplateDB reminderTemplateDB) {
         this.statusBuktiPelaksanaanDB = statusBuktiPelaksanaanDB;
         this.statusHasilPemeriksaanDB = statusHasilPemeriksaanDB;
         this.statusRencanaPemeriksaanDB = statusRencanaPemeriksaanDB;
@@ -29,32 +34,34 @@ public class DatabaseLoader implements CommandLineRunner {
         this.employeeRestService = employeeRestService;
         this.roleDB = roleDB;
         this.accessPermissionDB = accessPermissionDB;
-        this.reminderMailFormatDB = reminderMailFormatDB;
+        this.reminderTemplateDB = reminderTemplateDB;
     }
 
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String... args) {
         TimeZone.setDefault(TimeZone.getTimeZone("Asia/Jakarta"));
-        System.out.println("Database setted");
+        logger.info("Timezone set to Asia/Jakarta");
+
         if (statusBuktiPelaksanaanDB.findAll().isEmpty()) populasiStatusBuktiPelaksanaan();
         if (statusRencanaPemeriksaanDB.findAll().isEmpty()) populasiStatusRencanaPemeriksaan();
         if (statusHasilPemeriksaanDB.findAll().isEmpty()) populasiStatusHasilPemeriksaan();
         if (statusRekomendasiDB.findAll().isEmpty()) populasiStatusRekomendasi();
-        if (employeeRestService.getAll().isEmpty() && roleDB.findAll().isEmpty() && accessPermissionDB.findAll().isEmpty()) populasiEmployeedanRole();
-        if (reminderMailFormatDB.findAll().isEmpty()) populasiReminderMailFormat();
-        MailScheduler.startMe = true;
+        if (employeeRestService.getAll().isEmpty() && roleDB.findAll().isEmpty() && accessPermissionDB.findAll().isEmpty())
+            populasiEmployeedanRole();
+        if (reminderTemplateDB.findAll().isEmpty()) populasiReminderTemplate();
+        MailScheduler.startService = true;
     }
 
-    private void populasiReminderMailFormat() {
-        ReminderMailFormat reminderMailFormatGlobal = new ReminderMailFormat();
-        reminderMailFormatGlobal.setMailFormat("An global template for your email");
-        reminderMailFormatGlobal.setSubjects("Final test");
-        reminderMailFormatGlobal.setGlobal(true);
-        reminderMailFormatDB.save(reminderMailFormatGlobal);
+    private void populasiReminderTemplate() {
+        ReminderTemplate reminderTemplateGlobal = new ReminderTemplate();
+        reminderTemplateGlobal.setSubjects("Final test");
+        reminderTemplateGlobal.setBody("An global template for your email");
+        reminderTemplateGlobal.setGlobal(true);
+        reminderTemplateDB.save(reminderTemplateGlobal);
+        logger.info("Generated Reminder Template: 1");
     }
 
     private void populasiEmployeedanRole() {
-
         // Inisiasi Role
         Role roleAdministrator = roleDB.save(new Role("Administrator"));
         Role roleSupervisor = roleDB.save(new Role("Supervisor"));
@@ -63,9 +70,8 @@ public class DatabaseLoader implements CommandLineRunner {
         Role roleOfficer = roleDB.save(new Role("QA Officer Operational Risk"));
         Role roleBM = roleDB.save(new Role("Branch Manager"));
         Role roleSuper = roleDB.save(new Role("Super QA Officer Operational Risk"));
-        Role roleDeveloper = roleDB.save(new Role("dev"));
+        logger.info("Generated Role: 7");
         // Inisiasi Role Selesai
-
 
         // Inisiasi Akses
         // Akses Admin
@@ -156,6 +162,7 @@ public class DatabaseLoader implements CommandLineRunner {
         aksesOfficer.setAksesRiskLevel(true);
 
         aksesOfficer.setAksesTabelRekomendasi(true);
+        aksesOfficer.setAturTenggatWaktu(true);
         aksesOfficer.setUbahReminder(true);
 
         aksesOfficer.setAksesTambahBuktiPelaksanaan(true);
@@ -177,37 +184,11 @@ public class DatabaseLoader implements CommandLineRunner {
         // Akses BM Selesai
 
         // Akses SuperQA
-        AccessPermissions aksesSuper = new AccessPermissions(roleSuper);
-        aksesSuper.setAksesTambahRisiko(true);
-        aksesSuper.setAksesHapusRisiko(true);
-        aksesSuper.setAksesRisiko(true);
-        aksesSuper.setAksesUbahRisiko(true);
-        aksesSuper.setAksesTabelRisiko(true);
-        aksesSuper.setAksesUbahHierarki(true);
-
-        aksesSuper.setAksesRiskRating(true);
-        aksesSuper.setUbahRiskRating(true);
-
-        aksesSuper.setAksesRiskLevel(true);
-        aksesSuper.setUbahRiskLevel(true);
-
-        aksesSuper.setAksesTabelRekomendasi(true);
-        aksesSuper.setUbahReminder(true);
-
-        aksesSuper.setAksesTambahBuktiPelaksanaan(true);
-        aksesSuper.setAksesBuktiPelaksanaan(true);
-        aksesSuper.setAksesPersetujuanBuktiPelaksanaan(true);
-        aksesSuper.setAksesUbahBuktiPelaksanaan(true);
+        AccessPermissions aksesSuper = new AccessPermissions(roleSuper, true);
         roleSuper.setAccessPermissions(aksesSuper);
         roleDB.save(roleSuper);
-        // Akses SuperQA Selesai
 
-        // Akses Developer
-        AccessPermissions aksesDeveloper = new AccessPermissions(roleDeveloper, true);
-        roleDeveloper.setAccessPermissions(aksesDeveloper);
-        roleDB.save(roleDeveloper);
-        // Akses Developer selesai
-        // Inisiasi Akses Selesai
+        logger.info("Generated Access Permission: 7");
 
 
         // Inisiasi Akun Awal
@@ -281,16 +262,6 @@ public class DatabaseLoader implements CommandLineRunner {
                 "Super QA",
                 roleSuper
         );
-        Employee dev = new Employee(
-                "dev",
-                Employee.Status.AKTIF,
-                "dev",
-                "dev",
-                "0123",
-                "developers@sirio.com",
-                "Core Developers",
-                roleDeveloper
-        );
 
         employeeRestService.buatEmployee(admin);
         employeeRestService.buatEmployee(supervisor);
@@ -299,94 +270,58 @@ public class DatabaseLoader implements CommandLineRunner {
         employeeRestService.buatEmployee(officer);
         employeeRestService.buatEmployee(bm);
         employeeRestService.buatEmployee(superQA);
-        employeeRestService.buatEmployee(dev);
+        logger.info("Generated Employee: 7");
         // Inisiasi Akun Awal selesai
     }
 
     private void populasiStatusBuktiPelaksanaan() {
-        StatusBuktiPelaksanaan menungguPersetujuan = new StatusBuktiPelaksanaan();
-        menungguPersetujuan.setNamaStatus("Menunggu Persetujuan");
-        statusBuktiPelaksanaanDB.save(menungguPersetujuan);
+        List<StatusBuktiPelaksanaan> daftarStatusBaru = List.of(
+                new StatusBuktiPelaksanaan("Menunggu Persetujuan"),
+                new StatusBuktiPelaksanaan("Disetujui"),
+                new StatusBuktiPelaksanaan("Ditolak")
+        );
+        daftarStatusBaru = statusBuktiPelaksanaanDB.saveAll(daftarStatusBaru);
 
-        StatusBuktiPelaksanaan disetujui = new StatusBuktiPelaksanaan();
-        disetujui.setNamaStatus("Disetujui");
-        statusBuktiPelaksanaanDB.save(disetujui);
-
-        StatusBuktiPelaksanaan ditolak = new StatusBuktiPelaksanaan();
-        ditolak.setNamaStatus("Ditolak");
-        statusBuktiPelaksanaanDB.save(ditolak);
+        logger.info("Generated Status Bukti Pelaksanaan: " + daftarStatusBaru.size());
     }
 
     private void populasiStatusRencanaPemeriksaan() {
-        StatusRencanaPemeriksaan draft = new StatusRencanaPemeriksaan();
-        draft.setNamaStatus("Draft");
-        statusRencanaPemeriksaanDB.save(draft);
+        List<StatusRencanaPemeriksaan> daftarStatusBaru = List.of(
+                new StatusRencanaPemeriksaan("Draft"),
+                new StatusRencanaPemeriksaan("Sedang Dijalankan"),
+                new StatusRencanaPemeriksaan("Selesai")
+        );
+        daftarStatusBaru = statusRencanaPemeriksaanDB.saveAll(daftarStatusBaru);
 
-        StatusRencanaPemeriksaan sedangDijalankan = new StatusRencanaPemeriksaan();
-        sedangDijalankan.setNamaStatus("Sedang Dijalankan");
-        statusRencanaPemeriksaanDB.save(sedangDijalankan);
-
-        StatusRencanaPemeriksaan selesai = new StatusRencanaPemeriksaan();
-        selesai.setNamaStatus("Selesai");
-        statusRencanaPemeriksaanDB.save(selesai);
+        logger.info("Generated Status Rencana Pemeriksaan: " + daftarStatusBaru.size());
     }
 
     private void populasiStatusHasilPemeriksaan() {
-        StatusHasilPemeriksaan draft = new StatusHasilPemeriksaan();
-        draft.setNamaStatus("Draft");
-        statusHasilPemeriksaanDB.save(draft);
+        List<StatusHasilPemeriksaan> daftarStatusBaru = List.of(
+                new StatusHasilPemeriksaan("Menunggu Persetujuan"),
+                new StatusHasilPemeriksaan("Draft"),
+                new StatusHasilPemeriksaan("Ditolak"),
+                new StatusHasilPemeriksaan("Menunggu Pelaksanaan"),
+                new StatusHasilPemeriksaan("Selesai")
+        );
+        daftarStatusBaru = statusHasilPemeriksaanDB.saveAll(daftarStatusBaru);
 
-        StatusHasilPemeriksaan menungguPersetujuan = new StatusHasilPemeriksaan();
-        menungguPersetujuan.setNamaStatus("Menunggu Persetujuan");
-        statusHasilPemeriksaanDB.save(menungguPersetujuan);
-
-        StatusHasilPemeriksaan ditolak = new StatusHasilPemeriksaan();
-        ditolak.setNamaStatus("Ditolak");
-        statusHasilPemeriksaanDB.save(ditolak);
-
-        StatusHasilPemeriksaan menungguPelaksanaan = new StatusHasilPemeriksaan();
-        menungguPelaksanaan.setNamaStatus("Menunggu Pelaksanaan");
-        statusHasilPemeriksaanDB.save(menungguPelaksanaan);
-
-        StatusHasilPemeriksaan selesai = new StatusHasilPemeriksaan();
-        selesai.setNamaStatus("Selesai");
-        statusHasilPemeriksaanDB.save(selesai);
+        logger.info("Generated Status Hasil Pemeriksaan: " + daftarStatusBaru.size());
     }
 
     private void populasiStatusRekomendasi() {
-        StatusRekomendasi draft = new StatusRekomendasi();
-        draft.setNamaStatus("Draft");
-        draft.setDapatSetTenggatWaktu(false);
-        statusRekomendasiDB.save(draft);
+        List<StatusRekomendasi> daftarStatusBaru = List.of(
+                new StatusRekomendasi("Draft", false),
+                new StatusRekomendasi("Menunggu Persetujuan", false),
+                new StatusRekomendasi("Ditolak", false),
+                new StatusRekomendasi("Menunggu Pengaturan Tenggat Waktu", true),
+                new StatusRekomendasi("Menunggu Pelaksanaan", true),
+                new StatusRekomendasi("Sedang Dilaksanakan", false),
+                new StatusRekomendasi("Selesai", false)
+        );
 
-        StatusRekomendasi menungguPersetujuan = new StatusRekomendasi();
-        menungguPersetujuan.setNamaStatus("Menunggu Persetujuan");
-        menungguPersetujuan.setDapatSetTenggatWaktu(false);
-        statusRekomendasiDB.save(menungguPersetujuan);
+        daftarStatusBaru = statusRekomendasiDB.saveAll(daftarStatusBaru);
 
-        StatusRekomendasi ditolak = new StatusRekomendasi();
-        ditolak.setNamaStatus("Ditolak");
-        ditolak.setDapatSetTenggatWaktu(false);
-        statusRekomendasiDB.save(ditolak);
-
-        StatusRekomendasi menungguPengaturanTenggatWaktu = new StatusRekomendasi();
-        menungguPengaturanTenggatWaktu.setNamaStatus("Menunggu Pengaturan Tenggat Waktu");
-        menungguPengaturanTenggatWaktu.setDapatSetTenggatWaktu(true);
-        statusRekomendasiDB.save(menungguPengaturanTenggatWaktu);
-
-        StatusRekomendasi menungguPelaksanaan = new StatusRekomendasi();
-        menungguPelaksanaan.setNamaStatus("Menunggu Pelaksanaan");
-        menungguPelaksanaan.setDapatSetTenggatWaktu(true);
-        statusRekomendasiDB.save(menungguPelaksanaan);
-
-        StatusRekomendasi sedangDilaksanakan = new StatusRekomendasi();
-        sedangDilaksanakan.setNamaStatus("Sedang Dilaksanakan");
-        sedangDilaksanakan.setDapatSetTenggatWaktu(false);
-        statusRekomendasiDB.save(sedangDilaksanakan);
-
-        StatusRekomendasi selesai = new StatusRekomendasi();
-        selesai.setNamaStatus("Selesai");
-        selesai.setDapatSetTenggatWaktu(false);
-        statusRekomendasiDB.save(selesai);
+        logger.info("Generated Status Rekomendasi: " + daftarStatusBaru.size());
     }
 }

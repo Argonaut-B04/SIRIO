@@ -4,7 +4,6 @@ import SirioButton from '../../Button/SirioButton';
 import HasilPemeriksaanService from '../../../Services/HasilPemeriksaanService';
 import {NavLink, Redirect} from 'react-router-dom';
 import { withRouter } from 'react-router-dom';
-import SirioConfirmButton from "../../Button/ActionButton/SirioConfirmButton";
 
 class HasilPemeriksaanFormTolak extends React.Component {
 
@@ -114,12 +113,16 @@ class HasilPemeriksaanFormTolak extends React.Component {
 
     handleSubmit(event) {
         event.preventDefault();
-        this.setState(
-            {
-                [event.target.name]
-                    : event.target.value
-            }
-        )
+        const persetujuan = {
+            id: this.props.location.state.id,
+            status: "3",
+            feedback: this.state.feedback
+        };
+
+        if (this.state.submitable) {
+            HasilPemeriksaanService.setujuiHasilPemeriksaan(persetujuan)
+                .then(() => this.setRedirect());
+        }
     }
 
     // Fungsi yang akan mengembalikan definisi tiap field pada form
@@ -144,17 +147,6 @@ class HasilPemeriksaanFormTolak extends React.Component {
     submitButton() {
         return (
             <div>
-                <SirioConfirmButton
-                    purple recommended
-                    classes="m-1"
-                    modalTitle= "Daftar Komponen Pemeriksaan"
-                    modalDesc={this.state.daftarKomponen}
-                    customConfirmText=" "
-                    closeOnConfirm
-                    confirmDisable
-                >
-                    Daftar Komponen Pemeriksaan
-                </SirioConfirmButton>
                 <SirioButton purple
                              recommended={this.state.submitable}
                              disabled={!this.state.submitable}

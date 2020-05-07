@@ -48,6 +48,7 @@ export default class SirioWarningButton extends React.Component {
         const { show } = this.state;
         const { modalTitle, modalDesc, onConfirm, customConfirmText, customCancelText } = this.props;
         const { modalButton } = classes;
+
         return (
             <>
                 <SirioButton
@@ -75,7 +76,12 @@ export default class SirioWarningButton extends React.Component {
                                 purple
                                 recommended
                                 circular
-                                onClick={onConfirm ? onConfirm : handleClose}
+                                onClick={() => {
+                                    if (onConfirm) {
+                                        onConfirm()
+                                    }
+                                    handleClose()
+                                }}
                                 classes={modalButton}
                             >
                                 {customConfirmText ? customConfirmText : "Lanjutkan"}

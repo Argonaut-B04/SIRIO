@@ -97,14 +97,14 @@ class DetailHasilPemeriksaan extends React.Component {
                         "Risk Level": komponen.namaRiskLevel,
                         "Hasil Temuan": !(komponen.daftarTemuanRisikoTerdaftar.length > 0) ? "-" :
                             <div>
-                                {komponen.daftarTemuanRisikoTerdaftar.map(temuanRisiko =>
-                                    <p>- {temuanRisiko.keterangan}</p>
+                                {komponen.daftarTemuanRisikoTerdaftar.map((temuanRisiko, i) =>
+                                    <p key={i}>- {temuanRisiko.keterangan}</p>
                                 )}
                             </div>,
                         "Rekomendasi": !(komponen.daftarRekomendasiTerdaftar.length > 0) ? "-" :
                             <div>
-                                {komponen.daftarRekomendasiTerdaftar.map(rekomendasi =>
-                                    <p>- {rekomendasi.keterangan}</p>
+                                {komponen.daftarRekomendasiTerdaftar.map((rekomendasi, i) =>
+                                    <p key={i}>- {rekomendasi.keterangan}</p>
                                 )}
                             </div>
                     }
@@ -146,7 +146,7 @@ class DetailHasilPemeriksaan extends React.Component {
     }
 
     buttonUbah(id, idTugasPemeriksaan, status) {
-        if(status === "Draft" || status === "Menunggu Persetujuan" || status === "Ditolak") {
+        if (status === "Draft" || status === "Menunggu Persetujuan" || status === "Ditolak") {
             return (
                 <NavLink to={{
                     pathname: "/hasil-pemeriksaan/ubah",
@@ -196,7 +196,6 @@ class DetailHasilPemeriksaan extends React.Component {
                     onConfirm={() => this.setuju(id)}
                     customConfirmText="Ya, Setujui"
                     customCancelText="Batal"
-                    closeOnConfirm
                 >
                     Setuju
                 </SirioConfirmButton>
@@ -329,6 +328,7 @@ class DetailHasilPemeriksaan extends React.Component {
                         noBack
                         data={komponen}
                         id='id'
+                        key='id'
                     />
                 )}
                 <div className="w-100 text-right">

@@ -29,7 +29,7 @@ export default class SirioAxiosBase {
 
     static formatDateFromSirioDatePicker(string) {
         const dateinArray = string.split("-");
-        return this.formatDate(dateinArray);
+        return SirioAxiosBase.formatDate(dateinArray);
     }
 
     static formatDateYear(cell, row) {

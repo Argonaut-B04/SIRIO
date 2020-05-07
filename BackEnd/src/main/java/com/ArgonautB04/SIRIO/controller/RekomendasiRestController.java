@@ -5,17 +5,13 @@ import com.ArgonautB04.SIRIO.rest.BaseResponse;
 import com.ArgonautB04.SIRIO.rest.RekomendasiDTO;
 import com.ArgonautB04.SIRIO.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -91,12 +87,15 @@ public class RekomendasiRestController {
         for (Rekomendasi rekomendasi : daftarRekomendasi) {
             RekomendasiDTO rekomendasiDTO = new RekomendasiDTO();
 
+            // Memasukan id dan keterangan
             rekomendasiDTO.setId(rekomendasi.getIdRekomendasi());
             rekomendasiDTO.setKeterangan(rekomendasi.getKeterangan());
 
+            // Memasukan tenggat waktu
             LocalDate tenggatWaktu = rekomendasi.getTenggatWaktu();
             rekomendasiDTO.setTenggatWaktuDate(tenggatWaktu);
 
+            // Memasukan durasi hingga tenggat waktu
             if (tenggatWaktu != null) {
                 int durasi = (int) ChronoUnit.DAYS.between(waktuSaatIni, tenggatWaktu);
                 if (durasi < 0) {
@@ -106,8 +105,10 @@ public class RekomendasiRestController {
                 rekomendasiDTO.setDurasi(durasiFinal);
             }
 
+            // Memasukan status rekomendasi
             rekomendasiDTO.setStatus(rekomendasi.getStatusRekomendasi().getNamaStatus());
 
+            // Memasukan status bukti untuk rekomendasi
             List<BuktiPelaksanaan> buktiList = buktiPelaksanaanRestService.getByDaftarRekomendasi(daftarRekomendasi);
             for (BuktiPelaksanaan buktiPelaksanaan : buktiList) {
                 if (buktiPelaksanaan.getRekomendasi().equals(rekomendasi)) {
@@ -119,6 +120,7 @@ public class RekomendasiRestController {
                 }
             }
 
+            // Memasukan daftar kantor cabang setiap rekomendasi
             rekomendasiDTO
                     .setNamaKantorCabang(
                             rekomendasi
@@ -127,6 +129,14 @@ public class RekomendasiRestController {
                                     .getTugasPemeriksaan()
                                     .getKantorCabang()
                                     .getNamaKantor());
+
+            // Memasukan id hasil pemeriksaan setiap rekomendasi
+            rekomendasiDTO.setIdHasilPemeriksaan(
+                    rekomendasi
+                            .getKomponenPemeriksaan()
+                            .getHasilPemeriksaan()
+                            .getIdHasilPemeriksaan()
+            );
 
             resultDTO.add(rekomendasiDTO);
         }
@@ -145,32 +155,17 @@ public class RekomendasiRestController {
             @PathVariable("idRekomendasi") int idRekomendasi, Principal principal
     ) {
         BaseResponse<RekomendasiDTO> response = new BaseResponse<>();
-        Optional<Employee> pengelolaOptional = employeeRestService.getByUsername(principal.getName());
-        Employee pengelola;
-        if (pengelolaOptional.isPresent()) {
-            pengelola = pengelolaOptional.get();
-            if (pengelola.getRole().getAccessPermissions().getAksesRekomendasi()) {
-                try {
-                    Rekomendasi rekomendasi = rekomendasiRestService.getById(idRekomendasi);
-                    RekomendasiDTO result = new RekomendasiDTO();
-                    result.setId(rekomendasi.getIdRekomendasi());
-                    result.setKeterangan(rekomendasi.getKeterangan());
+        Employee pengelola = employeeRestService.validateEmployeeExistByPrincipal(principal);
+        employeeRestService.validateRolePermission(pengelola, "tabel rekomendasi");
+        Rekomendasi rekomendasi = rekomendasiRestService.validateExistInById(idRekomendasi);
+        RekomendasiDTO result = new RekomendasiDTO();
+        result.setId(rekomendasi.getIdRekomendasi());
+        result.setKeterangan(rekomendasi.getKeterangan());
 
-                    response.setStatus(200);
-                    response.setMessage("success");
-                    response.setResult(result);
-                } catch (NoSuchElementException e) {
-                    throw new ResponseStatusException(
-                            HttpStatus.NOT_FOUND, "Rekomendasi dengan ID " + idRekomendasi + " tidak ditemukan!"
-                    );
-                }
-                return response;
-            } else throw new ResponseStatusException(
-                    HttpStatus.UNAUTHORIZED, "Akun anda tidak memiliki akses ke pengaturan ini"
-            );
-        } else throw new ResponseStatusException(
-                HttpStatus.UNAUTHORIZED, "Akun anda tidak terdaftar dalam Sirio"
-        );
+        response.setStatus(200);
+        response.setMessage("success");
+        response.setResult(result);
+        return response;
     }
 
     /**
@@ -187,7 +182,7 @@ public class RekomendasiRestController {
         Employee employee = employeeRestService.validateEmployeeExistByPrincipal(principal);
         employeeRestService.validateRolePermission(employee, "tabel rekomendasi");
 
-        KantorCabang kantorCabang = kantorCabangRestService.validateExistInDatabase(idKantor);
+        KantorCabang kantorCabang = kantorCabangRestService.validateExistById(idKantor);
 
         List<TugasPemeriksaan> daftarTugasPemeriksaan =
                 tugasPemeriksaanRestService.
@@ -222,7 +217,7 @@ public class RekomendasiRestController {
         employeeRestService.validateRolePermission(employee, "tenggat waktu");
 
         Integer idRekomendasi = rekomendasiDTO.getId();
-        Rekomendasi rekomendasi = rekomendasiRestService.validateExistInDatabase(idRekomendasi);
+        Rekomendasi rekomendasi = rekomendasiRestService.validateExistInById(idRekomendasi);
 
         LocalDate tenggatWaktuBaru = rekomendasiDTO.getTenggatWaktuDate();
         rekomendasiRestService.validateDateInputMoreThanToday(tenggatWaktuBaru);

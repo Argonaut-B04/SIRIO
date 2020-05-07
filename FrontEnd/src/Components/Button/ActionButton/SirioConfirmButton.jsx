@@ -10,7 +10,6 @@ import classes from "./ActionButton.module.css";
  * - Seluruh Props SirioButton
  * - modalTitle         : String, judul modal
  * - onConfirm          : Function, dijalankan ketika tombol konfirmasi ditekan
- * - closeOnConfirm     : Boolean, tutup modal ketika confirm ditekan
  * - customConfirmText  : String, Opsional untuk mengganti kata "konfirmasi" pada tombol konfirmasi
  */
 export default class SirioWarningButton extends React.Component {
@@ -43,22 +42,9 @@ export default class SirioWarningButton extends React.Component {
     render() {
         const { handleClose, handleShow } = this;
         const { show } = this.state;
-        const { onConfirm, closeOnConfirm, modalTitle, customConfirmText } = this.props;
+        const { onConfirm, modalTitle, customConfirmText } = this.props;
         const { modalButton } = classes;
-        var onConfirmFunction;
 
-        if (onConfirm) {
-            if (closeOnConfirm) {
-                onConfirmFunction = () => {
-                    handleClose();
-                    onConfirm();
-                }
-            } else {
-                onConfirmFunction = onConfirm;
-            }
-        } else {
-            onConfirmFunction = handleClose;
-        }
         return (
             <>
                 <SirioButton
@@ -82,6 +68,10 @@ export default class SirioWarningButton extends React.Component {
                             <div>{this.props.modalDesc}</div>
                         </div>
 
+                        <div className="text-center px-0 mx-0 w-75">
+                            <div>{this.props.modalDesc}</div>
+                        </div>
+
                         <div className="d-flex justify-content-center align-items-center w-100">
                             <SirioButton
                                 purple
@@ -89,7 +79,12 @@ export default class SirioWarningButton extends React.Component {
                                 text={this.props.confirmDisable}
                                 disable={this.props.confirmDisable}
                                 circular
-                                onClick={onConfirmFunction}
+                                onClick={() => {
+                                    if (onConfirm) {
+                                        onConfirm()
+                                    }
+                                    handleClose()
+                                }}
                                 classes={modalButton}
                             >
                                 {customConfirmText ? customConfirmText : "Konfirmasi"}

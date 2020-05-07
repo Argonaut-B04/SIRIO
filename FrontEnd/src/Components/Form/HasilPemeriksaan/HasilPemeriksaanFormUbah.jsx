@@ -151,23 +151,23 @@ class HasilPemeriksaanFormTambah extends React.Component {
         const response = await RisikoService.getAll();
 
         const risikoKategori1 = response.data.result
-            .filter(risiko => risiko.risikoKategori === 1)
+            .filter(risiko => risiko.kategori === 1)
             .map(risiko => {
                 return (
                     {
-                        label: risiko.namaRisiko,
-                        value: risiko.idRisiko
+                        label: risiko.nama,
+                        value: risiko.id
                     }
                 )
             });
 
         const risikoKategori2 = response.data.result
-            .filter(risiko => risiko.risikoKategori === 2)
+            .filter(risiko => risiko.kategori === 2)
             .map(risiko => {
                 return (
                     {
-                        label: risiko.namaRisiko,
-                        value: risiko.idRisiko
+                        label: risiko.nama,
+                        value: risiko.id
                     }
                 )
             });
@@ -237,6 +237,8 @@ class HasilPemeriksaanFormTambah extends React.Component {
                 )}
         </p>;
 
+        console.log(histori)
+
         return (
             <SirioConfirmButton
                 purple recommended
@@ -244,7 +246,6 @@ class HasilPemeriksaanFormTambah extends React.Component {
                 modalTitle= "Riwayat Temuan Risiko"
                 modalDesc={histori}
                 customConfirmText=" "
-                closeOnConfirm
                 confirmDisable
             >
                 Riwayat Temuan

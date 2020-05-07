@@ -43,7 +43,7 @@ class ReminderTemplateForm extends Component {
 
         this.setState({
             subject: response.data.result.subjects,
-            content: response.data.result.mailFormat
+            content: response.data.result.body
         })
     }
 
@@ -84,6 +84,7 @@ class ReminderTemplateForm extends Component {
                     changeComplete: true,
                     changed: false
                 })
+                window.history.back();
             });
     }
 
@@ -207,7 +208,6 @@ class ReminderTemplateForm extends Component {
                             onConfirm={() => this.handleSubmit(null, "reminder")}
                             customConfirmText="Konfirmasi"
                             customCancelText="Batal"
-                            closeOnConfirm
                         >
                             Reminder
                         </SirioConfirmButton>
@@ -222,7 +222,6 @@ class ReminderTemplateForm extends Component {
                             onConfirm={() => this.handleSubmit(null, "rekomendasi")}
                             customConfirmText="Konfirmasi"
                             customCancelText="Batal"
-                            closeOnConfirm
                         >
                             Rekomendasi
                         </SirioConfirmButton>
@@ -234,13 +233,12 @@ class ReminderTemplateForm extends Component {
                         disabled={!submitable}
                         hover
                         classes="ml-2"
-                        title="Pengaturan isi email akan disimpan untuk seluruh reminder dalam Sirio"
+                        title="Template akan digunakan untuk seluruh reminder baru dalam Sirio"
                         type="button"
-                        modalTitle="Anda akan menyimpan pengaturan reminder untuk seluruh reminder dalam Sirio"
+                        modalTitle="Anda akan mengubah template reminder untuk seluruh reminder baru dalam Sirio"
                         onConfirm={() => this.handleSubmit(null, "global")}
                         customConfirmText="Konfirmasi"
                         customCancelText="Batal"
-                        closeOnConfirm
                     >
                         Global
                     </SirioConfirmButton>
@@ -250,13 +248,12 @@ class ReminderTemplateForm extends Component {
                         disabled={!submitable}
                         hover
                         classes="ml-2"
-                        title="Pengaturan isi email akan disimpan untuk seluruh reminder yang telah anda buat"
+                        title="Pengaturan ini akan menyimpan template reminder untuk seluruh reminder yang anda buat selanjutnya"
                         type="button"
-                        modalTitle="Anda akan menyimpan pengaturan reminder untuk seluruh reminder yang telah anda buat"
+                        modalTitle="Anda akan menyimpan template reminder untuk reminder yang akan anda buat seterusnya"
                         onConfirm={() => this.handleSubmit(null, "akun")}
                         customConfirmText="Konfirmasi"
                         customCancelText="Batal"
-                        closeOnConfirm
                     >
                         Akun
                     </SirioConfirmButton>
@@ -269,6 +266,7 @@ class ReminderTemplateForm extends Component {
                     modalDesc="Seluruh perubahan isi email yang belum tersimpan akan dihapus. Konfirmasi?"
                     onConfirm={() => window.history.back()}
                     customConfirmText="Konfirmasi"
+                    type="button"
                     customCancelText="Kembali"
                 >
                     Batal

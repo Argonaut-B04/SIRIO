@@ -1,8 +1,12 @@
 package com.ArgonautB04.SIRIO.controller;
 
-import com.ArgonautB04.SIRIO.model.*;
-import com.ArgonautB04.SIRIO.rest.*;
-import com.ArgonautB04.SIRIO.services.*;
+import com.ArgonautB04.SIRIO.model.Employee;
+import com.ArgonautB04.SIRIO.model.KantorCabang;
+import com.ArgonautB04.SIRIO.rest.BaseResponse;
+import com.ArgonautB04.SIRIO.rest.KantorCabangDTO;
+import com.ArgonautB04.SIRIO.services.EmployeeRestService;
+import com.ArgonautB04.SIRIO.services.KantorCabangRestService;
+import com.ArgonautB04.SIRIO.services.RiskRatingRestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -38,32 +42,15 @@ public class KantorCabangRestController {
      */
     @GetMapping("/getAll")
     private BaseResponse<List<KantorCabang>> getAllKantorCabang() {
-        BaseResponse<List<KantorCabang>> response = new BaseResponse<>();
-        List<KantorCabang> result = kantorCabangRestService.getAll();
-        response.setStatus(200);
-        response.setMessage("success");
-        response.setResult(result);
-
-        return response;
+        return new BaseResponse<>(200, "success", kantorCabangRestService.getAll());
     }
 
     @GetMapping("/check/{namaKantor}")
     private BaseResponse<Boolean> isExistInDatabase(
             @PathVariable("namaKantor") String namaKantor
     ) {
-        BaseResponse<Boolean> response = new BaseResponse<>();
-
         Optional<KantorCabang> kantorCabang = kantorCabangRestService.getByNama(namaKantor);
-
-        if (kantorCabang.isEmpty()) {
-            response.setResult(false);
-        } else {
-            response.setResult(true);
-        }
-
-        response.setStatus(200);
-        response.setMessage("success");
-        return response;
+        return new BaseResponse<>(200, "success", kantorCabang.isPresent());
     }
 
     /**
@@ -77,18 +64,8 @@ public class KantorCabangRestController {
             @PathVariable("idKantorCabang") int idKantorCabang
     ) {
         BaseResponse<KantorCabang> response = new BaseResponse<>();
-        try {
-            KantorCabang result = kantorCabangRestService.getById(idKantorCabang);
-
-            response.setStatus(200);
-            response.setMessage("success");
-            response.setResult(result);
-        } catch (NoSuchElementException e) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Kantor cabang dengan ID " + idKantorCabang + " tidak ditemukan!"
-            );
-        }
-        return response;
+        KantorCabang result = kantorCabangRestService.validateExistById(idKantorCabang);
+        return new BaseResponse<>(200, "success", result);
     }
 
     /**
@@ -105,16 +82,10 @@ public class KantorCabangRestController {
         BaseResponse<KantorCabang> response = new BaseResponse<>();
         KantorCabang kantorCabangTemp = new KantorCabang();
 
-        try {
-            Employee employee = employeeRestService.getByUsername(principal.getName()).get();
-            kantorCabangTemp.setPembuat(employee);
-            Employee pemilik = employeeRestService.getById(kantorCabangDTO.getIdPemilik());
-            kantorCabangTemp.setPemilik(pemilik);
-        } catch (NoSuchElementException e) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Employee dengan ID " + kantorCabangDTO.getIdPembuat() + " tidak ditemukan!"
-            );
-        }
+        Employee employee = employeeRestService.validateEmployeeExistByPrincipal(principal);
+        kantorCabangTemp.setPembuat(employee);
+        Employee pemilik = employeeRestService.validateEmployeeExistById(kantorCabangDTO.getIdPemilik());
+        kantorCabangTemp.setPemilik(pemilik);
 
         if (kantorCabangDTO.getArea() != null && !kantorCabangDTO.getArea().equals("")) {
             kantorCabangTemp.setArea(kantorCabangDTO.getArea());
@@ -167,14 +138,7 @@ public class KantorCabangRestController {
     ) {
         BaseResponse<KantorCabang> response = new BaseResponse<>();
 
-        KantorCabang kantorCabang;
-        try {
-            kantorCabang = kantorCabangRestService.getById(kantorCabangDTO.getId());
-        } catch (NoSuchElementException | NullPointerException e) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Kantor Cabang dengan ID " + kantorCabangDTO.getId() + " tidak ditemukan!"
-            );
-        }
+        KantorCabang kantorCabang = kantorCabangRestService.validateExistById(kantorCabangDTO.getId());
 
         if (kantorCabangDTO.getNamaKantorCabang() != null && !kantorCabangDTO.getNamaKantorCabang().equals("")) {
             kantorCabang.setNamaKantor(kantorCabangDTO.getNamaKantorCabang());
@@ -214,14 +178,8 @@ public class KantorCabangRestController {
             );
         }
 
-        try {
-            Employee employee = employeeRestService.getById(kantorCabangDTO.getIdPemilik());
-            kantorCabang.setPemilik(employee);
-        } catch (NoSuchElementException | NullPointerException e) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Employee dengan ID " + kantorCabangDTO.getIdPemilik() + " tidak ditemukan!"
-            );
-        }
+        Employee employee = employeeRestService.validateEmployeeExistById(kantorCabangDTO.getIdPemilik());
+        kantorCabang.setPemilik(employee);
 
         response.setStatus(200);
         response.setMessage("success");
@@ -241,18 +199,10 @@ public class KantorCabangRestController {
     ) {
         BaseResponse<String> response = new BaseResponse<>();
 
-        KantorCabang kantorCabang;
-        try {
-            kantorCabang = kantorCabangRestService.getById(kantorCabangDTO.getId());
-        } catch (NoSuchElementException | NullPointerException e) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Kantor Cabang dengan ID " + kantorCabangDTO.getId() + " tidak ditemukan!"
-            );
-        }
+        KantorCabang kantorCabang = kantorCabangRestService.validateExistById(kantorCabangDTO.getId());
 
         response.setStatus(200);
         response.setMessage("success");
-       // kantorCabangRestService.hapusKantorCabang(kantorCabang.getIdKantor());
 
         try {
             kantorCabangRestService.hapusKantorCabang(kantorCabang.getIdKantor());

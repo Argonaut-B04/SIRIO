@@ -6,6 +6,7 @@ import java.util.List;
 public class RekomendasiDTO {
     private Integer id;
     private Integer idPembuat;
+    private Integer idHasilPemeriksaan;
     private String keterangan;
     private String tenggatWaktu;
     private LocalDate tenggatWaktuDate;
@@ -37,6 +38,14 @@ public class RekomendasiDTO {
 
     public void setIdPembuat(Integer idPembuat) {
         this.idPembuat = idPembuat;
+    }
+
+    public Integer getIdHasilPemeriksaan() {
+        return idHasilPemeriksaan;
+    }
+
+    public void setIdHasilPemeriksaan(Integer idHasilPemeriksaan) {
+        this.idHasilPemeriksaan = idHasilPemeriksaan;
     }
 
     public String getKeterangan() {

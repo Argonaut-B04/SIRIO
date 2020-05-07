@@ -3,7 +3,6 @@ import SirioComponentHeader from '../Header/SirioComponentHeader';
 import BootstrapTable from "react-bootstrap-table-next";
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
-import overlayFactory from 'react-bootstrap-table2-overlay';
 import ComponentWrapper from '../../Layout/ComponentWrapper';
 import classes from './SirioTable.module.css';
 import SirioButton from "../Button/SirioButton";
@@ -80,8 +79,10 @@ export default class SirioTable extends Component {
                                 type="button"
                                 onClick={() => onSizePerPageChange(option.page)}
                                 classes={classes.sizeperpage}
+                                tooltip={"Tampilkan " + option.text + " data"}
                             >
                                 {option.text}
+                                <br /><small>size</small>
                             </SirioButton>
                         );
                     })
@@ -107,19 +108,6 @@ export default class SirioTable extends Component {
             pageButtonRenderer: this.pageButtonRenderer
         })
 
-    // Overlay adalah animasi singkat yang ditampilkan pada tabel ketika isi tabel sedang dirender
-    overlay = overlayFactory({
-        spinner: true,
-        styles: {
-            overlay: (base) => (
-                {
-                    ...base,
-                    background: 'rgba(255, 0, 0, 0.5)'
-                }
-            )
-        }
-    })
-
     renderRowNumber(pageNum, pageSize) {
         this.setState({
             pageNum: pageNum,
@@ -135,6 +123,7 @@ export default class SirioTable extends Component {
         dataField: 'noData',
         text: 'NO',
         isDummyField: true,
+        editable: false,
         searchable: false,
         classes: [classes.rowNumber, "d-none d-sm-table-cell"].join(" "),
         headerClasses: [classes.colheader, "d-none d-sm-table-cell"].join(" "),
@@ -146,7 +135,7 @@ export default class SirioTable extends Component {
 
     // Fungsi render SirioTable
     render() {
-        const { columns, props, pagination, overlay } = this;
+        const { columns, props, pagination } = this;
         const { noHeader, customHeader, leftSearch, headerButton, title, subtitle, betweenTitleSubtitle, id, data, columnsDefinition, includeSearchBar, cellEdit, defaultSorted, indication, footerContent } = props;
         const { SearchBar } = Search;
 
@@ -197,7 +186,6 @@ export default class SirioTable extends Component {
                                         defaultSorted={defaultSorted}
                                         noDataIndication={indication || "No Data"}
                                         pagination={pagination}
-                                        overlay={overlay}
                                         classes="table-responsive-lg"
                                     />
                                 </div>

@@ -123,24 +123,26 @@ class HasilPemeriksaanFormTambah extends React.Component {
     async renderRisikoKategori12() {
         const response = await RisikoService.getAll();
 
+        console.log(response.data.result)
+
         const risikoKategori1 = response.data.result
-            .filter(risiko => risiko.risikoKategori === 1)
+            .filter(risiko => risiko.kategori === 1)
             .map(risiko => {
                 return (
                     {
-                        label: risiko.namaRisiko,
-                        value: risiko.idRisiko
+                        label: risiko.nama,
+                        value: risiko.id
                     }
                 )
             });
 
         const risikoKategori2 = response.data.result
-            .filter(risiko => risiko.risikoKategori === 2)
+            .filter(risiko => risiko.kategori === 2)
             .map(risiko => {
                 return (
                     {
-                        label: risiko.namaRisiko,
-                        value: risiko.idRisiko
+                        label: risiko.nama,
+                        value: risiko.id
                     }
                 )
             });
@@ -206,6 +208,8 @@ class HasilPemeriksaanFormTambah extends React.Component {
             )}
             </p>;
 
+        console.log(histori)
+
         return (
             <SirioConfirmButton
                 purple recommended
@@ -213,7 +217,6 @@ class HasilPemeriksaanFormTambah extends React.Component {
                 modalTitle= "Riwayat Temuan Risiko"
                 modalDesc={histori}
                 customConfirmText=" "
-                closeOnConfirm
                 confirmDisable
             >
                 Riwayat Temuan
@@ -442,6 +445,7 @@ class HasilPemeriksaanFormTambah extends React.Component {
     }
 
     handleSelectChangeRisiko(name, event) {
+        console.log(this.state.daftarRisikoKategori1)
         const risiko1 = this.state.daftarRisikoKategori1;
         const risiko2 = this.state.daftarRisikoKategori2;
         if (event.value === "1") {

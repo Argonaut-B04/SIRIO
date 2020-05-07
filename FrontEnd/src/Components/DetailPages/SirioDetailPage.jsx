@@ -7,14 +7,24 @@ class SirioDetailPage extends Component {
     render() {
         const { noBack, link, title, data, subButton } = this.props;
         const { headerWrapper, logoImage, rowItem, toolkitWrapper } = classes;
+        var backer;
+        if (link) {
+            backer =
+                <a href={'/' + link}>
+                    <img src={process.env.PUBLIC_URL + '/backLogo.png'} className={logoImage} alt="Back Logo" data-tip="Kembali" />
+                </a>
+                ;
+        } else {
+            backer =
+                <div onClick={() => window.history.back()}>
+                    <img src={process.env.PUBLIC_URL + '/backLogo.png'} className={logoImage} alt="Back Logo" data-tip="Kembali" />
+                </div>
+                ;
+        }
         return (
             <div>
                 <div className={headerWrapper}>
-                    {!noBack &&
-                        <a href={'/' + link}>
-                            <img src={process.env.PUBLIC_URL + '/backLogo.png'} className={logoImage} alt="Back Logo" />
-                        </a>
-                    }
+                    {!noBack && backer}
                     <h2 className={classes.title}>
                         {title}
                     </h2>
@@ -24,8 +34,12 @@ class SirioDetailPage extends Component {
                         <tbody>
                             {Object.keys(data).map((key, i) =>
                                 <tr key={i}>
-                                    <td className={rowItem}>{key}</td>
-                                    <td className={rowItem}>{data[key]}</td>
+                                    <td className={rowItem} key={1}>{key}</td>
+                                    <td className={rowItem} key={2}>
+                                        <div className="w-100">
+                                            {data[key]}
+                                        </div>
+                                    </td>
                                 </tr>
                             )}
                         </tbody>

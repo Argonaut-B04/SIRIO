@@ -16,6 +16,7 @@ export default class ManagerOperationalSideNav extends Component {
                         konfigurasi
                     ]
                 }
+                {...this.props}
             />
         );
     }

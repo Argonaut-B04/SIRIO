@@ -43,9 +43,9 @@ class TabelKantorCabang extends React.Component {
     }
 
     auditFormatter(kunjunganAudit){
-        if (kunjunganAudit == false){
+        if (kunjunganAudit === false){
             return "Belum Pernah"
-        }else if (kunjunganAudit == true){
+        }else if (kunjunganAudit === true){
             return "Sudah Pernah"
         }
     }

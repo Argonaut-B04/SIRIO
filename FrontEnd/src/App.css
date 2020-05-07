@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css?family=Nunito:600,700&display=swap');
 * {
-    transition: 0.2s ease-in-out;
-    transition-property: background-color, color, width, height;
+    transition: 0.3s ease-in-out;
+    transition-property: background-color, color, width, height, opacity, display, margin, left, top, bottom, right;
 }
 
 a {
@@ -75,4 +75,81 @@ tr {
     font-weight: normal;
     font-size: 14px;
     height: 30px;
+}
+
+.react-datepicker__header {
+    background-color: white !important;
+    border-bottom: 1px dashed #aeaeae;
+}
+
+.react-datepicker__day--selected {
+    border-radius: 100%;
+    background-color: #7F3F98;
+}
+
+.react-datepicker__day--selected:hover {
+    border-radius: 100%;
+    background-color: #7F3F98;
+}
+
+.react-datepicker__day:focus {
+    outline: none;
+}
+
+.react-datepicker__day--outside-month{
+    opacity: 0.8;
+}
+
+.react-datepicker__day {
+    border-radius: 100%;
+}
+
+.react-datepicker__day:hover {
+    border-radius: 100%;
+    background-color: rgba(127, 63, 152, 0.781);
+    color: white;
+}
+
+.react-datepicker__day--disabled:hover {
+    border-radius: 0;
+    background-color: transparent;
+    color: white;
+}
+
+.react-datepicker__navigation {
+    border: none;
+    box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.1);
+    width: 20px;
+    height: 20px;
+    border-radius: 20%;
+    color: black;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.react-datepicker__navigation--next {
+    background-image: url(/angle_right.png);
+    background-size: 15px;
+}
+
+.react-datepicker__navigation--previous {
+    background-image: url(/angle_left.png);
+    background-size: 15px;
+}
+
+.react-datepicker__navigation:focus {
+    outline: none;
+}
+
+.react-datepicker__current-month {
+    font-family: Nunito;
+}
+
+.react-datepicker__day-name {
+    opacity: 0.7;
+}
+
+.sirio_tooltip {
+    text-align: center;
+    max-width: 300px;
 }
