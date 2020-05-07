@@ -146,7 +146,7 @@ class FormRisikoUbah extends React.Component {
         var errorDU;
         if (fokusDU === null) {
             submitable = true;
-        } else if (fokusDU != null || fokusDU !== "" || fokusDU.length > 1) {
+        } else if (fokusDU !== null || fokusDU !== "" || fokusDU.length > 1) {
             if (fokusDU.length > 500) {
                 submitable = false;
                 errorDU = "Detail Uraian Risiko terlalu panjang!";
@@ -300,7 +300,7 @@ class FormRisikoUbah extends React.Component {
                     optionList: this.state.sopOptionList
                 }, {
                     label: "Detail Uraian Risiko",
-                    disabled: this.state.kategori != 3,
+                    disabled: this.state.kategori !== 3,
                     handleChange: this.handleChange,
                     validation: this.state.errorDU,
                     // disabled: {this.state.kategori != 3 ? disabled : enabled},
@@ -310,7 +310,7 @@ class FormRisikoUbah extends React.Component {
                     placeholder: "Masukan detail uraian risiko"
                 }, {
                     label: "Metodologi",
-                    disabled: this.state.kategori != 3,
+                    disabled: this.state.kategori !== 3,
                     handleChange: this.handleChange,
                     // validation: this.state.errorDU,
                     type: "text",
@@ -319,7 +319,7 @@ class FormRisikoUbah extends React.Component {
                     placeholder: "Masukan metodologi risiko"
                 }, {
                     label: "Deskripsi",
-                    disabled: this.state.kategori != 3,
+                    disabled: this.state.kategori !== 3,
                     handleChange: this.handleChange,
                     // validation: this.state.errorDU,
                     type: "textarea",
@@ -328,7 +328,7 @@ class FormRisikoUbah extends React.Component {
                     placeholder: "Masukan deskripsi risiko"
                 }, {
                     label: "Ketentuan Sampel",
-                    disabled: this.state.kategori != 3,
+                    disabled: this.state.kategori !== 3,
                     handleChange: this.handleChange,
                     // validation: this.state.errorDU,
                     type: "textarea",
