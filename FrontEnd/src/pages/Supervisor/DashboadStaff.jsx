@@ -5,7 +5,7 @@ import { withRouter } from "react-router-dom";
 import SirioBarChart from "../../Components/Chart/SirioBarChart";
 import SirioDashboardBox from "../../Components/Box/SirioDashboardBox";
 import DashboardStaffService from '../../Services/DashboardStaffService';
-import { NavLink, Redirect } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 
 /**
  * Controller untuk menampilkan halaman utama
