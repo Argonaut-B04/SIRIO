@@ -79,7 +79,7 @@ export const dashboardEmployee = {
 
 export const dashboardKantorCabang = {
     link: "/dashboard-kantor",
-    title: "Dashboard Kantor Cabang",
+    title: "Dashboard",
 }
 
 export const login = {

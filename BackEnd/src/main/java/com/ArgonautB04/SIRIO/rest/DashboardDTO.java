@@ -9,6 +9,9 @@ public class DashboardDTO {
     private Integer jumlahRekomendasiOverdue;
     private Integer jumlahRekomendasiImplemented;
     private Integer jumlahRekomendasiNotImplemented;
+    private Float persenRekomendasiOverdue;
+    private Float persenRekomendasiImplemented;
+    private Float persenRekomendasiNotImplemented;
 
     public Integer getId() {
         return id;
@@ -72,5 +75,29 @@ public class DashboardDTO {
 
     public void setJumlahRekomendasiNotImplemented(Integer jumlahRekomendasiNotImplemented) {
         this.jumlahRekomendasiNotImplemented = jumlahRekomendasiNotImplemented;
+    }
+
+    public Float getPersenRekomendasiOverdue() {
+        return persenRekomendasiOverdue;
+    }
+
+    public void setPersenRekomendasiOverdue(Float persenRekomendasiOverdue) {
+        this.persenRekomendasiOverdue = persenRekomendasiOverdue;
+    }
+
+    public Float getPersenRekomendasiImplemented() {
+        return persenRekomendasiImplemented;
+    }
+
+    public void setPersenRekomendasiImplemented(Float persenRekomendasiImplemented) {
+        this.persenRekomendasiImplemented = persenRekomendasiImplemented;
+    }
+
+    public Float getPersenRekomendasiNotImplemented() {
+        return persenRekomendasiNotImplemented;
+    }
+
+    public void setPersenRekomendasiNotImplemented(Float persenRekomendasiNotImplemented) {
+        this.persenRekomendasiNotImplemented = persenRekomendasiNotImplemented;
     }
 }

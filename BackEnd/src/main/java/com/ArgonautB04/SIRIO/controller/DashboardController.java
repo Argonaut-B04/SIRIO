@@ -54,7 +54,7 @@ public class DashboardController {
      * @return komponen dashboard (rekomendasi, temuan risiko, pemeriksaan)
      */
     @GetMapping("/getAll")
-    private BaseResponse<List<DashboardDTO>> getAllDashboardComponent(
+    private BaseResponse<DashboardDTO> getAllDashboardComponent(
             Principal principal
     ) {
         Employee employee = employeeRestService.validateEmployeeExistByPrincipal(principal);
@@ -81,7 +81,6 @@ public class DashboardController {
             daftarTugasPemeriksaan = tugasPemeriksaanRestService.getAll();
         }
 
-        List<DashboardDTO> resultDTO = new ArrayList<>();
         DashboardDTO dashboardDTO = new DashboardDTO();
         dashboardDTO.setJumlahRekomendasi(daftarRekomendasi.size());
         dashboardDTO.setJumlahTemuan(daftarTemuanRisiko.size());
@@ -111,14 +110,22 @@ public class DashboardController {
                 }
             }
         }
-        dashboardDTO.setJumlahRekomendasiOverdue(listRekomendasiOverdue.size()
-                - (listRekomendasiNotImplemented.size() + listRekomendasiImplemented.size()));
-        dashboardDTO.setJumlahRekomendasiImplemented(listRekomendasiImplemented.size());
-        dashboardDTO.setJumlahRekomendasiNotImplemented(listRekomendasiNotImplemented.size()
-                + (daftarRekomendasi.size() - buktiList.size()));
 
-        resultDTO.add(dashboardDTO);
-        return new BaseResponse<>(200, "success", resultDTO);
+        int rekomendasiOverdue = listRekomendasiOverdue.size()
+                - (listRekomendasiNotImplemented.size() + listRekomendasiImplemented.size());
+        int rekomendasiImplemented = listRekomendasiImplemented.size();
+        int rekomendasiNotImplemented = listRekomendasiNotImplemented.size()
+                + (daftarRekomendasi.size() - buktiList.size());
+
+        dashboardDTO.setJumlahRekomendasiOverdue(rekomendasiOverdue);
+        dashboardDTO.setJumlahRekomendasiImplemented(rekomendasiImplemented);
+        dashboardDTO.setJumlahRekomendasiNotImplemented(rekomendasiNotImplemented);
+
+        dashboardDTO.setPersenRekomendasiOverdue((float) rekomendasiOverdue*100/daftarRekomendasi.size());
+        dashboardDTO.setPersenRekomendasiImplemented((float) rekomendasiImplemented*100/daftarRekomendasi.size());
+        dashboardDTO.setPersenRekomendasiNotImplemented((float) rekomendasiNotImplemented*100/daftarRekomendasi.size());
+
+        return new BaseResponse<>(200, "success", dashboardDTO);
     }
 
 }

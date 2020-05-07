@@ -53,6 +53,7 @@ class DetailBuktiPelaksanaan extends React.Component {
     }
 
     data() {
+        console.log(this.state.buktiPelaksanaan);
         return {
             "Keterangan:": this.state.buktiPelaksanaan.keterangan,
             "Lampiran:": this.lampiranFormater(this.state.buktiPelaksanaan.lampiran),
@@ -163,7 +164,7 @@ class DetailBuktiPelaksanaan extends React.Component {
                 return ("")
             }
         }
-    }
+    };
 
     render() {
         return (
