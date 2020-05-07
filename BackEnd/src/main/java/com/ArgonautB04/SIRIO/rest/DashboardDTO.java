@@ -5,11 +5,16 @@ import java.util.List;
 public class DashboardDTO {
 
     private Integer id;
+    private List<Integer> listTemuan;
     private Integer jumlahTemuan;
     private Integer jumlahRekomendasi;
-    private Integer jumlahRekomendasiDiimplementasi;
-    private Integer jumlahRekomendasiBelumDiimplementasi;
-    private Integer jumlahRekomendasiOverdue;
+    private List<Integer> listRekomendasiDiimplementasi;
+    private Float jumlahRekomendasiDiimplementasi;
+    private List<Integer> listRekomendasiBelumDiimplementasi;
+    private Float jumlahRekomendasiBelumDiimplementasi;
+    private List<Integer> listRekomendasiOverdue;
+    private Float jumlahRekomendasiOverdue;
+    private List<String> listMonth;
 
     public Integer getId() {
         return id;
@@ -17,6 +22,14 @@ public class DashboardDTO {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public List<Integer> getListTemuan() {
+        return listTemuan;
+    }
+
+    public void setListTemuan(List<Integer> listTemuan) {
+        this.listTemuan = listTemuan;
     }
 
     public Integer getJumlahTemuan() {
@@ -35,27 +48,59 @@ public class DashboardDTO {
         this.jumlahRekomendasi = jumlahRekomendasi;
     }
 
-    public Integer getJumlahRekomendasiDiimplementasi() {
+    public List<Integer> getListRekomendasiDiimplementasi() {
+        return listRekomendasiDiimplementasi;
+    }
+
+    public void setListRekomendasiDiimplementasi(List<Integer> listRekomendasiDiimplementasi) {
+        this.listRekomendasiDiimplementasi = listRekomendasiDiimplementasi;
+    }
+
+    public Float getJumlahRekomendasiDiimplementasi() {
         return jumlahRekomendasiDiimplementasi;
     }
 
-    public void setJumlahRekomendasiDiimplementasi(Integer jumlahRekomendasiDiimplementasi) {
+    public void setJumlahRekomendasiDiimplementasi(Float jumlahRekomendasiDiimplementasi) {
         this.jumlahRekomendasiDiimplementasi = jumlahRekomendasiDiimplementasi;
     }
 
-    public Integer getJumlahRekomendasiBelumDiimplementasi() {
+    public List<Integer> getListRekomendasiBelumDiimplementasi() {
+        return listRekomendasiBelumDiimplementasi;
+    }
+
+    public void setListRekomendasiBelumDiimplementasi(List<Integer> listRekomendasiBelumDiimplementasi) {
+        this.listRekomendasiBelumDiimplementasi = listRekomendasiBelumDiimplementasi;
+    }
+
+    public Float getJumlahRekomendasiBelumDiimplementasi() {
         return jumlahRekomendasiBelumDiimplementasi;
     }
 
-    public void setJumlahRekomendasiBelumDiimplementasi(Integer jumlahRekomendasiBelumDiimplementasi) {
+    public void setJumlahRekomendasiBelumDiimplementasi(Float jumlahRekomendasiBelumDiimplementasi) {
         this.jumlahRekomendasiBelumDiimplementasi = jumlahRekomendasiBelumDiimplementasi;
     }
 
-    public Integer getJumlahRekomendasiOverdue() {
+    public List<Integer> getListRekomendasiOverdue() {
+        return listRekomendasiOverdue;
+    }
+
+    public void setListRekomendasiOverdue(List<Integer> listRekomendasiOverdue) {
+        this.listRekomendasiOverdue = listRekomendasiOverdue;
+    }
+
+    public Float getJumlahRekomendasiOverdue() {
         return jumlahRekomendasiOverdue;
     }
 
-    public void setJumlahRekomendasiOverdue(Integer jumlahRekomendasiOverdue) {
+    public void setJumlahRekomendasiOverdue(Float jumlahRekomendasiOverdue) {
         this.jumlahRekomendasiOverdue = jumlahRekomendasiOverdue;
+    }
+
+    public List<String> getListMonth() {
+        return listMonth;
+    }
+
+    public void setListMonth(List<String> listMonth) {
+        this.listMonth = listMonth;
     }
 }

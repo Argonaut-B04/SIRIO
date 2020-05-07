@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -45,6 +47,40 @@ public class TemuanRisikoRestServiceImpl implements TemuanRisikoRestService {
     public List<TemuanRisiko> getAll() {
         return temuanRisikoDB.findAll();
     }
+
+//    @Override
+//    public List<Integer> getAllByMonth() {
+//        List<TemuanRisiko> impl = getAll();
+//        List<Integer> intImpl = new ArrayList<>();
+//        int count6 = 0;
+//        int count5 = 0;
+//        int count4 = 0;
+//        int count3 = 0;
+//        int count2 = 0;
+//        int count1 = 0;
+//        for (int i=0;i<impl.size();i++) {
+//            if (impl.get(i).getTenggatWaktu().getMonth().equals(LocalDate.now().getMonth())) {
+//                count6++;
+//            } else if (impl.get(i).getTenggatWaktu().getMonth().equals(LocalDate.now().minusMonths(1).getMonth())) {
+//                count5++;
+//            } else if (impl.get(i).getTenggatWaktu().getMonth().equals(LocalDate.now().minusMonths(2).getMonth())) {
+//                count4++;
+//            } else if (impl.get(i).getTenggatWaktu().getMonth().equals(LocalDate.now().minusMonths(3).getMonth())) {
+//                count3++;
+//            } else if (impl.get(i).getTenggatWaktu().getMonth().equals(LocalDate.now().minusMonths(4).getMonth())) {
+//                count2++;
+//            } else if (impl.get(i).getTenggatWaktu().getMonth().equals(LocalDate.now().minusMonths(5).getMonth())) {
+//                count1++;
+//            }
+//        }
+//        intImpl.add(count1);
+//        intImpl.add(count2);
+//        intImpl.add(count3);
+//        intImpl.add(count4);
+//        intImpl.add(count5);
+//        intImpl.add(count6);
+//        return intImpl;
+//    }
 
     @Override
     public List<TemuanRisiko> getByKomponenPemeriksaan(KomponenPemeriksaan komponenPemeriksaan) {

@@ -56,14 +56,25 @@ public class DashboardStaffController {
         employeeRestService.validateRolePermission(pengelola, "akses dashboard staff");
         BaseResponse<DashboardDTO> response = new BaseResponse<>();
         DashboardDTO result = new DashboardDTO();
+        result.setListMonth(rekomendasiRestService.getListMonth());
+
         Integer jumlahRekomendasi = rekomendasiRestService.getAll().size();
         Integer jumlahTemuan = temuanRisikoRestService.getAll().size();
-        Integer jumlahRekomendasiBelumDiimplementasi = rekomendasiRestService.getRekomendasiBelumDiimplementasi().size();
-        Integer jumlahRekomendasiOverdue = rekomendasiRestService.getRekomendasiOverdue().size();
-        Integer jumlahRekomendasiDiimplementasi = jumlahRekomendasi - jumlahRekomendasiBelumDiimplementasi - jumlahRekomendasiOverdue;
+        Float persenRekomendasi = (float)jumlahRekomendasi/(float)jumlahRekomendasi*(float)100;
+//        List<Integer> jumlahTemuan = temuanRisikoRestService.getAll().size();
+        List<Integer> listRekomendasiOverdue = rekomendasiRestService.getRekomendasiOverdueByMonth();
+        Float jumlahRekomendasiOverdue = (float)rekomendasiRestService.getRekomendasiOverdue().size()/(float)jumlahRekomendasi*(float)100;
+        List<Integer> listRekomendasiDiimplementasi = rekomendasiRestService.getRekomendasiDiimplementasiByMonth();
+        Float jumlahRekomendasiDiimplementasi = (float)rekomendasiRestService.getRekomendasiDiimplementasi().size()/(float)jumlahRekomendasi*(float)100;
+        List<Integer> listRekomendasiBelumDiimplementasi = rekomendasiRestService.getRekomendasiBelumDiimplementasiByMonth();
+        Float jumlahRekomendasiBelumDiimplementasi = persenRekomendasi - jumlahRekomendasiDiimplementasi - jumlahRekomendasiOverdue;
+
         result.setJumlahRekomendasiBelumDiimplementasi(jumlahRekomendasiBelumDiimplementasi);
+        result.setListRekomendasiBelumDiimplementasi(listRekomendasiBelumDiimplementasi);
         result.setJumlahRekomendasiDiimplementasi(jumlahRekomendasiDiimplementasi);
+        result.setListRekomendasiDiimplementasi(listRekomendasiDiimplementasi);
         result.setJumlahRekomendasiOverdue(jumlahRekomendasiOverdue);
+        result.setListRekomendasiOverdue(listRekomendasiOverdue);
         result.setJumlahRekomendasi(jumlahRekomendasi);
         result.setJumlahTemuan(jumlahTemuan);
         response.setStatus(200);

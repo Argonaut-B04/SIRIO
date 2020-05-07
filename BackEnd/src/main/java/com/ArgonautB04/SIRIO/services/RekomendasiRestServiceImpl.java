@@ -50,14 +50,84 @@ public class RekomendasiRestServiceImpl implements RekomendasiRestService {
     }
 
     @Override
-    public List<Rekomendasi> getRekomendasiBelumDiimplementasi() {
-        List<Rekomendasi> belumImpl = new ArrayList<>();
-        for (Rekomendasi r : getAll()) {
-            if (r.getBuktiPelaksanaan() != null && r.getBuktiPelaksanaan().getStatusBuktiPelaksanaan().equals(1)) {
-                belumImpl.add(r);
+    public List<Integer> getAllByMonth() {
+        List<Rekomendasi> impl = getAll();
+        List<Integer> intImpl = new ArrayList<>();
+        int count6 = 0;
+        int count5 = 0;
+        int count4 = 0;
+        int count3 = 0;
+        int count2 = 0;
+        int count1 = 0;
+        for (int i=0;i<impl.size();i++) {
+            if (impl.get(i).getTenggatWaktu() != null) {
+                if (impl.get(i).getTenggatWaktu().getMonth().equals(LocalDate.now().getMonth())) {
+                    count6++;
+                } else if (impl.get(i).getTenggatWaktu().getMonth().equals(LocalDate.now().minusMonths(1).getMonth())) {
+                    count5++;
+                } else if (impl.get(i).getTenggatWaktu().getMonth().equals(LocalDate.now().minusMonths(2).getMonth())) {
+                    count4++;
+                } else if (impl.get(i).getTenggatWaktu().getMonth().equals(LocalDate.now().minusMonths(3).getMonth())) {
+                    count3++;
+                } else if (impl.get(i).getTenggatWaktu().getMonth().equals(LocalDate.now().minusMonths(4).getMonth())) {
+                    count2++;
+                } else if (impl.get(i).getTenggatWaktu().getMonth().equals(LocalDate.now().minusMonths(5).getMonth())) {
+                    count1++;
+                }
             }
         }
-        return belumImpl;
+        intImpl.add(count1);
+        intImpl.add(count2);
+        intImpl.add(count3);
+        intImpl.add(count4);
+        intImpl.add(count5);
+        intImpl.add(count6);
+        return intImpl;
+    }
+
+    @Override
+    public List<Integer> getRekomendasiDiimplementasiByMonth() {
+        List<Rekomendasi> impl = getRekomendasiDiimplementasi();
+        List<Integer> intImpl = new ArrayList<>();
+        int count6 = 0;
+        int count5 = 0;
+        int count4 = 0;
+        int count3 = 0;
+        int count2 = 0;
+        int count1 = 0;
+        for (int i=0;i<impl.size();i++) {
+            if (impl.get(i).getTenggatWaktu().getMonth().equals(LocalDate.now().getMonth())) {
+                count6++;
+            } else if (impl.get(i).getTenggatWaktu().getMonth().equals(LocalDate.now().minusMonths(1).getMonth())) {
+                count5++;
+            } else if (impl.get(i).getTenggatWaktu().getMonth().equals(LocalDate.now().minusMonths(2).getMonth())) {
+                count4++;
+            } else if (impl.get(i).getTenggatWaktu().getMonth().equals(LocalDate.now().minusMonths(3).getMonth())) {
+                count3++;
+            } else if (impl.get(i).getTenggatWaktu().getMonth().equals(LocalDate.now().minusMonths(4).getMonth())) {
+                count2++;
+            } else if (impl.get(i).getTenggatWaktu().getMonth().equals(LocalDate.now().minusMonths(5).getMonth())) {
+                count1++;
+            }
+        }
+        intImpl.add(count1);
+        intImpl.add(count2);
+        intImpl.add(count3);
+        intImpl.add(count4);
+        intImpl.add(count5);
+        intImpl.add(count6);
+        return intImpl;
+    }
+
+    @Override
+    public List<Rekomendasi> getRekomendasiDiimplementasi() {
+        List<Rekomendasi> impl = new ArrayList<>();
+        for (Rekomendasi r : getAll()) {
+            if (r.getStatusRekomendasi().getIdStatusRekomendasi() == 7) {
+                impl.add(r);
+            }
+        }
+        return impl;
     }
 
     @Override
@@ -65,11 +135,66 @@ public class RekomendasiRestServiceImpl implements RekomendasiRestService {
         List<Rekomendasi> overdue = new ArrayList<>();
         for (Rekomendasi r : getAll()) {
             if (r.getTenggatWaktu() != null && LocalDate.now().isAfter(r.getTenggatWaktu()) && r.getStatusRekomendasi() != null
-                    && !r.getStatusRekomendasi().equals(7)) {
+                    && r.getStatusRekomendasi().getIdStatusRekomendasi() == 6){
                 overdue.add(r);
             }
         }
         return overdue;
+    }
+
+    @Override
+    public List<Integer> getRekomendasiOverdueByMonth() {
+        List<Rekomendasi> overdue = getRekomendasiOverdue();
+        List<Integer> intOverdue = new ArrayList<>();
+        int count6 = 0;
+        int count5 = 0;
+        int count4 = 0;
+        int count3 = 0;
+        int count2 = 0;
+        int count1 = 0;
+        for (int i=0;i<overdue.size();i++) {
+            if (overdue.get(i).getTenggatWaktu().getMonth().equals(LocalDate.now().getMonth())) {
+                count6++;
+            } else if (overdue.get(i).getTenggatWaktu().getMonth().equals(LocalDate.now().minusMonths(1).getMonth())) {
+                count5++;
+            } else if (overdue.get(i).getTenggatWaktu().getMonth().equals(LocalDate.now().minusMonths(2).getMonth())) {
+                count4++;
+            } else if (overdue.get(i).getTenggatWaktu().getMonth().equals(LocalDate.now().minusMonths(3).getMonth())) {
+                count3++;
+            } else if (overdue.get(i).getTenggatWaktu().getMonth().equals(LocalDate.now().minusMonths(4).getMonth())) {
+                count2++;
+            } else if (overdue.get(i).getTenggatWaktu().getMonth().equals(LocalDate.now().minusMonths(5).getMonth())) {
+                count1++;
+            }
+        }
+        intOverdue.add(count1);
+        intOverdue.add(count2);
+        intOverdue.add(count3);
+        intOverdue.add(count4);
+        intOverdue.add(count5);
+        intOverdue.add(count6);
+        return intOverdue;
+    }
+
+    @Override
+    public List<Integer> getRekomendasiBelumDiimplementasiByMonth() {
+        List<Integer> impl = getRekomendasiDiimplementasiByMonth();
+        List<Integer> overdue = getRekomendasiOverdueByMonth();
+        List<Integer> rekomendasi = getAllByMonth();
+        List<Integer> belumImpl = new ArrayList<>();
+        for (int i=0; i<rekomendasi.size();i++) {
+            belumImpl.add(rekomendasi.get(i) - impl.get(i) - overdue.get(i));
+        }
+        return belumImpl;
+    }
+
+    @Override
+    public List<String> getListMonth() {
+        List<String> months = new ArrayList<>(6);
+        for (int i=5;i>=0;i--) {
+            months.add(LocalDate.now().minusMonths(i).getMonth() + "\n" + LocalDate.now().minusMonths(i).getYear());
+        }
+        return months;
     }
 
     @Override
