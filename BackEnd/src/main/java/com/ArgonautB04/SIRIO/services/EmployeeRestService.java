@@ -14,6 +14,8 @@ public interface EmployeeRestService {
 
     Optional<Employee> getByUsername(String username);
 
+    Optional<Employee> getByEmail(String email);
+
     List<Employee> getAll();
 
     Employee ubahEmployee(int idEmployee, Employee employee);
@@ -26,9 +28,14 @@ public interface EmployeeRestService {
 
     Employee validateEmployeeExistByPrincipal(Principal principal);
 
+    Employee validateEmployeeExistByUsername(String username);
+
+
     Employee validateEmployeeExistById(Integer id);
 
     void validateRolePermission(Employee employee, String requestedPermissions);
 
     void simpanPerubahan(Employee employee);
+
+    void changePassword(String username, String newPassword);
 }

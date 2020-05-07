@@ -19,8 +19,14 @@ public class KomponenPemeriksaan implements Serializable {
     @Column
     private Integer jumlahSampel;
 
-    @Size(max = 125)
     @Column
+    private Integer jumlahPopulasi;
+
+    @Column
+    private Integer jumlahSampelError;
+
+    @Lob
+    @Column(columnDefinition = "TEXT")
     private String keteranganSampel;
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -47,6 +53,22 @@ public class KomponenPemeriksaan implements Serializable {
 
     public void setIdKomponenPemeriksaan(Integer idKomponenPemeriksaan) {
         this.idKomponenPemeriksaan = idKomponenPemeriksaan;
+    }
+
+    public Integer getJumlahPopulasi() {
+        return jumlahPopulasi;
+    }
+
+    public void setJumlahPopulasi(Integer jumlahPopulasi) {
+        this.jumlahPopulasi = jumlahPopulasi;
+    }
+
+    public Integer getJumlahSampelError() {
+        return jumlahSampelError;
+    }
+
+    public void setJumlahSampelError(Integer jumlahSampelError) {
+        this.jumlahSampelError = jumlahSampelError;
     }
 
     public Integer getJumlahSampel() {

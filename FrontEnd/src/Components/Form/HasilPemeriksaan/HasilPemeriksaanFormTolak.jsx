@@ -1,6 +1,7 @@
 import React from 'react';
 import SirioForm from '../SirioForm';
 import SirioButton from '../../Button/SirioButton';
+import SirioConfirmButton from "../../Button/ActionButton/SirioConfirmButton";
 import HasilPemeriksaanService from '../../../Services/HasilPemeriksaanService';
 import {NavLink, Redirect} from 'react-router-dom';
 import { withRouter } from 'react-router-dom';
@@ -112,7 +113,7 @@ class HasilPemeriksaanFormTolak extends React.Component {
     }
 
     handleSubmit(event) {
-        event.preventDefault();
+        event&&event.preventDefault();
         const persetujuan = {
             id: this.props.location.state.id,
             status: "3",
@@ -147,13 +148,24 @@ class HasilPemeriksaanFormTolak extends React.Component {
     submitButton() {
         return (
             <div>
-                <SirioButton purple
-                             recommended={this.state.submitable}
-                             disabled={!this.state.submitable}
-                             classes="mx-1"
-                             onClick={(event)  => this.handleSubmit(event)}>
+                {/*<SirioButton purple*/}
+                {/*             recommended={this.state.submitable}*/}
+                {/*             disabled={!this.state.submitable}*/}
+                {/*             classes="mx-1"*/}
+                {/*             onClick={(event)  => this.handleSubmit(event)}>*/}
+                {/*    Simpan*/}
+                {/*</SirioButton>*/}
+                <SirioConfirmButton
+                    purple
+                    classes="m-1"
+                    modalTitle="Apakah anda yakin untuk menolak hasil pemeriksaan?"
+                    onConfirm={this.handleSubmit}
+                    customConfirmText="Ya, Tolak"
+                    customCancelText="Batal"
+                    closeOnConfirm
+                >
                     Simpan
-                </SirioButton>
+                </SirioConfirmButton>
                 <NavLink to={{
                     pathname: "/hasil-pemeriksaan/detail",
                     state: {
@@ -179,7 +191,7 @@ class HasilPemeriksaanFormTolak extends React.Component {
                 <SirioForm
                     title="Form Feedback Penolakan"
                     inputDefinition={this.inputDefinition()}
-                    onSubmit={this.handleSubmit}
+                    onSubmit={(event) => event.preventDefault()}
                     submitButton={this.submitButton()}
                 />
             </>

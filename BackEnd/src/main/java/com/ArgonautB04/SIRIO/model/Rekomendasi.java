@@ -20,8 +20,8 @@ public class Rekomendasi implements Serializable {
     private Integer idRekomendasi;
 
     @NotNull
-    @Size(max = 125)
-    @Column(nullable = false)
+    @Lob
+    @Column(columnDefinition = "TEXT", nullable = false)
     private String keterangan;
 
     @DateTimeFormat

@@ -54,6 +54,8 @@ public class KomponenPemeriksaanRestServiceImpl implements KomponenPemeriksaanRe
         target.setRisiko(komponenPemeriksaan.getRisiko());
         target.setKeteranganSampel(komponenPemeriksaan.getKeteranganSampel());
         target.setJumlahSampel(komponenPemeriksaan.getJumlahSampel());
+        target.setJumlahPopulasi(komponenPemeriksaan.getJumlahPopulasi());
+        target.setJumlahSampelError(komponenPemeriksaan.getJumlahSampelError());
         return komponenPemeriksaanDB.save(target);
     }
 

@@ -89,7 +89,7 @@ public class HasilPemeriksaanRestController {
         BaseResponse<List<HasilPemeriksaanDTO>> response = new BaseResponse<>();
         Employee employee = employeeRestService.validateEmployeeExistByPrincipal(principal);
 
-        List<HasilPemeriksaan> daftarHasilPemeriksaan = employee.getRole() == roleRestService.getById(6) ?
+        List<HasilPemeriksaan> daftarHasilPemeriksaan = employee.getRole() == roleRestService.getById(5) ?
                 hasilPemeriksaanRestService.getByDaftarTugasPemeriksaan(
                         tugasPemeriksaanRestService.getByPelaksana(employee)) : hasilPemeriksaanRestService.getAll();
 
@@ -159,6 +159,8 @@ public class HasilPemeriksaanRestController {
                 komponenPemeriksaanDTO.setBobotRiskLevel(komponenPemeriksaan.getRiskLevel().getBobotLevel());
             }
             komponenPemeriksaanDTO.setJumlahSampel(komponenPemeriksaan.getJumlahSampel());
+            komponenPemeriksaanDTO.setJumlahPopulasi(komponenPemeriksaan.getJumlahPopulasi());
+            komponenPemeriksaanDTO.setJumlahSampelError(komponenPemeriksaan.getJumlahSampelError());
             komponenPemeriksaanDTO.setKeteranganSampel(komponenPemeriksaan.getKeteranganSampel());
 
             komponenPemeriksaanDTO.setRisiko(new RisikoDTO());
@@ -244,7 +246,7 @@ public class HasilPemeriksaanRestController {
             );
         }
 
-        if (employee != tugasPemeriksaan.getPelaksana() && employee.getRole() == roleRestService.getById(6))
+        if (employee != tugasPemeriksaan.getPelaksana() && employee.getRole() == roleRestService.getById(5))
             throw new ResponseStatusException(
                     HttpStatus.FORBIDDEN, "Employee dengan ID " + employee.getIdEmployee() +
                     " tidak ditugaskan untuk membuat hasil pemeriksaan ini!"
@@ -293,6 +295,24 @@ public class HasilPemeriksaanRestController {
                     hasilPemeriksaanRestService.hapusHasilPemeriksaan(hasilPemeriksaan.getIdHasilPemeriksaan());
                     throw new ResponseStatusException(
                             HttpStatus.METHOD_NOT_ALLOWED, "Jumlah sampel perlu diisi untuk pengajuan persetujuan Hasil Pemeriksaan!"
+                    );
+                }
+
+                if (komponenPemeriksaanData.getJumlahPopulasi() != null) {
+                    komponenPemeriksaanTemp.setJumlahPopulasi(komponenPemeriksaanData.getJumlahPopulasi());
+                } else if (hasilPemeriksaanDTO.getIdStatus() == 2) {
+                    hasilPemeriksaanRestService.hapusHasilPemeriksaan(hasilPemeriksaan.getIdHasilPemeriksaan());
+                    throw new ResponseStatusException(
+                            HttpStatus.METHOD_NOT_ALLOWED, "Jumlah populasi perlu diisi untuk pengajuan persetujuan Hasil Pemeriksaan!"
+                    );
+                }
+
+                if (komponenPemeriksaanData.getJumlahSampelError() != null) {
+                    komponenPemeriksaanTemp.setJumlahSampelError(komponenPemeriksaanData.getJumlahSampelError());
+                } else if (hasilPemeriksaanDTO.getIdStatus() == 2) {
+                    hasilPemeriksaanRestService.hapusHasilPemeriksaan(hasilPemeriksaan.getIdHasilPemeriksaan());
+                    throw new ResponseStatusException(
+                            HttpStatus.METHOD_NOT_ALLOWED, "Jumlah sampel error perlu diisi untuk pengajuan persetujuan Hasil Pemeriksaan!"
                     );
                 }
 
@@ -359,7 +379,7 @@ public class HasilPemeriksaanRestController {
         }
 
         if (employee != hasilPemeriksaanTemp.getTugasPemeriksaan().getPelaksana() &&
-                employee.getRole() == roleRestService.getById(6))
+                employee.getRole() == roleRestService.getById(5))
             throw new ResponseStatusException(
                     HttpStatus.FORBIDDEN, "Employee dengan ID " + employee.getIdEmployee() +
                     " tidak ditugaskan untuk mengubah hasil pemeriksaan ini!"
@@ -403,6 +423,24 @@ public class HasilPemeriksaanRestController {
                 } else if (hasilPemeriksaanDTO.getIdStatus() == 2 || hasilPemeriksaanDTO.getIdStatus() == 3) {
                     throw new ResponseStatusException(
                             HttpStatus.METHOD_NOT_ALLOWED, "Jumlah sampel perlu diisi untuk pengajuan persetujuan " +
+                            "Hasil Pemeriksaan! Hanya data valid sebelumnya yang berhasil diubah"
+                    );
+                }
+
+                if (komponenPemeriksaanData.getJumlahPopulasi() != null) {
+                    komponenPemeriksaanTemp.setJumlahPopulasi(komponenPemeriksaanData.getJumlahPopulasi());
+                } else if (hasilPemeriksaanDTO.getIdStatus() == 2 || hasilPemeriksaanDTO.getIdStatus() == 3) {
+                    throw new ResponseStatusException(
+                            HttpStatus.METHOD_NOT_ALLOWED, "Jumlah populasi perlu diisi untuk pengajuan persetujuan " +
+                            "Hasil Pemeriksaan! Hanya data valid sebelumnya yang berhasil diubah"
+                    );
+                }
+
+                if (komponenPemeriksaanData.getJumlahSampelError() != null) {
+                    komponenPemeriksaanTemp.setJumlahSampelError(komponenPemeriksaanData.getJumlahSampelError());
+                } else if (hasilPemeriksaanDTO.getIdStatus() == 2 || hasilPemeriksaanDTO.getIdStatus() == 3) {
+                    throw new ResponseStatusException(
+                            HttpStatus.METHOD_NOT_ALLOWED, "Jumlah sampel error perlu diisi untuk pengajuan persetujuan " +
                             "Hasil Pemeriksaan! Hanya data valid sebelumnya yang berhasil diubah"
                     );
                 }
@@ -556,7 +594,7 @@ public class HasilPemeriksaanRestController {
             );
 
         if (employee != hasilPemeriksaan.getTugasPemeriksaan().getPelaksana() &&
-                employee.getRole() == roleRestService.getById(6))
+                employee.getRole() == roleRestService.getById(5))
             throw new ResponseStatusException(
                     HttpStatus.FORBIDDEN, "Employee dengan ID " + employee.getIdEmployee() +
                     " tidak ditugaskan untuk menghapus hasil pemeriksaan ini!"

@@ -164,12 +164,11 @@ class FormHierarkiRisiko extends React.Component {
                 return (
                     <SirioSelect
                         name="parent"
-                        
+
                         handleChange={(name, event) => {
-                            row.parent = event.value;
-                            row.namaParent = event.label;
+                            this.changeParent(row.id, event)
                         }}
-                        value = {row.parent}
+                        value={row.parent}
                         options={optionList}
                     />
                 )
@@ -177,6 +176,24 @@ class FormHierarkiRisiko extends React.Component {
         } else {
             return row.namaParent
         }
+    }
+
+    changeParent(id, event) {
+        let rowListLocal = [...this.state.rowList];
+        rowListLocal = rowListLocal.map((item) => {
+            if (item.id === id) {
+                return {
+                    ...item,
+                    parent: event.value,
+                    namaParent: event.label
+                }
+            }
+            return item;
+        })
+        this.setState(curr => ({
+            ...curr,
+            rowList: rowListLocal
+        }));
     }
 
     footerContent() {
@@ -279,17 +296,17 @@ class FormHierarkiRisiko extends React.Component {
     render() {
         return (
             <>
-            {this.renderRedirect()}
-            <SirioTable
-                title="Hierarki Semua Risiko"
-                data={this.state.rowList}
-                id='id'
-                columnsDefinition={this.columns()}
-                headerButton={this.headerButton()}
-            />
+                {this.renderRedirect()}
+                <SirioTable
+                    title="Hierarki Semua Risiko"
+                    data={this.state.rowList}
+                    id='id'
+                    columnsDefinition={this.columns()}
+                    headerButton={this.headerButton()}
+                />
             </>
         );
     }
-} 
+}
 
 export default withRouter(FormHierarkiRisiko);

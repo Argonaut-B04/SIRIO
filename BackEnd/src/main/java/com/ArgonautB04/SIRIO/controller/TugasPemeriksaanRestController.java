@@ -64,7 +64,7 @@ public class TugasPemeriksaanRestController {
     ) {
         Employee employee = employeeRestService.validateEmployeeExistByPrincipal(principal);
 
-        List<TugasPemeriksaan> daftarTugasPemeriksaan = employee.getRole() == roleRestService.getById(6) ?
+        List<TugasPemeriksaan> daftarTugasPemeriksaan = employee.getRole() == roleRestService.getById(5) ?
                 tugasPemeriksaanRestService.getByPelaksana(employee) : tugasPemeriksaanRestService.getAll();
 
         List<TugasPemeriksaanDTO> result = new ArrayList<>();
