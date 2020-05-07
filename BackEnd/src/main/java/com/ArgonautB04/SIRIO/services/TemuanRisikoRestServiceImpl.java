@@ -52,6 +52,11 @@ public class TemuanRisikoRestServiceImpl implements TemuanRisikoRestService {
     }
 
     @Override
+    public List<TemuanRisiko> getByDaftarKomponenPemeriksaan(List<KomponenPemeriksaan> komponenPemeriksaanList) {
+        return temuanRisikoDB.findAllByKomponenPemeriksaanIn(komponenPemeriksaanList);
+    }
+
+    @Override
     public List<TemuanRisiko> getHistoriTemuanRisikoKantorCabang(TugasPemeriksaan tugasPemeriksaan, Risiko risiko) {
         StatusHasilPemeriksaan statusHasilPemeriksaan = statusHasilPemeriksaanDB.findById(5).get();
         List<TugasPemeriksaan> tugasPemeriksaans = tugasPemeriksaanDB.findAllByKantorCabang(

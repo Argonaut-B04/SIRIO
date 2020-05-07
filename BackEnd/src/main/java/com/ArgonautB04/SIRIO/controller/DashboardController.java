@@ -2,6 +2,7 @@ package com.ArgonautB04.SIRIO.controller;
 
 import com.ArgonautB04.SIRIO.model.*;
 import com.ArgonautB04.SIRIO.rest.BaseResponse;
+import com.ArgonautB04.SIRIO.rest.DashboardDTO;
 import com.ArgonautB04.SIRIO.rest.RekomendasiDTO;
 import com.ArgonautB04.SIRIO.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,107 +49,75 @@ public class DashboardController {
     private KomponenPemeriksaanRestService komponenPemeriksaanRestService;
 
     /**
-     * Mengambil seluruh rekomendasi yang terhubung dengan user yang sedang login
+     * Mengambil seluruh komponen dashboard
      *
-     * @return daftar rekomendasi yang terhubung dengan pembuat tersebut
+     * @return komponen dashboard (rekomendasi, temuan risiko, pemeriksaan)
      */
     @GetMapping("/getAll")
-    private BaseResponse<List<RekomendasiDTO>> getAllRekomendasiUntukLoggedInUser(
+    private BaseResponse<List<DashboardDTO>> getAllDashboardComponent(
             Principal principal
     ) {
         Employee employee = employeeRestService.validateEmployeeExistByPrincipal(principal);
-        employeeRestService.validateRolePermission(employee, "tabel rekomendasi");
-
+//        employeeRestService.validateRolePermission(employee, "tabel rekomendasi");
         Role role = employee.getRole();
 
         List<Rekomendasi> daftarRekomendasi;
+        List<TemuanRisiko> daftarTemuanRisiko;
+        List<TugasPemeriksaan> daftarTugasPemeriksaan;
         if (role.getNamaRole().equals("Branch Manager")) {
             KantorCabang kantorCabang =
-                    kantorCabangRestService
-                            .getByPemilik(employee);
-
-            List<TugasPemeriksaan> daftarTugasPemeriksaan =
-                    tugasPemeriksaanRestService
-                            .getByKantorCabang(kantorCabang);
-
+                    kantorCabangRestService.getByPemilik(employee);
+            daftarTugasPemeriksaan =
+                    tugasPemeriksaanRestService.getByKantorCabang(kantorCabang);
             List<HasilPemeriksaan> daftarHasilPemeriksaan =
-                    hasilPemeriksaanRestService
-                            .getByDaftarTugasPemeriksaan(daftarTugasPemeriksaan);
-
+                    hasilPemeriksaanRestService.getByDaftarTugasPemeriksaan(daftarTugasPemeriksaan);
             List<KomponenPemeriksaan> daftarKomponenPemeriksaan =
-                    komponenPemeriksaanRestService
-                            .getByDaftarHasilPemeriksaan(daftarHasilPemeriksaan);
-
+                    komponenPemeriksaanRestService.getByDaftarHasilPemeriksaan(daftarHasilPemeriksaan);
             daftarRekomendasi = rekomendasiRestService.getByDaftarKomponenPemeriksaan(daftarKomponenPemeriksaan);
-
-        } else if (role.getNamaRole().equals("Super QA Officer Operational Risk")
-                | role.getNamaRole().equals("Manajer Operational Risk")) {
-            daftarRekomendasi = rekomendasiRestService.getAll();
-
+            daftarTemuanRisiko = temuanRisikoRestService.getByDaftarKomponenPemeriksaan(daftarKomponenPemeriksaan);
         } else {
-            daftarRekomendasi = rekomendasiRestService.getByPembuat(employee);
+            daftarRekomendasi = rekomendasiRestService.getAll();
+            daftarTemuanRisiko = temuanRisikoRestService.getAll();
+            daftarTugasPemeriksaan = tugasPemeriksaanRestService.getAll();
         }
 
+        List<DashboardDTO> resultDTO = new ArrayList<>();
+        DashboardDTO dashboardDTO = new DashboardDTO();
+        dashboardDTO.setJumlahRekomendasi(daftarRekomendasi.size());
+        dashboardDTO.setJumlahTemuan(daftarTemuanRisiko.size());
+        dashboardDTO.setJumlahPemeriksaan(daftarTugasPemeriksaan.size());
 
-        List<RekomendasiDTO> resultDTO = new ArrayList<>();
+        List<BuktiPelaksanaan> buktiList = buktiPelaksanaanRestService.getByDaftarRekomendasi(daftarRekomendasi);
+        List<BuktiPelaksanaan> listRekomendasiImplemented = new ArrayList<BuktiPelaksanaan>();
+        List<BuktiPelaksanaan> listRekomendasiNotImplemented = new ArrayList<BuktiPelaksanaan>();
+        List<Rekomendasi> listRekomendasiOverdue = new ArrayList<Rekomendasi>();
+
         LocalDate waktuSaatIni = LocalDate.now();
         for (Rekomendasi rekomendasi : daftarRekomendasi) {
-            RekomendasiDTO rekomendasiDTO = new RekomendasiDTO();
-
-            // Memasukan id dan keterangan
-            rekomendasiDTO.setId(rekomendasi.getIdRekomendasi());
-            rekomendasiDTO.setKeterangan(rekomendasi.getKeterangan());
-
-            // Memasukan tenggat waktu
             LocalDate tenggatWaktu = rekomendasi.getTenggatWaktu();
-            rekomendasiDTO.setTenggatWaktuDate(tenggatWaktu);
-
-            // Memasukan durasi hingga tenggat waktu
             if (tenggatWaktu != null) {
                 int durasi = (int) ChronoUnit.DAYS.between(waktuSaatIni, tenggatWaktu);
-                if (durasi < 0) {
-                    durasi = 0;
+                if (durasi == 0 | durasi < 0) {
+                    listRekomendasiOverdue.add(rekomendasi);
                 }
-                String durasiFinal = durasi + " Hari";
-                rekomendasiDTO.setDurasi(durasiFinal);
             }
-
-            // Memasukan status rekomendasi
-            rekomendasiDTO.setStatus(rekomendasi.getStatusRekomendasi().getNamaStatus());
-
-            // Memasukan status bukti untuk rekomendasi
-            List<BuktiPelaksanaan> buktiList = buktiPelaksanaanRestService.getByDaftarRekomendasi(daftarRekomendasi);
             for (BuktiPelaksanaan buktiPelaksanaan : buktiList) {
                 if (buktiPelaksanaan.getRekomendasi().equals(rekomendasi)) {
-                    rekomendasiDTO.setStatusBukti(
-                            buktiPelaksanaan
-                                    .getStatusBuktiPelaksanaan()
-                                    .getNamaStatus()
-                    );
+                    if (buktiPelaksanaan.getStatusBuktiPelaksanaan().getNamaStatus().equals("Disetujui")) {
+                        listRekomendasiImplemented.add(buktiPelaksanaan);
+                    } else {
+                        listRekomendasiNotImplemented.add(buktiPelaksanaan);
+                    }
                 }
             }
-
-            // Memasukan daftar kantor cabang setiap rekomendasi
-            rekomendasiDTO
-                    .setNamaKantorCabang(
-                            rekomendasi
-                                    .getKomponenPemeriksaan()
-                                    .getHasilPemeriksaan()
-                                    .getTugasPemeriksaan()
-                                    .getKantorCabang()
-                                    .getNamaKantor());
-
-            // Memasukan id hasil pemeriksaan setiap rekomendasi
-            rekomendasiDTO.setIdHasilPemeriksaan(
-                    rekomendasi
-                            .getKomponenPemeriksaan()
-                            .getHasilPemeriksaan()
-                            .getIdHasilPemeriksaan()
-            );
-
-            resultDTO.add(rekomendasiDTO);
         }
+        dashboardDTO.setJumlahRekomendasiOverdue(listRekomendasiOverdue.size()
+                - (listRekomendasiNotImplemented.size() + listRekomendasiImplemented.size()));
+        dashboardDTO.setJumlahRekomendasiImplemented(listRekomendasiImplemented.size());
+        dashboardDTO.setJumlahRekomendasiNotImplemented(listRekomendasiNotImplemented.size()
+                + (daftarRekomendasi.size() - buktiList.size()));
 
+        resultDTO.add(dashboardDTO);
         return new BaseResponse<>(200, "success", resultDTO);
     }
 

@@ -148,7 +148,7 @@ class TabelBuktiPelaksanaan extends React.Component {
                     }
 
                 }, {
-                    dataField: 'status',
+                    dataField: 'statusBukti',
                     text: 'STATUS BUKTI',
                     sort: true,
                     classes: classes.rowItem,
@@ -201,7 +201,7 @@ class TabelBuktiPelaksanaan extends React.Component {
                     }
 
                 }, {
-                    dataField: 'status',
+                    dataField: 'statusBukti',
                     text: 'STATUS BUKTI',
                     sort: true,
                     classes: classes.rowItem,
