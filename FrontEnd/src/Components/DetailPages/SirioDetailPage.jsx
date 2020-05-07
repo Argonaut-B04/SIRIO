@@ -36,7 +36,7 @@ class SirioDetailPage extends Component {
                                 <tr key={i}>
                                     <td className={rowItem} key={1}>{key}</td>
                                     <td className={rowItem} key={2}>
-                                        <div className="w-100">
+                                        <div className="w-100" style={{ whiteSpace: 'pre-line' }}>
                                             {data[key]}
                                         </div>
                                     </td>

@@ -30,13 +30,9 @@ class HasilPemeriksaanFormTambah extends React.Component {
             riskOptionList: [],
             submitableDraft: false,
             submitable: false,
-            redirect: false,
+            redirect: false
         };
 
-        // this.renderRisikoKategoriFilter = this.renderRisikoKategoriFilter.bind(this);
-        // this.renderKomponenPemeriksaan = this.renderKomponenPemeriksaan.bind(this);
-        // this.renderRiskLevelOption = this.renderRiskLevelOption.bind(this);
-        // this.renderHistoriTemuan = this.renderHistoriTemuan.bind(this);
         this.renderData = this.renderData.bind(this);
         this.handleChangeKomponen = this.handleChangeKomponen.bind(this);
         this.handleSelectChangeKomponen = this.handleSelectChangeKomponen.bind(this);
@@ -52,10 +48,6 @@ class HasilPemeriksaanFormTambah extends React.Component {
     }
 
     componentDidMount() {
-        // this.renderRisikoKategoriFilter();
-        // this.renderKomponenPemeriksaan();
-        // this.renderRiskLevelOption();
-        // this.renderHistoriTemuan();
         this.renderData();
     }
 
@@ -129,17 +121,20 @@ class HasilPemeriksaanFormTambah extends React.Component {
                     {
                         id: risiko.id,
                         idRiskLevel: "",
+                        submitableRiskLevel: [true,false],
                         risiko:risiko,
                         jumlahSampel:"",
                         errorJumlahSampel:"",
+                        submitableJumlahSampel: [true,false],
                         jumlahPopulasi:"",
                         errorJumlahPopulasi:"",
+                        submitableJumlahPopulasi: [true,false],
                         jumlahSampelError:"",
                         errorJumlahSampelError:"",
+                        submitableJumlahSampelError: [true,false],
                         keteranganSampel:"",
                         errorKeteranganSampel:"",
-                        submitable:false,
-                        submitableDraft:true,
+                        submitableKeteranganSampel: [true,false],
                         daftarTemuanRisiko:[
                             {
                                 keterangan: ""
@@ -149,7 +144,8 @@ class HasilPemeriksaanFormTambah extends React.Component {
                             {
                                 keterangan: ""
                             }
-                        ]
+                        ],
+                        submitableTemuandanRekomendasi: [true,false],
                     }
                 )
             });
@@ -163,115 +159,6 @@ class HasilPemeriksaanFormTambah extends React.Component {
             daftarKomponenPemeriksaan: daftarKomponen
         })
     }
-
-    // async renderHistoriTemuan() {
-    //     const response = await TemuanRisikoService.getHistoriTemuanRisikoKantorCabang(this.props.location.state.id);
-    //
-    //     const daftarHistoriTemuan = response.data.result;
-    //
-    //     this.setState({
-    //         daftarHistoriTemuan: daftarHistoriTemuan
-    //     })
-    // }
-
-    // async renderRiskLevelOption() {
-    //     const response = await RiskLevelService.getAll();
-    //
-    //     const riskLevelList = response.data.result.map(riskLevel => {
-    //         return (
-    //             {
-    //                 label: riskLevel.namaLevel,
-    //                 value: riskLevel.idLevel
-    //             }
-    //         )
-    //     });
-    //
-    //     this.setState({
-    //         riskLevelOptionList: riskLevelList
-    //     })
-    // }
-
-    // async renderRisikoKategoriFilter() {
-    //     const response = await RisikoService.getAll();
-    //
-    //     const risikoKategori1 = response.data.result
-    //         .filter(risiko => risiko.kategori === 1)
-    //         .map(risiko => {
-    //             return (
-    //                 {
-    //                     label: risiko.nama,
-    //                     value: risiko.id
-    //                 }
-    //             )
-    //         });
-    //
-    //     const risikoKategori2 = response.data.result
-    //         .filter(risiko => risiko.kategori === 2)
-    //         .map(risiko => {
-    //             return (
-    //                 {
-    //                     label: risiko.nama,
-    //                     value: risiko.id
-    //                 }
-    //             )
-    //         });
-    //
-    //     const risikoKategori3 = response.data.result
-    //         .filter(risiko => risiko.kategori === 3)
-    //         .map(risiko => {
-    //             return (
-    //                 {
-    //                     label: risiko.nama,
-    //                     value: risiko.id
-    //                 }
-    //             )
-    //         });
-    //
-    //     this.setState({
-    //         daftarRisikoKategori1: risikoKategori1,
-    //         daftarRisikoKategori2: risikoKategori2,
-    //         daftarRisikoKategori3: risikoKategori3
-    //     })
-    // }
-
-    // async renderKomponenPemeriksaan() {
-    //     const response = await RisikoService.getAllChild();
-    //
-    //     const daftarKomponen = response.data.result
-    //         .map(risiko => {
-    //             return (
-    //                 {
-    //                     id: risiko.id,
-    //                     idRiskLevel: "",
-    //                     risiko:risiko,
-    //                     jumlahSampel:"",
-    //                     errorJumlahSampel:"",
-    //                     jumlahPopulasi:"",
-    //                     errorJumlahPopulasi:"",
-    //                     jumlahSampelError:"",
-    //                     errorJumlahSampelError:"",
-    //                     keteranganSampel:"",
-    //                     errorKeteranganSampel:"",
-    //                     submitable:false,
-    //                     submitableDraft:true,
-    //                     daftarTemuanRisiko:[
-    //                         {
-    //                             keterangan: ""
-    //                         }
-    //                     ],
-    //                     daftarRekomendasi:[
-    //                         {
-    //                             keterangan: ""
-    //                         }
-    //                     ]
-    //                 }
-    //             )
-    //         });
-    //
-    //     this.setState({
-    //         daftarKomponenPemeriksaan: daftarKomponen
-    //     })
-    // }
 
     getSOPButton(indexKomponen) {
         return (
@@ -442,8 +329,6 @@ class HasilPemeriksaanFormTambah extends React.Component {
                     this.state.daftarKomponenPemeriksaan
                         .reduce((accumulator, currentValue, currentIndex) => {
                             if(currentValue.risiko.id === this.state.filterKategori) {
-                                console.log(currentValue.risiko.id)
-                                console.log(this.state.filterKategori)
                                 accumulator.push(
                                     <SirioForm
                                         key={currentIndex}
@@ -535,8 +420,7 @@ class HasilPemeriksaanFormTambah extends React.Component {
         }
 
         if (name === "daftarTemuanRisiko" || name === "daftarRekomendasi") {
-            array[indexKomponen]["submitable"] = true;
-            array[indexKomponen]["submitableDraft"] = true;
+            array[indexKomponen]["submitableTemuandanRekomendasi"] = [true, true];
         }
 
         this.setState({
@@ -551,8 +435,7 @@ class HasilPemeriksaanFormTambah extends React.Component {
         array[indexKomponen][targetName][index][objectKey] = targetValue;
 
         if (targetName === "daftarTemuanRisiko" || targetName === "daftarRekomendasi") {
-            array[indexKomponen]["submitable"] = true;
-            array[indexKomponen]["submitableDraft"] = true;
+            array[indexKomponen]["submitableTemuandanRekomendasi"] = [true, true];
         }
 
         this.setState({
@@ -669,7 +552,6 @@ class HasilPemeriksaanFormTambah extends React.Component {
             })
         };
         if ((status === 1 && this.submitableDraft()) || (status === 2 && this.submitable())) {
-            console.log("test")
             HasilPemeriksaanService.addHasilPemeriksaan(hasilPemeriksaan)
                 .then(() => this.setRedirect());
         }
@@ -678,7 +560,13 @@ class HasilPemeriksaanFormTambah extends React.Component {
     submitable() {
         var submitable = true;
         this.state.daftarKomponenPemeriksaan.map(komponen => {
-            submitable = submitable && komponen.submitable;
+            submitable = submitable &&
+                komponen.submitableRiskLevel[1] &&
+                komponen.submitableJumlahPopulasi[1] &&
+                komponen.submitableJumlahSampel[1] &&
+                komponen.submitableJumlahSampelError[1] &&
+                komponen.submitableKeteranganSampel[1] &&
+                komponen.submitableTemuandanRekomendasi[1];
             return null
         });
         return submitable;
@@ -687,7 +575,13 @@ class HasilPemeriksaanFormTambah extends React.Component {
     submitableDraft() {
         var submitableDraft = true;
         this.state.daftarKomponenPemeriksaan.map(komponen => {
-            submitableDraft = submitableDraft && komponen.submitableDraft;
+            submitableDraft = submitableDraft &&
+                komponen.submitableRiskLevel[0] &&
+                komponen.submitableJumlahPopulasi[0] &&
+                komponen.submitableJumlahSampel[0] &&
+                komponen.submitableJumlahSampelError[0] &&
+                komponen.submitableKeteranganSampel[0] &&
+                komponen.submitableTemuandanRekomendasi[0];
             return null
         });
         return submitableDraft;
@@ -708,8 +602,8 @@ class HasilPemeriksaanFormTambah extends React.Component {
             errorKeteranganSampel = "Ketarangan perlu mengandung huruf";
         }
 
-        array[indexKomponen]["submitable"] = submitable;
-        array[indexKomponen]["submitableDraft"] = submitableDraft;
+        array[indexKomponen]["submitableKeteranganSampel"][1] = submitable;
+        array[indexKomponen]["submitableKeteranganSampel"][0] = submitableDraft;
         array[indexKomponen]["errorKeteranganSampel"] = errorKeteranganSampel;
         this.setState({
             daftarKomponenPemeriksaan: array
@@ -725,14 +619,14 @@ class HasilPemeriksaanFormTambah extends React.Component {
 
         if (fokusJumlahPopulasi === null || fokusJumlahPopulasi === "") {
             submitable = false;
-        } else if (!fokusJumlahPopulasi.match(number)) {
+        } else if (!fokusJumlahPopulasi.match(number) || parseInt(fokusJumlahPopulasi) < 0) {
             submitable = false;
             submitableDraft = false;
-            errorJumlahPopulasi = "Jumlah Populasi berupa angka";
+            errorJumlahPopulasi = "Jumlah Populasi berupa angka dan tidak boleh negatif";
         }
 
-        array[indexKomponen]["submitable"] = submitable;
-        array[indexKomponen]["submitableDraft"] = submitableDraft;
+        array[indexKomponen]["submitableJumlahPopulasi"][1] = submitable;
+        array[indexKomponen]["submitableJumlahPopulasi"][0] = submitableDraft;
         array[indexKomponen]["errorJumlahPopulasi"] = errorJumlahPopulasi;
         this.setState({
             daftarKomponenPemeriksaan: array
@@ -748,14 +642,14 @@ class HasilPemeriksaanFormTambah extends React.Component {
 
         if (fokusJumlahSampel === null || fokusJumlahSampel === "") {
             submitable = false;
-        } else if (!fokusJumlahSampel.match(number)) {
+        } else if (!fokusJumlahSampel.match(number) || parseInt(fokusJumlahSampel) < 0) {
             submitable = false;
             submitableDraft = false;
-            errorJumlahSampel = "Jumlah Sampel berupa angka";
+            errorJumlahSampel = "Jumlah Sampel berupa angka dan tidak boleh negatif";
         }
 
-        array[indexKomponen]["submitable"] = submitable;
-        array[indexKomponen]["submitableDraft"] = submitableDraft;
+        array[indexKomponen]["submitableJumlahSampel"][1] = submitable;
+        array[indexKomponen]["submitableJumlahSampel"][0] = submitableDraft;
         array[indexKomponen]["errorJumlahSampel"] = errorJumlahSampel;
         this.setState({
             daftarKomponenPemeriksaan: array
@@ -771,14 +665,14 @@ class HasilPemeriksaanFormTambah extends React.Component {
 
         if (fokusJumlahSampelError === null || fokusJumlahSampelError === "") {
             submitable = false;
-        } else if (!fokusJumlahSampelError.match(number)) {
+        } else if (!fokusJumlahSampelError.match(number) || parseInt(fokusJumlahSampelError) < 0) {
             submitable = false;
             submitableDraft = false;
-            errorJumlahSampelError = "Jumlah Sampel Error berupa angka";
+            errorJumlahSampelError = "Jumlah Sampel Error berupa angka dan tidak boleh negatif";
         }
 
-        array[indexKomponen]["submitable"] = submitable;
-        array[indexKomponen]["submitableDraft"] = submitableDraft;
+        array[indexKomponen]["submitableJumlahSampelError"][1] = submitable;
+        array[indexKomponen]["submitableJumlahSampelError"][0] = submitableDraft;
         array[indexKomponen]["errorJumlahSampelError"] = errorJumlahSampelError;
         this.setState({
             daftarKomponenPemeriksaan: array
@@ -793,7 +687,8 @@ class HasilPemeriksaanFormTambah extends React.Component {
             submitable = false;
         }
 
-        array[indexKomponen]["submitable"] = submitable;
+        array[indexKomponen]["submitableRiskLevel"][1] = submitable;
+        array[indexKomponen]["submitableRiskLevel"][0] = true;
         this.setState({
             daftarKomponenPemeriksaan: array
         });
@@ -867,13 +762,6 @@ class HasilPemeriksaanFormTambah extends React.Component {
                         {this.submitButton()}
                     </div>
                 </ComponentWrapper>
-                {/*<SirioForm*/}
-                {/*    title="Form Tambah Hasil Pemeriksaan"*/}
-                {/*    betweenTitleSubtitle={this.getBetween()}*/}
-                {/*    inputDefinition={this.getForm()}*/}
-                {/*    onSubmit={this.handleSubmit}*/}
-                {/*    submitButton={this.submitButton()}*/}
-                {/*/>*/}
             </>
         );
     }
