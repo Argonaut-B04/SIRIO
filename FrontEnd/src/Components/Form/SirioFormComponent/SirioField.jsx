@@ -41,23 +41,13 @@ export default class SirioField extends Component {
 
         // untuk array
         if (Array.isArray(nextprops.value)) {
-            if (this.props.value.length !== nextprops.value.length) {
-                return true
-            } else {
-                for (var i = 0; i < this.props.value.length; i++) {
-                    if (this.props.value[i] !== nextprops.value[i]) {
-                        return true;
-                    };
-                }
-                return false;
-            }
+            return true;
         }
 
         // untuk custom input
         if (typeof nextprops.customInput !== "undefined") {
             return false;
         }
-
         return true;
     }
 
