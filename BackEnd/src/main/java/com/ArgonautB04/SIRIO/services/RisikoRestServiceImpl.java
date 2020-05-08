@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -46,9 +47,18 @@ public class RisikoRestServiceImpl implements RisikoRestService {
     @Override
     public Risiko ubahRisiko(int idRisiko, Risiko risiko) {
         Risiko target = getById(idRisiko);
-        target.setChildList(risiko.getChildList());
+        List<Risiko> empty = new ArrayList<>();
+        if (target.getRisikoKategori().equals(risiko.getRisikoKategori())) {
+            for (Risiko r : risiko.getChildList()) {
+                r.setParent(null);
+            }
+            target.setChildList(empty);
+            target.setParent(null);
+        } else {
+            target.setChildList(risiko.getChildList());
+            target.setParent(risiko.getParent());
+        }
         target.setSop(risiko.getSop());
-        target.setParent(risiko.getParent());
         target.setNamaRisiko(risiko.getNamaRisiko());
         target.setRisikoKategori(risiko.getRisikoKategori());
         if (risiko.getRisikoKategori() == 3) {

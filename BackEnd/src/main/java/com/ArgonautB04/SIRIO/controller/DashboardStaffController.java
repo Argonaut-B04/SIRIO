@@ -1,6 +1,7 @@
 package com.ArgonautB04.SIRIO.controller;
 
 import com.ArgonautB04.SIRIO.model.Employee;
+import com.ArgonautB04.SIRIO.model.Rekomendasi;
 import com.ArgonautB04.SIRIO.rest.BaseResponse;
 import com.ArgonautB04.SIRIO.rest.DashboardDTO;
 import com.ArgonautB04.SIRIO.services.*;
@@ -60,14 +61,19 @@ public class DashboardStaffController {
 
         Integer jumlahRekomendasi = rekomendasiRestService.getAll().size();
         Integer jumlahTemuan = temuanRisikoRestService.getAll().size();
-        Float persenRekomendasi = (float)jumlahRekomendasi/(float)jumlahRekomendasi*(float)100;
-//        List<Integer> jumlahTemuan = temuanRisikoRestService.getAll().size();
-        List<Integer> listRekomendasiOverdue = rekomendasiRestService.getRekomendasiOverdueByMonth();
+        List<Integer> listTemuan = temuanRisikoRestService.getAllByMonth();
+
+        List<Rekomendasi> rekomendasiOverdue = rekomendasiRestService.getRekomendasiOverdue();
+        List<Integer> listRekomendasiOverdue = rekomendasiRestService.getRekomendasiByMonth(rekomendasiOverdue);
         Float jumlahRekomendasiOverdue = (float)rekomendasiRestService.getRekomendasiOverdue().size()/(float)jumlahRekomendasi*(float)100;
-        List<Integer> listRekomendasiDiimplementasi = rekomendasiRestService.getRekomendasiDiimplementasiByMonth();
+
+        List<Rekomendasi> rekomendasiDiimplementasi = rekomendasiRestService.getRekomendasiDiimplementasi();
+        List<Integer> listRekomendasiDiimplementasi = rekomendasiRestService.getRekomendasiByMonth(rekomendasiDiimplementasi);
         Float jumlahRekomendasiDiimplementasi = (float)rekomendasiRestService.getRekomendasiDiimplementasi().size()/(float)jumlahRekomendasi*(float)100;
-        List<Integer> listRekomendasiBelumDiimplementasi = rekomendasiRestService.getRekomendasiBelumDiimplementasiByMonth();
-        Float jumlahRekomendasiBelumDiimplementasi = persenRekomendasi - jumlahRekomendasiDiimplementasi - jumlahRekomendasiOverdue;
+
+        List<Rekomendasi> rekomendasiBelumDiimplementasi = rekomendasiRestService.getRekomendasiBelumDiimplementasi();
+        List<Integer> listRekomendasiBelumDiimplementasi = rekomendasiRestService.getRekomendasiByMonth(rekomendasiBelumDiimplementasi);
+        Float jumlahRekomendasiBelumDiimplementasi = (float)rekomendasiRestService.getRekomendasiBelumDiimplementasi().size()/(float)jumlahRekomendasi*(float)100;
 
         result.setJumlahRekomendasiBelumDiimplementasi(jumlahRekomendasiBelumDiimplementasi);
         result.setListRekomendasiBelumDiimplementasi(listRekomendasiBelumDiimplementasi);
@@ -77,6 +83,7 @@ public class DashboardStaffController {
         result.setListRekomendasiOverdue(listRekomendasiOverdue);
         result.setJumlahRekomendasi(jumlahRekomendasi);
         result.setJumlahTemuan(jumlahTemuan);
+        result.setListTemuan(listTemuan);
         response.setStatus(200);
         response.setMessage("success");
         response.setResult(result);

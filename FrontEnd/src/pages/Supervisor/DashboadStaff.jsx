@@ -112,7 +112,7 @@ class DashboardStaff extends React.Component {
                     borderWidth: 1,
                     hoverBackgroundColor: '#7F3F98',
                     hoverBorderColor: '#7F3F98',
-                    data: [this.state.jumlahTemuan,12,14,14,30,32]
+                    data: this.state.listTemuan
                 },
                 {
                     label: 'Jumlah Rekomendasi Diimplementasi',

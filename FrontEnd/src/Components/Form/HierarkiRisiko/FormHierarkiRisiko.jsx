@@ -185,7 +185,7 @@ class FormHierarkiRisiko extends React.Component {
                 return {
                     ...item,
                     parent: event.value,
-                    namaParent: event.label
+                    namaParent: event.label,
                 }
             }
             return item;

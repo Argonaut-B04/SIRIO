@@ -268,7 +268,7 @@ class FormRisikoUbah extends React.Component {
                     type: "textarea",
                     name: "nama",
                     required: true,
-                    validation: this.state.errorNama,
+                    // validation: this.state.errorNama,
                     value: this.state.nama,
                     placeholder: "Masukan nama risiko"
                 }, {
@@ -276,7 +276,7 @@ class FormRisikoUbah extends React.Component {
                     handleChange: this.handleSelectChange,
                     type: "select",
                     name: "kategori",
-                    validation: this.state.errorKategori,
+                    // validation: this.state.errorKategori,
                     value: this.state.kategori,
                     optionList: [
                         {
@@ -296,14 +296,13 @@ class FormRisikoUbah extends React.Component {
                     type: "select",
                     name: "sop",
                     value: this.state.sop,
-                    validation: this.state.errorSop,
+                    // validation: this.state.errorSop,
                     optionList: this.state.sopOptionList
                 }, {
                     label: "Detail Uraian Risiko",
                     disabled: this.state.kategori !== 3,
                     handleChange: this.handleChange,
-                    validation: this.state.errorDU,
-                    // disabled: {this.state.kategori != 3 ? disabled : enabled},
+                    // validation: this.state.errorDU,
                     type: "textarea",
                     name: "detailUraian",
                     value: this.state.detailUraian,
@@ -313,7 +312,7 @@ class FormRisikoUbah extends React.Component {
                     disabled: this.state.kategori !== 3,
                     handleChange: this.handleChange,
                     // validation: this.state.errorDU,
-                    type: "text",
+                    type: "textarea",
                     name: "metodologi",
                     value: this.state.metodologi,
                     placeholder: "Masukan metodologi risiko"
