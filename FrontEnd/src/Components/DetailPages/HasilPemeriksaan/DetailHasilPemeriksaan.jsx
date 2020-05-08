@@ -73,7 +73,6 @@ class DetailHasilPemeriksaan extends React.Component {
 
     async renderDataHasilPemeriksaan() {
         const response = await HasilPemeriksaanService.getHasilPemeriksaan(this.props.location.state.id);
-        console.log(response.data.result)
 
         this.setState({
             hasilPemeriksaan: response.data.result,
@@ -93,11 +92,14 @@ class DetailHasilPemeriksaan extends React.Component {
                     {
                         "Komponen Risiko": komponen.risiko.nama,
                         "SOP": this.getSOPButton(komponen.risiko.namaSop, komponen.risiko.linkSop),
-                        "Jumlah Populasi": komponen.jumlahPopulasi,
-                        "Jumlah Sampel": komponen.jumlahSampel,
-                        "Jumlah Sampel Error": komponen.jumlahSampelError,
-                        "Keterangan Sampel": komponen.keteranganSampel,
-                        "Risk Level": komponen.namaRiskLevel,
+                        "Deskripsi": komponen.risiko.deskripsi,
+                        "Metodologi": komponen.risiko.metodologi,
+                        "Ketentuan Sampel": komponen.risiko.ketentuanSampel ? komponen.risiko.ketentuanSampel : "N/A",
+                        "Jumlah Populasi": komponen.jumlahPopulasi ? komponen.jumlahPopulasi : "Belum Diisi",
+                        "Jumlah Sampel": komponen.jumlahSampel ? komponen.jumlahSampel : "Belum Diisi",
+                        "Jumlah Sampel Error": komponen.jumlahSampelError ? komponen.jumlahSampelError : "Belum Diisi",
+                        "Keterangan Sampel": komponen.keteranganSampel ? komponen.keteranganSampel : "Belum Diisi",
+                        "Risk Level": komponen.namaRiskLevel ? komponen.namaRiskLevel : "Belum Diisi",
                         "Hasil Temuan": !(komponen.daftarTemuanRisikoTerdaftar.length > 0) ? "-" :
                             <div>
                                 {komponen.daftarTemuanRisikoTerdaftar.map((temuanRisiko, i) =>
@@ -331,7 +333,7 @@ class DetailHasilPemeriksaan extends React.Component {
                     noBack
                     data={{
                         "Risk Score": this.state.riskScore,
-                        "Feedback": this.state.hasilPemeriksaan.feedback
+                        "Feedback": this.state.hasilPemeriksaan.feedback ? this.state.hasilPemeriksaan.feedback : "N/A"
                     }}
                     id='id'
                 />

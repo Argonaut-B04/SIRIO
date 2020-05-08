@@ -31,7 +31,7 @@ export default class SirioField extends Component {
 
     // Sesegera mungkin, shouldComponentUpdate harus dibuka (tapi gak sekarang juga);
     shouldComponentUpdate(nextprops, nextstate) {
-    
+
         // untuk form biasa
         if (typeof nextprops.value !== "undefined") {
             if (this.props.value === nextprops.value) {
@@ -48,7 +48,6 @@ export default class SirioField extends Component {
         if (typeof nextprops.customInput !== "undefined") {
             return false;
         }
-        
         return true;
     }
 

@@ -21,7 +21,7 @@ class EmployeeFormUbah extends React.Component {
             noHp: "",
             roleOptionList: [],
             redirect: false,
-            submitable: false,
+            submitable: false
         };
 
         this.renderRoleOption = this.renderRoleOption.bind(this);
