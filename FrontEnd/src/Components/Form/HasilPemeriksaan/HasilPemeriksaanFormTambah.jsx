@@ -259,8 +259,7 @@ class HasilPemeriksaanFormTambah extends React.Component {
                     type: "select",
                     name: "idRiskLevel",
                     value: daftarKomponenPemeriksaan[indexKomponen].idRiskLevel,
-                    optionList: riskLevelOptionList,
-                    validationFunction: (value) => this.validateRiskLevel(value, indexKomponen)
+                    optionList: riskLevelOptionList
                 }, {
                     label: "Hasil Temuan",
                     multiple: true,
@@ -452,14 +451,19 @@ class HasilPemeriksaanFormTambah extends React.Component {
             daftarKomponenPemeriksaan: array
         });
 
-        if (name === "jumlahSampel") {
-            this.validateJumlahSampel(value, indexKomponen);
-        } else if (name === "keteranganSampel") {
-            this.validateKeteranganSampel(value, indexKomponen);
-        } else if (name === "jumlahPopulasi") {
-            this.validateJumlahPopulasi(value, indexKomponen);
-        } else if (name === "jumlahSampelError") {
-            this.validateJumlahSampelError(value, indexKomponen);
+        switch (name) {
+            case "jumlahSampel":
+                this.validateJumlahSampel(value, indexKomponen);
+                break;
+            case "keteranganSampel":
+                this.validateKeteranganSampel(value, indexKomponen);
+                break;
+            case "jumlahPopulasi":
+                this.validateJumlahPopulasi(value, indexKomponen);
+                break;
+            case "jumlahSampelError":
+                this.validateJumlahSampelError(value, indexKomponen);
+                break;
         }
     }
 

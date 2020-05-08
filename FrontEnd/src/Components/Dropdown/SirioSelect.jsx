@@ -49,6 +49,7 @@ export default class SirioSelect extends Component {
                     required
                 />
         }
+        console.log("options")
         return (
             <>
                 {hiddenOne}
