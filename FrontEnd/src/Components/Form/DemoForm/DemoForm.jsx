@@ -157,7 +157,7 @@ export class DemoForm extends Component {
 
                     {/* Terakhir, tombol submit di sebelah kanan bawah */}
                     <div className="w-100 text-right">
-                        <SirioButton purple hover> Submit </SirioButton>
+                        <SirioButton purple recommended> Submit </SirioButton>
                     </div>
                 </ComponentWrapper>
             </>

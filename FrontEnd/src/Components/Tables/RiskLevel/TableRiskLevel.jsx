@@ -165,7 +165,7 @@ class TableRiskLevel extends React.Component {
                     return (
                         <SirioButton
                             red
-                            hover
+                            recommended
                             onClick={() => this.hapus(row.idLevel)}
                         >
                             Hapus
@@ -271,7 +271,7 @@ class TableRiskLevel extends React.Component {
             <SirioButton
                 purple
                 recommended={!this.state.editMode}
-                hover
+                recommended
                 onClick={this.toggleEditMode}
                 classes="mx-1"
             >
@@ -282,8 +282,7 @@ class TableRiskLevel extends React.Component {
             toggleButton = (
                 <SirioWarningButton
                     purple
-                    hover
-                    recommended={!this.state.editMode}
+                    recommended
                     modalTitle="Konfirmasi Pembatalan"
                     modalDesc="Seluruh perubahan konfigurasi Risk Level yang belum tersimpan akan dihapus. Konfirmasi?"
                     onConfirm={() => window.location.reload(false)}
@@ -322,7 +321,7 @@ class TableRiskLevel extends React.Component {
                     </SirioConfirmButton>
                     <SirioWarningButton
                         red
-                        hover
+                        recommended
                         modalTitle="Konfirmasi Pembatalan"
                         modalDesc="Seluruh perubahan konfigurasi Risk Level yang belum tersimpan akan dihapus. Konfirmasi?"
                         onConfirm={() => window.location.href = "/"}

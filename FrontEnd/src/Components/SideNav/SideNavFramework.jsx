@@ -123,7 +123,7 @@ export default class SideNavFramework extends React.Component {
                     {!this.props.noToggle &&
                         <SirioButton
                             blue
-                            hover
+                            recommended
                             classes="m-2"
                             onClick={() => { this.toggleNav() }}>
                             Tutup Menu

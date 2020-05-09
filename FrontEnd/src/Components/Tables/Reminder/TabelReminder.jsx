@@ -365,7 +365,7 @@ class TabelReminder extends React.Component {
             <div>
                 <SirioConfirmButton
                     purple
-                    hover
+                    recommended
                     classes="m-1"
                     modalTitle="Anda akan menyimpan perubahan pada tabel reminder"
                     onConfirm={this.handleSubmit}
@@ -376,7 +376,7 @@ class TabelReminder extends React.Component {
                 </SirioConfirmButton>
                 <SirioWarningButton
                     red
-                    hover
+                    recommended
                     modalTitle="Konfirmasi Pembatalan"
                     modalDesc="Seluruh perubahan reminder yang belum tersimpan akan dihapus. Konfirmasi?"
                     onConfirm={() => window.location.href = "/rekomendasi"}
