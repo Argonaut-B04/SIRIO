@@ -32,21 +32,13 @@ export default class SirioField extends Component {
     // Sesegera mungkin, shouldComponentUpdate harus dibuka (tapi gak sekarang juga);
     shouldComponentUpdate(nextprops, nextstate) {
 
+        if (this.props.type === "select") return true;
+
         // untuk form biasa
         if (typeof nextprops.value !== "undefined") {
             if (this.props.value === nextprops.value) {
                 return false;
             }
-        }
-
-        // untuk array
-        if (Array.isArray(nextprops.value)) {
-            return true;
-        }
-
-        // untuk custom input
-        if (typeof nextprops.customInput !== "undefined") {
-            return false;
         }
         return true;
     }

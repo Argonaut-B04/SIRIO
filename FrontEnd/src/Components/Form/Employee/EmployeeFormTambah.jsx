@@ -20,8 +20,7 @@ export default class EmployeeFormTambah extends React.Component {
             email: "",
             noHp: "",
             roleOptionList: [],
-            redirect: false,
-            submitable: [false,false,false,false,false,false,false]
+            redirect: false
         };
 
         this.renderRoleOption = this.renderRoleOption.bind(this);
@@ -38,155 +37,114 @@ export default class EmployeeFormTambah extends React.Component {
     }
 
     validateJabatan(fokusJabatan) {
-        var submitableArray = this.state.submitable;
-        var submitable = true;
-        var errorJabatan;
+        var errorJabatan = "";
         if (fokusJabatan === null || fokusJabatan === "") {
-            submitable = false;
+            errorJabatan = "";
         } else if (fokusJabatan.length > 30) {
-            submitable = false;
             errorJabatan = "Jabatan maksimal 30 karakter";
         }
 
-        submitableArray[4] = submitable;
         this.setState({
-            errorJabatan: errorJabatan,
-            submitable: submitableArray
+            errorJabatan: errorJabatan
         })
 
     }
 
     validateNama(fokusName) {
-        var submitableArray = this.state.submitable;
-        var submitable = true;
-        var errorName;
+        var errorName = "";
         var letterOnly = /^[a-zA-Z\s]*$/;
         if (fokusName === null || fokusName === "") {
-            submitable = false;
+            errorName = "";
         } else if (!fokusName.match(letterOnly)) {
-            submitable = false;
             errorName = "Nama hanya boleh mengandung huruf";
         } else if (fokusName.length > 50) {
-            submitable = false;
             errorName = "Nama maksimal 50 karakter";
         }
 
-        submitableArray[3] = submitable;
         this.setState({
-            errorName: errorName,
-            submitable: submitableArray
+            errorName: errorName
         })
     }
 
     validateNomorHp(fokusNoHp) {
-        var submitableArray = this.state.submitable;
-        var submitable = true;
-        var errorNoHp;
+        var errorNoHp = "";
         var numberOnly = /^[0-9]*$/;
+
         if (fokusNoHp === null || fokusNoHp === "") {
-            submitable = false;
+            errorNoHp = "";
         } else if (!fokusNoHp.match(numberOnly)) {
-            submitable = false;
             errorNoHp = "Nomor HP hanya boleh mengandung angka";
         } else if (fokusNoHp.length > 20) {
-            submitable = false;
             errorNoHp = "Nomor HP maksimal 20 karakter";
         }
 
-        submitableArray[6] = submitable;
         this.setState({
-            errorNoHp: errorNoHp,
-            submitable: submitableArray
+            errorNoHp: errorNoHp
         })
     }
 
     validatePassword(fokusPassword) {
-        var submitableArray = this.state.submitable;
-        var submitable = true;
-        var errorPassword;
+        var errorPassword = "";
         var letterNumber = /[^\w\d]*(([0-9]+.*[A-Za-z]+.*)|[A-Za-z]+.*([0-9]+.*))/;
         if (fokusPassword === null || fokusPassword === "") {
-            submitable = false;
+            errorPassword = "";
         } else if (!fokusPassword.match(letterNumber)) {
-            submitable = false;
             errorPassword = "Password harus mengandung angka dan huruf";
         } else if (fokusPassword.length < 8) {
-            submitable = false;
             errorPassword = "Password minimal 8 karakter";
         } else if (fokusPassword.length > 70) {
-            submitable = false;
             errorPassword = "Password maksimal 70 karakter";
         }
 
-        submitableArray[1] = submitable;
         this.setState({
-            errorPassword: errorPassword,
-            submitable: submitableArray
+            errorPassword: errorPassword
         })
     }
 
     validateUsername(fokusUsername) {
-        var submitableArray = this.state.submitable;
-        var submitable = true;
-        var errorUsername;
+        var errorUsername = "";
         var letterNumber = /^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$/;
         if (fokusUsername === null || fokusUsername === "") {
-            submitable = false;
+            errorUsername = "";
         } else if (!fokusUsername.match(letterNumber)) {
-            submitable = false;
             errorUsername = "Username mengandung angka dan huruf";
         } else if (fokusUsername.length > 20) {
-            submitable = false;
             errorUsername = "Username maksimal 20 karakter";
         }
 
-        submitableArray[0] = submitable;
         this.setState({
-            errorUsername: errorUsername,
-            submitable: submitableArray
+            errorUsername: errorUsername
         })
     }
 
     validateEmail(fokusEmail) {
-        var submitableArray = this.state.submitable;
-        var submitable = true;
-        var errorEmail;
+        var errorEmail = "";
         // eslint-disable-next-line
         var email = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         if (fokusEmail === null || fokusEmail === "") {
-            submitable = false;
+            errorEmail = "";
         } else if (!fokusEmail.match(email)) {
-            submitable = false;
             errorEmail = "Email tidak sesuai format";
         }
 
-        submitableArray[5] = submitable;
         this.setState({
-            errorEmail: errorEmail,
-            submitable: submitableArray
-        })
-    }
-
-    validateRole(fokusRole) {
-        var submitableArray = this.state.submitable;
-        var submitable = true;
-
-        if (fokusRole === null || fokusRole === "") {
-            submitable = false;
-        }
-
-        submitableArray[2] = submitable;
-        this.setState({
-            submitable: submitableArray
+            errorEmail: errorEmail
         })
     }
 
     submitable() {
-        var submitable = true;
-        for (let i = 0; i < 5; i++) {
-            submitable = submitable && this.state.submitable[i];
-        }
-        return submitable;
+        return this.state.errorUsername === "" &&
+            this.state.errorPassword === "" &&
+            this.state.errorName === "" &&
+            this.state.errorJabatan === "" &&
+            this.state.errorEmail === "" &&
+            this.state.errorNoHp === "" &&
+            (this.state.username !== null && this.state.username !== "") &&
+            (this.state.password !== null && this.state.password !== "") &&
+            (this.state.idRole !== null && this.state.idRole !== "") &&
+            (this.state.nama !== null && this.state.nama !== "") &&
+            (this.state.jabatan !== null && this.state.jabatan !== "") &&
+            (this.state.email !== null && this.state.email !== "");
     }
 
     setRedirect = () => {
@@ -261,8 +219,6 @@ export default class EmployeeFormTambah extends React.Component {
                     : event.value
             }
         );
-
-        if (name === "idRole") this.validateRole(event.value);
     }
 
     async handleSubmit(event) {
@@ -271,20 +227,16 @@ export default class EmployeeFormTambah extends React.Component {
             const response = await EmployeeService.checkEmployeeExist(this.state.username);
             if (response.data.result) {
                 const errorUsername = "Username sudah terdaftar";
-                if (this.state.errorUsername !== errorUsername) {
-                    this.setState({
-                        errorUsername: errorUsername
-                    })
-                }
+                this.setState({
+                    errorUsername: errorUsername
+                })
             } else {
                 const response = await EmployeeService.checkEmailExist({email: this.state.email});
                 if (response.data.result) {
                     const errorEmail = "Email sudah terdaftar";
-                    if (this.state.errorEmail !== errorEmail) {
-                        this.setState({
-                            errorEmail: errorEmail
-                        })
-                    }
+                    this.setState({
+                        errorEmail: errorEmail
+                    })
                 } else {
                     const employee = {
                         username: this.state.username,
@@ -306,6 +258,7 @@ export default class EmployeeFormTambah extends React.Component {
     // Setiap objek {} pada List [] akan menjadi 1 field
     // untuk informasi lebih lengkap, cek SirioForm
     inputDefinition() {
+        console.log(this.state.roleOptionList)
         return (
             [
                 {
