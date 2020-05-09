@@ -28,8 +28,6 @@ class HasilPemeriksaanFormTambah extends React.Component {
             kategoriType: "",
             riskLevelOptionList: [],
             riskOptionList: [],
-            submitableDraft: false,
-            submitable: false,
             redirect: false
         };
 
@@ -121,20 +119,15 @@ class HasilPemeriksaanFormTambah extends React.Component {
                     {
                         id: risiko.id,
                         idRiskLevel: "",
-                        submitableRiskLevel: [true,false],
                         risiko:risiko,
                         jumlahSampel:"",
                         errorJumlahSampel:"",
-                        submitableJumlahSampel: [true,false],
                         jumlahPopulasi:"",
                         errorJumlahPopulasi:"",
-                        submitableJumlahPopulasi: [true,false],
                         jumlahSampelError:"",
                         errorJumlahSampelError:"",
-                        submitableJumlahSampelError: [true,false],
                         keteranganSampel:"",
                         errorKeteranganSampel:"",
-                        submitableKeteranganSampel: [true,false],
                         daftarTemuanRisiko:[
                             {
                                 keterangan: ""
@@ -144,8 +137,7 @@ class HasilPemeriksaanFormTambah extends React.Component {
                             {
                                 keterangan: ""
                             }
-                        ],
-                        submitableTemuandanRekomendasi: [true,false],
+                        ]
                     }
                 )
             });
@@ -418,10 +410,6 @@ class HasilPemeriksaanFormTambah extends React.Component {
             array[indexKomponen][name].splice(index, 1)
         }
 
-        if (name === "daftarTemuanRisiko" || name === "daftarRekomendasi") {
-            array[indexKomponen]["submitableTemuandanRekomendasi"] = [true, true];
-        }
-
         this.setState({
             daftarKomponenPemeriksaan: array
         });
@@ -432,10 +420,6 @@ class HasilPemeriksaanFormTambah extends React.Component {
         const targetValue = event.target.value;
         const array = this.state.daftarKomponenPemeriksaan;
         array[indexKomponen][targetName][index][objectKey] = targetValue;
-
-        if (targetName === "daftarTemuanRisiko" || targetName === "daftarRekomendasi") {
-            array[indexKomponen]["submitableTemuandanRekomendasi"] = [true, true];
-        }
 
         this.setState({
             daftarKomponenPemeriksaan: array
@@ -474,8 +458,6 @@ class HasilPemeriksaanFormTambah extends React.Component {
         this.setState({
             daftarKomponenPemeriksaan: array
         });
-
-        if (name === "idRiskLevel") this.validateRiskLevel(event.value, indexKomponen);
     }
 
     handleSelectChangeRisiko(name, event) {
@@ -565,12 +547,15 @@ class HasilPemeriksaanFormTambah extends React.Component {
         var submitable = true;
         this.state.daftarKomponenPemeriksaan.map(komponen => {
             submitable = submitable &&
-                komponen.submitableRiskLevel[1] &&
-                komponen.submitableJumlahPopulasi[1] &&
-                komponen.submitableJumlahSampel[1] &&
-                komponen.submitableJumlahSampelError[1] &&
-                komponen.submitableKeteranganSampel[1] &&
-                komponen.submitableTemuandanRekomendasi[1];
+                (komponen.errorJumlahPopulasi === "" &&
+                komponen.errorJumlahSampel === "" &&
+                komponen.errorJumlahSampelError === "" &&
+                komponen.errorKeteranganSampel === "" &&
+                (komponen.jumlahSampel !== null && komponen.jumlahSampel !== "") &&
+                (komponen.jumlahPopulasi !== null && komponen.jumlahPopulasi !== "") &&
+                (komponen.jumlahSampelError !== null && komponen.jumlahSampelError !== "") &&
+                (komponen.keteranganSampel !== null && komponen.keteranganSampel !== "") &&
+                (komponen.idRiskLevel !== null && komponen.idRiskLevel !== ""));
             return null
         });
         return submitable;
@@ -580,34 +565,26 @@ class HasilPemeriksaanFormTambah extends React.Component {
         var submitableDraft = true;
         this.state.daftarKomponenPemeriksaan.map(komponen => {
             submitableDraft = submitableDraft &&
-                komponen.submitableRiskLevel[0] &&
-                komponen.submitableJumlahPopulasi[0] &&
-                komponen.submitableJumlahSampel[0] &&
-                komponen.submitableJumlahSampelError[0] &&
-                komponen.submitableKeteranganSampel[0] &&
-                komponen.submitableTemuandanRekomendasi[0];
+                komponen.errorJumlahPopulasi === "" &&
+                komponen.errorJumlahSampel === "" &&
+                komponen.errorJumlahSampelError === "" &&
+                komponen.errorKeteranganSampel === "" ;
             return null
         });
         return submitableDraft;
     }
 
     validateKeteranganSampel(fokusKeteranganSampel, indexKomponen) {
-        var submitable = true;
-        var submitableDraft = true;
-        var errorKeteranganSampel;
+        var errorKeteranganSampel = "";
         const letter = /.*[a-zA-Z].*/;
         const array = this.state.daftarKomponenPemeriksaan;
 
         if (fokusKeteranganSampel === null || fokusKeteranganSampel === "") {
-            submitable = false;
+            errorKeteranganSampel = "";
         } else if (!fokusKeteranganSampel.match(letter)) {
-            submitable = false;
-            submitableDraft = false;
             errorKeteranganSampel = "Ketarangan perlu mengandung huruf";
         }
 
-        array[indexKomponen]["submitableKeteranganSampel"][1] = submitable;
-        array[indexKomponen]["submitableKeteranganSampel"][0] = submitableDraft;
         array[indexKomponen]["errorKeteranganSampel"] = errorKeteranganSampel;
         this.setState({
             daftarKomponenPemeriksaan: array
@@ -615,22 +592,16 @@ class HasilPemeriksaanFormTambah extends React.Component {
     }
 
     validateJumlahPopulasi(fokusJumlahPopulasi, indexKomponen) {
-        var submitable = true;
-        var submitableDraft = true;
-        var errorJumlahPopulasi;
+        var errorJumlahPopulasi = "";
         const number = /^[0-9]*$/;
         const array = this.state.daftarKomponenPemeriksaan;
 
         if (fokusJumlahPopulasi === null || fokusJumlahPopulasi === "") {
-            submitable = false;
+            errorJumlahPopulasi = "";
         } else if (!fokusJumlahPopulasi.match(number) || parseInt(fokusJumlahPopulasi) < 0) {
-            submitable = false;
-            submitableDraft = false;
             errorJumlahPopulasi = "Jumlah Populasi berupa angka dan tidak boleh negatif";
         }
 
-        array[indexKomponen]["submitableJumlahPopulasi"][1] = submitable;
-        array[indexKomponen]["submitableJumlahPopulasi"][0] = submitableDraft;
         array[indexKomponen]["errorJumlahPopulasi"] = errorJumlahPopulasi;
         this.setState({
             daftarKomponenPemeriksaan: array
@@ -638,22 +609,16 @@ class HasilPemeriksaanFormTambah extends React.Component {
     }
 
     validateJumlahSampel(fokusJumlahSampel, indexKomponen) {
-        var submitable = true;
-        var submitableDraft = true;
-        var errorJumlahSampel;
+        var errorJumlahSampel = "";
         const number = /^[0-9]*$/;
         const array = this.state.daftarKomponenPemeriksaan;
 
         if (fokusJumlahSampel === null || fokusJumlahSampel === "") {
-            submitable = false;
+            errorJumlahSampel = "";
         } else if (!fokusJumlahSampel.match(number) || parseInt(fokusJumlahSampel) < 0) {
-            submitable = false;
-            submitableDraft = false;
             errorJumlahSampel = "Jumlah Sampel berupa angka dan tidak boleh negatif";
         }
 
-        array[indexKomponen]["submitableJumlahSampel"][1] = submitable;
-        array[indexKomponen]["submitableJumlahSampel"][0] = submitableDraft;
         array[indexKomponen]["errorJumlahSampel"] = errorJumlahSampel;
         this.setState({
             daftarKomponenPemeriksaan: array
@@ -661,38 +626,17 @@ class HasilPemeriksaanFormTambah extends React.Component {
     }
 
     validateJumlahSampelError(fokusJumlahSampelError, indexKomponen) {
-        var submitable = true;
-        var submitableDraft = true;
-        var errorJumlahSampelError;
+        var errorJumlahSampelError = "";
         const number = /^[0-9]*$/;
         const array = this.state.daftarKomponenPemeriksaan;
 
         if (fokusJumlahSampelError === null || fokusJumlahSampelError === "") {
-            submitable = false;
+            errorJumlahSampelError = "";
         } else if (!fokusJumlahSampelError.match(number) || parseInt(fokusJumlahSampelError) < 0) {
-            submitable = false;
-            submitableDraft = false;
             errorJumlahSampelError = "Jumlah Sampel Error berupa angka dan tidak boleh negatif";
         }
 
-        array[indexKomponen]["submitableJumlahSampelError"][1] = submitable;
-        array[indexKomponen]["submitableJumlahSampelError"][0] = submitableDraft;
         array[indexKomponen]["errorJumlahSampelError"] = errorJumlahSampelError;
-        this.setState({
-            daftarKomponenPemeriksaan: array
-        });
-    }
-
-    validateRiskLevel(fokusRiskLevel, indexKomponen) {
-        var submitable = true;
-        const array = this.state.daftarKomponenPemeriksaan;
-
-        if (fokusRiskLevel === null || fokusRiskLevel === "") {
-            submitable = false;
-        }
-
-        array[indexKomponen]["submitableRiskLevel"][1] = submitable;
-        array[indexKomponen]["submitableRiskLevel"][0] = true;
         this.setState({
             daftarKomponenPemeriksaan: array
         });

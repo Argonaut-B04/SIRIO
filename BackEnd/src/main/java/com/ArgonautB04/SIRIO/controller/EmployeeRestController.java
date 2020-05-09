@@ -153,7 +153,8 @@ public class EmployeeRestController {
         }
 
         if (employeeDTO.getEmail() != null && !employeeDTO.getEmail().equals("")) {
-            if (employeeRestService.getByEmail(employeeDTO.getEmail()).isPresent())
+            if (employeeRestService.getByEmail(employeeDTO.getEmail()).isPresent() &&
+                    !employeeDTO.getEmail().equals(employee.getEmail()))
                 throw new ResponseStatusException(
                         HttpStatus.CONFLICT, "Email " + employeeDTO.getEmail() + " sudah ada pada database!"
                 );
