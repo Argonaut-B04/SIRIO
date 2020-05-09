@@ -12,7 +12,7 @@ import classes from "./ActionButton.module.css";
  * - onConfirm          : Function, dijalankan ketika tombol konfirmasi ditekan
  * - customConfirmText  : String, Opsional untuk mengganti kata "konfirmasi" pada tombol konfirmasi
  */
-export default class SirioWarningButton extends React.Component {
+export default class SirioConfirmButton extends React.Component {
 
     constructor(props, context) {
         super(props, context);
