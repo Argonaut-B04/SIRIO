@@ -435,12 +435,13 @@ class TableRiskRating extends React.Component {
                         purple
                         disabled={hasError}
                         tooltip={hasError ? "Selesaikan error terlebih dahulu" : undefined}
-                        hover={!hasError}
+                        recommended={!hasError}
                         classes="m-1"
                         modalTitle="Anda akan menyimpan perubahan konfigurasi Risk Rating"
                         onConfirm={this.handleSubmit}
                         customConfirmText="Konfirmasi"
                         customCancelText="Batal"
+                        disablePopUp={this.hasEmptyRow()}
                     >
                         Simpan
                     </SirioConfirmButton>
