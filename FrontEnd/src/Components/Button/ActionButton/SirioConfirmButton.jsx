@@ -42,8 +42,8 @@ export default class SirioConfirmButton extends React.Component {
     render() {
         const { handleClose, handleShow } = this;
         const { show } = this.state;
-        const { onConfirm, modalTitle, customConfirmText } = this.props;
-        const { modalButton } = classes;
+        const { onConfirm, modalTitle, customConfirmText, modalDesc } = this.props;
+        const { modalButton, modalDescWrapper } = classes;
 
         return (
             <>
@@ -60,13 +60,18 @@ export default class SirioConfirmButton extends React.Component {
                     onHide={handleClose}
                     centered>
                     <Modal.Body className="d-flex justify-content-center align-items-center flex-column py-5">
-                        <div className="text-center p-3 w-75">
-                            <h3 >{modalTitle}</h3>
-                        </div>
+                    
+                        {modalTitle &&
+                            <div className="text-center p-3 w-75">
+                                <h3 >{modalTitle}</h3>
+                            </div>
+                        }
 
-                        <div className="text-center px-0 mx-0 w-75">
-                            <div>{this.props.modalDesc}</div>
-                        </div>
+                        {modalDesc &&
+                            <div className={modalDescWrapper}>
+                                <div>{modalDesc}</div>
+                            </div>
+                        }
 
                         <div className="d-flex justify-content-center align-items-center w-100">
                             <SirioButton

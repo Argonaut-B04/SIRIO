@@ -44,8 +44,8 @@ export default class SirioMessageButton extends React.Component {
     render() {
         const { handleClose, handleShow } = this;
         const { show } = this.state;
-        const { modalTitle, onClick, customConfirmText } = this.props;
-        const { modalButton } = classes;
+        const { modalTitle, onClick, customConfirmText, modalDesc } = this.props;
+        const { modalButton, modalDescWrapper } = classes;
         return (
             <>
                 <SirioButton
@@ -63,9 +63,17 @@ export default class SirioMessageButton extends React.Component {
                     <Modal.Body className="d-flex justify-content-center align-items-center flex-column py-5">
                         <img src={process.env.PUBLIC_URL + "/modal-checklist.png"} height="200px" className="ml-4" alt="checklist" />
 
-                        <div className="text-center p-3 w-75">
-                            <h2>{modalTitle}</h2>
-                        </div>
+                        {modalTitle &&
+                            <div className="text-center p-3 w-75">
+                                <h3 >{modalTitle}</h3>
+                            </div>
+                        }
+
+                        {modalDesc &&
+                            <div className={modalDescWrapper}>
+                                <div>{modalDesc}</div>
+                            </div>
+                        }
 
                         <div className="d-flex justify-content-center align-items-center w-100">
                             <SirioButton

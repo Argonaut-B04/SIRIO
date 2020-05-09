@@ -44,10 +44,10 @@ export default class SirioWarningButton extends React.Component {
     }
 
     render() {
-        const { handleClose, handleShow } = this;
-        const { show } = this.state;
-        const { modalTitle, modalDesc, onConfirm, customConfirmText, customCancelText } = this.props;
-        const { modalButton } = classes;
+        const { handleClose, handleShow, state, props } = this;
+        const { show } = state;
+        const { modalTitle, modalDesc, onConfirm, customConfirmText, customCancelText } = props;
+        const { modalButton, modalDescWrapper } = classes;
 
         return (
             <>
@@ -66,10 +66,17 @@ export default class SirioWarningButton extends React.Component {
                     <Modal.Body className="d-flex justify-content-center align-items-center flex-column py-5">
                         <img src={process.env.PUBLIC_URL + '/trashbin.svg'} width="200px" alt="trashbin" />
 
-                        <div className="text-center p-3 w-75">
-                            <h2>{modalTitle}</h2>
-                            <h5>{modalDesc}</h5>
-                        </div>
+                        {modalTitle &&
+                            <div className="text-center p-3 w-75">
+                                <h3 >{modalTitle}</h3>
+                            </div>
+                        }
+
+                        {modalDesc &&
+                            <div className={modalDescWrapper}>
+                                <div>{modalDesc}</div>
+                            </div>
+                        }
 
                         <div className="d-flex justify-content-center align-items-center w-100">
                             <SirioButton
@@ -86,6 +93,7 @@ export default class SirioWarningButton extends React.Component {
                             >
                                 {customConfirmText ? customConfirmText : "Lanjutkan"}
                             </SirioButton>
+                            
                             <SirioButton
                                 purple
                                 circular
