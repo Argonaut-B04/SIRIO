@@ -2,6 +2,8 @@ import React from "react";
 import Modal from "react-bootstrap/Modal";
 import SirioButton from "../SirioButton";
 import classes from "./ActionButton.module.css";
+import TriggerButton from "./TriggerButton";
+import SirioModal from "./SirioModal";
 
 /**
  * Komponen untuk Button yang membuka Popup berupa Konfirmasi
@@ -43,37 +45,19 @@ export default class SirioConfirmButton extends React.Component {
         const { handleClose, handleShow } = this;
         const { show } = this.state;
         const { onConfirm, modalTitle, customConfirmText, modalDesc } = this.props;
-        const { modalButton, modalDescWrapper } = classes;
+        const { modalButton } = classes;
 
         return (
             <>
-                <SirioButton
-                    {...this.props}
-                    onClick={handleShow}
-                >
-                    {this.props.children}
-                </SirioButton>
+                <TriggerButton {...this.props} handleShow={this.handleShow} />
 
-                <Modal
-                    size="md"
+                <SirioModal
+                    image={<img src={process.env.PUBLIC_URL + "/modal-checklist.png"} height="200px" className="ml-4" alt="checklist" />}
+                    modalTitle={modalTitle}
+                    modalDesc={modalDesc}
                     show={show}
-                    onHide={handleClose}
-                    centered>
-                    <Modal.Body className="d-flex justify-content-center align-items-center flex-column py-5">
-                    
-                        {modalTitle &&
-                            <div className="text-center p-3 w-75">
-                                <h3 >{modalTitle}</h3>
-                            </div>
-                        }
-
-                        {modalDesc &&
-                            <div className={modalDescWrapper}>
-                                <div>{modalDesc}</div>
-                            </div>
-                        }
-
-                        <div className="d-flex justify-content-center align-items-center w-100">
+                    footerButton={
+                        <>
                             <SirioButton
                                 purple
                                 recommended={!this.props.confirmDisable}
@@ -98,9 +82,9 @@ export default class SirioConfirmButton extends React.Component {
                             >
                                 Batal
                             </SirioButton>
-                        </div>
-                    </Modal.Body>
-                </Modal>
+                        </>
+                    }
+                />
             </>
         );
     }
