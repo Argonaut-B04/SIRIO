@@ -20,8 +20,11 @@ import java.util.Optional;
 @Transactional
 public class ReminderRestServiceImpl implements ReminderRestService {
 
+
     @Autowired
     private ReminderDB reminderDB;
+    @Autowired
+    private ReminderTemplateRestService reminderTemplateRestService;
 
     @Override
     public Reminder buatReminder(Reminder reminder) {
@@ -89,6 +92,57 @@ public class ReminderRestServiceImpl implements ReminderRestService {
             );
         } else {
             return target.get();
+        }
+    }
+
+    @Override
+    public void generateDefaultReminder(Employee employee, Rekomendasi rekomendasi) {
+        LocalDate tenggatWaktu = rekomendasi.getTenggatWaktu();
+        LocalDate today = LocalDate.now();
+
+        // ambil template yang sesuai
+        ReminderTemplate reminderTemplate;
+        if (rekomendasi.getReminderTemplatePilihan() != null) {
+            reminderTemplate = rekomendasi.getReminderTemplatePilihan();
+        } else if (employee.getReminderTemplatePilihan() != null) {
+            reminderTemplate = employee.getReminderTemplatePilihan();
+        } else {
+            reminderTemplate = reminderTemplateRestService.getGlobal();
+        }
+
+        LocalDate mingguAkhir = tenggatWaktu.minusWeeks(1);
+        LocalDate hari3 = tenggatWaktu.minusDays(3);
+        LocalDate hari1 = tenggatWaktu.minusDays(1);
+
+        if (mingguAkhir.compareTo(today) > 0) {
+            buatReminder(
+                    new Reminder(
+                            mingguAkhir,
+                            employee,
+                            rekomendasi,
+                            reminderTemplate
+                    )
+            );
+        }
+        if (hari3.compareTo(today) > 0) {
+            buatReminder(
+                    new Reminder(
+                            hari3,
+                            employee,
+                            rekomendasi,
+                            reminderTemplate
+                    )
+            );
+        }
+        if (hari1.compareTo(today) > 0) {
+            buatReminder(
+                    new Reminder(
+                            hari1,
+                            employee,
+                            rekomendasi,
+                            reminderTemplate
+                    )
+            );
         }
     }
 

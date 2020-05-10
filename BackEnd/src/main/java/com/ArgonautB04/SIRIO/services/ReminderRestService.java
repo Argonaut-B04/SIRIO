@@ -39,4 +39,6 @@ public interface ReminderRestService {
     void simpanReminder(Reminder akanDiperbarui);
 
     Reminder validateExistById(int idReminder);
+
+    void generateDefaultReminder(Employee employee, Rekomendasi rekomendasi);
 }
