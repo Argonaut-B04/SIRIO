@@ -17,9 +17,8 @@ export class DemoForm3 extends Component {
     handleChange(event) {
 
         // simpan ke state
-        this.setState({
-            [event.target.name]: event.target.value
-        })
+        // Update: jangan langsung simpan ke state, simpannya barengan sama validasi aja
+        // Supaya setstate cuma 1x
 
         // baru validasi
         this.validate(event);
@@ -47,6 +46,7 @@ export class DemoForm3 extends Component {
 
             // lalu kita simpan ke state, misal disini aku kasi nama error nya "errorField1"
             this.setState({
+                [event.target.name]: event.target.value,
                 errorField1: hasilError
             })
 
@@ -65,6 +65,7 @@ export class DemoForm3 extends Component {
 
             // lalu kita simpan ke state, misal disini aku kasi nama error nya "errorField2"
             this.setState({
+                [event.target.name]: event.target.value,
                 errorField2: hasilError
             })
 

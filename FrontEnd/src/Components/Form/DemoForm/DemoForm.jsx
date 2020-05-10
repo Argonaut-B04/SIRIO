@@ -44,16 +44,15 @@ export class DemoForm extends Component {
         daftarForm[index].daftarField[event.target.name] = event.target.value;
 
         // setelah diganti, simpan ke state
-        this.setState({
-            daftarForm: daftarForm
-        })
+        // UPDATE: jangan langsung simpan ke state, simpannya nanti sama sama validasi
 
         // baru validasi
-        this.validate(event, index);
+        // UPDATE: oper yang akan disimpan, jadi nanti setState hanya 1x saja
+        this.validate(event, index, daftarForm);
     }
 
     // ini fungsi validasi, perlu diperhatikan ini untuk multiple form
-    validate(event, index) {
+    validate(event, index, daftarForm) {
 
         // sekarang, kita tinjau daftar error nya
         const { daftarError } = this.state;
@@ -71,6 +70,7 @@ export class DemoForm extends Component {
 
         // lalu kita simpan ke state
         this.setState({
+            daftarForm: daftarForm,
             daftarError: daftarError
         })
     }
