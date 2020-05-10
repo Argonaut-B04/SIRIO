@@ -32,7 +32,13 @@ export default class SirioField extends Component {
     // Sesegera mungkin, shouldComponentUpdate harus dibuka (tapi gak sekarang juga);
     shouldComponentUpdate(nextprops, nextstate) {
 
-        if (this.props.type === "select") return true;
+        if (this.props.type === "select") {
+            return true;
+        };
+
+        if (this.props.disabled !== nextprops.disabled) {
+            return true;
+        }
 
         // untuk form biasa
         if (typeof nextprops.value !== "undefined") {
@@ -40,20 +46,8 @@ export default class SirioField extends Component {
                 return false;
             }
         }
+
         return true;
-    }
-
-    componentDidUpdate() {
-        var validationResult;
-        if (this.isFunction(this.props.validationFunction)) {
-            validationResult = this.props.validationFunction(this.props.value);
-        }
-
-        if ((this.state.validationResult !== validationResult) && (typeof validationResult !== 'undefined')) {
-            this.setState({
-                validationResult: validationResult
-            })
-        }
     }
 
     generateField(key, customInput, type, index, name, value, handleChange, optionList, customClass, required, min, max, placeholder) {

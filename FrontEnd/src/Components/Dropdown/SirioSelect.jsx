@@ -44,6 +44,7 @@ export default class SirioSelect extends Component {
                 <input
                     tabIndex={-1}
                     autoComplete="off"
+                    readOnly
                     style={{ opacity: 0, height: 0, top: "40px", position: "absolute" }}
                     value={options && options.filter(option => option.value === value)}
                     required
