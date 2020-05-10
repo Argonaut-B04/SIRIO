@@ -165,7 +165,7 @@ class TableRiskLevel extends React.Component {
                     return (
                         <SirioButton
                             red
-                            hover
+                            recommended
                             onClick={() => this.hapus(row.idLevel)}
                         >
                             Hapus
@@ -270,8 +270,7 @@ class TableRiskLevel extends React.Component {
         var toggleButton = (
             <SirioButton
                 purple
-                recommended={!this.state.editMode}
-                hover
+                recommended
                 onClick={this.toggleEditMode}
                 classes="mx-1"
             >
@@ -282,8 +281,7 @@ class TableRiskLevel extends React.Component {
             toggleButton = (
                 <SirioWarningButton
                     purple
-                    hover
-                    recommended={!this.state.editMode}
+                    recommended
                     modalTitle="Konfirmasi Pembatalan"
                     modalDesc="Seluruh perubahan konfigurasi Risk Level yang belum tersimpan akan dihapus. Konfirmasi?"
                     onConfirm={() => window.location.reload(false)}
@@ -311,18 +309,19 @@ class TableRiskLevel extends React.Component {
                         purple
                         disabled={this.hasEmptyRow()}
                         tooltip={this.hasEmptyRow() ? "Masih terdapat baris yang kosong" : undefined}
-                        hover={!this.hasEmptyRow()}
+                        recommended={!this.hasEmptyRow()}
                         classes="m-1"
                         modalTitle="Anda akan menyimpan perubahan konfigurasi Risk Level"
                         onConfirm={this.handleSubmit}
                         customConfirmText="Konfirmasi"
                         customCancelText="Batal"
+                        disablePopUp={this.hasEmptyRow()}
                     >
                         Simpan
                     </SirioConfirmButton>
                     <SirioWarningButton
                         red
-                        hover
+                        recommended
                         modalTitle="Konfirmasi Pembatalan"
                         modalDesc="Seluruh perubahan konfigurasi Risk Level yang belum tersimpan akan dihapus. Konfirmasi?"
                         onConfirm={() => window.location.href = "/"}
@@ -346,6 +345,8 @@ class TableRiskLevel extends React.Component {
         return (
             <>
                 <SirioTable
+                    noTotal
+                    noSizePerPage
                     title={(this.state.editMode ? "Konfigurasi " : "Daftar ") + "Risk Level"}
                     subtitle={this.state.editMode && "Klik pada cell yang ingin anda ubah"}
                     data={this.state.rowList}

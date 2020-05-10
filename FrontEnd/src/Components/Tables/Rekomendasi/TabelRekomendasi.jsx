@@ -47,7 +47,6 @@ export default class TabelRekomendasi extends React.Component {
                 if (!error.response) {
                     window.location.href = "/error";
                 } else {
-                    console.log(error.response.data);
                     this.setState({
                         redirector: true,
                         code: error.response.data.status,
