@@ -28,16 +28,15 @@ export class DemoForm2 extends Component {
         daftarField[event.target.name] = event.target.value;
 
         // setelah diganti, simpan ke state
-        this.setState({
-            daftarField: daftarField
-        })
+        // UPDATE: jangan langsung simpan ke state, tapi oper lewat validasi ...
+        // Nanti setState nya sekalian
 
         // baru validasi
-        this.validate(event);
+        this.validate(event, daftarField);
     }
 
     // ini fungsi validasi
-    validate(event) {
+    validate(event, daftarField) {
 
         // ini validasi untuk input dengan name='field'
         if (event.target.name === "field") {
@@ -58,6 +57,7 @@ export class DemoForm2 extends Component {
 
             // lalu kita simpan ke state
             this.setState({
+                daftarField: daftarField,
                 daftarError: daftarError
             })
 
@@ -79,6 +79,7 @@ export class DemoForm2 extends Component {
 
             // lalu kita simpan ke state
             this.setState({
+                daftarField: daftarField,
                 daftarError: daftarError
             })
         }

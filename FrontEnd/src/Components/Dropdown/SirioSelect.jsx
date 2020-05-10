@@ -42,6 +42,7 @@ export default class SirioSelect extends Component {
         if (required) {
             hiddenOne =
                 <input
+                    readOnly
                     tabIndex={-1}
                     autoComplete="off"
                     style={{ opacity: 0, height: 0, top: "40px", position: "absolute" }}

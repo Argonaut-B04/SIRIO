@@ -137,7 +137,7 @@ class LoginForm extends Component {
                     <fieldset className="w-100 text-right">
                         <SirioButton
                             blue
-                            hover
+                            recommended
                             onClick={loginClicked}
                         >
                             Login

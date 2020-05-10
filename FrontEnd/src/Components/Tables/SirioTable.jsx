@@ -95,7 +95,8 @@ export default class SirioTable extends Component {
             sizePerPage: 10,
             prePageText: "Previous",
             nextPageText: "Next",
-            showTotal: true,
+            showTotal: !this.props.noTotal,
+            hideSizePerPage: this.props.noSizePerPage,
             hidePageListOnlyOnePage: true,
             onPageChange: (page, sizePerPage) => {
                 this.renderRowNumber(page, sizePerPage)

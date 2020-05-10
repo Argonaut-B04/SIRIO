@@ -39,6 +39,9 @@ public class RekomendasiRestController {
     @Autowired
     private BuktiPelaksanaanRestService buktiPelaksanaanRestService;
 
+    @Autowired
+    private ReminderRestService reminderRestService;
+
     /**
      * Mengambil seluruh rekomendasi yang terhubung dengan user yang sedang login
      *
@@ -213,19 +216,29 @@ public class RekomendasiRestController {
             @RequestBody RekomendasiDTO rekomendasiDTO,
             Principal principal
     ) {
+        // validasi employee ada dan punya akses tenggat waktu
         Employee employee = employeeRestService.validateEmployeeExistByPrincipal(principal);
         employeeRestService.validateRolePermission(employee, "tenggat waktu");
 
+        // validasi rekomendasi yang mau diset tenggat waktu ada di database
         Integer idRekomendasi = rekomendasiDTO.getId();
         Rekomendasi rekomendasi = rekomendasiRestService.validateExistInById(idRekomendasi);
 
+        // validasi tenggat waktu yang dimasukan
         LocalDate tenggatWaktuBaru = rekomendasiDTO.getTenggatWaktuDate();
         rekomendasiRestService.validateDateInputMoreThanToday(tenggatWaktuBaru);
 
+        // validasi status rekomendasi memungkinkan pengaturan tenggat waktu
         rekomendasiRestService.validateDeadlineCanBeSet(rekomendasi);
 
+        // mengatur tenggat waktu dan simpan perubahan
         rekomendasi.setTenggatWaktu(tenggatWaktuBaru);
         Rekomendasi result = rekomendasiRestService.buatAtauSimpanPerubahanRekomendasi(rekomendasi, true);
+
+        // membuat 3 reminder: 1 hari sebelum, 3 hari sebelum, dan 1 minggu sebelum
+        reminderRestService.generateDefaultReminder(employee, rekomendasi);
+
+        // kirim response
         return new BaseResponse<>(200, "success", result);
     }
 }
