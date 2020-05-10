@@ -169,6 +169,9 @@ public class HasilPemeriksaanRestController {
             komponenPemeriksaanDTO.getRisiko().setNama(komponenPemeriksaan.getRisiko().getNamaRisiko());
             komponenPemeriksaanDTO.getRisiko().setNamaSop(komponenPemeriksaan.getRisiko().getSop().getJudul());
             komponenPemeriksaanDTO.getRisiko().setLinkSop(komponenPemeriksaan.getRisiko().getSop().getLinkDokumen());
+            komponenPemeriksaanDTO.getRisiko().setDeskripsi(komponenPemeriksaan.getRisiko().getDeskripsi());
+            komponenPemeriksaanDTO.getRisiko().setKetentuanSampel(komponenPemeriksaan.getRisiko().getKetentuanSampel());
+            komponenPemeriksaanDTO.getRisiko().setMetodologi(komponenPemeriksaan.getRisiko().getMetodologi());
             if (komponenPemeriksaan.getRisiko().getParent() != null) {
                 komponenPemeriksaanDTO.getRisiko().setParent(komponenPemeriksaan.getRisiko().getParent().getIdRisiko());
                 if (komponenPemeriksaan.getRisiko().getParent().getParent() != null)

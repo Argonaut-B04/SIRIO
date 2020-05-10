@@ -216,6 +216,7 @@ class FormRisikoUbah extends React.Component {
                     : event.target.value
             }
         )
+        this.validateNama(event);
     }
 
     handleSelectChange(name, event) {
