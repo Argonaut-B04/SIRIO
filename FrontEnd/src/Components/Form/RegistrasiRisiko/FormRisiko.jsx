@@ -122,13 +122,13 @@ class FormRisiko extends React.Component {
 
     submitable() {
         return this.state.errorNama === "" &&
-            (this.state.detailUraian === null || this.state.errorDU === "") &&
-            (this.state.metodologi === null || this.state.errorMetod === "") &&
-            (this.state.deskripsi === null || this.state.errorDesc === "") &&
-            (this.state.ketentuanSampel === null || this.state.errorKS === "") &&
-            (this.state.nama !== null && this.state.nama !== "") &&
-            (this.state.kategori !== null) &&
-            (this.state.sop !== null);
+            (this.state.detailUraian === "" || this.state.errorDU === "") &&
+            (this.state.metodologi === "" || this.state.errorMetod === "") &&
+            (this.state.deskripsi === "" || this.state.errorDesc === "") &&
+            (this.state.ketentuanSampel === "" || this.state.errorKS === "") &&
+            (this.state.nama !== "" && this.state.nama !== "") &&
+            (this.state.kategori !== "") &&
+            (this.state.sop !== "");
     }
 
     componentDidMount() {
@@ -329,7 +329,7 @@ class FormRisiko extends React.Component {
             <>
                 {this.renderRedirect()}
                 <SirioForm
-                    title="Form Risiko"
+                    title="Form Tambah Risiko"
                     inputDefinition={this.inputDefinition()}
                     onSubmit={this.handleSubmit}
                     submitButton={this.submitButton()}
