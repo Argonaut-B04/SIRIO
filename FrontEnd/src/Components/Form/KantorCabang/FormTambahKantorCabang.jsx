@@ -57,7 +57,7 @@ class FormTambahKantorCabang extends React.Component {
         var errorArea = "";
         var symbols = /[-!$%@#^&*()\\_+|~=`{}\[\]:";'<>?,.\/]/;
         if(fokusArea === null || fokusArea === ""){
-            errorArea = "";
+            errorArea = "Area harus diisi";
         } else if (fokusArea.match(symbols)) {
             errorArea = "Area hanya boleh mengandung huruf dan angka";
         }
@@ -75,7 +75,7 @@ class FormTambahKantorCabang extends React.Component {
         var errorReg = "";
         var symbols = /[-!$%@#^&*()\\_+|~=`{}\[\]:";'<>?,.\/]/;
         if(fokusReg === null || fokusReg === ""){
-            errorReg= "";
+            errorReg= "Regional harus diisi";
         } else if (fokusReg.match(symbols)) {
             errorReg= "Regional hanya boleh mengandung huruf dan angka";
         }

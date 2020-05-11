@@ -60,7 +60,7 @@ class FormUbahKantorCabang extends React.Component {
         var errorArea = "";
         var symbols = /[-!$%@#^&*()\\_+|~=`{}\[\]:";'<>?,.\/]/;
         if(fokusArea === null || fokusArea === ""){
-            errorArea = "";
+            errorArea = "Area harus diisi";
         } else if (fokusArea.match(symbols)) {
             errorArea = "Area hanya boleh mengandung huruf dan angka";
         }
@@ -78,7 +78,7 @@ class FormUbahKantorCabang extends React.Component {
         var errorReg = "";
         var symbols = /[-!$%@#^&*()\\_+|~=`{}\[\]:";'<>?,.\/]/;
         if(fokusReg === null || fokusReg === ""){
-            errorReg= "";
+            errorReg= "Regional harus diisi";
         } else if (fokusReg.match(symbols)) {
             errorReg= "Regional hanya boleh mengandung huruf dan angka";
         }
@@ -304,7 +304,7 @@ class FormUbahKantorCabang extends React.Component {
             <div>
                 {tombolSimpan}
                 <NavLink to={{
-                    pathname: "/kantorCabang/detail",
+                    pathname: "/administrator/kantorCabang/detail",
                     state: {
                         id: this.props.location.state.id
                     }
