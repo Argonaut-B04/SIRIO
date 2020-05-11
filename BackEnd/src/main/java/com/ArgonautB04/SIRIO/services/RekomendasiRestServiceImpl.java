@@ -50,40 +50,51 @@ public class RekomendasiRestServiceImpl implements RekomendasiRestService {
     }
 
     @Override
-    public List<Integer> getAllByMonth() {
-        List<Rekomendasi> impl = getAll();
-        List<Integer> intImpl = new ArrayList<>();
-        int count6 = 0;
-        int count5 = 0;
-        int count4 = 0;
-        int count3 = 0;
-        int count2 = 0;
-        int count1 = 0;
-        for (int i=0;i<impl.size();i++) {
-            if (impl.get(i).getTenggatWaktu() != null) {
-                if (impl.get(i).getTenggatWaktu().getMonth().equals(LocalDate.now().getMonth())) {
-                    count6++;
-                } else if (impl.get(i).getTenggatWaktu().getMonth().equals(LocalDate.now().minusMonths(1).getMonth())) {
-                    count5++;
-                } else if (impl.get(i).getTenggatWaktu().getMonth().equals(LocalDate.now().minusMonths(2).getMonth())) {
-                    count4++;
-                } else if (impl.get(i).getTenggatWaktu().getMonth().equals(LocalDate.now().minusMonths(3).getMonth())) {
-                    count3++;
-                } else if (impl.get(i).getTenggatWaktu().getMonth().equals(LocalDate.now().minusMonths(4).getMonth())) {
-                    count2++;
-                } else if (impl.get(i).getTenggatWaktu().getMonth().equals(LocalDate.now().minusMonths(5).getMonth())) {
-                    count1++;
-                }
+    public List<Rekomendasi> getByPembuat(int idQa) {
+        List<Rekomendasi> list = new ArrayList<>();
+        for (Rekomendasi r: getAll()) {
+            if (r.getKomponenPemeriksaan().getHasilPemeriksaan().getTugasPemeriksaan().getPelaksana().getIdEmployee() == idQa) {
+                list.add(r);
             }
         }
-        intImpl.add(count1);
-        intImpl.add(count2);
-        intImpl.add(count3);
-        intImpl.add(count4);
-        intImpl.add(count5);
-        intImpl.add(count6);
-        return intImpl;
+        return list;
     }
+
+//    @Override
+//    public List<Integer> getAllByMonth() {
+//        List<Rekomendasi> impl = getAll();
+//        List<Integer> intImpl = new ArrayList<>();
+//        int count6 = 0;
+//        int count5 = 0;
+//        int count4 = 0;
+//        int count3 = 0;
+//        int count2 = 0;
+//        int count1 = 0;
+//        for (int i=0;i<impl.size();i++) {
+//            if (impl.get(i).getTenggatWaktu() != null) {
+//                if (impl.get(i).getTenggatWaktu().getMonth().equals(LocalDate.now().getMonth())) {
+//                    count6++;
+//                } else if (impl.get(i).getTenggatWaktu().getMonth().equals(LocalDate.now().minusMonths(1).getMonth())) {
+//                    count5++;
+//                } else if (impl.get(i).getTenggatWaktu().getMonth().equals(LocalDate.now().minusMonths(2).getMonth())) {
+//                    count4++;
+//                } else if (impl.get(i).getTenggatWaktu().getMonth().equals(LocalDate.now().minusMonths(3).getMonth())) {
+//                    count3++;
+//                } else if (impl.get(i).getTenggatWaktu().getMonth().equals(LocalDate.now().minusMonths(4).getMonth())) {
+//                    count2++;
+//                } else if (impl.get(i).getTenggatWaktu().getMonth().equals(LocalDate.now().minusMonths(5).getMonth())) {
+//                    count1++;
+//                }
+//            }
+//        }
+//        intImpl.add(count1);
+//        intImpl.add(count2);
+//        intImpl.add(count3);
+//        intImpl.add(count4);
+//        intImpl.add(count5);
+//        intImpl.add(count6);
+//        return intImpl;
+//    }
 
     @Override
     public List<Rekomendasi> getRekomendasiDiimplementasi() {
@@ -91,6 +102,17 @@ public class RekomendasiRestServiceImpl implements RekomendasiRestService {
         for (Rekomendasi r : getAll()) {
             if (r.getBuktiPelaksanaan() != null && r.getBuktiPelaksanaan().getStatusBuktiPelaksanaan().getIdStatusBukti()
                     == 2) {
+                impl.add(r);
+            }
+        }
+        return impl;
+    }
+
+    @Override
+    public List<Rekomendasi> getRekomendasiDiimplementasiByPembuat(int idQa) {
+        List<Rekomendasi> impl = new ArrayList<>();
+        for (Rekomendasi r : getRekomendasiDiimplementasi()) {
+            if (r.getKomponenPemeriksaan().getHasilPemeriksaan().getTugasPemeriksaan().getPelaksana().getIdEmployee() == idQa) {
                 impl.add(r);
             }
         }
@@ -111,6 +133,17 @@ public class RekomendasiRestServiceImpl implements RekomendasiRestService {
     }
 
     @Override
+    public List<Rekomendasi> getRekomendasiOverdueByPembuat(int idQa) {
+        List<Rekomendasi> impl = new ArrayList<>();
+        for (Rekomendasi r : getRekomendasiOverdue()) {
+            if (r.getKomponenPemeriksaan().getHasilPemeriksaan().getTugasPemeriksaan().getPelaksana().getIdEmployee() == idQa) {
+                impl.add(r);
+            }
+        }
+        return impl;
+    }
+
+    @Override
     public List<Integer> getRekomendasiByMonth(List<Rekomendasi> rekomendasiList) {
         List<Integer> intOverdue = new ArrayList<>();
         int count6 = 0;
@@ -120,18 +153,18 @@ public class RekomendasiRestServiceImpl implements RekomendasiRestService {
         int count2 = 0;
         int count1 = 0;
         for (int i=0;i<rekomendasiList.size();i++) {
-            if (rekomendasiList.get(i).getTenggatWaktu().getMonth().equals(LocalDate.now().getMonth())) {
+            if (rekomendasiList.get(i).getKomponenPemeriksaan().getHasilPemeriksaan().getTugasPemeriksaan().getTanggalMulai().getMonth().equals(LocalDate.now().getMonth())) {
                 count6++;
                 //tanggal mulai dari tugas
-            } else if (rekomendasiList.get(i).getTenggatWaktu().getMonth().equals(LocalDate.now().minusMonths(1).getMonth())) {
+            } else if (rekomendasiList.get(i).getKomponenPemeriksaan().getHasilPemeriksaan().getTugasPemeriksaan().getTanggalMulai().getMonth().equals(LocalDate.now().minusMonths(1).getMonth())) {
                 count5++;
-            } else if (rekomendasiList.get(i).getTenggatWaktu().getMonth().equals(LocalDate.now().minusMonths(2).getMonth())) {
+            } else if (rekomendasiList.get(i).getKomponenPemeriksaan().getHasilPemeriksaan().getTugasPemeriksaan().getTanggalMulai().getMonth().equals(LocalDate.now().minusMonths(2).getMonth())) {
                 count4++;
-            } else if (rekomendasiList.get(i).getTenggatWaktu().getMonth().equals(LocalDate.now().minusMonths(3).getMonth())) {
+            } else if (rekomendasiList.get(i).getKomponenPemeriksaan().getHasilPemeriksaan().getTugasPemeriksaan().getTanggalMulai().getMonth().equals(LocalDate.now().minusMonths(3).getMonth())) {
                 count3++;
-            } else if (rekomendasiList.get(i).getTenggatWaktu().getMonth().equals(LocalDate.now().minusMonths(4).getMonth())) {
+            } else if (rekomendasiList.get(i).getKomponenPemeriksaan().getHasilPemeriksaan().getTugasPemeriksaan().getTanggalMulai().getMonth().equals(LocalDate.now().minusMonths(4).getMonth())) {
                 count2++;
-            } else if (rekomendasiList.get(i).getTenggatWaktu().getMonth().equals(LocalDate.now().minusMonths(5).getMonth())) {
+            } else if (rekomendasiList.get(i).getKomponenPemeriksaan().getHasilPemeriksaan().getTugasPemeriksaan().getTanggalMulai().getMonth().equals(LocalDate.now().minusMonths(5).getMonth())) {
                 count1++;
             }
         }
@@ -151,14 +184,23 @@ public class RekomendasiRestServiceImpl implements RekomendasiRestService {
             if (r.getStatusRekomendasi().getIdStatusRekomendasi() == 6 && r.getBuktiPelaksanaan() == null
                     && r.getTenggatWaktu().isAfter(LocalDate.now())) {
                 belumImpl.add(r);
-                System.out.println("gaada bukti" + r.getIdRekomendasi());
             } else if (r.getStatusRekomendasi().getIdStatusRekomendasi() == 6 && r.getBuktiPelaksanaan() != null
                     && r.getBuktiPelaksanaan().getStatusBuktiPelaksanaan().getIdStatusBukti() != 2  && r.getTenggatWaktu().isAfter(LocalDate.now())) {
                 belumImpl.add(r);
-                System.out.println("bukti ditolak" + r.getIdRekomendasi());
             }
         }
         return belumImpl;
+    }
+
+    @Override
+    public List<Rekomendasi> getRekomendasiBelumDiimplementasiByPembuat(int idQa) {
+        List<Rekomendasi> impl = new ArrayList<>();
+        for (Rekomendasi r : getRekomendasiBelumDiimplementasi()) {
+            if (r.getKomponenPemeriksaan().getHasilPemeriksaan().getTugasPemeriksaan().getPelaksana().getIdEmployee() == idQa) {
+                impl.add(r);
+            }
+        }
+        return impl;
     }
 
     @Override

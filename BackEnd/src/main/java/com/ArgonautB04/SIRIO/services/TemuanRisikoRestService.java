@@ -11,7 +11,11 @@ public interface TemuanRisikoRestService {
 
     List<TemuanRisiko> getAll();
 
+    List<TemuanRisiko> getByPembuat(int idQa);
+
     List<Integer> getAllByMonth();
+
+    List<Integer> getByPembuatByMonth(int idQa);
 
     List<TemuanRisiko> getByKomponenPemeriksaan(KomponenPemeriksaan komponenPemeriksaan);
 

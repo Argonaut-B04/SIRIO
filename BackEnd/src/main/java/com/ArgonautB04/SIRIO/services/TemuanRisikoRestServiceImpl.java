@@ -31,6 +31,9 @@ public class TemuanRisikoRestServiceImpl implements TemuanRisikoRestService {
     @Autowired
     private StatusHasilPemeriksaanDB statusHasilPemeriksaanDB;
 
+    @Autowired
+    private EmployeeRestService employeeRestService;
+
     @Override
     public TemuanRisiko buatTemuanRisiko(TemuanRisiko temuanRisiko) {
         return temuanRisikoDB.save(temuanRisiko);
@@ -49,8 +52,54 @@ public class TemuanRisikoRestServiceImpl implements TemuanRisikoRestService {
     }
 
     @Override
+    public List<TemuanRisiko> getByPembuat(int idQa) {
+        Employee emp = employeeRestService.getById(idQa);
+        return temuanRisikoDB.findAllByPembuat(emp);
+    }
+
+    @Override
     public List<Integer> getAllByMonth() {
         List<TemuanRisiko> impl = getAll();
+        List<Integer> intImpl = new ArrayList<>();
+        int count6 = 0;
+        int count5 = 0;
+        int count4 = 0;
+        int count3 = 0;
+        int count2 = 0;
+        int count1 = 0;
+        for (int i=0;i<impl.size();i++) {
+            if (impl.get(i).getKomponenPemeriksaan().getHasilPemeriksaan().getTugasPemeriksaan().getTanggalMulai()
+                    .getMonth().equals(LocalDate.now().getMonth())) {
+                count6++;
+            } else if (impl.get(i).getKomponenPemeriksaan().getHasilPemeriksaan().getTugasPemeriksaan().getTanggalMulai()
+                    .getMonth().equals(LocalDate.now().minusMonths(1).getMonth())) {
+                count5++;
+            } else if (impl.get(i).getKomponenPemeriksaan().getHasilPemeriksaan().getTugasPemeriksaan().getTanggalMulai()
+                    .getMonth().equals(LocalDate.now().minusMonths(2).getMonth())) {
+                count4++;
+            } else if (impl.get(i).getKomponenPemeriksaan().getHasilPemeriksaan().getTugasPemeriksaan().getTanggalMulai()
+                    .getMonth().equals(LocalDate.now().minusMonths(3).getMonth())) {
+                count3++;
+            } else if (impl.get(i).getKomponenPemeriksaan().getHasilPemeriksaan().getTugasPemeriksaan().getTanggalMulai()
+                    .getMonth().equals(LocalDate.now().minusMonths(4).getMonth())) {
+                count2++;
+            } else if (impl.get(i).getKomponenPemeriksaan().getHasilPemeriksaan().getTugasPemeriksaan().getTanggalMulai()
+                    .getMonth().equals(LocalDate.now().minusMonths(5).getMonth())) {
+                count1++;
+            }
+        }
+        intImpl.add(count1);
+        intImpl.add(count2);
+        intImpl.add(count3);
+        intImpl.add(count4);
+        intImpl.add(count5);
+        intImpl.add(count6);
+        return intImpl;
+    }
+
+    @Override
+    public List<Integer> getByPembuatByMonth(int idQa) {
+        List<TemuanRisiko> impl = getByPembuat(idQa);
         List<Integer> intImpl = new ArrayList<>();
         int count6 = 0;
         int count5 = 0;
