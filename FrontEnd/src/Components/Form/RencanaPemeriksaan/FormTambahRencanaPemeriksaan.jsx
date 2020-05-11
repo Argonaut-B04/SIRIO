@@ -121,7 +121,7 @@ export default class FormTambahRencana extends React.Component {
             submitable = false;
             errorNama = "Hanya boleh mengandung huruf";
         }
-        if (fokusNama.length < 2) {
+        if (fokusNama.length < 1) {
             submitable = false;
             errorNama = "Nama rencana harus diisi";
         } 

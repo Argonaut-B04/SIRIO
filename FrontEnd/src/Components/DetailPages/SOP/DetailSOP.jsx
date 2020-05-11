@@ -44,8 +44,7 @@ class DetailSOP extends React.Component {
     };
 
     async renderDataSOP() {
-        console.log(this.props.location.state.id)
-        const response = await SopService.getSOPDetail(1);
+        const response = await SopService.getSOPDetail(this.props.location.state.id);
         
         this.setState({
            sop: response.data.result,

@@ -4,7 +4,6 @@ import SirioButton from '../../Button/SirioButton';
 import SopService from '../../../Services/SopService';
 import { Redirect } from 'react-router-dom';
 import { withRouter } from 'react-router-dom';
-import {OverlayTrigger, Tooltip} from 'react-bootstrap'
 
 class FormTambahSOP extends React.Component {
 
