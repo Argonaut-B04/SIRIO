@@ -10,7 +10,7 @@ import SirioField from "../SirioFormComponent/SirioField";
 import TemuanRisikoService from "../../../Services/TemuanRisikoService";
 import SirioConfirmButton from "../../Button/ActionButton/SirioConfirmButton";
 
-class HasilPemeriksaanFormTambah extends React.Component {
+class HasilPemeriksaanFormUbah extends React.Component {
 
     // Masukan user disimpan kedalam state sebelum dikirim ke backend
     constructor(props) {
@@ -231,13 +231,11 @@ class HasilPemeriksaanFormTambah extends React.Component {
     getHistoriTemuanButton(idRisiko) {
         const histori = <p>
             {this.state.daftarHistoriTemuan
-                .filter(temuan => temuan.idRisiko === idRisiko)
+                .filter(x => x.idRisiko === idRisiko)
                 .map((temuan, index) =>
                     <p className="text-center p-0 m-0">{index+1}. {temuan.keterangan} </p>
                 )}
         </p>;
-
-        console.log(histori)
 
         return (
             <SirioConfirmButton
@@ -666,4 +664,4 @@ class HasilPemeriksaanFormTambah extends React.Component {
     }
 }
 
-export default withRouter(HasilPemeriksaanFormTambah);
+export default withRouter(HasilPemeriksaanFormUbah);

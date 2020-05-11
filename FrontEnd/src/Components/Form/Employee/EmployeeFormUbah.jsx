@@ -244,19 +244,31 @@ class EmployeeFormUbah extends React.Component {
         )
     }
 
-    handleSubmit(event) {
+    async handleSubmit(event) {
         event.preventDefault();
-        const employee = {
-            id: this.state.id,
-            idRole: this.state.idRole,
-            nama: this.state.nama,
-            jabatan: this.state.jabatan,
-            email: this.state.email,
-            noHp: this.state.noHp
-        };
         if (this.state.submitable) {
-            EmployeeService.editEmployee(employee)
-                .then(() => this.setRedirect());
+            const response = await EmployeeService.checkEmailExist(this.state.email);
+            if (response.data.result) {
+                const errorEmail = "Email sudah terdaftar";
+                if (this.state.errorEmail !== errorEmail) {
+                    this.setState({
+                        errorEmail: errorEmail
+                    })
+                }
+            } else {
+                const employee = {
+                    id: this.state.id,
+                    idRole: this.state.idRole,
+                    nama: this.state.nama,
+                    jabatan: this.state.jabatan,
+                    email: this.state.email,
+                    noHp: this.state.noHp
+                };
+                if (this.state.submitable) {
+                    EmployeeService.editEmployee(employee)
+                        .then(() => this.setRedirect());
+                }
+            }
         }
     }
 

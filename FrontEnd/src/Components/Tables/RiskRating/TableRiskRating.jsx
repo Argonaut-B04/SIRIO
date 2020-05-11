@@ -451,7 +451,7 @@ class TableRiskRating extends React.Component {
                         hover
                         modalTitle="Konfirmasi Pembatalan"
                         modalDesc="Seluruh perubahan konfigurasi Risk Rating yang belum tersimpan akan dihapus. Konfirmasi?"
-                        onConfirm={() => window.location.href = "/"}
+                        onConfirm={() => window.location.reload(false)}
                         customConfirmText="Konfirmasi"
                         customCancelText="Kembali"
                     >

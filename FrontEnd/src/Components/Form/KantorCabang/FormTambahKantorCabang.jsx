@@ -6,9 +6,7 @@ import EmployeeService from '../../../Services/EmployeeService';
 import { Redirect } from 'react-router-dom';
 import { withRouter } from 'react-router-dom';
 import {OverlayTrigger, Tooltip} from 'react-bootstrap'
-/**
- * Kelas untuk membuat form demo
- */
+
 class FormTambahKantorCabang extends React.Component {
 
     // Masukan user disimpan kedalam state sebelum dikirim ke backend
@@ -183,7 +181,7 @@ class FormTambahKantorCabang extends React.Component {
         const fokusNama = this.state.namaKantorCabang
         if(fokusNama.match(".*[-@#!$%^&*()_+{}:.,[]|>/=<?]+.*")){
             submitable = false;
-            errorNama = "Hanya boleh mengandung huruf";
+            errorNama = "Hanya boleh mengandung huruf dan angka";
         }
         if (fokusNama.length < 2) {
             submitable = false;
@@ -207,7 +205,7 @@ class FormTambahKantorCabang extends React.Component {
         const fokusArea = this.state.area
         if(fokusArea.match(".*[-@#!$%^&*()_+{}:.,[]|>/=<?]+.*")){
             submitable = false;
-            errorArea = "Hanya boleh mengandung huruf";
+            errorArea = "Hanya boleh mengandung huruf dan angka";
         }
         if (fokusArea.length < 2) {
             submitable = false;
@@ -231,7 +229,7 @@ class FormTambahKantorCabang extends React.Component {
         const fokusReg = this.state.regional
         if(fokusReg.match(".*[-@#!$%^&*()_+{}:.,[]|>/=<?]+.*")){
             submitable = false;
-            errorReg= "Hanya boleh mengandung huruf";
+            errorReg= "Hanya boleh mengandung huruf dan angka";
         }
         if (fokusReg.length < 2) {
             submitable = false;
@@ -272,7 +270,7 @@ class FormTambahKantorCabang extends React.Component {
         return (
             [
                 {
-                    label: "Nama Point*",
+                    label: "Nama Point",
                     required: true,
                     handleChange: this.handleChange,
                     type: "text",
@@ -281,7 +279,7 @@ class FormTambahKantorCabang extends React.Component {
                     value: this.state.namaKantorCabang,
                     placeholder: "Masukan nama point"
                 }, {
-                    label: "Branch Manager*",
+                    label: "Branch Manager",
                     required: true,
                     validation: this.state.errorBM,
                     handleChange: this.handleSelectChange,
@@ -290,7 +288,7 @@ class FormTambahKantorCabang extends React.Component {
                     value: this.state.idPemilik,
                     optionList: this.state.employeeOptionList
                 },{
-                    label: "Area*",
+                    label: "Area",
                     required: true,
                     handleChange: this.handleChange,
                     type: "text",
@@ -299,7 +297,7 @@ class FormTambahKantorCabang extends React.Component {
                     value: this.state.area,
                     placeholder: "Masukan nama area"
                 },{
-                    label: "Regional*",
+                    label: "Regional",
                     required: true,
                     handleChange: this.handleChange,
                     type: "text",

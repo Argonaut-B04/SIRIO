@@ -41,9 +41,6 @@ public class RencanaPemeriksaanRestController {
 
     /**
      * Mengambil seluruh rencana pemeriksaan yang terhubung dengan user yang sedang login
-     * <p>
-     * Changelog:
-     * - Mengubah filter id pembuat dengan filter logged in user
      *
      * @return daftar rencana pemeriksaan yang terhubung dengan pembuat tersebut
      */

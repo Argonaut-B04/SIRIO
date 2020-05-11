@@ -49,7 +49,7 @@ export const konfigurasi = {
             link: "/risk-level"
         }, {
             title: "SOP",
-            link: "#"
+            link: "/manager/sop"
         }, {
             title: "Template Reminder",
             link: "/pengaturan-reminder"
@@ -72,9 +72,9 @@ export const profilKC = {
     title: "Profil Kantor Cabang",
 }
 
-export const dashboardEmployee = {
-    link: "/dashboard-employee",
-    title: "Dashboard Employee",
+export const dashboardStaff = {
+    link: "/dashboard-staff",
+    title: "Dashboard Staff",
 }
 
 export const dashboardKantorCabang = {

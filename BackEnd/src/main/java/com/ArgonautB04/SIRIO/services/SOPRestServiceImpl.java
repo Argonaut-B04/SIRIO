@@ -3,7 +3,9 @@ package com.ArgonautB04.SIRIO.services;
 import com.ArgonautB04.SIRIO.model.SOP;
 import com.ArgonautB04.SIRIO.repository.SOPDB;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -30,8 +32,34 @@ public class SOPRestServiceImpl implements SOPRestService {
     }
 
     @Override
+    public Optional<SOP> getByJudul(String judul) {
+        return SOPDB.findByJudul(judul);
+    }
+
+    @Override
+    public SOP validateExistById(int idSOP) {
+
+        Optional<SOP> sop = SOPDB.findById(idSOP);
+        if (sop.isPresent()) {
+            return sop.get();
+        } else {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    "SOP dengan ID " + idSOP + " tidak ditemukan!"
+            );
+        }
+    }
+
+    @Override
+    public SOP nonaktifkanSOP(int idSOP) {
+        SOP sop = getById(idSOP);
+        sop.setStatus(SOP.Status.NONAKTIF);
+        return sop;
+    }
+
+    @Override
     public List<SOP> getAll() {
-        return SOPDB.findAll();
+        return SOPDB.findAllByStatus(SOP.Status.AKTIF);
     }
 
     @Override

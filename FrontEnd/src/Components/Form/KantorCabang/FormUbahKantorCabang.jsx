@@ -7,9 +7,7 @@ import { Redirect } from 'react-router-dom';
 import { withRouter } from 'react-router-dom';
 import {OverlayTrigger, Tooltip} from 'react-bootstrap'
 
-/**
- * Kelas untuk membuat form demo
- */
+
 class FormUbahKantorCabang extends React.Component {
 
     // Masukan user disimpan kedalam state sebelum dikirim ke backend

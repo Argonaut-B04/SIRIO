@@ -7,9 +7,6 @@ import KantorCabangService from '../../../Services/KantorCabangService';
 import { Redirect } from 'react-router-dom';
 import RencanaPemeriksaanService from '../../../Services/RencanaPemeriksaanService';
 
-/**
- * Kelas untuk membuat form demo
- */
 export default class FormTambahRencana extends React.Component {
 
     // Masukan user disimpan kedalam state sebelum dikirim ke backend
@@ -370,7 +367,7 @@ export default class FormTambahRencana extends React.Component {
         return (
             [
                 {
-                    label: "Nama Rencana*",
+                    label: "Nama Rencana",
                     handleChange: this.handleChange,
                     type: "text",
                     name: "namaRencana",
@@ -379,7 +376,7 @@ export default class FormTambahRencana extends React.Component {
                     value: this.state.namaRencana,
                     placeholder: "Masukan nama rencana"
                 }, {
-                    label: "Link Pemeriksaan*",
+                    label: "Link Pemeriksaan",
                     handleChange: this.handleChange,
                     type: "text",
                     name: "linkMajelis",
@@ -413,7 +410,7 @@ export default class FormTambahRencana extends React.Component {
         return (
             [
                 {
-                    label: "Kantor Cabang*",
+                    label: "Kantor Cabang",
                     handleChange: this.handleMultipleSelectChange,
                     index: index,
                     required: true,
@@ -423,7 +420,7 @@ export default class FormTambahRencana extends React.Component {
                     value: this.state.daftarTugasPemeriksaan[index].kantorCabang,
                     optionList: this.state.kantorOptionList
                 }, {
-                    label: "QA Officer*",
+                    label: "QA Officer",
                     handleChange: this.handleMultipleSelectChange,
                     index: index,
                     type: "select",
@@ -433,7 +430,7 @@ export default class FormTambahRencana extends React.Component {
                     value: this.state.daftarTugasPemeriksaan[index].idQA,
                     optionList: this.state.employeeOptionList,
                 }, {
-                    label: "Tanggal Mulai*",
+                    label: "Tanggal Mulai",
                     handleChange: this.handleMultipleChange,
                     index: index,
                     type: "date",
@@ -443,7 +440,7 @@ export default class FormTambahRencana extends React.Component {
                     value: this.state.daftarTugasPemeriksaan[index].tanggalMulai
                     
                 }, {
-                    label: "Tanggal Selesai*",
+                    label: "Tanggal Selesai",
                     handleChange: this.handleMultipleChange,
                     index: index,
                     type: "date",

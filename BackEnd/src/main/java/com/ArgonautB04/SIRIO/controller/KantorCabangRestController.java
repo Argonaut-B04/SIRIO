@@ -34,9 +34,6 @@ public class KantorCabangRestController {
 
     /**
      * Mengambil seluruh kantor cabang yang terhubung dengan user yang sedang login
-     * <p>
-     * Changelog:
-     * - Mengubah filter id pembuat dengan filter logged in user
      *
      * @return daftar kantor cabang yang terhubung dengan pembuat tersebut
      */
@@ -45,6 +42,11 @@ public class KantorCabangRestController {
         return new BaseResponse<>(200, "success", kantorCabangRestService.getAll());
     }
 
+    /**
+     * Mengecek apakah nama kantor cabang yang ditambahkan sudah ada di database
+     *
+     * @return true jika sudah ada
+     */
     @GetMapping("/check/{namaKantor}")
     private BaseResponse<Boolean> isExistInDatabase(
             @PathVariable("namaKantor") String namaKantor
@@ -191,7 +193,7 @@ public class KantorCabangRestController {
     /**
      * Menghapus kantor cabang
      *
-     * @param kantorCabangDTO data transfer object untuk tugas pemeriksaan yang akan dihapus
+     * @param kantorCabangDTO data transfer object untuk kantor cabang yang akan dihapus
      */
     @PostMapping("/hapus")
     private BaseResponse<String> hapusKantorCabang(
