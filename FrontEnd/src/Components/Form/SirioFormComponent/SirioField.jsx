@@ -42,6 +42,9 @@ export default class SirioField extends Component {
 
         // untuk form biasa
         if (typeof nextprops.value !== "undefined") {
+            if (this.props.errormessage !== nextprops.errormessage) {
+                return true;
+            }
             if (this.props.value === nextprops.value) {
                 return false;
             }
