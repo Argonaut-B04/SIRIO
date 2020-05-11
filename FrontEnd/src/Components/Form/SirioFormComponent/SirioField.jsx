@@ -30,36 +30,18 @@ export default class SirioField extends Component {
     }
 
     // Sesegera mungkin, shouldComponentUpdate harus dibuka (tapi gak sekarang juga);
-    // shouldComponentUpdate(nextprops, nextstate) {
-    //
-    //     // untuk form biasa
-    //     // if (typeof nextprops.value !== "undefined") {
-    //     //     if (this.props.value === nextprops.value) {
-    //     //         return false;
-    //     //     }
-    //     // }
-    //     //
-    //     // // untuk array
-    //     // if (Array.isArray(nextprops.value)) {
-    //     //     if (this.props.value.length !== nextprops.value.length) {
-    //     //         return true
-    //     //     } else {
-    //     //         for (var i = 0; i < this.props.value.length; i++) {
-    //     //             if (this.props.value[i] !== nextprops.value[i]) {
-    //     //                 return true;
-    //     //             };
-    //     //         }
-    //     //         return false;
-    //     //     }
-    //     // }
-    //     //
-    //     // // untuk custom input
-    //     // if (typeof nextprops.customInput !== "undefined") {
-    //     //     return false;
-    //     // }
-    //     //
-    //     // return true;
-    // }
+    shouldComponentUpdate(nextprops, nextstate) {
+
+        if (this.props.type === "select") return true;
+
+        // untuk form biasa
+        if (typeof nextprops.value !== "undefined") {
+            if (this.props.value === nextprops.value) {
+                return false;
+            }
+        }
+        return true;
+    }
 
     componentDidUpdate() {
         var validationResult;

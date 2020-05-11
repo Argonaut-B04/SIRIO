@@ -1,8 +1,9 @@
 import React from "react";
-import Modal from "react-bootstrap/Modal";
 import SirioButton from "../SirioButton";
 import "bootstrap/dist/css/bootstrap.min.css";
 import classes from "./ActionButton.module.css";
+import TriggerButton from "./TriggerButton";
+import SirioModal from "./SirioModal";
 
 /**
  * Komponen untuk Button yang membuka Popup berupa Warning
@@ -44,34 +45,22 @@ export default class SirioWarningButton extends React.Component {
     }
 
     render() {
-        const { handleClose, handleShow } = this;
-        const { show } = this.state;
-        const { modalTitle, modalDesc, onConfirm, customConfirmText, customCancelText } = this.props;
+        const { handleClose, handleShow, state, props } = this;
+        const { show } = state;
+        const { modalTitle, modalDesc, onConfirm, customConfirmText, customCancelText } = props;
         const { modalButton } = classes;
 
         return (
             <>
-                <SirioButton
-                    {...this.props}
-                    onClick={handleShow}
-                >
-                    {this.props.children}
-                </SirioButton>
-
-                <Modal
-                    size="md"
+                <TriggerButton {...this.props} handleShow={handleShow} />
+                <SirioModal
+                    image={<img src={process.env.PUBLIC_URL + '/trashbin.svg'} width="200px" alt="trashbin" />}
+                    modalTitle={modalTitle}
+                    modalDesc={modalDesc}
                     show={show}
-                    onHide={handleClose}
-                    centered>
-                    <Modal.Body className="d-flex justify-content-center align-items-center flex-column py-5">
-                        <img src={process.env.PUBLIC_URL + '/trashbin.svg'} width="200px" alt="trashbin" />
-
-                        <div className="text-center p-3 w-75">
-                            <h2>{modalTitle}</h2>
-                            <h5>{modalDesc}</h5>
-                        </div>
-
-                        <div className="d-flex justify-content-center align-items-center w-100">
+                    handleClose={handleClose}
+                    footerButton={
+                        <>
                             <SirioButton
                                 purple
                                 recommended
@@ -86,6 +75,7 @@ export default class SirioWarningButton extends React.Component {
                             >
                                 {customConfirmText ? customConfirmText : "Lanjutkan"}
                             </SirioButton>
+
                             <SirioButton
                                 purple
                                 circular
@@ -94,9 +84,9 @@ export default class SirioWarningButton extends React.Component {
                             >
                                 {customCancelText ? customCancelText : "Kembali"}
                             </SirioButton>
-                        </div>
-                    </Modal.Body>
-                </Modal>
+                        </>
+                    }
+                />
             </>
         );
     }

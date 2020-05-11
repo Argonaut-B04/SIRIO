@@ -65,17 +65,26 @@ class TabelReminder extends React.Component {
     }
 
     async renderRows() {
+
+        // Mengubah isi dari loader
+        this.props.contentStartLoading();
+        this.props.changeLoadingBody("Mengambil data dari server");
+
         const response = await ReminderService.getByIdRekomendasi({
             id: this.props.location.state.id
         });
 
         const theDate = this.props.location.state.deadline;
 
+        // Mengubah isi dari loader
+        this.props.changeLoadingBody("Menampilkan data");
+
         this.setState({
             rowList: response.data.result,
             deadline: new Date(theDate)
-        })
+        }, this.props.contentFinishLoading())
 
+        // Setelah jeda waktu, hentikan loader
     }
 
     columns() {
@@ -365,7 +374,7 @@ class TabelReminder extends React.Component {
             <div>
                 <SirioConfirmButton
                     purple
-                    hover
+                    recommended
                     classes="m-1"
                     modalTitle="Anda akan menyimpan perubahan pada tabel reminder"
                     onConfirm={this.handleSubmit}
@@ -376,7 +385,7 @@ class TabelReminder extends React.Component {
                 </SirioConfirmButton>
                 <SirioWarningButton
                     red
-                    hover
+                    recommended
                     modalTitle="Konfirmasi Pembatalan"
                     modalDesc="Seluruh perubahan reminder yang belum tersimpan akan dihapus. Konfirmasi?"
                     onConfirm={() => window.location.href = "/rekomendasi"}

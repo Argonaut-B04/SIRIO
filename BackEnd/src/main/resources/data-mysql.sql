@@ -34,8 +34,8 @@ VALUES
 
 INSERT IGNORE INTO `status_hasil_pemeriksaan` (`id_status_hasil`, `keterangan_status`, `nama_status`) 
 VALUES 
-('1', NULL, 'Menunggu Persetujuan'), 
-('2', NULL, 'Draft'), 
+('1', NULL, 'Draft'), 
+('2', NULL, 'Menunggu Persetujuan'), 
 ('3', NULL, 'Ditolak'), 
 ('4', NULL, 'Menunggu Pelaksanaan'), 
 ('5', NULL, 'Selesai');
