@@ -18,9 +18,17 @@ public interface RekomendasiRestService {
 
     List<Rekomendasi> getAll();
 
-    List<Rekomendasi> getRekomendasiBelumDiimplementasi();
+    List<Integer> getAllByMonth();
+
+    List<Integer> getRekomendasiByMonth(List<Rekomendasi> rekomendasiList);
+
+    List<Rekomendasi> getRekomendasiDiimplementasi();
 
     List<Rekomendasi> getRekomendasiOverdue();
+
+    List<Rekomendasi> getRekomendasiBelumDiimplementasi();
+
+    List<String> getListMonth();
 
     List<Rekomendasi> getByKomponenPemeriksaan(KomponenPemeriksaan komponenPemeriksaan);
   

@@ -22,6 +22,11 @@ class DashboardStaff extends React.Component {
             jumlahRekomendasiOverdue: "",
             jumlahRekomendasiBelumDiimplementasi: "",
             jumlahRekomendasiDiimplementasi: "",
+            listTemuan: [],
+            listRekomendasiOverdue: [],
+            listRekomendasiBelumDiimplementasi: [],
+            listRekomendasiDiimplementasi: [],
+            listMonth: [],
             preloader: true,
             contentLoading: !PollingService.isConnected()
         }
@@ -35,7 +40,12 @@ class DashboardStaff extends React.Component {
                 jumlahTemuan: response.data.result.jumlahTemuan,
                 jumlahRekomendasiOverdue: response.data.result.jumlahRekomendasiOverdue,
                 jumlahRekomendasiBelumDiimplementasi: response.data.result.jumlahRekomendasiBelumDiimplementasi,
-                jumlahRekomendasiDiimplementasi: response.data.result.jumlahRekomendasiDiimplementasi
+                jumlahRekomendasiDiimplementasi: response.data.result.jumlahRekomendasiDiimplementasi,
+                listTemuan: response.data.result.listTemuan,
+                listRekomendasiOverdue: response.data.result.listRekomendasiOverdue,
+                listRekomendasiBelumDiimplementasi: response.data.result.listRekomendasiBelumDiimplementasi,
+                listRekomendasiDiimplementasi: response.data.result.listRekomendasiDiimplementasi,
+                listMonth: response.data.result.listMonth
             })
         })
         .catch(error => {
@@ -92,47 +102,47 @@ class DashboardStaff extends React.Component {
     render() {
         const { preloader, contentLoading, loadingBody } = this.state;
         const data = {
-            labels: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni'],
+            labels: this.state.listMonth,
             datasets: [
                 {
                     label: 'Jumlah Temuan',
-                    backgroundColor: 'rgba(251, 251, 181, 0.6)',
-                    borderColor: 'rgba(244, 244, 35, 0.96)',
+                    backgroundColor: '#7F3F98',
+                    borderColor: '#7F3F98',
                     stack: 'Stack 0',
                     borderWidth: 1,
-                    hoverBackgroundColor: 'rgba(252, 252, 7, 0.6)',
-                    hoverBorderColor: 'rgba(234, 234, 46, 0.96)',
-                    data: [this.state.jumlahTemuan,12,14,14,43,32]
+                    hoverBackgroundColor: '#7F3F98',
+                    hoverBorderColor: '#7F3F98',
+                    data: this.state.listTemuan
                 },
                 {
                     label: 'Jumlah Rekomendasi Diimplementasi',
-                    backgroundColor: 'rgba(34, 245, 34, 0.3)',
-                    borderColor: 'rgba(46, 234, 46, 0.96)',
+                    backgroundColor: '#5DBCD2',
+                    borderColor: '#5DBCD2',
                     stack: 'Stack 1',
                     borderWidth: 1,
-                    hoverBackgroundColor: 'rgba(34, 245, 34, 0.96)',
-                    hoverBorderColor: 'rgba(46, 234, 46, 0.96)',
-                    data: [this.state.jumlahRekomendasiDiimplementasi, 95, 90, 40, 10,2]
+                    hoverBackgroundColor: '#5DBCD2',
+                    hoverBorderColor: '#5DBCD2',
+                    data: this.state.listRekomendasiDiimplementasi
                 },
                 {
                     label: 'Jumlah Rekomendasi Belum Diimplementasi',
                     stack: 'Stack 1',
-                    backgroundColor: 'rgba(255,99,132,0.2)',
-                    borderColor: 'rgba(255,99,132,1)',
+                    backgroundColor: 'rgba(255, 0, 0, 0.85)',
+                    borderColor: 'rgba(255, 0, 0, 0.85)',
                     borderWidth: 1,
-                    hoverBackgroundColor: 'rgba(255,99,132,0.4)',
-                    hoverBorderColor: 'rgba(255,99,132,1)',
-                    data: [this.state.jumlahRekomendasiBelumDiimplementasi, 55, 60, 110, 140,10]
+                    hoverBackgroundColor: 'rgba(255, 0, 0, 0.85)',
+                    hoverBorderColor: 'rgba(255, 0, 0, 0.85)',
+                    data: this.state.listRekomendasiBelumDiimplementasi
                 },
                 {
                     label: 'Jumlah Rekomendasi Overdue',
                     stack: 'Stack 1',
-                    backgroundColor: 'rgba(254,99,132,0.2)',
-                    borderColor: 'rgba(255,99,132,1)',
+                    backgroundColor: '#F2C94C',
+                    borderColor: '#F2C94C',
                     borderWidth: 1,
-                    hoverBackgroundColor: 'rgba(255,99,132,0.4)',
-                    hoverBorderColor: 'rgba(255,99,132,1)',
-                    data: [this.state.jumlahRekomendasiOverdue, 55, 60, 110, 140,40]
+                    hoverBackgroundColor: '#F2C94C',
+                    hoverBorderColor: '#F2C94C',
+                    data: this.state.listRekomendasiOverdue
                 }
             ]
         };
@@ -144,15 +154,15 @@ class DashboardStaff extends React.Component {
             },
             {
                 title: "Rekomendasi Diimplementasi",
-                value: this.state.jumlahRekomendasiDiimplementasi
+                value: this.state.jumlahRekomendasiDiimplementasi + "%"
             },
             {
                 title: "Rekomendasi Belum Diimplementasi",
-                value: this.state.jumlahRekomendasiBelumDiimplementasi
+                value: this.state.jumlahRekomendasiBelumDiimplementasi + "%"
             },
             {
                 title: "Rekomendasi Overdue",
-                value: this.state.jumlahRekomendasiOverdue
+                value: this.state.jumlahRekomendasiOverdue + "%"
             },
             {
                 title: "Temuan",
@@ -161,11 +171,11 @@ class DashboardStaff extends React.Component {
         ]
         return (
             <SirioMainLayout preloader={preloader} contentLoading={contentLoading} loadingBody={loadingBody} active={!contentLoading}>
-                <h1 className="text-center">Welcome to SIRIO</h1>
+                <h1 className="text-left">Dashboard Performa Staff Operational Risk</h1>
+                <br></br>
                 <div>
-                    <h3 className="text-center">Perbandingan Reaksi Saat Mendengar / Mengetahui (faktor sumbu x)</h3>
                     <SirioBarChart data={data} />
-                    <h6 className="text-right pt-3">Data diambil dari sumber yang tidak terpercaya sehingga dapat dipastikan tidak benar</h6>
+                    <h6 className="text-right pt-3">Data ini hanya data sementara</h6>
                 </div>
 
                 <div>
