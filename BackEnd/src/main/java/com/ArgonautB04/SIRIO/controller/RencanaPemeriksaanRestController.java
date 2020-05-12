@@ -147,6 +147,7 @@ public class RencanaPemeriksaanRestController {
     ) throws ParseException {
         Employee employee = employeeRestService.validateEmployeeExistByPrincipal(principal);
         RencanaPemeriksaan rencanaPemeriksaanTemp = new RencanaPemeriksaan();
+        rencanaPemeriksaanTemp.setPembuat(employee);
 
         if (rencanaPemeriksaanDTO.getNamaRencana() != null && !rencanaPemeriksaanDTO.getNamaRencana().equals("")) {
             rencanaPemeriksaanTemp.setNamaRencana(rencanaPemeriksaanDTO.getNamaRencana());

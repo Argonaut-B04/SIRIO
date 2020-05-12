@@ -183,10 +183,10 @@ class FormUbahRencana extends React.Component {
             submitable = false;
             errorNama = "Hanya boleh mengandung huruf";
         }
-        if (fokusNama.length < 2) {
-            submitable = false;
-            errorNama = "Minimal terdapat 2 karakter";
-        } 
+        // if (fokusNama.length < 1) {
+        //     submitable = false;
+        //     errorNama = "Nama harus diisi";
+        // } 
         if (fokusNama.length > 50) {
             submitable = false;
             errorNama = "Nama rencana tidak boleh lebih dari 50 karakter";
@@ -202,11 +202,13 @@ class FormUbahRencana extends React.Component {
     validateLink() {
         var submitable = true;
         var errorLink;
+        var link = /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/;
         const fokusLink = this.state.linkMajelis
-        if (fokusLink.length < 1) {
-            submitable = false;
-            errorLink = "Lampiran wajib diisi";
-        } else if (!fokusLink.includes("https://")) {
+        // if (fokusLink.length < 1) {
+        //     submitable = false;
+        //     errorLink = "Lampiran wajib diisi";
+        // } 
+        if (!fokusLink.match(link)) {
             submitable = false;
             errorLink = "Lampiran harus berupa link url";
         }
@@ -426,7 +428,7 @@ class FormUbahRencana extends React.Component {
             [
                 
                 {
-                    label: "Kantor Cabang*",
+                    label: "Kantor Cabang",
                     handleChange: this.handleMultipleSelectChange,
                     index: index,
                     required: true,
@@ -436,7 +438,7 @@ class FormUbahRencana extends React.Component {
                     value: this.state.daftarTugasPemeriksaan[index].kantorCabang,
                     optionList: this.state.kantorOptionList
                 }, {
-                    label: "QA Officer*",
+                    label: "QA Officer",
                     handleChange: this.handleMultipleSelectChange,
                     index: index,
                     type: "select",
@@ -446,7 +448,7 @@ class FormUbahRencana extends React.Component {
                     value: this.state.daftarTugasPemeriksaan[index].idQA,
                     optionList: this.state.employeeOptionList
                 }, {
-                    label: "Tanggal Mulai*",
+                    label: "Tanggal Mulai",
                     handleChange: this.handleMultipleChange,
                     index: index,
                     type: "date",
@@ -455,7 +457,7 @@ class FormUbahRencana extends React.Component {
                     name: "tanggalMulai",
                     value: this.state.daftarTugasPemeriksaan[index].tanggalMulai
                 }, {
-                    label: "Tanggal Selesai*",
+                    label: "Tanggal Selesai",
                     handleChange: this.handleMultipleChange,
                     index: index,
                     type: "date",
