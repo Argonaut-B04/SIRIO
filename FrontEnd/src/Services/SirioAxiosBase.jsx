@@ -29,6 +29,25 @@ export default class SirioAxiosBase {
 
     static formatDateFromSirioDatePicker(string) {
         const dateinArray = string.split("-");
-        return this.formatDate(dateinArray);
+        return SirioAxiosBase.formatDate(dateinArray);
+    }
+
+    static formatDateYear(cell, row) {
+        const tanggal = row;
+        const tanggalArray = tanggal.split("-");
+        return tanggalArray[0];
+    }
+
+    static formatDateMonth(cell, row) {
+        const tanggal = row;
+        const dateStringinArray = tanggal.split(" ");
+        const tanggalArray = dateStringinArray.split("-");
+        var month = tanggalArray[1];
+        var monthName = ["Januari", "Februari", "Maret", "April", "Mei", "Juni",
+            "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+
+        month = monthName[month - 1];
+
+        return month;
     }
 }

@@ -6,10 +6,12 @@ import com.ArgonautB04.SIRIO.repository.RisikoDB;
 import com.ArgonautB04.SIRIO.rest.RisikoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -45,12 +47,39 @@ public class RisikoRestServiceImpl implements RisikoRestService {
     @Override
     public Risiko ubahRisiko(int idRisiko, Risiko risiko) {
         Risiko target = getById(idRisiko);
-        target.setChildList(risiko.getChildList());
+        List<Risiko> empty = new ArrayList<>();
+        if (target.getRisikoKategori().equals(risiko.getRisikoKategori())) {
+            for (Risiko r : risiko.getChildList()) {
+                r.setParent(null);
+            }
+            target.setChildList(empty);
+            target.setParent(null);
+        } else {
+            target.setChildList(risiko.getChildList());
+            target.setParent(risiko.getParent());
+        }
         target.setSop(risiko.getSop());
-        target.setRisikoKategori(risiko.getRisikoKategori());
-        target.setParent(risiko.getParent());
         target.setNamaRisiko(risiko.getNamaRisiko());
-        target.setKomponen(risiko.getKomponen());
+        target.setRisikoKategori(risiko.getRisikoKategori());
+        if (risiko.getRisikoKategori() == 3) {
+            if (risiko.getDetailUraian() != null) {
+                target.setDetailUraian(risiko.getDetailUraian());
+            }
+            if (risiko.getDeskripsi() != null) {
+                target.setDeskripsi(risiko.getDeskripsi());
+            }
+            if (risiko.getMetodologi() != null) {
+                target.setMetodologi(risiko.getMetodologi());
+            }
+            if(risiko.getKetentuanSampel() != null) {
+                target.setKetentuanSampel(risiko.getKetentuanSampel());
+            }
+        } else {
+            target.setDeskripsi(null);
+            target.setMetodologi(null);
+            target.setKetentuanSampel(null);
+            target.setDetailUraian(null);
+        }
         return risikoDB.save(target);
     }
 
@@ -75,8 +104,25 @@ public class RisikoRestServiceImpl implements RisikoRestService {
 
     @Override
     public Risiko transformasidto(Risiko risiko, RisikoDTO risikoDTO) {
-        risiko.setChildList(risikoDTO.getChild());
-        risiko.setKomponen(risikoDTO.getKomponen());
+        if (risikoDTO.getKategori() == 3) {
+            if (risikoDTO.getDetailUraian() != null) {
+                risiko.setDetailUraian(risikoDTO.getDetailUraian());
+            }
+            if (risikoDTO.getDeskripsi() != null) {
+                risiko.setDeskripsi(risikoDTO.getDeskripsi());
+            }
+            if (risikoDTO.getMetodologi() != null) {
+                risiko.setMetodologi(risikoDTO.getMetodologi());
+            }
+            if(risikoDTO.getKetentuanSampel() != null) {
+                risiko.setKetentuanSampel(risikoDTO.getKetentuanSampel());
+            }
+        } else {
+            risiko.setDetailUraian(null);
+            risiko.setKetentuanSampel(null);
+            risiko.setMetodologi(null);
+            risiko.setDeskripsi(null);
+        }
         risiko.setRisikoKategori(risikoDTO.getKategori());
         risiko.setNamaRisiko(risikoDTO.getNama());
         if (risikoDTO.getParent() != null) {
@@ -97,7 +143,7 @@ public class RisikoRestServiceImpl implements RisikoRestService {
 
     @Override
     public List<Risiko> getByKategori(Integer kategori) {
-        return risikoDB.findAllByRisikoKategori(kategori);
+        return risikoDB.findAllByRisikoKategoriAndStatus(kategori, Risiko.Status.AKTIF);
     }
 
     @Override
@@ -123,4 +169,20 @@ public class RisikoRestServiceImpl implements RisikoRestService {
         }
     }
 
+    @Override
+    public Optional<Risiko> getByNama(String nama) {
+        return risikoDB.findByNamaRisikoAndStatus(nama, Risiko.Status.AKTIF);
+    }
+
+    public Risiko validateExistById(int idRisiko) {
+        Optional<Risiko> target = risikoDB.findById(idRisiko);
+        if (target.isPresent()) {
+            return target.get();
+        } else {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    "ID Risiko " + idRisiko + " Tidak Ditemukan"
+            );
+        }
+    }
 }

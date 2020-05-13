@@ -1,12 +1,12 @@
 package com.ArgonautB04.SIRIO.rest;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 public class RekomendasiDTO {
     private Integer id;
     private Integer idPembuat;
+    private Integer idHasilPemeriksaan;
     private String keterangan;
     private String tenggatWaktu;
     private LocalDate tenggatWaktuDate;
@@ -15,6 +15,7 @@ public class RekomendasiDTO {
     private String statusBukti;
     private String namaKantorCabang;
     private List<ReminderDTO> reminderDTO;
+
     public List<ReminderDTO> getReminder() {
         return reminderDTO;
     }
@@ -37,6 +38,14 @@ public class RekomendasiDTO {
 
     public void setIdPembuat(Integer idPembuat) {
         this.idPembuat = idPembuat;
+    }
+
+    public Integer getIdHasilPemeriksaan() {
+        return idHasilPemeriksaan;
+    }
+
+    public void setIdHasilPemeriksaan(Integer idHasilPemeriksaan) {
+        this.idHasilPemeriksaan = idHasilPemeriksaan;
     }
 
     public String getKeterangan() {
@@ -94,6 +103,5 @@ public class RekomendasiDTO {
     public void setTenggatWaktuDate(LocalDate tenggatWaktuDate) {
         this.tenggatWaktuDate = tenggatWaktuDate;
     }
-
 
 }

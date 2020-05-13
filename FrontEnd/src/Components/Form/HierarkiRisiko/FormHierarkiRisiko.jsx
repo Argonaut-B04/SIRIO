@@ -24,6 +24,8 @@ class FormHierarkiRisiko extends React.Component {
         this.activeUbah = this.activeUbah.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.setRedirect = this.setRedirect.bind(this);
+        this.toggleEdit = this.toggleEdit.bind(this);
+        this.getOptions = this.getOptions.bind(this);
     }
 
     componentDidMount() {
@@ -59,7 +61,7 @@ class FormHierarkiRisiko extends React.Component {
                 classes: classes.rowItem,
                 headerClasses: classes.colheader,
                 headerStyle: (colum, colIndex) => {
-                    return { width: "30%", textAlign: 'left' };
+                    return { width: "30%", textAlign: 'center' };
                 }
             }, {
                 dataField: 'kategori',
@@ -69,8 +71,11 @@ class FormHierarkiRisiko extends React.Component {
                 classes: classes.rowItem,
                 headerClasses: classes.colheader,
                 headerStyle: (colum, colIndex) => {
-                    return { width: "25%", textAlign: 'center' };
-                }
+                    return { width: "20%", textAlign: 'center' };
+                },
+                style: () => {
+                    return { textAlign: 'center' }
+                },
             }, {
                 dataField: 'noData 1',
                 text: 'PARENT',
@@ -81,7 +86,7 @@ class FormHierarkiRisiko extends React.Component {
                 classes: classes.rowItem,
                 headerClasses: classes.colheader,
                 headerStyle: (colum, colIndex) => {
-                    return { width: "20%", textAlign: 'center' };
+                    return { width: "25%", textAlign: 'center' };
                 }
             }, {
                 dataField: 'noData 2',
@@ -92,9 +97,9 @@ class FormHierarkiRisiko extends React.Component {
                 formatter: (cell, row) => this.activeUbah(row),
                 classes: classes.rowItem,
                 headerClasses: classes.colheader,
-                headerStyle: (colum, colIndex) => {
-                    return { width: "20%", textAlign: 'center' };
-                }
+                style: () => {
+                    return { textAlign: 'center' }
+                },
             }
             ]
         )
@@ -106,22 +111,38 @@ class FormHierarkiRisiko extends React.Component {
             row.changeable = false;
         }
 
+
         if (row.kategori === 1) {
             return "";
         }
 
         return (
             <SirioButton
+
                 purple
                 recommended
-                onClick={() => {
-                    row.changeable = !row.changeable;
-                    this.forceUpdate();
-                }}
+                onClick={() => this.toggleEdit(row.id)}
             >
-                {row.changeable ? "Turn Off Ubah" : "Turn On Ubah"}
+                {row.changeable ? "Selesai" : "Ubah Hierarki"}
             </SirioButton>
         )
+    }
+
+    toggleEdit(id) {
+        let rowListLocal = [...this.state.rowList];
+        rowListLocal = rowListLocal.map((item) => {
+            if (item.id === id) {
+                return {
+                    ...item,
+                    changeable: item.changeable ? !item.changeable : true
+                }
+            }
+            return item;
+        })
+        this.setState(curr => ({
+            ...curr,
+            rowList: rowListLocal
+        }));
     }
 
     getOptions(row) {
@@ -143,12 +164,11 @@ class FormHierarkiRisiko extends React.Component {
                 return (
                     <SirioSelect
                         name="parent"
-                        value={row.parent}
+
                         handleChange={(name, event) => {
-                            row.parent = event.value;
-                            row.namaParent = event.label;
-                            this.forceUpdate();
+                            this.changeParent(row.id, event)
                         }}
+                        value={row.parent}
                         options={optionList}
                     />
                 )
@@ -156,6 +176,24 @@ class FormHierarkiRisiko extends React.Component {
         } else {
             return row.namaParent
         }
+    }
+
+    changeParent(id, event) {
+        let rowListLocal = [...this.state.rowList];
+        rowListLocal = rowListLocal.map((item) => {
+            if (item.id === id) {
+                return {
+                    ...item,
+                    parent: event.value,
+                    namaParent: event.label,
+                }
+            }
+            return item;
+        })
+        this.setState(curr => ({
+            ...curr,
+            rowList: rowListLocal
+        }));
     }
 
     footerContent() {
@@ -168,7 +206,6 @@ class FormHierarkiRisiko extends React.Component {
                     onConfirm={this.handleSubmit}
                     customConfirmText="Konfirmasi"
                     customCancelText="Batal"
-                    closeOnConfirm
                 >
                     Simpan
             </SirioConfirmButton>
@@ -178,7 +215,7 @@ class FormHierarkiRisiko extends React.Component {
                     modalDesc="Seluruh perubahan hierarki risiko yang belum tersimpan akan dihapus. Apakah Anda yakin?"
                     onConfirm={() => window.location.href = "/"}
                     customConfirmText="Konfirmasi"
-                    customCancelText="Kembali"
+                    customCancelText="Batal"
                 >
                     Batal
             </SirioWarningButton>
@@ -187,7 +224,6 @@ class FormHierarkiRisiko extends React.Component {
     }
 
     handleSubmit() {
-        console.log(this.state.rowList)
         HierarkiRisikoService.submitChanges(this.state.rowList)
             .then(() => this.setRedirect());
     }
@@ -199,7 +235,6 @@ class FormHierarkiRisiko extends React.Component {
     };
 
     renderRedirect = () => {
-        console.log(this.state.redirect)
         if (this.state.redirect) {
             return <Redirect to={{
                 pathname: "/registrasi-risiko",
@@ -209,6 +244,26 @@ class FormHierarkiRisiko extends React.Component {
             }} />
         }
     };
+
+    // hierarkiFormatter() {
+    //     var list = [];
+    //     console.log(this.state.rowList)
+    //     for (let i = 0; i < this.state.rowList.length; i++) {
+    //         if (rowList[i].namaParent != this.state.rowList[i].namaParent) {
+    //             const nama = this.state.rowList[i].namaParent;
+    //             list.push(nama);
+    //         }
+    //     }
+    //     return ( 
+    //     <> 
+    //     {list.map(parent => 
+    //     <li>
+    //         {parent}
+    //     </li>
+    //     )} 
+    //     </> 
+    //     )
+    // }
 
     // Fungsi untuk mendapatkan tombol di sisi kanan title
     headerButton() {
@@ -221,7 +276,6 @@ class FormHierarkiRisiko extends React.Component {
                     onConfirm={this.handleSubmit}
                     customConfirmText="Konfirmasi"
                     customCancelText="Batal"
-                    closeOnConfirm
                 >
                     Simpan
             </SirioConfirmButton>
@@ -231,7 +285,7 @@ class FormHierarkiRisiko extends React.Component {
                     modalDesc="Seluruh perubahan hierarki risiko yang belum tersimpan akan dihapus. Apakah Anda yakin?"
                     onConfirm={() => window.location.href = "/registrasi-risiko"}
                     customConfirmText="Konfirmasi"
-                    customCancelText="Kembali"
+                    customCancelText="Batal"
                 >
                     Batal
             </SirioWarningButton>
@@ -242,17 +296,17 @@ class FormHierarkiRisiko extends React.Component {
     render() {
         return (
             <>
-            {this.renderRedirect()}
-            <SirioTable
-                title="Hierarki Semua Risiko"
-                data={this.state.rowList}
-                id='id'
-                columnsDefinition={this.columns()}
-                headerButton={this.headerButton()}
-            />
+                {this.renderRedirect()}
+                <SirioTable
+                    title="Hierarki Semua Risiko"
+                    data={this.state.rowList}
+                    id='id'
+                    columnsDefinition={this.columns()}
+                    headerButton={this.headerButton()}
+                />
             </>
         );
     }
-} 
+}
 
 export default withRouter(FormHierarkiRisiko);

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import classes from "./SirioDropdown.module.css";
 
 /**
  * Komponen Dropdown untuk Sirio secara Umum
@@ -30,15 +29,18 @@ class SirioDropdown extends Component {
     }
 
     render() {
+        const { state, props, toggleOpen } = this;
+        const { listOpen } = state;
+        const { headerClass, activeClass, menuClass, headerTitle } = props;
         return (
-            <div className={classes.dropdown}>
-                <div className={this.state.listOpen ? [this.props.headerClass, this.props.activeClass].join(' ') : this.props.headerClass} onClick={() => this.toggleOpen()}>
-                    <span>{this.props.headerTitle}</span> <span className="ml-auto"> ▼ </span>
+            <>
+                <div className={listOpen ? [headerClass, activeClass].join(' ') : headerClass} onClick={toggleOpen} data-tip={listOpen ? "Klik untuk menutup" : "Klik untuk melihat lebih"}>
+                    <span>{headerTitle}</span> <span className="ml-auto"> ▼ </span>
                 </div>
-                {this.state.listOpen && <div className={this.props.menuClass}>
+                {listOpen && <div className={menuClass}>
                     {this.props.children}
                 </div>}
-            </div>
+            </>
         );
     }
 }

@@ -28,10 +28,123 @@ export default class EmployeeFormTambah extends React.Component {
         this.inputDefinition = this.inputDefinition.bind(this);
         this.handleSelectChange = this.handleSelectChange.bind(this);
         this.setRedirect = this.setRedirect.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+        this.submitable = this.submitable.bind(this);
     }
 
     componentDidMount() {
         this.renderRoleOption();
+    }
+
+    validateJabatan(fokusJabatan) {
+        var errorJabatan = "";
+        if (fokusJabatan === null || fokusJabatan === "") {
+            errorJabatan = "";
+        } else if (fokusJabatan.length > 30) {
+            errorJabatan = "Jabatan maksimal 30 karakter";
+        }
+
+        this.setState({
+            errorJabatan: errorJabatan
+        })
+
+    }
+
+    validateNama(fokusName) {
+        var errorName = "";
+        var letterOnly = /^[a-zA-Z\s]*$/;
+        if (fokusName === null || fokusName === "") {
+            errorName = "";
+        } else if (!fokusName.match(letterOnly)) {
+            errorName = "Nama hanya boleh mengandung huruf";
+        } else if (fokusName.length > 50) {
+            errorName = "Nama maksimal 50 karakter";
+        }
+
+        this.setState({
+            errorName: errorName
+        })
+    }
+
+    validateNomorHp(fokusNoHp) {
+        var errorNoHp = "";
+        var numberOnly = /^[0-9]*$/;
+
+        if (fokusNoHp === null || fokusNoHp === "") {
+            errorNoHp = "";
+        } else if (!fokusNoHp.match(numberOnly)) {
+            errorNoHp = "Nomor HP hanya boleh mengandung angka";
+        } else if (fokusNoHp.length > 20) {
+            errorNoHp = "Nomor HP maksimal 20 karakter";
+        }
+
+        this.setState({
+            errorNoHp: errorNoHp
+        })
+    }
+
+    validatePassword(fokusPassword) {
+        var errorPassword = "";
+        var letterNumber = /[^\w\d]*(([0-9]+.*[A-Za-z]+.*)|[A-Za-z]+.*([0-9]+.*))/;
+        if (fokusPassword === null || fokusPassword === "") {
+            errorPassword = "";
+        } else if (!fokusPassword.match(letterNumber)) {
+            errorPassword = "Password harus mengandung angka dan huruf";
+        } else if (fokusPassword.length < 8) {
+            errorPassword = "Password minimal 8 karakter";
+        } else if (fokusPassword.length > 70) {
+            errorPassword = "Password maksimal 70 karakter";
+        }
+
+        this.setState({
+            errorPassword: errorPassword
+        })
+    }
+
+    validateUsername(fokusUsername) {
+        var errorUsername = "";
+        var letterNumber = /^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$/;
+        if (fokusUsername === null || fokusUsername === "") {
+            errorUsername = "";
+        } else if (!fokusUsername.match(letterNumber)) {
+            errorUsername = "Username mengandung angka dan huruf";
+        } else if (fokusUsername.length > 20) {
+            errorUsername = "Username maksimal 20 karakter";
+        }
+
+        this.setState({
+            errorUsername: errorUsername
+        })
+    }
+
+    validateEmail(fokusEmail) {
+        var errorEmail = "";
+        // eslint-disable-next-line
+        var email = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        if (fokusEmail === null || fokusEmail === "") {
+            errorEmail = "";
+        } else if (!fokusEmail.match(email)) {
+            errorEmail = "Email tidak sesuai format";
+        }
+
+        this.setState({
+            errorEmail: errorEmail
+        })
+    }
+
+    submitable() {
+        return this.state.errorUsername === "" &&
+            this.state.errorPassword === "" &&
+            this.state.errorName === "" &&
+            this.state.errorJabatan === "" &&
+            this.state.errorEmail === "" &&
+            this.state.errorNoHp === "" &&
+            (this.state.username !== null && this.state.username !== "") &&
+            (this.state.password !== null && this.state.password !== "") &&
+            (this.state.idRole !== null && this.state.idRole !== "") &&
+            (this.state.nama !== null && this.state.nama !== "") &&
+            (this.state.jabatan !== null && this.state.jabatan !== "") &&
+            (this.state.email !== null && this.state.email !== "");
     }
 
     setRedirect = () => {
@@ -67,38 +180,80 @@ export default class EmployeeFormTambah extends React.Component {
             roleOptionList: roleOptionList
         })
     }
-    
+
     handleChange(event) {
+        const { name, value } = event.target;
         this.setState(
             {
-                [event.target.name]
-                    : event.target.value
+                [name]
+                    : value
             }
-        )
+        );
+
+        switch (name) {
+            case "username":
+                this.validateUsername(value);
+                break;
+            case "password":
+                this.validatePassword(value);
+                break;
+            case "nama":
+                this.validateNama(value);
+                break;
+            case "jabatan":
+                this.validateJabatan(value);
+                break;
+            case "email":
+                this.validateEmail(value);
+                break;
+            case "noHp":
+                this.validateNomorHp(value);
+                break;
+        }
     }
-    
+
     handleSelectChange(name, event) {
         this.setState(
             {
                 [name]
                     : event.value
             }
-        )
+        );
     }
-    
-    handleSubmit(event) {
+
+    async handleSubmit(event) {
         event.preventDefault();
-        const employee = {
-            username: this.state.username,
-            password: this.state.password,
-            idRole: this.state.idRole,
-            nama: this.state.nama,
-            jabatan: this.state.jabatan,
-            email: this.state.email,
-            noHp: this.state.noHp
-        };
-        EmployeeService.addEmployee(employee)
-            .then(() => this.setRedirect());
+        if (this.submitable()) {
+            EmployeeService.checkEmployeeExist(this.state.username)
+                .then(response => {
+                    if (response.data.result) {
+                        this.setState({
+                            errorUsername: "Username sudah terdaftar"
+                        })
+                    } else {
+                        EmployeeService.checkEmailExist({ email: this.state.email })
+                            .then(response => {
+                                if (response.data.result) {
+                                    this.setState({
+                                        errorEmail: "Email sudah terdaftar"
+                                    })
+                                } else {
+                                    const employee = {
+                                        username: this.state.username,
+                                        password: this.state.password,
+                                        idRole: this.state.idRole,
+                                        nama: this.state.nama,
+                                        jabatan: this.state.jabatan,
+                                        email: this.state.email,
+                                        noHp: this.state.noHp
+                                    };
+                                    EmployeeService.addEmployee(employee)
+                                        .then(() => this.setRedirect());
+                                }
+                            })
+                    }
+                });
+        }
     }
 
     // Fungsi yang akan mengembalikan definisi tiap field pada form
@@ -113,14 +268,16 @@ export default class EmployeeFormTambah extends React.Component {
                     type: "text",
                     name: "username",
                     value: this.state.username,
-                    placeholder: "Username"
+                    placeholder: "Username",
+                    errormessage: this.state.errorUsername
                 }, {
                     label: "Password",
                     handleChange: this.handleChange,
                     type: "password",
                     name: "password",
                     value: this.state.password,
-                    placeholder: "Password"
+                    placeholder: "Password",
+                    errormessage: this.state.errorPassword
                 }, {
                     label: "Role",
                     handleChange: this.handleSelectChange,
@@ -134,43 +291,62 @@ export default class EmployeeFormTambah extends React.Component {
                     type: "text",
                     name: "nama",
                     value: this.state.nama,
-                    placeholder: "Nama"
+                    placeholder: "Nama",
+                    errormessage: this.state.errorName
                 }, {
                     label: "Jabatan",
                     handleChange: this.handleChange,
                     type: "text",
                     name: "jabatan",
                     value: this.state.jabatan,
-                    placeholder: "Jabatan"
+                    placeholder: "Jabatan",
+                    errormessage: this.state.errorJabatan
                 }, {
                     label: "Email",
                     handleChange: this.handleChange,
                     type: "text",
                     name: "email",
                     value: this.state.email,
-                    placeholder: "email@email.com"
+                    placeholder: "email@email.com",
+                    errormessage: this.state.errorEmail
                 }, {
                     label: "Nomor Telepon",
                     handleChange: this.handleChange,
                     type: "text",
                     name: "noHp",
                     value: this.state.noHp,
-                    placeholder: "08123456789"
+                    placeholder: "08123456789",
+                    errormessage: this.state.errorNoHp
                 }]
         )
     }
 
     submitButton() {
-        return (
-            <div>
-                <SirioButton purple recommended
-                             classes="mx-1"
-                             onClick={(event)  => this.handleSubmit(event)}>
+        var tombolSimpan =
+            <SirioButton
+                purple
+                disabled
+                classes="mx-1"
+            >
+                Simpan
+            </SirioButton>;
+        if (this.submitable()) {
+            tombolSimpan =
+                <SirioButton
+                    purple
+                    recommended
+                    classes="mx-1"
+                    onClick={(event) => this.handleSubmit(event)}
+                >
                     Simpan
                 </SirioButton>
+        }
+        return (
+            <div>
+                {tombolSimpan}
                 <SirioButton purple
-                             classes="mx-1"
-                             onClick={() => window.location.href = "/employee"}>
+                    classes="mx-1"
+                    onClick={() => window.location.href = "/employee"}>
                     Batal
                 </SirioButton>
             </div>

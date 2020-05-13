@@ -13,6 +13,10 @@ import java.io.Serializable;
 @Table
 public class KantorCabang implements Serializable {
 
+    public static enum Status {
+        AKTIF, NONAKTIF
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idKantor;
@@ -21,6 +25,11 @@ public class KantorCabang implements Serializable {
     @Size(max = 25)
     @Column(nullable = false, unique = true)
     private String namaKantor;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 10)
+    private Status status = Status.AKTIF;
 
     @NotNull
     @Size(max = 125)
@@ -45,13 +54,11 @@ public class KantorCabang implements Serializable {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "pemilik", referencedColumnName = "idEmployee", nullable = false)
     @OnDelete(action = OnDeleteAction.NO_ACTION)
-    @JsonIgnore
     private Employee pemilik;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "pembuat", referencedColumnName = "idEmployee", nullable = false)
     @OnDelete(action = OnDeleteAction.NO_ACTION)
-    @JsonIgnore
     private Employee pembuat;
 
     public int getIdKantor() {
@@ -116,5 +123,13 @@ public class KantorCabang implements Serializable {
 
     public void setPembuat(Employee pembuat) {
         this.pembuat = pembuat;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
     }
 }

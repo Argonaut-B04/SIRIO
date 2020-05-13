@@ -4,10 +4,13 @@ import com.ArgonautB04.SIRIO.model.Employee;
 import com.ArgonautB04.SIRIO.repository.EmployeeDB;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
+import java.security.Principal;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -37,7 +40,8 @@ public class EmployeeRestServiceImpl implements EmployeeRestService {
         target.setEmail(employee.getEmail());
         target.setNama(employee.getNama());
         target.setNoHp(employee.getNoHp());
-        target.setPassword(employee.getPassword());
+//        password harus di encrypt
+//        target.setPassword(employee.getPassword());
         target.setRole(employee.getRole());
         target.setUsername(employee.getUsername());
         target.setJabatan(employee.getJabatan());
@@ -53,7 +57,12 @@ public class EmployeeRestServiceImpl implements EmployeeRestService {
 
     @Override
     public Optional<Employee> getByUsername(String username) {
-        return employeeDb.findByUsernameAndStatus(username, Employee.Status.AKTIF);
+        return employeeDb.findByUsername(username);
+    }
+
+    @Override
+    public Optional<Employee> getByEmail(String email) {
+        return employeeDb.findByEmail(email);
     }
 
     @Override
@@ -78,5 +87,189 @@ public class EmployeeRestServiceImpl implements EmployeeRestService {
     @Override
     public void hapusEmployee(int idEmployee) throws DataIntegrityViolationException {
         employeeDb.deleteById(idEmployee);
+    }
+
+    @Override
+    public Employee validateEmployeeExistByPrincipal(Principal principal) {
+        return validateEmployeeExistByUsername(principal.getName());
+    }
+
+    @Override
+    public Employee validateEmployeeExistByUsername(String username) {
+        Optional<Employee> employeeOptional = getByUsername(username);
+        if (employeeOptional.isEmpty()) {
+            throw new ResponseStatusException(
+                    HttpStatus.UNAUTHORIZED,
+                    "Akun anda tidak terdaftar dalam Sirio"
+            );
+        } else {
+            return employeeOptional.get();
+        }
+    }
+
+    @Override
+    public Employee validateEmployeeExistById(Integer id) {
+        Optional<Employee> target = employeeDb.findByIdEmployeeAndStatus(id, Employee.Status.AKTIF);
+        if (target.isPresent()) {
+            return target.get();
+        } else {
+            throw new ResponseStatusException(
+                    HttpStatus.UNAUTHORIZED,
+                    "Tidak ditemukan employee aktif dengan id " + id
+            );
+        }
+    }
+
+    @Override
+    public void validateRolePermission(Employee employee, String requestedPermissions) {
+        switch (requestedPermissions) {
+            case "tenggat waktu":
+                if (!employee.getRole().getAccessPermissions().getAturTenggatWaktu()) {
+                    throw new ResponseStatusException(
+                            HttpStatus.UNAUTHORIZED,
+                            "Akun anda tidak memiliki akses ke pengaturan tenggat waktu"
+                    );
+                }
+                break;
+            case "tabel rekomendasi":
+                if (!employee.getRole().getAccessPermissions().getAksesTabelRekomendasi()) {
+                    throw new ResponseStatusException(
+                            HttpStatus.UNAUTHORIZED,
+                            "Akun anda tidak memiliki akses ke daftar rekomendasi"
+                    );
+                }
+                break;
+            case "akses risk rating":
+                if (!employee.getRole().getAccessPermissions().getAksesRiskRating()) {
+                    throw new ResponseStatusException(
+                            HttpStatus.UNAUTHORIZED,
+                            "Akun anda tidak memiliki akses ke daftar risk rating"
+                    );
+                }
+                break;
+            case "ubah risk rating":
+                if (!employee.getRole().getAccessPermissions().getUbahRiskRating()) {
+                    throw new ResponseStatusException(
+                            HttpStatus.UNAUTHORIZED,
+                            "Akun anda tidak memiliki akses untuk melakukan perubahan daftar risk rating"
+                    );
+                }
+                break;
+            case "akses risk level":
+                if (!employee.getRole().getAccessPermissions().getAksesRiskRating()) {
+                    throw new ResponseStatusException(
+                            HttpStatus.UNAUTHORIZED,
+                            "Akun anda tidak memiliki akses ke daftar risk level"
+                    );
+                }
+                break;
+            case "ubah risk level":
+                if (!employee.getRole().getAccessPermissions().getUbahRiskLevel()) {
+                    throw new ResponseStatusException(
+                            HttpStatus.UNAUTHORIZED,
+                            "Akun anda tidak memiliki akses untuk melakukan perubahan daftar risk level"
+                    );
+                }
+                break;
+            case "tambah risiko":
+                if (!employee.getRole().getAccessPermissions().getAksesTambahRisiko()) {
+                    throw new ResponseStatusException(
+                            HttpStatus.UNAUTHORIZED,
+                            "Akun anda tidak memiliki akses untuk melakukan penambahan risiko"
+                    );
+                }
+                break;
+            case "akses risiko":
+                if (!employee.getRole().getAccessPermissions().getAksesRisiko()) {
+                    throw new ResponseStatusException(
+                            HttpStatus.UNAUTHORIZED,
+                            "Akun anda tidak memiliki akses ke daftar risiko"
+                    );
+                }
+                break;
+            case "hapus risiko":
+                if (!employee.getRole().getAccessPermissions().getAksesHapusRisiko()) {
+                    throw new ResponseStatusException(
+                            HttpStatus.UNAUTHORIZED,
+                            "Akun anda tidak memiliki akses untuk menghapus risiko"
+                    );
+                }
+                break;
+            case "ubah risiko":
+                if (!employee.getRole().getAccessPermissions().getAksesUbahRisiko()) {
+                    throw new ResponseStatusException(
+                            HttpStatus.UNAUTHORIZED,
+                            "Akun anda tidak memiliki akses untuk mengubah risiko"
+                    );
+                }
+                break;
+            case "tabel risiko":
+                if (!employee.getRole().getAccessPermissions().getAksesTabelRisiko()) {
+                    throw new ResponseStatusException(
+                            HttpStatus.UNAUTHORIZED,
+                            "Akun anda tidak memiliki akses ke tabel risiko"
+                    );
+                }
+                break;
+            case "bukti pelaksanaan":
+                if (!employee.getRole().getAccessPermissions().getAksesBuktiPelaksanaan()) {
+                    throw new ResponseStatusException(
+                            HttpStatus.UNAUTHORIZED,
+                            "Akun anda tidak memiliki akses ke bukti pelaksanaan"
+                    );
+                }
+                break;
+            case "tambah bukti pelaksanaan":
+                if (!employee.getRole().getAccessPermissions().getAksesTambahBuktiPelaksanaan()) {
+                    throw new ResponseStatusException(
+                            HttpStatus.UNAUTHORIZED,
+                            "Akun anda tidak memiliki akses untuk menambah bukti pelaksanaan"
+                    );
+                }
+                break;
+            case "ubah bukti pelaksanaan":
+                if (!employee.getRole().getAccessPermissions().getAksesUbahBuktiPelaksanaan()) {
+                    throw new ResponseStatusException(
+                            HttpStatus.UNAUTHORIZED,
+                            "Akun anda tidak memiliki akses untuk mengubah bukti pelaksanaan"
+                    );
+                }
+                break;
+            case "persetujuan bukti pelaksanaan":
+                if (!employee.getRole().getAccessPermissions().getAksesPersetujuanBuktiPelaksanaan()) {
+                    throw new ResponseStatusException(
+                            HttpStatus.UNAUTHORIZED,
+                            "Akun anda tidak memiliki akses persetujuan bukti"
+                    );
+                }
+                break;
+            case "atur hierarki risiko":
+                if (!employee.getRole().getAccessPermissions().getAksesUbahHierarki()) {
+                    throw new ResponseStatusException(
+                            HttpStatus.UNAUTHORIZED,
+                            "Akun anda tidak memiliki akses untuk mengatur hierarki risiko"
+                    );
+                }
+                break;
+        }
+    }
+
+    @Override
+    public void simpanPerubahan(Employee employee) {
+        Optional<Employee> target = employeeDb.findById(employee.getIdEmployee());
+        if (target.isPresent()) {
+            Employee fokus = target.get();
+            fokus.setReminderTemplatePilihan(employee.getReminderTemplatePilihan());
+            employeeDb.save(employee);
+        }
+    }
+
+    @Override
+    public void changePassword(String username, String newPassword) {
+        Employee target = validateEmployeeExistByUsername(username);
+        target.setPassword(
+            encrypt(newPassword)
+        );
+        employeeDb.save(target);
     }
 }

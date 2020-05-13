@@ -25,6 +25,23 @@ class EmployeeService {
         return this.axiosInstance.get(SirioAxiosBase.BASEURL + `/Employee/` + id);
     }
 
+    async getAllBM() {
+        return this.axiosInstance.get(SirioAxiosBase.BASEURL + `/Employee/getAllBranchManager`);
+    }
+
+    async getAllQAOfficer() {
+        return this.axiosInstance.get(SirioAxiosBase.BASEURL + `/Employee/getAllQAOfficer`);
+    }
+
+
+    async checkEmployeeExist(username) {
+        return this.axiosInstance.get(SirioAxiosBase.BASEURL + `/Employee/check/username/` + username);
+    }
+
+    async checkEmailExist(data) {
+        return this.axiosInstance.post(SirioAxiosBase.BASEURL + `/Employee/check/email`, data);
+    }
+
     async deleteEmployee(data) {
         return this.axiosInstance.post(SirioAxiosBase.BASEURL + `/Employee/hapus`, data)
     }

@@ -18,8 +18,6 @@ class LoginForm extends Component {
             username: '',
             password: '',
             hasLoginFailed: false,
-            source: null,
-            target: null
         }
 
         this.handleChange = this.handleChange.bind(this);
@@ -32,20 +30,23 @@ class LoginForm extends Component {
     }
 
     loadSource() {
-        if (this.props.location.state) {
+        const { state } = this.props.location;
+        if (state) {
             this.setState({
-                source: this.props.location.state.source,
-                target: this.props.location.state.goto
+                source: state.source,
+                target: state.goto
             })
         }
     }
 
     // Fungsi yang mengikat input field dengan state
     handleChange(event) {
+        const { name, value } = event.target;
         this.setState(
             {
-                [event.target.name]
-                    : event.target.value
+                [name]
+                    : value,
+                hasLoginFailed: false
             }
         )
     }
@@ -53,35 +54,54 @@ class LoginForm extends Component {
     // Fungsi ketika user klik tombol submit
     // Komunikasi dengan SirioBackend melalui AuthenticationService
     loginClicked() {
+        const { username, password, target } = this.state
+
+        this.props.contentStartLoading();
+        this.props.changeLoadingBody("Mencoba untuk masuk");
+
         AuthenticationService
-            .executeBasicAuthenticationService(this.state.username, this.state.password)
+            .executeBasicAuthenticationService(username, password)
             .then(
                 (response) => {
-                    AuthenticationService.registerSuccessfulLogin(this.state.username, this.state.password, response.data.result.role.namaRole);
-                    if (this.state.target) {
-                        window.location.href = this.state.target;
+                    AuthenticationService.registerSuccessfulLogin(username, password, response.data.result.role.namaRole);
+
+                    this.props.changeLoadingBody("Berhasil masuk, mengarahkan anda ke halaman selanjutnya");
+                    this.props.contentFinishLoading();
+
+                    if (target) {
+                        window.location.href = target;
                     } else {
                         window.location.href = "/";
                     }
                 }
             )
             .catch(
-                () => {
+                (error) => {
+                    var errInfo = error.response ? error.response.data.message : "Sambungan ke server terputus";
+                    if (error.response) {
+                        errInfo = error.response.status === 401 ? "Username dan Password tidak sesuai" : errInfo;
+                    }
+                    this.props.changeLoadingBody("Gagal");
+                    this.props.contentFinishLoading();
+
                     this.setState({
-                        hasLoginFailed: true
+                        hasLoginFailed: true,
+                        errInfo: errInfo
                     })
                 }
             )
-
     }
 
     render() {
+        const { handleChange, loginClicked, state } = this;
+        const { loginFormContainer } = classes;
+        const { source, hasLoginFailed, errInfo, username, password } = state;
         return (
-            <div className={classes.loginFormContainer}>
+            <div className={loginFormContainer}>
                 <h2>Selamat datang kembali!</h2>
                 <div>
-                    {this.state.source === 401 && <div className="alert alert-warning">You need to login first</div>}
-                    {this.state.hasLoginFailed && <div className="alert alert-warning">Invalid Credentials</div>}
+                    {source === 401 && <div className="alert alert-warning">You need to login first</div>}
+                    {hasLoginFailed && <div className="alert alert-warning">{errInfo}</div>}
                     <fieldset className="form-group">
                         <label>Username</label>
                         <input
@@ -89,11 +109,11 @@ class LoginForm extends Component {
                             type="text"
                             name="username"
                             placeholder="Username"
-                            value={this.state.username}
-                            onChange={this.handleChange}
+                            value={username}
+                            onChange={handleChange}
                             onKeyPress={(event) => {
                                 if (event.key === "Enter") {
-                                    this.loginClicked();
+                                    loginClicked();
                                 }
                             }}
                         />
@@ -105,11 +125,11 @@ class LoginForm extends Component {
                             type="password"
                             name="password"
                             placeholder="Masukan 8 karakter atau lebih"
-                            value={this.state.password}
-                            onChange={this.handleChange}
+                            value={password}
+                            onChange={handleChange}
                             onKeyPress={(event) => {
                                 if (event.key === "Enter") {
-                                    this.loginClicked();
+                                    loginClicked();
                                 }
                             }}
                         />
@@ -118,7 +138,7 @@ class LoginForm extends Component {
                         <SirioButton
                             blue
                             recommended
-                            onClick={this.loginClicked}
+                            onClick={loginClicked}
                         >
                             Login
                         </SirioButton>

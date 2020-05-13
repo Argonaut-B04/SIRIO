@@ -1,6 +1,7 @@
 import React from 'react';
 import SirioForm from '../SirioForm';
 import SirioButton from '../../Button/SirioButton';
+import SirioConfirmButton from "../../Button/ActionButton/SirioConfirmButton";
 import HasilPemeriksaanService from '../../../Services/HasilPemeriksaanService';
 import {NavLink, Redirect} from 'react-router-dom';
 import { withRouter } from 'react-router-dom';
@@ -13,15 +14,76 @@ class HasilPemeriksaanFormTolak extends React.Component {
 
         this.state = {
             feedback: "",
-            redirect: false
+            redirect: false,
+            submitable: false,
+            errorFeedback: "",
+            daftarKomponen: "",
         };
 
         this.handleChange = this.handleChange.bind(this);
         this.inputDefinition = this.inputDefinition.bind(this);
         this.setRedirect = this.setRedirect.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+        this.renderDataHasilPemeriksaan = this.renderDataHasilPemeriksaan.bind(this);
+        this.submitButton = this.submitButton.bind(this);
     }
 
     componentDidMount() {
+        this.renderDataHasilPemeriksaan();
+    }
+
+    async renderDataHasilPemeriksaan() {
+        const response = await HasilPemeriksaanService.getHasilPemeriksaan(this.props.location.state.id);
+
+        var daftarKomponen = <p>
+                {response.data.result.daftarKomponenPemeriksaan.map((komponen, index) =>
+                    <p className="text-center p-0 m-0">{index+1}. {komponen.risiko.nama} </p>
+                )}
+            </p>;
+
+        // var daftarKomponen = "";
+        // response.data.result.daftarKomponenPemeriksaan.map((komponen, index) => {
+        //     const indexX = index + 1;
+        //     const kata = "(" + indexX + ") " + komponen.risiko.nama + "; ";
+        //     daftarKomponen += "\n\n" + kata;
+        // });
+
+        this.setState({
+            daftarKomponen: daftarKomponen
+        })
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        var submitable = this.state.feedback !== null && this.state.feedback !== "";
+
+        submitable = submitable && this.validateFeedback();
+
+        if (this.state.submitable !== submitable) {
+            this.setState({
+                submitable: submitable
+            })
+        }
+    }
+
+    validateFeedback() {
+        var submitable = true;
+        var fokusFeedback = this.state.feedback;
+        var errorFeedback;
+        var containLetter = /.*[a-zA-Z].*/;
+        if (!fokusFeedback.match(containLetter)) {
+            submitable = false;
+            errorFeedback = "Feedback perlu mengandung huruf";
+        } else if (fokusFeedback.length > 500) {
+            submitable = false;
+            errorFeedback = "Feedback maksimal 500 karakter";
+        }
+
+        if (this.state.errorFeedback !== errorFeedback) {
+            this.setState({
+                errorFeedback: errorFeedback
+            })
+        }
+        return submitable;
     }
 
     setRedirect = () => {
@@ -51,14 +113,17 @@ class HasilPemeriksaanFormTolak extends React.Component {
     }
 
     handleSubmit(event) {
-        event.preventDefault();
+        event&&event.preventDefault();
         const persetujuan = {
             id: this.props.location.state.id,
             status: "3",
             feedback: this.state.feedback
         };
-        HasilPemeriksaanService.setujuiHasilPemeriksaan(persetujuan)
-            .then(() => this.setRedirect());
+
+        if (this.state.submitable) {
+            HasilPemeriksaanService.setujuiHasilPemeriksaan(persetujuan)
+                .then(() => this.setRedirect());
+        }
     }
 
     // Fungsi yang akan mengembalikan definisi tiap field pada form
@@ -68,12 +133,13 @@ class HasilPemeriksaanFormTolak extends React.Component {
         return (
             [
                 {
-                label: "Feedback",
-                handleChange: this.handleChange,
-                type: "textarea",
-                name: "feedback",
-                value: this.state.feedback,
-                placeholder: "Feedback hasil pemeriksaan"
+                    label: "Feedback",
+                    handleChange: this.handleChange,
+                    type: "textarea",
+                    name: "feedback",
+                    value: this.state.feedback,
+                    placeholder: "Feedback hasil pemeriksaan",
+                    validation: this.state.errorFeedback
                 }
             ]
         )
@@ -82,11 +148,24 @@ class HasilPemeriksaanFormTolak extends React.Component {
     submitButton() {
         return (
             <div>
-                <SirioButton purple recommended
-                             classes="mx-1"
-                             onClick={(event)  => this.handleSubmit(event)}>
+                {/*<SirioButton purple*/}
+                {/*             recommended={this.state.submitable}*/}
+                {/*             disabled={!this.state.submitable}*/}
+                {/*             classes="mx-1"*/}
+                {/*             onClick={(event)  => this.handleSubmit(event)}>*/}
+                {/*    Simpan*/}
+                {/*</SirioButton>*/}
+                <SirioConfirmButton
+                    purple
+                    classes="m-1"
+                    modalTitle="Apakah anda yakin untuk menolak hasil pemeriksaan?"
+                    onConfirm={this.handleSubmit}
+                    customConfirmText="Ya, Tolak"
+                    customCancelText="Batal"
+                    closeOnConfirm
+                >
                     Simpan
-                </SirioButton>
+                </SirioConfirmButton>
                 <NavLink to={{
                     pathname: "/hasil-pemeriksaan/detail",
                     state: {
@@ -112,7 +191,7 @@ class HasilPemeriksaanFormTolak extends React.Component {
                 <SirioForm
                     title="Form Feedback Penolakan"
                     inputDefinition={this.inputDefinition()}
-                    onSubmit={this.handleSubmit}
+                    onSubmit={(event) => event.preventDefault()}
                     submitButton={this.submitButton()}
                 />
             </>

@@ -8,6 +8,8 @@ import SirioMessageButton from '../../Button/ActionButton/SirioMessageButton';
 import SirioWarningButton from '../../Button/ActionButton/SirioWarningButton';
 import RiskRatingService from '../../../Services/RiskRatingService';
 import CellEditFactory from 'react-bootstrap-table2-editor';
+import SirioComponentHeader from '../../Header/SirioComponentHeader';
+import ComponentWrapper from '../../../Layout/ComponentWrapper';
 
 /**
  * Kelas untuk membuat komponen tabel risk rating
@@ -21,7 +23,7 @@ class TableRiskRating extends React.Component {
             rowList: [],
             changeComplete: false,
             editMode: false,
-            activeEditRowId: []
+            error: []
         }
 
         this.renderRows = this.renderRows.bind(this);
@@ -35,9 +37,16 @@ class TableRiskRating extends React.Component {
         this.renderRows();
     }
 
+    componentDidUpdate() {
+        if (this.state.editMode && !this.hasEmptyRow()) {
+            this.validateRange();
+        }
+    }
+
     endNotification() {
         this.setState({
-            changeComplete: false
+            changeComplete: false,
+            rowChanged: false,
         })
     }
 
@@ -66,6 +75,149 @@ class TableRiskRating extends React.Component {
         })
     }
 
+    validate(newValue, row, column) {
+        this.setState({
+            rowChanged: true
+        })
+        if (newValue === "") {
+            return {
+                valid: false,
+                message: 'Tidak boleh dikosongkan'
+            }
+        }
+        if (column.dataField === "namaRating") {
+            if (newValue === row.namaRating) {
+                return true;
+            }
+            const daftarNamaLevel = this.state.rowList.map(singleRow => singleRow.namaRating);
+            if (daftarNamaLevel.includes(newValue)) {
+                return {
+                    valid: false,
+                    message: 'Nama rating harus unik'
+                }
+            }
+        } else if (column.dataField === "skorMinimal") {
+            if (newValue === row.skorMinimal) {
+                return true;
+            }
+
+            // harus numerik
+            if (isNaN(newValue)) {
+                return {
+                    valid: false,
+                    message: 'Skor Minimal harus berupa angka'
+                }
+            }
+
+            if (parseInt(newValue) >= parseInt(row.skorMaksimal)) {
+                return {
+                    valid: false,
+                    message: "Skor minimal tidak boleh sama atau lebih banyak daripada skor maksimal"
+                }
+            }
+
+            if (0 > parseInt(newValue)) {
+                return {
+                    valid: false,
+                    message: "Skor minimal tidak boleh kurang dari 0"
+                }
+            }
+
+        } else if (column.dataField === "skorMaksimal") {
+            if (newValue === row.skorMinimal) {
+                return true;
+            }
+
+            // harus numerik
+            if (isNaN(newValue)) {
+                return {
+                    valid: false,
+                    message: 'Skor maksimal harus berupa angka'
+                }
+            }
+
+            if (parseInt(row.skorMinimal) >= parseInt(newValue)) {
+                return {
+                    valid: false,
+                    message: "Skor Maksimal tidak boleh sama atau lebih sedikit daripada skor minimal"
+                }
+            }
+
+            if (100 < parseInt(newValue)) {
+                return {
+                    valid: false,
+                    message: "Skor Maksimal tidak boleh melebihi 100"
+                }
+            }
+        }
+    }
+
+    between(value, lowerRange, upperRange) {
+        return value > lowerRange && value < upperRange;
+    }
+
+    // Kolom yang akan di sort secara default
+    defaultSorted = [{
+        dataField: 'skorMinimal',
+        order: 'asc'
+    }];
+
+    validateRange() {
+        const daftarRow = this.state.rowList;
+
+        var errorResult = [];
+
+        // cek yang tabrakan
+        for (let i = 0; i < daftarRow.length; i++) {
+
+            // ambil data row ini
+            const skorMinimal = daftarRow[i].skorMinimal;
+            const skorMaksimal = daftarRow[i].skorMaksimal;
+
+            // compare dengan row row berikutnya
+            for (let j = i + 1; j < daftarRow.length; j++) {
+                const skorMinimalCompare = daftarRow[j].skorMinimal;
+                const skorMaksimalCompare = daftarRow[j].skorMaksimal;
+
+                if (this.between(skorMinimalCompare, skorMinimal, skorMaksimal)
+                    || this.between(skorMaksimalCompare, skorMinimal, skorMaksimal)) {
+                    if (!errorResult.includes("Terdapat range yang invalid")) {
+                        errorResult.push("Terdapat range yang invalid")
+                    }
+                }
+            }
+        }
+
+        // cek kalau ada yang belum termasuk
+        var total = 0;
+        for (let i = 0; i < daftarRow.length; i++) {
+            // cek setiap row
+            const skorMinimal = daftarRow[i].skorMinimal;
+            const skorMaksimal = daftarRow[i].skorMaksimal;
+
+            total += (skorMaksimal - skorMinimal);
+        }
+        if (total !== 100) {
+            if (!errorResult.includes("Range belum mencakup 0 hingga 100")) {
+                errorResult.push("Range belum mencakup 0 hingga 100")
+            }
+        }
+
+        // masukin infonya
+        if (errorResult.length !== this.state.error.length) {
+            this.setState({
+                error: errorResult
+            })
+        }
+        for (var i = 0; errorResult.length < i; i++) {
+            if (this.state.error[i] !== errorResult[i]) {
+                this.setState({
+                    error: errorResult
+                })
+            }
+        }
+    }
+
     columns() {
         return (
             [{
@@ -78,26 +230,37 @@ class TableRiskRating extends React.Component {
                 headerStyle: (colum, colIndex) => {
                     return { textAlign: 'left' };
                 },
+                validator: (newValue, row, column) => {
+                    return this.validate(newValue, row, column);
+                }
             }, {
                 dataField: 'skorMinimal',
                 editable: this.state.editMode,
                 text: 'Skor Minimal',
+                type: "number",
                 sort: true,
                 classes: classes.rowItem,
                 headerClasses: classes.colheader,
                 headerStyle: (colum, colIndex) => {
                     return { textAlign: 'left' };
                 },
+                validator: (newValue, row, column) => {
+                    return this.validate(newValue, row, column);
+                }
             }, {
                 dataField: 'skorMaksimal',
                 editable: this.state.editMode,
                 text: 'Skor Maksimal',
+                type: "number",
                 sort: true,
                 classes: classes.rowItem,
                 headerClasses: classes.colheader,
                 headerStyle: (colum, colIndex) => {
                     return { textAlign: 'left' };
                 },
+                validator: (newValue, row, column) => {
+                    return this.validate(newValue, row, column);
+                }
             }, {
                 dataField: 'keteranganRating',
                 editable: this.state.editMode,
@@ -110,7 +273,7 @@ class TableRiskRating extends React.Component {
                 },
             }, {
                 dataField: 'noData 1',
-                text: '',
+                text: 'Aksi Hapus',
                 editable: false,
                 hidden: this.state ? !this.state.editMode : false,
                 headerClasses: classes.colheader,
@@ -118,7 +281,17 @@ class TableRiskRating extends React.Component {
                 style: () => {
                     return { textAlign: 'center' }
                 },
-                formatter: (cell, row) => this.getButtonsFirst(row)
+                formatter: (cell, row) => {
+                    return (
+                        <SirioButton
+                            red
+                            recommended
+                            onClick={() => this.hapus(row.idRating)}
+                        >
+                            Hapus
+                        </SirioButton>
+                    )
+                }
             }]
         )
     }
@@ -152,7 +325,8 @@ class TableRiskRating extends React.Component {
         })
 
         this.setState({
-            rowList: changedRow
+            rowList: changedRow,
+            rowChanged: true
         })
     }
 
@@ -165,69 +339,142 @@ class TableRiskRating extends React.Component {
         })
 
         this.setState({
-            rowList: changedRow
+            rowList: changedRow,
+            rowChanged: true
         })
     }
 
-    getButtonsFirst(row) {
-        return (
-            <SirioButton
-                red
-                onClick={() => this.hapus(row.idRating)}
-            >
-                Hapus
-            </SirioButton>
-        );
+    hasEmptyRow() {
+        var result = false;
+        const error = this.state.error;
+        const row = this.state.rowList;
+        for (let i = 0; i < row.length; i++) {
+            if (row[i].namaRating === "") {
+                if (!error.includes("Terdapat nama rating yang kosong")) {
+                    error.push("Terdapat nama rating yang kosong");
+                }
+                result = true;
+            } else {
+                if (error.includes("Terdapat nama rating yang kosong")) {
+                    error.splice(error.indexOf("Terdapat nama rating yang kosong"), 1)
+                }
+            }
+            if (row[i].skorMinimal === "") {
+                if (!error.includes("Terdapat skor minimal yang kosong")) {
+                    error.push("Terdapat skor minimal yang kosong");
+                }
+                result = true;
+            } else {
+                if (error.includes("Terdapat skor minimal yang kosong")) {
+                    error.splice(error.indexOf("Terdapat skor minimal yang kosong"), 1)
+                }
+            }
+            if (row[i].skorMaksimal === "") {
+                if (!error.includes("Terdapat skor maksimal yang kosong")) {
+                    error.push("Terdapat skor maksimal yang kosong");
+                }
+                result = true;
+            } else {
+                if (error.includes("Terdapat skor maksimal yang kosong")) {
+                    error.splice(error.indexOf("Terdapat skor maksimal yang kosong"), 1)
+                }
+            }
+        }
+        return result;
+    }
+
+    clearEmptyRow() {
+        const row = this.state.rowList;
+        const modifiedRow = [];
+        for (let i = 0; i < row.length; i++) {
+            if (row[i].namaLevel !== "" && row[i].bobotLevel !== "") {
+                modifiedRow.push(row[i]);
+            }
+        }
+        this.setState({
+            rowList: modifiedRow
+        })
     }
 
     // Fungsi untuk mendapatkan tombol di sisi kanan title
     headerButton() {
-        return (
-            <>
+        var error = this.hasEmptyRow();
+        var addButton;
+        if (this.state.editMode) {
+            addButton = (
                 <SirioButton
                     purple
-                    recommended={!this.state.editMode}
-                    onClick={this.toggleEditMode}
+                    recommended={!error}
+                    disabled={error}
+                    tooltip={error ? "Masih terdapat baris kosong" : undefined}
+                    onClick={!error ? this.tambah : undefined}
                     classes="mx-1"
                 >
-                    {this.state.editMode ? "Nonaktifkan " : "Aktifkan "} Mode Edit
+                    Tambah
                 </SirioButton>
-                {this.state.editMode ?
-                    <SirioButton
-                        purple
-                        recommended
-                        onClick={this.tambah}
-                        classes="mx-1"
-                    >
-                        Tambah
-                    </SirioButton>
-                    :
-                    ""
-                }
+            )
+        }
+
+        var toggleButton = (
+            <SirioButton
+                purple
+                recommended
+                onClick={this.toggleEditMode}
+                classes="mx-1"
+            >
+                {this.state.editMode ? "Nonaktifkan " : "Aktifkan "} Mode Edit
+            </SirioButton>
+        )
+        if (this.state.rowChanged) {
+            toggleButton = (
+                <SirioWarningButton
+                    purple
+                    recommended
+                    modalTitle="Konfirmasi Pembatalan"
+                    modalDesc="Seluruh perubahan konfigurasi Risk Level yang belum tersimpan akan dihapus. Konfirmasi?"
+                    onConfirm={() => window.location.reload(false)}
+                    customConfirmText="Konfirmasi"
+                    customCancelText="Kembali"
+                >
+                    Nonaktifkan Mode Edit
+                </SirioWarningButton>
+            )
+        }
+
+        return (
+            <>
+                {toggleButton}
+                {addButton}
             </>
         )
     }
 
     footerContent() {
+        var hasError = this.state.error.length !== 0;
         if (this.state.editMode) {
             return (
-                <div>
+                <div className="pr-3">
                     <SirioConfirmButton
                         purple
+                        disabled={hasError}
+                        tooltip={hasError ? "Selesaikan error terlebih dahulu" : undefined}
+                        recommended={!hasError}
+                        type="button"
                         classes="m-1"
                         modalTitle="Anda akan menyimpan perubahan konfigurasi Risk Rating"
                         onConfirm={this.handleSubmit}
                         customConfirmText="Konfirmasi"
                         customCancelText="Batal"
-                        closeOnConfirm
+                    // disablePopUp={hasError}
                     >
                         Simpan
-                </SirioConfirmButton>
+                    </SirioConfirmButton>
                     <SirioWarningButton
                         red
+                        recommended
                         modalTitle="Konfirmasi Pembatalan"
                         modalDesc="Seluruh perubahan konfigurasi Risk Rating yang belum tersimpan akan dihapus. Konfirmasi?"
-                        onConfirm={() => window.location.href = "/"}
+                        onConfirm={() => window.location.reload(false)}
                         customConfirmText="Konfirmasi"
                         customCancelText="Kembali"
                     >
@@ -246,27 +493,64 @@ class TableRiskRating extends React.Component {
     render() {
         const column = this.columns();
         return (
-            <>
-                <SirioTable
-                    title={(this.state.editMode ? "Konfigurasi " : "Daftar ") + "Risk Rating"}
-                    data={this.state.rowList}
-                    id='idRating'
-                    columnsDefinition={column}
-                    includeSearchBar
-                    headerButton={this.headerButton()}
-                    footerContent={this.footerContent()}
-                    cellEdit={this.cellEdit}
-                />
-                {this.state.changeComplete &&
-                    <SirioMessageButton
-                        show
-                        classes="d-none"
-                        modalTitle="Perubahan Risk Rating Telah Disimpan"
-                        customConfirmText="Kembali"
-                        onClick={this.endNotification}
+            <div className="row">
+                <div className={this.state.editMode ? "col-12 col-md-9" : "col-12"}>
+                    <SirioComponentHeader
+                        title={(this.state.editMode ? "Konfigurasi " : "Daftar ") + "Risk Rating"}
+                        headerButton={this.headerButton()}
+                        subtitle={this.state.editMode && "Klik pada cell yang ingin anda ubah"}
                     />
-                }
-            </>
+                </div>
+                <div className={this.state.editMode ? "col-md-3 d-md-none" : "d-none"}>
+
+                </div>
+                <div className={this.state.editMode ? "col-12 col-md-9" : "col-12"}>
+                    <SirioTable
+                        noTotal
+                        noSizePerPage
+                        noHeader
+                        data={this.state.rowList}
+                        defaultSorted={this.defaultSorted}
+                        id='idRating'
+                        columnsDefinition={column}
+                        includeSearchBar
+                        cellEdit={this.cellEdit}
+                        indication="Belum ada Risk Rating yang terdaftar"
+                    />
+                    <div className="w-100 text-right">
+                        {this.footerContent()}
+                    </div>
+                    {this.state.changeComplete &&
+                        <SirioMessageButton
+                            show
+                            classes="d-none"
+                            modalTitle="Perubahan Risk Rating Telah Disimpan"
+                            customConfirmText="Kembali"
+                            onClick={this.endNotification}
+                        />
+                    }
+                </div>
+                <div className={this.state.editMode ? "col-12 col-md-3 my-md-0 my-3" : "d-none"}>
+                    <ComponentWrapper>
+                        <div>
+                            Aturan Risk Rating:
+                            <ul>
+                                <li>Mencakup 1 - 100</li>
+                                <li>Jangkauan skor saling terpisah antar rating</li>
+                                <li>Nama, skor minimal, dan skor maksimal harus terisi</li>
+                            </ul>
+                        </div>
+                        {this.state.error.length !== 0 &&
+                            <div>
+                                Daftar kesalahan pengaturan:
+                                <ul className="text-danger">
+                                    {this.state.error.map((error, index) => <li key={index}>{error}</li>)}
+                                </ul>
+                            </div>
+                        }
+                    </ComponentWrapper>
+                </div>
+            </div>
         );
     }
 }

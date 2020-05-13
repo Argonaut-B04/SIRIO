@@ -17,10 +17,12 @@ class FormRisikoUbah extends React.Component {
             nama: "",
             kategori: "",
             sop: "",
-            komponen: "",
+            detailUraian: "",
+            ketentuanSampel: "",
+            metodologi: "",
+            deskripsi: "",
             sopOptionList: [],
             redirect: false,
-            submitable: true,
         }
 
         this.handleChange = this.handleChange.bind(this);
@@ -29,6 +31,8 @@ class FormRisikoUbah extends React.Component {
         this.setRedirect = this.setRedirect.bind(this);
         this.renderDataRisiko = this.renderDataRisiko.bind(this);
         this.renderSopOption = this.renderSopOption.bind(this);
+        this.submitable = this.submitable.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     componentDidMount() {
@@ -36,99 +40,86 @@ class FormRisikoUbah extends React.Component {
         this.renderDataRisiko();
     }
 
-    componentDidUpdate(prevProps, prevState) {
-        var submitable = true;
-
-        if (prevState.nama !== this.state.nama) {
-            submitable = submitable && this.validateNama();
-        }
-
-        if (prevState.kategori !== this.state.kategori) {
-            submitable = submitable && this.validateKategori();
-        }
-
-        if (prevState.sop !== this.state.sop) {
-            submitable = submitable && this.validateSop();
-        }
-
-        if (prevState.komponen !== this.state.komponen) {
-            submitable = submitable && this.validateKomponen();
-        }
-
-        if (this.state.submitable !== submitable) {
-            this.setState({
-                submitable: submitable
-            })
-        }
-    }
-
-    validateNama() {
-        var submitable = true;
-        const fokusNama = this.state.nama;
-        var errorNama;
-        if (fokusNama.length < 1) {
-            submitable = false;
-            errorNama = "Nama tidak boleh kosong";
+    validateNama(fokusNama, name) {
+        var hasilError;
+        if (fokusNama.length < 1 || fokusNama === null || fokusNama === "") {
+            hasilError = "Nama tidak boleh kosong";
         } else if (fokusNama.length > 50) {
-            submitable = false;
-            errorNama = "Nama terlalu panjang";
+            hasilError = "Nama melebihi 50 karakter";
+        } else {
+            hasilError = "";
         }
-        if (this.state.errorNama !== errorNama) {
-            this.setState({
-                errorNama: errorNama
-            })
-        }
-        return submitable;
+        // if(fokusNama.match(".*[1234567890!-@#$%^&*()_+{}:.,[]|>/=<?]+.*")){
+        //     submitable = false;
+        //     errorNama = "Nama hanya boleh mengandung huruf";
+        // }
+        this.setState({
+            [name]: fokusNama,
+            errorNama: hasilError
+        })
     }
 
-    validateKategori() {
-        var submitable = true;
-        const fokusKategori = this.state.kategori;
-        var errorKategori;
-        if (fokusKategori.length < 1) {
-            submitable = false;
-            errorKategori = "Kategori Risiko tidak boleh kosong!";
+    validateDU(fokusDU, name) {
+        var hasilError;
+        if (fokusDU.length > 500) {
+            hasilError = "Detail Uraian Risiko terlalu panjang!";
+        } else {
+            hasilError = "";
         }
-        if (this.state.errorKategori !== errorKategori) {
-            this.setState({
-                errorKategori: errorKategori
-            })
-        }
-        return submitable;
+        this.setState({
+            [name]: fokusDU,
+            errorDU: hasilError
+        })
     }
 
-    validateSop() {
-        var submitable = true;
-        const fokusSop = this.state.sop;
-        var errorSop;
-        if (fokusSop.length < 1) {
-            submitable = false;
-            errorSop = "Referensi SOP tidak boleh kosong!";
-        } 
-        if (this.state.errorSop !== errorSop) {
-            this.setState({
-                errorSop: errorSop
-            })
+    validateMetod(fokusMetod, name) {
+        var hasilError;
+        if (fokusMetod.length > 50) {
+            hasilError = "Metodologi terlalu panjang!";
+        } else {
+            hasilError = "";
         }
-        return submitable;
+        this.setState({
+            [name]: fokusMetod,
+            errorMetod: hasilError
+        })
     }
 
-    validateKomponen() {
-        var submitable = true;
-        const fokusKomponen = this.state.komponen;
-        var errorKomponen;
-        if (fokusKomponen !== null || fokusKomponen.length > 1) {
-            if (fokusKomponen.length > 500) {
-                submitable = false;
-                errorKomponen = "Komponen Risiko terlalu panjang!";
-            }
+    validateDesc(fokusDesc, name) {
+        var hasilError;
+        if (fokusDesc.length > 500) {
+            hasilError = "Deskripsi terlalu panjang!";
+        } else {
+            hasilError = "";
         }
-        if (this.state.errorKomponen !== errorKomponen) {
-            this.setState({
-                errorKomponen: errorKomponen
-            })
+        this.setState({
+            [name]: fokusDesc,
+            errorDesc: hasilError
+        })
+    }
+
+    validateKS(fokusKS, name) {
+        var hasilError;
+        if (fokusKS.length > 500) {
+            hasilError = "Ketentuan Sampel terlalu panjang!";
+        } else {
+            hasilError = "";
         }
-        return submitable;
+        this.setState({
+            [name]: fokusKS,
+            errorKS: hasilError
+        })
+    }
+
+    submitable() {
+        return this.state.errorNama === "" &&
+            (this.state.detailUraian === null || this.state.errorDU === "") &&
+            (this.state.metodologi === null || this.state.errorMetod === "") &&
+            (this.state.deskripsi === null || this.state.errorDesc === "") &&
+            (this.state.ketentuanSampel === null || this.state.errorKS === "") &&
+            (this.state.nama !== "" && this.state.nama !== "") &&
+            (this.state.kategori !== "") &&
+            (this.state.sop !== "");
     }
 
     setRedirect = () => {
@@ -173,17 +164,40 @@ class FormRisikoUbah extends React.Component {
             nama: response.data.result.namaRisiko,
             kategori: response.data.result.risikoKategori,
             sop: response.data.result.sop.idSop,
-            komponen: response.data.result.komponen,
+            detailUraian: response.data.result.detailUraian,
+            metodologi: response.data.result.metodologi,
+            ketentuanSampel: response.data.result.ketentuanSampel,
+            deskripsi: response.data.result.deskripsi,
+            errorNama: "",
+            errorDU: "",
+            errorMetod: "",
+            errorDesc: "",
+            errorKS: ""
         })
     }
 
     handleChange(event) {
-        this.setState(
-            {
-                [event.target.name]
-                    : event.target.value
-            }
-        )
+        // Gunakan name dan value nya
+        const { name, value } = event.target;
+        switch (name) {
+            case "nama":
+                this.validateNama(value, name);
+                break;
+            case "detailUraian":
+                this.validateDU(value, name);
+                break;
+            case "metodologi":
+                this.validateMetod(value, name);
+                break;
+            case "deskripsi":
+                this.validateDesc(value, name);
+                break;
+            case "ketentuanSampel":
+                this.validateKS(value, name);
+                break;
+            default:
+                break;
+        }
     }
 
     handleSelectChange(name, event) {
@@ -198,38 +212,56 @@ class FormRisikoUbah extends React.Component {
     handleSubmit(event) {
         // event.preventDefault wajib ada
         event.preventDefault();
-        const risiko = {
-            id: this.state.id,
-            nama: this.state.nama,
-            kategori: this.state.kategori,
-            sop: this.state.sop,
-            komponen: this.state.komponen
+        // if (this.state.submitable) {
+        //     const response = await RegistrasiRisikoService.checkRisikoExist(this.state.nama);
+        //     if (response.data.result) {
+        //         const errorUsername = "Nama sudah terdaftar";
+        //         if (this.state.errorUsername !== errorUsername) {
+        //             this.setState({
+        //                 errorUsername: errorUsername
+        //             })
+        //         }
+        //     } else {
+            if (this.submitable()) {
+                const risiko = {
+                    id: this.state.id,
+                    nama: this.state.nama,
+                    kategori: this.state.kategori,
+                    sop: this.state.sop,
+                    detailUraian: this.state.detailUraian,
+                    metodologi: this.state.metodologi,
+                    deskripsi: this.state.deskripsi,
+                    ketentuanSampel: this.state.ketentuanSampel
+                }
+                RegistrasiRisikoService.ubahRisiko(risiko)
+                    .then(() => this.setRedirect());
+            }
         }
-        RegistrasiRisikoService.ubahRisiko(risiko)
-            .then(() => this.setRedirect());
-    }
+        // }
+    // }
 
     // Fungsi yang akan mengembalikan definisi tiap field pada form
     // Setiap objek {} pada List [] akan menjadi 1 field
     // untuk informasi lebih lengkap, cek SirioForm
     inputDefinition() {
+        const { errorNama, errorDU, errorDesc, errorMetod, errorKS } = this.state;
         return (
             [
                 {
-                    label: "Nama Risiko*",
+                    label: "Nama Risiko",
                     handleChange: this.handleChange,
-                    type: "textarea",
+                    type: "text",
                     name: "nama",
-                    required: true,
-                    validation: this.state.errorNama,
                     value: this.state.nama,
-                    placeholder: "Masukan nama risiko"
+                    placeholder: "Masukan nama risiko",
+                    required: true,
+                    errormessage: errorNama
                 }, {
-                    label: "Kategori Risiko*",
+                    label: "Kategori Risiko",
                     handleChange: this.handleSelectChange,
                     type: "select",
                     name: "kategori",
-                    validation: this.state.errorKategori,
+                    required: true,
                     value: this.state.kategori,
                     optionList: [
                         {
@@ -244,40 +276,80 @@ class FormRisikoUbah extends React.Component {
                         }
                     ]
                 }, {
-                    label: "Referensi SOP*",
+                    label: "Referensi SOP",
                     handleChange: this.handleSelectChange,
                     type: "select",
                     name: "sop",
                     value: this.state.sop,
-                    validation: this.state.errorSop,
+                    required: true,
                     optionList: this.state.sopOptionList
                 }, {
-                    label: "Komponen Risiko",
+                    label: "Detail Uraian Risiko",
+                    disabled: this.state.kategori !== 3,
                     handleChange: this.handleChange,
-                    validation: this.state.errorKomponen,
                     type: "textarea",
-                    name: "komponen",
-                    value: this.state.komponen,
-                    placeholder: "Masukan komponen risiko"
+                    name: "detailUraian",
+                    value: this.state.detailUraian,
+                    placeholder: "Masukan detail uraian risiko",
+                    errormessage: errorDU
+                }, {
+                    label: "Metodologi",
+                    disabled: this.state.kategori !== 3,
+                    handleChange: this.handleChange,
+                    type: "text",
+                    name: "metodologi",
+                    value: this.state.metodologi,
+                    placeholder: "Masukan metodologi risiko",
+                    errormessage: errorMetod
+                }, {
+                    label: "Deskripsi",
+                    disabled: this.state.kategori !== 3,
+                    handleChange: this.handleChange,
+                    type: "textarea",
+                    name: "deskripsi",
+                    value: this.state.deskripsi,
+                    placeholder: "Masukan deskripsi risiko",
+                    errormessage: errorDesc
+                }, {
+                    label: "Ketentuan Sampel",
+                    disabled: this.state.kategori !== 3,
+                    handleChange: this.handleChange,
+                    // validation: this.state.errorDU,
+                    type: "textarea",
+                    name: "ketentuanSampel",
+                    value: this.state.ketentuanSampel,
+                    placeholder: "Masukan ketentuan sampel risiko",
+                    errormessage: errorKS
                 }
             ]
         )
     }
 
-
     submitButton() {
-        return (
-            <div>
-                <SirioButton purple 
-                            recommended={this.state.submitable}
-                            disabled={!this.state.submitable}
-                             classes="mx-1"
-                             onClick={(event)  => this.handleSubmit(event)}>
+        var tombolSimpan =
+            <SirioButton
+                purple
+                disabled
+                classes="mx-2"
+            >
+                Simpan
+            </SirioButton>;
+        if (this.submitable()) {
+            tombolSimpan =
+                <SirioButton
+                    purple
+                    recommended
+                    classes="mx-2"
+                    onClick={(event) => this.handleSubmit(event)}
+                >
                     Simpan
                 </SirioButton>
+        }
+        return (
+            <div>
+                {tombolSimpan}
                 <SirioButton purple
-                             classes="mx-1"
-                             onClick={() => window.location.href = "/registrasi-risiko"}>
+                    onClick={() => window.location.href = "/registrasi-risiko"}>
                     Batal
                 </SirioButton>
             </div>

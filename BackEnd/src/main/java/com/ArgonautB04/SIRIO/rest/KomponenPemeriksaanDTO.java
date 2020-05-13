@@ -10,6 +10,8 @@ public class KomponenPemeriksaanDTO {
     private Integer idRiskLevel;
     private Float bobotRiskLevel;
     private Integer jumlahSampel;
+    private Integer jumlahPopulasi;
+    private Integer jumlahSampelError;
     private String keteranganSampel;
     private String namaRiskLevel;
     private List<TemuanRisikoDTO> daftarTemuanRisiko;
@@ -17,6 +19,22 @@ public class KomponenPemeriksaanDTO {
     private List<TemuanRisikoDTO> daftarTemuanRisikoTerdaftar;
     private List<RekomendasiDTO> daftarRekomendasiTerdaftar;
     private RisikoDTO risiko;
+
+    public Integer getJumlahPopulasi() {
+        return jumlahPopulasi;
+    }
+
+    public void setJumlahPopulasi(Integer jumlahPopulasi) {
+        this.jumlahPopulasi = jumlahPopulasi;
+    }
+
+    public Integer getJumlahSampelError() {
+        return jumlahSampelError;
+    }
+
+    public void setJumlahSampelError(Integer jumlahSampelError) {
+        this.jumlahSampelError = jumlahSampelError;
+    }
 
     public Float getBobotRiskLevel() {
         return bobotRiskLevel;

@@ -13,7 +13,7 @@ import java.io.Serializable;
 @Table
 public class Employee implements Serializable {
 
-    public static enum Status {
+    public enum Status {
         AKTIF, NONAKTIF
     }
 
@@ -39,6 +39,7 @@ public class Employee implements Serializable {
     @NotNull
     @Size(max = 70)
     @Column(nullable = false)
+    @JsonIgnore
     private String password;
 
     @Size(max = 20)
@@ -47,7 +48,7 @@ public class Employee implements Serializable {
 
     @NotNull
     @Size(max = 30)
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String email;
 
     @NotNull
@@ -59,6 +60,11 @@ public class Employee implements Serializable {
     @JoinColumn(name = "role", referencedColumnName = "idRole", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Role role;
+
+    @ManyToOne
+    @JoinColumn(name = "reminderTemplate", referencedColumnName = "idReminderTemplate")
+    @JsonIgnore
+    private ReminderTemplate reminderTemplatePilihan;
 
     public Employee() {
     }
@@ -144,5 +150,13 @@ public class Employee implements Serializable {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public ReminderTemplate getReminderTemplatePilihan() {
+        return reminderTemplatePilihan;
+    }
+
+    public void setReminderTemplatePilihan(ReminderTemplate reminderTemplatePilihan) {
+        this.reminderTemplatePilihan = reminderTemplatePilihan;
     }
 }

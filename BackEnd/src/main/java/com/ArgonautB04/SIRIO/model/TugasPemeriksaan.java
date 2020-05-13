@@ -9,6 +9,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Date;
 
 @Entity
 @Table
@@ -19,18 +20,18 @@ public class TugasPemeriksaan implements Serializable {
     private int idTugas;
 
     @NotNull
-    @DateTimeFormat(pattern = "MM-dd-yyy")
-    @Column(name = "tanggal_mulai", nullable = false)
+    @DateTimeFormat
+    @Column(nullable = false)
     private LocalDate tanggalMulai;
 
     @NotNull
-    @DateTimeFormat(pattern = "MM-dd-yyy")
-    @Column(name = "tanggal_selesai", nullable = false)
+    @DateTimeFormat
+    @Column(nullable = false)
     private LocalDate tanggalSelesai;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "kantor_cabang", referencedColumnName = "idKantor", nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @OnDelete(action = OnDeleteAction.NO_ACTION)
     private KantorCabang kantorCabang;
 
     @ManyToOne(fetch = FetchType.EAGER)

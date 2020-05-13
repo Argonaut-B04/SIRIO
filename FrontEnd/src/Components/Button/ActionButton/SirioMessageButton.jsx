@@ -1,8 +1,9 @@
 import React from "react";
-import Modal from "react-bootstrap/Modal";
 import SirioButton from "../SirioButton";
 import "bootstrap/dist/css/bootstrap.min.css";
 import classes from "./ActionButton.module.css";
+import TriggerButton from "./TriggerButton";
+import SirioModal from "./SirioModal";
 
 /**
  * Komponen untuk Button yang membuka Popup berupa Message
@@ -42,40 +43,37 @@ export default class SirioMessageButton extends React.Component {
     }
 
     render() {
+        const { handleClose, handleShow } = this;
+        const { show } = this.state;
+        const { modalTitle, onClick, customConfirmText, modalDesc } = this.props;
+        const { modalButton } = classes;
         return (
             <>
-                <SirioButton
-                    {...this.props}
-                    onClick={this.handleShow}
-                >
-                    {this.props.children}
-                </SirioButton>
+                <TriggerButton {...this.props} handleShow={handleShow} />
 
-                <Modal
-                    size="md"
-                    show={this.state.show}
-                    onHide={this.handleClose}
-                    centered>
-                    <Modal.Body className="d-flex justify-content-center align-items-center flex-column py-5">
-                        <img src={process.env.PUBLIC_URL + "/modal-checklist.png"} height="200px" className="ml-4" alt="checklist" />
-
-                        <div className="text-center p-3 w-75">
-                            <h2>{this.props.modalTitle}</h2>
-                        </div>
-
-                        <div className="d-flex justify-content-center align-items-center w-100">
-                            <SirioButton
-                                purple
-                                recommended
-                                circular
-                                onClick={this.props.onClick ? this.props.onClick : this.handleClose}
-                                classes={classes.modalButton}
-                            >
-                                {this.props.customConfirmText ? this.props.customConfirmText : "oke"}
-                            </SirioButton>
-                        </div>
-                    </Modal.Body>
-                </Modal>
+                <SirioModal
+                    image={<img src={process.env.PUBLIC_URL + "/modal-checklist.png"} height="200px" className="ml-4" alt="checklist" />}
+                    modalTitle={modalTitle}
+                    handleClose={handleClose}
+                    modalDesc={modalDesc}
+                    show={show}
+                    footerButton={
+                        <SirioButton
+                            purple
+                            recommended
+                            circular
+                            onClick={() => {
+                                if (onClick) {
+                                    onClick()
+                                }
+                                handleClose()
+                            }}
+                            classes={modalButton}
+                        >
+                            {customConfirmText ? customConfirmText : "oke"}
+                        </SirioButton>
+                    }
+                />
             </>
         );
     }

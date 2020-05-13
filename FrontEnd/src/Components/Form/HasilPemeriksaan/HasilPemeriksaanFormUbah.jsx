@@ -3,12 +3,16 @@ import SirioForm from '../SirioForm';
 import SirioButton from '../../Button/SirioButton';
 import HasilPemeriksaanService from '../../../Services/HasilPemeriksaanService';
 import RisikoService from '../../../Services/RisikoService';
-import {NavLink, Redirect} from 'react-router-dom';
+import { NavLink, Redirect } from 'react-router-dom';
 import { withRouter } from 'react-router-dom';
 import RiskLevelService from "../../../Services/RiskLevelService";
 import SirioField from "../SirioFormComponent/SirioField";
+import TemuanRisikoService from "../../../Services/TemuanRisikoService";
+import SirioConfirmButton from "../../Button/ActionButton/SirioConfirmButton";
+import SirioComponentHeader from "../../Header/SirioComponentHeader";
+import ComponentWrapper from "../../../Layout/ComponentWrapper";
 
-class HasilPemeriksaanFormTambah extends React.Component {
+class HasilPemeriksaanFormUbah extends React.Component {
 
     // Masukan user disimpan kedalam state sebelum dikirim ke backend
     constructor(props) {
@@ -19,6 +23,8 @@ class HasilPemeriksaanFormTambah extends React.Component {
             daftarKomponenPemeriksaan: [],
             daftarRisikoKategori1: [],
             daftarRisikoKategori2: [],
+            daftarRisikoKategori3: [],
+            daftarHistoriTemuan: [],
             filterKategori: "",
             kategoriType: "",
             riskLevelOptionList: [],
@@ -26,23 +32,22 @@ class HasilPemeriksaanFormTambah extends React.Component {
             redirect: false
         };
 
-        this.renderRisikoKategori12 = this.renderRisikoKategori12.bind(this);
-        this.renderHasilPemeriksaan = this.renderHasilPemeriksaan.bind(this);
-        this.renderRiskLevelOption = this.renderRiskLevelOption.bind(this);
+        this.renderData = this.renderData.bind(this);
         this.handleChangeKomponen = this.handleChangeKomponen.bind(this);
         this.handleSelectChangeKomponen = this.handleSelectChangeKomponen.bind(this);
         this.handleSelectChange = this.handleSelectChange.bind(this);
         this.handleSelectChangeRisiko = this.handleSelectChangeRisiko.bind(this);
         this.handleMultiFieldChange = this.handleMultiFieldChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
         this.modifyFieldCount = this.modifyFieldCount.bind(this);
         this.setRedirect = this.setRedirect.bind(this);
-        this.innerInputDefinition = this.innerInputDefinition.bind(this);
+        this.getInputDefinition = this.getInputDefinition.bind(this);
+        this.submitable = this.submitable.bind(this);
+        this.submitableDraft = this.submitableDraft.bind(this);
     }
 
     componentDidMount() {
-        this.renderRisikoKategori12();
-        this.renderHasilPemeriksaan();
-        this.renderRiskLevelOption();
+        this.renderData();
     }
 
     setRedirect = () => {
@@ -62,10 +67,12 @@ class HasilPemeriksaanFormTambah extends React.Component {
         }
     };
 
-    async renderRiskLevelOption() {
-        const response = await RiskLevelService.getAll();
+    async renderData() {
+        const responseTemuanRisiko = await TemuanRisikoService.getHistoriTemuanRisikoKantorCabang(this.props.location.state.id);
+        const daftarHistoriTemuan = responseTemuanRisiko.data.result;
 
-        const riskLevelList = response.data.result.map(riskLevel => {
+        const responseRiskLevel = await RiskLevelService.getAll();
+        const riskLevelList = responseRiskLevel.data.result.map(riskLevel => {
             return (
                 {
                     label: riskLevel.namaLevel,
@@ -74,47 +81,41 @@ class HasilPemeriksaanFormTambah extends React.Component {
             )
         });
 
-        this.setState({
-            riskLevelOptionList: riskLevelList
-        })
-    }
-
-    async renderRisikoKategori12() {
-        const response = await RisikoService.getAll();
-
-        const risikoKategori1 = response.data.result
-            .filter(risiko => risiko.risikoKategori === 1)
+        const responseRisiko = await RisikoService.getAll();
+        const risikoKategori1 = responseRisiko.data.result
+            .filter(risiko => risiko.kategori === 1)
             .map(risiko => {
                 return (
                     {
-                        label: risiko.namaRisiko,
-                        value: risiko.idRisiko
+                        label: risiko.nama,
+                        value: risiko.id
+                    }
+                )
+            });
+        const risikoKategori2 = responseRisiko.data.result
+            .filter(risiko => risiko.kategori === 2)
+            .map(risiko => {
+                return (
+                    {
+                        label: risiko.nama,
+                        value: risiko.id
+                    }
+                )
+            });
+        const risikoKategori3 = responseRisiko.data.result
+            .filter(risiko => risiko.kategori === 3)
+            .map(risiko => {
+                return (
+                    {
+                        label: risiko.nama,
+                        value: risiko.id
                     }
                 )
             });
 
-        const risikoKategori2 = response.data.result
-            .filter(risiko => risiko.risikoKategori === 2)
-            .map(risiko => {
-                return (
-                    {
-                        label: risiko.namaRisiko,
-                        value: risiko.idRisiko
-                    }
-                )
-            });
-
-        this.setState({
-            daftarRisikoKategori1: risikoKategori1,
-            daftarRisikoKategori2: risikoKategori2
-        })
-    }
-
-    async renderHasilPemeriksaan() {
-        const response = await HasilPemeriksaanService.getHasilPemeriksaan(this.props.location.state.id);
-
-        const idCurrentStatus = response.data.result.idStatus;
-        const daftarKomponen = response.data.result.daftarKomponenPemeriksaan
+        const responseHasilPemeriksaan = await HasilPemeriksaanService.getHasilPemeriksaan(this.props.location.state.id);
+        const idCurrentStatus = responseHasilPemeriksaan.data.result.idStatus;
+        const daftarKomponen = responseHasilPemeriksaan.data.result.daftarKomponenPemeriksaan
             .map(komponen => {
                 return (
                     {
@@ -122,14 +123,20 @@ class HasilPemeriksaanFormTambah extends React.Component {
                         idRiskLevel: komponen.idRiskLevel,
                         risiko: komponen.risiko,
                         jumlahSampel: komponen.jumlahSampel,
+                        errorJumlahSampel: "",
+                        jumlahPopulasi: komponen.jumlahPopulasi,
+                        errorJumlahPopulasi:"",
+                        jumlahSampelError: komponen.jumlahSampelError,
+                        errorJumlahSampelError:"",
                         keteranganSampel: komponen.keteranganSampel,
+                        errorKeteranganSampel: "",
                         daftarTemuanRisiko: (komponen.daftarTemuanRisikoTerdaftar.length > 0) ?
                             komponen.daftarTemuanRisikoTerdaftar
                             :
                             [{
                                 keterangan: ""
                             }],
-                        daftarRekomendasi:(komponen.daftarRekomendasiTerdaftar.length > 0) ?
+                        daftarRekomendasi: (komponen.daftarRekomendasiTerdaftar.length > 0) ?
                             komponen.daftarRekomendasiTerdaftar
                             :
                             [{
@@ -140,138 +147,214 @@ class HasilPemeriksaanFormTambah extends React.Component {
             });
 
         this.setState({
+            daftarHistoriTemuan: daftarHistoriTemuan,
+            riskLevelOptionList: riskLevelList,
+            daftarRisikoKategori1: risikoKategori1,
+            daftarRisikoKategori2: risikoKategori2,
+            daftarRisikoKategori3: risikoKategori3,
             daftarKomponenPemeriksaan: daftarKomponen,
             idCurrentStatus: idCurrentStatus
         })
     }
 
-    getSOPButton(namaSop, linkSop) {
+    getSOPButton(indexKomponen) {
         return (
             <SirioButton
                 purple
                 hyperlinkLeft
-                onClick={() => window.location.href = linkSop}
+                onClick={() => window.location.href = this.state.daftarKomponenPemeriksaan[indexKomponen].risiko.linkSop}
             >
-                {namaSop}
+                {this.state.daftarKomponenPemeriksaan[indexKomponen].risiko.namaSop}
             </SirioButton>
         )
     }
 
-    innerInputDefinition(komponen) {
+    getHistoriTemuanButton(idRisiko) {
+        const histori = <p>
+            {this.state.daftarHistoriTemuan
+                .filter(x => x.idRisiko === idRisiko)
+                .map((temuan, index) =>
+                    <p className="text-center p-0 m-0">{index+1}. {temuan.keterangan} </p>
+                )}
+        </p>;
+
+        return (
+            <SirioConfirmButton
+                purple recommended
+                classes="m-1"
+                modalTitle= "Riwayat Temuan Risiko"
+                modalDesc={histori}
+                customConfirmText=" "
+                confirmDisable
+            >
+                Riwayat Temuan
+            </SirioConfirmButton>
+        )
+    }
+
+    getInputDefinition(indexKomponen) {
+        const daftarKomponenPemeriksaan = this.state.daftarKomponenPemeriksaan;
+        const riskLevelOptionList = this.state.riskLevelOptionList;
         return (
             [
                 {
                     label: "Komponen Risiko",
-                    customInput: komponen.risiko.nama
+                    customInput: daftarKomponenPemeriksaan[indexKomponen].risiko.nama
                 }, {
                     label: "SOP",
-                    customInput: this.getSOPButton(komponen.risiko.namaSop, komponen.risiko.linkSop)
+                    customInput: this.getSOPButton(indexKomponen)
+                }, {
+                    label: "Deskripsi",
+                    customInput: <p style={{ whiteSpace: 'pre-line' }}>{daftarKomponenPemeriksaan[indexKomponen].risiko.deskripsi}</p>
+                }, {
+                    label: "Metodologi",
+                    customInput: <p style={{ whiteSpace: 'pre-line' }}>{daftarKomponenPemeriksaan[indexKomponen].risiko.metodologi}</p>
+                }, {
+                    label: "Ketentuan Sampel",
+                    customInput: daftarKomponenPemeriksaan[indexKomponen].risiko.ketentuanSampel?
+                        <p style={{ whiteSpace: 'pre-line' }}>{daftarKomponenPemeriksaan[indexKomponen].risiko.ketentuanSampel}</p>
+                        :
+                        <p>N/A</p>
+                }, {
+                    label: "Jumlah Populasi",
+                    handleChange: (event) => this.handleChangeKomponen(event, indexKomponen),
+                    type: "number",
+                    name: "jumlahPopulasi",
+                    min: 0,
+                    value: daftarKomponenPemeriksaan[indexKomponen].jumlahPopulasi,
+                    errormessage: daftarKomponenPemeriksaan[indexKomponen].errorJumlahPopulasi,
+                    placeholder: "0"
                 }, {
                     label: "Jumlah Sampel",
-                    handleChange: (event) => this.handleChangeKomponen(event, komponen.id),
+                    handleChange: (event) => this.handleChangeKomponen(event, indexKomponen),
                     type: "number",
                     name: "jumlahSampel",
                     min: 0,
-                    value: komponen.jumlahSampel,
+                    value: daftarKomponenPemeriksaan[indexKomponen].jumlahSampel,
+                    errormessage: daftarKomponenPemeriksaan[indexKomponen].errorJumlahSampel,
+                    placeholder: "0"
+                }, {
+                    label: "Jumlah Sampel Error",
+                    handleChange: (event) => this.handleChangeKomponen(event, indexKomponen),
+                    type: "number",
+                    name: "jumlahSampelError",
+                    min: 0,
+                    value: daftarKomponenPemeriksaan[indexKomponen].jumlahSampelError,
+                    errormessage: daftarKomponenPemeriksaan[indexKomponen].errorJumlahSampelError,
                     placeholder: "0"
                 }, {
                     label: "Keterangan Sampel",
-                    handleChange: (event) => this.handleChangeKomponen(event, komponen.id),
+                    handleChange: (event) => this.handleChangeKomponen(event, indexKomponen),
                     type: "textarea",
                     name: "keteranganSampel",
-                    value: komponen.keteranganSampel,
+                    value: daftarKomponenPemeriksaan[indexKomponen].keteranganSampel,
+                    errormessage: daftarKomponenPemeriksaan[indexKomponen].errorKeteranganSampel,
                     placeholder: "Keterangan sampel"
                 }, {
                     label: "Risk Level",
-                    handleChange: (name, event) => this.handleSelectChangeKomponen(name, event, komponen.id),
+                    handleChange: (name, event) => this.handleSelectChangeKomponen(name, event, indexKomponen),
                     type: "select",
                     name: "idRiskLevel",
-                    value: komponen.idRiskLevel,
-                    optionList: this.state.riskLevelOptionList
+                    value: daftarKomponenPemeriksaan[indexKomponen].idRiskLevel,
+                    optionList: riskLevelOptionList,
                 }, {
                     label: "Hasil Temuan",
                     multiple: true,
                     isMultipleObject: true,
-                    handleChange: (event, index) => this.handleMultiFieldChange(event, index, komponen.id, komponen.daftarTemuanRisiko, "keterangan"),
+                    handleChange: (event, index) => this.handleMultiFieldChange(event, index, indexKomponen, "keterangan"),
                     type: "textArea",
                     name: "daftarTemuanRisiko",
-                    value: komponen.daftarTemuanRisiko.map(temuan => temuan.keterangan),
-                    modifier: (name, newField, index) => this.modifyFieldCount(name, newField, index, komponen.id,  komponen.daftarTemuanRisiko,"keterangan"),
+                    value: daftarKomponenPemeriksaan[indexKomponen].daftarTemuanRisiko.map(temuan => temuan.keterangan),
+                    modifier: (name, newField, index) => this.modifyFieldCount(name, newField, index, indexKomponen, "keterangan"),
+                }, {
+                    label: "",
+                    customInput: this.getHistoriTemuanButton(daftarKomponenPemeriksaan[indexKomponen].risiko.id)
                 }, {
                     label: "Rekomendasi",
                     multiple: true,
                     isMultipleObject: true,
-                    handleChange: (event, index) => this.handleMultiFieldChange(event, index, komponen.id, komponen.daftarRekomendasi, "keterangan"),
+                    handleChange: (event, index) => this.handleMultiFieldChange(event, index, indexKomponen, "keterangan"),
                     type: "textArea",
                     name: "daftarRekomendasi",
-                    value: komponen.daftarRekomendasi.map(rekomendasi => rekomendasi.keterangan),
-                    modifier: (name, newField, index) => this.modifyFieldCount(name, newField, index, komponen.id, komponen.daftarRekomendasi,"keterangan"),
+                    value: daftarKomponenPemeriksaan[indexKomponen].daftarRekomendasi.map(rekomendasi => rekomendasi.keterangan),
+                    modifier: (name, newField, index) => this.modifyFieldCount(name, newField, index, indexKomponen, "keterangan"),
                 }
             ]
         )
     }
 
-    outerInputDefinition() {
+    getForm() {
         if(this.state.daftarKomponenPemeriksaan.length > 0) {
             if (this.state.kategoriType === "1") {
                 return (
                     this.state.daftarKomponenPemeriksaan
-                        .filter(komponen => komponen.risiko.grantParent === this.state.filterKategori)
-                        .map(komponen => {
-                            return (
-                                {
-                                    fullComponent:
-                                        <SirioForm
-                                            noHeader
-                                            isInnerForm
-                                            inputDefinition={this.innerInputDefinition(komponen)}
-                                        />
-                                }
-                            )
-                        })
+                        .reduce((accumulator, currentValue, currentIndex) => {
+                            if(currentValue.risiko.grantParent === this.state.filterKategori ||
+                                currentValue.risiko.parent === this.state.filterKategori) {
+                                accumulator.push(
+                                    <SirioForm
+                                        key={currentIndex}
+                                        noHeader
+                                        isInnerForm
+                                        inputDefinition={this.getInputDefinition(currentIndex)}
+                                    />
+                                )
+                            }
+                            return accumulator
+                        }, [])
                 )
             } else if (this.state.kategoriType === "2") {
                 return (
                     this.state.daftarKomponenPemeriksaan
-                        .filter(komponen => komponen.risiko.parent === this.state.filterKategori)
-                        .map(komponen => {
-                            return (
-                                {
-                                    fullComponent:
-                                        <SirioForm
-                                            noHeader
-                                            isInnerForm
-                                            inputDefinition={this.innerInputDefinition(komponen)}
-                                        />
-                                }
-                            )
-                        })
+                        .reduce((accumulator, currentValue, currentIndex) => {
+                            if(currentValue.risiko.parent === this.state.filterKategori) {
+                                accumulator.push(
+                                    <SirioForm
+                                        key={currentIndex}
+                                        noHeader
+                                        isInnerForm
+                                        inputDefinition={this.getInputDefinition(currentIndex)}
+                                    />
+                                )
+                            }
+                            return accumulator
+                        }, [])
+                )
+            } else if (this.state.kategoriType === "3") {
+                return (
+                    this.state.daftarKomponenPemeriksaan
+                        .reduce((accumulator, currentValue, currentIndex) => {
+                            if(currentValue.risiko.id === this.state.filterKategori) {
+                                accumulator.push(
+                                    <SirioForm
+                                        key={currentIndex}
+                                        noHeader
+                                        isInnerForm
+                                        inputDefinition={this.getInputDefinition(currentIndex)}
+                                    />
+                                )
+                            }
+                            return accumulator
+                        }, [])
                 )
             } else {
                 return (
                     this.state.daftarKomponenPemeriksaan
-                        .map(komponen => {
+                        .map((komponen, index) => {
                             return (
-                                {
-                                    fullComponent:
-                                        <SirioForm
-                                            noHeader
-                                            isInnerForm
-                                            inputDefinition={this.innerInputDefinition(komponen)}
-                                        />
-                                }
+                                <SirioForm
+                                    key={index}
+                                    noHeader
+                                    isInnerForm
+                                    inputDefinition={this.getInputDefinition(index)}
+                                />
                             )
                         })
                 )
             }
         } else {
             return (
-                [
-                    {
-                        label: "Loading",
-                        customField: <p>Loading...</p>
-                    }
-                ]
+                []
             )
         }
     }
@@ -299,6 +382,10 @@ class HasilPemeriksaanFormTambah extends React.Component {
                                 {
                                     label: "Kategori 2",
                                     value: "2"
+                                },
+                                {
+                                    label: "Kategori 3",
+                                    value: "3"
                                 }
                             ]
                         }
@@ -318,77 +405,70 @@ class HasilPemeriksaanFormTambah extends React.Component {
         )
     }
 
-    modifyFieldCount(name, newField, index, idKomponen, array, objectKey) {
-        // const newArray = [];
-        // const oriArray = array;
-        if (newField.length > array.length) {
-            array.push({
+    modifyFieldCount(name, newField, index, indexKomponen, objectKey) {
+        const array = this.state.daftarKomponenPemeriksaan;
+        if (newField.length > array[indexKomponen][name].length) {
+            array[indexKomponen][name].push({
                 [objectKey]: newField[newField.length - 1]
             })
         } else {
-            array.splice(index+1, 1)
+            array[indexKomponen][name].splice(index, 1)
         }
-        // for(let i = 0; i < newField.length; i++) {
-        //     newArray.push({
-        //         [objectKey]: newField[i]
-        //     })
-        // }
-        // oriArray.map((ori, index) => {
-        //     if(ori.keterangan === newField[index]) {
-        //         newArray.push(ori);
-        //     } else {
-        //
-        //     }
-        // });
 
-        this.setState(prevState => ({
-            ...prevState,
-            daftarKomponenPemeriksaan: prevState.daftarKomponenPemeriksaan.map(komponen => ({
-                ...komponen,
-                [name]: komponen.id === idKomponen ? array : komponen[name]
-            }))
-        }))
+        this.setState({
+            daftarKomponenPemeriksaan: array
+        });
     }
 
-    handleMultiFieldChange(event, index, idKomponen, array, objectKey) {
+    handleMultiFieldChange(event, index, indexKomponen, objectKey) {
         const targetName = event.target.name;
         const targetValue = event.target.value;
-        const targetArray = array;
-        targetArray[index][objectKey] = targetValue;
-        this.setState(prevState => ({
-            ...prevState,
-            daftarKomponenPemeriksaan: prevState.daftarKomponenPemeriksaan.map(komponen => ({
-                ...komponen,
-                [targetName]: komponen.id === idKomponen ? targetArray : komponen[targetName]
-            }))
-        }))
+        const array = this.state.daftarKomponenPemeriksaan;
+        array[indexKomponen][targetName][index][objectKey] = targetValue;
+
+        this.setState({
+            daftarKomponenPemeriksaan: array
+        });
     }
 
-    handleChangeKomponen(event, idKomponen) {
+    handleChangeKomponen(event, indexKomponen) {
         const { name, value } = event.target;
+        const array = this.state.daftarKomponenPemeriksaan;
+        array[indexKomponen][name] = value;
 
-        this.setState(prevState => ({
-            ...prevState,
-            daftarKomponenPemeriksaan: prevState.daftarKomponenPemeriksaan.map(komponen => ({
-                ...komponen,
-                [name]: komponen.id === idKomponen ? value : komponen[name]
-            }))
-        }))
+        this.setState({
+            daftarKomponenPemeriksaan: array
+        });
+
+        switch (name) {
+            case "jumlahSampel":
+                this.validateJumlahSampel(value, indexKomponen);
+                break;
+            case "keteranganSampel":
+                this.validateKeteranganSampel(value, indexKomponen);
+                break;
+            case "jumlahPopulasi":
+                this.validateJumlahPopulasi(value, indexKomponen);
+                break;
+            case "jumlahSampelError":
+                this.validateJumlahSampelError(value, indexKomponen);
+                break;
+        }
     }
 
-    handleSelectChangeKomponen(name, event, idKomponen) {
-        this.setState(prevState => ({
-            ...prevState,
-            daftarKomponenPemeriksaan: prevState.daftarKomponenPemeriksaan.map(komponen => ({
-                ...komponen,
-                [name]: komponen.id === idKomponen ? event.value : komponen[name]
-            }))
-        }));
+    handleSelectChangeKomponen(name, event, indexKomponen) {
+        const array = this.state.daftarKomponenPemeriksaan;
+        array[indexKomponen][name] = event.value;
+
+        this.setState({
+            daftarKomponenPemeriksaan: array
+        });
     }
 
     handleSelectChangeRisiko(name, event) {
         const risiko1 = this.state.daftarRisikoKategori1;
         const risiko2 = this.state.daftarRisikoKategori2;
+        const risiko3 = this.state.daftarRisikoKategori3;
         if (event.value === "1") {
             this.setState(
                 {
@@ -405,6 +485,15 @@ class HasilPemeriksaanFormTambah extends React.Component {
                         : event.value,
                     riskOptionList: risiko2,
                     filterKategori: risiko2[0].value
+                }
+            )
+        } else if (event.value === "3") {
+            this.setState(
+                {
+                    [name]
+                        : event.value,
+                    riskOptionList: risiko3,
+                    filterKategori: risiko3[0].value
                 }
             )
         } else {
@@ -434,8 +523,7 @@ class HasilPemeriksaanFormTambah extends React.Component {
     }
 
     handleSubmit(event, status) {
-        event.preventDefault();
-
+        event&&event.preventDefault();
         const hasilPemeriksaan = {
             id: this.props.location.state.id,
             idStatus: status,
@@ -452,7 +540,6 @@ class HasilPemeriksaanFormTambah extends React.Component {
                     } return null
                 });
                 komponen.daftarRekomendasi.map(rekomendasi => {
-                    console.log(rekomendasi)
                     if (rekomendasi.id != null) {
                         daftarRekomendasiTerdaftar.push(rekomendasi)
                     } else {
@@ -465,6 +552,8 @@ class HasilPemeriksaanFormTambah extends React.Component {
                         idRiskLevel: komponen.idRiskLevel,
                         risiko: komponen.risiko,
                         jumlahSampel: komponen.jumlahSampel,
+                        jumlahPopulasi: komponen.jumlahPopulasi,
+                        jumlahSampelError: komponen.jumlahSampelError,
                         keteranganSampel: komponen.keteranganSampel,
                         daftarTemuanRisiko: daftarTemuan,
                         daftarRekomendasi: daftarRekomendasi,
@@ -474,24 +563,154 @@ class HasilPemeriksaanFormTambah extends React.Component {
                 )
             })
         };
-        console.log(hasilPemeriksaan)
-        HasilPemeriksaanService.editHasilPemeriksaan(hasilPemeriksaan)
-            .then(() => this.setRedirect());
+        if ((status === 1 && this.submitableDraft()) || ((status === 2 || status === 3) && this.submitable())) {
+            HasilPemeriksaanService.editHasilPemeriksaan(hasilPemeriksaan)
+                .then(() => this.setRedirect());
+        }
+    }
+
+    submitable() {
+        var submitable = true;
+        this.state.daftarKomponenPemeriksaan.map(komponen => {
+            submitable = submitable &&
+                (komponen.errorJumlahPopulasi === "" &&
+                komponen.errorJumlahSampel === "" &&
+                komponen.errorJumlahSampelError === "" &&
+                komponen.errorKeteranganSampel === "" &&
+                (komponen.jumlahSampel !== null && komponen.jumlahSampel !== "") &&
+                (komponen.jumlahPopulasi !== null && komponen.jumlahPopulasi !== "") &&
+                (komponen.jumlahSampelError !== null && komponen.jumlahSampelError !== "") &&
+                (komponen.keteranganSampel !== null && komponen.keteranganSampel !== "") &&
+                (komponen.idRiskLevel !== null && komponen.idRiskLevel !== ""));
+            return null
+        });
+        return submitable;
+    }
+
+    submitableDraft() {
+        var submitableDraft = true;
+        this.state.daftarKomponenPemeriksaan.map(komponen => {
+            submitableDraft = submitableDraft &&
+                komponen.errorJumlahPopulasi === "" &&
+                komponen.errorJumlahSampel === "" &&
+                komponen.errorJumlahSampelError === "" &&
+                komponen.errorKeteranganSampel === "" ;
+            return null
+        });
+        return submitableDraft;
+    }
+
+    validateKeteranganSampel(fokusKeteranganSampel, indexKomponen) {
+        var errorKeteranganSampel = "";
+        const letter = /.*[a-zA-Z].*/;
+        const array = this.state.daftarKomponenPemeriksaan;
+
+        if (fokusKeteranganSampel === null || fokusKeteranganSampel === "") {
+            errorKeteranganSampel = "";
+        } else if (!fokusKeteranganSampel.match(letter)) {
+            errorKeteranganSampel = "Ketarangan perlu mengandung huruf";
+        }
+
+        array[indexKomponen]["errorKeteranganSampel"] = errorKeteranganSampel;
+        this.setState({
+            daftarKomponenPemeriksaan: array
+        });
+    }
+
+    validateJumlahPopulasi(fokusJumlahPopulasi, indexKomponen) {
+        var errorJumlahPopulasi = "";
+        const number = /^[0-9]*$/;
+        const array = this.state.daftarKomponenPemeriksaan;
+
+        if (fokusJumlahPopulasi === null || fokusJumlahPopulasi === "") {
+            errorJumlahPopulasi = "";
+        } else if (!fokusJumlahPopulasi.match(number) || parseInt(fokusJumlahPopulasi) < 0) {
+            errorJumlahPopulasi = "Jumlah Populasi berupa angka dan tidak boleh negatif";
+        }
+
+        array[indexKomponen]["errorJumlahPopulasi"] = errorJumlahPopulasi;
+        this.setState({
+            daftarKomponenPemeriksaan: array
+        });
+    }
+
+    validateJumlahSampel(fokusJumlahSampel, indexKomponen) {
+        var errorJumlahSampel = "";
+        const number = /^[0-9]*$/;
+        const array = this.state.daftarKomponenPemeriksaan;
+
+        if (fokusJumlahSampel === null || fokusJumlahSampel === "") {
+            errorJumlahSampel = "";
+        } else if (!fokusJumlahSampel.match(number) || parseInt(fokusJumlahSampel) < 0) {
+            errorJumlahSampel = "Jumlah Sampel berupa angka dan tidak boleh negatif";
+        }
+
+        array[indexKomponen]["errorJumlahSampel"] = errorJumlahSampel;
+        this.setState({
+            daftarKomponenPemeriksaan: array
+        });
+    }
+
+    validateJumlahSampelError(fokusJumlahSampelError, indexKomponen) {
+        var errorJumlahSampelError = "";
+        const number = /^[0-9]*$/;
+        const array = this.state.daftarKomponenPemeriksaan;
+
+        if (fokusJumlahSampelError === null || fokusJumlahSampelError === "") {
+            errorJumlahSampelError = "";
+        } else if (!fokusJumlahSampelError.match(number) || parseInt(fokusJumlahSampelError) < 0) {
+            errorJumlahSampelError = "Jumlah Sampel Error berupa angka dan tidak boleh negatif";
+        }
+
+        array[indexKomponen]["errorJumlahSampelError"] = errorJumlahSampelError;
+        this.setState({
+            daftarKomponenPemeriksaan: array
+        });
     }
 
     submitButton() {
-        return (
-            <div>
-                <SirioButton purple recommended
-                             classes="mx-1"
-                             onClick={(event)  => this.handleSubmit(event, 2)}>
+        var tombolSimpan =
+            <SirioButton
+                purple
+                disabled
+                classes="mx-1"
+            >
+                Simpan
+            </SirioButton>;
+        if (this.submitable()) {
+            tombolSimpan =
+                <SirioButton
+                    purple
+                    recommended
+                    classes="mx-1"
+                    onClick={(event) => this.handleSubmit(event, 2)}
+                >
                     Simpan
                 </SirioButton>
-                <SirioButton purple recommended
-                             classes="mx-1"
-                             onClick={(event)  => this.handleSubmit(event, this.state.idCurrentStatus)}>
+        }
+        var tombolDraft =
+            <SirioButton
+                purple
+                disabled
+                classes="mx-1"
+            >
+                Draft
+            </SirioButton>;
+        if (this.state.idCurrentStatus === 1 ? this.submitableDraft() : this.submitable()) {
+            tombolDraft =
+                <SirioButton
+                    purple
+                    recommended
+                    classes="mx-1"
+                    onClick={(event)  => this.handleSubmit(event, this.state.idCurrentStatus)}
+                >
                     Draft
                 </SirioButton>
+        }
+        return (
+            <div>
+                {tombolSimpan}
+                {tombolDraft}
                 <NavLink to={{
                     pathname: "/hasil-pemeriksaan/detail",
                     state: {
@@ -513,16 +732,20 @@ class HasilPemeriksaanFormTambah extends React.Component {
         return (
             <>
                 {this.renderRedirect()}
-                <SirioForm
-                    title="Form Tambah Hasil Pemeriksaan"
+                <SirioComponentHeader
+                    title="Form Ubah Hasil Pemeriksaan"
                     betweenTitleSubtitle={this.getBetween()}
-                    inputDefinition={this.outerInputDefinition()}
-                    onSubmit={this.handleSubmit}
-                    submitButton={this.submitButton()}
                 />
+
+                <ComponentWrapper>
+                    {this.getForm().map(e => e)}
+                    <div className="w-100 text-right">
+                        {this.submitButton()}
+                    </div>
+                </ComponentWrapper>
             </>
         );
     }
 }
 
-export default withRouter(HasilPemeriksaanFormTambah);
+export default withRouter(HasilPemeriksaanFormUbah);

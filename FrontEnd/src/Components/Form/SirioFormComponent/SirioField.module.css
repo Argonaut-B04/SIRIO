@@ -7,8 +7,12 @@
     color: black;
     width: 200px;
     padding: 5px;
-    margin: 10px 0px;
+    margin: 10px 0 0 0;
     vertical-align: top;
+}
+
+.required:first-child:after{
+    content: "*";
 }
 
 .input {
@@ -59,8 +63,10 @@
     font-size: 14px;
     line-height: 1.2;
     text-align: justify;
-    margin-right: 10px;
-    margin-top: 3px;
+    font-style: normal;
+    font-weight: normal;
+    padding-left: 5px;
+    margin: 0
 }
 
 .groupedInput {
@@ -72,4 +78,22 @@
     justify-content: baseline;
     align-items: center;
     padding: 0;
+}
+
+.input:disabled {
+    font-family: Proxima Nova;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 24px;
+    color: grey;
+    background-color: #dddddd;
+    width: 100%;
+    min-height: 40px;
+    border: 1.5px solid #8E8E8E;
+    box-sizing: border-box;
+    border-radius: 6px;
+    padding: 5px;
+    margin: 10px 0px;
+    vertical-align: top;
 }

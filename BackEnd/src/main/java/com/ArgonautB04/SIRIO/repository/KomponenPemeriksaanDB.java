@@ -15,5 +15,7 @@ public interface KomponenPemeriksaanDB extends JpaRepository<KomponenPemeriksaan
 
     List<KomponenPemeriksaan> findAllByHasilPemeriksaanIn(Collection<HasilPemeriksaan> hasilPemeriksaan);
 
+    List<KomponenPemeriksaan> findAllByHasilPemeriksaanInAndRisiko(Collection<HasilPemeriksaan> hasilPemeriksaan, Risiko risiko);
+
     KomponenPemeriksaan findAllByRisiko(Risiko risiko);
 }

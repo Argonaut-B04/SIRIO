@@ -4,8 +4,9 @@ package com.ArgonautB04.SIRIO.rest;
  * Kelas ini digunakan sebagai objek utama yang akan dikirim sebagai JsonResponse
  *
  * @param <T> Class bebas masukin apa saja yang bakal jadi konten response
- * @author windawijaya
+ * @author windawijaya, nathanael
  * @since 2019
+ * @version 1.1
  */
 public class BaseResponse<T> {
     private int status;
@@ -13,24 +14,29 @@ public class BaseResponse<T> {
     private T result;
 
     /**
+     * Empty Constructor
+     */
+    public BaseResponse() {
+    }
+
+    /**
+     * Constructor to shorthand status, message, and result;
+     *
+     * @param status  the status
+     * @param message the message
+     * @param result  the result
+     */
+    public BaseResponse(int status, String message, T result) {
+        this.status = status;
+        this.message = message;
+        this.result = result;
+    }
+
+    /**
      * @return the status
      */
     public int getStatus() {
         return status;
-    }
-
-    /**
-     * @return the message
-     */
-    public String getMessage() {
-        return message;
-    }
-
-    /**
-     * @return the result
-     */
-    public T getResult() {
-        return result;
     }
 
     /**
@@ -41,10 +47,24 @@ public class BaseResponse<T> {
     }
 
     /**
+     * @return the message
+     */
+    public String getMessage() {
+        return message;
+    }
+
+    /**
      * @param message the message to set
      */
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    /**
+     * @return the result
+     */
+    public T getResult() {
+        return result;
     }
 
     /**

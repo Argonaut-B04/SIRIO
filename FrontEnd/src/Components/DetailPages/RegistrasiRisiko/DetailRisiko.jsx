@@ -18,7 +18,11 @@ class DetailRisiko extends React.Component {
             risikoKategori: "",
             sop: "",
             judulSop: "",
-            komponen: "",
+            detailUraian: "",
+            ketentuanSampel: "",
+            metodologi: "",
+            deskripsi: "",
+            child: [],
             redirect: false,
 
         }
@@ -31,11 +35,35 @@ class DetailRisiko extends React.Component {
         this.renderDataRisiko();
     }
 
-    komponenFormatter() {
-        if (this.state.komponen === "" | this.state.komponen === null) {
+    detailUraianFormatter() {
+        if (this.state.detailUraian === "" | this.state.detailUraian === null) {
             return "-"
         } else {
-            return this.state.komponen
+            return this.state.detailUraian
+        }
+    }
+
+    metodologiFormatter() {
+        if (this.state.metodologi === "" | this.state.metodologi === null) {
+            return "-"
+        } else {
+            return this.state.metodologi
+        }
+    }
+
+    deskripsiFormatter() {
+        if (this.state.deskripsi === "" | this.state.deskripsi === null) {
+            return "-"
+        } else {
+            return this.state.deskripsi
+        }
+    }
+
+    ketentuanSampelFormatter() {
+        if (this.state.ketentuanSampel === "" | this.state.ketentuanSampel === null) {
+            return "-"
+        } else {
+            return this.state.ketentuanSampel
         }
     }
 
@@ -48,7 +76,11 @@ class DetailRisiko extends React.Component {
             risikoKategori: response.data.result.risikoKategori,
             judulSop: response.data.result.sop.judul,
             sop: response.data.result.sop.idSop,
-            komponen: response.data.result.komponen,
+            detailUraian: response.data.result.detailUraian,
+            metodologi: response.data.result.metodologi,
+            ketentuanSampel: response.data.result.ketentuanSampel,
+            deskripsi: response.data.result.deskripsi
+            // child: response.data.result.childList,
         })
     }
 
@@ -57,9 +89,33 @@ class DetailRisiko extends React.Component {
             "Nama Risiko": this.state.namaRisiko,
             "Kategori Risiko": this.state.risikoKategori,
             "Referensi SOP": this.state.judulSop,
-            "Komponen Risiko": this.komponenFormatter()
+            "Detail Uraian Risiko": this.detailUraianFormatter(),
+            "Metodologi": this.metodologiFormatter(),
+            "Deskripsi": this.deskripsiFormatter(),
+            "Ketentuan Sampel": this.ketentuanSampelFormatter()
         };
     }
+
+    // childFormatter() {
+    //     if (this.state.risikoKategori === 3 | this.state.risikoKategori === null | this.state.child.length === 0) {
+    //         return "-"
+    //     } else {
+    //         var list = [];
+    //         for (let i = 0; i < this.state.child.length; i++) {
+    //             const nama = this.state.child[i].namaRisiko;
+    //             list.push(nama);
+    //         }
+    //         return ( 
+    //         <> 
+    //         {list.map(child => 
+    //         <li>
+    //             {child}
+    //         </li>
+    //         )} 
+    //         </> 
+    //         )
+    //     }
+    // }
 
     setRedirect = () => {
         this.setState({

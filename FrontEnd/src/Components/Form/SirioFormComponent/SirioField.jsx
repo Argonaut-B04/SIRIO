@@ -18,6 +18,41 @@ import SirioRectangularButton from '../../Button/SirioRectangularButton';
  */
 export default class SirioField extends Component {
 
+    constructor(props) {
+        super(props)
+        this.state = {}
+    }
+
+    // Ini fungsi untuk mengetes apakah parameter (functionToCheck) adalah fungsi
+    // nanti dipindahkan ke SirioAxiosBase
+    isFunction(functionToCheck) {
+        return functionToCheck && {}.toString.call(functionToCheck) === '[object Function]';
+    }
+
+    // Sesegera mungkin, shouldComponentUpdate harus dibuka (tapi gak sekarang juga);
+    shouldComponentUpdate(nextprops, nextstate) {
+
+        if (this.props.type === "select") {
+            return true;
+        };
+
+        if (this.props.disabled !== nextprops.disabled) {
+            return true;
+        }
+
+        // untuk form biasa
+        if (typeof nextprops.value !== "undefined") {
+            if (this.props.errormessage !== nextprops.errormessage) {
+                return true;
+            }
+            if (this.props.value === nextprops.value) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     generateField(key, customInput, type, index, name, value, handleChange, optionList, customClass, required, min, max, placeholder) {
         var field;
         if (customInput) {
@@ -31,7 +66,9 @@ export default class SirioField extends Component {
                     value={value}
                     handleChange={handleChange}
                     options={optionList}
+                    required={required}
                     className={[customClass, classes.sirioSelect].join(" ")}
+                    disabled={this.props.disabled}
                 />;
         } else if (type === "textarea") {
             field =
@@ -41,10 +78,12 @@ export default class SirioField extends Component {
                     value={value}
                     onChange={(event) => handleChange(event, index)}
 
+                    disabled={this.props.disabled}
+
                     placeholder={placeholder}
                     className={[customClass, classes.input].join(" ")}
-                    minRows={3}
-                    maxRows={6}
+                    minRows={6}
+                    maxRows={12}
 
                     required={required}
                 />
@@ -53,6 +92,8 @@ export default class SirioField extends Component {
                 field =
                     <input
                         type={this.props.type}
+
+                        disabled={this.props.disabled}
 
                         checked
 
@@ -68,6 +109,8 @@ export default class SirioField extends Component {
                 field =
                     <input
                         type={this.props.type}
+
+                        disabled={this.props.disabled}
 
                         name={this.props.name}
                         defaultChecked={this.props.value}
@@ -87,6 +130,8 @@ export default class SirioField extends Component {
                     name={name}
                     value={value}
                     onChange={(event) => handleChange(event, index)}
+
+                    disabled={this.props.disabled}
 
                     min={min}
 
@@ -130,16 +175,27 @@ export default class SirioField extends Component {
         )
     }
 
-
     render() {
         if (this.props.fullComponent) {
             return this.props.fullComponent;
         } else {
             const label = this.props.label &&
-                <label className={classes.label}>
-                    {this.props.label}
+                <>
+                    <label className={this.props.required ? [classes.label, classes.required].join(" ") : classes.label}>
+                        {this.props.label}
+                    </label>
+
+                    {/* (validasi metode 2 yang gagal) untuk sementara, error dari validator belum aku hapus */}
                     {this.props.validator && <p className={classes.error}>{this.props.validator}</p>}
-                </label>
+
+                    {/* validasi metode 3, ini yang paling berhasil menurutku */}
+                    {/* Ini errormessage yang kita kirim dari inputdefinition */}
+                    {/* jadi SirioField tugasnya hanya full menampilkan */}
+                    {this.props.errormessage && <p className={classes.error}>{this.props.errormessage}</p>}
+
+                    {/* ini validasi metode 1, karena Greta dan Modi masih pake metode 1, kita biarkan saja dulu */}
+                    {this.state.validationResult && <p className={classes.error}>{this.state.validationResult}</p>}
+                </>
             // modifier untuk multiple
             var field;
             if (Array.isArray(this.props.value)) {

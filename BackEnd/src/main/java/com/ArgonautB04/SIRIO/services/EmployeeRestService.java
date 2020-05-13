@@ -3,6 +3,7 @@ package com.ArgonautB04.SIRIO.services;
 import com.ArgonautB04.SIRIO.model.Employee;
 import org.springframework.dao.DataIntegrityViolationException;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,6 +14,8 @@ public interface EmployeeRestService {
 
     Optional<Employee> getByUsername(String username);
 
+    Optional<Employee> getByEmail(String email);
+
     List<Employee> getAll();
 
     Employee ubahEmployee(int idEmployee, Employee employee);
@@ -22,4 +25,17 @@ public interface EmployeeRestService {
     Employee aktifkanEmployee(int idEmployee);
 
     void hapusEmployee(int idEmployee) throws DataIntegrityViolationException;
+
+    Employee validateEmployeeExistByPrincipal(Principal principal);
+
+    Employee validateEmployeeExistByUsername(String username);
+
+
+    Employee validateEmployeeExistById(Integer id);
+
+    void validateRolePermission(Employee employee, String requestedPermissions);
+
+    void simpanPerubahan(Employee employee);
+
+    void changePassword(String username, String newPassword);
 }

@@ -3,8 +3,7 @@ import SirioForm from '../SirioForm';
 import SirioButton from '../../Button/SirioButton';
 import RegistrasiRisikoService from '../../../Services/RegistrasiRisikoService';
 import SopService from '../../../Services/SopService';
-import { Redirect } from 'react-router-dom';
-import { withRouter } from 'react-router-dom';
+import { Redirect, withRouter } from 'react-router-dom';
 
 class FormRisiko extends React.Component {
 
@@ -16,10 +15,12 @@ class FormRisiko extends React.Component {
             nama: "",
             kategori: "",
             sop: "",
-            komponen: "",
+            detailUraian: "",
+            ketentuanSampel: "",
+            metodologi: "",
+            deskripsi: "",
             sopOptionList: [],
             redirect: false,
-            submitable: false,
         }
 
         this.handleChange = this.handleChange.bind(this);
@@ -27,6 +28,8 @@ class FormRisiko extends React.Component {
         this.setRedirect = this.setRedirect.bind(this);
         this.handleSelectChange = this.handleSelectChange.bind(this);
         this.renderSopOption = this.renderSopOption.bind(this);
+        this.submitable = this.submitable.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     setRedirect = () => {
@@ -46,97 +49,86 @@ class FormRisiko extends React.Component {
         }
     };
 
-    componentDidUpdate(prevProps, prevState) {
-        var submitable = true;
-
-        if (prevState.nama !== this.state.nama) {
-            submitable = submitable && this.validateNama();
-        }
-
-        if (prevState.kategori !== this.state.kategori) {
-            submitable = submitable && this.validateKategori();
-        }
-
-        if (prevState.sop !== this.state.sop) {
-            submitable = submitable && this.validateSop();
-        }
-
-        if (prevState.komponen !== this.state.komponen) {
-            submitable = submitable && this.validateKomponen();
-        }
-
-        if (this.state.submitable !== submitable) {
-            this.setState({
-                submitable: submitable
-            })
-        }
-    }
-
-    validateNama() {
-        var submitable = true;
-        const fokusNama = this.state.nama;
-        var errorNama;
-        if (fokusNama.length < 1) {
-            submitable = false;
-            errorNama = "Nama tidak boleh kosong";
+    validateNama(fokusNama, name) {
+        var hasilError;
+        if (fokusNama.length < 1 || fokusNama === null || fokusNama === "") {
+            hasilError = "Nama tidak boleh kosong";
         } else if (fokusNama.length > 50) {
-            submitable = false;
-            errorNama = "Nama terlalu panjang";
+            hasilError = "Nama melebihi 50 karakter";
+        } else {
+            hasilError = "";
         }
-        if (this.state.errorNama !== errorNama) {
-            this.setState({
-                errorNama: errorNama
-            })
-        }
-        return submitable;
+        // if(fokusNama.match(".*[1234567890!-@#$%^&*()_+{}:.,[]|>/=<?]+.*")){
+        //     submitable = false;
+        //     errorNama = "Nama hanya boleh mengandung huruf";
+        // }
+        this.setState({
+            [name]: fokusNama,
+            errorNama: hasilError
+        })
     }
 
-    validateKategori() {
-        var submitable = true;
-        const fokusKategori = this.state.kategori;
-        var errorKategori;
-        if (fokusKategori.length < 1) {
-            submitable = false;
-            errorKategori = "Kategori Risiko tidak boleh kosong!";
+    validateDU(fokusDU, name) {
+        var hasilError;
+        if (fokusDU.length > 500) {
+            hasilError = "Detail Uraian Risiko terlalu panjang!";
+        } else {
+            hasilError = "";
         }
-        if (this.state.errorKategori !== errorKategori) {
-            this.setState({
-                errorKategori: errorKategori
-            })
-        }
-        return submitable;
+        this.setState({
+            [name]: fokusDU,
+            errorDU: hasilError
+        })
     }
 
-    validateSop() {
-        var submitable = true;
-        const fokusSop = this.state.sop;
-        var errorSop;
-        if (fokusSop.length < 1) {
-            submitable = false;
-            errorSop = "Referensi SOP tidak boleh kosong!";
-        } 
-        if (this.state.errorSop !== errorSop) {
-            this.setState({
-                errorSop: errorSop
-            })
+    validateMetod(fokusMetod, name) {
+        var hasilError;
+        if (fokusMetod.length > 50) {
+            hasilError = "Metodologi terlalu panjang!";
+        } else {
+            hasilError = "";
         }
-        return submitable;
+        this.setState({
+            [name]: fokusMetod,
+            errorMetod: hasilError
+        })
     }
 
-    validateKomponen() {
-        var submitable = true;
-        const fokusKomponen = this.state.komponen;
-        var errorKomponen;
-        if (fokusKomponen.length > 500) {
-            submitable = false;
-            errorKomponen = "Komponen Risiko terlalu panjang!";
+    validateDesc(fokusDesc, name) {
+        var hasilError;
+        if (fokusDesc.length > 500) {
+            hasilError = "Deskripsi terlalu panjang!";
+        } else {
+            hasilError = "";
         }
-        if (this.state.errorKomponen !== errorKomponen) {
-            this.setState({
-                errorKomponen: errorKomponen
-            })
+        this.setState({
+            [name]: fokusDesc,
+            errorDesc: hasilError
+        })
+    }
+
+    validateKS(fokusKS, name) {
+        var hasilError;
+        if (fokusKS.length > 500) {
+            hasilError = "Ketentuan Sampel terlalu panjang!";
+        } else {
+            hasilError = "";
         }
-        return submitable;
+        this.setState({
+            [name]: fokusKS,
+            errorKS: hasilError
+        })
+    }
+
+    submitable() {
+        return this.state.errorNama === "" &&
+            (this.state.detailUraian === "" || this.state.errorDU === "") &&
+            (this.state.metodologi === "" || this.state.errorMetod === "") &&
+            (this.state.deskripsi === "" || this.state.errorDesc === "") &&
+            (this.state.ketentuanSampel === "" || this.state.errorKS === "") &&
+            (this.state.nama !== "" && this.state.nama !== "") &&
+            (this.state.kategori !== "") &&
+            (this.state.sop !== "");
     }
 
     componentDidMount() {
@@ -161,22 +153,27 @@ class FormRisiko extends React.Component {
     }
 
     // Fungsi untuk mengubah state ketika isi dari input diubah
-    // Fungsi ini wajib ada jika membuat form
     handleChange(event) {
-        if (typeof event.target.checked === "boolean") {
-            this.setState(
-                {
-                    [event.target.name]
-                        : event.target.checked
-                }
-            )
-        } else {
-            this.setState(
-                {
-                    [event.target.name]
-                        : event.target.value
-                }
-            )
+        // Gunakan name dan value nya
+        const { name, value } = event.target;
+        switch (name) {
+            case "nama":
+                this.validateNama(value, name);
+                break;
+            case "detailUraian":
+                this.validateDU(value, name);
+                break;
+            case "metodologi":
+                this.validateMetod(value, name);
+                break;
+            case "deskripsi":
+                this.validateDesc(value, name);
+                break;
+            case "ketentuanSampel":
+                this.validateKS(value, name);
+                break;
+            default:
+                break;
         }
     }
 
@@ -196,39 +193,44 @@ class FormRisiko extends React.Component {
     handleSubmit(event) {
         // event.preventDefault wajib ada
         event.preventDefault();
-        const risiko = {
-            nama: this.state.nama,
-            kategori: this.state.kategori,
-            sop: this.state.sop,
-            komponen: this.state.komponen
+        if (this.submitable()) {
+            const risiko = {
+                nama: this.state.nama,
+                kategori: this.state.kategori,
+                sop: this.state.sop,
+                detailUraian: this.state.detailUraian,
+                metodologi: this.state.metodologi,
+                deskripsi: this.state.deskripsi,
+                ketentuanSampel: this.state.ketentuanSampel
+            }
+            RegistrasiRisikoService.submitChanges(risiko)
+                .then(() => this.setRedirect());
         }
-        RegistrasiRisikoService.submitChanges(risiko)
-            .then(() => this.setRedirect());
     }
 
     // Fungsi yang akan mengembalikan definisi tiap field pada form
     // Setiap objek {} pada List [] akan menjadi 1 field
     // untuk informasi lebih lengkap, cek SirioForm
     inputDefinition() {
+        const { errorNama, errorDU, errorDesc, errorMetod, errorKS } = this.state;
         return (
             [
                 {
-                    label: "Nama Risiko*",
+                    label: "Nama Risiko",
                     handleChange: this.handleChange,
-                    type: "textarea",
-                    required: true,
-                    validation: this.state.errorNama,
+                    type: "text",
                     name: "nama",
                     value: this.state.nama,
-                    placeholder: "Masukan nama risiko"
+                    placeholder: "Masukan nama risiko",
+                    required: true,
+                    errormessage: errorNama
                 }, {
-                    label: "Kategori Risiko*",
+                    label: "Kategori Risiko",
                     handleChange: this.handleSelectChange,
                     type: "select",
-                    required: true,
-                    validation: this.state.errorKategori,
                     name: "kategori",
                     value: this.state.kategori,
+                    required: true,
                     optionList: [
                         {
                             label: "Kategori 1",
@@ -242,37 +244,77 @@ class FormRisiko extends React.Component {
                         }
                     ]
                 }, {
-                    label: "Referensi SOP*",
+                    label: "Referensi SOP",
                     handleChange: this.handleSelectChange,
                     type: "select",
-                    validation: this.state.errorSop,
-                    required: true,
                     name: "sop",
                     value: this.state.sop,
+                    required: true,
                     optionList: this.state.sopOptionList
                 }, {
-                    label: "Komponen Risiko",
+                    label: "Detail Uraian Risiko",
                     handleChange: this.handleChange,
-                    validation: this.state.errorKomponen,
+                    disabled: (this.state.kategori !== 3),
                     type: "textarea",
-                    name: "komponen",
-                    value: this.state.komponen,
-                    placeholder: "Masukan komponen risiko"
+                    name: "detailUraian",
+                    value: this.state.detailUraian,
+                    placeholder: "Masukan detail uraian risiko",
+                    errormessage: errorDU
+                }, {
+                    label: "Metodologi",
+                    handleChange: this.handleChange,
+                    disabled: this.state.kategori !== 3,
+                    type: "text",
+                    name: "metodologi",
+                    value: this.state.metodologi,
+                    placeholder: "Masukan metodologi risiko",
+                    errormessage: errorMetod
+                }, {
+                    label: "Deskripsi",
+                    handleChange: this.handleChange,
+                    disabled: this.state.kategori !== 3,
+                    type: "textarea",
+                    name: "deskripsi",
+                    value: this.state.deskripsi,
+                    placeholder: "Masukan deskripsi risiko",
+                    errormessage: errorDesc
+                }, {
+                    label: "Ketentuan Sampel",
+                    handleChange: this.handleChange,
+                    disabled: this.state.kategori !== 3,
+                    type: "textarea",
+                    name: "ketentuanSampel",
+                    value: this.state.ketentuanSampel,
+                    placeholder: "Masukan ketentuan sampel risiko",
+                    errormessage: errorKS
                 }
             ]
         )
     }
 
     submitButton() {
-        return (
-            <div>
-                <SirioButton purple 
-                    recommended={this.state.submitable}
-                    disabled={!this.state.submitable}
+        var tombolSimpan =
+            <SirioButton
+                purple
+                disabled
+                classes="mx-2"
+            >
+                Simpan
+            </SirioButton>;
+        if (this.submitable()) {
+            tombolSimpan =
+                <SirioButton
+                    purple
+                    recommended
                     classes="mx-2"
-                    onClick={(event)  => this.handleSubmit(event)}>
+                    onClick={(event) => this.handleSubmit(event)}
+                >
                     Simpan
                 </SirioButton>
+        }
+        return (
+            <div>
+                {tombolSimpan}
                 <SirioButton purple
                     onClick={() => window.location.href = "/registrasi-risiko"}>
                     Batal
@@ -285,16 +327,15 @@ class FormRisiko extends React.Component {
     render() {
         return (
             <>
-            {this.renderRedirect()}
-            <SirioForm
-                title="Form Risiko"
-                inputDefinition={this.inputDefinition()}
-                onSubmit={this.handleSubmit}
-                submitButton={this.submitButton()}
-            />
+                {this.renderRedirect()}
+                <SirioForm
+                    title="Form Tambah Risiko"
+                    inputDefinition={this.inputDefinition()}
+                    onSubmit={this.handleSubmit}
+                    submitButton={this.submitButton()}
+                />
             </>
         );
     }
 }
-
 export default withRouter(FormRisiko);

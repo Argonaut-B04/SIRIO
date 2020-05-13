@@ -5,7 +5,9 @@ import com.ArgonautB04.SIRIO.model.Employee;
 import com.ArgonautB04.SIRIO.model.Rekomendasi;
 import com.ArgonautB04.SIRIO.repository.BuktiPelaksanaanDB;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -62,5 +64,17 @@ public class BuktiPelaksananRestServiceImpl implements BuktiPelaksanaanRestServi
     @Override
     public List<BuktiPelaksanaan> getByDaftarRekomendasi(List<Rekomendasi> rekomendasiList) {
         return buktiPelaksanaanDB.findAllByRekomendasiIn(rekomendasiList);
+    }
+
+    @Override
+    public BuktiPelaksanaan validateExistById(int idBuktiPelaksanaan) {
+        Optional<BuktiPelaksanaan> target = buktiPelaksanaanDB.findById(idBuktiPelaksanaan);
+        if (target.isPresent()) {
+            return target.get();
+        } else {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Bukti pelaksanaan dengan ID " + idBuktiPelaksanaan + " tidak ditemukan!"
+            );
+        }
     }
 }

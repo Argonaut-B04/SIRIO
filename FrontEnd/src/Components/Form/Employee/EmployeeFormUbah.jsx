@@ -3,7 +3,7 @@ import SirioForm from '../SirioForm';
 import SirioButton from '../../Button/SirioButton';
 import EmployeeService from '../../../Services/EmployeeService';
 import RoleService from '../../../Services/RoleService';
-import {NavLink, Redirect} from 'react-router-dom';
+import { NavLink, Redirect } from 'react-router-dom';
 import { withRouter } from 'react-router-dom';
 
 class EmployeeFormUbah extends React.Component {
@@ -18,22 +18,96 @@ class EmployeeFormUbah extends React.Component {
             nama: "",
             jabatan: "",
             email: "",
+            initialEmail:"",
             noHp: "",
             roleOptionList: [],
             redirect: false
         };
 
-        this.renderRoleOption = this.renderRoleOption.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.inputDefinition = this.inputDefinition.bind(this);
         this.handleSelectChange = this.handleSelectChange.bind(this);
         this.setRedirect = this.setRedirect.bind(this);
-        this.renderDataEmployee = this.renderDataEmployee.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+        this.renderData = this.renderData.bind(this);
+        this.submitable = this.submitable.bind(this);
     }
 
     componentDidMount() {
-        this.renderRoleOption();
-        this.renderDataEmployee();
+        this.renderData();
+    }
+
+    validateJabatan(fokusJabatan) {
+        var errorJabatan = "";
+        if (fokusJabatan === null || fokusJabatan === "") {
+            errorJabatan = "";
+        } else if (fokusJabatan.length > 30) {
+            errorJabatan = "Jabatan maksimal 30 karakter";
+        }
+
+        this.setState({
+            errorJabatan: errorJabatan
+        })
+
+    }
+
+    validateNama(fokusName) {
+        var errorName = "";
+        var letterOnly = /^[a-zA-Z\s]*$/;
+        if (fokusName === null || fokusName === "") {
+            errorName = "";
+        } else if (!fokusName.match(letterOnly)) {
+            errorName = "Nama hanya boleh mengandung huruf";
+        } else if (fokusName.length > 50) {
+            errorName = "Nama maksimal 50 karakter";
+        }
+
+        this.setState({
+            errorName: errorName
+        })
+    }
+
+    validateNomorHp(fokusNoHp) {
+        var errorNoHp = "";
+        var numberOnly = /^[0-9]*$/;
+
+        if (fokusNoHp === null || fokusNoHp === "") {
+            errorNoHp = "";
+        } else if (!fokusNoHp.match(numberOnly)) {
+            errorNoHp = "Nomor HP hanya boleh mengandung angka";
+        } else if (fokusNoHp.length > 20) {
+            errorNoHp = "Nomor HP maksimal 20 karakter";
+        }
+
+        this.setState({
+            errorNoHp: errorNoHp
+        })
+    }
+
+    validateEmail(fokusEmail) {
+        var errorEmail = "";
+        // eslint-disable-next-line
+        var email = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        if (fokusEmail === null || fokusEmail === "") {
+            errorEmail = "";
+        } else if (!fokusEmail.match(email)) {
+            errorEmail = "Email tidak sesuai format";
+        }
+
+        this.setState({
+            errorEmail: errorEmail
+        })
+    }
+
+    submitable() {
+        return this.state.errorName === "" &&
+            this.state.errorJabatan === "" &&
+            this.state.errorEmail === "" &&
+            this.state.errorNoHp === "" &&
+            (this.state.idRole !== null && this.state.idRole !== "") &&
+            (this.state.nama !== null && this.state.nama !== "") &&
+            (this.state.jabatan !== null && this.state.jabatan !== "") &&
+            (this.state.email !== null && this.state.email !== "");
     }
 
     setRedirect = () => {
@@ -53,10 +127,9 @@ class EmployeeFormUbah extends React.Component {
         }
     };
 
-    async renderRoleOption() {
-        const response = await RoleService.getRoleList();
-
-        const roleOptionList = response.data.result.map(role => {
+    async renderData() {
+        const responseRole = await RoleService.getRoleList();
+        const roleOptionList = responseRole.data.result.map(role => {
             return (
                 {
                     label: role.namaRole,
@@ -65,22 +138,22 @@ class EmployeeFormUbah extends React.Component {
             )
         });
 
-        this.setState({
-            roleOptionList: roleOptionList
-        })
-    }
-
-    async renderDataEmployee() {
-        const response = await EmployeeService.getEmployee(this.props.location.state.id);
+        const responseEmployee = await EmployeeService.getEmployee(this.props.location.state.id);
 
         this.setState({
-            id: response.data.result.idEmployee,
-            idRole: response.data.result.role.idRole,
-            nama: response.data.result.nama,
-            jabatan: response.data.result.jabatan,
-            email: response.data.result.email,
-            noHp: this.nomorHpFormatter(response.data.result.noHp),
-        })
+            roleOptionList: roleOptionList,
+            id: responseEmployee.data.result.idEmployee,
+            idRole: responseEmployee.data.result.role.idRole,
+            nama: responseEmployee.data.result.nama,
+            jabatan: responseEmployee.data.result.jabatan,
+            email: responseEmployee.data.result.email,
+            initialEmail: responseEmployee.data.result.email,
+            noHp: this.nomorHpFormatter(responseEmployee.data.result.noHp),
+            errorJabatan: "",
+            errorName: "",
+            errorEmail: "",
+            errorNoHp: "",
+        });
     }
 
     nomorHpFormatter(noHp) {
@@ -92,12 +165,28 @@ class EmployeeFormUbah extends React.Component {
     }
 
     handleChange(event) {
+        const { name, value } = event.target;
         this.setState(
             {
-                [event.target.name]
-                    : event.target.value
+                [name]
+                    : value
             }
-        )
+        );
+
+        switch (name) {
+            case "nama":
+                this.validateNama(value);
+                break;
+            case "jabatan":
+                this.validateJabatan(value);
+                break;
+            case "email":
+                this.validateEmail(value);
+                break;
+            case "noHp":
+                this.validateNomorHp(value);
+                break;
+        }
     }
 
     handleSelectChange(name, event) {
@@ -106,22 +195,37 @@ class EmployeeFormUbah extends React.Component {
                 [name]
                     : event.value
             }
-        )
+        );
     }
 
-    handleSubmit(event) {
+    async handleSubmit(event) {
         event.preventDefault();
-        const employee = {
-            id: this.state.id,
-            idRole: this.state.idRole,
-            nama: this.state.nama,
-            jabatan: this.state.jabatan,
-            email: this.state.email,
-            noHp: this.state.noHp
-        };
-        console.log("test");
-        EmployeeService.editEmployee(employee)
-            .then(() => this.setRedirect());
+        if (this.submitable()) {
+            const employee = {
+                id: this.state.id,
+                idRole: this.state.idRole,
+                nama: this.state.nama,
+                jabatan: this.state.jabatan,
+                email: this.state.email,
+                noHp: this.state.noHp
+            };
+            if (this.state.initialEmail !== this.state.email) {
+                EmployeeService.checkEmailExist({email: this.state.email})
+                    .then(response => {
+                        if (response.data.result) {
+                            this.setState({
+                                errorEmail: "Email sudah terdaftar"
+                            })
+                        } else {
+                            EmployeeService.editEmployee(employee)
+                                .then(() => this.setRedirect());
+                        }
+                    })
+            } else {
+                EmployeeService.editEmployee(employee)
+                    .then(() => this.setRedirect());
+            }
+        }
     }
 
     // Fungsi yang akan mengembalikan definisi tiap field pada form
@@ -131,52 +235,72 @@ class EmployeeFormUbah extends React.Component {
         return (
             [
                 {
-                label: "Role",
-                handleChange: this.handleSelectChange,
-                type: "select",
-                name: "idRole",
-                value: this.state.idRole,
-                optionList: this.state.roleOptionList
-            }, {
-                label: "Nama",
-                handleChange: this.handleChange,
-                type: "text",
-                name: "nama",
-                value: this.state.nama,
-                placeholder: "Nama"
-            }, {
-                label: "Jabatan",
-                handleChange: this.handleChange,
-                type: "text",
-                name: "jabatan",
-                value: this.state.jabatan,
-                placeholder: "Jabatan"
-            }, {
-                label: "Email",
-                handleChange: this.handleChange,
-                type: "text",
-                name: "email",
-                value: this.state.email,
-                placeholder: "email@email.com"
-            }, {
-                label: "Nomor Telepon",
-                handleChange: this.handleChange,
-                type: "text",
-                name: "noHp",
-                value: this.state.noHp,
-                placeholder: "08123456789"
-            }]
+                    label: "Role",
+                    handleChange: this.handleSelectChange,
+                    type: "select",
+                    name: "idRole",
+                    value: this.state.idRole,
+                    optionList: this.state.roleOptionList
+                }, {
+                    label: "Nama",
+                    handleChange: this.handleChange,
+                    type: "text",
+                    name: "nama",
+                    value: this.state.nama,
+                    placeholder: "Nama",
+                    errormessage: this.state.errorName
+                }, {
+                    label: "Jabatan",
+                    handleChange: this.handleChange,
+                    type: "text",
+                    name: "jabatan",
+                    value: this.state.jabatan,
+                    placeholder: "Jabatan",
+                    errormessage: this.state.errorJabatan
+                }, {
+                    label: "Email",
+                    handleChange: this.handleChange,
+                    type: "text",
+                    name: "email",
+                    value: this.state.email,
+                    placeholder: "email@email.com",
+                    errormessage: this.state.errorEmail
+                }, {
+                    label: "Nomor Telepon",
+                    handleChange: this.handleChange,
+                    type: "text",
+                    name: "noHp",
+                    value: this.state.noHp,
+                    placeholder: "08123456789",
+                    errormessage: this.state.errorNoHp
+                }
+            ]
         )
     }
 
     submitButton() {
-        return (
-            <div>
-                <SirioButton purple recommended
-                             classes="mx-1"
-                             onClick={(event)  => this.handleSubmit(event)}>
+        var tombolSimpan =
+            <SirioButton
+                purple
+                disabled
+                classes="mx-1"
+            >
+                Simpan
+            </SirioButton>;
+        if (this.submitable()) {
+            tombolSimpan =
+                <SirioButton
+                    purple
+                    recommended
+                    classes="mx-1"
+                    onClick={(event)  => this.handleSubmit(event)}
+                >
                     Simpan
                 </SirioButton>
+        }
+        return (
+            <div>
+                {tombolSimpan}
                 <NavLink to={{
                     pathname: "/employee/detail",
                     state: {

@@ -3,19 +3,15 @@ package com.ArgonautB04.SIRIO.controller;
 import com.ArgonautB04.SIRIO.model.*;
 import com.ArgonautB04.SIRIO.rest.BaseResponse;
 import com.ArgonautB04.SIRIO.rest.RekomendasiDTO;
-import com.ArgonautB04.SIRIO.rest.Settings;
 import com.ArgonautB04.SIRIO.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.*;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.List;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -43,90 +39,112 @@ public class RekomendasiRestController {
     @Autowired
     private BuktiPelaksanaanRestService buktiPelaksanaanRestService;
 
+    @Autowired
+    private ReminderRestService reminderRestService;
+
     /**
      * Mengambil seluruh rekomendasi yang terhubung dengan user yang sedang login
      *
      * @return daftar rekomendasi yang terhubung dengan pembuat tersebut
      */
     @GetMapping("/getAll")
-    private BaseResponse<List<RekomendasiDTO>> getAllRekomendasiUntukLoggedInUser(Principal principal) {
-        BaseResponse<List<RekomendasiDTO>> response = new BaseResponse<>();
-        Optional<Employee> pengelolaOptional = employeeRestService.getByUsername(principal.getName());
-        Employee pengelola;
-        if (pengelolaOptional.isPresent()) {
-            pengelola = pengelolaOptional.get();
-            if (pengelola.getRole().getAccessPermissions().getAksesTabelRekomendasi()) {
-                try {
-                    List<Rekomendasi> result;
-                    if (pengelola.getRole().getNamaRole().equals("Branch Manager")) {
-                        KantorCabang kantorCabang = kantorCabangRestService.getByPemilik(pengelola);
-                        List<TugasPemeriksaan> daftarTugasPemeriksaan = tugasPemeriksaanRestService
-                                .getByKantorCabang(kantorCabang);
-                        List<HasilPemeriksaan> daftarHasilPemeriksaan = hasilPemeriksaanRestService
-                                .getByDaftarTugasPemeriksaan(daftarTugasPemeriksaan);
-                        List<KomponenPemeriksaan> daftarKomponenPemeriksaan = komponenPemeriksaanRestService
-                                .getByDaftarHasilPemeriksaan(daftarHasilPemeriksaan);
-                        result = rekomendasiRestService.getByDaftarKomponenPemeriksaan(daftarKomponenPemeriksaan);
-                    } else if (pengelola.getRole().getNamaRole().equals("Super QA Officer Operational Risk")
-                            | pengelola.getRole().getNamaRole().equals("Manajer Operational Risk")) {
-                        result = rekomendasiRestService.getAll();
-                    } else {
-                        result = rekomendasiRestService.getByPembuat(pengelola);
-                    }
-                  
-                    List<RekomendasiDTO> resultDTO = new ArrayList<>();
-                    for (Rekomendasi rekomendasi : result) {
-                        RekomendasiDTO rekomendasiDTO = new RekomendasiDTO();
-                        rekomendasiDTO.setId(rekomendasi.getIdRekomendasi());
-                        rekomendasiDTO.setKeterangan(rekomendasi.getKeterangan());
+    private BaseResponse<List<RekomendasiDTO>> getAllRekomendasiUntukLoggedInUser(
+            Principal principal
+    ) {
+        Employee employee = employeeRestService.validateEmployeeExistByPrincipal(principal);
+        employeeRestService.validateRolePermission(employee, "tabel rekomendasi");
 
-                        Date tenggatWaktu = rekomendasi.getTenggatWaktu();
-                        if (tenggatWaktu != null) {
-                            String tenggatWaktuString = tenggatWaktu.toString();
-                            String tenggatWaktuFinal = tenggatWaktuString.substring(0, 10);
-                            rekomendasiDTO.setTenggatWaktu(tenggatWaktuFinal);
-                          
-                           DateFormat df = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
-                           Date dateobj = new Date();
-                           String mulai = df.format(dateobj);
-                           String tanggalMulai = mulai.substring(0, 2);
-                           String tanggalSelesai = tenggatWaktuString.substring(8, 10);
-                           int tanggalMulaiFinal = Integer.parseInt(tanggalMulai);
-                           int tanggalSelesaiFinal = Integer.parseInt(tanggalSelesai);
-                           int durasi = (tanggalSelesaiFinal - tanggalMulaiFinal) + 1;
-                           if (durasi < 0) {
-                               durasi = 0;
-                           }
-                           String durasiString = Integer.toString(durasi);
-                           String durasiFinal = durasiString + " Hari";
-                           rekomendasiDTO.setDurasi(durasiFinal);
-                        }
+        Role role = employee.getRole();
 
-                        rekomendasiDTO.setStatus(rekomendasi.getStatusRekomendasi().getNamaStatus());
-                      
-                        List<BuktiPelaksanaan> buktiList = buktiPelaksanaanRestService.getByDaftarRekomendasi(result);
-                        for (BuktiPelaksanaan buktiPelaksanaan : buktiList) {
-                            if (buktiPelaksanaan.getRekomendasi().equals(rekomendasi)) {
-                                rekomendasiDTO.setStatusBukti(buktiPelaksanaan.getStatusBuktiPelaksanaan().getNamaStatus());
-                            }
-                        }
-                        rekomendasiDTO.setNamaKantorCabang(rekomendasi.getKomponenPemeriksaan().getHasilPemeriksaan()
-                                .getTugasPemeriksaan().getKantorCabang().getNamaKantor());
-                        resultDTO.add(rekomendasiDTO);
-                    }
-                    response.setStatus(200);
-                    response.setMessage("success");
-                    response.setResult(resultDTO);
-                } catch (NoSuchElementException e) {
-                    throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Akun anda tidak terdaftar atau tidak ditemukan!");
+        List<Rekomendasi> daftarRekomendasi;
+        if (role.getNamaRole().equals("Branch Manager")) {
+            KantorCabang kantorCabang =
+                    kantorCabangRestService
+                            .getByPemilik(employee);
+
+            List<TugasPemeriksaan> daftarTugasPemeriksaan =
+                    tugasPemeriksaanRestService
+                            .getByKantorCabang(kantorCabang);
+
+            List<HasilPemeriksaan> daftarHasilPemeriksaan =
+                    hasilPemeriksaanRestService
+                            .getByDaftarTugasPemeriksaan(daftarTugasPemeriksaan);
+
+            List<KomponenPemeriksaan> daftarKomponenPemeriksaan =
+                    komponenPemeriksaanRestService
+                            .getByDaftarHasilPemeriksaan(daftarHasilPemeriksaan);
+
+            daftarRekomendasi = rekomendasiRestService.getByDaftarKomponenPemeriksaan(daftarKomponenPemeriksaan);
+
+        } else if (role.getNamaRole().equals("Super QA Officer Operational Risk")
+                | role.getNamaRole().equals("Manajer Operational Risk")) {
+            daftarRekomendasi = rekomendasiRestService.getAll();
+
+        } else {
+            daftarRekomendasi = rekomendasiRestService.getByPembuat(employee);
+        }
+
+
+        List<RekomendasiDTO> resultDTO = new ArrayList<>();
+        LocalDate waktuSaatIni = LocalDate.now();
+        for (Rekomendasi rekomendasi : daftarRekomendasi) {
+            RekomendasiDTO rekomendasiDTO = new RekomendasiDTO();
+
+            // Memasukan id dan keterangan
+            rekomendasiDTO.setId(rekomendasi.getIdRekomendasi());
+            rekomendasiDTO.setKeterangan(rekomendasi.getKeterangan());
+
+            // Memasukan tenggat waktu
+            LocalDate tenggatWaktu = rekomendasi.getTenggatWaktu();
+            rekomendasiDTO.setTenggatWaktuDate(tenggatWaktu);
+
+            // Memasukan durasi hingga tenggat waktu
+            if (tenggatWaktu != null) {
+                int durasi = (int) ChronoUnit.DAYS.between(waktuSaatIni, tenggatWaktu);
+                if (durasi < 0) {
+                    durasi = 0;
                 }
-                return response;
-            } else throw new ResponseStatusException(
-                    HttpStatus.UNAUTHORIZED, "Akun anda tidak memiliki akses ke pengaturan ini"
+                String durasiFinal = durasi + " Hari";
+                rekomendasiDTO.setDurasi(durasiFinal);
+            }
+
+            // Memasukan status rekomendasi
+            rekomendasiDTO.setStatus(rekomendasi.getStatusRekomendasi().getNamaStatus());
+
+            // Memasukan status bukti untuk rekomendasi
+            List<BuktiPelaksanaan> buktiList = buktiPelaksanaanRestService.getByDaftarRekomendasi(daftarRekomendasi);
+            for (BuktiPelaksanaan buktiPelaksanaan : buktiList) {
+                if (buktiPelaksanaan.getRekomendasi().equals(rekomendasi)) {
+                    rekomendasiDTO.setStatusBukti(
+                            buktiPelaksanaan
+                                    .getStatusBuktiPelaksanaan()
+                                    .getNamaStatus()
+                    );
+                }
+            }
+
+            // Memasukan daftar kantor cabang setiap rekomendasi
+            rekomendasiDTO
+                    .setNamaKantorCabang(
+                            rekomendasi
+                                    .getKomponenPemeriksaan()
+                                    .getHasilPemeriksaan()
+                                    .getTugasPemeriksaan()
+                                    .getKantorCabang()
+                                    .getNamaKantor());
+
+            // Memasukan id hasil pemeriksaan setiap rekomendasi
+            rekomendasiDTO.setIdHasilPemeriksaan(
+                    rekomendasi
+                            .getKomponenPemeriksaan()
+                            .getHasilPemeriksaan()
+                            .getIdHasilPemeriksaan()
             );
-        } else throw new ResponseStatusException(
-                HttpStatus.UNAUTHORIZED, "Akun anda tidak terdaftar dalam Sirio"
-        );
+
+            resultDTO.add(rekomendasiDTO);
+        }
+
+        return new BaseResponse<>(200, "success", resultDTO);
     }
 
     /**
@@ -140,32 +158,17 @@ public class RekomendasiRestController {
             @PathVariable("idRekomendasi") int idRekomendasi, Principal principal
     ) {
         BaseResponse<RekomendasiDTO> response = new BaseResponse<>();
-        Optional<Employee> pengelolaOptional = employeeRestService.getByUsername(principal.getName());
-        Employee pengelola;
-        if (pengelolaOptional.isPresent()) {
-            pengelola = pengelolaOptional.get();
-            if (pengelola.getRole().getAccessPermissions().getAksesRekomendasi()) {
-                try {
-                    Rekomendasi rekomendasi = rekomendasiRestService.getById(idRekomendasi);
-                    RekomendasiDTO result = new RekomendasiDTO();
-                    result.setId(rekomendasi.getIdRekomendasi());
-                    result.setKeterangan(rekomendasi.getKeterangan());
+        Employee pengelola = employeeRestService.validateEmployeeExistByPrincipal(principal);
+        employeeRestService.validateRolePermission(pengelola, "tabel rekomendasi");
+        Rekomendasi rekomendasi = rekomendasiRestService.validateExistInById(idRekomendasi);
+        RekomendasiDTO result = new RekomendasiDTO();
+        result.setId(rekomendasi.getIdRekomendasi());
+        result.setKeterangan(rekomendasi.getKeterangan());
 
-                    response.setStatus(200);
-                    response.setMessage("success");
-                    response.setResult(result);
-                } catch (NoSuchElementException e) {
-                    throw new ResponseStatusException(
-                            HttpStatus.NOT_FOUND, "Rekomendasi dengan ID " + idRekomendasi + " tidak ditemukan!"
-                    );
-                }
-                return response;
-            } else throw new ResponseStatusException(
-                    HttpStatus.UNAUTHORIZED, "Akun anda tidak memiliki akses ke pengaturan ini"
-            );
-        } else throw new ResponseStatusException(
-                HttpStatus.UNAUTHORIZED, "Akun anda tidak terdaftar dalam Sirio"
-        );
+        response.setStatus(200);
+        response.setMessage("success");
+        response.setResult(result);
+        return response;
     }
 
     /**
@@ -175,50 +178,67 @@ public class RekomendasiRestController {
      * @return daftar rekomendasi yang terhubung dengan kantor cabang
      */
     @GetMapping("/getAllByKantorCabang/{idKantor}")
-    private BaseResponse<List<Rekomendasi>> getAllRekomendasiUntukKantorCabang(@PathVariable("idKantor") int idKantor) {
-        BaseResponse<List<Rekomendasi>> response = new BaseResponse<>();
-        try {
-            KantorCabang kantorCabang = kantorCabangRestService.getById(idKantor);
-            List<TugasPemeriksaan> daftarTugasPemeriksaan = tugasPemeriksaanRestService.getByKantorCabang(kantorCabang);
-            List<HasilPemeriksaan> daftarHasilPemeriksaan = hasilPemeriksaanRestService
-                    .getByDaftarTugasPemeriksaan(daftarTugasPemeriksaan);
-            List<KomponenPemeriksaan> daftarKomponenPemeriksaan = komponenPemeriksaanRestService
-                    .getByDaftarHasilPemeriksaan(daftarHasilPemeriksaan);
-            List<Rekomendasi> result = rekomendasiRestService.getByDaftarKomponenPemeriksaan(daftarKomponenPemeriksaan);
+    private BaseResponse<List<Rekomendasi>> getAllRekomendasiUntukKantorCabang(
+            @PathVariable("idKantor") int idKantor,
+            Principal principal
+    ) {
+        Employee employee = employeeRestService.validateEmployeeExistByPrincipal(principal);
+        employeeRestService.validateRolePermission(employee, "tabel rekomendasi");
 
-            response.setStatus(200);
-            response.setMessage("success");
-            response.setResult(result);
-        } catch (NoSuchElementException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-                    "Kantor Cabang dengan ID " + idKantor + " tidak ditemukan!");
-        }
-        return response;
+        KantorCabang kantorCabang = kantorCabangRestService.validateExistById(idKantor);
+
+        List<TugasPemeriksaan> daftarTugasPemeriksaan =
+                tugasPemeriksaanRestService.
+                        getByKantorCabang(kantorCabang);
+
+        List<HasilPemeriksaan> daftarHasilPemeriksaan =
+                hasilPemeriksaanRestService
+                        .getByDaftarTugasPemeriksaan(daftarTugasPemeriksaan);
+
+        List<KomponenPemeriksaan> daftarKomponenPemeriksaan =
+                komponenPemeriksaanRestService
+                        .getByDaftarHasilPemeriksaan(daftarHasilPemeriksaan);
+
+        List<Rekomendasi> result =
+                rekomendasiRestService
+                        .getByDaftarKomponenPemeriksaan(daftarKomponenPemeriksaan);
+
+        return new BaseResponse<>(200, "success", result);
     }
 
     /**
-     * Mengubah tenggat waktu untuk rekomendasi spesifik. (UNTESTED)
+     * Mengubah tenggat waktu untuk rekomendasi spesifik.
      *
      * @return objek rekomendasi yang telah diubah
      */
     @PostMapping("/tenggatWaktu")
-    private BaseResponse<Rekomendasi> ubahTenggatWaktu(@RequestBody RekomendasiDTO rekomendasiDTO) {
-        BaseResponse<Rekomendasi> response = new BaseResponse<>();
-        Integer idRekomendasi = rekomendasiDTO.getId();
-        try {
-            Rekomendasi result = rekomendasiRestService.ubahTenggatWaktu(idRekomendasi,
-                    Settings.convertToDateViaInstant(rekomendasiDTO.getTenggatWaktuDate()));
+    private BaseResponse<Rekomendasi> ubahTenggatWaktu(
+            @RequestBody RekomendasiDTO rekomendasiDTO,
+            Principal principal
+    ) {
+        // validasi employee ada dan punya akses tenggat waktu
+        Employee employee = employeeRestService.validateEmployeeExistByPrincipal(principal);
+        employeeRestService.validateRolePermission(employee, "tenggat waktu");
 
-            response.setStatus(200);
-            response.setMessage("success");
-            response.setResult(result);
-        } catch (NoSuchElementException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-                    "Rekomendasi dengan ID " + idRekomendasi + " tidak ditemukan!");
-        } catch (IllegalAccessError e) {
-            throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED,
-                    "Tenggat waktu rekomendasi belum dapat diatur!");
-        }
-        return response;
+        // validasi rekomendasi yang mau diset tenggat waktu ada di database
+        Integer idRekomendasi = rekomendasiDTO.getId();
+        Rekomendasi rekomendasi = rekomendasiRestService.validateExistInById(idRekomendasi);
+
+        // validasi tenggat waktu yang dimasukan
+        LocalDate tenggatWaktuBaru = rekomendasiDTO.getTenggatWaktuDate();
+        rekomendasiRestService.validateDateInputMoreThanToday(tenggatWaktuBaru);
+
+        // validasi status rekomendasi memungkinkan pengaturan tenggat waktu
+        rekomendasiRestService.validateDeadlineCanBeSet(rekomendasi);
+
+        // mengatur tenggat waktu dan simpan perubahan
+        rekomendasi.setTenggatWaktu(tenggatWaktuBaru);
+        Rekomendasi result = rekomendasiRestService.buatAtauSimpanPerubahanRekomendasi(rekomendasi, true);
+
+        // membuat 3 reminder: 1 hari sebelum, 3 hari sebelum, dan 1 minggu sebelum
+        reminderRestService.generateDefaultReminder(employee, rekomendasi);
+
+        // kirim response
+        return new BaseResponse<>(200, "success", result);
     }
 }

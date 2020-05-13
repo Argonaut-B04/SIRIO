@@ -1,5 +1,7 @@
 package com.ArgonautB04.SIRIO.model;
 
+import org.springframework.beans.factory.annotation.Value;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -15,65 +17,99 @@ public class AccessPermissions implements Serializable {
     @MapsId
     private Role role;
 
-    @Column(columnDefinition = "boolean default false")
-    private Boolean aksesRiskRating;
+    @Column
+    private Boolean aksesRiskRating = false;
 
-    @Column(columnDefinition = "boolean default false")
-    private Boolean ubahRiskRating;
+    @Column
+    private Boolean ubahRiskRating = false;
 
-    @Column(columnDefinition = "boolean default false")
-    private Boolean aksesRiskLevel;
+    @Column
+    private Boolean aksesRiskLevel = false;
 
-    @Column(columnDefinition = "boolean default false")
-    private Boolean ubahRiskLevel;
+    @Column
+    private Boolean ubahRiskLevel = false;
 
-    @Column(columnDefinition = "boolean default false")
-    private Boolean ubahReminder;
+    @Column
+    private Boolean ubahReminder = false;
 
-    @Column(columnDefinition = "boolean default false")
-    private Boolean aksesTabelRisiko;
+    @Column
+    private Boolean aksesTabelRisiko = false;
 
-    @Column(columnDefinition = "boolean default false")
-    private Boolean aksesRisiko;
+    @Column
+    private Boolean aksesRisiko = false;
 
-    @Column(columnDefinition = "boolean default false")
-    private Boolean aksesTambahRisiko;
+    @Column
+    private Boolean aksesTambahRisiko = false;
 
-    @Column(columnDefinition = "boolean default false")
-    private Boolean aksesUbahRisiko;
+    @Column
+    private Boolean aksesUbahRisiko = false;
 
-    @Column(columnDefinition = "boolean default false")
-    private Boolean aksesHapusRisiko;
+    @Column
+    private Boolean aksesHapusRisiko = false;
 
-    @Column(columnDefinition = "boolean default false")
-    private Boolean aksesUbahHierarki;
+    @Column
+    private Boolean aksesUbahHierarki = false;
 
-//    @Column(columnDefinition = "boolean default false")
-//    private Boolean aksesKategoriUbahHierarki;
+    @Column
+    private Boolean aksesTabelRekomendasi = false;
 
-    @Column(columnDefinition = "boolean default false")
-    private Boolean aksesTabelRekomendasi;
+    @Column
+    private Boolean aksesRekomendasi = false;
 
-    @Column(columnDefinition = "boolean default false")
-    private Boolean aksesRekomendasi;
+    @Column
+    private Boolean aksesBuktiPelaksanaan = false;
 
-    @Column(columnDefinition = "boolean default false")
-    private Boolean aksesBuktiPelaksanaan;
+    @Column
+    private Boolean aksesTambahBuktiPelaksanaan = false;
 
-    @Column(columnDefinition = "boolean default false")
-    private Boolean aksesTambahBuktiPelaksanaan;
+    @Column
+    private Boolean aksesUbahBuktiPelaksanaan = false;
 
-    @Column(columnDefinition = "boolean default false")
-    private Boolean aksesUbahBuktiPelaksanaan;
+    @Column
+    private Boolean aksesPersetujuanBuktiPelaksanaan = false;
 
-    @Column(columnDefinition = "boolean default false")
-    private Boolean aksesPersetujuanBuktiPelaksanaan;
+    @Column
+    private Boolean aturTenggatWaktu = false;
+
+    @Column Boolean aksesDashboardStaff = false;
 
     public AccessPermissions() {
     }
 
     public AccessPermissions(Role role) {
         this.role = role;
+    }
+
+    public AccessPermissions(Role role, boolean trueDefault) {
+        this.role = role;
+        if (!trueDefault) return;
+        this.aksesRiskRating = true;
+        this.ubahRiskRating = true;
+        this.aksesRiskLevel = true;
+        this.ubahRiskLevel = true;
+        this.ubahReminder = true;
+        this.aksesTabelRisiko = true;
+        this.aksesRisiko = true;
+        this.aksesTambahRisiko = true;
+        this.aksesUbahRisiko = true;
+        this.aksesHapusRisiko = true;
+        this.aksesUbahHierarki = true;
+        this.aksesTabelRekomendasi = true;
+        this.aksesRekomendasi = true;
+        this.aksesBuktiPelaksanaan = true;
+        this.aksesTambahBuktiPelaksanaan = true;
+        this.aksesUbahBuktiPelaksanaan = true;
+        this.aksesPersetujuanBuktiPelaksanaan = true;
+        this.aturTenggatWaktu = true;
+        this.aksesDashboardStaff = true;
+    }
+
+    public Boolean getAksesDashboardStaff() {
+        return aksesDashboardStaff;
+    }
+
+    public void setAksesDashboardStaff(Boolean aksesDashboardStaff) {
+        this.aksesDashboardStaff = aksesDashboardStaff;
     }
 
     public Boolean getAksesTabelRisiko() {
@@ -226,5 +262,13 @@ public class AccessPermissions implements Serializable {
 
     public void setAksesPersetujuanBuktiPelaksanaan(Boolean aksesPersetujuanBuktiPelaksanaan) {
         this.aksesPersetujuanBuktiPelaksanaan = aksesPersetujuanBuktiPelaksanaan;
+    }
+
+    public Boolean getAturTenggatWaktu() {
+        return aturTenggatWaktu;
+    }
+
+    public void setAturTenggatWaktu(Boolean aturTenggatWaktu) {
+        this.aturTenggatWaktu = aturTenggatWaktu;
     }
 }

@@ -16,20 +16,22 @@ import ComponentWrapper from '../../Layout/ComponentWrapper';
 class SirioForm extends Component {
 
     render() {
+        const { noHeader, customHeader, title, subtitle, betweenTitleSubtitle, inputDefinition, isInnerForm, childForm, footerButton, onSubmit, submitButton } = this.props;
+        
         var header;
-        if (this.props.noHeader || this.props.customHeader) {
-            header = this.props.customHeader
+        if (noHeader || customHeader) {
+            header = customHeader
         } else {
             header = <SirioComponentHeader
-                title={this.props.title}
-                subtitle={this.props.subtitle}
-                betweenTitleSubtitle={this.props.betweenTitleSubtitle}
+                title={title}
+                subtitle={subtitle}
+                betweenTitleSubtitle={betweenTitleSubtitle}
             />
         }
 
         var fields =
             <>
-                {this.props.inputDefinition.map((field, i) =>
+                {inputDefinition.map((field, i) =>
                     <SirioField
                         key={i}
                         label={field.label}
@@ -46,25 +48,28 @@ class SirioForm extends Component {
                         validator={field.validation}
                         required={field.required}
                         min={field.min}
-                        afterValidity={field.afterValidity}
+                        max={field.max}
                         multiple={field.multiple}
                         sideButton={field.sideButton}
                         modifier={field.modifier}
+                        validationFunction={field.validationFunction}
+                        disabled={field.disabled}
+                        errormessage={field.errormessage}
                     />
                 )}
             </>
 
-        if (this.props.isInnerForm || this.props.childForm) {
+        if (isInnerForm || childForm) {
             return (
                 <>
                     {header}
                     <ComponentWrapper classes="m-4">
                         {fields}
 
-                        {this.props.footerButton &&
+                        {footerButton &&
                             <div className="w-100 text-right">
                                 <br />
-                                {this.props.footerButton}
+                                {footerButton}
                             </div>
                         }
                     </ComponentWrapper>
@@ -75,10 +80,10 @@ class SirioForm extends Component {
                 <>
                     {header}
                     <ComponentWrapper>
-                        <form onSubmit={this.props.onSubmit}>
+                        <form onSubmit={onSubmit}>
                             {fields}
                             <div className="w-100 text-right mt-5">
-                                {this.props.submitButton}
+                                {submitButton}
                             </div>
                         </form>
                     </ComponentWrapper>

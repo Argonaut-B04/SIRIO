@@ -1,331 +1,168 @@
-import React from 'react';
+import React, { Component } from 'react'
 import SirioForm from '../SirioForm';
+import SirioComponentHeader from '../../Header/SirioComponentHeader';
+import ComponentWrapper from '../../../Layout/ComponentWrapper';
 import SirioButton from '../../Button/SirioButton';
-import SirioField from '../SirioFormComponent/SirioField';
 
-/**
- * Kelas untuk membuat form demo
- */
-export default class DemoForm extends React.Component {
+// Demo form untuk validasi multiple form dalam 1 page
+export class DemoForm extends Component {
 
-    // Masukan user disimpan kedalam state sebelum dikirim ke backend
+    // pastikan inisiasi ada 2 list, yang pertama adalah daftar value, yang kedua adalah daftar error
     constructor(props) {
         super(props);
-
         this.state = {
-            nama: "",
-            umur: 0,
-            jenis: "",
-            manusia: true,
-            customDropdown: "",
-            customDropdown2: "",
-            submitable: false,
-            namaMain: ["Chocola", "Vanilla"],
+            daftarForm: [],
+            daftarError: []
         }
 
-        this.handleChange = this.handleChange.bind(this);
-        this.innerInputDefinition = this.innerInputDefinition.bind(this);
-        this.handleSelectChange = this.handleSelectChange.bind(this);
-        this.handleMultiFieldChange = this.handleMultiFieldChange.bind(this);
-        this.modifyFieldCount = this.modifyFieldCount.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleInsideFieldChange = this.handleInsideFieldChange.bind(this);
     }
 
-    // Fungsi untuk mengubah state ketika isi dari input diubah
-    // Fungsi ini wajib ada jika membuat form
-    handleChange(event) {
-        if (event.target.type === "checkbox") {
-            this.setState(
-                {
-                    [event.target.name]
-                        : event.target.checked
-                }
+    // ini untuk simulasi, misalnya ada 5 form
+    getForm() {
+        var forms = []
+        for (let i = 0; i < 5; i++) {
+            forms.push(
+                <SirioForm
+                    key={i}
+                    noHeader
+                    isInnerForm
+                    inputDefinition={this.getInputDefinitions(i)}
+                />
             )
+        }
+        return forms;
+    }
+
+    // ini akan dipanggil ketika isi dari field terganti
+    handleInsideFieldChange(event, index) {
+
+        // tinjau daftar value nya
+        const { daftarForm } = this.state;
+
+        // kita ganti value nya
+        daftarForm[index].daftarField[event.target.name] = event.target.value;
+
+        // setelah diganti, simpan ke state
+        // UPDATE: jangan langsung simpan ke state, simpannya nanti sama sama validasi
+
+        // baru validasi
+        // UPDATE: oper yang akan disimpan, jadi nanti setState hanya 1x saja
+        this.validate(event, index, daftarForm);
+    }
+
+    // ini fungsi validasi, perlu diperhatikan ini untuk multiple form
+    validate(event, index, daftarForm) {
+
+        // sekarang, kita tinjau daftar error nya
+        const { daftarError } = this.state;
+
+        // Misalnya, aku bikin dia error kalau value nya adalah "halo"
+        if (event.target.value === "halo") {
+
+            // kita ganti isi dari error nya
+            daftarError[index].daftarField[event.target.name] = "halo juga";
         } else {
-            this.setState(
-                {
-                    [event.target.name]
-                        : event.target.value
-                }
-            )
+
+            // kalau value nya selain "halo", kita kosongkan isi error nya
+            daftarError[index].daftarField[event.target.name] = "";
         }
+
+        // lalu kita simpan ke state
+        this.setState({
+            daftarForm: daftarForm,
+            daftarError: daftarError
+        })
     }
 
-    // Fungsi untuk mengubah state ketika isi dropdown diubah
-    // Fungsi unu wajib ada jika membuat field tipe select
-    handleSelectChange(name, event) {
-        this.setState(
-            {
-                [name]
-                    : event.value
-            }
-        )
-    }
+    // Ini untuk input definition dari masing - masing form
+    // terinspirasi dari cloud, jadi setiap SirioForm akan punya input definition berbeda
+    // sesuai dengan index nya
+    getInputDefinitions(index) {
 
-    // Fungsi yang akan dijalankan ketika user submit
-    // Umumnya akan digunakan untuk memanggil service komunikasi ke backend
-    handleSubmit(event) {
-        event.preventDefault();
-        if (this.state.submitable) {
-            alert("submited");
-        }
-    }
+        // Yang perlu kita pake dari state adalah daftar value dan daftar error nya
+        const { daftarForm, daftarError } = this.state;
 
-    componentDidUpdate(prevProps, prevState) {
-        var submitable = true;
-        var validating = false;
-
-        submitable = this.validateRequired();
-
-        if (prevState.nama !== this.state.nama) {
-            submitable = submitable && this.validateNama();
-            validating = true;
-        }
-        
-        if (prevState.umur !== this.state.umur) {
-            submitable = submitable && this.validateUmur();
-            validating = true;
+        // Karena ini simulasi, daftar value nya kosong
+        // kemungkinan di kalian, daftar value nya tidak akan kosong karena ambil dari backend
+        // tapi kalau ada error karena undefined, masukin ini
+        if (typeof daftarForm[index] === "undefined") {
+            daftarForm[index] = {};
+            daftarForm[index].daftarField = {}
         }
 
-        if (validating) {
-            if (this.state.submitable !== submitable) {
-                this.setState({
-                    submitable: submitable
-                })
-            }
+        // Ini untuk inisiasi daftar error spesifik untuk field tertentu
+        // Struktur data yang aku pake disini adalah dictionary, jadi pake key dan value
+        // Yang Cloud implementasi sekarang itu full array
+        // Kenapa pake dictionary? karena penamaannya jadi lebih gampang dan bisa dibaca
+        if (typeof daftarError[index] === "undefined") {
+            daftarError[index] = {};
+            daftarError[index].daftarField = {}
         }
-    }
 
-    validateRequired() {
-        var submitable = true;
-        const required = [this.state.nama, this.state.umur];
-        for (let i = 0; i < required.length; i++) {
-            submitable = submitable && (required[i] !== null && required[i] !== "");
-        }
-        return submitable;
-    }
 
-    validateNama() {
-        var submitable = true;
-        const fokusNama = this.state.nama;
-        var errorNama;
-        if (fokusNama.length < 2) {
-            submitable = false;
-            errorNama = "Nama minimal 2 karakter, nd mungkin aku panggil kamu sebagai Tuan/Nyonya " + fokusNama;
-        } else if (fokusNama.length > 10) {
-            submitable = false;
-            errorNama = "uvuvwevwe osas ?";
-        }
-        if (this.state.errorNama !== errorNama) {
-            this.setState({
-                errorNama: errorNama
-            })
-        }
-        return submitable;
-    }
-
-    validateUmur() {
-        var submitable = true;
-        const fokusUmur = this.state.umur;
-        var errorUmur;
-        if (fokusUmur < 18) {
-            submitable = false;
-            errorUmur = "Khusus 18 tahun keatas ya ^-^";
-        }
-        if (this.state.errorUmur !== errorUmur) {
-            this.setState({
-                errorUmur: errorUmur
-            })
-        }
-        return submitable;
-    }
-
-    // Fungsi yang akan mengembalikan definisi tiap field pada form
-    // Setiap objek {} pada List [] akan menjadi 1 field
-    // untuk informasi lebih lengkap, cek SirioForm
-    innerInputDefinition() {
         return (
             [
                 {
-                    label: "Nama",
-                    required: true,
-                    handleChange: this.handleChange,
-                    validation: this.state.errorNama,
+                    label: "Field 1 for " + (index + 1),
                     type: "textarea",
-                    name: "nama",
-                    value: this.state.nama,
-                    placeholder: "masukan nama",
-                }, {
-                    label: "Umur",
-                    handleChange: this.handleChange,
-                    validation: this.state.errorUmur,
-                    type: "number",
-                    name: "umur",
-                    min: 1,
-                    value: this.state.umur,
-                    placeholder: "masukan umur",
-                    required: true
-                }, {
-                    label: "Jenis",
-                    handleChange: this.handleSelectChange,
-                    type: "select",
-                    name: "jenis",
-                    value: this.state.jenis,
-                    optionList: [
-                        {
-                            label: "Pria",
-                            value: "Pria"
-                        }, {
-                            label: "Wanita",
-                            value: "Wanita"
-                        }, {
-                            label: "Kucing",
-                            value: "neko"
-                        }
-                    ]
-                }
-            ]
-        )
-    }
 
-    outerInputDefinition() {
-        return (
-            [
+                    // perlu diperhatikan kita pass value dan errormessage spesifik
+                    // sangat disarankan struktur data nya sama, supaya tidak bingung
+                    value: daftarForm[index].daftarField.field,
+                    errormessage: daftarError[index].daftarField.field,
+
+                    // name ini sangat penting, sesuaikan dengan paling kanan di value
+                    name: "field",
+
+                    // Tentu saja masukin index, index akan menjadi parameter kedua di fungsi handleChange
+                    index: index,
+
+                    // Kita kirim handleChange nya
+                    handleChange: this.handleInsideFieldChange,
+                },
                 {
-                    fullComponent:
-                        <SirioForm
-                            noHeader
-                            isInnerForm
-                            inputDefinition={this.innerInputDefinition()}
-                        />
-                }, {
-                    label: "Nama Mereka",
-                    multiple: true,
-                    handleChange: this.handleMultiFieldChange,
-                    type: "text",
-                    name: "namaMain",
-                    value: this.state.namaMain,
-                    modifier: (name, newArray) => this.modifyFieldCount(name, newArray)
+                    label: "Field 2 for " + (index + 1),
+                    type: "textarea",
+
+                    // Beda kan? paling kanan nya adalah spesifik
+                    value: daftarForm[index].daftarField.secondField,
+                    errormessage: daftarError[index].daftarField.secondField,
+
+                    // Sekali lagi, name itu harus sama dengan paling kanan di value
+                    name: "secondField",
+
+                    // kirim index juga
+                    index: index,
+                    handleChange: this.handleInsideFieldChange,
                 }
             ]
         )
     }
 
-    modifyFieldCount(name, newField) {
-        this.setState(
-            {
-                [name]: newField
-            }
-        )
-    }
-
-    handleMultiFieldChange(event, index) {
-        const targetName = event.target.name;
-        const targetValue = event.target.value;
-        const targetArray = this.state[targetName];
-        targetArray[index] = targetValue;
-        this.setState(
-            {
-                [event.target.name]
-                    : targetArray
-            }
-        )
-    }
-
-    customSelectHandle(name, event) {
-        if (event.value === "vanish") {
-            this.setState({
-                nama: "Solo Quisiera Desaparecer"
-            })
-        } else if (event.value === "Shironeko") {
-            this.setState({
-                nama: "Shironeko"
-            })
-        }
-    }
-
-    getBetween() {
+    render() {
         return (
             <>
-                <div className="col-md-3 pl-0">
-                    <SirioField
-                        type="select"
-                        handleChange={(name, event) => {
-                            this.handleSelectChange(name, event);
-                            this.customSelectHandle(name, event);
-                        }}
-                        classes="p-1"
-                        name="customDropdown"
-                        value={this.state.customDropdown}
-                        optionList={
-                            [
-                                {
-                                    label: "Shironeko",
-                                    value: "Shironeko"
-                                },
-                                {
-                                    label: "Vanish",
-                                    value: "vanish"
-                                }
-                            ]
-                        }
-                    />
-                </div>
-                <div className="col-md-3 pl-0">
-                    <SirioField
-                        type="select"
-                        handleChange={this.handleSelectChange}
-                        classes="p-1"
-                        name="customDropdown2"
-                        value={this.state.customDropdown2}
-                        optionList={
-                            [
-                                {
-                                    label: "Chisato",
-                                    value: 1
-                                },
-                                {
-                                    label: "Chidua",
-                                    value: 2
-                                }
-                            ]
-                        }
-                    />
-                </div>
+                <SirioComponentHeader
+                    title="testForm"
+                />
+
+                {/* Kalau form nya ada banyak dan tidak ada field di luar form, tolong jangan pake inner dan outer form */}
+                {/* Akan memperberat performa server karena dia harus ngerender dan jalanin semua fungsi form padahal gak ada field nya */}
+                {/* Alternatif nya, decompose jadi SirioComponentHeader untuk judul */}
+                <ComponentWrapper>
+
+                    {/* lalu pake map, getForm() ini akan mengembalikan list yang isinya 5 SirioForm */}
+                    {this.getForm().map(e => e)}
+
+                    {/* Terakhir, tombol submit di sebelah kanan bawah */}
+                    <div className="w-100 text-right">
+                        <SirioButton purple recommended> Submit </SirioButton>
+                    </div>
+                </ComponentWrapper>
             </>
         )
     }
-    submitButton() {
-        return (
-            <div>
-                <SirioButton
-                    purple
-                    recommended={this.state.submitable}
-                    disabled={!this.state.submitable}
-                >
-                    Simpan
-                </SirioButton>
-                <SirioButton purple
-                    classes="ml-2"
-                    type="button"
-                    onClick={() => alert("batal")}
-                >
-                    Batal
-                </SirioButton>
-            </div>
-        )
-    }
-    // Fungsi render SirioForm
-    render() {
-        return (
-            <SirioForm
-                title="Demo Form"
-                betweenTitleSubtitle={this.getBetween()}
-                subtitle="Ini demo form untuk ngedemoin ... form"
-                inputDefinition={this.outerInputDefinition()}
-                onSubmit={this.handleSubmit}
-                submitButton={this.submitButton()}
-            />
-        );
-    }
 }
+
+export default DemoForm
