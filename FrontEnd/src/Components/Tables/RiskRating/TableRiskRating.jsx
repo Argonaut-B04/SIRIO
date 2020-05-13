@@ -109,10 +109,10 @@ class TableRiskRating extends React.Component {
                 }
             }
 
-            if (parseInt(newValue) < parseInt(row.skorMaksimal)) {
+            if (parseInt(newValue) >= parseInt(row.skorMaksimal)) {
                 return {
                     valid: false,
-                    message: "Skor minimal tidak boleh lebih banyak daripada skor maksimal"
+                    message: "Skor minimal tidak boleh sama atau lebih banyak daripada skor maksimal"
                 }
             }
 
@@ -136,10 +136,10 @@ class TableRiskRating extends React.Component {
                 }
             }
 
-            if (parseInt(row.skorMinimal) > parseInt(newValue)) {
+            if (parseInt(row.skorMinimal) >= parseInt(newValue)) {
                 return {
                     valid: false,
-                    message: "Skor Maksimal tidak boleh lebih sedikit daripada skor minimal"
+                    message: "Skor Maksimal tidak boleh sama atau lebih sedikit daripada skor minimal"
                 }
             }
 
@@ -152,33 +152,54 @@ class TableRiskRating extends React.Component {
         }
     }
 
+    between(value, lowerRange, upperRange) {
+        return value > lowerRange && value < upperRange;
+    }
+
+    // Kolom yang akan di sort secara default
+    defaultSorted = [{
+        dataField: 'skorMinimal',
+        order: 'asc'
+    }];
+
     validateRange() {
         const daftarRow = this.state.rowList;
-        const arrayOfOne = Array(101).fill(0);
 
         var errorResult = [];
 
         // cek yang tabrakan
         for (let i = 0; i < daftarRow.length; i++) {
+
+            // ambil data row ini
             const skorMinimal = daftarRow[i].skorMinimal;
             const skorMaksimal = daftarRow[i].skorMaksimal;
-            for (let j = skorMinimal; j <= skorMaksimal; j++) {
-                if (arrayOfOne[j] === 0) {
-                    arrayOfOne[j] = 1;
-                } else {
-                    if (!errorResult.includes("Jangkauan skor saling bertabrakan")) {
-                        errorResult.push("Jangkauan skor saling bertabrakan");
+
+            // compare dengan row row berikutnya
+            for (let j = i + 1; j < daftarRow.length; j++) {
+                const skorMinimalCompare = daftarRow[j].skorMinimal;
+                const skorMaksimalCompare = daftarRow[j].skorMaksimal;
+
+                if (this.between(skorMinimalCompare, skorMinimal, skorMaksimal)
+                    || this.between(skorMaksimalCompare, skorMinimal, skorMaksimal)) {
+                    if (!errorResult.includes("Terdapat range yang invalid")) {
+                        errorResult.push("Terdapat range yang invalid")
                     }
                 }
             }
         }
 
         // cek kalau ada yang belum termasuk
-        for (let i = 0; i < arrayOfOne.length; i++) {
-            if (arrayOfOne[i] === 0) {
-                if (!errorResult.includes("Jangkauan skor belum mencakup 0 sampai 100")) {
-                    errorResult.push("Jangkauan skor belum mencakup 0 sampai 100")
-                }
+        var total = 0;
+        for (let i = 0; i < daftarRow.length; i++) {
+            // cek setiap row
+            const skorMinimal = daftarRow[i].skorMinimal;
+            const skorMaksimal = daftarRow[i].skorMaksimal;
+
+            total += (skorMaksimal - skorMinimal);
+        }
+        if (total !== 100) {
+            if (!errorResult.includes("Range belum mencakup 0 hingga 100")) {
+                errorResult.push("Range belum mencakup 0 hingga 100")
             }
         }
 
@@ -216,6 +237,7 @@ class TableRiskRating extends React.Component {
                 dataField: 'skorMinimal',
                 editable: this.state.editMode,
                 text: 'Skor Minimal',
+                type: "number",
                 sort: true,
                 classes: classes.rowItem,
                 headerClasses: classes.colheader,
@@ -229,6 +251,7 @@ class TableRiskRating extends React.Component {
                 dataField: 'skorMaksimal',
                 editable: this.state.editMode,
                 text: 'Skor Maksimal',
+                type: "number",
                 sort: true,
                 classes: classes.rowItem,
                 headerClasses: classes.colheader,
@@ -436,12 +459,13 @@ class TableRiskRating extends React.Component {
                         disabled={hasError}
                         tooltip={hasError ? "Selesaikan error terlebih dahulu" : undefined}
                         recommended={!hasError}
+                        type="button"
                         classes="m-1"
                         modalTitle="Anda akan menyimpan perubahan konfigurasi Risk Rating"
                         onConfirm={this.handleSubmit}
                         customConfirmText="Konfirmasi"
                         customCancelText="Batal"
-                        disablePopUp={this.hasEmptyRow()}
+                    // disablePopUp={hasError}
                     >
                         Simpan
                     </SirioConfirmButton>
@@ -470,20 +494,23 @@ class TableRiskRating extends React.Component {
         const column = this.columns();
         return (
             <div className="row">
-                <div className={this.state.editMode ? "col-9" : "col-12"}>
+                <div className={this.state.editMode ? "col-12 col-md-9" : "col-12"}>
                     <SirioComponentHeader
                         title={(this.state.editMode ? "Konfigurasi " : "Daftar ") + "Risk Rating"}
                         headerButton={this.headerButton()}
                         subtitle={this.state.editMode && "Klik pada cell yang ingin anda ubah"}
                     />
                 </div>
-                <div className={this.state.editMode ? "col-3" : "d-none"}>
+                <div className={this.state.editMode ? "col-md-3 d-md-none" : "d-none"}>
 
                 </div>
-                <div className={this.state.editMode ? "col-9" : "col-12"}>
+                <div className={this.state.editMode ? "col-12 col-md-9" : "col-12"}>
                     <SirioTable
+                        noTotal
+                        noSizePerPage
                         noHeader
                         data={this.state.rowList}
+                        defaultSorted={this.defaultSorted}
                         id='idRating'
                         columnsDefinition={column}
                         includeSearchBar
@@ -503,7 +530,7 @@ class TableRiskRating extends React.Component {
                         />
                     }
                 </div>
-                <div className={this.state.editMode ? "col-3" : "d-none"}>
+                <div className={this.state.editMode ? "col-12 col-md-3 my-md-0 my-3" : "d-none"}>
                     <ComponentWrapper>
                         <div>
                             Aturan Risk Rating:
