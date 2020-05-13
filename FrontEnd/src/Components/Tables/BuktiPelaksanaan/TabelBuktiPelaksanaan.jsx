@@ -61,10 +61,6 @@ class TabelBuktiPelaksanaan extends React.Component {
         }
     }
 
-    dataFormatter() {
-        return "Tidak Ada Rekomendasi Dijalankan"
-    }
-
     getButtons(cell, row) {
         const status = row.statusBukti;
         const tanpaBukti = status === null;

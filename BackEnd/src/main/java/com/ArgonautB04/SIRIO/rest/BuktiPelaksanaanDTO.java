@@ -8,7 +8,6 @@ public class BuktiPelaksanaanDTO {
     private String lampiran;
     private String namaPembuat;
     private String namaPemeriksa;
-    private LocalDate tanggalPersetujuan;
     private Integer status;
     private String feedback;
     private Integer idRekomendasi;
@@ -94,6 +93,4 @@ public class BuktiPelaksanaanDTO {
     public void setStatusRekomendasi(Integer statusRekomendasi) {
         this.statusRekomendasi = statusRekomendasi;
     }
-
-    
 }

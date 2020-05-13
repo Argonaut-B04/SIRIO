@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -223,6 +224,8 @@ public class BuktiPelaksanaanRestController {
                     HttpStatus.FORBIDDEN, "Feedback perlu diisi untuk penolakan bukti pelaksanaan!"
             );
         buktiPelaksanaanTemp.setFeedback(buktiPelaksanaanDTO.getFeedback());
+
+        buktiPelaksanaanTemp.setTanggalPersetujuan(LocalDate.now());
 
         buktiPelaksanaanRestService.ubahBuktiPelaksanaan(buktiPelaksanaanDTO.getId(), buktiPelaksanaanTemp);
 
