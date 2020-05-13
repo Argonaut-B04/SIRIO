@@ -50,7 +50,7 @@ class FormTambahBukti extends React.Component {
 
     async renderRekomendasi() {
         const response = await RekomendasiService.getRekomendasi(this.props.location.state.id);
-        console.log(response);
+        
         this.setState({
             id: response.data.result.id,
             ketRekomendasi: response.data.result.keterangan

@@ -84,7 +84,6 @@ public class RekomendasiRestController {
             daftarRekomendasi = rekomendasiRestService.getByPembuat(employee);
         }
 
-
         List<RekomendasiDTO> resultDTO = new ArrayList<>();
         LocalDate waktuSaatIni = LocalDate.now();
         for (Rekomendasi rekomendasi : daftarRekomendasi) {
@@ -164,6 +163,7 @@ public class RekomendasiRestController {
         RekomendasiDTO result = new RekomendasiDTO();
         result.setId(rekomendasi.getIdRekomendasi());
         result.setKeterangan(rekomendasi.getKeterangan());
+        result.setStatus(rekomendasi.getStatusRekomendasi().getNamaStatus());
 
         response.setStatus(200);
         response.setMessage("success");

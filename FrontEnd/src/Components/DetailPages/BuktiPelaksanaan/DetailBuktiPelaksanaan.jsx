@@ -74,8 +74,10 @@ class DetailBuktiPelaksanaan extends React.Component {
 
     setuju() {
         const buktiPelaksanaan = {
-            status: 2
+            status: 2,
+            statusRekomendasi: 7
         };
+        console.log(buktiPelaksanaan);
         BuktiPelaksanaanService.setStatusBukti(this.state.buktiPelaksanaan.id, buktiPelaksanaan)
             .then(() => this.setRedirect());
     }
