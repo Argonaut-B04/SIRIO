@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -82,9 +83,25 @@ public class DashboardController {
         }
 
         DashboardDTO dashboardDTO = new DashboardDTO();
+        dashboardDTO.setJumlahPemeriksaan(daftarTugasPemeriksaan.size());
         dashboardDTO.setJumlahRekomendasi(daftarRekomendasi.size());
         dashboardDTO.setJumlahTemuan(daftarTemuanRisiko.size());
-        dashboardDTO.setJumlahPemeriksaan(daftarTugasPemeriksaan.size());
+
+        List<String> listTemuanApril = new ArrayList<String>();
+        List<String> listTemuanMei = new ArrayList<String>();
+        for (TemuanRisiko temuanRisiko : daftarTemuanRisiko) {
+            String tanggalTemuan = temuanRisiko.getKomponenPemeriksaan().getHasilPemeriksaan()
+                    .getTugasPemeriksaan().getTanggalSelesai().toString().substring(5,7);
+            if (tanggalTemuan.contains("04")) {
+                listTemuanApril.add(tanggalTemuan);
+            } else if (tanggalTemuan.contains("05")) {
+                listTemuanMei.add(tanggalTemuan);
+            }
+        }
+        List<Integer> jumlahTemuanBulanTertentu = new ArrayList<Integer>();
+        jumlahTemuanBulanTertentu.add(listTemuanApril.size());
+        jumlahTemuanBulanTertentu.add(listTemuanMei.size());
+        dashboardDTO.setJumlahTemuanPerBulan(jumlahTemuanBulanTertentu);
 
         List<BuktiPelaksanaan> buktiList = buktiPelaksanaanRestService.getByDaftarRekomendasi(daftarRekomendasi);
         List<BuktiPelaksanaan> listRekomendasiImplemented = new ArrayList<BuktiPelaksanaan>();
@@ -120,6 +137,53 @@ public class DashboardController {
         dashboardDTO.setJumlahRekomendasiOverdue(rekomendasiOverdue);
         dashboardDTO.setJumlahRekomendasiImplemented(rekomendasiImplemented);
         dashboardDTO.setJumlahRekomendasiNotImplemented(rekomendasiNotImplemented);
+
+        List<String> listRekomendasiOverdueApril = new ArrayList<String>();
+        List<String> listRekomendasiOverdueMei = new ArrayList<String>();
+        for (Rekomendasi rekomendasi : listRekomendasiOverdue) {
+            String tanggalRekomendasiOverdue = rekomendasi.getTenggatWaktu().toString().substring(5,7);
+            if (tanggalRekomendasiOverdue.contains("04")) {
+                listRekomendasiOverdueApril.add(tanggalRekomendasiOverdue);
+            } else if (tanggalRekomendasiOverdue.contains("05")) {
+                listRekomendasiOverdueMei.add(tanggalRekomendasiOverdue);
+            }
+        }
+        List<Integer> jumlahRekomendasiOverdueBulanTertentu = new ArrayList<Integer>();
+        jumlahRekomendasiOverdueBulanTertentu.add(listRekomendasiOverdueApril.size()
+                - (listRekomendasiNotImplemented.size() + listRekomendasiImplemented.size()));
+        jumlahRekomendasiOverdueBulanTertentu.add(listRekomendasiOverdueMei.size());
+        dashboardDTO.setJumlahRekomendasiOverduePerBulan(jumlahRekomendasiOverdueBulanTertentu);
+
+        List<String> listRekomendasiImplementedApril = new ArrayList<String>();
+        List<String> listRekomendasiImplementedMei = new ArrayList<String>();
+        for (BuktiPelaksanaan buktiPelaksanaan : listRekomendasiImplemented) {
+            String tanggalRekomendasiImplemented = buktiPelaksanaan.getRekomendasi().getTenggatWaktu().toString().substring(5,7);
+            if (tanggalRekomendasiImplemented.contains("04")) {
+                listRekomendasiImplementedApril.add(tanggalRekomendasiImplemented);
+            } else if (tanggalRekomendasiImplemented.contains("05")) {
+                listRekomendasiImplementedMei.add(tanggalRekomendasiImplemented);
+            }
+        }
+        List<Integer> jumlahRekomendasiImplementedBulanTertentu = new ArrayList<Integer>();
+        jumlahRekomendasiImplementedBulanTertentu.add(listRekomendasiImplementedApril.size());
+        jumlahRekomendasiImplementedBulanTertentu.add(listRekomendasiImplementedMei.size());
+        dashboardDTO.setJumlahRekomendasiImplementedPerBulan(jumlahRekomendasiImplementedBulanTertentu);
+
+        List<String> listRekomendasiNotImplementedApril = new ArrayList<String>();
+        List<String> listRekomendasiNotImplementedMei = new ArrayList<String>();
+        for (BuktiPelaksanaan buktiPelaksanaan : listRekomendasiNotImplemented) {
+            String tanggalRekomendasiNotImplemented = buktiPelaksanaan.getRekomendasi().getTenggatWaktu().toString().substring(5,7);
+            if (tanggalRekomendasiNotImplemented.contains("04")) {
+                listRekomendasiNotImplementedApril.add(tanggalRekomendasiNotImplemented);
+            } else if (tanggalRekomendasiNotImplemented.contains("05")) {
+                listRekomendasiNotImplementedMei.add(tanggalRekomendasiNotImplemented);
+            }
+        }
+        List<Integer> jumlahRekomendasiNotImplementedBulanTertentu = new ArrayList<Integer>();
+        jumlahRekomendasiNotImplementedBulanTertentu.add(listRekomendasiNotImplementedApril.size());
+        jumlahRekomendasiNotImplementedBulanTertentu.add(listRekomendasiNotImplementedMei.size()
+                + (daftarRekomendasi.size() - buktiList.size() - listRekomendasiNotImplementedApril.size()));
+        dashboardDTO.setJumlahRekomendasiNotImplementedPerBulan(jumlahRekomendasiNotImplementedBulanTertentu);
 
         dashboardDTO.setPersenRekomendasiOverdue((float) rekomendasiOverdue*100/daftarRekomendasi.size());
         dashboardDTO.setPersenRekomendasiImplemented((float) rekomendasiImplemented*100/daftarRekomendasi.size());

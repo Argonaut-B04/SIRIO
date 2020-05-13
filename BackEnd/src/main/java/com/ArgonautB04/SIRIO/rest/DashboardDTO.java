@@ -1,5 +1,7 @@
 package com.ArgonautB04.SIRIO.rest;
 
+import java.util.List;
+
 public class DashboardDTO {
     private Integer id;
     private Integer riskScore;
@@ -12,6 +14,11 @@ public class DashboardDTO {
     private Float persenRekomendasiOverdue;
     private Float persenRekomendasiImplemented;
     private Float persenRekomendasiNotImplemented;
+    private String bulanTahun;
+    private List<Integer> jumlahTemuanPerBulan;
+    private List<Integer> jumlahRekomendasiOverduePerBulan;
+    private List<Integer> jumlahRekomendasiImplementedPerBulan;
+    private List<Integer> jumlahRekomendasiNotImplementedPerBulan;
 
     public Integer getId() {
         return id;
@@ -99,5 +106,45 @@ public class DashboardDTO {
 
     public void setPersenRekomendasiNotImplemented(Float persenRekomendasiNotImplemented) {
         this.persenRekomendasiNotImplemented = persenRekomendasiNotImplemented;
+    }
+
+    public String getBulanTahun() {
+        return bulanTahun;
+    }
+
+    public void setBulanTahun(String bulanTahun) {
+        this.bulanTahun = bulanTahun;
+    }
+
+    public List<Integer> getJumlahTemuanPerBulan() {
+        return jumlahTemuanPerBulan;
+    }
+
+    public void setJumlahTemuanPerBulan(List<Integer> jumlahTemuanPerBulan) {
+        this.jumlahTemuanPerBulan = jumlahTemuanPerBulan;
+    }
+
+    public List<Integer> getJumlahRekomendasiOverduePerBulan() {
+        return jumlahRekomendasiOverduePerBulan;
+    }
+
+    public void setJumlahRekomendasiOverduePerBulan(List<Integer> jumlahRekomendasiOverduePerBulan) {
+        this.jumlahRekomendasiOverduePerBulan = jumlahRekomendasiOverduePerBulan;
+    }
+
+    public List<Integer> getJumlahRekomendasiImplementedPerBulan() {
+        return jumlahRekomendasiImplementedPerBulan;
+    }
+
+    public void setJumlahRekomendasiImplementedPerBulan(List<Integer> jumlahRekomendasiImplementedPerBulan) {
+        this.jumlahRekomendasiImplementedPerBulan = jumlahRekomendasiImplementedPerBulan;
+    }
+
+    public List<Integer> getJumlahRekomendasiNotImplementedPerBulan() {
+        return jumlahRekomendasiNotImplementedPerBulan;
+    }
+
+    public void setJumlahRekomendasiNotImplementedPerBulan(List<Integer> jumlahRekomendasiNotImplementedPerBulan) {
+        this.jumlahRekomendasiNotImplementedPerBulan = jumlahRekomendasiNotImplementedPerBulan;
     }
 }

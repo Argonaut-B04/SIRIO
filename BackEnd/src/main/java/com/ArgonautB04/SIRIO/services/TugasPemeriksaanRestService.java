@@ -5,6 +5,7 @@ import com.ArgonautB04.SIRIO.model.KantorCabang;
 import com.ArgonautB04.SIRIO.model.RencanaPemeriksaan;
 import com.ArgonautB04.SIRIO.model.TugasPemeriksaan;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface TugasPemeriksaanRestService {
@@ -27,4 +28,6 @@ public interface TugasPemeriksaanRestService {
     void hapusTugasPemeriksaan(int idTugasPemeriksaan);
 
     TugasPemeriksaan validateExistById(int idTugasPemeriksaan);
+
+    List<TugasPemeriksaan> getByDate(LocalDate startDate, LocalDate endDate);
 }

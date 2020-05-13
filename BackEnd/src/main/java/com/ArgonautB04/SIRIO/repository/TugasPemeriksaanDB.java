@@ -7,6 +7,8 @@ import com.ArgonautB04.SIRIO.model.TugasPemeriksaan;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -16,4 +18,6 @@ public interface TugasPemeriksaanDB extends JpaRepository<TugasPemeriksaan, Inte
     List<TugasPemeriksaan> findAllByKantorCabang(KantorCabang kantorCabang);
 
     List<TugasPemeriksaan> findAllByRencanaPemeriksaan(RencanaPemeriksaan rencanaPemeriksaan);
+
+    List<TugasPemeriksaan> findByTanggalSelesaiIsGreaterThanAndTanggalMulaiIsLessThan(@NotNull LocalDate tanggalMulai, @NotNull LocalDate tanggalSelesai);
 }

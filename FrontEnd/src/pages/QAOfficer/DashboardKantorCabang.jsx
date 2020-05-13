@@ -5,6 +5,8 @@ import { withRouter } from "react-router-dom";
 import SirioBarChart from "../../Components/Chart/SirioBarChart";
 import SirioDashboardBox from "../../Components/Box/SirioDashboardBox";
 import DashboardService from "../../Services/DashboardService";
+import SirioField from "../../Components/Form/SirioFormComponent/SirioField";
+import SirioForm from "../../Components/Form/SirioForm";
 
 class DashboardKantorCabang extends React.Component {
 
@@ -64,10 +66,64 @@ class DashboardKantorCabang extends React.Component {
         })
     }
 
+    getBetween() {
+        return (
+            <>
+                <div className="col-md-3 pl-0">
+                    <SirioField
+                        type="select"
+                        // handleChange={this.handleSelectChangeRisiko}
+                        classes="p-1"
+                        name="kategoriType"
+                        value="Semua Kantor Cabang"
+                        optionList={
+                            [
+                                {
+                                    label: "Semua Kantor Cabang",
+                                    value: "0"
+                                },
+                                {
+                                    label: "Abung Selatan",
+                                    value: "1"
+                                },
+                                {
+                                    label: "Adipala",
+                                    value: "2"
+                                },
+                                {
+                                    label: "Adiwerna",
+                                    value: "2"
+                                },
+                                {
+                                    label: "Air Joman",
+                                    value: "2"
+                                },
+                                {
+                                    label: "Air Putih",
+                                    value: "2"
+                                }
+                            ]
+                        }
+                    />
+                </div>
+                <div className="col-md-3 pl-0">
+                    <SirioField
+                        type="select"
+                        // handleChange={this.handleSelectChange}
+                        classes="p-1"
+                        name="filterKategori"
+                        // value={this.state.filterKategori}
+                        // optionList={this.state.riskOptionList}
+                    />
+                </div>
+            </>
+        )
+    }
+
     render() {
         const { preloader, contentLoading, loadingBody } = this.state;
         const data = {
-            labels: ['Dapet PR', 'Dapet PR Besok Deadline', 'Besok Kuis', 'Haaa? Hari ini ada kuis?', '"Aku cuma liat kamu sebagai teman"'],
+            labels: ['April', 'Mei'],
             datasets: [
                 {
                     label: 'Jumlah Temuan',
@@ -77,7 +133,7 @@ class DashboardKantorCabang extends React.Component {
                     borderWidth: 1,
                     hoverBackgroundColor: 'rgba(252, 252, 7, 0.6)',
                     hoverBorderColor: 'rgba(234, 234, 46, 0.96)',
-                    data: [this.state.dashboardComponent.jumlahTemuan]
+                    data: this.state.dashboardComponent.jumlahTemuanPerBulan
                 },
                 {
                     label: 'Jumlah Rekomendasi Diimplementasi',
@@ -87,7 +143,7 @@ class DashboardKantorCabang extends React.Component {
                     borderWidth: 1,
                     hoverBackgroundColor: 'rgba(34, 245, 34, 0.96)',
                     hoverBorderColor: 'rgba(46, 234, 46, 0.96)',
-                    data: [this.state.dashboardComponent.jumlahRekomendasiImplemented]
+                    data: this.state.dashboardComponent.jumlahRekomendasiImplementedPerBulan
                 },
                 {
                     label: 'Jumlah Rekomendasi Belum Diimplementasi',
@@ -97,7 +153,7 @@ class DashboardKantorCabang extends React.Component {
                     borderWidth: 1,
                     hoverBackgroundColor: 'rgba(255,99,132,0.4)',
                     hoverBorderColor: 'rgba(255,99,132,1)',
-                    data: [this.state.dashboardComponent.jumlahRekomendasiNotImplemented]
+                    data: [6, 17]
                 },
                 {
                     label: 'Jumlah Rekomendasi Overdue',
@@ -107,7 +163,7 @@ class DashboardKantorCabang extends React.Component {
                     borderWidth: 1,
                     hoverBackgroundColor: 'rgba(44, 130, 201, 0.4)',
                     hoverBorderColor: 'rgba(44, 130, 201, 1)',
-                    data: [this.state.dashboardComponent.jumlahRekomendasiOverdue]
+                    data: this.state.dashboardComponent.jumlahRekomendasiOverduePerBulan
                 }
             ]
         };
@@ -115,14 +171,6 @@ class DashboardKantorCabang extends React.Component {
         console.log(this.state.dashboardComponent);
         console.log(this.state.dashboardComponent.jumlahRekomendasi);
         const boxData = [
-            {
-                title: "Jumlah Temuan",
-                value: <p>{this.state.dashboardComponent.jumlahTemuan}</p>
-            },
-            {
-                title: "Jumlah Rekomendasi",
-                value: <p>{this.state.dashboardComponent.jumlahRekomendasi}</p>
-            },
             {
                 title: "Rekomendasi Diimplementasi",
                 value: <p>{this.state.dashboardComponent.persenRekomendasiImplemented}%</p>
@@ -134,10 +182,27 @@ class DashboardKantorCabang extends React.Component {
             {
                 title: "Rekomendasi Overdue",
                 value: <p>{this.state.dashboardComponent.persenRekomendasiOverdue}%</p>
-            }
+            },
+            {
+                title: "Jumlah Temuan",
+                value: <p>{this.state.dashboardComponent.jumlahTemuan}</p>
+            },
+            {
+                title: "Jumlah Rekomendasi",
+                value: <p>{this.state.dashboardComponent.jumlahRekomendasi}</p>
+            },
         ]
         return (
             <SirioMainLayout preloader={preloader} contentLoading={contentLoading} loadingBody={loadingBody} active={!contentLoading}>
+                {/* <div>
+                    <SirioForm
+                        
+                        betweenTitleSubtitle={this.getBetween()}
+                        inputDefinition={null}
+                        onSubmit={null}
+                        submitButton={null}
+                    />
+                </div> */}
                 <div>
                     <h3>Dashboard Performa Seluruh Kantor Cabang</h3><br></br>
                     <SirioBarChart data={data} />
