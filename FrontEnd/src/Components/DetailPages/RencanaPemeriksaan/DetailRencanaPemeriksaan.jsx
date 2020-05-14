@@ -150,6 +150,7 @@ class DetailRencanaPemeriksaan extends React.Component {
                     }}>
                         <SirioButton
                             purple
+                            classes="mx-2"
                         >
                             Ubah
                         </SirioButton>

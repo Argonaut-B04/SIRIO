@@ -76,42 +76,35 @@ class DetailKantorCabang extends React.Component {
     }
    
     subButton(status) {
-        if (status === "AKTIF"){
-            return (
-                <div>
-                    <NavLink to={{
-                        pathname: "/administrator/kantorCabang/ubah",
-                        state: {
-                            id: this.state.kantorCabang.idKantor,
-                        }
-                    }}>
-                        <SirioButton
-                            purple
-                        >
-                            Ubah
-                        </SirioButton>
-                    </NavLink>
-                    <SirioWarningButton
-                        red
-                        modalTitle="Konfirmasi Penghapusan"
-                        modalDesc="Apakah anda yakin untuk menghapus kantor cabang?"
-                        onConfirm={() => this.hapus(this.state.kantorCabang.idKantor)}
-                        customConfirmText="Ya, Hapus"
-                        customCancelText="Batal"
+   
+        return (
+            <div>
+                <NavLink to={{
+                    pathname: "/administrator/kantorCabang/ubah",
+                    state: {
+                        id: this.state.kantorCabang.idKantor,
+                    }
+                }}>
+                    <SirioButton
+                        purple recommended
+                        classes="mx-2"
                     >
-                        Hapus
-                    </SirioWarningButton>
-                </div>
-                
-            )
-        }else{
-            return (
-                <div>
-                   
-                </div>
-                
-            )
-        }
+                        Ubah
+                    </SirioButton>
+                </NavLink>
+                <SirioWarningButton
+                    red
+                    modalTitle="Konfirmasi Penghapusan"
+                    modalDesc="Apakah anda yakin untuk menghapus kantor cabang?"
+                    onConfirm={() => this.hapus(this.state.kantorCabang.idKantor)}
+                    customConfirmText="Ya, Hapus"
+                    customCancelText="Batal"
+                >
+                    Hapus
+                </SirioWarningButton>
+            </div>
+            
+        )
         
     }
 

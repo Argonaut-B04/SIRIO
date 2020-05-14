@@ -96,7 +96,7 @@ class TabelSOP extends React.Component {
             <NavLink to={{
                 pathname: "/manager/sop/detail",
                 state: {
-                    id: row.idKantor
+                    id: row.idSop
                 }
             }}>
                 <SirioButton
