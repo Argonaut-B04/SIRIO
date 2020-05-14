@@ -3,7 +3,7 @@ import SirioForm from '../SirioForm';
 import SirioButton from '../../Button/SirioButton';
 import BuktiPelaksanaanService from '../../../Services/BuktiPelaksanaanService';
 import SirioConfirmButton from '../../Button/ActionButton/SirioConfirmButton';
-import { Redirect } from 'react-router-dom';
+import { NavLink, Redirect } from 'react-router-dom';
 import { withRouter } from 'react-router-dom';
 
 class FormTolakBukti extends React.Component {
@@ -155,12 +155,19 @@ class FormTolakBukti extends React.Component {
         return (
             <div>
                 {tombolSimpan}
-                <SirioButton purple
-                            type="button"
-                            classes="mx-1"
-                            onClick={() => window.location.href = "/bukti-pelaksanaan"}>
-                    Batal
-                </SirioButton>
+                <NavLink to={{
+                    pathname: "/bukti-pelaksanaan/detail",
+                    state: {
+                        id: this.props.location.state.id
+                    }
+                }}>
+                    <SirioButton
+                        purple
+                        classes="mx-1"
+                    >
+                        Batal
+                    </SirioButton>
+                </NavLink>
             </div>
         )
     }
