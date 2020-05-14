@@ -75,8 +75,10 @@ class DetailBuktiPelaksanaan extends React.Component {
 
     setuju() {
         const buktiPelaksanaan = {
-            status: 2
+            status: 2,
+            statusRekomendasi: 7
         };
+        console.log(buktiPelaksanaan);
         BuktiPelaksanaanService.setStatusBukti(this.state.buktiPelaksanaan.id, buktiPelaksanaan)
             .then(() => this.setRedirect());
     }
@@ -156,12 +158,19 @@ class DetailBuktiPelaksanaan extends React.Component {
             if (menungguPersetujuan) {
                 return (
                     <div>
+                        {this.buttonUbah(this.state.buktiPelaksanaan.id)}
                         {this.buttonSetuju()}
                         {this.buttonTolak(this.state.buktiPelaksanaan.id)}
                     </div>
                 );
-            } else if (diSetujui || diTolak) {
+            } else if (diSetujui) {
                 return ("")
+            } else if (diTolak) {
+                return (
+                    <div>
+                        {this.buttonUbah(this.state.buktiPelaksanaan.id)}
+                    </div>
+                );
             }
         }
     };

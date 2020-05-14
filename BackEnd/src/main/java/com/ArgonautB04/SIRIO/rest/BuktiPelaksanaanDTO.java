@@ -1,15 +1,18 @@
 package com.ArgonautB04.SIRIO.rest;
 
+import java.time.LocalDate;
+
 public class BuktiPelaksanaanDTO {
     private Integer id;
     private String keterangan;
     private String lampiran;
     private String namaPembuat;
     private String namaPemeriksa;
-    private Integer idRekomendasi;
     private Integer status;
     private String feedback;
+    private Integer idRekomendasi;
     private String keteranganRekomendasi;
+    private Integer statusRekomendasi;
 
     public Integer getId() {
         return id;
@@ -81,5 +84,13 @@ public class BuktiPelaksanaanDTO {
 
     public void setKeteranganRekomendasi(String keteranganRekomendasi) {
         this.keteranganRekomendasi = keteranganRekomendasi;
+    }
+
+    public Integer getStatusRekomendasi() {
+        return statusRekomendasi;
+    }
+
+    public void setStatusRekomendasi(Integer statusRekomendasi) {
+        this.statusRekomendasi = statusRekomendasi;
     }
 }

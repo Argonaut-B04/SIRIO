@@ -1,21 +1,16 @@
 package com.ArgonautB04.SIRIO.controller;
 
-import com.ArgonautB04.SIRIO.model.BuktiPelaksanaan;
-import com.ArgonautB04.SIRIO.model.Employee;
-import com.ArgonautB04.SIRIO.model.Rekomendasi;
-import com.ArgonautB04.SIRIO.model.StatusBuktiPelaksanaan;
+import com.ArgonautB04.SIRIO.model.*;
 import com.ArgonautB04.SIRIO.rest.BaseResponse;
 import com.ArgonautB04.SIRIO.rest.BuktiPelaksanaanDTO;
-import com.ArgonautB04.SIRIO.services.BuktiPelaksanaanRestService;
-import com.ArgonautB04.SIRIO.services.EmployeeRestService;
-import com.ArgonautB04.SIRIO.services.RekomendasiRestService;
-import com.ArgonautB04.SIRIO.services.StatusBuktiPelaksanaanRestService;
+import com.ArgonautB04.SIRIO.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -35,6 +30,9 @@ public class BuktiPelaksanaanRestController {
 
     @Autowired
     private RekomendasiRestService rekomendasiRestService;
+
+    @Autowired
+    private StatusRekomendasiRestService statusRekomendasiRestService;
 
     /**
      * Mengambil seluruh bukti pelaksanaan
@@ -85,6 +83,7 @@ public class BuktiPelaksanaanRestController {
         result.setNamaPembuat(buktiPelaksanaan.getPembuat().getNama());
         result.setIdRekomendasi(buktiPelaksanaan.getRekomendasi().getIdRekomendasi());
         result.setKeteranganRekomendasi(buktiPelaksanaan.getRekomendasi().getKeterangan());
+        result.setStatusRekomendasi(buktiPelaksanaan.getRekomendasi().getStatusRekomendasi().getIdStatusRekomendasi());
 
         return new BaseResponse<>(200, "success", result);
     }
@@ -198,6 +197,7 @@ public class BuktiPelaksanaanRestController {
         employeeRestService.validateRolePermission(pengelola, "persetujuan bukti pelaksanaan");
         BuktiPelaksanaan buktiPelaksanaanTemp = buktiPelaksanaanRestService.validateExistById(buktiPelaksanaanDTO.getId());
         buktiPelaksanaanTemp.setPemeriksa(pengelola);
+        Rekomendasi rekomendasi = rekomendasiRestService.getById(buktiPelaksanaanTemp.getRekomendasi().getIdRekomendasi());
 
         try {
             StatusBuktiPelaksanaan statusBuktiPelaksanaan = statusBuktiPelaksanaanRestService.getById(
@@ -214,6 +214,9 @@ public class BuktiPelaksanaanRestController {
                     HttpStatus.NOT_FOUND, "Status bukti pelaksanaan tidak ditemukan!"
             );
         }
+        StatusRekomendasi statusRekomendasi = statusRekomendasiRestService.getById(
+                buktiPelaksanaanDTO.getStatusRekomendasi());
+        rekomendasi.setStatusRekomendasi(statusRekomendasi);
 
         if (buktiPelaksanaanDTO.getStatus() == 3 && (buktiPelaksanaanDTO.getFeedback() == null ||
                 buktiPelaksanaanDTO.getFeedback().equals("")))
@@ -221,6 +224,8 @@ public class BuktiPelaksanaanRestController {
                     HttpStatus.FORBIDDEN, "Feedback perlu diisi untuk penolakan bukti pelaksanaan!"
             );
         buktiPelaksanaanTemp.setFeedback(buktiPelaksanaanDTO.getFeedback());
+
+        buktiPelaksanaanTemp.setTanggalPersetujuan(LocalDate.now());
 
         buktiPelaksanaanRestService.ubahBuktiPelaksanaan(buktiPelaksanaanDTO.getId(), buktiPelaksanaanTemp);
 
