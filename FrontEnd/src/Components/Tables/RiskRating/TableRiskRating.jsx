@@ -465,7 +465,7 @@ class TableRiskRating extends React.Component {
                         onConfirm={this.handleSubmit}
                         customConfirmText="Konfirmasi"
                         customCancelText="Batal"
-                    // disablePopUp={hasError}
+                        disablePopUp={hasError}
                     >
                         Simpan
                     </SirioConfirmButton>
