@@ -26,6 +26,7 @@ class BuktiPelaksanaanService {
         const dataToPass = {
             id: idBuktiPelaksanaan,
             status: data.status,
+            statusRekomendasi: data.statusRekomendasi,
             feedback: data.feedback
         }
         return this.axiosInstance.post(SirioAxiosBase.BASEURL + '/BuktiPelaksanaan/persetujuan', dataToPass)
