@@ -4,6 +4,7 @@ import com.ArgonautB04.SIRIO.model.Risiko;
 import com.ArgonautB04.SIRIO.rest.RisikoDTO;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface RisikoRestService {
     Risiko buatRisiko(Risiko risiko);
@@ -29,6 +30,8 @@ public interface RisikoRestService {
     RisikoDTO ubahHierarki(Risiko risikoAwal, RisikoDTO risikoBaru);
 
     List<Risiko> getParentByKategori(Integer kategori);
+
+    Optional<Risiko> getByNama(String nama);
 
     Risiko validateExistById(int idRisiko);
 }

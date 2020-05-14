@@ -1,7 +1,8 @@
 import React from "react";
-import Modal from "react-bootstrap/Modal";
 import SirioButton from "../SirioButton";
 import classes from "./ActionButton.module.css";
+import TriggerButton from "./TriggerButton";
+import SirioModal from "./SirioModal";
 
 /**
  * Komponen untuk Button yang membuka Popup berupa Konfirmasi
@@ -12,7 +13,7 @@ import classes from "./ActionButton.module.css";
  * - onConfirm          : Function, dijalankan ketika tombol konfirmasi ditekan
  * - customConfirmText  : String, Opsional untuk mengganti kata "konfirmasi" pada tombol konfirmasi
  */
-export default class SirioWarningButton extends React.Component {
+export default class SirioConfirmButton extends React.Component {
 
     constructor(props, context) {
         super(props, context);
@@ -42,37 +43,21 @@ export default class SirioWarningButton extends React.Component {
     render() {
         const { handleClose, handleShow } = this;
         const { show } = this.state;
-        const { onConfirm, modalTitle, customConfirmText } = this.props;
+        const { onConfirm, modalTitle, customConfirmText, modalDesc } = this.props;
         const { modalButton } = classes;
 
         return (
             <>
-                <SirioButton
-                    {...this.props}
-                    onClick={handleShow}
-                >
-                    {this.props.children}
-                </SirioButton>
+                <TriggerButton {...this.props} handleShow={handleShow} />
 
-                <Modal
-                    size="md"
+                <SirioModal
+                    image={<img src={process.env.PUBLIC_URL + "/modal-checklist.png"} height="200px" className="ml-4" alt="checklist" />}
+                    modalTitle={modalTitle}
+                    modalDesc={modalDesc}
+                    handleClose={handleClose}
                     show={show}
-                    onHide={handleClose}
-                    centered>
-                    <Modal.Body className="d-flex justify-content-center align-items-center flex-column py-5">
-                        <div className="text-center p-3 w-75">
-                            <h3 >{modalTitle}</h3>
-                        </div>
-
-                        <div className="text-center px-0 mx-0 w-75">
-                            <div>{this.props.modalDesc}</div>
-                        </div>
-
-                        <div className="text-center px-0 mx-0 w-75">
-                            <div>{this.props.modalDesc}</div>
-                        </div>
-
-                        <div className="d-flex justify-content-center align-items-center w-100">
+                    footerButton={
+                        <>
                             <SirioButton
                                 purple
                                 recommended={!this.props.confirmDisable}
@@ -97,9 +82,9 @@ export default class SirioWarningButton extends React.Component {
                             >
                                 Batal
                             </SirioButton>
-                        </div>
-                    </Modal.Body>
-                </Modal>
+                        </>
+                    }
+                />
             </>
         );
     }

@@ -22,7 +22,7 @@
 
 .rowItem {
     padding: 0.5rem !important;
-    vertical-align: middle !important;
+    vertical-align: text-top !important;
     height: 50px;
     font-size: 16px !important;
 }

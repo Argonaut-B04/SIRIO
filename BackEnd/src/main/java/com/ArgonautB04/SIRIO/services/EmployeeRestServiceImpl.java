@@ -9,7 +9,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import javax.swing.text.html.Option;
 import javax.transaction.Transactional;
 import java.security.Principal;
 import java.util.List;
@@ -41,7 +40,8 @@ public class EmployeeRestServiceImpl implements EmployeeRestService {
         target.setEmail(employee.getEmail());
         target.setNama(employee.getNama());
         target.setNoHp(employee.getNoHp());
-        target.setPassword(employee.getPassword());
+//        password harus di encrypt
+//        target.setPassword(employee.getPassword());
         target.setRole(employee.getRole());
         target.setUsername(employee.getUsername());
         target.setJabatan(employee.getJabatan());
@@ -57,8 +57,12 @@ public class EmployeeRestServiceImpl implements EmployeeRestService {
 
     @Override
     public Optional<Employee> getByUsername(String username) {
-//        return employeeDb.findByUsernameAndStatus(username, Employee.Status.AKTIF);
         return employeeDb.findByUsername(username);
+    }
+
+    @Override
+    public Optional<Employee> getByEmail(String email) {
+        return employeeDb.findByEmail(email);
     }
 
     @Override
@@ -87,7 +91,12 @@ public class EmployeeRestServiceImpl implements EmployeeRestService {
 
     @Override
     public Employee validateEmployeeExistByPrincipal(Principal principal) {
-        Optional<Employee> employeeOptional = getByUsername(principal.getName());
+        return validateEmployeeExistByUsername(principal.getName());
+    }
+
+    @Override
+    public Employee validateEmployeeExistByUsername(String username) {
+        Optional<Employee> employeeOptional = getByUsername(username);
         if (employeeOptional.isEmpty()) {
             throw new ResponseStatusException(
                     HttpStatus.UNAUTHORIZED,
@@ -234,6 +243,14 @@ public class EmployeeRestServiceImpl implements EmployeeRestService {
                     );
                 }
                 break;
+            case "atur hierarki risiko":
+                if (!employee.getRole().getAccessPermissions().getAksesUbahHierarki()) {
+                    throw new ResponseStatusException(
+                            HttpStatus.UNAUTHORIZED,
+                            "Akun anda tidak memiliki akses untuk mengatur hierarki risiko"
+                    );
+                }
+                break;
         }
     }
 
@@ -245,5 +262,14 @@ public class EmployeeRestServiceImpl implements EmployeeRestService {
             fokus.setReminderTemplatePilihan(employee.getReminderTemplatePilihan());
             employeeDb.save(employee);
         }
+    }
+
+    @Override
+    public void changePassword(String username, String newPassword) {
+        Employee target = validateEmployeeExistByUsername(username);
+        target.setPassword(
+            encrypt(newPassword)
+        );
+        employeeDb.save(target);
     }
 }

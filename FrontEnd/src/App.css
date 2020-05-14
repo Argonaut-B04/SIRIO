@@ -96,7 +96,7 @@ tr {
     outline: none;
 }
 
-.react-datepicker__day--outside-month{
+.react-datepicker__day--outside-month {
     opacity: 0.8;
 }
 
@@ -152,4 +152,10 @@ tr {
 .sirio_tooltip {
     text-align: center;
     max-width: 300px;
+}
+
+input:disabled {
+    cursor: default;
+    border: none;
+    background-color: rgb(84, 84, 84, 0.2);
 }

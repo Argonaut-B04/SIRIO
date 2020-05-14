@@ -48,7 +48,7 @@ public class Employee implements Serializable {
 
     @NotNull
     @Size(max = 30)
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String email;
 
     @NotNull

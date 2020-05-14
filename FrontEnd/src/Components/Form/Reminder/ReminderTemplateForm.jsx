@@ -39,12 +39,20 @@ class ReminderTemplateForm extends Component {
     }
 
     async renderKonten() {
+        // Mengubah isi dari loader
+        this.props.contentStartLoading();
+        this.props.changeLoadingBody("Mengambil data dari server");
+
         const response = await ReminderService.getTemplateByIdReminder(this.props.location.state.idReminder);
+
+        // Mengubah isi dari loader
+        this.props.changeLoadingBody("Menampilkan data");
 
         this.setState({
             subject: response.data.result.subjects,
             content: response.data.result.body
-        })
+        }, this.props.contentFinishLoading())
+        
     }
 
     handleChange(event) {
@@ -77,7 +85,7 @@ class ReminderTemplateForm extends Component {
             content: this.state.content,
             effectArea: area
         }
-        
+
         ReminderService.changeTemplate(data)
             .then((response) => {
                 this.setState({
@@ -156,7 +164,7 @@ class ReminderTemplateForm extends Component {
             [
                 {
                     fullComponent: <p>
-                    Masukan subject dan isi dari email yang akan dikirimkan sebagai reminder<br />
+                        Masukan subject dan isi dari email yang akan dikirimkan sebagai reminder<br />
                         <small>
                             Cantumkan nama penerima dengan <code>!!nama!! </code>
                             dan tanggal tenggat waktu dengan <code>!!tanggal!!</code>

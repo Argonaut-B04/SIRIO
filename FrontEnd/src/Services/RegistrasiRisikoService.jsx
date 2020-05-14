@@ -28,6 +28,10 @@ class RegistrasiRisikoService {
     async ubahRisiko(data) {
         return this.axiosInstance.post(SirioAxiosBase.BASEURL + '/Risiko/ubah', data)
     }
+
+    async checkRisikoExist(nama) {
+        return this.axiosInstance.get(SirioAxiosBase.BASEURL + '/Risiko/check/' + nama)
+    }
 }
 
 export default new RegistrasiRisikoService();

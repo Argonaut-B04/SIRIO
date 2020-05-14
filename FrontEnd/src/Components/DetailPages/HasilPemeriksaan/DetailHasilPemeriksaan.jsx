@@ -92,9 +92,14 @@ class DetailHasilPemeriksaan extends React.Component {
                     {
                         "Komponen Risiko": komponen.risiko.nama,
                         "SOP": this.getSOPButton(komponen.risiko.namaSop, komponen.risiko.linkSop),
-                        "Jumlah Sampel": komponen.jumlahSampel,
-                        "Keterangan Sampel": komponen.keteranganSampel,
-                        "Risk Level": komponen.namaRiskLevel,
+                        "Deskripsi": komponen.risiko.deskripsi,
+                        "Metodologi": komponen.risiko.metodologi,
+                        "Ketentuan Sampel": komponen.risiko.ketentuanSampel ? komponen.risiko.ketentuanSampel : "N/A",
+                        "Jumlah Populasi": komponen.jumlahPopulasi ? komponen.jumlahPopulasi : "Belum Diisi",
+                        "Jumlah Sampel": komponen.jumlahSampel ? komponen.jumlahSampel : "Belum Diisi",
+                        "Jumlah Sampel Error": komponen.jumlahSampelError ? komponen.jumlahSampelError : "Belum Diisi",
+                        "Keterangan Sampel": komponen.keteranganSampel ? komponen.keteranganSampel : "Belum Diisi",
+                        "Risk Level": komponen.namaRiskLevel ? komponen.namaRiskLevel : "Belum Diisi",
                         "Hasil Temuan": !(komponen.daftarTemuanRisikoTerdaftar.length > 0) ? "-" :
                             <div>
                                 {komponen.daftarTemuanRisikoTerdaftar.map((temuanRisiko, i) =>
@@ -229,25 +234,34 @@ class DetailHasilPemeriksaan extends React.Component {
     subButton() {
         switch (this.state.role) {
             case "Super QA Officer Operational Risk":
-                return (
-                    <div>
-                        {this.buttonUbah(this.state.hasilPemeriksaan.id, this.state.hasilPemeriksaan.tugasPemeriksaan.id, this.state.hasilPemeriksaan.namaStatus)}
-                        {this.buttonHapus(this.state.hasilPemeriksaan.id, this.state.hasilPemeriksaan.namaStatus)}
-                        {this.buttonSetuju(this.state.hasilPemeriksaan.id, this.state.hasilPemeriksaan.namaStatus)}
-                        {this.buttonTolak(this.state.hasilPemeriksaan.id, this.state.hasilPemeriksaan.namaStatus)}
-                    </div>
-                );
-            case "admin":
-                return (
-                    <div>
-                        {this.buttonUbah(this.state.hasilPemeriksaan.id, this.state.hasilPemeriksaan.tugasPemeriksaan.id, this.state.hasilPemeriksaan.namaStatus)}
-                        {this.buttonHapus(this.state.hasilPemeriksaan.id, this.state.hasilPemeriksaan.namaStatus)}
-                        {this.buttonSetuju(this.state.hasilPemeriksaan.id, this.state.hasilPemeriksaan.namaStatus)}
-                        {this.buttonTolak(this.state.hasilPemeriksaan.id, this.state.hasilPemeriksaan.namaStatus)}
-                    </div>
-                );
+                if (this.state.hasilPemeriksaan.tugasPemeriksaan) {
+                    console.log(this.state.hasilPemeriksaan.tugasPemeriksaan)
+                    return (
+                        <div>
+                            {this.buttonUbah(this.state.hasilPemeriksaan.id, this.state.hasilPemeriksaan.tugasPemeriksaan.id, this.state.hasilPemeriksaan.namaStatus)}
+                            {this.buttonHapus(this.state.hasilPemeriksaan.id, this.state.hasilPemeriksaan.namaStatus)}
+                            {this.buttonSetuju(this.state.hasilPemeriksaan.id, this.state.hasilPemeriksaan.namaStatus)}
+                            {this.buttonTolak(this.state.hasilPemeriksaan.id, this.state.hasilPemeriksaan.namaStatus)}
+                        </div>
+                    );
+                } else {
+                    return null
+                }
+            case "dev":
+                if (this.state.hasilPemeriksaan.tugasPemeriksaan) {
+                    return (
+                        <div>
+                            {this.buttonUbah(this.state.hasilPemeriksaan.id, this.state.hasilPemeriksaan.tugasPemeriksaan.id, this.state.hasilPemeriksaan.namaStatus)}
+                            {this.buttonHapus(this.state.hasilPemeriksaan.id, this.state.hasilPemeriksaan.namaStatus)}
+                            {this.buttonSetuju(this.state.hasilPemeriksaan.id, this.state.hasilPemeriksaan.namaStatus)}
+                            {this.buttonTolak(this.state.hasilPemeriksaan.id, this.state.hasilPemeriksaan.namaStatus)}
+                        </div>
+                    );
+                } else {
+                    return null
+                }
             case "QA Officer Operational Risk":
-                if (this.state.yangDitugaskan) {
+                if (this.state.yangDitugaskan && this.state.hasilPemeriksaan.tugasPemeriksaan) {
                     return (
                         <div>
                             {this.buttonUbah(this.state.hasilPemeriksaan.id, this.state.hasilPemeriksaan.tugasPemeriksaan.id, this.state.hasilPemeriksaan.namaStatus)}
@@ -319,7 +333,7 @@ class DetailHasilPemeriksaan extends React.Component {
                     noBack
                     data={{
                         "Risk Score": this.state.riskScore,
-                        "Feedback": this.state.hasilPemeriksaan.feedback
+                        "Feedback": this.state.hasilPemeriksaan.feedback ? this.state.hasilPemeriksaan.feedback : "N/A"
                     }}
                     id='id'
                 />

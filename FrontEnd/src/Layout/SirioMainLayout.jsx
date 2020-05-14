@@ -64,7 +64,7 @@ export default class SirioMainLayout extends Component {
         return (
             <>
                 {preloader}
-                <SirioSideNav shouldShow={shouldShow} toggleNav={this.toggleNav} noToggle={window.innerWidth > 1000}/>
+                <SirioSideNav shouldShow={shouldShow} toggleNav={this.toggleNav} noToggle={window.innerWidth > 1000} />
 
                 {/* Jika props contentLoading tersedia, maka komponen akan menggunakan loader content */}
                 <LoadingOverlay
@@ -79,7 +79,7 @@ export default class SirioMainLayout extends Component {
                         <SirioButton
                             blue
                             square
-                            hover
+                            recommended
                             insideClass={classes.burgerButton}
                             onClick={() => { this.toggleNav() }}>
                             ≡
