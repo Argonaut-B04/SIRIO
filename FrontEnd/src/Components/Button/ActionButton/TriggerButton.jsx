@@ -8,7 +8,7 @@ export class TriggerButton extends Component {
         return (
             <SirioButton
                 {...this.props}
-                onClick={!disablePopUp && handleShow}
+                onClick={disablePopUp ? undefined : handleShow}
             >
                 {this.props.children}
             </SirioButton>

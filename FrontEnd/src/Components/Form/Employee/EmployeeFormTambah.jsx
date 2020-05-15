@@ -221,17 +221,12 @@ export default class EmployeeFormTambah extends React.Component {
         );
     }
 
-    componentDidUpdate() {
-        console.log("updated")
-    }
-
     async handleSubmit(event) {
         event.preventDefault();
         if (this.submitable()) {
             EmployeeService.checkEmployeeExist(this.state.username)
                 .then(response => {
                     if (response.data.result) {
-                        console.log("error username");
                         this.setState({
                             errorUsername: "Username sudah terdaftar"
                         })
@@ -239,12 +234,10 @@ export default class EmployeeFormTambah extends React.Component {
                         EmployeeService.checkEmailExist({ email: this.state.email })
                             .then(response => {
                                 if (response.data.result) {
-                                    console.log("error email");
                                     this.setState({
                                         errorEmail: "Email sudah terdaftar"
                                     })
                                 } else {
-                                    console.log("no error");
                                     const employee = {
                                         username: this.state.username,
                                         password: this.state.password,
