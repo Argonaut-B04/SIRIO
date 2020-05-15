@@ -202,7 +202,7 @@ class FormUbahRencana extends React.Component {
     validateLink() {
         var submitable = true;
         var errorLink;
-        var link = /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/;
+        var link = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.%]+$/;
         const fokusLink = this.state.linkMajelis
         // if (fokusLink.length < 1) {
         //     submitable = false;
