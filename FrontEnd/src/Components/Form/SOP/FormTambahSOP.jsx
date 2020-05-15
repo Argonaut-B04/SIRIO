@@ -61,7 +61,7 @@ class FormTambahSOP extends React.Component {
 
     validateLink(fokusLink) {
         var errorLink = "";
-        var link = /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/;
+        var link = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.%]+$/;
         if (fokusLink === null || fokusLink === "") {
             errorLink = "Link SOP  harus diisi";
         } else if(!fokusLink.match(link)){

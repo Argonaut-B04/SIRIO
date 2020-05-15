@@ -266,7 +266,6 @@ class FormUbahKantorCabang extends React.Component {
                         <p variant="success">Kunjungan Audit</p>
                         </OverlayTrigger>,
                         handleChange: this.handleInputChange,
-                        required: true,
                         type: "checkbox",
                         name: "kunjunganAudit",
                         value: this.state.kunjunganAudit,

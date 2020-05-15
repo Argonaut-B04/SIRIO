@@ -145,7 +145,7 @@ public class TugasPemeriksaanRestController {
      *
      * @param tugasPemeriksaanDTO data transfer object untuk tugas pemeriksaan yang akan dihapus
      */
-    @DeleteMapping("/hapus")
+    @PostMapping("/hapus")
     private BaseResponse<String> hapusTugasPemeriksaan(
             @RequestBody TugasPemeriksaanDTO tugasPemeriksaanDTO
     ) {
