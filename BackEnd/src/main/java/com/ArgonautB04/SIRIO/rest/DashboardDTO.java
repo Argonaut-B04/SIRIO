@@ -8,29 +8,14 @@ public class DashboardDTO {
     private Integer jumlahTemuan;
     private Integer jumlahPemeriksaan;
     private Integer jumlahRekomendasi;
-    private Integer jumlahRekomendasiOverdue;
-    private Integer jumlahRekomendasiImplemented;
-    private Integer jumlahRekomendasiNotImplemented;
-    private Float persenRekomendasiOverdue;
-    private Float persenRekomendasiImplemented;
-    private Float persenRekomendasiNotImplemented;
-    private String bulanTahun;
+    private Double jumlahRekomendasiOverdue;
+    private Double jumlahRekomendasiImplemented;
+    private Double jumlahRekomendasiNotImplemented;
     private List<Integer> jumlahTemuanPerBulan;
     private List<Integer> jumlahRekomendasiOverduePerBulan;
     private List<Integer> jumlahRekomendasiImplementedPerBulan;
     private List<Integer> jumlahRekomendasiNotImplementedPerBulan;
-
-//    private Integer id;
-//    private List<Integer> listTemuan;
-//    private Integer jumlahTemuan;
-//    private Integer jumlahRekomendasi;
-//    private List<Integer> listRekomendasiDiimplementasi;
-//    private Float jumlahRekomendasiDiimplementasi;
-//    private List<Integer> listRekomendasiBelumDiimplementasi;
-//    private Float jumlahRekomendasiBelumDiimplementasi;
-//    private List<Integer> listRekomendasiOverdue;
-//    private Float jumlahRekomendasiOverdue;
-//    private List<String> listMonth;
+    private List<String> daftarBulan;
 
     public Integer getId() {
         return id;
@@ -46,13 +31,6 @@ public class DashboardDTO {
 
     public void setRiskScore(Integer riskScore) {
         this.riskScore = riskScore;
-
-//    public List<Integer> getListTemuan() {
-//        return listTemuan;
-//    }
-//
-//    public void setListTemuan(List<Integer> listTemuan) {
-//        this.listTemuan = listTemuan;
     }
 
     public Integer getJumlahTemuan() {
@@ -79,60 +57,28 @@ public class DashboardDTO {
         this.jumlahRekomendasi = jumlahRekomendasi;
     }
 
-    public Integer getJumlahRekomendasiOverdue() {
+    public Double getJumlahRekomendasiOverdue() {
         return jumlahRekomendasiOverdue;
     }
 
-    public void setJumlahRekomendasiOverdue(Integer jumlahRekomendasiOverdue) {
+    public void setJumlahRekomendasiOverdue(Double jumlahRekomendasiOverdue) {
         this.jumlahRekomendasiOverdue = jumlahRekomendasiOverdue;
     }
 
-    public Integer getJumlahRekomendasiImplemented() {
+    public Double getJumlahRekomendasiImplemented() {
         return jumlahRekomendasiImplemented;
     }
 
-    public void setJumlahRekomendasiImplemented(Integer jumlahRekomendasiImplemented) {
+    public void setJumlahRekomendasiImplemented(Double jumlahRekomendasiImplemented) {
         this.jumlahRekomendasiImplemented = jumlahRekomendasiImplemented;
     }
 
-    public Integer getJumlahRekomendasiNotImplemented() {
+    public Double getJumlahRekomendasiNotImplemented() {
         return jumlahRekomendasiNotImplemented;
     }
 
-    public void setJumlahRekomendasiNotImplemented(Integer jumlahRekomendasiNotImplemented) {
+    public void setJumlahRekomendasiNotImplemented(Double jumlahRekomendasiNotImplemented) {
         this.jumlahRekomendasiNotImplemented = jumlahRekomendasiNotImplemented;
-    }
-
-    public Float getPersenRekomendasiOverdue() {
-        return persenRekomendasiOverdue;
-    }
-
-    public void setPersenRekomendasiOverdue(Float persenRekomendasiOverdue) {
-        this.persenRekomendasiOverdue = persenRekomendasiOverdue;
-    }
-
-    public Float getPersenRekomendasiImplemented() {
-        return persenRekomendasiImplemented;
-    }
-
-    public void setPersenRekomendasiImplemented(Float persenRekomendasiImplemented) {
-        this.persenRekomendasiImplemented = persenRekomendasiImplemented;
-    }
-
-    public Float getPersenRekomendasiNotImplemented() {
-        return persenRekomendasiNotImplemented;
-    }
-
-    public void setPersenRekomendasiNotImplemented(Float persenRekomendasiNotImplemented) {
-        this.persenRekomendasiNotImplemented = persenRekomendasiNotImplemented;
-    }
-
-    public String getBulanTahun() {
-        return bulanTahun;
-    }
-
-    public void setBulanTahun(String bulanTahun) {
-        this.bulanTahun = bulanTahun;
     }
 
     public List<Integer> getJumlahTemuanPerBulan() {
@@ -166,61 +112,25 @@ public class DashboardDTO {
     public void setJumlahRekomendasiNotImplementedPerBulan(List<Integer> jumlahRekomendasiNotImplementedPerBulan) {
         this.jumlahRekomendasiNotImplementedPerBulan = jumlahRekomendasiNotImplementedPerBulan;
     }
-}
 
-//    public List<Integer> getListRekomendasiDiimplementasi() {
-//        return listRekomendasiDiimplementasi;
-//    }
-//
-//    public void setListRekomendasiDiimplementasi(List<Integer> listRekomendasiDiimplementasi) {
-//        this.listRekomendasiDiimplementasi = listRekomendasiDiimplementasi;
-//    }
-//
-//    public Float getJumlahRekomendasiDiimplementasi() {
-//        return jumlahRekomendasiDiimplementasi;
-//    }
-//
-//    public void setJumlahRekomendasiDiimplementasi(Float jumlahRekomendasiDiimplementasi) {
-//        this.jumlahRekomendasiDiimplementasi = jumlahRekomendasiDiimplementasi;
-//    }
-//
-//    public List<Integer> getListRekomendasiBelumDiimplementasi() {
-//        return listRekomendasiBelumDiimplementasi;
-//    }
-//
-//    public void setListRekomendasiBelumDiimplementasi(List<Integer> listRekomendasiBelumDiimplementasi) {
-//        this.listRekomendasiBelumDiimplementasi = listRekomendasiBelumDiimplementasi;
-//    }
-//
-//    public Float getJumlahRekomendasiBelumDiimplementasi() {
-//        return jumlahRekomendasiBelumDiimplementasi;
-//    }
-//
-//    public void setJumlahRekomendasiBelumDiimplementasi(Float jumlahRekomendasiBelumDiimplementasi) {
-//        this.jumlahRekomendasiBelumDiimplementasi = jumlahRekomendasiBelumDiimplementasi;
-//    }
-//
-//    public List<Integer> getListRekomendasiOverdue() {
-//        return listRekomendasiOverdue;
-//    }
-//
-//    public void setListRekomendasiOverdue(List<Integer> listRekomendasiOverdue) {
-//        this.listRekomendasiOverdue = listRekomendasiOverdue;
-//    }
-//
-//    public Float getJumlahRekomendasiOverdue() {
-//        return jumlahRekomendasiOverdue;
-//    }
-//
-//    public void setJumlahRekomendasiOverdue(Float jumlahRekomendasiOverdue) {
-//        this.jumlahRekomendasiOverdue = jumlahRekomendasiOverdue;
-//    }
-//
-//    public List<String> getListMonth() {
-//        return listMonth;
-//    }
-//
-//    public void setListMonth(List<String> listMonth) {
-//        this.listMonth = listMonth;
-//    }
-//}
+    public List<String> getDaftarBulan() {
+        return daftarBulan;
+    }
+
+    public void setDaftarBulan(List<String> daftarBulan) {
+        this.daftarBulan = daftarBulan;
+    }
+
+    //    private Integer id;
+//    private List<Integer> listTemuan;
+//    private Integer jumlahTemuan;
+//    private Integer jumlahRekomendasi;
+//    private List<Integer> listRekomendasiDiimplementasi;
+//    private Float jumlahRekomendasiDiimplementasi;
+//    private List<Integer> listRekomendasiBelumDiimplementasi;
+//    private Float jumlahRekomendasiBelumDiimplementasi;
+//    private List<Integer> listRekomendasiOverdue;
+//    private Float jumlahRekomendasiOverdue;
+//    private List<String> listMonth;
+
+}

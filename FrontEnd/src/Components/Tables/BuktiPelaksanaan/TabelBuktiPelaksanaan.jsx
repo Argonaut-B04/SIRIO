@@ -42,6 +42,16 @@ class TabelBuktiPelaksanaan extends React.Component {
         })
     }
 
+    dataFormatter() {
+        const dataRekomendasi = []
+        for (var i in this.state.rowList) {
+            if (this.state.rowList[i].status === "Sedang Dilaksanakan" || this.state.rowList[i].status === "Selesai") {
+                dataRekomendasi.push(this.state.rowList[i]);
+            }
+        }
+        return dataRekomendasi;
+    }
+
     statusFormatter(cell) {
         switch (cell) {
             case "Menunggu Persetujuan":
@@ -234,7 +244,7 @@ class TabelBuktiPelaksanaan extends React.Component {
             <>
                 <SirioTable
                     title="Daftar Bukti Pelaksanaan Rekomendasi"
-                    data={this.state.rowList}
+                    data={this.dataFormatter()}
                     id='id'
                     columnsDefinition={this.getColumns()}
                     includeSearchBar

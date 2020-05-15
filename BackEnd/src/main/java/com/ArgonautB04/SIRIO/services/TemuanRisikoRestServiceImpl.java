@@ -49,8 +49,7 @@ public class TemuanRisikoRestServiceImpl implements TemuanRisikoRestService {
     }
 
     @Override
-    public List<Integer> getAllByMonth() {
-        List<TemuanRisiko> impl = getAll();
+    public List<Integer> getTemuanByMonth(List<TemuanRisiko> temuanRisikoList) {
         List<Integer> intImpl = new ArrayList<>();
         int count6 = 0;
         int count5 = 0;
@@ -58,23 +57,23 @@ public class TemuanRisikoRestServiceImpl implements TemuanRisikoRestService {
         int count3 = 0;
         int count2 = 0;
         int count1 = 0;
-        for (int i=0;i<impl.size();i++) {
-            if (impl.get(i).getKomponenPemeriksaan().getHasilPemeriksaan().getTugasPemeriksaan().getTanggalMulai()
+        for (int i=0;i<temuanRisikoList.size();i++) {
+            if (temuanRisikoList.get(i).getKomponenPemeriksaan().getHasilPemeriksaan().getTugasPemeriksaan().getTanggalMulai()
                     .getMonth().equals(LocalDate.now().getMonth())) {
                 count6++;
-            } else if (impl.get(i).getKomponenPemeriksaan().getHasilPemeriksaan().getTugasPemeriksaan().getTanggalMulai()
+            } else if (temuanRisikoList.get(i).getKomponenPemeriksaan().getHasilPemeriksaan().getTugasPemeriksaan().getTanggalMulai()
                     .getMonth().equals(LocalDate.now().minusMonths(1).getMonth())) {
                 count5++;
-            } else if (impl.get(i).getKomponenPemeriksaan().getHasilPemeriksaan().getTugasPemeriksaan().getTanggalMulai()
+            } else if (temuanRisikoList.get(i).getKomponenPemeriksaan().getHasilPemeriksaan().getTugasPemeriksaan().getTanggalMulai()
                     .getMonth().equals(LocalDate.now().minusMonths(2).getMonth())) {
                 count4++;
-            } else if (impl.get(i).getKomponenPemeriksaan().getHasilPemeriksaan().getTugasPemeriksaan().getTanggalMulai()
+            } else if (temuanRisikoList.get(i).getKomponenPemeriksaan().getHasilPemeriksaan().getTugasPemeriksaan().getTanggalMulai()
                     .getMonth().equals(LocalDate.now().minusMonths(3).getMonth())) {
                 count3++;
-            } else if (impl.get(i).getKomponenPemeriksaan().getHasilPemeriksaan().getTugasPemeriksaan().getTanggalMulai()
+            } else if (temuanRisikoList.get(i).getKomponenPemeriksaan().getHasilPemeriksaan().getTugasPemeriksaan().getTanggalMulai()
                     .getMonth().equals(LocalDate.now().minusMonths(4).getMonth())) {
                 count2++;
-            } else if (impl.get(i).getKomponenPemeriksaan().getHasilPemeriksaan().getTugasPemeriksaan().getTanggalMulai()
+            } else if (temuanRisikoList.get(i).getKomponenPemeriksaan().getHasilPemeriksaan().getTugasPemeriksaan().getTanggalMulai()
                     .getMonth().equals(LocalDate.now().minusMonths(5).getMonth())) {
                 count1++;
             }

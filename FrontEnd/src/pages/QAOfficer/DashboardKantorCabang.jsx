@@ -7,6 +7,7 @@ import SirioDashboardBox from "../../Components/Box/SirioDashboardBox";
 import DashboardService from "../../Services/DashboardService";
 import SirioField from "../../Components/Form/SirioFormComponent/SirioField";
 import SirioForm from "../../Components/Form/SirioForm";
+import AuthenticationService from "../../Services/AuthenticationService";
 
 class DashboardKantorCabang extends React.Component {
 
@@ -17,7 +18,8 @@ class DashboardKantorCabang extends React.Component {
         this.state = {
             preloader: true,
             contentLoading: !PollingService.isConnected(),
-            dashboardComponent: {}
+            dashboardComponent: {},
+            role: AuthenticationService.getRole()
         }
         this.renderDataDashboard = this.renderDataDashboard.bind(this);
     }
@@ -120,10 +122,72 @@ class DashboardKantorCabang extends React.Component {
         )
     }
 
+    getBoxData() {
+        const role = this.state.role;
+        const qaOfficer = role === "QA Officer Operational Risk" || role === "Super QA Officer Operational Risk";
+        const branchManager = role === "Branch Manager";
+
+        if (qaOfficer) {
+            return ([
+                {
+                    title: "Rekomendasi Diimplementasi",
+                    value: <p>{this.state.dashboardComponent.jumlahRekomendasiImplemented}%</p>
+                },
+                {
+                    title: "Rekomendasi Belum Diimplementasi",
+                    value: <p>{this.state.dashboardComponent.jumlahRekomendasiNotImplemented}%</p>
+                },
+                {
+                    title: "Rekomendasi Overdue",
+                    value: <p>{this.state.dashboardComponent.jumlahRekomendasiOverdue}%</p>
+                },
+                {
+                    title: "Jumlah Temuan",
+                    value: <p>{this.state.dashboardComponent.jumlahTemuan}</p>
+                },
+                {
+                    title: "Jumlah Rekomendasi",
+                    value: <p>{this.state.dashboardComponent.jumlahRekomendasi}</p>
+                },
+            ])
+        } else if (branchManager) {
+            return ([
+                {
+                    title: "Rekomendasi Diimplementasi",
+                    value: <p>{this.state.dashboardComponent.jumlahRekomendasiImplemented}%</p>
+                },
+                {
+                    title: "Rekomendasi Belum Diimplementasi",
+                    value: <p>{this.state.dashboardComponent.jumlahRekomendasiNotImplemented}%</p>
+                },
+                {
+                    title: "Rekomendasi Overdue",
+                    value: <p>{this.state.dashboardComponent.jumlahRekomendasiOverdue}%</p>
+                },
+                {
+                    title: "Jumlah Temuan",
+                    value: <p>{this.state.dashboardComponent.jumlahTemuan}</p>
+                },
+                {
+                    title: "Jumlah Rekomendasi",
+                    value: <p>{this.state.dashboardComponent.jumlahRekomendasi}</p>
+                },
+                {
+                    title: "Jumlah Pemeriksaan",
+                    value: <p>{this.state.dashboardComponent.jumlahPemeriksaan}</p>
+                },
+                {
+                    title: "Risk Score",
+                    value: <p>{this.state.dashboardComponent.riskScore}</p>
+                },
+            ])
+        }
+    }
+
     render() {
         const { preloader, contentLoading, loadingBody } = this.state;
         const data = {
-            labels: ['April', 'Mei'],
+            labels: this.state.dashboardComponent.daftarBulan,
             datasets: [
                 {
                     label: 'Jumlah Temuan',
@@ -153,7 +217,7 @@ class DashboardKantorCabang extends React.Component {
                     borderWidth: 1,
                     hoverBackgroundColor: 'rgba(255,99,132,0.4)',
                     hoverBorderColor: 'rgba(255,99,132,1)',
-                    data: [6, 17]
+                    data: this.state.dashboardComponent.jumlahRekomendasiNotImplementedPerBulan
                 },
                 {
                     label: 'Jumlah Rekomendasi Overdue',
@@ -168,30 +232,6 @@ class DashboardKantorCabang extends React.Component {
             ]
         };
 
-        console.log(this.state.dashboardComponent);
-        console.log(this.state.dashboardComponent.jumlahRekomendasi);
-        const boxData = [
-            {
-                title: "Rekomendasi Diimplementasi",
-                value: <p>{this.state.dashboardComponent.persenRekomendasiImplemented}%</p>
-            },
-            {
-                title: "Rekomendasi Belum Diimplementasi",
-                value: <p>{this.state.dashboardComponent.persenRekomendasiNotImplemented}%</p>
-            },
-            {
-                title: "Rekomendasi Overdue",
-                value: <p>{this.state.dashboardComponent.persenRekomendasiOverdue}%</p>
-            },
-            {
-                title: "Jumlah Temuan",
-                value: <p>{this.state.dashboardComponent.jumlahTemuan}</p>
-            },
-            {
-                title: "Jumlah Rekomendasi",
-                value: <p>{this.state.dashboardComponent.jumlahRekomendasi}</p>
-            },
-        ]
         return (
             <SirioMainLayout preloader={preloader} contentLoading={contentLoading} loadingBody={loadingBody} active={!contentLoading}>
                 {/* <div>
@@ -209,7 +249,7 @@ class DashboardKantorCabang extends React.Component {
                 </div>
 
                 <div>
-                    <SirioDashboardBox data={boxData} />
+                    <SirioDashboardBox data={this.getBoxData()} />
                 </div>
             </SirioMainLayout>
         )

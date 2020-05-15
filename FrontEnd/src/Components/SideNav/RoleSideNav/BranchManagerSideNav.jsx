@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import SideNavFramework from '../SideNavFramework';
-import { halamanUtama, buktiRekomendasi, dashboard, profilKC } from '../../../Configuration/UrlConfig';
+import { halamanUtama, buktiRekomendasi, dashboardKantorCabang, profilKC } from '../../../Configuration/UrlConfig';
 
 /**
  * Komponen SideNav untuk Branch Manager
@@ -14,7 +14,7 @@ export default class BranchManagerSideNav extends Component {
                     [
                         halamanUtama,
                         buktiRekomendasi,
-                        dashboard,
+                        dashboardKantorCabang,
                         profilKC
                     ]
                 }
