@@ -191,42 +191,42 @@ class DashboardKantorCabang extends React.Component {
             datasets: [
                 {
                     label: 'Jumlah Temuan',
-                    backgroundColor: 'rgba(251, 251, 181, 0.6)',
-                    borderColor: 'rgba(244, 244, 35, 0.96)',
                     stack: 'Stack 0',
                     borderWidth: 1,
-                    hoverBackgroundColor: 'rgba(252, 252, 7, 0.6)',
-                    hoverBorderColor: 'rgba(234, 234, 46, 0.96)',
+                    backgroundColor: '#7F3F98',
+                    borderColor: '#7F3F98',
+                    hoverBackgroundColor: '#a665bf',
+                    hoverBorderColor: '#7F3F98',
                     data: this.state.dashboardComponent.jumlahTemuanPerBulan
                 },
                 {
                     label: 'Jumlah Rekomendasi Diimplementasi',
-                    backgroundColor: 'rgba(34, 245, 34, 0.3)',
-                    borderColor: 'rgba(46, 234, 46, 0.96)',
                     stack: 'Stack 1',
                     borderWidth: 1,
-                    hoverBackgroundColor: 'rgba(34, 245, 34, 0.96)',
-                    hoverBorderColor: 'rgba(46, 234, 46, 0.96)',
+                    backgroundColor: '#5DBCD2',
+                    borderColor: '#5DBCD2',
+                    hoverBackgroundColor: '#99d5e3',
+                    hoverBorderColor: '#5DBCD2',
                     data: this.state.dashboardComponent.jumlahRekomendasiImplementedPerBulan
                 },
                 {
                     label: 'Jumlah Rekomendasi Belum Diimplementasi',
                     stack: 'Stack 1',
-                    backgroundColor: 'rgba(255,99,132,0.3)',
-                    borderColor: 'rgba(255,99,132,1)',
                     borderWidth: 1,
-                    hoverBackgroundColor: 'rgba(255,99,132,0.4)',
-                    hoverBorderColor: 'rgba(255,99,132,1)',
+                    backgroundColor: '#6FCF97',
+                    borderColor: '#6FCF97',
+                    hoverBackgroundColor: '#a8e2c0',
+                    hoverBorderColor: '#6FCF97',
                     data: this.state.dashboardComponent.jumlahRekomendasiNotImplementedPerBulan
                 },
                 {
                     label: 'Jumlah Rekomendasi Overdue',
                     stack: 'Stack 1',
-                    backgroundColor: 'rgba(44, 130, 201, 0.4)',
-                    borderColor: 'rgba(44, 130, 201, 1)',
                     borderWidth: 1,
-                    hoverBackgroundColor: 'rgba(44, 130, 201, 0.4)',
-                    hoverBorderColor: 'rgba(44, 130, 201, 1)',
+                    backgroundColor: '#F2C94C',
+                    borderColor: '#F2C94C',
+                    hoverBackgroundColor: '#f7df93',
+                    hoverBorderColor: '#F2C94C',
                     data: this.state.dashboardComponent.jumlahRekomendasiOverduePerBulan
                 }
             ]
