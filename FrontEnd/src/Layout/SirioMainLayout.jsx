@@ -48,11 +48,13 @@ export default class SirioMainLayout extends Component {
         // Untuk menampilkan, navigasi apa yang harus ditampilkan
         var targetClass = classes.mainContent;
         var topbar = classes.topbar;
-        if (this.props.active ? (this.props.active && this.state.showing) : this.state.showing) {
+
+        if (this.props.transparent) {
+            targetClass = classes.mainContentTransparent;
+            topbar = [topbar, classes.hiddenBar].join(" ");
+        } else if (this.props.active ? (this.props.active && this.state.showing) : this.state.showing) {
             targetClass = [targetClass, classes.show].join(" ");
             topbar = [topbar, classes.hiddenBar].join(" ");
-        } else if (this.props.transparent) {
-            targetClass = classes.mainContentTransparent;
         }
 
         const shouldShow = this.props.active ? (this.props.active && this.state.showing) : this.state.showing;
