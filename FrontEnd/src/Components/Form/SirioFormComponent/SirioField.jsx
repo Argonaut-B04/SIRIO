@@ -32,7 +32,7 @@ export default class SirioField extends Component {
     // Sesegera mungkin, shouldComponentUpdate harus dibuka (tapi gak sekarang juga);
     shouldComponentUpdate(nextprops, nextstate) {
 
-        if (this.props.type === "select") {
+        if (this.props.type === "select" || this.props.type === "date") {
             return true;
         };
 
