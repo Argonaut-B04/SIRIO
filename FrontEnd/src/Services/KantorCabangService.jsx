@@ -17,6 +17,10 @@ class KantorCabangService {
         return this.axiosInstance.get(SirioAxiosBase.BASEURL + `/KantorCabang/` + id);
     }
 
+    async getKantorCabang() {
+        return this.axiosInstance.get(SirioAxiosBase.BASEURL + `/KantorCabang/pemilik/`);
+    }
+
     async addKantorCabang(data) {
         return this.axiosInstance.post(SirioAxiosBase.BASEURL + `/KantorCabang/tambah`, data);
     }

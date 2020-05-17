@@ -55,7 +55,7 @@ export default class FormTambahRencana extends React.Component {
     renderRedirect = () => {
         if (this.state.redirect) {
             return <Redirect to={{
-                pathname: "/manager/rencanaPemeriksaan",
+                pathname: "rencanaPemeriksaan",
                 state: {
                     addSuccess: true
                 }
@@ -334,6 +334,7 @@ export default class FormTambahRencana extends React.Component {
                     index: index,
                     type: "date",
                     min: this.getMin(index),
+                    disable: this.state.daftarTugasPemeriksaan[index].tanggalMulai == "",
                     required: true,
                     name: "tanggalSelesai",
                     value: this.state.daftarTugasPemeriksaan[index].tanggalSelesai
@@ -395,7 +396,7 @@ export default class FormTambahRencana extends React.Component {
                 {tombolDraft}
                 <SirioButton purple
                     classes="mx-1"
-                    onClick={() => window.location.href = "/manager/rencanaPemeriksaan"}>
+                    onClick={() => window.location.href = "/rencanaPemeriksaan"}>
                     Batal
                 </SirioButton>
             </div>

@@ -8,7 +8,7 @@ import TugasPemeriksaanService from '../../../Services/TugasPemeriksaanService';
 import { NavLink, Redirect } from 'react-router-dom';
 import { withRouter } from 'react-router-dom';
 import RencanaPemeriksaanService from '../../../Services/RencanaPemeriksaanService';
-
+import moment from 'moment';
 
 /**
  * Kelas untuk membuat form demo
@@ -59,7 +59,7 @@ class FormUbahRencana extends React.Component {
     renderRedirect = () => {
         if (this.state.redirect) {
             return <Redirect to={{
-                pathname: "/manager/rencanaPemeriksaan",
+                pathname: "/rencanaPemeriksaan",
                 state: {
                     editSuccess: true
                 }
@@ -89,7 +89,6 @@ class FormUbahRencana extends React.Component {
                 }
             )
         });
-
 
         const response = await RencanaPemeriksaanService.getRencanaPemeriksaanDetail(this.props.location.state.id);
         const result = response.data.result;
@@ -347,12 +346,20 @@ class FormUbahRencana extends React.Component {
                     type: "date",
                     required: true,
                     validation: this.state.errorTM,
+                    min: this.getMin(index),
                     name: "tanggalSelesai",
                     value: this.state.daftarTugasPemeriksaan[index].tanggalSelesai
                 }
 
             ]
         )
+    }
+
+    getMin(index) {
+        var dateToAdd = this.state.daftarTugasPemeriksaan[index].tanggalMulai;
+        var date = new Date(dateToAdd);
+        var after = moment(date).add(1, 'days').format('YYYY[-]MM[-]DD');
+        return after;
     }
 
     submitButton() {
@@ -399,7 +406,7 @@ class FormUbahRencana extends React.Component {
                 {tombolJalankan}
                 {tombolDraft}
                 <NavLink to={{
-                    pathname: "/manager/rencanaPemeriksaan/detail",
+                    pathname: "/rencanaPemeriksaan/detail",
                     state: {
                         id: this.props.location.state.id
                     }

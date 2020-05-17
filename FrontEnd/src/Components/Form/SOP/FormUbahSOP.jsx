@@ -99,7 +99,7 @@ class FormUbahSOP extends React.Component {
     renderRedirect = () => {
         if (this.state.redirect) {
             return <Redirect to={{
-                pathname: "/manager/sop",
+                pathname: "/sop",
                 state: {
                     editSuccess: true
                 }
@@ -235,7 +235,7 @@ class FormUbahSOP extends React.Component {
             <div>
                 {tombolSimpan}
                 <NavLink to={{
-                    pathname: "/manager/sop/detail",
+                    pathname: "/sop/detail",
                     state: {
                         id: this.props.location.state.id
                     }

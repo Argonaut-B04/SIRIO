@@ -35,7 +35,7 @@ class DetailSOP extends React.Component {
     renderRedirect = () => {
         if (this.state.redirect) {
             return <Redirect to={{
-                pathname: "/manager/sop",
+                pathname: "/sop",
                 state: {
                     deleteSuccess: true
                 }
@@ -69,7 +69,7 @@ class DetailSOP extends React.Component {
         return (
             <div>
                 <NavLink to={{
-                    pathname: "/manager/sop/ubah",
+                    pathname: "/sop/ubah",
                     state: {
                         id: this.state.sop.idSop,
                     }
@@ -105,7 +105,7 @@ class DetailSOP extends React.Component {
                     data={this.state.dataGeneral}
                     id='id'
                     subButton={this.subButton(this.state.sop.status)}
-                    link="manager/sop"
+                    link="sop"
                 />
             </>
         );

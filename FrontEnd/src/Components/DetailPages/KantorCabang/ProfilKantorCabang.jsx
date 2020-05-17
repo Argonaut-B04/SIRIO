@@ -54,7 +54,8 @@ class DetailKantorCabang extends React.Component {
     }
 
     async renderDataKantor() {
-        const response = await KantorCabangService.getKantorCabangDetail(this.props.location.state.id);
+        const response = await KantorCabangService.getKantorCabang();
+        console.log(this.state.role.id)
 
         this.setState({
            kantorCabang: response.data.result,

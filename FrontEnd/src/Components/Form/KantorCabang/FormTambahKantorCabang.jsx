@@ -5,7 +5,8 @@ import KantorCabangService from '../../../Services/KantorCabangService';
 import EmployeeService from '../../../Services/EmployeeService';
 import { Redirect } from 'react-router-dom';
 import { withRouter } from 'react-router-dom';
-import {OverlayTrigger, Tooltip} from 'react-bootstrap'
+import {OverlayTrigger, Tooltip} from 'react-bootstrap';
+
 
 class FormTambahKantorCabang extends React.Component {
 
@@ -89,6 +90,7 @@ class FormTambahKantorCabang extends React.Component {
        
     }
 
+    
     submitable() {
         return this.state.errorNama === "" &&
             this.state.errorArea === "" &&
@@ -108,7 +110,7 @@ class FormTambahKantorCabang extends React.Component {
     renderRedirect = () => {
         if (this.state.redirect) {
             return <Redirect to={{
-                pathname: "/administrator/kantorCabang",
+                pathname: "/kantorCabang",
                 state: {
                     addSuccess: true
                 }
@@ -299,7 +301,7 @@ class FormTambahKantorCabang extends React.Component {
                 {tombolSimpan}
                 <SirioButton purple
                     classes="mx-1"
-                    onClick={() => window.location.href = "/administrator/kantorCabang"}>
+                    onClick={() => window.location.href = "/kantorCabang"}>
                     Batal
                 </SirioButton>
             </div>

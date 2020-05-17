@@ -111,7 +111,7 @@ class FormUbahKantorCabang extends React.Component {
     renderRedirect = () => {
         if (this.state.redirect) {
             return <Redirect to={{
-                pathname: "/administrator/kantorCabang",
+                pathname: "/kantorCabang",
                 state: {
                     editSuccess: true
                 }
@@ -303,7 +303,7 @@ class FormUbahKantorCabang extends React.Component {
             <div>
                 {tombolSimpan}
                 <NavLink to={{
-                    pathname: "/administrator/kantorCabang/detail",
+                    pathname: "/kantorCabang/detail",
                     state: {
                         id: this.props.location.state.id
                     }

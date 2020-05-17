@@ -93,7 +93,7 @@ class FormTambahSOP extends React.Component {
     renderRedirect = () => {
         if (this.state.redirect) {
             return <Redirect to={{
-                pathname: "/manager/sop",
+                pathname: "/sop",
                 state: {
                     addSuccess: true
                 }
@@ -220,7 +220,7 @@ class FormTambahSOP extends React.Component {
                 {tombolSimpan}
                 <SirioButton purple
                     classes="mx-1"
-                    onClick={() => window.location.href = "/manager/sop"}>
+                    onClick={() => window.location.href = "/sop"}>
                     Batal
                 </SirioButton>
             </div>

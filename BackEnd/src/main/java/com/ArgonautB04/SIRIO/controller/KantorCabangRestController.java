@@ -70,6 +70,20 @@ public class KantorCabangRestController {
     }
 
     /**
+     * Mengambil suatu kantor cabang
+     *
+     * @return detail kantor cabang
+     */
+    @GetMapping("/pemilik")
+    private BaseResponse<KantorCabang> getKantorCabangbyPemilik(
+            Principal principal
+    ) {
+        BaseResponse<KantorCabang> response = new BaseResponse<>();
+        KantorCabang result = kantorCabangRestService.getByPemilik(employeeRestService.validateEmployeeExistByPrincipal(principal));
+        return new BaseResponse<>(200, "success", result);
+    }
+
+    /**
      * Menambah kantor cabang baru
      *
      * @param principal

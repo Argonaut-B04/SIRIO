@@ -80,7 +80,7 @@ class TabelSOP extends React.Component {
     headerButton() {
         return (
             <NavLink to={{
-                pathname: "/manager/sop/tambah"
+                pathname: "/sop/tambah"
             }}>
                 <SirioButton
                     purple recommended
@@ -94,7 +94,7 @@ class TabelSOP extends React.Component {
     getButtonsFirst(cell, row) {
         return (
             <NavLink to={{
-                pathname: "/manager/sop/detail",
+                pathname: "/sop/detail",
                 state: {
                     id: row.idSop
                 }
