@@ -6,6 +6,7 @@ import EmployeeService from '../../../Services/EmployeeService';
 import KantorCabangService from '../../../Services/KantorCabangService';
 import { Redirect } from 'react-router-dom';
 import RencanaPemeriksaanService from '../../../Services/RencanaPemeriksaanService';
+import moment from 'moment';
 
 export default class FormTambahRencana extends React.Component {
 
@@ -332,7 +333,7 @@ export default class FormTambahRencana extends React.Component {
                     handleChange: this.handleSelectChange,
                     index: index,
                     type: "date",
-                    min: this.state.daftarTugasPemeriksaan[index].tanggalMulai,
+                    min: this.getMin(index),
                     required: true,
                     name: "tanggalSelesai",
                     value: this.state.daftarTugasPemeriksaan[index].tanggalSelesai
@@ -340,6 +341,13 @@ export default class FormTambahRencana extends React.Component {
 
             ]
         )
+    }
+
+    getMin(index) {
+        var dateToAdd = this.state.daftarTugasPemeriksaan[index].tanggalMulai;
+        var date = new Date(dateToAdd);
+        var after = moment(date).add(1, 'days').format('YYYY[-]MM[-]DD');
+        return after;
     }
 
     submitButton() {
