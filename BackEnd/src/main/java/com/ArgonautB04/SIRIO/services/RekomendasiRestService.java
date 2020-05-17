@@ -18,25 +18,29 @@ public interface RekomendasiRestService {
 
     List<Rekomendasi> getAll();
 
+    List<Rekomendasi> getAll(LocalDate tanggalAwal, LocalDate tanggalAkhir);
+
     List<Rekomendasi> getByPembuat(int idQa);
+
+    List<Rekomendasi> getByPembuat(int idQa, LocalDate tanggalAwal, LocalDate tanggalAkhir);
 
 //    List<Integer> getAllByMonth();
 
-    List<Integer> getRekomendasiByMonth(List<Rekomendasi> rekomendasiList);
+    List<Integer> getRekomendasiByMonth(List<Rekomendasi> rekomendasiList, LocalDate tanggalAwal, LocalDate tanggalAkhir);
 
-    List<Rekomendasi> getRekomendasiDiimplementasi();
+    List<Rekomendasi> getRekomendasiDiimplementasi(LocalDate tanggalAwal, LocalDate tanggalAkhir);
 
-    List<Rekomendasi> getRekomendasiDiimplementasiByPembuat(int idQa);
+    List<Rekomendasi> getRekomendasiDiimplementasiByPembuat(int idQa, LocalDate tanggalAwal, LocalDate tanggalAkhir);
 
-    List<Rekomendasi> getRekomendasiOverdue();
+    List<Rekomendasi> getRekomendasiOverdue(LocalDate tanggalAwal, LocalDate tanggalAkhir);
 
-    List<Rekomendasi> getRekomendasiOverdueByPembuat(int idQa);
+    List<Rekomendasi> getRekomendasiOverdueByPembuat(int idQa, LocalDate tanggalAwal, LocalDate tanggalAkhir);
 
-    List<Rekomendasi> getRekomendasiBelumDiimplementasi();
+    List<Rekomendasi> getRekomendasiBelumDiimplementasi(LocalDate tanggalAwal, LocalDate tanggalAkhir);
 
-    List<Rekomendasi> getRekomendasiBelumDiimplementasiByPembuat(int idQa);
+    List<Rekomendasi> getRekomendasiBelumDiimplementasiByPembuat(int idQa, LocalDate tanggalAwal, LocalDate tanggalAkhir);
 
-    List<String> getListMonth();
+    List<String> getListMonth(LocalDate tanggalAwal, LocalDate tanggalAkhir);
 
     List<Rekomendasi> getByKomponenPemeriksaan(KomponenPemeriksaan komponenPemeriksaan);
   

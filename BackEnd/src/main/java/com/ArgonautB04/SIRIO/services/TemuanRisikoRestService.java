@@ -2,6 +2,7 @@ package com.ArgonautB04.SIRIO.services;
 
 import com.ArgonautB04.SIRIO.model.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface TemuanRisikoRestService {
@@ -11,11 +12,15 @@ public interface TemuanRisikoRestService {
 
     List<TemuanRisiko> getAll();
 
+    List<TemuanRisiko> getAll(LocalDate tanggalAwal, LocalDate tanggalAkhir);
+
     List<TemuanRisiko> getByPembuat(int idQa);
 
-    List<Integer> getAllByMonth();
+    List<TemuanRisiko> getByPembuat(int idQa, LocalDate tanggalAwal, LocalDate tanggalAkhir);
 
-    List<Integer> getByPembuatByMonth(int idQa);
+    List<Integer> getAllByMonth(LocalDate tanggalAwal, LocalDate tanggalAkhir);
+
+    List<Integer> getByPembuatByMonth(int idQa, LocalDate tanggalAwal, LocalDate tanggalAkhir);
 
     List<TemuanRisiko> getByKomponenPemeriksaan(KomponenPemeriksaan komponenPemeriksaan);
 
