@@ -255,14 +255,20 @@ export default class SirioField extends Component {
 
             return (
                 <fieldset>
-                    <div className="row">
-                        <div className="col-3">
-                            {label}
-                        </div>
-                        <div className={"col-9"}>
-                            {field}
-                        </div>
-                    </div>
+                    {
+                        label
+                            ?
+                            <div className="row">
+                                <div className="col-3">
+                                    {label}
+                                </div>
+                                <div className={"col-9"}>
+                                    {field}
+                                </div>
+                            </div>
+                            :
+                        field
+                    }
                 </fieldset>
             )
         }
