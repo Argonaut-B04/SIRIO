@@ -205,6 +205,7 @@ class DashboardStaff extends React.Component {
                             handleChange={this.handleChange}
                             disabled={this.state.tanggalAwal === ""}
                             classes="p-1"
+                            min={this.state.tanggalAwal}
                             required={this.state.tanggalAwal !== ""}
                             name="tanggalAkhir"
                             value={this.state.tanggalAkhir}
@@ -286,6 +287,11 @@ class DashboardStaff extends React.Component {
 
     handleChange(event) {
         const { name, value } = event.target;
+        if (name === "tanggalAwal") {
+            this.setState({
+                tanggalAkhir: ""
+            })
+        }
         this.setState(
             {
                 [name]
