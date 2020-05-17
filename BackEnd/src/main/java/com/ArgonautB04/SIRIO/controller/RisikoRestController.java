@@ -47,7 +47,6 @@ public class RisikoRestController {
         Risiko risikoTemp = risikoRestService.transformasidto(new Risiko(), risikoDTO);
 
         Risiko risiko = risikoRestService.buatRisiko(risikoTemp);
-
         return new BaseResponse<>(200, "success", risiko);
     }
 
