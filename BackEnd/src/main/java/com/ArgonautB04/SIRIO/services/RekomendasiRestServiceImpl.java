@@ -5,6 +5,7 @@ import com.ArgonautB04.SIRIO.model.KomponenPemeriksaan;
 import com.ArgonautB04.SIRIO.model.Rekomendasi;
 import com.ArgonautB04.SIRIO.repository.RekomendasiDB;
 import com.ArgonautB04.SIRIO.repository.StatusRekomendasiDB;
+import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -145,6 +147,12 @@ public class RekomendasiRestServiceImpl implements RekomendasiRestService {
     }
 
     @Override
+    public int countByDate(LocalDate batasBawah) {
+        LocalDate batasAtas = batasBawah.plusMonths(1);
+        return rekomendasiDB.countAllByTenggatWaktuGreaterThanEqualAndTenggatWaktuLessThan(batasBawah, batasAtas);
+    }
+
+    @Override
     public List<Rekomendasi> getRekomendasiBelumDiimplementasi() {
         List<Rekomendasi> belumImpl = new ArrayList<>();
         for (Rekomendasi r : getAll()) {
@@ -166,6 +174,16 @@ public class RekomendasiRestServiceImpl implements RekomendasiRestService {
         List<String> months = new ArrayList<>(6);
         for (int i=5;i>=0;i--) {
             months.add(LocalDate.now().minusMonths(i).getMonth() + "\n" + LocalDate.now().minusMonths(i).getYear());
+        }
+        return months;
+    }
+
+    @Override
+    public List<String> getListMonthFiltered(LocalDate tanggalAwal, LocalDate tanggalAkhir) {
+        int monthsBetween = (int) ChronoUnit.MONTHS.between(tanggalAwal, tanggalAkhir);
+        List<String> months = new ArrayList<>();
+        for (int i = (monthsBetween-1); i >= 0; i--) {
+            months.add(tanggalAkhir.minusMonths(i).getMonth() + "\n" + tanggalAkhir.minusMonths(i).getYear());
         }
         return months;
     }

@@ -279,11 +279,6 @@ public class DashboardController {
 
         result.setDaftarBulan(rekomendasiRestService.getListMonth());
 
-//        String namaKantor = "";
-//        Optional<KantorCabang> kantorCabang = kantorCabangRestService.getByNama(namaKantor);
-//        daftarTugasPemeriksaan = tugasPemeriksaanRestService.getByKantorCabang(kantorCabang.get());
-//        List<HasilPemeriksaan> daftarHasilPemeriksaan = hasilPemeriksaanRestService.getByDaftarTugasPemeriksaan(daftarTugasPemeriksaan);
-
         return new BaseResponse<>(200, "success", result);
     }
 
@@ -292,7 +287,7 @@ public class DashboardController {
         return Math.round(value * scale) / scale;
     }
 
-    @GetMapping("/getAll")
+    @GetMapping("/getAllByFilter")
     private BaseResponse<DashboardDTO> getDashboardComponentByFilter(
             @RequestParam("namaKantor") String namaKantor,
             @RequestParam("areaKantor") String areaKantor,
@@ -308,23 +303,33 @@ public class DashboardController {
         List<TemuanRisiko> daftarTemuanRisiko;
         List<TugasPemeriksaan> daftarTugasPemeriksaan;
         List<KomponenPemeriksaan> daftarKomponenPemeriksaan;
-        if (role.getNamaRole().equals("Branch Manager")) {
-            KantorCabang kantorCabang =
-                    kantorCabangRestService.getByPemilik(employee);
+        if (!namaKantor.isEmpty()) {
+            Optional<KantorCabang> kantorCabang =
+                    kantorCabangRestService.getByNama(namaKantor);
             daftarTugasPemeriksaan =
-                    tugasPemeriksaanRestService.getByKantorCabang(kantorCabang);
-            List<HasilPemeriksaan> daftarHasilPemeriksaan =
-                    hasilPemeriksaanRestService.getByDaftarTugasPemeriksaan(daftarTugasPemeriksaan);
-            daftarKomponenPemeriksaan =
-                    komponenPemeriksaanRestService.getByDaftarHasilPemeriksaan(daftarHasilPemeriksaan);
-            daftarRekomendasi = rekomendasiRestService.getByDaftarKomponenPemeriksaan(daftarKomponenPemeriksaan);
-            daftarTemuanRisiko = temuanRisikoRestService.getByDaftarKomponenPemeriksaan(daftarKomponenPemeriksaan);
+                    tugasPemeriksaanRestService.getByKantorCabang(kantorCabang.get());
+        } else if (!areaKantor.isEmpty() && !regionalKantor.isEmpty()) {
+            List<KantorCabang> daftarKantorCabang =
+                    kantorCabangRestService.getByAreaAndRegional(areaKantor, regionalKantor);
+            daftarTugasPemeriksaan =
+                    tugasPemeriksaanRestService.getByDaftarKantorCabang(daftarKantorCabang);
+        } else if (!areaKantor.isEmpty()) {
+            List<KantorCabang> daftarKantorCabang =
+                    kantorCabangRestService.getByArea(areaKantor);
+            daftarTugasPemeriksaan =
+                    tugasPemeriksaanRestService.getByDaftarKantorCabang(daftarKantorCabang);
         } else {
-            daftarRekomendasi = rekomendasiRestService.getAll();
-            daftarTemuanRisiko = temuanRisikoRestService.getAll();
-            daftarTugasPemeriksaan = tugasPemeriksaanRestService.getAll();
-            daftarKomponenPemeriksaan = komponenPemeriksaanRestService.getAll();
+            List<KantorCabang> daftarKantorCabang =
+                    kantorCabangRestService.getByRegional(regionalKantor);
+            daftarTugasPemeriksaan =
+                    tugasPemeriksaanRestService.getByDaftarKantorCabang(daftarKantorCabang);
         }
+        List<HasilPemeriksaan> daftarHasilPemeriksaan =
+                hasilPemeriksaanRestService.getByDaftarTugasPemeriksaan(daftarTugasPemeriksaan);
+        daftarKomponenPemeriksaan =
+                komponenPemeriksaanRestService.getByDaftarHasilPemeriksaan(daftarHasilPemeriksaan);
+        daftarRekomendasi = rekomendasiRestService.getByDaftarKomponenPemeriksaan(daftarKomponenPemeriksaan);
+        daftarTemuanRisiko = temuanRisikoRestService.getByDaftarKomponenPemeriksaan(daftarKomponenPemeriksaan);
 
         DashboardDTO result = new DashboardDTO();
         result.setJumlahPemeriksaan(daftarTugasPemeriksaan.size());
@@ -383,11 +388,6 @@ public class DashboardController {
         result.setRiskScore(riskScore);
 
         result.setDaftarBulan(rekomendasiRestService.getListMonth());
-
-//        String namaKantor = "";
-//        Optional<KantorCabang> kantorCabang = kantorCabangRestService.getByNama(namaKantor);
-//        daftarTugasPemeriksaan = tugasPemeriksaanRestService.getByKantorCabang(kantorCabang.get());
-//        List<HasilPemeriksaan> daftarHasilPemeriksaan = hasilPemeriksaanRestService.getByDaftarTugasPemeriksaan(daftarTugasPemeriksaan);
 
         return new BaseResponse<>(200, "success", result);
     }

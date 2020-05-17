@@ -17,6 +17,10 @@ public interface KantorCabangRestService {
 
     List<KantorCabang> getByArea(String area);
 
+    List<KantorCabang> getByRegional(String regional);
+
+    List<KantorCabang> getByAreaAndRegional(String area, String regional);
+
     KantorCabang nonaktifkanKantor(int idKantor);
 
     KantorCabang aktifkanKantor(int idKantor);

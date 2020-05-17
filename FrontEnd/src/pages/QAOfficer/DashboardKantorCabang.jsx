@@ -167,25 +167,19 @@ class DashboardKantorCabang extends React.Component {
     handleSubmit(event) {
         event.preventDefault();
         const filter = {
-            areaKantor: this.state.areaKantor
+            namaKantor: this.state.namaKantor,
+            areaKantor: this.state.areaKantor,
+            regionalKantor: this.state.regionalKantor
         };
-        DashboardService.getAllComponent(filter)
-            .then(() => this.setRedirect());
+        DashboardService.getAllComponentByFilter(filter)
+            .then((response) => 
+            this.setState({
+                dashboardComponent: response.data.result,
+                namaKantor: "",
+                areaKantor: "",
+                regionalKantor: ""
+            }));
     }
-
-    setRedirect = () => {
-        this.setState({
-            redirect: true
-        })
-    };
-
-    renderRedirect = () => {
-        if (this.state.redirect) {
-            return <Redirect to={{
-                pathname: "/dashboard-kantor"
-            }} />
-        }
-    };
 
     getBetween() {
         return (
@@ -201,7 +195,7 @@ class DashboardKantorCabang extends React.Component {
                     />
                 </div>
                 <div className="col-md-1 pl-0">
-                    {!this.state.namaChanged &&
+                    {this.state.namaChanged ? <h5>{this.state.areaKantorList}</h5> :
                     <SirioField
                         type="select"
                         handleChange={this.handleSelectChange}
@@ -213,7 +207,7 @@ class DashboardKantorCabang extends React.Component {
                     }
                 </div>
                 <div className="col-md-1 pl-0">
-                    {!this.state.namaChanged &&
+                    {this.state.namaChanged ? <h5>{this.state.regionalKantorList}</h5> :
                     <SirioField
                         type="select"
                         handleChange={this.handleSelectChange}
@@ -224,7 +218,7 @@ class DashboardKantorCabang extends React.Component {
                     />
                     }
                 </div>
-                <div className="col-md-1 pl-0">
+                <div className="col-md-6 pl-0">
                     <SirioField
                         type="date"
                         handleChange={this.handleChange}
@@ -233,7 +227,7 @@ class DashboardKantorCabang extends React.Component {
                         value={this.state.tanggalAwal}
                     />
                 </div>
-                <div className="col-md-1 pl-0">
+                <div className="col-md-6 pl-0">
                     <SirioField
                         type="date"
                         handleChange={this.handleChange}
@@ -245,112 +239,6 @@ class DashboardKantorCabang extends React.Component {
             </>
         )
     }
-
-    // inputDefinition() {
-    //     return ([
-    //         {
-    //             handleChange: this.handleSelectChange,
-    //             type: "select",
-    //             name: "namaKantor",
-    //             value: this.state.namaKantor,
-    //             required: true,
-    //             optionList: this.state.namaKantorList
-    //         }, {
-    //             label: "Semua Area",
-    //             handleChange: this.handleSelectChange,
-    //             type: "select",
-    //             name: "areaKantor",
-    //             value: this.state.areaKantor,
-    //             required: true,
-    //             optionList: this.state.areaKantorList
-    //         }, {
-    //             label: "Semua Regional",
-    //             handleChange: this.handleSelectChange,
-    //             type: "select",
-    //             name: "regionalKantor",
-    //             value: this.state.regionalKantor,
-    //             required: true,
-    //             optionList: this.state.regionalKantorList
-    //         }
-    //     ])
-    // }
-
-    // getBoxData() {
-    //     const role = this.state.role;
-    //     const qaOfficer = role === "QA Officer Operational Risk" || role === "Super QA Officer Operational Risk";
-    //     const branchManager = role === "Branch Manager";
-
-    //     if (qaOfficer) {
-    //         return ([
-    //             {
-    //                 title: "Rekomendasi Diimplementasi",
-    //                 value: <p>{this.state.dashboardComponent.jumlahRekomendasiImplemented}%</p>
-    //             },
-    //             {
-    //                 title: "Rekomendasi Belum Diimplementasi",
-    //                 value: <p>{this.state.dashboardComponent.jumlahRekomendasiNotImplemented}%</p>
-    //             },
-    //             {
-    //                 title: "Rekomendasi Overdue",
-    //                 value: <p>{this.state.dashboardComponent.jumlahRekomendasiOverdue}%</p>
-    //             },
-    //             {
-    //                 title: "Jumlah Temuan",
-    //                 value: <p>{this.state.dashboardComponent.jumlahTemuan}</p>
-    //             },
-    //             {
-    //                 title: "Jumlah Rekomendasi",
-    //                 value: <p>{this.state.dashboardComponent.jumlahRekomendasi}</p>
-    //             },
-    //         ])
-    //     } else if (branchManager) {
-    //         return ([
-    //             {
-    //                 title: "Rekomendasi Diimplementasi",
-    //                 value: <p>{this.state.dashboardComponent.jumlahRekomendasiImplemented}%</p>
-    //             },
-    //             {
-    //                 title: "Rekomendasi Belum Diimplementasi",
-    //                 value: <p>{this.state.dashboardComponent.jumlahRekomendasiNotImplemented}%</p>
-    //             },
-    //             {
-    //                 title: "Rekomendasi Overdue",
-    //                 value: <p>{this.state.dashboardComponent.jumlahRekomendasiOverdue}%</p>
-    //             },
-    //             {
-    //                 title: "Jumlah Temuan",
-    //                 value: <p>{this.state.dashboardComponent.jumlahTemuan}</p>
-    //             },
-    //             {
-    //                 title: "Jumlah Rekomendasi",
-    //                 value: <p>{this.state.dashboardComponent.jumlahRekomendasi}</p>
-    //             },
-    //             {
-    //                 title: "Jumlah Pemeriksaan",
-    //                 value: <p>{this.state.dashboardComponent.jumlahPemeriksaan}</p>
-    //             },
-    //             {
-    //                 title: "Risk Score",
-    //                 value: <p>{this.state.dashboardComponent.riskScore}</p>
-    //             },
-    //         ])
-    //     }
-    // }
-
-    // getButton() {
-    //     return (
-    //         <div>
-    //             <SirioButton
-    //                 purple
-    //                 recommended
-    //                 classes="mx-2"
-    //                 onClick={(event) => this.handleSubmit(event)}
-    //             >
-    //                 Simpan
-    //             </SirioButton>
-    //         </div>
-    //     )
-    // }
 
     getChart() {
         return({
@@ -400,6 +288,64 @@ class DashboardKantorCabang extends React.Component {
         })
     }
 
+    getBoxFirst() {
+        return([
+            {
+                title: "Rekomendasi Diimplementasi",
+                value: <p>{this.state.dashboardComponent.jumlahRekomendasiImplemented}%</p>
+            },
+            {
+                title: "Rekomendasi Belum Diimplementasi",
+                value: <p>{this.state.dashboardComponent.jumlahRekomendasiNotImplemented}%</p>
+            },
+            {
+                title: "Rekomendasi Overdue",
+                value: <p>{this.state.dashboardComponent.jumlahRekomendasiOverdue}%</p>
+            },
+            {
+                title: "Jumlah Temuan",
+                value: <p>{this.state.dashboardComponent.jumlahTemuan}</p>
+            },
+            {
+                title: "Jumlah Rekomendasi",
+                value: <p>{this.state.dashboardComponent.jumlahRekomendasi}</p>
+            }
+        ])
+    }
+
+    getBoxSecond() {
+        return([
+            {
+                title: "Rekomendasi Diimplementasi",
+                value: <p>{this.state.dashboardComponent.jumlahRekomendasiImplemented}%</p>
+            },
+            {
+                title: "Rekomendasi Belum Diimplementasi",
+                value: <p>{this.state.dashboardComponent.jumlahRekomendasiNotImplemented}%</p>
+            },
+            {
+                title: "Rekomendasi Overdue",
+                value: <p>{this.state.dashboardComponent.jumlahRekomendasiOverdue}%</p>
+            },
+            {
+                title: "Jumlah Temuan",
+                value: <p>{this.state.dashboardComponent.jumlahTemuan}</p>
+            },
+            {
+                title: "Jumlah Rekomendasi",
+                value: <p>{this.state.dashboardComponent.jumlahRekomendasi}</p>
+            },
+            {
+                title: "Jumlah Pemeriksaan",
+                value: <p>{this.state.dashboardComponent.jumlahPemeriksaan}</p>
+            },
+            {
+                title: "Risk Score",
+                value: <p>{this.state.dashboardComponent.riskScore}</p>
+            }
+        ])
+    }
+
     render() {
         const { preloader, contentLoading, loadingBody } = this.state;
         const role = this.state.role;
@@ -407,28 +353,6 @@ class DashboardKantorCabang extends React.Component {
         const branchManager = role === "Branch Manager";
 
         if (qaOfficer) {
-            const boxData = [
-                {
-                    title: "Rekomendasi Diimplementasi",
-                    value: <p>{this.state.dashboardComponent.jumlahRekomendasiImplemented}%</p>
-                },
-                {
-                    title: "Rekomendasi Belum Diimplementasi",
-                    value: <p>{this.state.dashboardComponent.jumlahRekomendasiNotImplemented}%</p>
-                },
-                {
-                    title: "Rekomendasi Overdue",
-                    value: <p>{this.state.dashboardComponent.jumlahRekomendasiOverdue}%</p>
-                },
-                {
-                    title: "Jumlah Temuan",
-                    value: <p>{this.state.dashboardComponent.jumlahTemuan}</p>
-                },
-                {
-                    title: "Jumlah Rekomendasi",
-                    value: <p>{this.state.dashboardComponent.jumlahRekomendasi}</p>
-                },
-            ]
             return (
                 <SirioMainLayout preloader={preloader} contentLoading={contentLoading} loadingBody={loadingBody} active={!contentLoading}>
                     <div>
@@ -452,41 +376,13 @@ class DashboardKantorCabang extends React.Component {
                         <SirioBarChart data={this.getChart()} />
                     </div>
                     <div>
-                        <SirioDashboardBox data={boxData} />
+                        
+                            <SirioDashboardBox data={this.getBoxFirst()} />
+                        
                     </div>
                 </SirioMainLayout>
             )
         } else if (branchManager) {
-            const boxData = [
-                {
-                    title: "Rekomendasi Diimplementasi",
-                    value: <p>{this.state.dashboardComponent.jumlahRekomendasiImplemented}%</p>
-                },
-                {
-                    title: "Rekomendasi Belum Diimplementasi",
-                    value: <p>{this.state.dashboardComponent.jumlahRekomendasiNotImplemented}%</p>
-                },
-                {
-                    title: "Rekomendasi Overdue",
-                    value: <p>{this.state.dashboardComponent.jumlahRekomendasiOverdue}%</p>
-                },
-                {
-                    title: "Jumlah Temuan",
-                    value: <p>{this.state.dashboardComponent.jumlahTemuan}</p>
-                },
-                {
-                    title: "Jumlah Rekomendasi",
-                    value: <p>{this.state.dashboardComponent.jumlahRekomendasi}</p>
-                },
-                {
-                    title: "Jumlah Pemeriksaan",
-                    value: <p>{this.state.dashboardComponent.jumlahPemeriksaan}</p>
-                },
-                {
-                    title: "Risk Score",
-                    value: <p>{this.state.dashboardComponent.riskScore}</p>
-                },
-            ]
             return (
                 <SirioMainLayout preloader={preloader} contentLoading={contentLoading} loadingBody={loadingBody} active={!contentLoading}>
                     <div>
@@ -497,97 +393,12 @@ class DashboardKantorCabang extends React.Component {
                         <SirioBarChart data={this.getChart()} />
                     </div>
                     <div>
-                        <SirioDashboardBox data={boxData} />
+                        <SirioDashboardBox data={this.getBoxSecond()} />
                     </div>
                 </SirioMainLayout>
             )
         }
     }
-
-    // render() {
-    //     const { preloader, contentLoading, loadingBody } = this.state;
-    //     const data = {
-    //         labels: this.state.dashboardComponent.daftarBulan,
-    //         datasets: [
-    //             {
-    //                 label: 'Jumlah Temuan',
-    //                 stack: 'Stack 0',
-    //                 borderWidth: 1,
-    //                 backgroundColor: '#7F3F98',
-    //                 borderColor: '#7F3F98',
-    //                 hoverBackgroundColor: '#a665bf',
-    //                 hoverBorderColor: '#7F3F98',
-    //                 data: this.state.dashboardComponent.jumlahTemuanPerBulan
-    //             },
-    //             {
-    //                 label: 'Jumlah Rekomendasi Diimplementasi',
-    //                 stack: 'Stack 1',
-    //                 borderWidth: 1,
-    //                 backgroundColor: '#5DBCD2',
-    //                 borderColor: '#5DBCD2',
-    //                 hoverBackgroundColor: '#99d5e3',
-    //                 hoverBorderColor: '#5DBCD2',
-    //                 data: this.state.dashboardComponent.jumlahRekomendasiImplementedPerBulan
-    //             },
-    //             {
-    //                 label: 'Jumlah Rekomendasi Belum Diimplementasi',
-    //                 stack: 'Stack 1',
-    //                 borderWidth: 1,
-    //                 backgroundColor: '#6FCF97',
-    //                 borderColor: '#6FCF97',
-    //                 hoverBackgroundColor: '#a8e2c0',
-    //                 hoverBorderColor: '#6FCF97',
-    //                 data: this.state.dashboardComponent.jumlahRekomendasiNotImplementedPerBulan
-    //             },
-    //             {
-    //                 label: 'Jumlah Rekomendasi Overdue',
-    //                 stack: 'Stack 1',
-    //                 borderWidth: 1,
-    //                 backgroundColor: '#F2C94C',
-    //                 borderColor: '#F2C94C',
-    //                 hoverBackgroundColor: '#f7df93',
-    //                 hoverBorderColor: '#F2C94C',
-    //                 data: this.state.dashboardComponent.jumlahRekomendasiOverduePerBulan
-    //             }
-    //         ]
-    //     };
-
-    //     return (
-    //         <SirioMainLayout preloader={preloader} contentLoading={contentLoading} loadingBody={loadingBody} active={!contentLoading}>
-    //             <div>
-    //                 <h3>Dashboard Performa Seluruh Kantor Cabang</h3>
-    //                 {/* <SirioForm
-    //                     title=""
-    //                     inputDefinition={this.inputDefinition()}
-    //                     onSubmit={this.handleSubmit}
-    //                     submitButton={this.submitButton()}
-    //                 /> */}
-    //                 <SirioComponentHeader
-    //                     // title=""
-    //                     betweenTitleSubtitle={this.getBetween()}
-    //                 />
-    //             </div>
-    //             <div>
-    //                 <SirioButton
-    //                     purple
-    //                     recommended
-    //                     classes="mx-2"
-    //                     onClick={(event) => this.handleSubmit(event)}
-    //                 >
-    //                     Cari
-    //                 </SirioButton>
-    //             </div>
-    //             <div>
-    //                 <br></br>
-    //                 <SirioBarChart data={data} />
-    //             </div>
-
-    //             <div>
-    //                 <SirioDashboardBox data={this.getBoxData()} />
-    //             </div>
-    //         </SirioMainLayout>
-    //     )
-    // }
 }
 
 export default withRouter(DashboardKantorCabang);

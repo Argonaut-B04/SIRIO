@@ -3,6 +3,7 @@ package com.ArgonautB04.SIRIO.services;
 import com.ArgonautB04.SIRIO.model.Employee;
 import com.ArgonautB04.SIRIO.model.KomponenPemeriksaan;
 import com.ArgonautB04.SIRIO.model.Rekomendasi;
+import org.apache.tomcat.jni.Local;
 
 import java.time.LocalDate;
 import java.util.Date;
@@ -22,6 +23,8 @@ public interface RekomendasiRestService {
 
     List<Integer> getRekomendasiByMonth(List<Rekomendasi> rekomendasiList);
 
+    int countByDate(LocalDate batasBawah);
+
     List<Rekomendasi> getRekomendasiDiimplementasi();
 
     List<Rekomendasi> getRekomendasiOverdue();
@@ -29,6 +32,8 @@ public interface RekomendasiRestService {
     List<Rekomendasi> getRekomendasiBelumDiimplementasi();
 
     List<String> getListMonth();
+
+    List<String> getListMonthFiltered(LocalDate tanggalAwal, LocalDate tanggalAkhir);
 
     List<Rekomendasi> getByKomponenPemeriksaan(KomponenPemeriksaan komponenPemeriksaan);
   
