@@ -201,21 +201,27 @@ class EmployeeFormUbah extends React.Component {
     async handleSubmit(event) {
         event.preventDefault();
         if (this.submitable()) {
-            const response = await EmployeeService.checkEmailExist({email: this.state.email});
-            if (this.state.initialEmail !== this.state.email && response.data.result) {
-                const errorEmail = "Email sudah terdaftar";
-                this.setState({
-                    errorEmail: errorEmail
-                })
+            const employee = {
+                id: this.state.id,
+                idRole: this.state.idRole,
+                nama: this.state.nama,
+                jabatan: this.state.jabatan,
+                email: this.state.email,
+                noHp: this.state.noHp
+            };
+            if (this.state.initialEmail !== this.state.email) {
+                EmployeeService.checkEmailExist({email: this.state.email})
+                    .then(response => {
+                        if (response.data.result) {
+                            this.setState({
+                                errorEmail: "Email sudah terdaftar"
+                            })
+                        } else {
+                            EmployeeService.editEmployee(employee)
+                                .then(() => this.setRedirect());
+                        }
+                    })
             } else {
-                const employee = {
-                    id: this.state.id,
-                    idRole: this.state.idRole,
-                    nama: this.state.nama,
-                    jabatan: this.state.jabatan,
-                    email: this.state.email,
-                    noHp: this.state.noHp
-                };
                 EmployeeService.editEmployee(employee)
                     .then(() => this.setRedirect());
             }

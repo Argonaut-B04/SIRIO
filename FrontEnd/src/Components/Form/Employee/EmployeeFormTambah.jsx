@@ -224,33 +224,35 @@ export default class EmployeeFormTambah extends React.Component {
     async handleSubmit(event) {
         event.preventDefault();
         if (this.submitable()) {
-            const response = await EmployeeService.checkEmployeeExist(this.state.username);
-            if (response.data.result) {
-                const errorUsername = "Username sudah terdaftar";
-                this.setState({
-                    errorUsername: errorUsername
-                })
-            } else {
-                const response = await EmployeeService.checkEmailExist({email: this.state.email});
-                if (response.data.result) {
-                    const errorEmail = "Email sudah terdaftar";
-                    this.setState({
-                        errorEmail: errorEmail
-                    })
-                } else {
-                    const employee = {
-                        username: this.state.username,
-                        password: this.state.password,
-                        idRole: this.state.idRole,
-                        nama: this.state.nama,
-                        jabatan: this.state.jabatan,
-                        email: this.state.email,
-                        noHp: this.state.noHp
-                    };
-                    EmployeeService.addEmployee(employee)
-                        .then(() => this.setRedirect());
-                }
-            }
+            EmployeeService.checkEmployeeExist(this.state.username)
+                .then(response => {
+                    if (response.data.result) {
+                        this.setState({
+                            errorUsername: "Username sudah terdaftar"
+                        })
+                    } else {
+                        EmployeeService.checkEmailExist({ email: this.state.email })
+                            .then(response => {
+                                if (response.data.result) {
+                                    this.setState({
+                                        errorEmail: "Email sudah terdaftar"
+                                    })
+                                } else {
+                                    const employee = {
+                                        username: this.state.username,
+                                        password: this.state.password,
+                                        idRole: this.state.idRole,
+                                        nama: this.state.nama,
+                                        jabatan: this.state.jabatan,
+                                        email: this.state.email,
+                                        noHp: this.state.noHp
+                                    };
+                                    EmployeeService.addEmployee(employee)
+                                        .then(() => this.setRedirect());
+                                }
+                            })
+                    }
+                });
         }
     }
 
@@ -258,7 +260,6 @@ export default class EmployeeFormTambah extends React.Component {
     // Setiap objek {} pada List [] akan menjadi 1 field
     // untuk informasi lebih lengkap, cek SirioForm
     inputDefinition() {
-        console.log(this.state.roleOptionList)
         return (
             [
                 {
@@ -335,7 +336,7 @@ export default class EmployeeFormTambah extends React.Component {
                     purple
                     recommended
                     classes="mx-1"
-                    onClick={(event)  => this.handleSubmit(event)}
+                    onClick={(event) => this.handleSubmit(event)}
                 >
                     Simpan
                 </SirioButton>

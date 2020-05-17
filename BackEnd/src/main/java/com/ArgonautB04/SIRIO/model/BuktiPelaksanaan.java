@@ -3,11 +3,13 @@ package com.ArgonautB04.SIRIO.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.time.LocalDate;
 
 @Entity
 @Table
@@ -29,6 +31,9 @@ public class BuktiPelaksanaan implements Serializable {
     @Size(max = 125)
     @Column
     private String feedback;
+
+    @DateTimeFormat
+    private LocalDate tanggalPersetujuan;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "status", referencedColumnName = "idStatusBukti", nullable = false)
@@ -115,5 +120,13 @@ public class BuktiPelaksanaan implements Serializable {
 
     public void setPembuat(Employee pembuat) {
         this.pembuat = pembuat;
+    }
+
+    public LocalDate getTanggalPersetujuan() {
+        return tanggalPersetujuan;
+    }
+
+    public void setTanggalPersetujuan(LocalDate tanggalPersetujuan) {
+        this.tanggalPersetujuan = tanggalPersetujuan;
     }
 }

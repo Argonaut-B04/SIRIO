@@ -2,7 +2,7 @@ import React from 'react';
 import SirioForm from '../SirioForm';
 import SirioButton from '../../Button/SirioButton';
 import BuktiPelaksanaanService from '../../../Services/BuktiPelaksanaanService';
-import { Redirect } from 'react-router-dom';
+import { NavLink, Redirect } from 'react-router-dom';
 import { withRouter } from 'react-router-dom';
 
 class FormUbahBukti extends React.Component {
@@ -25,10 +25,47 @@ class FormUbahBukti extends React.Component {
         this.setRedirect = this.setRedirect.bind(this);
         this.renderDataBuktiPelaksanaan = this.renderDataBuktiPelaksanaan.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.submitable = this.submitable.bind(this);
     }
 
     componentDidMount() {
         this.renderDataBuktiPelaksanaan();
+    }
+
+    validateKeterangan(fokusKeterangan) {
+        var errorKeterangan = "";
+        if (fokusKeterangan === null || fokusKeterangan === "") {
+            errorKeterangan = "Keterangan bukti harus diisi";
+        } else if (fokusKeterangan.length > 125) {
+            errorKeterangan = "Keterangan tidak boleh lebih dari 125 karakter";
+        }
+        
+        this.setState({
+            errorKeterangan: errorKeterangan
+        })
+    }
+
+    validateLampiran(fokusLampiran) {
+        var errorLampiran = "";
+        var linkOnly = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.%]+$/;
+        if (fokusLampiran === null || fokusLampiran === "") {
+            errorLampiran = "Lampiran bukti harus diisi";
+        } else if (!fokusLampiran.match(linkOnly)) {
+            errorLampiran = "Lampiran harus berupa link url";
+        } else if (fokusLampiran.length > 255) {
+            errorLampiran = "Lampiran tidak boleh lebih dari 255 karakter";
+        }
+        
+        this.setState({
+            errorLampiran: errorLampiran
+        })
+    }
+
+    submitable() {
+        return this.state.errorKeterangan === "" &&
+            this.state.errorLampiran === "" &&
+            (this.state.keterangan !== null && this.state.keterangan !== "") &&
+            (this.state.lampiran !== null && this.state.lampiran !== "");
     }
 
     setRedirect = () => {
@@ -60,142 +97,100 @@ class FormUbahBukti extends React.Component {
     }
 
     handleChange(event) {
+        const { name, value } = event.target;
         this.setState(
             {
-                [event.target.name]
-                    : event.target.value
+                [name]
+                    : value
             }
-        )
+        );
+
+        switch (name) {
+            case "keterangan":
+                this.validateKeterangan(value);
+                break;
+            case "lampiran":
+                this.validateLampiran(value);
+                break;
+        }
     }
 
     handleSubmit(event) {
         event.preventDefault();
-        const buktiPelaksanaan = {
-            id: this.state.id,
-            keterangan: this.state.keterangan,
-            lampiran: this.state.lampiran
-        };
-        BuktiPelaksanaanService.editBukti(buktiPelaksanaan)
-            .then(() => this.setRedirect());
-    }
-
-    componentDidUpdate(prevProps, prevState) {
-        var submitable = true;
-        var validating = false;
-        submitable = this.validateRequired();
-        if (prevState.keterangan !== this.state.keterangan) {
-            submitable = this.validateKeterangan() && submitable;
-            validating = true;
+        if (this.submitable()) {
+            const buktiPelaksanaan = {
+                id: this.state.id,
+                keterangan: this.state.keterangan,
+                lampiran: this.state.lampiran
+            };
+            BuktiPelaksanaanService.editBukti(buktiPelaksanaan)
+                .then(() => this.setRedirect());
         }
-        if (prevState.lampiran !== this.state.lampiran) {
-            submitable = this.validateLampiran() && submitable;
-            validating = true;
-        }
-        if (validating) {
-            if (this.state.submitable !== submitable) {
-                this.setState({
-                    submitable: submitable
-                })
-            }
-        }
-    }
-
-    validateRequired() {
-        var submitable = true;
-        const required = [this.state.keterangan, this.state.lampiran];
-        for (let i = 0; i < required.length; i++) {
-            submitable = submitable && (required[i] !== null && required[i] !== "");
-        }
-        return submitable;
-    }
-
-    validateKeterangan() {
-        var submitable = true;
-        const varKeterangan = this.state.keterangan;
-        var errorKeterangan;
-        if (varKeterangan.length < 1) {
-            submitable = false;
-            errorKeterangan = "Keterangan wajib diisi";
-        } else if (varKeterangan.length > 125) {
-            submitable = false;
-            errorKeterangan = "Keterangan tidak boleh lebih dari 125 karakter";
-        }
-        if (this.state.errorKeterangan !== errorKeterangan) {
-            this.setState({
-                errorKeterangan: errorKeterangan
-            })
-        }
-        return submitable;
-    }
-
-    validateLampiran() {
-        var submitable = true;
-        const varLampiran = this.state.lampiran;
-        var errorLampiran;
-        if (varLampiran.length < 1) {
-            submitable = false;
-            errorLampiran = "Lampiran wajib diisi";
-        } else if (!(varLampiran.includes("https://"))) {
-            submitable = false;
-            errorLampiran = "Lampiran harus berupa link url";
-        } else if (varLampiran.length > 255) {
-            submitable = false;
-            errorLampiran = "Lampiran tidak boleh lebih dari 255 karakter";
-        }
-        if (this.state.errorLampiran !== errorLampiran) {
-            this.setState({
-                errorLampiran: errorLampiran
-            })
-        }
-        return submitable;
     }
 
     inputDefinition() {
-        var rowDefinition = [];
-        rowDefinition.push(
+        return ([
             {
                 label: "Rekomendasi",
                 customInput: <p>{this.state.keteranganRekomendasi}</p>
             }, {
-                label: "Keterangan*",
+                label: "Keterangan",
                 required: true,
                 handleChange: this.handleChange,
-                validation: this.state.errorKeterangan,
                 type: "textarea",
                 name: "keterangan",
                 value: this.state.keterangan,
-                placeholder: "Masukan keterangan bukti"
+                placeholder: "Masukan keterangan bukti",
+                errormessage: this.state.errorKeterangan
             }, {
-                label: "Lampiran*",
+                label: "Lampiran",
                 required: true,
                 handleChange: this.handleChange,
-                validation: this.state.errorLampiran,
                 type: "textarea",
                 name: "lampiran",
                 value: this.state.lampiran,
-                placeholder: "Masukan lampiran bukti"
+                placeholder: "Masukan lampiran bukti (berupa link url)",
+                errormessage: this.state.errorLampiran
             }
-            
-        )
-        return rowDefinition;
+        ])
     }
 
     submitButton() {
-        return (
-            <div>
-                <SirioButton purple 
-                             recommended={this.state.submitable}
-                             disabled={!this.state.submitable}
-                             classes="mx-1"
-                             onClick={(event)  => this.handleSubmit(event)}>
+        var tombolSimpan =
+            <SirioButton
+                purple
+                disabled
+                classes="mx-1"
+            >
+                Simpan
+            </SirioButton>;
+        if (this.submitable()) {
+            tombolSimpan =
+                <SirioButton
+                    purple
+                    recommended
+                    classes="mx-1"
+                    onClick={(event) => this.handleSubmit(event)}
+                >
                     Simpan
                 </SirioButton>
-                <SirioButton purple
-                             type="button"
-                             classes="mx-1"
-                             onClick={() => window.location.href = "/bukti-pelaksanaan"}>
-                    Batal
-                </SirioButton>
+        }
+        return (
+            <div>
+                {tombolSimpan}
+                <NavLink to={{
+                    pathname: "/bukti-pelaksanaan/detail",
+                    state: {
+                        id: this.props.location.state.id
+                    }
+                }}>
+                    <SirioButton
+                        purple
+                        classes="mx-1"
+                    >
+                        Batal
+                    </SirioButton>
+                </NavLink>
             </div>
         )
     }
