@@ -279,12 +279,117 @@ public class DashboardController {
 
         result.setDaftarBulan(rekomendasiRestService.getListMonth());
 
+//        String namaKantor = "";
+//        Optional<KantorCabang> kantorCabang = kantorCabangRestService.getByNama(namaKantor);
+//        daftarTugasPemeriksaan = tugasPemeriksaanRestService.getByKantorCabang(kantorCabang.get());
+//        List<HasilPemeriksaan> daftarHasilPemeriksaan = hasilPemeriksaanRestService.getByDaftarTugasPemeriksaan(daftarTugasPemeriksaan);
+
         return new BaseResponse<>(200, "success", result);
     }
 
     public static double roundAvoid(double value, int places) {
         double scale = Math.pow(10, places);
         return Math.round(value * scale) / scale;
+    }
+
+    @GetMapping("/getAll")
+    private BaseResponse<DashboardDTO> getDashboardComponentByFilter(
+            @RequestParam("namaKantor") String namaKantor,
+            @RequestParam("areaKantor") String areaKantor,
+            @RequestParam("regionalKantor") String regionalKantor,
+            @RequestParam("tanggalAwal") LocalDate tanggalAwal,
+            @RequestParam("tanggalAkhir") LocalDate tanggalAkhir,
+            Principal principal) {
+        Employee employee = employeeRestService.validateEmployeeExistByPrincipal(principal);
+//        employeeRestService.validateRolePermission(employee, "tabel rekomendasi");
+        Role role = employee.getRole();
+
+        List<Rekomendasi> daftarRekomendasi;
+        List<TemuanRisiko> daftarTemuanRisiko;
+        List<TugasPemeriksaan> daftarTugasPemeriksaan;
+        List<KomponenPemeriksaan> daftarKomponenPemeriksaan;
+        if (role.getNamaRole().equals("Branch Manager")) {
+            KantorCabang kantorCabang =
+                    kantorCabangRestService.getByPemilik(employee);
+            daftarTugasPemeriksaan =
+                    tugasPemeriksaanRestService.getByKantorCabang(kantorCabang);
+            List<HasilPemeriksaan> daftarHasilPemeriksaan =
+                    hasilPemeriksaanRestService.getByDaftarTugasPemeriksaan(daftarTugasPemeriksaan);
+            daftarKomponenPemeriksaan =
+                    komponenPemeriksaanRestService.getByDaftarHasilPemeriksaan(daftarHasilPemeriksaan);
+            daftarRekomendasi = rekomendasiRestService.getByDaftarKomponenPemeriksaan(daftarKomponenPemeriksaan);
+            daftarTemuanRisiko = temuanRisikoRestService.getByDaftarKomponenPemeriksaan(daftarKomponenPemeriksaan);
+        } else {
+            daftarRekomendasi = rekomendasiRestService.getAll();
+            daftarTemuanRisiko = temuanRisikoRestService.getAll();
+            daftarTugasPemeriksaan = tugasPemeriksaanRestService.getAll();
+            daftarKomponenPemeriksaan = komponenPemeriksaanRestService.getAll();
+        }
+
+        DashboardDTO result = new DashboardDTO();
+        result.setJumlahPemeriksaan(daftarTugasPemeriksaan.size());
+        result.setJumlahTemuan(daftarTemuanRisiko.size());
+        List<Integer> listTemuan = temuanRisikoRestService.getTemuanByMonth(daftarTemuanRisiko);
+        result.setJumlahTemuanPerBulan(listTemuan);
+
+        List<Rekomendasi> rekomendasiOverdue = new ArrayList<>();
+        List<Rekomendasi> rekomendasiImpl = new ArrayList<>();
+        List<Rekomendasi> rekomendasiNotImpl = new ArrayList<>();
+        List<Rekomendasi> rekomendasiTotal = new ArrayList<>();
+        for (Rekomendasi rekomendasi : daftarRekomendasi) {
+            if (rekomendasi.getStatusRekomendasi().getNamaStatus().equals("Sedang Dilaksanakan")
+                    || rekomendasi.getStatusRekomendasi().getNamaStatus().equals("Selesai")) {
+                if (rekomendasi.getBuktiPelaksanaan() == null
+                        || !(rekomendasi.getBuktiPelaksanaan().getStatusBuktiPelaksanaan().getNamaStatus().equals("Disetujui"))
+                        || (rekomendasi.getBuktiPelaksanaan().getStatusBuktiPelaksanaan().getNamaStatus().equals("Menunggu Persetujuan")
+                        && rekomendasi.getBuktiPelaksanaan().getStatusBuktiPelaksanaan().getNamaStatus().equals("Ditolak"))) {
+                    if (rekomendasi.getTenggatWaktu().isBefore(LocalDate.now())) {
+                        rekomendasiOverdue.add(rekomendasi);
+                    } else {
+                        rekomendasiNotImpl.add(rekomendasi);
+                    }
+                } else if (rekomendasi.getBuktiPelaksanaan() != null
+                        && rekomendasi.getBuktiPelaksanaan().getStatusBuktiPelaksanaan().getNamaStatus().equals("Disetujui")) {
+                    if (rekomendasi.getTenggatWaktu().isBefore(rekomendasi.getBuktiPelaksanaan().getTanggalPersetujuan())) {
+                        rekomendasiOverdue.add(rekomendasi);
+                    } else {
+                        rekomendasiImpl.add(rekomendasi);
+                    }
+                }
+                rekomendasiTotal.add(rekomendasi);
+            }
+        }
+        result.setJumlahRekomendasi(rekomendasiTotal.size());
+
+        List<Integer> listRekomendasiOverdue = rekomendasiRestService.getRekomendasiByMonth(rekomendasiOverdue);
+        result.setJumlahRekomendasiOverduePerBulan(listRekomendasiOverdue);
+        double jumlahRekomendasiOverdue = roundAvoid((double)rekomendasiOverdue.size()*100/(double)daftarRekomendasi.size(), 2);
+        result.setJumlahRekomendasiOverdue(jumlahRekomendasiOverdue);
+
+        List<Integer> listRekomendasiImpl = rekomendasiRestService.getRekomendasiByMonth(rekomendasiImpl);
+        result.setJumlahRekomendasiImplementedPerBulan(listRekomendasiImpl);
+        double jumlahRekomendasiImpl = roundAvoid((double)rekomendasiImpl.size()*100/(double)daftarRekomendasi.size(), 2);
+        result.setJumlahRekomendasiImplemented(jumlahRekomendasiImpl);
+
+        List<Integer> listRekomendasiNotImpl = rekomendasiRestService.getRekomendasiByMonth(rekomendasiNotImpl);
+        result.setJumlahRekomendasiNotImplementedPerBulan(listRekomendasiNotImpl);
+        double jumlahRekomendasiNotImpl = roundAvoid((double)rekomendasiNotImpl.size()*100/(double)daftarRekomendasi.size(), 2);
+        result.setJumlahRekomendasiNotImplemented(jumlahRekomendasiNotImpl);
+
+        int riskScore = 100;
+        for (KomponenPemeriksaan komponen : daftarKomponenPemeriksaan) {
+            riskScore += komponen.getRiskLevel().getBobotLevel();
+        }
+        result.setRiskScore(riskScore);
+
+        result.setDaftarBulan(rekomendasiRestService.getListMonth());
+
+//        String namaKantor = "";
+//        Optional<KantorCabang> kantorCabang = kantorCabangRestService.getByNama(namaKantor);
+//        daftarTugasPemeriksaan = tugasPemeriksaanRestService.getByKantorCabang(kantorCabang.get());
+//        List<HasilPemeriksaan> daftarHasilPemeriksaan = hasilPemeriksaanRestService.getByDaftarTugasPemeriksaan(daftarTugasPemeriksaan);
+
+        return new BaseResponse<>(200, "success", result);
     }
 
 }

@@ -50,6 +50,11 @@ public class KantorCabangRestServiceImpl implements KantorCabangRestService {
     }
 
     @Override
+    public List<KantorCabang> getByArea(String area) {
+        return kantorCabangDB.findAllByArea(area);
+    }
+
+    @Override
     public List<KantorCabang> getAll() {
         return kantorCabangDB.findAllByStatus(KantorCabang.Status.AKTIF);
     }

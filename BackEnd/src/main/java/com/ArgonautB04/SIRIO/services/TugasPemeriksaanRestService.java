@@ -19,6 +19,8 @@ public interface TugasPemeriksaanRestService {
 
     List<TugasPemeriksaan> getByKantorCabang(KantorCabang kantorCabang);
 
+    List<TugasPemeriksaan> getByDaftarKantorCabang(List<KantorCabang> kantorCabangList);
+
     List<TugasPemeriksaan> getByRencana(RencanaPemeriksaan rencanaPemeriksaan);
 
     boolean isExistInDatabase(TugasPemeriksaan tugasPemeriksaan);

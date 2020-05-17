@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.List;
 
 @Repository
@@ -16,6 +17,8 @@ public interface TugasPemeriksaanDB extends JpaRepository<TugasPemeriksaan, Inte
     List<TugasPemeriksaan> findAllByPelaksana(Employee pelaksana);
 
     List<TugasPemeriksaan> findAllByKantorCabang(KantorCabang kantorCabang);
+
+    List<TugasPemeriksaan> findAllByKantorCabangIn(Collection<KantorCabang> kantorCabang);
 
     List<TugasPemeriksaan> findAllByRencanaPemeriksaan(RencanaPemeriksaan rencanaPemeriksaan);
 

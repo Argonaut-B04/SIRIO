@@ -2,11 +2,15 @@ import React from "react";
 import SirioMainLayout from "../../Layout/SirioMainLayout";
 import PollingService from "../../Services/PollingService";
 import { withRouter } from "react-router-dom";
+import { Redirect } from 'react-router-dom';
 import SirioBarChart from "../../Components/Chart/SirioBarChart";
 import SirioDashboardBox from "../../Components/Box/SirioDashboardBox";
 import DashboardService from "../../Services/DashboardService";
+import KantorCabangService from "../../Services/KantorCabangService";
 import SirioField from "../../Components/Form/SirioFormComponent/SirioField";
+import SirioButton from '../../Components/Button/SirioButton';
 import SirioForm from "../../Components/Form/SirioForm";
+import SirioComponentHeader from "../../Components/Header/SirioComponentHeader";
 import AuthenticationService from "../../Services/AuthenticationService";
 
 class DashboardKantorCabang extends React.Component {
@@ -19,14 +23,29 @@ class DashboardKantorCabang extends React.Component {
             preloader: true,
             contentLoading: !PollingService.isConnected(),
             dashboardComponent: {},
-            role: AuthenticationService.getRole()
+            kantorCabangList: [],
+            namaKantorList: [],
+            areaKantorList: [],
+            regionalKantorList: [],
+            namaKantor: "",
+            areaKantor: "",
+            regionalKantor: "",
+            tanggalAwal: "",
+            tanggalAkhir: "",
+            namaChanged: false,
+            role: AuthenticationService.getRole(),
+            redirect: false
         }
-        this.renderDataDashboard = this.renderDataDashboard.bind(this);
+        this.renderData = this.renderData.bind(this);
+        // this.inputDefinition = this.inputDefinition.bind(this);
+        this.handleSelectChange = this.handleSelectChange.bind(this);
+        this.handleSelectChangeNama = this.handleSelectChangeNama.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     // jika sudah selesai dirender, hentikan preloader
     componentDidMount() {
-        this.renderDataDashboard();
+        this.renderData();
         if (!PollingService.isConnected()) {
             this.setState({
                 preloader: false,
@@ -60,133 +79,281 @@ class DashboardKantorCabang extends React.Component {
         }
     }
 
-    async renderDataDashboard() {
-        const response = await DashboardService.getDashboard();
+    async renderData() {
+        const responseDashboardComp = await DashboardService.getAllComponent();
+        const dashboardComponent = responseDashboardComp.data.result;
+
+        const responseKantorCabang = await KantorCabangService.getKantorCabangList();
+        const kantorCabangList = responseKantorCabang.data.result;
+
+        const namaKantorCabang = responseKantorCabang.data.result.map(kc => {
+            return (
+                {
+                    label: kc.namaKantor,
+                    value: kc.namaKantor
+                }
+            )
+        });
+        const areaKantorCabang = responseKantorCabang.data.result.map(kc => {
+            return (
+                {
+                    label: kc.area,
+                    value: kc.area
+                }
+            )
+        });
+        const regionalKantorCabang = responseKantorCabang.data.result.map(kc => {
+            return (
+                {
+                    label: kc.regional,
+                    value: kc.regional
+                }
+            )
+        });
 
         this.setState({
-            dashboardComponent: response.data.result
+            dashboardComponent: dashboardComponent,
+            kantorCabangList: kantorCabangList,
+            namaKantorList: namaKantorCabang,
+            areaKantorList: areaKantorCabang,
+            regionalKantorList: regionalKantorCabang
         })
     }
+
+    getUnique(arr, index) {
+        const unique = arr
+            .map(e => e[index])
+            .map((e, i, final) => final.indexOf(e) === i && i)
+            .filter(e => arr[e]).map(e => arr[e]); 
+        return unique;
+    }
+
+    handleSelectChange(name, event) {
+        this.setState(
+            {
+                [name]
+                    : event.value
+            }
+        )
+    }
+
+    handleSelectChangeNama(name, event) {
+        const listKC = this.state.kantorCabangList;
+        for (var i in listKC) {
+            if (event.value === listKC[i].namaKantor) {
+                this.setState(
+                    {
+                        [name]
+                            : event.value,
+                        areaKantorList: listKC[i].area,
+                        regionalKantorList: listKC[i].regional,
+                        namaChanged: true
+                    }
+                )
+            }
+        }
+    }
+
+    handleChange(event) {
+        const { name, value } = event.target;
+        this.setState(
+            {
+                [name]
+                    : value
+            }
+        )
+    }
+
+    handleSubmit(event) {
+        event.preventDefault();
+        const filter = {
+            areaKantor: this.state.areaKantor
+        };
+        DashboardService.getAllComponent(filter)
+            .then(() => this.setRedirect());
+    }
+
+    setRedirect = () => {
+        this.setState({
+            redirect: true
+        })
+    };
+
+    renderRedirect = () => {
+        if (this.state.redirect) {
+            return <Redirect to={{
+                pathname: "/dashboard-kantor"
+            }} />
+        }
+    };
 
     getBetween() {
         return (
             <>
-                <div className="col-md-3 pl-0">
+                <div className="col-md-1 pl-0">
                     <SirioField
                         type="select"
-                        // handleChange={this.handleSelectChangeRisiko}
+                        handleChange={this.handleSelectChangeNama}
                         classes="p-1"
-                        name="kategoriType"
-                        value="Semua Kantor Cabang"
-                        optionList={
-                            [
-                                {
-                                    label: "Semua Kantor Cabang",
-                                    value: "0"
-                                },
-                                {
-                                    label: "Abung Selatan",
-                                    value: "1"
-                                },
-                                {
-                                    label: "Adipala",
-                                    value: "2"
-                                },
-                                {
-                                    label: "Adiwerna",
-                                    value: "2"
-                                },
-                                {
-                                    label: "Air Joman",
-                                    value: "2"
-                                },
-                                {
-                                    label: "Air Putih",
-                                    value: "2"
-                                }
-                            ]
-                        }
+                        name="namaKantor"
+                        value={this.state.namaKantor}
+                        optionList={this.state.namaKantorList}
                     />
                 </div>
-                <div className="col-md-3 pl-0">
+                <div className="col-md-1 pl-0">
+                    {!this.state.namaChanged &&
                     <SirioField
                         type="select"
-                        // handleChange={this.handleSelectChange}
+                        handleChange={this.handleSelectChange}
                         classes="p-1"
-                        name="filterKategori"
-                        // value={this.state.filterKategori}
-                        // optionList={this.state.riskOptionList}
+                        name="areaKantor"
+                        value={this.state.areaKantor}
+                        optionList={this.getUnique(this.state.areaKantorList, 'label')}
+                    />
+                    }
+                </div>
+                <div className="col-md-1 pl-0">
+                    {!this.state.namaChanged &&
+                    <SirioField
+                        type="select"
+                        handleChange={this.handleSelectChange}
+                        classes="p-1"
+                        name="regionalKantor"
+                        value={this.state.regionalKantor}
+                        optionList={this.getUnique(this.state.regionalKantorList, 'label')}
+                    />
+                    }
+                </div>
+                <div className="col-md-1 pl-0">
+                    <SirioField
+                        type="date"
+                        handleChange={this.handleChange}
+                        classes="p-1"
+                        name="tanggalAwal"
+                        value={this.state.tanggalAwal}
+                    />
+                </div>
+                <div className="col-md-1 pl-0">
+                    <SirioField
+                        type="date"
+                        handleChange={this.handleChange}
+                        classes="p-1"
+                        name="tanggalAkhir"
+                        value={this.state.tanggalAkhir}
                     />
                 </div>
             </>
         )
     }
 
-    getBoxData() {
-        const role = this.state.role;
-        const qaOfficer = role === "QA Officer Operational Risk" || role === "Super QA Officer Operational Risk";
-        const branchManager = role === "Branch Manager";
+    // inputDefinition() {
+    //     return ([
+    //         {
+    //             handleChange: this.handleSelectChange,
+    //             type: "select",
+    //             name: "namaKantor",
+    //             value: this.state.namaKantor,
+    //             required: true,
+    //             optionList: this.state.namaKantorList
+    //         }, {
+    //             label: "Semua Area",
+    //             handleChange: this.handleSelectChange,
+    //             type: "select",
+    //             name: "areaKantor",
+    //             value: this.state.areaKantor,
+    //             required: true,
+    //             optionList: this.state.areaKantorList
+    //         }, {
+    //             label: "Semua Regional",
+    //             handleChange: this.handleSelectChange,
+    //             type: "select",
+    //             name: "regionalKantor",
+    //             value: this.state.regionalKantor,
+    //             required: true,
+    //             optionList: this.state.regionalKantorList
+    //         }
+    //     ])
+    // }
 
-        if (qaOfficer) {
-            return ([
-                {
-                    title: "Rekomendasi Diimplementasi",
-                    value: <p>{this.state.dashboardComponent.jumlahRekomendasiImplemented}%</p>
-                },
-                {
-                    title: "Rekomendasi Belum Diimplementasi",
-                    value: <p>{this.state.dashboardComponent.jumlahRekomendasiNotImplemented}%</p>
-                },
-                {
-                    title: "Rekomendasi Overdue",
-                    value: <p>{this.state.dashboardComponent.jumlahRekomendasiOverdue}%</p>
-                },
-                {
-                    title: "Jumlah Temuan",
-                    value: <p>{this.state.dashboardComponent.jumlahTemuan}</p>
-                },
-                {
-                    title: "Jumlah Rekomendasi",
-                    value: <p>{this.state.dashboardComponent.jumlahRekomendasi}</p>
-                },
-            ])
-        } else if (branchManager) {
-            return ([
-                {
-                    title: "Rekomendasi Diimplementasi",
-                    value: <p>{this.state.dashboardComponent.jumlahRekomendasiImplemented}%</p>
-                },
-                {
-                    title: "Rekomendasi Belum Diimplementasi",
-                    value: <p>{this.state.dashboardComponent.jumlahRekomendasiNotImplemented}%</p>
-                },
-                {
-                    title: "Rekomendasi Overdue",
-                    value: <p>{this.state.dashboardComponent.jumlahRekomendasiOverdue}%</p>
-                },
-                {
-                    title: "Jumlah Temuan",
-                    value: <p>{this.state.dashboardComponent.jumlahTemuan}</p>
-                },
-                {
-                    title: "Jumlah Rekomendasi",
-                    value: <p>{this.state.dashboardComponent.jumlahRekomendasi}</p>
-                },
-                {
-                    title: "Jumlah Pemeriksaan",
-                    value: <p>{this.state.dashboardComponent.jumlahPemeriksaan}</p>
-                },
-                {
-                    title: "Risk Score",
-                    value: <p>{this.state.dashboardComponent.riskScore}</p>
-                },
-            ])
-        }
-    }
+    // getBoxData() {
+    //     const role = this.state.role;
+    //     const qaOfficer = role === "QA Officer Operational Risk" || role === "Super QA Officer Operational Risk";
+    //     const branchManager = role === "Branch Manager";
 
-    render() {
-        const { preloader, contentLoading, loadingBody } = this.state;
-        const data = {
+    //     if (qaOfficer) {
+    //         return ([
+    //             {
+    //                 title: "Rekomendasi Diimplementasi",
+    //                 value: <p>{this.state.dashboardComponent.jumlahRekomendasiImplemented}%</p>
+    //             },
+    //             {
+    //                 title: "Rekomendasi Belum Diimplementasi",
+    //                 value: <p>{this.state.dashboardComponent.jumlahRekomendasiNotImplemented}%</p>
+    //             },
+    //             {
+    //                 title: "Rekomendasi Overdue",
+    //                 value: <p>{this.state.dashboardComponent.jumlahRekomendasiOverdue}%</p>
+    //             },
+    //             {
+    //                 title: "Jumlah Temuan",
+    //                 value: <p>{this.state.dashboardComponent.jumlahTemuan}</p>
+    //             },
+    //             {
+    //                 title: "Jumlah Rekomendasi",
+    //                 value: <p>{this.state.dashboardComponent.jumlahRekomendasi}</p>
+    //             },
+    //         ])
+    //     } else if (branchManager) {
+    //         return ([
+    //             {
+    //                 title: "Rekomendasi Diimplementasi",
+    //                 value: <p>{this.state.dashboardComponent.jumlahRekomendasiImplemented}%</p>
+    //             },
+    //             {
+    //                 title: "Rekomendasi Belum Diimplementasi",
+    //                 value: <p>{this.state.dashboardComponent.jumlahRekomendasiNotImplemented}%</p>
+    //             },
+    //             {
+    //                 title: "Rekomendasi Overdue",
+    //                 value: <p>{this.state.dashboardComponent.jumlahRekomendasiOverdue}%</p>
+    //             },
+    //             {
+    //                 title: "Jumlah Temuan",
+    //                 value: <p>{this.state.dashboardComponent.jumlahTemuan}</p>
+    //             },
+    //             {
+    //                 title: "Jumlah Rekomendasi",
+    //                 value: <p>{this.state.dashboardComponent.jumlahRekomendasi}</p>
+    //             },
+    //             {
+    //                 title: "Jumlah Pemeriksaan",
+    //                 value: <p>{this.state.dashboardComponent.jumlahPemeriksaan}</p>
+    //             },
+    //             {
+    //                 title: "Risk Score",
+    //                 value: <p>{this.state.dashboardComponent.riskScore}</p>
+    //             },
+    //         ])
+    //     }
+    // }
+
+    // getButton() {
+    //     return (
+    //         <div>
+    //             <SirioButton
+    //                 purple
+    //                 recommended
+    //                 classes="mx-2"
+    //                 onClick={(event) => this.handleSubmit(event)}
+    //             >
+    //                 Simpan
+    //             </SirioButton>
+    //         </div>
+    //     )
+    // }
+
+    getChart() {
+        return({
             labels: this.state.dashboardComponent.daftarBulan,
             datasets: [
                 {
@@ -230,30 +397,197 @@ class DashboardKantorCabang extends React.Component {
                     data: this.state.dashboardComponent.jumlahRekomendasiOverduePerBulan
                 }
             ]
-        };
-
-        return (
-            <SirioMainLayout preloader={preloader} contentLoading={contentLoading} loadingBody={loadingBody} active={!contentLoading}>
-                {/* <div>
-                    <SirioForm
-                        
-                        betweenTitleSubtitle={this.getBetween()}
-                        inputDefinition={null}
-                        onSubmit={null}
-                        submitButton={null}
-                    />
-                </div> */}
-                <div>
-                    <h3>Dashboard Performa Seluruh Kantor Cabang</h3><br></br>
-                    <SirioBarChart data={data} />
-                </div>
-
-                <div>
-                    <SirioDashboardBox data={this.getBoxData()} />
-                </div>
-            </SirioMainLayout>
-        )
+        })
     }
+
+    render() {
+        const { preloader, contentLoading, loadingBody } = this.state;
+        const role = this.state.role;
+        const qaOfficer = role === "QA Officer Operational Risk" || role === "Super QA Officer Operational Risk";
+        const branchManager = role === "Branch Manager";
+
+        if (qaOfficer) {
+            const boxData = [
+                {
+                    title: "Rekomendasi Diimplementasi",
+                    value: <p>{this.state.dashboardComponent.jumlahRekomendasiImplemented}%</p>
+                },
+                {
+                    title: "Rekomendasi Belum Diimplementasi",
+                    value: <p>{this.state.dashboardComponent.jumlahRekomendasiNotImplemented}%</p>
+                },
+                {
+                    title: "Rekomendasi Overdue",
+                    value: <p>{this.state.dashboardComponent.jumlahRekomendasiOverdue}%</p>
+                },
+                {
+                    title: "Jumlah Temuan",
+                    value: <p>{this.state.dashboardComponent.jumlahTemuan}</p>
+                },
+                {
+                    title: "Jumlah Rekomendasi",
+                    value: <p>{this.state.dashboardComponent.jumlahRekomendasi}</p>
+                },
+            ]
+            return (
+                <SirioMainLayout preloader={preloader} contentLoading={contentLoading} loadingBody={loadingBody} active={!contentLoading}>
+                    <div>
+                        <h3>Dashboard Performa Seluruh Kantor Cabang</h3>
+                        <SirioComponentHeader
+                            betweenTitleSubtitle={this.getBetween()}
+                        />
+                    </div>
+                    <div>
+                        <SirioButton
+                            purple
+                            recommended
+                            classes="mx-2"
+                            onClick={(event) => this.handleSubmit(event)}
+                        >
+                            Cari
+                        </SirioButton>
+                    </div>
+                    <div>
+                        <br></br>
+                        <SirioBarChart data={this.getChart()} />
+                    </div>
+                    <div>
+                        <SirioDashboardBox data={boxData} />
+                    </div>
+                </SirioMainLayout>
+            )
+        } else if (branchManager) {
+            const boxData = [
+                {
+                    title: "Rekomendasi Diimplementasi",
+                    value: <p>{this.state.dashboardComponent.jumlahRekomendasiImplemented}%</p>
+                },
+                {
+                    title: "Rekomendasi Belum Diimplementasi",
+                    value: <p>{this.state.dashboardComponent.jumlahRekomendasiNotImplemented}%</p>
+                },
+                {
+                    title: "Rekomendasi Overdue",
+                    value: <p>{this.state.dashboardComponent.jumlahRekomendasiOverdue}%</p>
+                },
+                {
+                    title: "Jumlah Temuan",
+                    value: <p>{this.state.dashboardComponent.jumlahTemuan}</p>
+                },
+                {
+                    title: "Jumlah Rekomendasi",
+                    value: <p>{this.state.dashboardComponent.jumlahRekomendasi}</p>
+                },
+                {
+                    title: "Jumlah Pemeriksaan",
+                    value: <p>{this.state.dashboardComponent.jumlahPemeriksaan}</p>
+                },
+                {
+                    title: "Risk Score",
+                    value: <p>{this.state.dashboardComponent.riskScore}</p>
+                },
+            ]
+            return (
+                <SirioMainLayout preloader={preloader} contentLoading={contentLoading} loadingBody={loadingBody} active={!contentLoading}>
+                    <div>
+                        <h3>Dashboard Performa Kantor Cabang</h3>
+                    </div>
+                    <div>
+                        <br></br>
+                        <SirioBarChart data={this.getChart()} />
+                    </div>
+                    <div>
+                        <SirioDashboardBox data={boxData} />
+                    </div>
+                </SirioMainLayout>
+            )
+        }
+    }
+
+    // render() {
+    //     const { preloader, contentLoading, loadingBody } = this.state;
+    //     const data = {
+    //         labels: this.state.dashboardComponent.daftarBulan,
+    //         datasets: [
+    //             {
+    //                 label: 'Jumlah Temuan',
+    //                 stack: 'Stack 0',
+    //                 borderWidth: 1,
+    //                 backgroundColor: '#7F3F98',
+    //                 borderColor: '#7F3F98',
+    //                 hoverBackgroundColor: '#a665bf',
+    //                 hoverBorderColor: '#7F3F98',
+    //                 data: this.state.dashboardComponent.jumlahTemuanPerBulan
+    //             },
+    //             {
+    //                 label: 'Jumlah Rekomendasi Diimplementasi',
+    //                 stack: 'Stack 1',
+    //                 borderWidth: 1,
+    //                 backgroundColor: '#5DBCD2',
+    //                 borderColor: '#5DBCD2',
+    //                 hoverBackgroundColor: '#99d5e3',
+    //                 hoverBorderColor: '#5DBCD2',
+    //                 data: this.state.dashboardComponent.jumlahRekomendasiImplementedPerBulan
+    //             },
+    //             {
+    //                 label: 'Jumlah Rekomendasi Belum Diimplementasi',
+    //                 stack: 'Stack 1',
+    //                 borderWidth: 1,
+    //                 backgroundColor: '#6FCF97',
+    //                 borderColor: '#6FCF97',
+    //                 hoverBackgroundColor: '#a8e2c0',
+    //                 hoverBorderColor: '#6FCF97',
+    //                 data: this.state.dashboardComponent.jumlahRekomendasiNotImplementedPerBulan
+    //             },
+    //             {
+    //                 label: 'Jumlah Rekomendasi Overdue',
+    //                 stack: 'Stack 1',
+    //                 borderWidth: 1,
+    //                 backgroundColor: '#F2C94C',
+    //                 borderColor: '#F2C94C',
+    //                 hoverBackgroundColor: '#f7df93',
+    //                 hoverBorderColor: '#F2C94C',
+    //                 data: this.state.dashboardComponent.jumlahRekomendasiOverduePerBulan
+    //             }
+    //         ]
+    //     };
+
+    //     return (
+    //         <SirioMainLayout preloader={preloader} contentLoading={contentLoading} loadingBody={loadingBody} active={!contentLoading}>
+    //             <div>
+    //                 <h3>Dashboard Performa Seluruh Kantor Cabang</h3>
+    //                 {/* <SirioForm
+    //                     title=""
+    //                     inputDefinition={this.inputDefinition()}
+    //                     onSubmit={this.handleSubmit}
+    //                     submitButton={this.submitButton()}
+    //                 /> */}
+    //                 <SirioComponentHeader
+    //                     // title=""
+    //                     betweenTitleSubtitle={this.getBetween()}
+    //                 />
+    //             </div>
+    //             <div>
+    //                 <SirioButton
+    //                     purple
+    //                     recommended
+    //                     classes="mx-2"
+    //                     onClick={(event) => this.handleSubmit(event)}
+    //                 >
+    //                     Cari
+    //                 </SirioButton>
+    //             </div>
+    //             <div>
+    //                 <br></br>
+    //                 <SirioBarChart data={data} />
+    //             </div>
+
+    //             <div>
+    //                 <SirioDashboardBox data={this.getBoxData()} />
+    //             </div>
+    //         </SirioMainLayout>
+    //     )
+    // }
 }
 
 export default withRouter(DashboardKantorCabang);

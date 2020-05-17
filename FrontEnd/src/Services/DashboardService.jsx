@@ -9,8 +9,14 @@ class DashboardService {
         this.axiosInstance.defaults.headers.common['Authorization'] = AuthenticationService.getToken();
     }
 
-    async getDashboard() {
-        return this.axiosInstance.get(SirioAxiosBase.BASEURL + `/Dashboard/getAll`);
+    async getAllComponent(areaKantor) {
+        return this.axiosInstance.get(SirioAxiosBase.BASEURL + `/Dashboard/getAll`, 
+            {
+                namaKantor: "namaKantor",
+                areaKantor: "areaKantor",
+                regionalKantor: "regionalKantor"
+            }
+        );
     }
 
 }

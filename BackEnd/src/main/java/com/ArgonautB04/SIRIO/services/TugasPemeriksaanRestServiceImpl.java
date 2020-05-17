@@ -51,6 +51,11 @@ public class TugasPemeriksaanRestServiceImpl implements TugasPemeriksaanRestServ
     }
 
     @Override
+    public List<TugasPemeriksaan> getByDaftarKantorCabang(List<KantorCabang> kantorCabang) {
+        return tugasPemeriksaanDB.findAllByKantorCabangIn(kantorCabang);
+    }
+
+    @Override
     public List<TugasPemeriksaan> getByRencana(RencanaPemeriksaan rencanaPemeriksaan) {
         return tugasPemeriksaanDB.findAllByRencanaPemeriksaan(rencanaPemeriksaan);
     }
