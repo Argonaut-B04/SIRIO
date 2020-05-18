@@ -1,5 +1,8 @@
 package com.ArgonautB04.SIRIO.rest;
 
+import com.ArgonautB04.SIRIO.model.Rekomendasi;
+
+import java.time.LocalDate;
 import java.util.List;
 
 public class DashboardDTO {
@@ -16,6 +19,43 @@ public class DashboardDTO {
     private List<Integer> jumlahRekomendasiImplementedPerBulan;
     private List<Integer> jumlahRekomendasiNotImplementedPerBulan;
     private List<String> daftarBulan;
+
+    private LocalDate awal;
+    private LocalDate akhir;
+    private int bulan;
+    private List<Rekomendasi> rekomendasi;
+
+    public List<Rekomendasi> getRekomendasi() {
+        return rekomendasi;
+    }
+
+    public void setRekomendasi(List<Rekomendasi> rekomendasi) {
+        this.rekomendasi = rekomendasi;
+    }
+
+    public int getBulan() {
+        return bulan;
+    }
+
+    public void setBulan(int bulan) {
+        this.bulan = bulan;
+    }
+
+    public LocalDate getAwal() {
+        return awal;
+    }
+
+    public void setAwal(LocalDate awal) {
+        this.awal = awal;
+    }
+
+    public LocalDate getAkhir() {
+        return akhir;
+    }
+
+    public void setAkhir(LocalDate akhir) {
+        this.akhir = akhir;
+    }
 
     public Integer getId() {
         return id;

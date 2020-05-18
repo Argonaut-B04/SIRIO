@@ -262,4 +262,11 @@ public class RekomendasiRestServiceImpl implements RekomendasiRestService {
     public List<Rekomendasi> getByDaftarKomponenPemeriksaan(List<KomponenPemeriksaan> komponenPemeriksaanList) {
         return rekomendasiDB.findAllByKomponenPemeriksaanIn(komponenPemeriksaanList);
     }
+
+    @Override
+    public List<Rekomendasi> getByDaftarKomponenPemeriksaanAndTenggatWaktu(
+            List<KomponenPemeriksaan> komponenPemeriksaanList, LocalDate tenggatWaktu, LocalDate tenggatWaktu2) {
+        return rekomendasiDB.findAllByKomponenPemeriksaanInAndTenggatWaktuBetween(
+                komponenPemeriksaanList, tenggatWaktu, tenggatWaktu2);
+    }
 }

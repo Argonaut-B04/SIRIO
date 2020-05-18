@@ -39,6 +39,9 @@ public interface RekomendasiRestService {
   
     List<Rekomendasi> getByDaftarKomponenPemeriksaan(List<KomponenPemeriksaan> komponenPemeriksaanList);
 
+    List<Rekomendasi> getByDaftarKomponenPemeriksaanAndTenggatWaktu(
+            List<KomponenPemeriksaan> komponenPemeriksaanList, LocalDate tenggatWaktu, LocalDate tenggatWaktu2);
+
     void ubahRekomendasi(int idRekomendasi, Rekomendasi rekomendasi);
 
     void hapusRekomendasi(int idRekomendasi);

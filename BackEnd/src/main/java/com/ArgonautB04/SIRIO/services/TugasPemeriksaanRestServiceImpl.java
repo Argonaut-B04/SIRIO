@@ -56,6 +56,16 @@ public class TugasPemeriksaanRestServiceImpl implements TugasPemeriksaanRestServ
     }
 
     @Override
+    public List<TugasPemeriksaan> getByDaftarKantorCabangAndTanggalSelesai(List<KantorCabang> kantorCabangList, LocalDate tanggalMulai, LocalDate tanggalSelesai) {
+        return tugasPemeriksaanDB.findAllByKantorCabangInAndTanggalSelesaiBetween(kantorCabangList, tanggalMulai, tanggalSelesai);
+    }
+
+    @Override
+    public List<TugasPemeriksaan> getByKantorCabangAndTanggalSelesai(KantorCabang kantorCabang, LocalDate tanggalMulai, LocalDate tanggalSelesai) {
+        return tugasPemeriksaanDB.findAllByKantorCabangAndTanggalSelesaiBetween(kantorCabang, tanggalMulai, tanggalSelesai);
+    }
+
+    @Override
     public List<TugasPemeriksaan> getByRencana(RencanaPemeriksaan rencanaPemeriksaan) {
         return tugasPemeriksaanDB.findAllByRencanaPemeriksaan(rencanaPemeriksaan);
     }

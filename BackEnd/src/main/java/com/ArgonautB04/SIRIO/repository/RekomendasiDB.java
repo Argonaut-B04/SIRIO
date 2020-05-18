@@ -19,5 +19,8 @@ public interface RekomendasiDB extends JpaRepository<Rekomendasi, Integer> {
 
     List<Rekomendasi> findAllByKomponenPemeriksaanIn(Collection<KomponenPemeriksaan> komponenPemeriksaan);
 
+    List<Rekomendasi> findAllByKomponenPemeriksaanInAndTenggatWaktuBetween(
+            Collection<KomponenPemeriksaan> komponenPemeriksaan, LocalDate tenggatWaktu, LocalDate tenggatWaktu2);
+
     int countAllByTenggatWaktuGreaterThanEqualAndTenggatWaktuLessThan(LocalDate tenggatWaktu, LocalDate tenggatWaktu2);
 }

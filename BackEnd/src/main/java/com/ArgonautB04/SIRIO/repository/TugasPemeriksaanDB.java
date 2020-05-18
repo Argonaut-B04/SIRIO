@@ -23,4 +23,8 @@ public interface TugasPemeriksaanDB extends JpaRepository<TugasPemeriksaan, Inte
     List<TugasPemeriksaan> findAllByRencanaPemeriksaan(RencanaPemeriksaan rencanaPemeriksaan);
 
     List<TugasPemeriksaan> findByTanggalSelesaiIsGreaterThanAndTanggalMulaiIsLessThan(@NotNull LocalDate tanggalMulai, @NotNull LocalDate tanggalSelesai);
+
+    List<TugasPemeriksaan> findAllByKantorCabangInAndTanggalSelesaiBetween(Collection<KantorCabang> kantorCabang, @NotNull LocalDate tanggalMulai, @NotNull LocalDate tanggalSelesai);
+
+    List<TugasPemeriksaan> findAllByKantorCabangAndTanggalSelesaiBetween(KantorCabang kantorCabang, @NotNull LocalDate tanggalMulai, @NotNull LocalDate tanggalSelesai);
 }

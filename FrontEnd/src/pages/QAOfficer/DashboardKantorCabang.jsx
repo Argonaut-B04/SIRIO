@@ -2,14 +2,12 @@ import React from "react";
 import SirioMainLayout from "../../Layout/SirioMainLayout";
 import PollingService from "../../Services/PollingService";
 import { withRouter } from "react-router-dom";
-import { Redirect } from 'react-router-dom';
 import SirioBarChart from "../../Components/Chart/SirioBarChart";
 import SirioDashboardBox from "../../Components/Box/SirioDashboardBox";
 import DashboardService from "../../Services/DashboardService";
 import KantorCabangService from "../../Services/KantorCabangService";
 import SirioField from "../../Components/Form/SirioFormComponent/SirioField";
 import SirioButton from '../../Components/Button/SirioButton';
-import SirioForm from "../../Components/Form/SirioForm";
 import SirioComponentHeader from "../../Components/Header/SirioComponentHeader";
 import AuthenticationService from "../../Services/AuthenticationService";
 
@@ -30,14 +28,13 @@ class DashboardKantorCabang extends React.Component {
             namaKantor: "",
             areaKantor: "",
             regionalKantor: "",
-            tanggalAwal: "",
-            tanggalAkhir: "",
+            tanggalPertama: "",
+            tanggalKedua: "",
             namaChanged: false,
-            role: AuthenticationService.getRole(),
-            redirect: false
+            role: AuthenticationService.getRole()
         }
         this.renderData = this.renderData.bind(this);
-        // this.inputDefinition = this.inputDefinition.bind(this);
+        this.handleChange = this.handleChange.bind(this);
         this.handleSelectChange = this.handleSelectChange.bind(this);
         this.handleSelectChangeNama = this.handleSelectChangeNama.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -169,22 +166,21 @@ class DashboardKantorCabang extends React.Component {
         const filter = {
             namaKantor: this.state.namaKantor,
             areaKantor: this.state.areaKantor,
-            regionalKantor: this.state.regionalKantor
+            regionalKantor: this.state.regionalKantor,
+            tanggalPertama: this.state.tanggalPertama,
+            tanggalKedua: this.state.tanggalKedua
         };
         DashboardService.getAllComponentByFilter(filter)
             .then((response) => 
             this.setState({
-                dashboardComponent: response.data.result,
-                namaKantor: "",
-                areaKantor: "",
-                regionalKantor: ""
+                dashboardComponent: response.data.result
             }));
     }
 
     getBetween() {
         return (
             <>
-                <div className="col-md-1 pl-0">
+                <div >
                     <SirioField
                         type="select"
                         handleChange={this.handleSelectChangeNama}
@@ -194,7 +190,7 @@ class DashboardKantorCabang extends React.Component {
                         optionList={this.state.namaKantorList}
                     />
                 </div>
-                <div className="col-md-1 pl-0">
+                <div >
                     {this.state.namaChanged ? <h5>{this.state.areaKantorList}</h5> :
                     <SirioField
                         type="select"
@@ -206,7 +202,7 @@ class DashboardKantorCabang extends React.Component {
                     />
                     }
                 </div>
-                <div className="col-md-1 pl-0">
+                <div >
                     {this.state.namaChanged ? <h5>{this.state.regionalKantorList}</h5> :
                     <SirioField
                         type="select"
@@ -223,8 +219,8 @@ class DashboardKantorCabang extends React.Component {
                         type="date"
                         handleChange={this.handleChange}
                         classes="p-1"
-                        name="tanggalAwal"
-                        value={this.state.tanggalAwal}
+                        name="tanggalPertama"
+                        value={this.state.tanggalPertama}
                     />
                 </div>
                 <div className="col-md-6 pl-0">
@@ -232,8 +228,8 @@ class DashboardKantorCabang extends React.Component {
                         type="date"
                         handleChange={this.handleChange}
                         classes="p-1"
-                        name="tanggalAkhir"
-                        value={this.state.tanggalAkhir}
+                        name="tanggalKedua"
+                        value={this.state.tanggalKedua}
                     />
                 </div>
             </>
@@ -356,7 +352,7 @@ class DashboardKantorCabang extends React.Component {
             return (
                 <SirioMainLayout preloader={preloader} contentLoading={contentLoading} loadingBody={loadingBody} active={!contentLoading}>
                     <div>
-                        <h3>Dashboard Performa Seluruh Kantor Cabang</h3>
+                        <h3>Dashboard Performa Kantor Cabang</h3>
                         <SirioComponentHeader
                             betweenTitleSubtitle={this.getBetween()}
                         />
