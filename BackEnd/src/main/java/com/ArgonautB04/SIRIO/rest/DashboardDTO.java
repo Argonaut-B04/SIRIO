@@ -15,6 +15,15 @@ public class DashboardDTO {
     private List<Integer> listRekomendasiOverdue;
     private Float jumlahRekomendasiOverdue;
     private List<String> listMonth;
+    private String namaqa;
+
+    public String getNamaqa() {
+        return namaqa;
+    }
+
+    public void setNamaqa(String namaqa) {
+        this.namaqa = namaqa;
+    }
 
     public Integer getId() {
         return id;

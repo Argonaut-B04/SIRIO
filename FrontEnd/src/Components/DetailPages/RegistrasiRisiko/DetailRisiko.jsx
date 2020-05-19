@@ -180,7 +180,6 @@ class DetailRisiko extends React.Component {
                 data={this.data()}
                 id= 'id'
                 subButton={this.subButton()}
-                link="registrasi-risiko"
             />
             </>
         );

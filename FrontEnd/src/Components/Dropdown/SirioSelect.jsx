@@ -36,7 +36,7 @@ export default class SirioSelect extends Component {
 
     render() {
         const { customStyles, props } = this;
-        const { options, required, value, name, index, handleChange, className } = props;
+        const { options, required, value, name, index, handleChange, className, placeholder } = props;
         const { select } = classes;
         var hiddenOne;
         if (required) {

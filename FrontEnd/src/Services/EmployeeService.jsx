@@ -33,6 +33,9 @@ class EmployeeService {
         return this.axiosInstance.get(SirioAxiosBase.BASEURL + `/Employee/getAllQAOfficer`);
     }
 
+    async getAllQAOfficerDD() {
+        return this.axiosInstance.get(SirioAxiosBase.BASEURL + `/Employee/getAllQAOfficerDD`);
+    }
 
     async checkEmployeeExist(username) {
         return this.axiosInstance.get(SirioAxiosBase.BASEURL + `/Employee/check/username/` + username);
