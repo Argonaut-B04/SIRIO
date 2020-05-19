@@ -17,7 +17,7 @@ class DetailRencanaPemeriksaan extends React.Component {
             rencanaPemeriksaan: {},
             daftarTugasPemeriksaan: [],
             dataGeneral: {},
-            redirect: 0
+            redirect: false
         }
 
         this.renderDataRencana = this.renderDataRencana.bind(this);
@@ -30,29 +30,16 @@ class DetailRencanaPemeriksaan extends React.Component {
 
     setRedirect = () => {
         this.setState({
-            redirect: 1
-        })
-    };
-
-    setRedirect1 = () => {
-        this.setState({
-            redirect: 2
+            redirect: true
         })
     };
 
     renderRedirect = () => {
-        if (this.state.redirect === 1) {
+        if (this.state.redirect) {
             return <Redirect to={{
-                pathname: "/manager/rencanaPemeriksaan",
+                pathname: "/rencanaPemeriksaan",
                 state: {
                     deleteSuccess: true
-                }
-            }} />
-        }else if (this.state.redirect === 2) {
-            return <Redirect to={{
-                pathname: "/manager/rencanaPemeriksaan",
-                state: {
-                    endSuccess: true
                 }
             }} />
         }
@@ -143,13 +130,14 @@ class DetailRencanaPemeriksaan extends React.Component {
             return (
                 <div>
                     <NavLink to={{
-                        pathname: "/manager/rencanaPemeriksaan/ubah",
+                        pathname: "/rencanaPemeriksaan/ubah",
                         state: {
                             id: this.state.rencanaPemeriksaan.id,
                         }
                     }}>
                         <SirioButton
                             purple
+                            classes="mx-2"
                         >
                             Ubah
                         </SirioButton>
@@ -202,7 +190,7 @@ class DetailRencanaPemeriksaan extends React.Component {
                     data={this.state.dataGeneral}
                     id='id'
                     subButton={this.subButton(this.state.rencanaPemeriksaan.status)}
-                    link="manager/rencanaPemeriksaan"
+                    link="rencanaPemeriksaan"
                 />
                 {this.state.daftarTugasPemeriksaan.map(tugas=>
                     <SirioSubdetailPage

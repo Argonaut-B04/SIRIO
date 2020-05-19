@@ -1,16 +1,16 @@
 import React from 'react';
 import SirioButton from '../../Button/SirioButton';
-import classes from './TabelKantorCabang.module.css';
+import classes from './TabelSOP.module.css';
 import SirioTable from '../SirioTable';
-import KantorCabangService from '../../../Services/KantorCabangService';
+import SopService from '../../../Services/SopService';
 import { NavLink } from 'react-router-dom';
 import { withRouter } from 'react-router-dom';
 import SirioMessageButton from "../../Button/ActionButton/SirioMessageButton";
 
 /**
- * Kelas untuk membuat komponen tabel kantor cabang
+ * Kelas untuk membuat komponen tabel sop
  */
-class TabelKantorCabang extends React.Component {
+class TabelSOP extends React.Component {
 
     constructor(props) {
         super(props);
@@ -35,71 +35,35 @@ class TabelKantorCabang extends React.Component {
     }
 
     async renderRows() {
-        const response = await KantorCabangService.getKantorCabangList();
+        const response = await SopService.getSopList();
 
         this.setState({
             rowList: response.data.result
         })
     }
 
-    auditFormatter(kunjunganAudit){
-        if (kunjunganAudit === false){
-            return "Belum Pernah"
-        }else if (kunjunganAudit === true){
-            return "Sudah Pernah"
-        }
-    }
-
     columns = [{
-        dataField: 'namaKantor',
-        text: 'NAMA POINT',
+        dataField: 'judul',
+        text: 'JUDUL',
         sort: true,
         classes: classes.rowItem,
         headerClasses: classes.colheader,
         headerStyle: (colum, colIndex) => {
-            return { width: "18%", textAlign: 'left' };
+            return { width: "35%", textAlign: 'left' };
         }
     },{
-        dataField: 'pemilik.nama',
-        text: 'BRANCH MANAGER',
+        dataField: 'kategori',
+        text: 'KATEGORI',
         sort: true,
         classes: classes.rowItem,
         headerClasses: classes.colheader,
         headerStyle: (colum, colIndex) => {
-            return { width: "18%", textAlign: 'left' }
+            return { width: "35%", textAlign: 'left' }
         },
         
-    }, {
-        dataField: 'area',
-        text: 'AREA',
-        sort: true,
-        classes: classes.rowItem,
-        headerClasses: classes.colheader,
-        headerStyle: (colum, colIndex) => {
-            return { width: "15%", textAlign: 'left' };
-        }
-    }, {
-        dataField: 'regional',
-        text: 'REGIONAL',
-        sort: true,
-        classes: classes.rowItem,
-        headerClasses: classes.colheader,
-        headerStyle: (colum, colIndex) => {
-            return { width: "15%", textAlign: 'left' };
-        }
-    }, {
-        dataField: 'kunjunganAudit',
-        text: 'KUNJUNGAN AUDIT',
-        sort: true,
-        formatter: this.auditFormatter,
-        classes: classes.rowItem,
-        headerClasses: classes.colheader,
-        headerStyle: (colum, colIndex) => {
-            return { width: "15%", textAlign: 'left' };
-        }
-    }, {
+    },{
         dataField: 'noData1',
-        text: '',
+        text: 'AKSI',
         headerClasses: classes.colheader,
         classes: classes.rowItem,
         style: () => {
@@ -116,12 +80,12 @@ class TabelKantorCabang extends React.Component {
     headerButton() {
         return (
             <NavLink to={{
-                pathname: "/kantorCabang/tambah"
+                pathname: "/sop/tambah"
             }}>
                 <SirioButton
                     purple recommended
                 >
-                    Tambah Kantor Cabang
+                    Tambah SOP
                 </SirioButton>
             </NavLink>
         )
@@ -130,9 +94,9 @@ class TabelKantorCabang extends React.Component {
     getButtonsFirst(cell, row) {
         return (
             <NavLink to={{
-                pathname: "/kantorCabang/detail",
+                pathname: "/sop/detail",
                 state: {
-                    id: row.idKantor
+                    id: row.idSop
                 }
             }}>
                 <SirioButton
@@ -148,7 +112,7 @@ class TabelKantorCabang extends React.Component {
         return (
             <>
                 <SirioTable
-                    title="Daftar Kantor Cabang"
+                    title="Daftar SOP"
                     data={this.state.rowList}
                     id='id'
                     columnsDefinition={this.columns}
@@ -159,7 +123,7 @@ class TabelKantorCabang extends React.Component {
                 <SirioMessageButton
                     show
                     classes="d-none"
-                    modalTitle="Kantor Cabang berhasil Disimpan"
+                    modalTitle="SOP berhasil Disimpan"
                     customConfirmText="Tutup"
                     onClick={this.endNotification}
                 />
@@ -168,7 +132,7 @@ class TabelKantorCabang extends React.Component {
                 <SirioMessageButton
                     show
                     classes="d-none"
-                    modalTitle="Kantor Cabang berhasil Dihapus"
+                    modalTitle="SOP berhasil Dihapus"
                     customConfirmText="Tutup"
                     onClick={this.endNotification}
                 />
@@ -177,7 +141,7 @@ class TabelKantorCabang extends React.Component {
                 <SirioMessageButton
                     show
                     classes="d-none"
-                    modalTitle="Kantor Cabang berhasil Diubah"
+                    modalTitle="SOP berhasil Diubah"
                     customConfirmText="Tutup"
                     onClick={this.endNotification}
                 />
@@ -187,4 +151,4 @@ class TabelKantorCabang extends React.Component {
     }
 } 
 
-export default withRouter(TabelKantorCabang);
+export default withRouter(TabelSOP);
