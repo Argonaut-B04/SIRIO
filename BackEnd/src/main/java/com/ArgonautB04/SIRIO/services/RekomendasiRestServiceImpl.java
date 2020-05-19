@@ -178,12 +178,14 @@ public class RekomendasiRestServiceImpl implements RekomendasiRestService {
                         && r.getTenggatWaktu().isBefore(LocalDate.now())) {
                     overdue.add(r);
                 }
-//                else if (r.getTenggatWaktu() != null
-//                        && r.getTenggatWaktu().isBefore(
-//                        r.getBuktiPelaksanaan().
-//                        getTanggalDisetujui())) {
-//
-//                }
+                else if (r.getTenggatWaktu() != null
+                        && r.getBuktiPelaksanaan().
+                        getTanggalPersetujuan() != null
+                        && r.getTenggatWaktu().isBefore(
+                        r.getBuktiPelaksanaan().
+                        getTanggalPersetujuan())) {
+                    overdue.add(r);
+                }
             }
         } else {
             for (Rekomendasi r : getAll()) {
