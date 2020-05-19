@@ -60,6 +60,7 @@ export default class SirioSelect extends Component {
                     options={options}
                     className={[select, className].join(" ")}
                     styles={customStyles}
+                    placeholder={placeholder}
                 />
             </>
         );
