@@ -5,12 +5,12 @@ import { withRouter } from "react-router-dom";
 import SirioBarChart from "../../Components/Chart/SirioBarChart";
 import SirioDashboardBox from "../../Components/Box/SirioDashboardBox";
 import DashboardStaffService from '../../Services/DashboardStaffService';
-import { Redirect, NavLink } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import SirioField from "../../Components/Form/SirioFormComponent/SirioField";
 import SirioComponentHeader from "../../Components/Header/SirioComponentHeader";
 import EmployeeService from "../../Services/EmployeeService";
 import SirioButton from '../../Components/Button/SirioButton';
-import SirioForm from '../../Components/Form/SirioForm';
+import moment from 'moment';
 
 /**
  * Controller untuk menampilkan halaman utama
@@ -37,6 +37,7 @@ class DashboardStaff extends React.Component {
             namaqa: "",
             tanggalAwal: "",
             tanggalAkhir: "",
+            max: "",
             preloader: true,
             contentLoading: !PollingService.isConnected()
         }
@@ -156,7 +157,6 @@ class DashboardStaff extends React.Component {
     }
 
     getBetween() {
-        const { errorTanggal} = this.state;
         var tombolSimpan =
         <SirioButton
             purple
@@ -176,6 +176,9 @@ class DashboardStaff extends React.Component {
                     Cari
                 </SirioButton>
         }
+        var max = moment(this.state.tanggalAwal).add(2, 'y')
+        max = max.subtract(1, 'd')
+        max = max.format("YYYY-MM-DD")
         return (
             <div className="row">
                 <div className="col-md-12">
@@ -206,6 +209,7 @@ class DashboardStaff extends React.Component {
                             disabled={this.state.tanggalAwal === ""}
                             classes="p-1"
                             min={this.state.tanggalAwal}
+                            max={max}
                             required={this.state.tanggalAwal !== ""}
                             name="tanggalAkhir"
                             value={this.state.tanggalAkhir}
@@ -260,7 +264,7 @@ class DashboardStaff extends React.Component {
         )
     }
     async renderOption() {
-        const response = await EmployeeService.getAllQAOfficer();
+        const response = await EmployeeService.getAllQAOfficerDD();
 
         const optionList = response.data.result.map(qa => {
             return (

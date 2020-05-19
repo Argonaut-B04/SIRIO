@@ -134,6 +134,7 @@ export default class SirioField extends Component {
                     disabled={this.props.disabled}
 
                     min={min}
+                    max={max}
 
                     placeholder={placeholder}
                     className={[customClass, classes.input].join(" ")}

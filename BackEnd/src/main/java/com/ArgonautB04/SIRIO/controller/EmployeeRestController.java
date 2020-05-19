@@ -263,6 +263,28 @@ public class EmployeeRestController {
         BaseResponse<List<Employee>> response = new BaseResponse<>();
         ArrayList<Employee> result = new ArrayList<>();
         Employee allEmp = new Employee();
+        List<Employee> emp = employeeRestService.getAll();
+        for (Employee e: emp){
+            if (e.getRole().getIdRole() == 5 || e.getRole().getIdRole() == 7){
+                result.add(e);
+            }
+        }
+        response.setStatus(200);
+        response.setMessage("success");
+        response.setResult(result);
+        return response;
+    }
+
+    /**
+     * Mengambil seluruh QA Officer untuk dropdown
+     *
+     * @return daftar hasil employee
+     */
+    @GetMapping("/getAllQAOfficerDD")
+    private BaseResponse<List<Employee>> getAllQAOfficerDD() {
+        BaseResponse<List<Employee>> response = new BaseResponse<>();
+        ArrayList<Employee> result = new ArrayList<>();
+        Employee allEmp = new Employee();
         allEmp.setIdEmployee(0);
         allEmp.setNama("Semua QA Officer");
         result.add(allEmp);
