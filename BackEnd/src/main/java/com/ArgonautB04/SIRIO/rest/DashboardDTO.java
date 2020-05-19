@@ -1,6 +1,8 @@
 package com.ArgonautB04.SIRIO.rest;
 
+import com.ArgonautB04.SIRIO.model.HasilPemeriksaan;
 import com.ArgonautB04.SIRIO.model.Rekomendasi;
+import com.ArgonautB04.SIRIO.model.TugasPemeriksaan;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -24,6 +26,24 @@ public class DashboardDTO {
     private LocalDate akhir;
     private int bulan;
     private List<Rekomendasi> rekomendasi;
+    private List<TugasPemeriksaan> tugasPemeriksaan;
+    private List<HasilPemeriksaan> hasilPemeriksaan;
+
+    public List<TugasPemeriksaan> getTugasPemeriksaan() {
+        return tugasPemeriksaan;
+    }
+
+    public void setTugasPemeriksaan(List<TugasPemeriksaan> tugasPemeriksaan) {
+        this.tugasPemeriksaan = tugasPemeriksaan;
+    }
+
+    public List<HasilPemeriksaan> getHasilPemeriksaan() {
+        return hasilPemeriksaan;
+    }
+
+    public void setHasilPemeriksaan(List<HasilPemeriksaan> hasilPemeriksaan) {
+        this.hasilPemeriksaan = hasilPemeriksaan;
+    }
 
     public List<Rekomendasi> getRekomendasi() {
         return rekomendasi;

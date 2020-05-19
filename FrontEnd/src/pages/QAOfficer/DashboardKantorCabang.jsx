@@ -38,6 +38,7 @@ class DashboardKantorCabang extends React.Component {
         this.handleSelectChange = this.handleSelectChange.bind(this);
         this.handleSelectChangeNama = this.handleSelectChangeNama.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleReset = this.handleReset.bind(this);
     }
 
     // jika sudah selesai dirender, hentikan preloader
@@ -171,16 +172,75 @@ class DashboardKantorCabang extends React.Component {
             tanggalKedua: this.state.tanggalKedua
         };
         DashboardService.getAllComponentByFilter(filter)
-            .then((response) => 
+            .then((response) => {
+                if (this.state.namaKantor !== "") {
+                    this.setState({
+                        dashboardComponent: response.data.result,
+                        filterNama: true
+                    });
+                } else if (this.state.areaKantor !== "" && this.state.regionalKantor !== "") {
+                    this.setState({
+                        dashboardComponent: response.data.result,
+                        filterAreaRegional: true
+                    });
+                } else if (this.state.areaKantor !== "") {
+                    this.setState({
+                        dashboardComponent: response.data.result,
+                        filterArea: true
+                    });
+                } else if (this.state.regionalKantor !== "") {
+                    this.setState({
+                        dashboardComponent: response.data.result,
+                        filterRegional: true
+                    });
+                } else {
+                    this.setState({
+                        dashboardComponent: response.data.result,
+                        filterNama: false,
+                        filterAreaRegional: false,
+                        filterArea: false,
+                        filterRegional: false
+                    });
+                }
+            })
+    }
+
+    handleReset(event) {
+        event.preventDefault();
+        KantorCabangService.getKantorCabangList()
+            .then((response) =>
             this.setState({
-                dashboardComponent: response.data.result
+                kantorCabangList: response.data.result,
+                areaKantorList: response.data.result.map(kc => {
+                    return (
+                        {
+                            label: kc.area,
+                            value: kc.area
+                        }
+                    )
+                }),
+                regionalKantorList: response.data.result.map(kc => {
+                    return (
+                        {
+                            label: kc.regional,
+                            value: kc.regional
+                        }
+                    )
+                }),
+                namaKantor: "",
+                areaKantor: "",
+                regionalKantor: "",
+                tanggalPertama: "",
+                tanggalKedua: "",
+                namaChanged: false,
+                filterNama: false
             }));
     }
 
     getBetween() {
         return (
             <>
-                <div >
+                <div>
                     <SirioField
                         type="select"
                         handleChange={this.handleSelectChangeNama}
@@ -188,10 +248,11 @@ class DashboardKantorCabang extends React.Component {
                         name="namaKantor"
                         value={this.state.namaKantor}
                         optionList={this.state.namaKantorList}
+                        placeholder="Semua Kantor Cabang"
                     />
                 </div>
                 <div >
-                    {this.state.namaChanged ? <h5>{this.state.areaKantorList}</h5> :
+                    {this.state.namaChanged ? <h5>Area: {this.state.areaKantorList}</h5> :
                     <SirioField
                         type="select"
                         handleChange={this.handleSelectChange}
@@ -199,11 +260,12 @@ class DashboardKantorCabang extends React.Component {
                         name="areaKantor"
                         value={this.state.areaKantor}
                         optionList={this.getUnique(this.state.areaKantorList, 'label')}
+                        placeholder="Semua Area"
                     />
                     }
                 </div>
                 <div >
-                    {this.state.namaChanged ? <h5>{this.state.regionalKantorList}</h5> :
+                    {this.state.namaChanged ? <h5>Regional: {this.state.regionalKantorList}</h5> :
                     <SirioField
                         type="select"
                         handleChange={this.handleSelectChange}
@@ -211,6 +273,7 @@ class DashboardKantorCabang extends React.Component {
                         name="regionalKantor"
                         value={this.state.regionalKantor}
                         optionList={this.getUnique(this.state.regionalKantorList, 'label')}
+                        placeholder="Semua Regional"
                     />
                     }
                 </div>
@@ -342,6 +405,10 @@ class DashboardKantorCabang extends React.Component {
         ])
     }
 
+    // getTitle() {
+
+    // }
+
     render() {
         const { preloader, contentLoading, loadingBody } = this.state;
         const role = this.state.role;
@@ -352,12 +419,19 @@ class DashboardKantorCabang extends React.Component {
             return (
                 <SirioMainLayout preloader={preloader} contentLoading={contentLoading} loadingBody={loadingBody} active={!contentLoading}>
                     <div>
-                        <h3>Dashboard Performa Kantor Cabang</h3>
+                        {this.state.filterNama ?
+                            <h3 style={{margin: "15px"}}>Dashboard Performa Kantor Cabang {this.state.namaKantor}</h3> :
+                            <h3 style={{margin: "15px"}}>Dashboard Performa Kantor Cabang</h3>
+                        }
+                        {/* {this.state.filterAreaRegional ?
+                            <h3 style={{margin: "15px"}}>Dashboard Performa Kantor Cabang {this.state.areaKantor} {this.state.regionalKantor}</h3> :
+                            <h3 style={{margin: "15px"}}>Dashboard Performa Kantor Cabang</h3>
+                        } */}
                         <SirioComponentHeader
                             betweenTitleSubtitle={this.getBetween()}
                         />
                     </div>
-                    <div>
+                    <div style={{padding: "8px"}}>
                         <SirioButton
                             purple
                             recommended
@@ -366,15 +440,23 @@ class DashboardKantorCabang extends React.Component {
                         >
                             Cari
                         </SirioButton>
+                        <SirioButton
+                            purple
+                            recommended
+                            classes="mx-2"
+                            onClick={(event) => this.handleReset(event)}
+                        >
+                            Atur Ulang
+                        </SirioButton>
                     </div>
-                    <div>
-                        <br></br>
+                    <div style={{marginTop: "60px"}}>
                         <SirioBarChart data={this.getChart()} />
                     </div>
                     <div>
-                        
+                        {this.state.filterNama ? 
+                            <SirioDashboardBox data={this.getBoxSecond()} /> :
                             <SirioDashboardBox data={this.getBoxFirst()} />
-                        
+                        }
                     </div>
                 </SirioMainLayout>
             )
@@ -382,7 +464,7 @@ class DashboardKantorCabang extends React.Component {
             return (
                 <SirioMainLayout preloader={preloader} contentLoading={contentLoading} loadingBody={loadingBody} active={!contentLoading}>
                     <div>
-                        <h3>Dashboard Performa Kantor Cabang</h3>
+                        <h3 style={{margin: "15px"}}>Dashboard Performa Kantor Cabang</h3>
                     </div>
                     <div>
                         <br></br>
