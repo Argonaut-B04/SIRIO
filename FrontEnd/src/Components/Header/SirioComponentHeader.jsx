@@ -9,22 +9,40 @@ class SirioComponentHeader extends Component {
         return (
             <div className={headerWrapper}>
                 <div className="row">
-                    <div className="col-6">
-                        {title &&
-                            <h2 className={classes.title}>
-                                {title}
-                            </h2>
-                        }
-                        {betweenTitleSubtitle}
-                        {subtitle &&
-                            <h5 className={classes.subtitle}>
-                                {subtitle}
-                            </h5>
-                        }
-                    </div>
-                    <div className="col-6 d-flex justify-content-end align-items-center">
-                        {headerButton && <div className="ml-auto">{headerButton}</div>}
-                    </div>
+                    {!!headerButton ?
+                        <>
+                            <div className="col-9">
+                                {title &&
+                                    <h2 className={classes.title}>
+                                        {title}
+                                    </h2>
+                                }
+                                {betweenTitleSubtitle}
+                                {subtitle &&
+                                    <h5 className={classes.subtitle}>
+                                        {subtitle}
+                                    </h5>
+                                }
+                            </div>
+                            <div className="col-3 d-flex justify-content-end align-items-center">
+                                {headerButton && <div className="ml-auto">{headerButton}</div>}
+                            </div>
+                        </>
+                        :
+                        <>
+                            {title &&
+                                <h2 className={classes.title}>
+                                    {title}
+                                </h2>
+                            }
+                            {betweenTitleSubtitle}
+                            {subtitle &&
+                                <h5 className={classes.subtitle}>
+                                    {subtitle}
+                                </h5>
+                            }
+                        </>
+                    }
                 </div>
             </div>
         );
