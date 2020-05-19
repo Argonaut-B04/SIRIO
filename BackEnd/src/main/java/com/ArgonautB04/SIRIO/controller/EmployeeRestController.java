@@ -243,7 +243,7 @@ public class EmployeeRestController {
         ArrayList<Employee> result = new ArrayList<>();
         List<Employee> emp = employeeRestService.getAll();
         for (Employee e: emp){
-            if (e.getRole().getIdRole() == 7){
+            if (e.getRole().getIdRole() == 6){
                 result.add(e);
             }
         }

@@ -62,7 +62,7 @@ VALUES
 ('7', 'superQA@sirio.com', 'Super QA', 'Aku SuperQA', '0123', '', 'AKTIF', 'superofficer', '1', '7');
 
 
-INSERT IGNORE INTO `sop` (`id_sop`, `judul`, `kategori`, `link_dokumen`, `pembuat`) VALUES ('1', 'test', 'test', 'test', '1');
+INSERT IGNORE INTO `sop` (`id_sop`, `judul`, `kategori`, `link_dokumen`, `status`, `pembuat`) VALUES ('1', 'test', 'test', 'https://test', 'AKTIF', '1');
 
 INSERT IGNORE INTO `risiko` (`id_risiko`, `deskripsi`, `detail_uraian`, `ketentuan_sampel`, `metodologi`, `nama_risiko`, `risiko_kategori`, `status`, `parent`, `sop`) 
 VALUES 
