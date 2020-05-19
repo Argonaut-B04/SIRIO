@@ -2,6 +2,7 @@ import React from "react";
 import SirioMainLayout from "../../Layout/SirioMainLayout";
 import PollingService from "../../Services/PollingService";
 import { withRouter } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 import SirioBarChart from "../../Components/Chart/SirioBarChart";
 import SirioDashboardBox from "../../Components/Box/SirioDashboardBox";
 import DashboardService from "../../Services/DashboardService";
@@ -114,12 +115,13 @@ class DashboardKantorCabang extends React.Component {
             kantorCabangList: kantorCabangList,
             namaKantorList: namaKantorCabang,
             areaKantorList: areaKantorCabang,
-            regionalKantorList: regionalKantorCabang
+            regionalKantorList: regionalKantorCabang,
         })
     }
 
     getUnique(arr, index) {
         const unique = arr
+            .filter(arr => arr[index] !== "")
             .map(e => e[index])
             .map((e, i, final) => final.indexOf(e) === i && i)
             .filter(e => arr[e]).map(e => arr[e]); 
@@ -143,8 +145,8 @@ class DashboardKantorCabang extends React.Component {
                     {
                         [name]
                             : event.value,
-                        areaKantorList: listKC[i].area,
-                        regionalKantorList: listKC[i].regional,
+                        areaNamaKantor: listKC[i].area,
+                        regionalNamaKantor: listKC[i].regional,
                         namaChanged: true
                     }
                 )
@@ -207,33 +209,20 @@ class DashboardKantorCabang extends React.Component {
 
     handleReset(event) {
         event.preventDefault();
-        KantorCabangService.getKantorCabangList()
+        DashboardService.getAllComponent()
             .then((response) =>
             this.setState({
-                kantorCabangList: response.data.result,
-                areaKantorList: response.data.result.map(kc => {
-                    return (
-                        {
-                            label: kc.area,
-                            value: kc.area
-                        }
-                    )
-                }),
-                regionalKantorList: response.data.result.map(kc => {
-                    return (
-                        {
-                            label: kc.regional,
-                            value: kc.regional
-                        }
-                    )
-                }),
+                dashboardComponent: response.data.result,
                 namaKantor: "",
                 areaKantor: "",
                 regionalKantor: "",
                 tanggalPertama: "",
                 tanggalKedua: "",
                 namaChanged: false,
-                filterNama: false
+                filterNama: false,
+                filterAreaRegional: false,
+                filterArea: false,
+                filterRegional: false
             }));
     }
 
@@ -252,7 +241,7 @@ class DashboardKantorCabang extends React.Component {
                     />
                 </div>
                 <div >
-                    {this.state.namaChanged ? <h5>Area: {this.state.areaKantorList}</h5> :
+                    {this.state.namaChanged ? <h5>Area: {this.state.areaNamaKantor}</h5> :
                     <SirioField
                         type="select"
                         handleChange={this.handleSelectChange}
@@ -265,7 +254,7 @@ class DashboardKantorCabang extends React.Component {
                     }
                 </div>
                 <div >
-                    {this.state.namaChanged ? <h5>Regional: {this.state.regionalKantorList}</h5> :
+                    {this.state.namaChanged ? <h5>Regional: {this.state.regionalNamaKantor}</h5> :
                     <SirioField
                         type="select"
                         handleChange={this.handleSelectChange}
@@ -277,6 +266,31 @@ class DashboardKantorCabang extends React.Component {
                     />
                     }
                 </div>
+                <div className="col-md-6 pl-0">
+                    <SirioField
+                        type="date"
+                        handleChange={this.handleChange}
+                        classes="p-1"
+                        name="tanggalPertama"
+                        value={this.state.tanggalPertama}
+                    />
+                </div>
+                <div className="col-md-6 pl-0">
+                    <SirioField
+                        type="date"
+                        handleChange={this.handleChange}
+                        classes="p-1"
+                        name="tanggalKedua"
+                        value={this.state.tanggalKedua}
+                    />
+                </div>
+            </>
+        )
+    }
+
+    getSubtitle() {
+        return (
+            <>
                 <div className="col-md-6 pl-0">
                     <SirioField
                         type="date"
@@ -405,9 +419,19 @@ class DashboardKantorCabang extends React.Component {
         ])
     }
 
-    // getTitle() {
-
-    // }
+    getTitle() {
+        var title = "Dashboard Performa Kantor Cabang";
+        if (this.state.filterNama) {
+            title = "Dashboard Performa Kantor Cabang " + this.state.namaKantor
+        } else if (this.state.filterAreaRegional) {
+            title = "Dashboard Performa Kantor Cabang " + this.state.areaKantor + " - " + this.state.regionalKantor
+        } else if (this.state.filterArea) {
+            title = "Dashboard Performa Kantor Cabang " + this.state.areaKantor
+        } else if (this.state.filterRegional) {
+            title = "Dashboard Performa Kantor Cabang " + this.state.regionalKantor
+        } 
+        return title;
+    }
 
     render() {
         const { preloader, contentLoading, loadingBody } = this.state;
@@ -415,23 +439,31 @@ class DashboardKantorCabang extends React.Component {
         const qaOfficer = role === "QA Officer Operational Risk" || role === "Super QA Officer Operational Risk";
         const branchManager = role === "Branch Manager";
 
+        if (role === "Manajer Operational Risk"
+            || role === "QA Lead Operational Risk"
+            || role === "Supervisor"
+            || role === "Administrator") {
+            return (
+                <Redirect to={{
+                    pathname: "/error",
+                    state: {
+                        detail: "Not Authorized",
+                        code: "401"
+                    }
+                }} />
+            )
+        } 
+
         if (qaOfficer) {
             return (
                 <SirioMainLayout preloader={preloader} contentLoading={contentLoading} loadingBody={loadingBody} active={!contentLoading}>
                     <div>
-                        {this.state.filterNama ?
-                            <h3 style={{margin: "15px"}}>Dashboard Performa Kantor Cabang {this.state.namaKantor}</h3> :
-                            <h3 style={{margin: "15px"}}>Dashboard Performa Kantor Cabang</h3>
-                        }
-                        {/* {this.state.filterAreaRegional ?
-                            <h3 style={{margin: "15px"}}>Dashboard Performa Kantor Cabang {this.state.areaKantor} {this.state.regionalKantor}</h3> :
-                            <h3 style={{margin: "15px"}}>Dashboard Performa Kantor Cabang</h3>
-                        } */}
                         <SirioComponentHeader
+                            title={this.getTitle()}
                             betweenTitleSubtitle={this.getBetween()}
                         />
                     </div>
-                    <div style={{padding: "8px"}}>
+                    <div style={{padding: "5px"}}>
                         <SirioButton
                             purple
                             recommended
@@ -449,7 +481,7 @@ class DashboardKantorCabang extends React.Component {
                             Atur Ulang
                         </SirioButton>
                     </div>
-                    <div style={{marginTop: "60px"}}>
+                    <div style={{marginTop: "50px"}}>
                         <SirioBarChart data={this.getChart()} />
                     </div>
                     <div>

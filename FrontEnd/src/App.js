@@ -78,7 +78,7 @@ class App extends React.Component {
             <Route exact path="/demo3" component={DemoFormPage3} />
             <Route exact path="/demo2" component={DemoFormPage2} />
             <Route exact path="/demo" component={DemoFormPage} />
-            <Route exact path="/" component={MainPage} />
+            <Route exact path="/" component={Login} />
             <Route exact path="/dashboard-kantor" component={DashboardKantorCabang} />
 
             <Route exact path="/manager/rencanaPemeriksaan" component={DaftarRencanaPemeriksaan} />

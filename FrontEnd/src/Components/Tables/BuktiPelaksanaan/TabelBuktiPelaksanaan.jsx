@@ -35,11 +35,18 @@ class TabelBuktiPelaksanaan extends React.Component {
     }
 
     async renderRows() {
+        // Mengubah isi dari loader
+        this.props.contentStartLoading();
+        this.props.changeLoadingBody("Mengambil data dari server");
+
         const response = await RekomendasiService.getRekomendasiByLoggedInUser();
+
+        // Mengubah isi dari loader
+        this.props.changeLoadingBody("Menampilkan data");
 
         this.setState({
             rowList: response.data.result
-        })
+        }, this.props.contentFinishLoading()) // Setelah jeda waktu, hentikan loader
     }
 
     dataFormatter() {

@@ -468,8 +468,8 @@ public class DashboardController {
     public List<String> getListMonthFiltered(LocalDate tanggalAwal, LocalDate tanggalAkhir) {
         int monthsBetween = (int) ChronoUnit.MONTHS.between(tanggalAwal, tanggalAkhir);
         List<String> months = new ArrayList<>();
-        for (int i = monthsBetween; i >= 0; i--) {
-            months.add(tanggalAkhir.minusMonths(i).getMonth() + "\n" + tanggalAkhir.minusMonths(i).getYear());
+        for (int i = 0; i <= monthsBetween; i++) {
+            months.add(tanggalAwal.plusMonths(i).getDayOfMonth() + "\n" + tanggalAwal.plusMonths(i).getMonth() + "\n" + tanggalAwal.plusMonths(i).getYear());
         }
         return months;
     }
