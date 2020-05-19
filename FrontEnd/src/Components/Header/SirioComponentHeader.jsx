@@ -10,7 +10,7 @@ class SirioComponentHeader extends Component {
             <div className={headerWrapper}>
                 {!!headerButton ?
                     <div className="row">
-                        <div className="col-9">
+                        <div className="col-6">
                             {title &&
                                 <h2 className={classes.title}>
                                     {title}
@@ -23,7 +23,7 @@ class SirioComponentHeader extends Component {
                                 </h5>
                             }
                         </div>
-                        <div className="col-3 d-flex justify-content-end align-items-center">
+                        <div className="col-6 d-flex justify-content-end align-items-center">
                             {headerButton && <div className="ml-auto">{headerButton}</div>}
                         </div>
                     </div>
