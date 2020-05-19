@@ -1,7 +1,8 @@
 import React from "react";
 import TabelEmployee from "../../Components/Tables/Employee/TabelEmployee";
 import SirioMainLayout from "../../Layout/SirioMainLayout";
-import Detail from "../../Components/DetailPages/Employee/DetailEmployee";
+import AuthenticationService from "Services/AuthenticationService";
+import { Redirect } from "react-router-dom";
 
 export default class DaftarEmployee extends React.Component {
     constructor(props) {
@@ -42,6 +43,18 @@ export default class DaftarEmployee extends React.Component {
     }
 
     render() {
+        if (AuthenticationService.getRole() !== "Administrator") {
+            return (
+                <Redirect to={{
+                    pathname: "/error",
+                    state: {
+                        detail: "Not Authorized",
+                        code: "401"
+                    }
+                }} />
+            )
+        }
+
         return (
             <SirioMainLayout contentLoading={this.state.contentLoading} loadingBody={this.state.loadingBody}>
                 <TabelEmployee contentFinishLoading={this.contentFinishLoading} contentStartLoading={this.contentStartLoading} changeLoadingBody={this.changeLoadingBody} />
