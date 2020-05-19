@@ -165,7 +165,6 @@ class TableRiskLevel extends React.Component {
                     return (
                         <SirioButton
                             red
-                            recommended
                             onClick={() => this.hapus(row.idLevel)}
                         >
                             Hapus
@@ -305,6 +304,16 @@ class TableRiskLevel extends React.Component {
         if (this.state.editMode) {
             return (
                 <div className="pr-3">
+                    <SirioWarningButton
+                        red
+                        modalTitle="Konfirmasi Pembatalan"
+                        modalDesc="Seluruh perubahan konfigurasi Risk Level yang belum tersimpan akan dihapus. Konfirmasi?"
+                        onConfirm={() => window.location.href = "/"}
+                        customConfirmText="Konfirmasi"
+                        customCancelText="Kembali"
+                    >
+                        Batal
+                    </SirioWarningButton>
                     <SirioConfirmButton
                         purple
                         disabled={this.hasEmptyRow()}
@@ -319,17 +328,7 @@ class TableRiskLevel extends React.Component {
                     >
                         Simpan
                     </SirioConfirmButton>
-                    <SirioWarningButton
-                        red
-                        recommended
-                        modalTitle="Konfirmasi Pembatalan"
-                        modalDesc="Seluruh perubahan konfigurasi Risk Level yang belum tersimpan akan dihapus. Konfirmasi?"
-                        onConfirm={() => window.location.href = "/"}
-                        customConfirmText="Konfirmasi"
-                        customCancelText="Kembali"
-                    >
-                        Batal
-                    </SirioWarningButton>
+
                 </div>
             )
         } else return "";

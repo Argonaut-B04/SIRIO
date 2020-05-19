@@ -32,7 +32,7 @@ export default class SirioField extends Component {
     // Sesegera mungkin, shouldComponentUpdate harus dibuka (tapi gak sekarang juga);
     shouldComponentUpdate(nextprops, nextstate) {
 
-        if (this.props.type === "select") {
+        if (this.props.type === "select" || this.props.type === "date") {
             return true;
         };
 
@@ -65,6 +65,7 @@ export default class SirioField extends Component {
                     name={name}
                     value={value}
                     handleChange={handleChange}
+                    placeholder={placeholder}
                     options={optionList}
                     required={required}
                     className={[customClass, classes.sirioSelect].join(" ")}
@@ -134,6 +135,7 @@ export default class SirioField extends Component {
                     disabled={this.props.disabled}
 
                     min={min}
+                    max={max}
 
                     placeholder={placeholder}
                     className={[customClass, classes.input].join(" ")}
@@ -255,14 +257,20 @@ export default class SirioField extends Component {
 
             return (
                 <fieldset>
-                    <div className="row">
-                        <div className="col-3">
-                            {label}
-                        </div>
-                        <div className={"col-9"}>
-                            {field}
-                        </div>
-                    </div>
+                    {
+                        label
+                            ?
+                            <div className="row">
+                                <div className="col-3">
+                                    {label}
+                                </div>
+                                <div className={"col-9"}>
+                                    {field}
+                                </div>
+                            </div>
+                            :
+                        field
+                    }
                 </fieldset>
             )
         }

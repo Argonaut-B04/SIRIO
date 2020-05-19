@@ -3,7 +3,7 @@ import SirioForm from '../SirioForm';
 import SirioButton from '../../Button/SirioButton';
 import BuktiPelaksanaanService from '../../../Services/BuktiPelaksanaanService';
 import SirioConfirmButton from '../../Button/ActionButton/SirioConfirmButton';
-import { Redirect } from 'react-router-dom';
+import { NavLink, Redirect } from 'react-router-dom';
 import { withRouter } from 'react-router-dom';
 
 class FormTolakBukti extends React.Component {
@@ -24,10 +24,29 @@ class FormTolakBukti extends React.Component {
         this.setRedirect = this.setRedirect.bind(this);
         this.renderDataBuktiPelaksanaan = this.renderDataBuktiPelaksanaan.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.submitable = this.submitable.bind(this);
     }
 
     componentDidMount() {
         this.renderDataBuktiPelaksanaan();
+    }
+
+    validateFeedback(fokusFeedback) {
+        var errorFeedback = "";
+        if (fokusFeedback === null || fokusFeedback === "") {
+            errorFeedback = "Feedback penolakan bukti harus diisi";
+        } else if (fokusFeedback.length > 125) {
+            errorFeedback = "Feedback tidak boleh lebih dari 125 karakter";
+        }
+        
+        this.setState({
+            errorFeedback: errorFeedback
+        })
+    }
+
+    submitable() {
+        return this.state.errorFeedback === "" &&
+            (this.state.feedback !== null && this.state.feedback !== "");
     }
 
     setRedirect = () => {
@@ -58,72 +77,38 @@ class FormTolakBukti extends React.Component {
     }
 
     handleChange(event) {
+        const { name, value } = event.target;
         this.setState(
             {
-                [event.target.name]
-                    : event.target.value
+                [name]
+                    : value
             }
-        )
+        );
+
+        switch (name) {
+            case "feedback":
+                this.validateFeedback(value);
+                break;
+        }
     }
 
     handleSubmit(event) {
-        event.preventDefault();
-        const buktiPelaksanaan = {
-            status: 3,
-            feedback: this.state.feedback
-        };
-        BuktiPelaksanaanService.setStatusBukti(this.state.id, buktiPelaksanaan)
-            .then(() => this.setRedirect());
-    }
-
-    componentDidUpdate(prevProps, prevState) {
-        var submitable = true;
-        var validating = false;
-        submitable = this.validateRequired();
-        if (prevState.feedback !== this.state.feedback) {
-            submitable = this.validateFeedback() && submitable;
-            validating = true;
-        }
-        if (validating) {
-            if (this.state.submitable !== submitable) {
-                this.setState({
-                    submitable: submitable
-                })
-            }
+        event && event.preventDefault();
+        if (this.submitable()) {
+            const buktiPelaksanaan = {
+                status: 3,
+                statusRekomendasi: 6,
+                feedback: this.state.feedback
+            };
+            BuktiPelaksanaanService.setStatusBukti(this.state.id, buktiPelaksanaan)
+                .then(() => this.setRedirect());
         }
     }
 
-    validateRequired() {
-        var submitable = true;
-        const required = [this.state.feedback];
-        for (let i = 0; i < required.length; i++) {
-            submitable = submitable && (required[i] !== null && required[i] !== "");
-        }
-        return submitable;
-    }
-
-    validateFeedback() {
-        var submitable = true;
-        const varFeedback = this.state.feedback;
-        var errorFeedback;
-        if (varFeedback.length < 1) {
-            submitable = false;
-            errorFeedback = "Feedback wajib diisi";
-        } else if (varFeedback.length > 125) {
-            submitable = false;
-            errorFeedback = "Feedback tidak boleh lebih dari 125 karakter";
-        }
-        if (this.state.errorFeedback !== errorFeedback) {
-            this.setState({
-                errorFeedback: errorFeedback
-            })
-        }
-        return submitable;
-    }
+    
 
     inputDefinition() {
-        var rowDefinition = [];
-        rowDefinition.push(
+        return ([
             {
                 label: "Keterangan",
                 customInput: <p>{this.state.keterangan}</p>
@@ -131,26 +116,32 @@ class FormTolakBukti extends React.Component {
                 label: "Lampiran",
                 customInput: <p>{this.state.lampiran}</p>
             }, {
-                label: "Feedback*",
+                label: "Feedback",
                 required: true,
                 handleChange: this.handleChange,
-                validation: this.state.errorFeedback,
                 type: "textarea",
                 name: "feedback",
                 value: this.state.feedback,
-                placeholder: "Masukan feedback penolakan"
+                placeholder: "Masukan feedback penolakan",
+                errormessage: this.state.errorFeedback
             }
-        )
-        return rowDefinition;
+        ])
     }
 
     submitButton(cell, row) {
-        return (
-            <div>
+        var tombolSimpan =
+            <SirioConfirmButton
+                purple
+                disabled
+                classes="mx-1"
+            >
+                Simpan
+            </SirioConfirmButton>;
+        if (this.submitable()) {
+            tombolSimpan = 
                 <SirioConfirmButton
                     purple
-                    recommended={this.state.submitable}
-                    disabled={!this.state.submitable}
+                    recommended
                     type="button"
                     classes="mx-1"
                     modalTitle="Apakah anda yakin untuk menolak bukti pelaksanaan?"
@@ -160,12 +151,23 @@ class FormTolakBukti extends React.Component {
                 >
                     Simpan
                 </SirioConfirmButton>
-                <SirioButton purple
-                            type="button"
-                            classes="mx-1"
-                            onClick={() => window.location.href = "/bukti-pelaksanaan"}>
-                    Batal
-                </SirioButton>
+        }
+        return (
+            <div>
+                {tombolSimpan}
+                <NavLink to={{
+                    pathname: "/bukti-pelaksanaan/detail",
+                    state: {
+                        id: this.props.location.state.id
+                    }
+                }}>
+                    <SirioButton
+                        purple
+                        classes="mx-1"
+                    >
+                        Batal
+                    </SirioButton>
+                </NavLink>
             </div>
         )
     }

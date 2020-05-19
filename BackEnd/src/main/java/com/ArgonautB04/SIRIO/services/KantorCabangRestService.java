@@ -25,9 +25,14 @@ public interface KantorCabangRestService {
 
     void hapusKantorCabang(int idKantorCabang);
 
+    //List<KantorCabang> getByPembuat(Employee pembuat);
+
+   // KantorCabang validateExistInDatabase(int idKantorCabang);
+
     KantorCabang validateExistById(int idKantorCabang);
 
     void nullifiedRiskRating();
 
     void recalculateRiskRating();
+
 }

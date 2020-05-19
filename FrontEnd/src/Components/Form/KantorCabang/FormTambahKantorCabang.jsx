@@ -5,10 +5,9 @@ import KantorCabangService from '../../../Services/KantorCabangService';
 import EmployeeService from '../../../Services/EmployeeService';
 import { Redirect } from 'react-router-dom';
 import { withRouter } from 'react-router-dom';
-import {OverlayTrigger, Tooltip} from 'react-bootstrap'
-/**
- * Kelas untuk membuat form demo
- */
+import {OverlayTrigger, Tooltip} from 'react-bootstrap';
+
+
 class FormTambahKantorCabang extends React.Component {
 
     // Masukan user disimpan kedalam state sebelum dikirim ke backend
@@ -23,7 +22,6 @@ class FormTambahKantorCabang extends React.Component {
             kunjunganAudit: false,
             employeeOptionList: [],
             redirect: false,
-            submitable: false,
         }
 
         this.renderEmployeeOption = this.renderEmployeeOption.bind(this);
@@ -32,10 +30,75 @@ class FormTambahKantorCabang extends React.Component {
         this.handleSelectChange = this.handleSelectChange.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);
         this.setRedirect = this.setRedirect.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+        this.submitable = this.submitable.bind(this);
     }
 
     componentDidMount() {
         this.renderEmployeeOption();
+    }
+    validateKantor(fokusNama) {
+        var errorNama = "";
+        var symbols = /[-!$%@#^&*()\\_+|~=`{}\[\]:";'<>?,.\/]/;
+        if (fokusNama === null || fokusNama === "") {
+            errorNama = "Nama kantor harus diisi";
+        } else if (fokusNama.match(symbols)) {
+            errorNama = "Nama hanya boleh mengandung huruf dan angka";
+        }else if (fokusNama.length > 25) {
+            errorNama = "Nama kantor tidak boleh lebih dari 25 karakter";
+        }
+       
+        this.setState({
+            errorNama: errorNama
+        })
+        
+    }
+
+    validateArea(fokusArea) {
+        var errorArea = "";
+        var symbols = /[-!$%@#^&*()\\_+|~=`{}\[\]:";'<>?,.\/]/;
+        if(fokusArea === null || fokusArea === ""){
+            errorArea = "Area harus diisi";
+        } else if (fokusArea.match(symbols)) {
+            errorArea = "Area hanya boleh mengandung huruf dan angka";
+        }
+        if (fokusArea.length > 125) {
+            errorArea = "Area tidak boleh lebih dari 125 karakter";
+        }
+        
+        this.setState({
+            errorArea: errorArea
+        })
+        
+    }
+
+    validateRegional(fokusReg) {
+        var errorReg = "";
+        var symbols = /[-!$%@#^&*()\\_+|~=`{}\[\]:";'<>?,.\/]/;
+        if(fokusReg === null || fokusReg === ""){
+            errorReg= "Regional harus diisi";
+        } else if (fokusReg.match(symbols)) {
+            errorReg= "Regional hanya boleh mengandung huruf dan angka";
+        }
+        if (fokusReg.length > 125) {
+            errorReg = "Regional tidak boleh lebih dari 125 karakter";
+        }
+       
+        this.setState({
+            errorReg: errorReg
+        })
+       
+    }
+
+    
+    submitable() {
+        return this.state.errorNama === "" &&
+            this.state.errorArea === "" &&
+            this.state.errorReg === "" &&
+            (this.state.namaKantorCabang !== null && this.state.namaKantorCabang !== "") &&
+            (this.state.area !== null && this.state.area !== "") &&
+            (this.state.idPemilik!== null && this.state.idPemilik !== "") &&
+            (this.state.regional !== null && this.state.regional !== "");
     }
 
     setRedirect = () => {
@@ -47,7 +110,7 @@ class FormTambahKantorCabang extends React.Component {
     renderRedirect = () => {
         if (this.state.redirect) {
             return <Redirect to={{
-                pathname: "/administrator/kantorCabang",
+                pathname: "/kantorCabang",
                 state: {
                     addSuccess: true
                 }
@@ -75,12 +138,25 @@ class FormTambahKantorCabang extends React.Component {
     // Fungsi untuk mengubah state ketika isi dari input diubah
     // Fungsi ini wajib ada jika membuat form
     handleChange(event) {
+        const { name, value } = event.target;
         this.setState(
             {
-                [event.target.name]
-                    : event.target.value
+                [name]
+                    : value
             }
-        )
+        );
+
+        switch (name) {
+            case "namaKantorCabang":
+                this.validateKantor(value);
+                break;
+            case "area":
+                this.validateArea(value);
+                break;
+            case "regional":
+                this.validateRegional(value);
+                break;
+        }
     }
 
     // Fungsi untuk mengubah state ketika isi dropdown diubah
@@ -106,54 +182,11 @@ class FormTambahKantorCabang extends React.Component {
         });
     }
 
-    componentDidUpdate(prevProps, prevState) {
-        var submitable = true;
-        var validating = false;
-        submitable = this.validateRequired();
-        if (prevState.namaKantorCabang !== this.state.namaKantorCabang){
-            submitable = this.validateKantor() & submitable
-            validating = true;
-        }
-
-        if (prevState.area !== this.state.area){
-            submitable = this.validateArea() && submitable 
-            validating = true;
-        }
-
-        if (prevState.idPemilik !== this.state.idPemilik){
-            submitable = this.validateBM() && submitable 
-            validating = true;
-        }
-
-        if (prevState.regional !== this.state.regional){
-            submitable = this.validateRegional() && submitable 
-            validating = true; 
-        }
-
-        if (validating){
-            if (this.state.submitable !== submitable) {
-                this.setState({
-                    submitable: submitable
-                })
-            }
-        }
-        
-    }
-
-    validateRequired() {
-        var submitable = true;
-        const required = [this.state.namaKantorCabang, this.state.idPemilik, this.state.area, this.state.regional];
-        for (let i = 0; i < required.length; i++) {
-            submitable = submitable && (required[i] !== null && required[i] !== "");
-        }
-        return submitable;
-    }
-
     // Fungsi yang akan dijalankan ketika user submit
     // Umumnya akan digunakan untuk memanggil service komunikasi ke backend
     async handleSubmit(event) {
         event.preventDefault();
-        if(this.state.submitable){
+        if(this.submitable()){
             const response = await KantorCabangService.isExistKantorCabang(this.state.namaKantorCabang);
             if(response.data.result){
                 const errorNama = "Nama kantor sudah ada di database";
@@ -177,94 +210,6 @@ class FormTambahKantorCabang extends React.Component {
         }
     }
 
-    validateKantor() {
-        var submitable = true;
-        var errorNama;
-        const fokusNama = this.state.namaKantorCabang
-        if(fokusNama.match(".*[-@#!$%^&*()_+{}:.,[]|>/=<?]+.*")){
-            submitable = false;
-            errorNama = "Hanya boleh mengandung huruf";
-        }
-        if (fokusNama.length < 2) {
-            submitable = false;
-            errorNama = "Nama kantor harus diisi";
-        } 
-        if (fokusNama.length > 25) {
-            submitable = false;
-            errorNama = "Nama kantor tidak boleh lebih dari 25 karakter";
-        }
-        if (this.state.errorNama !== errorNama) {
-            this.setState({
-                errorNama: errorNama
-            })
-        }
-        return submitable;
-    }
-
-    validateArea() {
-        var submitable = true;
-        var errorArea;
-        const fokusArea = this.state.area
-        if(fokusArea.match(".*[-@#!$%^&*()_+{}:.,[]|>/=<?]+.*")){
-            submitable = false;
-            errorArea = "Hanya boleh mengandung huruf";
-        }
-        if (fokusArea.length < 2) {
-            submitable = false;
-            errorArea = "Area harus diisi";
-        } 
-        if (fokusArea.length > 125) {
-            submitable = false;
-            errorArea = "Area tidak boleh lebih dari 125 karakter";
-        }
-        if (this.state.errorArea !== errorArea) {
-            this.setState({
-                errorArea: errorArea
-            })
-        }
-        return submitable;
-    }
-
-    validateRegional() {
-        var submitable = true;
-        var errorReg;
-        const fokusReg = this.state.regional
-        if(fokusReg.match(".*[-@#!$%^&*()_+{}:.,[]|>/=<?]+.*")){
-            submitable = false;
-            errorReg= "Hanya boleh mengandung huruf";
-        }
-        if (fokusReg.length < 2) {
-            submitable = false;
-            errorReg = "Regional harus diisi";
-        } 
-        if (fokusReg.length > 125) {
-            submitable = false;
-            errorReg = "Regional tidak boleh lebih dari 50 karakter";
-        }
-        if (this.state.errorReg!== errorReg) {
-            this.setState({
-                errorReg: errorReg
-            })
-        }
-        return submitable;
-    }
-
-    validateBM() {
-        var submitable = true;
-        var errorBM;
-        const fokusBM = this.state.idPemilik
-        if (fokusBM.length < 1) {
-            submitable = false;
-            errorBM = "Branch Manager harus diisi";
-        } 
-        if (this.state.errorBM !== errorBM) {
-            this.setState({
-                errorBM: errorBM
-            })
-        }
-        return submitable;
-    }
-
     // Fungsi yang akan mengembalikan definisi tiap field pada form
     // Setiap objek {} pada List [] akan menjadi 1 field
     // untuk informasi lebih lengkap, cek SirioForm
@@ -272,7 +217,7 @@ class FormTambahKantorCabang extends React.Component {
         return (
             [
                 {
-                    label: "Nama Point*",
+                    label: "Nama Point",
                     required: true,
                     handleChange: this.handleChange,
                     type: "text",
@@ -281,7 +226,7 @@ class FormTambahKantorCabang extends React.Component {
                     value: this.state.namaKantorCabang,
                     placeholder: "Masukan nama point"
                 }, {
-                    label: "Branch Manager*",
+                    label: "Branch Manager",
                     required: true,
                     validation: this.state.errorBM,
                     handleChange: this.handleSelectChange,
@@ -290,7 +235,7 @@ class FormTambahKantorCabang extends React.Component {
                     value: this.state.idPemilik,
                     optionList: this.state.employeeOptionList
                 },{
-                    label: "Area*",
+                    label: "Area",
                     required: true,
                     handleChange: this.handleChange,
                     type: "text",
@@ -299,7 +244,7 @@ class FormTambahKantorCabang extends React.Component {
                     value: this.state.area,
                     placeholder: "Masukan nama area"
                 },{
-                    label: "Regional*",
+                    label: "Regional",
                     required: true,
                     handleChange: this.handleChange,
                     type: "text",
@@ -332,18 +277,31 @@ class FormTambahKantorCabang extends React.Component {
     }
 
     submitButton() {
-        return (
-            <div>
-                <SirioButton purple
-                    recommended={this.state.submitable}
-                    disabled={!this.state.submitable}
+        var tombolSimpan =
+            <SirioButton
+                purple
+                disabled
+                classes="mx-1"
+            >
+                Simpan
+            </SirioButton>;
+        if (this.submitable()) {
+            tombolSimpan =
+                <SirioButton
+                    purple
+                    recommended
                     classes="mx-1"
-                    onClick={(event)  => this.handleSubmit(event)}>
+                    onClick={(event)  => this.handleSubmit(event)}
+                >
                     Simpan
                 </SirioButton>
+        }
+        return (
+            <div>
+                {tombolSimpan}
                 <SirioButton purple
                     classes="mx-1"
-                    onClick={() => window.location.href = "/administrator/kantorCabang"}>
+                    onClick={() => window.location.href = "/kantorCabang"}>
                     Batal
                 </SirioButton>
             </div>

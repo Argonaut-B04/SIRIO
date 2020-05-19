@@ -41,9 +41,6 @@ public class RencanaPemeriksaanRestController {
 
     /**
      * Mengambil seluruh rencana pemeriksaan yang terhubung dengan user yang sedang login
-     * <p>
-     * Changelog:
-     * - Mengubah filter id pembuat dengan filter logged in user
      *
      * @return daftar rencana pemeriksaan yang terhubung dengan pembuat tersebut
      */
@@ -150,6 +147,7 @@ public class RencanaPemeriksaanRestController {
     ) throws ParseException {
         Employee employee = employeeRestService.validateEmployeeExistByPrincipal(principal);
         RencanaPemeriksaan rencanaPemeriksaanTemp = new RencanaPemeriksaan();
+        rencanaPemeriksaanTemp.setPembuat(employee);
 
         if (rencanaPemeriksaanDTO.getNamaRencana() != null && !rencanaPemeriksaanDTO.getNamaRencana().equals("")) {
             rencanaPemeriksaanTemp.setNamaRencana(rencanaPemeriksaanDTO.getNamaRencana());

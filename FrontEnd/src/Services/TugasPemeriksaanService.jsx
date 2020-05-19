@@ -12,6 +12,10 @@ class TugasPemeriksaanService {
     async getTugasPemeriksaanByLoggedInUser() {
         return this.axiosInstance.get(SirioAxiosBase.BASEURL + `/TugasPemeriksaan/getByEmployee`);
     }
+
+    async deleteTugas(data) {
+        return this.axiosInstance.post(SirioAxiosBase.BASEURL + `/TugasPemeriksaan/hapus`, data)
+    }
 }
 
 export default new TugasPemeriksaanService();

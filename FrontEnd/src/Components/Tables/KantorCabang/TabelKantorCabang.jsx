@@ -57,7 +57,7 @@ class TabelKantorCabang extends React.Component {
         classes: classes.rowItem,
         headerClasses: classes.colheader,
         headerStyle: (colum, colIndex) => {
-            return { width: "20%", textAlign: 'left' };
+            return { width: "18%", textAlign: 'left' };
         }
     },{
         dataField: 'pemilik.nama',
@@ -66,7 +66,7 @@ class TabelKantorCabang extends React.Component {
         classes: classes.rowItem,
         headerClasses: classes.colheader,
         headerStyle: (colum, colIndex) => {
-            return { width: "20%", textAlign: 'left' }
+            return { width: "18%", textAlign: 'left' }
         },
         
     }, {
@@ -116,10 +116,10 @@ class TabelKantorCabang extends React.Component {
     headerButton() {
         return (
             <NavLink to={{
-                pathname: "/administrator/kantorCabang/tambah"
+                pathname: "/kantorCabang/tambah"
             }}>
                 <SirioButton
-                    purple
+                    purple recommended
                 >
                     Tambah Kantor Cabang
                 </SirioButton>
@@ -130,7 +130,7 @@ class TabelKantorCabang extends React.Component {
     getButtonsFirst(cell, row) {
         return (
             <NavLink to={{
-                pathname: "/administrator/kantorCabang/detail",
+                pathname: "/kantorCabang/detail",
                 state: {
                     id: row.idKantor
                 }

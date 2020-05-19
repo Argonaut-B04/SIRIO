@@ -5,9 +5,12 @@ export default class SirioAxiosBase {
     static BASEURL = "http://localhost:8080/api/v1";
 
     static formatDate(cell) {
+        if (cell == null || cell.length < 3) {
+            return "-";
+        }
         const date = cell[2];
         var month = cell[1];
-        const year = cell[0]
+        const year = cell[0];
 
         var monthName = ["Januari", "Februari", "Maret", "April", "Mei", "Juni",
             "Juli", "Agustus", "September", "Oktober", "November", "Desember"];

@@ -6,7 +6,6 @@ import com.ArgonautB04.SIRIO.rest.BaseResponse;
 import com.ArgonautB04.SIRIO.rest.KantorCabangDTO;
 import com.ArgonautB04.SIRIO.services.EmployeeRestService;
 import com.ArgonautB04.SIRIO.services.KantorCabangRestService;
-import com.ArgonautB04.SIRIO.services.RiskRatingRestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -29,25 +28,27 @@ public class KantorCabangRestController {
     @Autowired
     private EmployeeRestService employeeRestService;
 
-    @Autowired
-    private RiskRatingRestService riskRatingRestService;
-
     /**
-     * Mengambil seluruh kantor cabang yang terhubung dengan user yang sedang login
-     * <p>
-     * Changelog:
-     * - Mengubah filter id pembuat dengan filter logged in user
+     * Mengambil seluruh kantor cabang
      *
      * @return daftar kantor cabang yang terhubung dengan pembuat tersebut
      */
     @GetMapping("/getAll")
     private BaseResponse<List<KantorCabang>> getAllKantorCabang() {
-        return new BaseResponse<>(200, "success", kantorCabangRestService.getAll());
+        return new BaseResponse<>(
+                200, "success", kantorCabangRestService.getAll());
     }
 
+    /**
+     * Mengecek apakah nama kantor cabang
+     * yang ditambahkan sudah ada di database
+     *
+     * @param namaKantor
+     * @return true jika sudah ada
+     */
     @GetMapping("/check/{namaKantor}")
     private BaseResponse<Boolean> isExistInDatabase(
-            @PathVariable("namaKantor") String namaKantor
+            @PathVariable("namaKantor") final String namaKantor
     ) {
         Optional<KantorCabang> kantorCabang = kantorCabangRestService.getByNama(namaKantor);
         return new BaseResponse<>(200, "success", kantorCabang.isPresent());
@@ -69,15 +70,30 @@ public class KantorCabangRestController {
     }
 
     /**
+     * Mengambil suatu kantor cabang
+     *
+     * @return detail kantor cabang
+     */
+    @GetMapping("/pemilik")
+    private BaseResponse<KantorCabang> getKantorCabangbyPemilik(
+            Principal principal
+    ) {
+        BaseResponse<KantorCabang> response = new BaseResponse<>();
+        KantorCabang result = kantorCabangRestService.getByPemilik(employeeRestService.validateEmployeeExistByPrincipal(principal));
+        return new BaseResponse<>(200, "success", result);
+    }
+
+    /**
      * Menambah kantor cabang baru
      *
+     * @param principal
      * @param kantorCabangDTO data transfer object untuk kantor cabang yang akan ditambah
      * @return kantor cabang yang telah disimpan
      */
     @PostMapping(value = "/tambah", consumes = {"application/json"})
     private BaseResponse<KantorCabang> tambahKantorCabang(
-            @RequestBody KantorCabangDTO kantorCabangDTO,
-            Principal principal
+            @RequestBody final KantorCabangDTO kantorCabangDTO,
+            final Principal principal
     ) {
         BaseResponse<KantorCabang> response = new BaseResponse<>();
         KantorCabang kantorCabangTemp = new KantorCabang();
@@ -134,10 +150,9 @@ public class KantorCabangRestController {
      */
     @PostMapping(value = "/ubah", consumes = {"application/json"})
     private BaseResponse<KantorCabang> ubahKantorCabang(
-            @RequestBody KantorCabangDTO kantorCabangDTO
+            @RequestBody final KantorCabangDTO kantorCabangDTO
     ) {
         BaseResponse<KantorCabang> response = new BaseResponse<>();
-
         KantorCabang kantorCabang = kantorCabangRestService.validateExistById(kantorCabangDTO.getId());
 
         if (kantorCabangDTO.getNamaKantorCabang() != null && !kantorCabangDTO.getNamaKantorCabang().equals("")) {
@@ -147,18 +162,6 @@ public class KantorCabangRestController {
                     HttpStatus.NOT_FOUND, "Nama kantor belum diisi!"
             );
         }
-
-//        if (kantorCabangDTO.getNamaKantorCabang() != null && !kantorCabangDTO.getNamaKantorCabang().equals("")) {
-//            if (kantorCabangRestService.getByNama(kantorCabangDTO.getNamaKantorCabang()).isPresent())
-//                throw new ResponseStatusException(
-//                        HttpStatus.CONFLICT, "Kantor Cabang " + kantorCabangDTO.getNamaKantorCabang() + " sudah ada pada database!"
-//                );
-//            kantorCabang.setNamaKantor(kantorCabangDTO.getNamaKantorCabang());
-//        } else {
-//            throw new ResponseStatusException(
-//                    HttpStatus.NOT_FOUND, "Kantor Cabang belum diisi!"
-//            );
-//        }
 
         if (kantorCabangDTO.getRegional() != null && !kantorCabangDTO.getRegional().equals("")) {
             kantorCabang.setRegional(kantorCabangDTO.getRegional());
@@ -191,11 +194,12 @@ public class KantorCabangRestController {
     /**
      * Menghapus kantor cabang
      *
-     * @param kantorCabangDTO data transfer object untuk tugas pemeriksaan yang akan dihapus
+     * @param kantorCabangDTO data transfer object untuk kantor cabang yang akan dihapus
+     * @return pemberitahuan bahwa kantor cabang berhasil telah dihapus
      */
     @PostMapping("/hapus")
     private BaseResponse<String> hapusKantorCabang(
-            @RequestBody KantorCabangDTO kantorCabangDTO
+            @RequestBody final KantorCabangDTO kantorCabangDTO
     ) {
         BaseResponse<String> response = new BaseResponse<>();
 
