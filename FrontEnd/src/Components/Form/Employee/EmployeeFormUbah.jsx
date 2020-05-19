@@ -75,8 +75,8 @@ class EmployeeFormUbah extends React.Component {
             errorNoHp = "";
         } else if (!fokusNoHp.match(numberOnly)) {
             errorNoHp = "Nomor HP hanya boleh mengandung angka";
-        } else if (fokusNoHp.length > 20) {
-            errorNoHp = "Nomor HP maksimal 20 karakter";
+        } else if (fokusNoHp.length >= 15 || fokusNoHp.length <= 10) {
+            errorNoHp = "Nomor HP diantara 10-15 karakter";
         }
 
         this.setState({
@@ -128,6 +128,10 @@ class EmployeeFormUbah extends React.Component {
     };
 
     async renderData() {
+        // Mengubah isi dari loader
+        this.props.contentStartLoading();
+        this.props.changeLoadingBody("Mengambil data role dari server");
+
         const responseRole = await RoleService.getRoleList();
         const roleOptionList = responseRole.data.result.map(role => {
             return (
@@ -138,6 +142,7 @@ class EmployeeFormUbah extends React.Component {
             )
         });
 
+        this.props.changeLoadingBody("Mengambil data employee dari server");
         const responseEmployee = await EmployeeService.getEmployee(this.props.location.state.id);
 
         this.setState({
@@ -153,7 +158,7 @@ class EmployeeFormUbah extends React.Component {
             errorName: "",
             errorEmail: "",
             errorNoHp: "",
-        });
+        }, this.props.contentFinishLoading());
     }
 
     nomorHpFormatter(noHp) {
@@ -210,6 +215,9 @@ class EmployeeFormUbah extends React.Component {
                 noHp: this.state.noHp
             };
             if (this.state.initialEmail !== this.state.email) {
+                // Mengubah isi dari loader
+                this.props.contentStartLoading();
+                this.props.changeLoadingBody("Mengecek email di server");
                 EmployeeService.checkEmailExist({email: this.state.email})
                     .then(response => {
                         if (response.data.result) {
@@ -217,15 +225,18 @@ class EmployeeFormUbah extends React.Component {
                                 errorEmail: "Email sudah terdaftar"
                             })
                         } else {
+                            this.props.changeLoadingBody("Mengirim data ke server");
                             EmployeeService.editEmployee(employee)
                                 .then(() => this.setRedirect());
                         }
                     })
             } else {
+                this.props.changeLoadingBody("Mengirim data ke server");
                 EmployeeService.editEmployee(employee)
                     .then(() => this.setRedirect());
             }
         }
+        this.props.contentFinishLoading()
     }
 
     // Fungsi yang akan mengembalikan definisi tiap field pada form
@@ -238,6 +249,7 @@ class EmployeeFormUbah extends React.Component {
                     label: "Role",
                     handleChange: this.handleSelectChange,
                     type: "select",
+                    required: true,
                     name: "idRole",
                     value: this.state.idRole,
                     optionList: this.state.roleOptionList
@@ -245,6 +257,7 @@ class EmployeeFormUbah extends React.Component {
                     label: "Nama",
                     handleChange: this.handleChange,
                     type: "text",
+                    required: true,
                     name: "nama",
                     value: this.state.nama,
                     placeholder: "Nama",
@@ -254,6 +267,7 @@ class EmployeeFormUbah extends React.Component {
                     handleChange: this.handleChange,
                     type: "text",
                     name: "jabatan",
+                    required: true,
                     value: this.state.jabatan,
                     placeholder: "Jabatan",
                     errormessage: this.state.errorJabatan
@@ -262,6 +276,7 @@ class EmployeeFormUbah extends React.Component {
                     handleChange: this.handleChange,
                     type: "text",
                     name: "email",
+                    required: true,
                     value: this.state.email,
                     placeholder: "email@email.com",
                     errormessage: this.state.errorEmail
@@ -309,6 +324,7 @@ class EmployeeFormUbah extends React.Component {
                 }}>
                     <SirioButton
                         purple
+                        classes="mx-1"
                     >
                         Batal
                     </SirioButton>
