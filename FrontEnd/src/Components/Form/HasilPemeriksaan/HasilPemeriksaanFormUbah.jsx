@@ -442,16 +442,19 @@ class HasilPemeriksaanFormUbah extends React.Component {
 
         switch (name) {
             case "jumlahSampel":
-                this.validateJumlahSampel(value, indexKomponen);
+                this.validateJumlah(value, array[indexKomponen].jumlahPopulasi,
+                    array[indexKomponen].jumlahSampelError, indexKomponen);
                 break;
             case "keteranganSampel":
                 this.validateKeteranganSampel(value, indexKomponen);
                 break;
             case "jumlahPopulasi":
-                this.validateJumlahPopulasi(value, indexKomponen);
+                this.validateJumlah(array[indexKomponen].jumlahSampel, value,
+                    array[indexKomponen].jumlahSampelError, indexKomponen);
                 break;
             case "jumlahSampelError":
-                this.validateJumlahSampelError(value, indexKomponen);
+                this.validateJumlah(array[indexKomponen].jumlahSampel,
+                    array[indexKomponen].jumlahPopulasi, value, indexKomponen);
                 break;
         }
     }
@@ -617,51 +620,51 @@ class HasilPemeriksaanFormUbah extends React.Component {
         });
     }
 
-    validateJumlahPopulasi(fokusJumlahPopulasi, indexKomponen) {
-        var errorJumlahPopulasi = "";
+    validateJumlah(fokusJumlahSampel, fokusJumlahPopulasi, fokusJumlahSampelError, indexKomponen) {
         const number = /^[0-9]*$/;
         const array = this.state.daftarKomponenPemeriksaan;
-
-        if (fokusJumlahPopulasi === null || fokusJumlahPopulasi === "") {
-            errorJumlahPopulasi = "";
-        } else if (!fokusJumlahPopulasi.match(number) || parseInt(fokusJumlahPopulasi) < 0) {
-            errorJumlahPopulasi = "Jumlah Populasi berupa angka dan tidak boleh negatif";
-        }
-
-        array[indexKomponen]["errorJumlahPopulasi"] = errorJumlahPopulasi;
-        this.setState({
-            daftarKomponenPemeriksaan: array
-        });
-    }
-
-    validateJumlahSampel(fokusJumlahSampel, indexKomponen) {
-        var errorJumlahSampel = "";
-        const number = /^[0-9]*$/;
-        const array = this.state.daftarKomponenPemeriksaan;
+        var errorJumlahPopulasi = this.state.daftarKomponenPemeriksaan[indexKomponen].errorJumlahPopulasi;
+        var errorJumlahSampel = this.state.daftarKomponenPemeriksaan[indexKomponen].errorJumlahSampel;
+        var errorJumlahSampelError = this.state.daftarKomponenPemeriksaan[indexKomponen].errorJumlahSampelError;
 
         if (fokusJumlahSampel === null || fokusJumlahSampel === "") {
             errorJumlahSampel = "";
         } else if (!fokusJumlahSampel.match(number) || parseInt(fokusJumlahSampel) < 0) {
             errorJumlahSampel = "Jumlah Sampel berupa angka dan tidak boleh negatif";
+        } else if (parseInt(fokusJumlahSampel) > parseInt(fokusJumlahPopulasi)) {
+            errorJumlahSampel = "Jumlah Sampel tidak boleh lebih besar dari Jumlah Populasi";
+        } else if (parseInt(fokusJumlahSampel) < parseInt(fokusJumlahSampelError)) {
+            errorJumlahSampel = "Jumlah Sampel tidak boleh lebih kecil dari Jumlah Sampel Error";
+        } else {
+            errorJumlahSampel = "";
         }
 
-        array[indexKomponen]["errorJumlahSampel"] = errorJumlahSampel;
-        this.setState({
-            daftarKomponenPemeriksaan: array
-        });
-    }
-
-    validateJumlahSampelError(fokusJumlahSampelError, indexKomponen) {
-        var errorJumlahSampelError = "";
-        const number = /^[0-9]*$/;
-        const array = this.state.daftarKomponenPemeriksaan;
+        if (fokusJumlahPopulasi === null || fokusJumlahPopulasi === "") {
+            errorJumlahPopulasi = "";
+        } else if (!fokusJumlahPopulasi.match(number) || parseInt(fokusJumlahPopulasi) < 0) {
+            errorJumlahPopulasi = "Jumlah Populasi berupa angka dan tidak boleh negatif";
+        } else if (parseInt(fokusJumlahPopulasi) < parseInt(fokusJumlahSampel)) {
+            errorJumlahPopulasi = "Jumlah Populasi tidak boleh lebih kecil dari Jumlah Sampel";
+        } else if (parseInt(fokusJumlahPopulasi) < parseInt(fokusJumlahSampelError)) {
+            errorJumlahPopulasi = "Jumlah Populasi tidak boleh lebih kecil dari Jumlah Sampel Error";
+        } else {
+            errorJumlahPopulasi = "";
+        }
 
         if (fokusJumlahSampelError === null || fokusJumlahSampelError === "") {
             errorJumlahSampelError = "";
         } else if (!fokusJumlahSampelError.match(number) || parseInt(fokusJumlahSampelError) < 0) {
             errorJumlahSampelError = "Jumlah Sampel Error berupa angka dan tidak boleh negatif";
+        } else if (parseInt(fokusJumlahSampelError) > parseInt(fokusJumlahPopulasi)) {
+            errorJumlahSampelError = "Jumlah Sampel Error tidak boleh lebih besar dari Jumlah Populasi";
+        } else if (parseInt(fokusJumlahSampelError) > parseInt(fokusJumlahSampel)) {
+            errorJumlahSampelError = "Jumlah Sampel Error tidak boleh lebih besar dari Jumlah Sampel";
+        } else {
+            errorJumlahSampelError = "";
         }
 
+        array[indexKomponen]["errorJumlahSampel"] = errorJumlahSampel;
+        array[indexKomponen]["errorJumlahPopulasi"] = errorJumlahPopulasi;
         array[indexKomponen]["errorJumlahSampelError"] = errorJumlahSampelError;
         this.setState({
             daftarKomponenPemeriksaan: array
