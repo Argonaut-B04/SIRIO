@@ -29,6 +29,10 @@ class ReminderService {
     async getTemplateByIdReminder(id) {
         return this.axiosInstance.get(SirioAxiosBase.BASEURL + '/Reminder/get-template-reminder/' + id)
     }
+
+    async getTemplateGlobal() {
+        return this.axiosInstance.get(SirioAxiosBase.BASEURL + "/Reminder/get-template-reminder-global");
+    }
 }
 
 export default new ReminderService();
