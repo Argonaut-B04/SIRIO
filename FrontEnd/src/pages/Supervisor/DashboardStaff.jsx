@@ -53,6 +53,7 @@ class DashboardStaff extends React.Component {
         this.handleSelectChange = this.handleSelectChange.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.submitable = this.submitable.bind(this);
+        this.reset = this.reset.bind(this);
     }
 
     // Fungsi untuk menghentikan tampilan loader konten
@@ -204,6 +205,15 @@ class DashboardStaff extends React.Component {
         }
     }
 
+    reset() {
+        this.setState({
+            qa: 0,
+            tanggalAwal: "",
+            tanggalAkhir: ""
+
+        })
+    }
+
     getBetween() {
         var tombolSimpan =
         <SirioButton
@@ -213,6 +223,24 @@ class DashboardStaff extends React.Component {
         >
             Cari
         </SirioButton>;
+        var tombolReset =
+        <SirioButton
+            purple
+            disabled
+            classes="p-1 mx-2"
+        >
+            Atur Ulang
+        </SirioButton>;
+        if (this.state.qa !== 0 || this.state.tanggalAwal !== "") {
+            tombolReset =
+                <SirioButton
+                    purple
+                    classes="p-1 mx-2"
+                    onClick={this.reset}
+                >
+                    Atur Ulang
+                </SirioButton>
+        }
         if (this.submitable()) {
             tombolSimpan =
                 <SirioButton
@@ -231,18 +259,18 @@ class DashboardStaff extends React.Component {
         this.state.role === "QA Lead Operational Risk" ||
         this.state.role === "Super QA Officer Operational Risk") {
             return (
-                <div className="row">
-                    <div className="col-md-3 pl-0">
+                <div>
+                    <div className="col-md-6 pl-0">
                         <SirioField
                                 type="date"
                                 handleChange={this.handleChange}
                                 classes="p-1"
                                 name="tanggalAwal"
                                 value={this.state.tanggalAwal}
-                                label="Range"
+                                label="Tanggal Awal: "
                             />
                     </div>
-                    <div className="col-md-3 pl-0">
+                    <div className="col-md-6 pl-0">
                         <SirioField
                                 type="date"
                                 handleChange={this.handleChange}
@@ -253,20 +281,21 @@ class DashboardStaff extends React.Component {
                                 required={this.state.tanggalAwal !== ""}
                                 name="tanggalAkhir"
                                 value={this.state.tanggalAkhir}
-                                label="hingga"
+                                label="Tanggal Akhir: "
     
                             />
                     </div>
-                    <div className="col-md-4 pl-0 mt-3">
+                    <div className="col-md-6 pl-0 mt-3">
                     {tombolSimpan}
+                    {tombolReset}
                     </div>
                 </div>
             )
         }
         if (this.state.role === "Supervisor") {
         return (
-            <div className="row">
-                <div className="col-md-3 mb-1 pl-0">
+            <div>
+                <div className="col-md-6 mb-1 pl-0">
                     <SirioField
                         type="select"
                         handleChange={this.handleSelectChange}
@@ -274,18 +303,20 @@ class DashboardStaff extends React.Component {
                         name="qa"
                         value={this.state.qa}
                         optionList={this.state.optionList}
+                        label="Filter QA: "
                     />
                 </div>
-                <div className="col-md-3 pl-0">
+                <div className="col-md-6 pl-0">
                     <SirioField
                             type="date"
                             handleChange={this.handleChange}
                             classes="p-1"
                             name="tanggalAwal"
                             value={this.state.tanggalAwal}
+                            label="Tanggal Awal: "
                         />
                 </div>
-                <div className="col-md-3 pl-0">
+                <div className="col-md-6 pl-0">
                     <SirioField
                             type="date"
                             handleChange={this.handleChange}
@@ -296,11 +327,13 @@ class DashboardStaff extends React.Component {
                             required={this.state.tanggalAwal !== ""}
                             name="tanggalAkhir"
                             value={this.state.tanggalAkhir}
+                            label="Tanggal Akhir: "
 
                         />
                 </div>
-                <div className="col-md-3 pl-0 mt-3">
+                <div className="col-md-6 pl-0 mt-3">
                 {tombolSimpan}
+                {tombolReset}
                 </div>
                 {/* <div className="col-md-12 mr-0 pl-0">
                     <SirioField
@@ -482,8 +515,8 @@ class DashboardStaff extends React.Component {
             return (
                 <>
                 <div>
+                    <h4 className="text-center mt-3 pt-3">Histori Data Temuan dan Rekomendasi untuk Tugas Pemeriksaan pada Suatu Bulan</h4>
                     <SirioBarChart data={data} contentFinishLoading={this.contentFinishLoading} contentStartLoading={this.contentStartLoading} changeLoadingBody={this.changeLoadingBody}/>
-                    <h6 className="text-right pt-3">Data ini hanya data sementara</h6>
                 </div>
 
                 <div>
