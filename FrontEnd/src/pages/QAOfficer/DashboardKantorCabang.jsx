@@ -5,7 +5,7 @@ import { withRouter } from "react-router-dom";
 import { Redirect } from "react-router-dom";
 import SirioBarChart from "../../Components/Chart/SirioBarChart";
 import SirioDashboardBox from "../../Components/Box/SirioDashboardBox";
-import DashboardService from "../../Services/DashboardService";
+import DashboardKantorService from "../../Services/DashboardKantorService";
 import KantorCabangService from "../../Services/KantorCabangService";
 import SirioField from "../../Components/Form/SirioFormComponent/SirioField";
 import SirioButton from '../../Components/Button/SirioButton';
@@ -80,7 +80,7 @@ class DashboardKantorCabang extends React.Component {
     }
 
     async renderData() {
-        const responseDashboardComp = await DashboardService.getAllComponent();
+        const responseDashboardComp = await DashboardKantorService.getAllComponent();
         const dashboardComponent = responseDashboardComp.data.result;
 
         const responseKantorCabang = await KantorCabangService.getKantorCabangList();
@@ -196,7 +196,7 @@ class DashboardKantorCabang extends React.Component {
             tanggalPertama: this.state.tanggalPertama,
             tanggalKedua: this.state.tanggalKedua
         };
-        DashboardService.getAllComponentByFilter(filter)
+        DashboardKantorService.getAllComponentByFilter(filter)
             .then((response) => {
                 if (this.state.namaKantor !== "") {
                     this.setState({
@@ -232,7 +232,7 @@ class DashboardKantorCabang extends React.Component {
 
     handleReset(event) {
         event.preventDefault();
-        DashboardService.getAllComponent()
+        DashboardKantorService.getAllComponent()
             .then((response) =>
             this.setState({
                 dashboardComponent: response.data.result,

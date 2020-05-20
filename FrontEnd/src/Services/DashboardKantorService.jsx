@@ -2,7 +2,7 @@ import axios from 'axios';
 import SirioAxiosBase from './SirioAxiosBase';
 import AuthenticationService from './AuthenticationService';
 
-class DashboardService {
+class DashboardKantorService {
 
     constructor() {
         this.axiosInstance = axios.create();
@@ -23,4 +23,4 @@ class DashboardService {
 
 }
 
-export default new DashboardService();
+export default new DashboardKantorService();
