@@ -68,15 +68,28 @@ class TabelHasilPemeriksaan extends React.Component {
     getButtonsFirst(cell, row) {
         const siapDijalankan = row.siapDijalankan;
         const status = row.namaStatus;
-        const jalankan = (siapDijalankan === 1 && status === "Menunggu Pelaksanaan");
-        return (
+        const jalankan = (siapDijalankan === true && status === "Menunggu Pelaksanaan");
+
+        var tombolJalankan =
             <SirioButton
                 purple
-                disabled={!jalankan}
+                disabled
             >
                 Jalankan
-            </SirioButton>
-        )
+            </SirioButton>;
+
+        if (jalankan) {
+            tombolJalankan =
+                <SirioButton
+                    purple
+                    recommended
+                    onClick={(event) => HasilPemeriksaanService.jalankan(row.id).then(() => window.location.reload())}
+                >
+                    Jalankan
+                </SirioButton>
+        }
+
+        return (tombolJalankan)
     }
 
     getButtonsSecond(cell, row) {

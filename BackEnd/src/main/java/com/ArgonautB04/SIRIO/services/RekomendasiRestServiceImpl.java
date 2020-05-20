@@ -574,4 +574,10 @@ public class RekomendasiRestServiceImpl implements RekomendasiRestService {
         return rekomendasiDB.findAllByKomponenPemeriksaanInAndTenggatWaktuBetween(
                 komponenPemeriksaanList, tenggatWaktu, tenggatWaktu2);
     }
+
+    @Override
+    public void jalankan(Rekomendasi rekomendasi) {
+        rekomendasi.setStatusRekomendasi(statusRekomendasiRestService.getByNamaStatus("Sedang Dilaksanakan"));
+        rekomendasiDB.save(rekomendasi);
+    }
 }
