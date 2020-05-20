@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import SirioField from './SirioFormComponent/SirioField';
 import SirioComponentHeader from '../Header/SirioComponentHeader';
 import ComponentWrapper from '../../Layout/ComponentWrapper';
+import { Row, Col } from 'react-bootstrap';
 
 /**
  * Komponen form untuk Sirio secara umum
@@ -17,7 +18,7 @@ class SirioForm extends Component {
 
     render() {
         const { noHeader, customHeader, title, subtitle, betweenTitleSubtitle, inputDefinition, isInnerForm, childForm, footerButton, onSubmit, submitButton } = this.props;
-        
+
         var header;
         if (noHeader || customHeader) {
             header = customHeader
@@ -28,34 +29,49 @@ class SirioForm extends Component {
                 betweenTitleSubtitle={betweenTitleSubtitle}
             />
         }
-
         var fields =
             <>
-                {inputDefinition.map((field, i) =>
-                    <SirioField
-                        key={i}
-                        label={field.label}
-                        handleChange={field.handleChange}
-                        index={field.index}
-                        type={field.type}
-                        name={field.name}
-                        value={field.value}
-                        placeholder={field.placeholder}
-                        optionList={field.optionList}
-                        classes={field.classes}
-                        customInput={field.customInput}
-                        fullComponent={field.fullComponent}
-                        validator={field.validation}
-                        required={field.required}
-                        min={field.min}
-                        max={field.max}
-                        multiple={field.multiple}
-                        sideButton={field.sideButton}
-                        modifier={field.modifier}
-                        validationFunction={field.validationFunction}
-                        disabled={field.disabled}
-                        errormessage={field.errormessage}
-                    />
+                {inputDefinition.map((field, i) => {
+
+                    if (!!field.customInput) {
+                        return (
+                            <Row className="my-2" key={i}>
+                                <Col xs={3}>
+                                    {field.label}
+                                </Col>
+                                <Col xs={9}>
+                                    {field.customInput}
+                                </Col>
+                            </Row>
+                        )
+                    }
+                    return (
+                        <SirioField
+                            key={i}
+                            label={field.label}
+                            handleChange={field.handleChange}
+                            index={field.index}
+                            type={field.type}
+                            name={field.name}
+                            value={field.value}
+                            placeholder={field.placeholder}
+                            optionList={field.optionList}
+                            classes={field.classes}
+                            customInput={field.customInput}
+                            fullComponent={field.fullComponent}
+                            validator={field.validation}
+                            required={field.required}
+                            min={field.min}
+                            max={field.max}
+                            multiple={field.multiple}
+                            sideButton={field.sideButton}
+                            modifier={field.modifier}
+                            validationFunction={field.validationFunction}
+                            disabled={field.disabled}
+                            errormessage={field.errormessage}
+                        />);
+                }
+
                 )}
             </>
 

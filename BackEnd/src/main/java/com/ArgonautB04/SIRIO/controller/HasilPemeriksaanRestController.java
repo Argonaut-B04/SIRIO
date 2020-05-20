@@ -676,4 +676,26 @@ public class HasilPemeriksaanRestController {
 
         return response;
     }
+
+    @GetMapping(value = "/jalankan/{id}")
+    private BaseResponse<String> jalankanHasilPemeriksaan(
+            @PathVariable("id") int id,
+            Principal principal
+    ) {
+        employeeRestService.validateEmployeeExistByPrincipal(principal);
+
+        HasilPemeriksaan target = hasilPemeriksaanRestService.getById(id);
+
+        List<KomponenPemeriksaan> komponenPemeriksaanList = komponenPemeriksaanRestService.getByHasilPemeriksaan(target);
+
+        List<Rekomendasi> rekomendasiList = rekomendasiRestService.getByDaftarKomponenPemeriksaan(komponenPemeriksaanList);
+
+        for (Rekomendasi rekomendasi : rekomendasiList) {
+            rekomendasiRestService.jalankan(rekomendasi);
+        }
+
+        hasilPemeriksaanRestService.ubahStatus(target.getIdHasilPemeriksaan(), 5);
+
+        return new BaseResponse<>(200, "sukses", "sukses");
+    }
 }

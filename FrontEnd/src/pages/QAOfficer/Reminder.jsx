@@ -1,6 +1,8 @@
 import React from "react";
 import TabelReminder from "../../Components/Tables/Reminder/TabelReminder";
 import SirioMainLayout from "../../Layout/SirioMainLayout";
+import AuthenticationService from "Services/AuthenticationService";
+import { Redirect } from "react-router-dom";
 
 /**
  * Controller yang menampilkan halaman daftar remidner
@@ -45,6 +47,22 @@ export default class Reminder extends React.Component {
     }
 
     render() {
+        if (AuthenticationService.getRole() === "Super QA Officer Operational Risk"
+            || AuthenticationService.getRole() === "QA Lead Operational Risk"
+            || AuthenticationService.getRole() === "Supervisor"
+            || AuthenticationService.getRole() === "Administrator"
+            || AuthenticationService.getRole() === "Branch Manager") {
+            return (
+                <Redirect to={{
+                    pathname: "/error",
+                    state: {
+                        detail: "Not Authorized",
+                        code: "401"
+                    }
+                }} />
+            )
+        } 
+        
         return (
             // Menggunakan contentLoading dan loadingBody untuk mengubah loader konten
             <SirioMainLayout contentLoading={this.state.contentLoading} loadingBody={this.state.loadingBody}>
