@@ -69,10 +69,6 @@ class HasilPemeriksaanFormUbah extends React.Component {
 
     async renderData() {
         this.props.contentStartLoading();
-        this.props.changeLoadingBody("Mengambil data histori temuan dari server");
-        const responseTemuanRisiko = await TemuanRisikoService.getHistoriTemuanRisikoKantorCabang(this.props.location.state.id);
-        const daftarHistoriTemuan = responseTemuanRisiko.data.result;
-
         this.props.changeLoadingBody("Mengambil data risk level dari server");
         const responseRiskLevel = await RiskLevelService.getAll();
         const riskLevelList = responseRiskLevel.data.result.map(riskLevel => {
@@ -150,6 +146,10 @@ class HasilPemeriksaanFormUbah extends React.Component {
                     }
                 )
             });
+
+        this.props.changeLoadingBody("Mengambil data histori temuan dari server");
+        const responseTemuanRisiko = await TemuanRisikoService.getHistoriTemuanRisikoKantorCabang(responseHasilPemeriksaan.data.result.tugasPemeriksaan.id);
+        const daftarHistoriTemuan = responseTemuanRisiko.data.result;
 
         this.setState({
             daftarHistoriTemuan: daftarHistoriTemuan,
@@ -580,9 +580,8 @@ class HasilPemeriksaanFormUbah extends React.Component {
             this.props.contentStartLoading();
             this.props.changeLoadingBody("Mengirim data ke server");
             HasilPemeriksaanService.editHasilPemeriksaan(hasilPemeriksaan)
+                .then(() => this.props.contentFinishLoading(), () => this.props.contentFinishLoading())
                 .then(() => this.setRedirect());
-
-            this.props.contentFinishLoading();
         }
     }
 
