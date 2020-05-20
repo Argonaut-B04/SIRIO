@@ -140,6 +140,8 @@ class FormRisikoUbah extends React.Component {
     };
 
     async renderSopOption() {
+        this.props.contentStartLoading();
+        this.props.changeLoadingBody("Mengambil data dari server");
         const response = await SopService.getSopList();
 
         const sopOptionList = response.data.result.map(sop => {
@@ -153,10 +155,12 @@ class FormRisikoUbah extends React.Component {
 
         this.setState({
             sopOptionList: sopOptionList
-        })
+        }, this.props.contentFinishLoading())
     }
 
     async renderDataRisiko() {
+        this.props.contentStartLoading();
+        this.props.changeLoadingBody("Mengambil data dari server");
         const response = await RegistrasiRisikoService.getRisiko(this.props.location.state.id);
 
         this.setState({
@@ -173,7 +177,7 @@ class FormRisikoUbah extends React.Component {
             errorMetod: "",
             errorDesc: "",
             errorKS: ""
-        })
+        }, this.props.contentFinishLoading())
     }
 
     handleChange(event) {
@@ -210,6 +214,10 @@ class FormRisikoUbah extends React.Component {
     }
 
     handleSubmit(event) {
+        // Mengubah isi dari loader
+        this.props.contentStartLoading();
+        this.props.changeLoadingBody("Mengambil data dari server");
+
         // event.preventDefault wajib ada
         event.preventDefault();
         // if (this.state.submitable) {
@@ -235,6 +243,7 @@ class FormRisikoUbah extends React.Component {
                 }
                 RegistrasiRisikoService.ubahRisiko(risiko)
                     .then(() => this.setRedirect());
+                    this.props.contentFinishLoading()
             }
         }
         // }

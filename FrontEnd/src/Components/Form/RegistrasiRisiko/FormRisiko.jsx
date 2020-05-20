@@ -136,6 +136,8 @@ class FormRisiko extends React.Component {
     }
 
     async renderSopOption() {
+        this.props.contentStartLoading();
+        this.props.changeLoadingBody("Mengambil data dari server");
         const response = await SopService.getSopList();
 
         const sopOptionList = response.data.result.map(sop => {
@@ -149,7 +151,7 @@ class FormRisiko extends React.Component {
 
         this.setState({
             sopOptionList: sopOptionList
-        })
+        }, this.props.contentFinishLoading())
     }
 
     // Fungsi untuk mengubah state ketika isi dari input diubah
@@ -191,6 +193,11 @@ class FormRisiko extends React.Component {
     // Fungsi yang akan dijalankan ketika user submit
     // Umumnya akan digunakan untuk memanggil service komunikasi ke backend
     handleSubmit(event) {
+
+        // Mengubah isi dari loader
+        this.props.contentStartLoading();
+        this.props.changeLoadingBody("Mengambil data dari server");
+
         // event.preventDefault wajib ada
         event.preventDefault();
         if (this.submitable()) {
@@ -205,6 +212,7 @@ class FormRisiko extends React.Component {
             }
             RegistrasiRisikoService.submitChanges(risiko)
                 .then(() => this.setRedirect());
+            this.props.contentFinishLoading()
         }
     }
 
