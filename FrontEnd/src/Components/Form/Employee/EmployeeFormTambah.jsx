@@ -260,12 +260,12 @@ export default class EmployeeFormTambah extends React.Component {
                                     };
                                     this.props.changeLoadingBody("Mengirim data ke server");
                                     EmployeeService.addEmployee(employee)
+                                        .then(() => this.props.contentFinishLoading())
                                         .then(() => this.setRedirect());
                                 }
                             })
                     }
                 });
-            this.props.contentFinishLoading()
         }
     }
 
