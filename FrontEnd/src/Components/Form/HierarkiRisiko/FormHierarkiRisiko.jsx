@@ -33,6 +33,9 @@ class FormHierarkiRisiko extends React.Component {
     }
 
     async renderRows() {
+        // Mengubah isi dari loader
+        this.props.contentStartLoading();
+        this.props.changeLoadingBody("Mengambil data dari server");
         HierarkiRisikoService.getAllRisiko()
             .then(
                 response => {
@@ -49,6 +52,7 @@ class FormHierarkiRisiko extends React.Component {
                     })
                 }
             )
+            this.props.contentFinishLoading()
     };
 
     columns() {
@@ -224,8 +228,12 @@ class FormHierarkiRisiko extends React.Component {
     }
 
     handleSubmit() {
+        // Mengubah isi dari loader
+        this.props.contentStartLoading();
+        this.props.changeLoadingBody("Mengirim data ke server");
         HierarkiRisikoService.submitChanges(this.state.rowList)
             .then(() => this.setRedirect());
+            this.props.contentFinishLoading()
     }
 
     setRedirect = () => {
@@ -247,9 +255,8 @@ class FormHierarkiRisiko extends React.Component {
 
     // hierarkiFormatter() {
     //     var list = [];
-    //     console.log(this.state.rowList)
     //     for (let i = 0; i < this.state.rowList.length; i++) {
-    //         if (rowList[i].namaParent != this.state.rowList[i].namaParent) {
+    //         if (Prev.rowList[i].namaParent != this.state.rowList[i].namaParent) {
     //             const nama = this.state.rowList[i].namaParent;
     //             list.push(nama);
     //         }
@@ -273,6 +280,7 @@ class FormHierarkiRisiko extends React.Component {
                     purple
                     classes="m-1"
                     modalTitle="Anda akan menyimpan perubahan hierarki risiko"
+                    modalDesc={this.hierarkiFormatter}
                     onConfirm={this.handleSubmit}
                     customConfirmText="Konfirmasi"
                     customCancelText="Batal"

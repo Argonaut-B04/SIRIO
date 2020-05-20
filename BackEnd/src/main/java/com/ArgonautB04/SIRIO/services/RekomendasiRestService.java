@@ -19,6 +19,15 @@ public interface RekomendasiRestService {
     List<Rekomendasi> getAll();
 
     /**
+     * fungsi untuk mengambil semua rekomendasi
+     * berdasarkan status sedang dijalankan
+     * dan selesai
+     * @return list rekomendasi dengan
+     * status tertentu
+     */
+    List<Rekomendasi> getAllByStatus();
+
+    /**
      * fungsi untuk mengambil semua rekomendasi berdasarkan
      * range tanggal awal dan tanggal akhir
      * @param tanggalAwal

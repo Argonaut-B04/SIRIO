@@ -47,10 +47,22 @@ public class RekomendasiRestServiceImpl implements RekomendasiRestService {
     }
 
     @Override
+    public List<Rekomendasi> getAllByStatus() {
+        List<Rekomendasi> all = new ArrayList<>();
+        for (Rekomendasi r: getAll()) {
+            if (r.getStatusRekomendasi().getIdStatusRekomendasi() == 6
+                || r.getStatusRekomendasi().getIdStatusRekomendasi() ==7) {
+                all.add(r);
+            }
+        }
+        return all;
+    }
+
+    @Override
     public List<Rekomendasi> getAll(
             final LocalDate tanggalAwal, final LocalDate tanggalAkhir) {
         List<Rekomendasi> getByTanggal = new ArrayList<>();
-        for (Rekomendasi r: getAll()) {
+        for (Rekomendasi r: getAllByStatus()) {
             try {
                 if ((r.getKomponenPemeriksaan().
                         getHasilPemeriksaan().getTugasPemeriksaan()
@@ -86,7 +98,7 @@ public class RekomendasiRestServiceImpl implements RekomendasiRestService {
     @Override
     public List<Rekomendasi> getByPembuat(final int idQa) {
         List<Rekomendasi> list = new ArrayList<>();
-        for (Rekomendasi r: getAll()) {
+        for (Rekomendasi r: getAllByStatus()) {
             try {
                 if (r.getKomponenPemeriksaan().getHasilPemeriksaan().
                         getTugasPemeriksaan().getPelaksana().
@@ -138,7 +150,7 @@ public class RekomendasiRestServiceImpl implements RekomendasiRestService {
                 }
             }
         } else {
-            for (Rekomendasi r : getAll()) {
+            for (Rekomendasi r : getAllByStatus()) {
                 if (r.getBuktiPelaksanaan() != null
                         && r.getBuktiPelaksanaan().getStatusBuktiPelaksanaan().
                         getIdStatusBukti()
@@ -179,6 +191,7 @@ public class RekomendasiRestServiceImpl implements RekomendasiRestService {
                     overdue.add(r);
                 }
                 else if (r.getTenggatWaktu() != null
+                        && r.getBuktiPelaksanaan() != null
                         && r.getBuktiPelaksanaan().
                         getTanggalPersetujuan() != null
                         && r.getTenggatWaktu().isBefore(
@@ -188,7 +201,7 @@ public class RekomendasiRestServiceImpl implements RekomendasiRestService {
                 }
             }
         } else {
-            for (Rekomendasi r : getAll()) {
+            for (Rekomendasi r : getAllByStatus()) {
                 if (r.getTenggatWaktu() != null && r.getStatusRekomendasi().
                         getIdStatusRekomendasi() == 6
                         && r.getTenggatWaktu().isBefore(LocalDate.now())) {
@@ -325,7 +338,7 @@ public class RekomendasiRestServiceImpl implements RekomendasiRestService {
                 }
             }
         } else {
-            for (Rekomendasi r : getAll()) {
+            for (Rekomendasi r : getAllByStatus()) {
                 if (r.getStatusRekomendasi().getIdStatusRekomendasi() == 6
                         && r.getBuktiPelaksanaan() == null
                         && r.getTenggatWaktu().isAfter(LocalDate.now())) {
