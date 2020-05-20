@@ -46,17 +46,6 @@ export default class DaftarRekomendasi extends React.Component {
     }
 
     render() {
-        if (AuthenticationService.getRole() !== "QA Officer Operational Risk") {
-            return (
-                <Redirect to={{
-                    pathname: "/error",
-                    state: {
-                        detail: "Not Authorized",
-                        code: "401"
-                    }
-                }} />
-            )
-        }
 
         return (
             // Menggunakan contentLoading dan loadingBody untuk mengubah loader konten
