@@ -37,7 +37,7 @@ class DetailKantorCabang extends React.Component {
     renderRedirect = () => {
         if (this.state.redirect) {
             return <Redirect to={{
-                pathname: "/kantorCabang",
+                pathname: "/kantor-cabang",
                 state: {
                     deleteSuccess: true
                 }
@@ -54,7 +54,12 @@ class DetailKantorCabang extends React.Component {
     }
 
     async renderDataKantor() {
+        this.props.contentStartLoading();
+        this.props.changeLoadingBody("Mengambil data dari server");
+
         const response = await KantorCabangService.getKantorCabangDetail(this.props.location.state.id);
+
+        this.props.changeLoadingBody("Menampilkan data");
 
         this.setState({
            kantorCabang: response.data.result,
@@ -66,15 +71,21 @@ class DetailKantorCabang extends React.Component {
             "Status          :": response.data.result.status,
             "Kunjungan Audit :": this.auditFormatter(response.data.result.kunjunganAudit)
         }
-        })
+        }, this.props.contentFinishLoading())
     }
 
     hapus(id) {
+        this.props.contentStartLoading();
+        this.props.changeLoadingBody("Mengirim data ke server"); 
+
         const kantorCabang = {
             id: id
         };
+       
         KantorCabangService.deleteKantorCabang(kantorCabang)
             .then(() => this.setRedirect());
+
+        this.props.contentFinishLoading()
     }
    
     subButton() {
@@ -84,7 +95,7 @@ class DetailKantorCabang extends React.Component {
             return (
                 <div>
                     <NavLink to={{
-                        pathname: "/kantorCabang/ubah",
+                        pathname: "/kantor-cabang/ubah",
                         state: {
                             id: this.state.kantorCabang.idKantor,
                         }
@@ -121,7 +132,7 @@ class DetailKantorCabang extends React.Component {
                     data={this.state.dataGeneral}
                     id='id'
                     subButton={this.subButton(this.state.kantorCabang.status)}
-                    link="kantorCabang"
+                    link="kantor-cabang"
                 />
             </>
         );

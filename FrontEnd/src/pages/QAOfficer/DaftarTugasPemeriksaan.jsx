@@ -59,6 +59,7 @@ export default class DaftarTugasPemeriksaan extends React.Component {
         }
 
         return (
+            // Menggunakan contentLoading dan loadingBody untuk mengubah loader konten
             <SirioMainLayout contentLoading={this.state.contentLoading} loadingBody={this.state.loadingBody}>
                 <TabelTugasPemeriksaan contentFinishLoading={this.contentFinishLoading} contentStartLoading={this.contentStartLoading} changeLoadingBody={this.changeLoadingBody} />
             </SirioMainLayout>

@@ -170,7 +170,6 @@ public class RencanaPemeriksaanRestController {
 
         if (rencanaPemeriksaanDTO.getDaftarTugasPemeriksaan() != null &&
                 !rencanaPemeriksaanDTO.getDaftarTugasPemeriksaan().isEmpty()) {
-            System.out.println(rencanaPemeriksaanDTO.getDaftarTugasPemeriksaan());
             for (TugasPemeriksaanDTO tugasPemeriksaanDTO : rencanaPemeriksaanDTO.getDaftarTugasPemeriksaan()) {
                 TugasPemeriksaan tugasPemeriksaanTemp = new TugasPemeriksaan();
                 tugasPemeriksaanTemp.setRencanaPemeriksaan(rencanaPemeriksaan);

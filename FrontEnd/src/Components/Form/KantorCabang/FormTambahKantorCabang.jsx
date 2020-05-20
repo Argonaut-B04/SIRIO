@@ -37,6 +37,7 @@ class FormTambahKantorCabang extends React.Component {
     componentDidMount() {
         this.renderEmployeeOption();
     }
+
     validateKantor(fokusNama) {
         var errorNama = "";
         var symbols = /[-!$%@#^&*()\\_+|~=`{}\[\]:";'<>?,.\/]/;
@@ -110,7 +111,7 @@ class FormTambahKantorCabang extends React.Component {
     renderRedirect = () => {
         if (this.state.redirect) {
             return <Redirect to={{
-                pathname: "/kantorCabang",
+                pathname: "/kantor-cabang",
                 state: {
                     addSuccess: true
                 }
@@ -119,6 +120,8 @@ class FormTambahKantorCabang extends React.Component {
     };
 
     async renderEmployeeOption() {
+        this.props.contentStartLoading();
+
         const response = await EmployeeService.getAllBM();
 
         const employeeOptionList = response.data.result.map(employee => {
@@ -132,7 +135,7 @@ class FormTambahKantorCabang extends React.Component {
 
         this.setState({
             employeeOptionList: employeeOptionList
-        })
+        }, this.props.contentFinishLoading())
     }
 
     // Fungsi untuk mengubah state ketika isi dari input diubah
@@ -185,6 +188,9 @@ class FormTambahKantorCabang extends React.Component {
     // Fungsi yang akan dijalankan ketika user submit
     // Umumnya akan digunakan untuk memanggil service komunikasi ke backend
     async handleSubmit(event) {
+        this.props.contentStartLoading();
+        this.props.changeLoadingBody("Mengirim data ke server");
+
         event.preventDefault();
         if(this.submitable()){
             const response = await KantorCabangService.isExistKantorCabang(this.state.namaKantorCabang);
@@ -208,6 +214,8 @@ class FormTambahKantorCabang extends React.Component {
                 .then(() => this.setRedirect());
             }
         }
+
+        this.props.contentFinishLoading()
     }
 
     // Fungsi yang akan mengembalikan definisi tiap field pada form
@@ -222,13 +230,12 @@ class FormTambahKantorCabang extends React.Component {
                     handleChange: this.handleChange,
                     type: "text",
                     name: "namaKantorCabang",
-                    validation: this.state.errorNama,
+                    errormessage: this.state.errorNama,
                     value: this.state.namaKantorCabang,
                     placeholder: "Masukan nama point"
                 }, {
                     label: "Branch Manager",
                     required: true,
-                    validation: this.state.errorBM,
                     handleChange: this.handleSelectChange,
                     type: "select",
                     name: "idPemilik",
@@ -301,7 +308,7 @@ class FormTambahKantorCabang extends React.Component {
                 {tombolSimpan}
                 <SirioButton purple
                     classes="mx-1"
-                    onClick={() => window.location.href = "/kantorCabang"}>
+                    onClick={() => window.location.href = "/kantor-cabang"}>
                     Batal
                 </SirioButton>
             </div>

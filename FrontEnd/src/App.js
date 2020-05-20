@@ -63,10 +63,6 @@ import ErrorPage from './pages/Errors/Error';
 import Error404 from './pages/Errors/Error404';
 import TemplateReminder from './pages/QAOfficer/TemplateReminder';
 import DashboardStaff from './pages/Supervisor/DashboardStaff';
-import DemoFormPage from './pages/DemoFormPage';
-import DemoFormPage2 from './pages/DemoFormPage2';
-import DemoFormPage3 from './pages/DemoFormPage3';
-import DemoFormPage4 from './pages/DemoFormPage4';
 
 /**
  * Router utama yang memetakan url ke controller
@@ -80,28 +76,23 @@ class App extends React.Component {
 
         <Router>
           <Switch>
-            <Route exact path="/demo4" component={DemoFormPage4} />
-            <Route exact path="/demo3" component={DemoFormPage3} />
-            <Route exact path="/demo2" component={DemoFormPage2} />
-            <Route exact path="/demo" component={DemoFormPage} />
-
             <Route exact path="/" component={Login} />
             <Route exact path="/dashboard-kantor" component={DashboardKantorCabang} />
 
-            <Route exact path="/rencanaPemeriksaan" component={DaftarRencanaPemeriksaan} />
-            <Route exact path="/rencanaPemeriksaan/detail" component={DetailRencanaPemeriksaan} />
-            <Route exact path="/rencanaPemeriksaan/tambah" component={FormTambahRencanaPemeriksaan} />
-            <Route exact path="/rencanaPemeriksaan/ubah" component={FormUbahRencanaPemeriksaan} />
+            <Route exact path="/rencana-pemeriksaan" component={DaftarRencanaPemeriksaan} />
+            <Route exact path="/rencana-pemeriksaan/detail" component={DetailRencanaPemeriksaan} />
+            <Route exact path="/rencana-pemeriksaan/tambah" component={FormTambahRencanaPemeriksaan} />
+            <Route exact path="/rencana-pemeriksaan/ubah" component={FormUbahRencanaPemeriksaan} />
 
             <Route exact path="/sop" component={DaftarSOP} />
             <Route exact path="/sop/detail" component={DetailSOP} />
             <Route exact path="/sop/tambah" component={FormTambahSOP} />
             <Route exact path="/sop/ubah" component={FormUbahSOP} />
 
-            <Route exact path="/kantorCabang/ubah" component={FormUbahKantorCabang} />
-            <Route exact path="/kantorCabang/tambah" component={FormTambahKantorCabang} />
-            <Route exact path="/kantorCabang" component={DaftarKantorCabang} />
-            <Route exact path="/kantorCabang/detail" component={DetailKantorCabang} />
+            <Route exact path="/kantor-cabang/ubah" component={FormUbahKantorCabang} />
+            <Route exact path="/kantor-cabang/tambah" component={FormTambahKantorCabang} />
+            <Route exact path="/kantor-cabang" component={DaftarKantorCabang} />
+            <Route exact path="/kantor-cabang/detail" component={DetailKantorCabang} />
 
             <Route exact path="/hasil-pemeriksaan" component={DaftarHasilPemeriksaan} />
             <Route exact path="/hasil-pemeriksaan/detail" component={DetailHasilPemeriksaan} />

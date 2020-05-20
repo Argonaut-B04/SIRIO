@@ -108,7 +108,12 @@ class FormUbahSOP extends React.Component {
     };
 
     async renderDataSop() {
+        this.props.contentStartLoading();
+        this.props.changeLoadingBody("Mengambil data dari server");
+        
         const response = await SopService.getSOPDetail(this.props.location.state.id);
+
+        this.props.changeLoadingBody("Menampilkan data");
 
         this.setState({
             id: response.data.result.idSop,
@@ -119,7 +124,7 @@ class FormUbahSOP extends React.Component {
             errorKat: "",
             errorLink: "",
 
-        });
+        }, this.props.contentFinishLoading());
     }
 
     // Fungsi untuk mengubah state ketika isi dari input diubah
@@ -152,7 +157,10 @@ class FormUbahSOP extends React.Component {
 
     // Fungsi yang akan dijalankan ketika user submit
     // Umumnya akan digunakan untuk memanggil service komunikasi ke backend
-    async handleSubmit(event) {
+   handleSubmit(event) {
+        this.props.contentStartLoading();
+        this.props.changeLoadingBody("Mengirim data ke server");
+
         event.preventDefault();
         if(this.submitable()){
             const sop = {
@@ -163,12 +171,12 @@ class FormUbahSOP extends React.Component {
             }
             SopService.editSOP(sop)
             .then(() => this.setRedirect());
+            this.props.contentFinishLoading()
             
         }
+
+        
     }
-
-    
-
     
     // Fungsi yang akan mengembalikan definisi tiap field pada form
     // Setiap objek {} pada List [] akan menjadi 1 field
@@ -202,7 +210,7 @@ class FormUbahSOP extends React.Component {
                     name: "linkDokumen",
                     errormessage: this.state.errorLink,
                     value: this.state.linkDokumen,
-                    placeholder: "https://drive.google.com/drive/my-drive"
+                    placeholder: "https://drive.google.com/"
                 }
 
             ]
