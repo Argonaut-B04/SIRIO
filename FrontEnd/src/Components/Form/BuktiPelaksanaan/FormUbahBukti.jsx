@@ -16,7 +16,6 @@ class FormUbahBukti extends React.Component {
             lampiran: "",
             id: "",
             keteranganRekomendasi: "",
-            submitable: true,
             redirect: false
         };
 
@@ -99,7 +98,9 @@ class FormUbahBukti extends React.Component {
             id: response.data.result.id,
             keterangan: response.data.result.keterangan,
             lampiran: response.data.result.lampiran,
-            keteranganRekomendasi: response.data.result.keteranganRekomendasi
+            keteranganRekomendasi: response.data.result.keteranganRekomendasi,
+            errorKeterangan: "",
+            errorLampiran: ""
         }, this.props.contentFinishLoading()) // Setelah jeda waktu, hentikan loader
     }
 
@@ -152,7 +153,7 @@ class FormUbahBukti extends React.Component {
                 type: "textarea",
                 name: "keterangan",
                 value: this.state.keterangan,
-                placeholder: "Masukan keterangan bukti",
+                placeholder: "Keterangan bukti pelaksanaan",
                 errormessage: this.state.errorKeterangan
             }, {
                 label: "Lampiran",
@@ -161,7 +162,7 @@ class FormUbahBukti extends React.Component {
                 type: "textarea",
                 name: "lampiran",
                 value: this.state.lampiran,
-                placeholder: "Masukan lampiran bukti (berupa link url)",
+                placeholder: "https://drive.google.com",
                 errormessage: this.state.errorLampiran
             }
         ])
