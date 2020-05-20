@@ -14,16 +14,27 @@ import java.util.List;
 @RequestMapping("/api/v1/Role")
 public class RoleRestController {
 
+    /**
+     * Complete and Success Response Code.
+     */
+    private final int complete = 200;
+
+    /**
+     * Bind to Role Rest Service.
+     */
     @Autowired
     private RoleRestService roleRestService;
 
     /**
-     * Mengambil seluruh role
+     * Mengambil seluruh role.
      *
-     * @return daftar role
+     * @return daftar role.
      */
     @GetMapping("/getAll")
     private BaseResponse<List<Role>> getAllRole() {
-        return new BaseResponse<>(200, "success", roleRestService.getAll());
+        return new BaseResponse<>(
+                complete,
+                "success",
+                roleRestService.getAll());
     }
 }

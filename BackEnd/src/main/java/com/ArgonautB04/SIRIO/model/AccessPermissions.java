@@ -1,287 +1,363 @@
 package com.ArgonautB04.SIRIO.model;
 
-import org.springframework.beans.factory.annotation.Value;
-
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.MapsId;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 import java.io.Serializable;
 
+/**
+ * Access Permission object that binds to Role.
+ */
 @Entity
 @Table
 public class AccessPermissions implements Serializable {
 
-    @Id
-    @Column(name = "idPermission")
-    private Integer idPermission;
-
+    /**
+     * Primary Role object.
+     */
     @OneToOne
     @MapsId
     private Role role;
 
+    /**
+     * Id for access permissions should be the same as Role id.
+     */
+    @Id
+    @Column(name = "idPermission")
+    private Integer idPermission;
+
+    /**
+     * Permission to access Risk Rating.
+     */
     @Column
     private Boolean aksesRiskRating = false;
 
+    /**
+     * Permission to change Risk Rating.
+     */
     @Column
     private Boolean ubahRiskRating = false;
 
+    /**
+     * Permission to access Risk Level.
+     */
     @Column
     private Boolean aksesRiskLevel = false;
 
+    /**
+     * Permission to change risk level.
+     */
     @Column
     private Boolean ubahRiskLevel = false;
 
+    /**
+     * Permission to change reminder.
+     */
     @Column
     private Boolean ubahReminder = false;
 
+    /**
+     * Permission to access Risk Table.
+     */
     @Column
     private Boolean aksesTabelRisiko = false;
 
+    /**
+     * Permission to access Risk.
+     */
     @Column
     private Boolean aksesRisiko = false;
 
+    /**
+     * Permission to add new Risk.
+     */
     @Column
     private Boolean aksesTambahRisiko = false;
 
+    /**
+     * Permission to change Risk.
+     */
     @Column
     private Boolean aksesUbahRisiko = false;
 
+    /**
+     * Permission to delete Risk.
+     */
     @Column
     private Boolean aksesHapusRisiko = false;
 
+    /**
+     * Permission to change Risk Hierarchy.
+     */
     @Column
     private Boolean aksesUbahHierarki = false;
 
+    /**
+     * Permission to access Recommendation Table.
+     */
     @Column
     private Boolean aksesTabelRekomendasi = false;
 
+    /**
+     * Permission to access Recommendation.
+     */
     @Column
     private Boolean aksesRekomendasi = false;
 
+    /**
+     * Permission to access Bukti Pelaksanaan.
+     */
     @Column
     private Boolean aksesBuktiPelaksanaan = false;
 
+    /**
+     * Permission to add Bukti Pelaksanaan.
+     */
     @Column
     private Boolean aksesTambahBuktiPelaksanaan = false;
 
+    /**
+     * Permission to change Bukti Pelaksanaan.
+     */
     @Column
     private Boolean aksesUbahBuktiPelaksanaan = false;
 
+    /**
+     * Permission to give approval to Bukti Pelaksanaan.
+     */
     @Column
     private Boolean aksesPersetujuanBuktiPelaksanaan = false;
 
+    /**
+     * Permission to change Recommendation Deadline.
+     */
     @Column
     private Boolean aturTenggatWaktu = false;
 
+    /**
+     * Permission to access Staff Dashboard.
+     */
     @Column
     private Boolean aksesDashboardStaff = false;
 
+    /**
+     * Permission to access Branch Office Dashboard.
+     */
     @Column
     private Boolean aksesDashboardKC = false;
 
+
+    /**
+     * Empty Constructor.
+     */
     public AccessPermissions() {
     }
 
-    public AccessPermissions(Role role) {
-        this.role = role;
+    /**
+     * Constructor for initial role and initial full access.
+     *
+     * @param primaryRole Bind to this Role object
+     * @param trueDefault Set all access permission to true.
+     */
+    public AccessPermissions(final Role primaryRole,
+                             final boolean trueDefault) {
+        this.role = primaryRole;
+        if (trueDefault) {
+            this.aksesRiskRating = true;
+            this.ubahRiskRating = true;
+            this.aksesRiskLevel = true;
+            this.ubahRiskLevel = true;
+            this.ubahReminder = true;
+            this.aksesTabelRisiko = true;
+            this.aksesRisiko = true;
+            this.aksesTambahRisiko = true;
+            this.aksesUbahRisiko = true;
+            this.aksesHapusRisiko = true;
+            this.aksesUbahHierarki = true;
+            this.aksesTabelRekomendasi = true;
+            this.aksesRekomendasi = true;
+            this.aksesBuktiPelaksanaan = true;
+            this.aksesTambahBuktiPelaksanaan = true;
+            this.aksesUbahBuktiPelaksanaan = true;
+            this.aksesPersetujuanBuktiPelaksanaan = true;
+            this.aturTenggatWaktu = true;
+            this.aksesDashboardStaff = true;
+            this.aksesDashboardKC = true;
+        }
+
     }
 
-    public AccessPermissions(Role role, boolean trueDefault) {
-        this.role = role;
-        if (!trueDefault) return;
-        this.aksesRiskRating = true;
-        this.ubahRiskRating = true;
-        this.aksesRiskLevel = true;
-        this.ubahRiskLevel = true;
-        this.ubahReminder = true;
-        this.aksesTabelRisiko = true;
-        this.aksesRisiko = true;
-        this.aksesTambahRisiko = true;
-        this.aksesUbahRisiko = true;
-        this.aksesHapusRisiko = true;
-        this.aksesUbahHierarki = true;
-        this.aksesTabelRekomendasi = true;
-        this.aksesRekomendasi = true;
-        this.aksesBuktiPelaksanaan = true;
-        this.aksesTambahBuktiPelaksanaan = true;
-        this.aksesUbahBuktiPelaksanaan = true;
-        this.aksesPersetujuanBuktiPelaksanaan = true;
-        this.aturTenggatWaktu = true;
-        this.aksesDashboardStaff = true;
-        this.aksesDashboardKC = true;
-    }
-
-    public Boolean getAksesDashboardKC() {
-        return aksesDashboardKC;
-    }
-
-    public void setAksesDashboardKC(Boolean aksesDashboardKC) {
-        this.aksesDashboardKC = aksesDashboardKC;
-    }
-
+    /**
+     * Getter for Branch Office Dashboard access.
+     *
+     * @return boolean true if has access, false otherwise.
+     */
     public Boolean getAksesDashboardStaff() {
         return aksesDashboardStaff;
     }
 
-    public void setAksesDashboardStaff(Boolean aksesDashboardStaff) {
-        this.aksesDashboardStaff = aksesDashboardStaff;
-    }
-
+    /**
+     * Getter for Branch Office Dashboard access.
+     *
+     * @return boolean true if has access, false otherwise.
+     */
     public Boolean getAksesTabelRisiko() {
         return aksesTabelRisiko;
     }
 
-    public void setAksesTabelRisiko(Boolean aksesTabelRisiko) {
-        this.aksesTabelRisiko = aksesTabelRisiko;
-    }
-
+    /**
+     * Getter for Risk access.
+     *
+     * @return boolean true if has access, false otherwise.
+     */
     public Boolean getAksesRisiko() {
         return aksesRisiko;
     }
 
-    public void setAksesRisiko(Boolean aksesRisiko) {
-        this.aksesRisiko = aksesRisiko;
-    }
-
+    /**
+     * Getter for add Risk access.
+     *
+     * @return boolean true if has access, false otherwise.
+     */
     public Boolean getAksesTambahRisiko() {
         return aksesTambahRisiko;
     }
 
-    public void setAksesTambahRisiko(Boolean aksesTambahRisiko) {
-        this.aksesTambahRisiko = aksesTambahRisiko;
-    }
-
+    /**
+     * Getter for change Risk access.
+     *
+     * @return boolean true if has access, false otherwise.
+     */
     public Boolean getAksesUbahRisiko() {
         return aksesUbahRisiko;
     }
 
-    public void setAksesUbahRisiko(Boolean aksesUbahRisiko) {
-        this.aksesUbahRisiko = aksesUbahRisiko;
-    }
-
+    /**
+     * Getter for delete Risk access.
+     *
+     * @return boolean true if has access, false otherwise.
+     */
     public Boolean getAksesHapusRisiko() {
         return aksesHapusRisiko;
     }
 
-    public void setAksesHapusRisiko(Boolean aksesHapusRisiko) {
-        this.aksesHapusRisiko = aksesHapusRisiko;
-    }
-
+    /**
+     * Getter for change Risk hierarchy access.
+     *
+     * @return boolean true if has access, false otherwise.
+     */
     public Boolean getAksesUbahHierarki() {
         return aksesUbahHierarki;
     }
 
-    public void setAksesUbahHierarki(Boolean aksesUbahHierarki) {
-        this.aksesUbahHierarki = aksesUbahHierarki;
-    }
-
-    public Integer getIdPermission() {
-        return idPermission;
-    }
-
-    public void setIdPermission(Integer idPermission) {
-        this.idPermission = idPermission;
-    }
-
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
-    }
-
+    /**
+     * Getter for Risk Rating access.
+     *
+     * @return boolean true if has access, false otherwise.
+     */
     public Boolean getAksesRiskRating() {
         return aksesRiskRating;
     }
 
-    public void setAksesRiskRating(Boolean aksesRiskRating) {
-        this.aksesRiskRating = aksesRiskRating;
-    }
-
+    /**
+     * Getter for change Risk Rating access.
+     *
+     * @return boolean true if has access, false otherwise.
+     */
     public Boolean getUbahRiskRating() {
         return ubahRiskRating;
     }
 
-    public void setUbahRiskRating(Boolean ubahRiskRating) {
-        this.ubahRiskRating = ubahRiskRating;
-    }
-
+    /**
+     * Getter for Risk Level access.
+     *
+     * @return boolean true if has access, false otherwise.
+     */
     public Boolean getAksesRiskLevel() {
         return aksesRiskLevel;
     }
 
-    public void setAksesRiskLevel(Boolean aksesRiskLevel) {
-        this.aksesRiskLevel = aksesRiskLevel;
-    }
-
+    /**
+     * Getter for Change Risk Level access.
+     *
+     * @return boolean true if has access, false otherwise.
+     */
     public Boolean getUbahRiskLevel() {
         return ubahRiskLevel;
     }
 
-    public void setUbahRiskLevel(Boolean ubahRiskLevel) {
-        this.ubahRiskLevel = ubahRiskLevel;
-    }
-
-    public Boolean getUbahReminder() {
-        return ubahReminder;
-    }
-
-    public void setUbahReminder(Boolean ubahReminder) {
-        this.ubahReminder = ubahReminder;
-    }
-
+    /**
+     * Getter for Recommendation Table access.
+     *
+     * @return boolean true if has access, false otherwise.
+     */
     public Boolean getAksesTabelRekomendasi() {
         return aksesTabelRekomendasi;
     }
 
-    public void setAksesTabelRekomendasi(Boolean aksesTabelRekomendasi) {
-        this.aksesTabelRekomendasi = aksesTabelRekomendasi;
-    }
-
-    public Boolean getAksesRekomendasi() {
-        return aksesRekomendasi;
-    }
-
-    public void setAksesRekomendasi(Boolean aksesRekomendasi) {
-        this.aksesRekomendasi = aksesRekomendasi;
-    }
-
+    /**
+     * Getter for Bukti Pelaksanaan access.
+     *
+     * @return boolean true if has access, false otherwise.
+     */
     public Boolean getAksesBuktiPelaksanaan() {
         return aksesBuktiPelaksanaan;
     }
 
-    public void setAksesBuktiPelaksanaan(Boolean aksesBuktiPelaksanaan) {
-        this.aksesBuktiPelaksanaan = aksesBuktiPelaksanaan;
-    }
-
+    /**
+     * Getter for add Bukti Pelaksanaan access.
+     *
+     * @return boolean true if has access, false otherwise.
+     */
     public Boolean getAksesTambahBuktiPelaksanaan() {
         return aksesTambahBuktiPelaksanaan;
     }
 
-    public void setAksesTambahBuktiPelaksanaan(Boolean aksesTambahBuktiPelaksanaan) {
-        this.aksesTambahBuktiPelaksanaan = aksesTambahBuktiPelaksanaan;
-    }
-
+    /**
+     * Getter for change Bukti Pelaksanaan access.
+     *
+     * @return boolean true if has access, false otherwise.
+     */
     public Boolean getAksesUbahBuktiPelaksanaan() {
         return aksesUbahBuktiPelaksanaan;
     }
 
-    public void setAksesUbahBuktiPelaksanaan(Boolean aksesUbahBuktiPelaksanaan) {
-        this.aksesUbahBuktiPelaksanaan = aksesUbahBuktiPelaksanaan;
-    }
-
+    /**
+     * Getter for approval Bukti Pelaksanaan access.
+     *
+     * @return boolean true if has access, false otherwise.
+     */
     public Boolean getAksesPersetujuanBuktiPelaksanaan() {
         return aksesPersetujuanBuktiPelaksanaan;
     }
 
-    public void setAksesPersetujuanBuktiPelaksanaan(Boolean aksesPersetujuanBuktiPelaksanaan) {
-        this.aksesPersetujuanBuktiPelaksanaan = aksesPersetujuanBuktiPelaksanaan;
-    }
-
+    /**
+     * Getter for set Recommendation Deadline access.
+     *
+     * @return boolean true if has access, false otherwise.
+     */
     public Boolean getAturTenggatWaktu() {
         return aturTenggatWaktu;
     }
 
-    public void setAturTenggatWaktu(Boolean aturTenggatWaktu) {
-        this.aturTenggatWaktu = aturTenggatWaktu;
+    /**
+     * Getter for Permission ID.
+     *
+     * @return id for this object.
+     */
+    public Integer getIdPermission() {
+        return idPermission;
+    }
+
+    /**
+     * Setter for Permission id.
+     *
+     * @param permissionId to set.
+     */
+    public void setIdPermission(final Integer permissionId) {
+        this.idPermission = permissionId;
     }
 }

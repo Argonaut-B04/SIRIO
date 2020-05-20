@@ -10,10 +10,32 @@ import java.util.Collection;
 import java.util.List;
 
 @Repository
-public interface BuktiPelaksanaanDB extends JpaRepository<BuktiPelaksanaan, Integer> {
+public interface BuktiPelaksanaanDB
+        extends JpaRepository<BuktiPelaksanaan, Integer> {
+
+    /**
+     * Get all Bukti Pelaksanaan object by Person in Charge.
+     *
+     * @param pembuat person in charge Employee object
+     * @return Bukti Pelaksaan object
+     */
     List<BuktiPelaksanaan> findAllByPembuat(Employee pembuat);
 
-    List<BuktiPelaksanaan> findAllByRekomendasiIn(Collection<Rekomendasi> rekomendasi);
+    /**
+     * Getter for all Bukti Pelaksanaan which has Recommendation in list.
+     *
+     * @param rekomendasi Recommendation object
+     * @return Bukti Pelaksanaan object
+     */
+    List<BuktiPelaksanaan> findAllByRekomendasiIn(
+            Collection<Rekomendasi> rekomendasi
+    );
 
+    /**
+     * Get Bukti Pelaksanaan bound to Recommendation.
+     *
+     * @param rekomendasi Recommendation object
+     * @return Bukti Pelaksanaan object
+     */
     BuktiPelaksanaan findByRekomendasi(Rekomendasi rekomendasi);
 }

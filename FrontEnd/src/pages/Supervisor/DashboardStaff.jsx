@@ -461,21 +461,21 @@ class DashboardStaff extends React.Component {
                 {
                     label: 'Jumlah Rekomendasi Belum Diimplementasi',
                     stack: 'Stack 1',
-                    backgroundColor: 'rgba(255, 0, 0, 0.85)',
-                    borderColor: 'rgba(255, 0, 0, 0.85)',
                     borderWidth: 1,
-                    hoverBackgroundColor: 'rgba(255, 0, 0, 0.85)',
-                    hoverBorderColor: 'rgba(255, 0, 0, 0.85)',
+                    backgroundColor: '#F2C94C',
+                    borderColor: '#F2C94C',
+                    hoverBackgroundColor: '#F2C94C',
+                    hoverBorderColor: '#F2C94C',
                     data: this.state.listRekomendasiBelumDiimplementasi
                 },
                 {
                     label: 'Jumlah Rekomendasi Overdue',
                     stack: 'Stack 1',
-                    backgroundColor: '#F2C94C',
-                    borderColor: '#F2C94C',
                     borderWidth: 1,
-                    hoverBackgroundColor: '#F2C94C',
-                    hoverBorderColor: '#F2C94C',
+                    backgroundColor: 'rgba(255, 0, 0, 0.85)',
+                    borderColor: 'rgba(255, 0, 0, 0.85)',
+                    hoverBackgroundColor: 'rgba(255, 0, 0, 0.85)',
+                    hoverBorderColor: 'rgba(255, 0, 0, 0.85)',
                     data: this.state.listRekomendasiOverdue
                 }
             ]
@@ -514,8 +514,9 @@ class DashboardStaff extends React.Component {
         } else {
             return (
                 <>
-                <div>
+                <div style={{marginTop: "50px"}}>
                     <h4 className="text-center mt-3 pt-3">Histori Data Temuan dan Rekomendasi untuk Tugas Pemeriksaan pada Suatu Bulan</h4>
+                    <br></br>
                     <SirioBarChart data={data} contentFinishLoading={this.contentFinishLoading} contentStartLoading={this.contentStartLoading} changeLoadingBody={this.changeLoadingBody}/>
                 </div>
 
@@ -545,9 +546,8 @@ class DashboardStaff extends React.Component {
 
         return (
             <SirioMainLayout preloader={preloader} contentLoading={contentLoading} loadingBody={loadingBody} active={!contentLoading}>
-                <h1 className="text-left">Dashboard Performa Staff Operational Risk {this.state.namaqa}</h1>
-                <br/>
                 <SirioComponentHeader
+                    title={"Dashboard Performa Staff Operational Risk" + this.state.namaqa}
                     betweenTitleSubtitle={this.getBetween()}
                 />
                 {/* <SirioForm
