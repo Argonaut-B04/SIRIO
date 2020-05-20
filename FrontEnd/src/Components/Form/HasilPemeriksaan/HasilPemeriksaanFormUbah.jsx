@@ -580,9 +580,8 @@ class HasilPemeriksaanFormUbah extends React.Component {
             this.props.contentStartLoading();
             this.props.changeLoadingBody("Mengirim data ke server");
             HasilPemeriksaanService.editHasilPemeriksaan(hasilPemeriksaan)
+                .then(() => this.props.contentFinishLoading(), () => this.props.contentFinishLoading())
                 .then(() => this.setRedirect());
-
-            this.props.contentFinishLoading();
         }
     }
 
