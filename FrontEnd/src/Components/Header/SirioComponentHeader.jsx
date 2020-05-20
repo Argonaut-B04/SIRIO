@@ -31,6 +31,11 @@ class SirioComponentHeader extends Component {
                     </div>
                     :
                     <div style={{ marginTop: "20px" }}>
+                        {title &&
+                            <h2 className={classes.title}>
+                                {title}
+                            </h2>
+                        }
                         {betweenTitleSubtitle}
                         {subtitle &&
                             <h5 className={classes.subtitle}>
