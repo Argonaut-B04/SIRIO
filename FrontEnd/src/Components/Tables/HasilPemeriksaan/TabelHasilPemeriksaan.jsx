@@ -65,6 +65,11 @@ class TabelHasilPemeriksaan extends React.Component {
         }
     }
 
+    handleJalankan(event) {
+        event&&event.preventDefault();
+
+    }
+
     getButtonsFirst(cell, row) {
         const siapDijalankan = row.siapDijalankan;
         const status = row.namaStatus;

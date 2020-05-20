@@ -214,28 +214,30 @@ class EmployeeFormUbah extends React.Component {
                 email: this.state.email,
                 noHp: this.state.noHp
             };
+
+            this.props.contentStartLoading();
             if (this.state.initialEmail !== this.state.email) {
                 // Mengubah isi dari loader
-                this.props.contentStartLoading();
                 this.props.changeLoadingBody("Mengecek email di server");
                 EmployeeService.checkEmailExist({email: this.state.email})
                     .then(response => {
                         if (response.data.result) {
                             this.setState({
                                 errorEmail: "Email sudah terdaftar"
-                            })
+                            }, this.props.contentFinishLoading())
                         } else {
                             this.props.changeLoadingBody("Mengirim data ke server");
                             EmployeeService.editEmployee(employee)
+                                .then(() => this.props.contentFinishLoading(), () => this.props.contentFinishLoading())
                                 .then(() => this.setRedirect());
                         }
-                    })
+                    }, () => this.props.contentFinishLoading())
             } else {
                 this.props.changeLoadingBody("Mengirim data ke server");
                 EmployeeService.editEmployee(employee)
+                    .then(() => this.props.contentFinishLoading(), () => this.props.contentFinishLoading())
                     .then(() => this.setRedirect());
             }
-            this.props.contentFinishLoading()
         }
     }
 
