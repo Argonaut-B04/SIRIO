@@ -268,6 +268,7 @@ export default class EmployeeFormTambah extends React.Component {
                             })
                     }
                 }, () => this.props.contentFinishLoading());
+            this.props.contentFinishLoading();
         }
     }
 
