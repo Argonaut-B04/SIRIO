@@ -74,9 +74,6 @@ class ReminderTemplateForm extends Component {
     }
 
     handleChange(event) {
-        // ini untuk nampung isi error nya apa
-        var hasilError;
-        // misalnya ini adalah validasi untuk input dengan name: "field"
         if (event.target.name === "subject") {
 
             var errorSubjek = ""
