@@ -12,6 +12,7 @@ import SirioButton from '../../Components/Button/SirioButton';
 import SirioComponentHeader from "../../Components/Header/SirioComponentHeader";
 import AuthenticationService from "../../Services/AuthenticationService";
 import moment from 'moment';
+import { Row, Col } from 'react-bootstrap';
 
 class DashboardKantorCabang extends React.Component {
 
@@ -79,7 +80,32 @@ class DashboardKantorCabang extends React.Component {
         }
     }
 
+    // Fungsi untuk menghentikan tampilan loader konten
+    contentFinishLoading() {
+        setTimeout(function () { // Memberikan jeda waktu 0.5 detik
+            this.setState({
+                contentLoading: false
+            })
+        }.bind(this), 500)
+    }
+
+    // Fungsi untuk menampilkan loader konten
+    contentStartLoading() {
+        this.setState({
+            contentLoading: true
+        })
+    }
+
+    // Fungsi untuk mengubah teks loader konten
+    changeLoadingBody(body) {
+        this.setState({
+            loadingBody: body
+        })
+    }
+
     async renderData() {
+        this.contentStartLoading();
+        this.changeLoadingBody("Mengambil data dari server");
         const responseDashboardComp = await DashboardKantorService.getAllComponent();
         const dashboardComponent = responseDashboardComp.data.result;
 
@@ -117,7 +143,7 @@ class DashboardKantorCabang extends React.Component {
             namaKantorList: namaKantorCabang,
             areaKantorList: areaKantorCabang,
             regionalKantorList: regionalKantorCabang,
-        });
+        }, this.contentFinishLoading());
     }
 
     getUnique(arr, index) {
@@ -188,6 +214,9 @@ class DashboardKantorCabang extends React.Component {
     }
 
     handleSubmit(event) {
+        this.contentStartLoading();
+        this.changeLoadingBody("Mengambil data dari server");
+
         event.preventDefault();
         const filter = {
             namaKantor: this.state.namaKantor,
@@ -202,22 +231,22 @@ class DashboardKantorCabang extends React.Component {
                     this.setState({
                         dashboardComponent: response.data.result,
                         filterNama: true
-                    });
+                    }, this.contentFinishLoading());
                 } else if (this.state.areaKantor !== "" && this.state.regionalKantor !== "") {
                     this.setState({
                         dashboardComponent: response.data.result,
                         filterAreaRegional: true
-                    });
+                    }, this.contentFinishLoading());
                 } else if (this.state.areaKantor !== "") {
                     this.setState({
                         dashboardComponent: response.data.result,
                         filterArea: true
-                    });
+                    }, this.contentFinishLoading());
                 } else if (this.state.regionalKantor !== "") {
                     this.setState({
                         dashboardComponent: response.data.result,
                         filterRegional: true
-                    });
+                    }, this.contentFinishLoading());
                 } else {
                     this.setState({
                         dashboardComponent: response.data.result,
@@ -225,12 +254,15 @@ class DashboardKantorCabang extends React.Component {
                         filterAreaRegional: false,
                         filterArea: false,
                         filterRegional: false
-                    });
+                    }, this.contentFinishLoading());
                 }
             })
     }
 
     handleReset(event) {
+        this.contentStartLoading();
+        this.changeLoadingBody("Mengambil data dari server");
+
         event.preventDefault();
         DashboardKantorService.getAllComponent()
             .then((response) =>
@@ -246,74 +278,89 @@ class DashboardKantorCabang extends React.Component {
                 filterAreaRegional: false,
                 filterArea: false,
                 filterRegional: false
-            }));
+            }, this.contentFinishLoading()));
     }
 
     getBetweenFirst() {
         var max = moment(this.state.tanggalPertama).add(2, 'y')
         max = max.subtract(1, 'd')
         return (
-            <>
-                <div>
-                    <SirioField
-                        type="select"
-                        handleChange={this.handleSelectChangeNama}
-                        classes="p-1"
-                        name="namaKantor"
-                        value={this.state.namaKantor}
-                        optionList={this.state.namaKantorList}
-                        placeholder="Semua Kantor Cabang"
-                    />
-                </div>
-                <div >
-                    {this.state.namaChanged ? <h5>Area: {this.state.areaNamaKantor}</h5> :
-                    <SirioField
-                        type="select"
-                        handleChange={this.handleSelectChange}
-                        classes="p-1"
-                        name="areaKantor"
-                        value={this.state.areaKantor}
-                        optionList={this.getUnique(this.state.areaKantorList, 'label')}
-                        placeholder="Semua Area"
-                    />
-                    }
-                </div>
-                <div >
-                    {this.state.namaChanged ? <h5>Regional: {this.state.regionalNamaKantor}</h5> :
-                    <SirioField
-                        type="select"
-                        handleChange={this.handleSelectChange}
-                        classes="p-1"
-                        name="regionalKantor"
-                        value={this.state.regionalKantor}
-                        optionList={this.getUnique(this.state.regionalKantorList, 'label')}
-                        placeholder="Semua Regional"
-                    />
-                    }
-                </div>
-                <div className="col-md-6 pl-0">
-                    <SirioField
-                        type="date"
-                        handleChange={this.handleChange}
-                        classes="p-1"
-                        name="tanggalPertama"
-                        value={this.state.tanggalPertama}
-                    />
-                </div>
-                <div className="col-md-6 pl-0">
-                    <SirioField
-                        type="date"
-                        handleChange={this.handleChange}
-                        disabled={this.state.tanggalPertama === ""}
-                        classes="p-1"
-                        min={this.state.tanggalPertama}
-                        max={max}
-                        required={this.state.tanggalPertama !== ""}
-                        name="tanggalKedua"
-                        value={this.state.tanggalKedua}
-                    />
-                </div>
-            </>
+            <Row>
+                <Col lg={5} xs={12}>
+                    <div style={{marginLeft: "20px"}}>
+                        <SirioField
+                            type="select"
+                            handleChange={this.handleSelectChangeNama}
+                            classes="p-1"
+                            name="namaKantor"
+                            value={this.state.namaKantor}
+                            optionList={this.state.namaKantorList}
+                            placeholder="Semua Kantor Cabang"
+                        />
+                    </div>
+                    <div style={{marginLeft: "20px"}}>
+                        {this.state.namaChanged ? <h5>Area: {this.state.areaNamaKantor}</h5> :
+                        <SirioField
+                            type="select"
+                            handleChange={this.handleSelectChange}
+                            classes="p-1"
+                            name="areaKantor"
+                            value={this.state.areaKantor}
+                            optionList={this.getUnique(this.state.areaKantorList, 'label')}
+                            placeholder="Semua Area"
+                        />
+                        }
+                    </div>
+                    <div style={{marginLeft: "20px"}}>
+                        {this.state.namaChanged ? <h5>Regional: {this.state.regionalNamaKantor}</h5> :
+                        <SirioField
+                            type="select"
+                            handleChange={this.handleSelectChange}
+                            classes="p-1"
+                            name="regionalKantor"
+                            value={this.state.regionalKantor}
+                            optionList={this.getUnique(this.state.regionalKantorList, 'label')}
+                            placeholder="Semua Regional"
+                        />
+                        }
+                    </div>
+                </Col>
+                <Col lg={4} xs={12}>
+                    <div className="pl-0">
+                        <SirioField
+                            type="date"
+                            handleChange={this.handleChange}
+                            classes="p-1"
+                            name="tanggalPertama"
+                            value={this.state.tanggalPertama}
+                        />
+                    </div>
+                    <div className="pl-0">
+                        <SirioField
+                            type="date"
+                            handleChange={this.handleChange}
+                            disabled={this.state.tanggalPertama === ""}
+                            classes="p-1"
+                            min={this.state.tanggalPertama}
+                            max={max}
+                            required={this.state.tanggalPertama !== ""}
+                            name="tanggalKedua"
+                            value={this.state.tanggalKedua}
+                        />
+                    </div>
+                    <div style={{marginTop: "20px"}}>
+                        {this.getButtonFirst()}
+                        <SirioButton
+                            purple
+                            recommended
+                            classes="mx-1"
+                            onClick={(event) => this.handleReset(event)}
+                        >
+                            Atur Ulang
+                        </SirioButton>
+                    </div>
+                </Col>
+            </Row>
         )
     }
 
@@ -353,7 +400,7 @@ class DashboardKantorCabang extends React.Component {
         <SirioButton
             purple
             recommended
-            classes="mx-2"
+            classes="mx-1"
         >
             Cari
         </SirioButton>
@@ -362,7 +409,7 @@ class DashboardKantorCabang extends React.Component {
             <SirioButton
                 purple
                 recommended
-                classes="mx-2"
+                classes="mx-1"
                 onClick={(event) => this.handleSubmit(event)}
             >
                 Cari
@@ -519,6 +566,8 @@ class DashboardKantorCabang extends React.Component {
         const role = this.state.role;
         const qaOfficer = role === "QA Officer Operational Risk" || role === "Super QA Officer Operational Risk";
         const branchManager = role === "Branch Manager";
+        const rekomendasi = this.state.dashboardComponent.jumlahRekomendasi;
+        const temuan = this.state.dashboardComponent.jumlahTemuan;
 
         if (role === "Manajer Operational Risk"
             || role === "QA Lead Operational Risk"
@@ -536,69 +585,98 @@ class DashboardKantorCabang extends React.Component {
         } 
 
         if (qaOfficer) {
-            return (
-                <SirioMainLayout preloader={preloader} contentLoading={contentLoading} loadingBody={loadingBody} active={!contentLoading}>
-                    <div>
-                        <SirioComponentHeader
-                            title={this.getTitle()}
-                            betweenTitleSubtitle={this.getBetweenFirst()}
-                        />
-                    </div>
-                    <div style={{padding: "5px"}}>
-                        {this.getButtonFirst()}
-                        <SirioButton
-                            purple
-                            recommended
-                            classes="mx-2"
-                            onClick={(event) => this.handleReset(event)}
-                        >
-                            Atur Ulang
-                        </SirioButton>
-                    </div>
-                    <div style={{marginTop: "50px"}}>
-                        <SirioBarChart data={this.getChart()} />
-                        <h6 className="text-right pt-3">Histori Data Temuan dan Rekomendasi untuk Tugas Pemeriksaan pada Suatu Bulan</h6>
-                    </div>
-                    <div>
-                        {this.state.filterNama ? 
-                            <SirioDashboardBox data={this.getBoxSecond()} /> :
-                            <SirioDashboardBox data={this.getBoxFirst()} />
-                        }
-                    </div>
-                </SirioMainLayout>
-            )
+            if ((rekomendasi === 0 && temuan === 0) || (rekomendasi === "" && temuan === "")) {
+                return (
+                    <SirioMainLayout preloader={preloader} contentLoading={contentLoading} loadingBody={loadingBody} active={!contentLoading}>
+                        <div>
+                            <SirioComponentHeader
+                                title={this.getTitle()}
+                            />
+                            {this.getBetweenFirst()}
+                        </div>
+                        <div className="text-center mt-5">
+                            <h3>Data tidak ditemukan!</h3>
+                        </div>
+                    </SirioMainLayout>
+                )
+            } else {
+                return (
+                    <SirioMainLayout preloader={preloader} contentLoading={contentLoading} loadingBody={loadingBody} active={!contentLoading}>
+                        <div>
+                            <SirioComponentHeader
+                                title={this.getTitle()}
+                            />
+                            {this.getBetweenFirst()}
+                        </div>
+                        <div style={{marginTop: "50px"}}>
+                            <SirioBarChart data={this.getChart()} />
+                            <h6 className="text-right pt-3">Histori Data Temuan dan Rekomendasi untuk Tugas Pemeriksaan pada Suatu Bulan</h6>
+                        </div>
+                        <div>
+                            {this.state.filterNama ? 
+                                <SirioDashboardBox data={this.getBoxSecond()} /> :
+                                <SirioDashboardBox data={this.getBoxFirst()} />
+                            }
+                        </div>
+                    </SirioMainLayout>
+                )
+            }
         } else if (branchManager) {
-            return (
-                <SirioMainLayout preloader={preloader} contentLoading={contentLoading} loadingBody={loadingBody} active={!contentLoading}>
-                    {/* <div>
-                        <h3 style={{margin: "15px"}}>Dashboard Performa Kantor Cabang</h3>
-                    </div> */}
-                    <div>
-                        <SirioComponentHeader
-                            title="Dashboard Performa Kantor Cabang"
-                            betweenTitleSubtitle={this.getBetweenSecond()}
-                        />
-                    </div>
-                    <div style={{padding: "5px"}}>
-                        {this.getBetweenSecond()}
-                        <SirioButton
-                            purple
-                            recommended
-                            classes="mx-2"
-                            onClick={(event) => this.handleReset(event)}
-                        >
-                            Atur Ulang
-                        </SirioButton>
-                    </div>
-                    <div style={{marginTop: "50px"}}>
-                        <SirioBarChart data={this.getChart()} />
-                        <h6 className="text-right pt-3">Histori Data Temuan dan Rekomendasi untuk Tugas Pemeriksaan pada Suatu Bulan</h6>
-                    </div>
-                    <div>
-                        <SirioDashboardBox data={this.getBoxSecond()} />
-                    </div>
-                </SirioMainLayout>
-            )
+            if ((rekomendasi === 0 && temuan === 0) || (rekomendasi === "" && temuan === "")) {
+                return (
+                    <SirioMainLayout preloader={preloader} contentLoading={contentLoading} loadingBody={loadingBody} active={!contentLoading}>
+                        <div>
+                            <SirioComponentHeader
+                                title="Dashboard Performa Kantor Cabang"
+                                betweenTitleSubtitle={this.getBetweenSecond()}
+                            />
+                        </div>
+                        <div style={{padding: "5px"}}>
+                            {this.getButtonSecond()}
+                            <SirioButton
+                                purple
+                                recommended
+                                classes="mx-2"
+                                onClick={(event) => this.handleReset(event)}
+                            >
+                                Atur Ulang
+                            </SirioButton>
+                        </div>
+                        <div className="text-center mt-5">
+                            <h3>Data tidak ditemukan!</h3>
+                        </div>
+                    </SirioMainLayout>
+                )
+            } else {
+                return (
+                    <SirioMainLayout preloader={preloader} contentLoading={contentLoading} loadingBody={loadingBody} active={!contentLoading}>
+                        <div>
+                            <SirioComponentHeader
+                                title="Dashboard Performa Kantor Cabang"
+                                betweenTitleSubtitle={this.getBetweenSecond()}
+                            />
+                        </div>
+                        <div style={{padding: "5px"}}>
+                            {this.getButtonSecond()}
+                            <SirioButton
+                                purple
+                                recommended
+                                classes="mx-2"
+                                onClick={(event) => this.handleReset(event)}
+                            >
+                                Atur Ulang
+                            </SirioButton>
+                        </div>
+                        <div style={{marginTop: "50px"}}>
+                            <SirioBarChart data={this.getChart()} />
+                            <h6 className="text-right pt-3">Histori Data Temuan dan Rekomendasi untuk Tugas Pemeriksaan pada Suatu Bulan</h6>
+                        </div>
+                        <div>
+                            <SirioDashboardBox data={this.getBoxSecond()} />
+                        </div>
+                    </SirioMainLayout>
+                )
+            }
         }
     }
 }
