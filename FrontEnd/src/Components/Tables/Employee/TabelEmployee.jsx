@@ -70,6 +70,7 @@ class TabelEmployee extends React.Component {
             }}>
                 <SirioButton
                     purple
+                    recommended
                 >
                     Tambah Pengguna
                 </SirioButton>

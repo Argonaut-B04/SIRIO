@@ -63,6 +63,7 @@ export default class TabelTugasPemeriksaan extends React.Component {
                 }}>
                     <SirioButton
                         purple
+                        recommended
                     >
                         Tambah Hasil
                     </SirioButton>
