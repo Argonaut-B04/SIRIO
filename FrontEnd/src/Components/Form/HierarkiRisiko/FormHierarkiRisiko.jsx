@@ -230,7 +230,7 @@ class FormHierarkiRisiko extends React.Component {
     handleSubmit() {
         // Mengubah isi dari loader
         this.props.contentStartLoading();
-        this.props.changeLoadingBody("Mengambil data dari server");
+        this.props.changeLoadingBody("Mengirim data ke server");
         HierarkiRisikoService.submitChanges(this.state.rowList)
             .then(() => this.setRedirect());
             this.props.contentFinishLoading()

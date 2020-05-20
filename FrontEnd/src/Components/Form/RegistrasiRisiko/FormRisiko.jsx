@@ -196,7 +196,7 @@ class FormRisiko extends React.Component {
 
         // Mengubah isi dari loader
         this.props.contentStartLoading();
-        this.props.changeLoadingBody("Mengambil data dari server");
+        this.props.changeLoadingBody("Mengirim data ke server");
 
         // event.preventDefault wajib ada
         event.preventDefault();

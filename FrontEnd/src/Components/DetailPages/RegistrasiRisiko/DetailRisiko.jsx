@@ -141,7 +141,7 @@ class DetailRisiko extends React.Component {
     hapus(id) {
         // Mengubah isi dari loader
         this.props.contentStartLoading();
-        this.props.changeLoadingBody("Mengambil data dari server");
+        this.props.changeLoadingBody("Menghapus data dari server");
         const risiko = {
             id: id
         };
