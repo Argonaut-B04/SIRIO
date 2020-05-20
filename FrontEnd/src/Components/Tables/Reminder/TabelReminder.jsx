@@ -389,7 +389,6 @@ class TabelReminder extends React.Component {
                 </SirioConfirmButton>
                 <SirioWarningButton
                     red
-                    recommended
                     modalTitle="Konfirmasi Pembatalan"
                     modalDesc="Seluruh perubahan reminder yang belum tersimpan akan dihapus. Konfirmasi?"
                     onConfirm={() => window.location.href = "/rekomendasi"}
