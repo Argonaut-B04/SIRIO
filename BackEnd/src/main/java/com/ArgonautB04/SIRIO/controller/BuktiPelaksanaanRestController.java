@@ -114,7 +114,8 @@ public class BuktiPelaksanaanRestController {
         }
         if (buktiPelaksanaanDTO.getLampiran() != null && !buktiPelaksanaanDTO.getLampiran().equals("")) {
             if (buktiPelaksanaanDTO.getLampiran().contains("https://") |
-                    buktiPelaksanaanDTO.getLampiran().contains("http://")) {
+                    buktiPelaksanaanDTO.getLampiran().contains("http://") |
+                    buktiPelaksanaanDTO.getLampiran().contains("www")) {
                 buktiPelaksanaanTemp.setLampiran(buktiPelaksanaanDTO.getLampiran());
             } else {
                 throw new ResponseStatusException(
@@ -164,7 +165,8 @@ public class BuktiPelaksanaanRestController {
 
         if (buktiPelaksanaanDTO.getLampiran() != null && !buktiPelaksanaanDTO.getLampiran().equals("")) {
             if (buktiPelaksanaanDTO.getLampiran().contains("https://") |
-                    buktiPelaksanaanDTO.getLampiran().contains("http://")) {
+                    buktiPelaksanaanDTO.getLampiran().contains("http://") |
+                    buktiPelaksanaanDTO.getLampiran().contains("www")) {
                 buktiPelaksanaanTemp.setLampiran(buktiPelaksanaanDTO.getLampiran());
             } else {
                 throw new ResponseStatusException(

@@ -149,7 +149,10 @@ public class RekomendasiRestServiceImpl implements RekomendasiRestService {
             for (Rekomendasi r : getAll(tanggalAwal, tanggalAkhir)) {
                 if (r.getBuktiPelaksanaan() != null
                         && r.getBuktiPelaksanaan().getStatusBuktiPelaksanaan().
-                        getIdStatusBukti() == 2) {
+                        getIdStatusBukti() == 2 && (r.getBuktiPelaksanaan().getTanggalPersetujuan()
+                        .isBefore(r.getTenggatWaktu()) ||
+                        r.getBuktiPelaksanaan().getTanggalPersetujuan()
+                                .isEqual(r.getTenggatWaktu()))) {
                     impl.add(r);
                 }
             }
@@ -158,7 +161,10 @@ public class RekomendasiRestServiceImpl implements RekomendasiRestService {
                 if (r.getBuktiPelaksanaan() != null
                         && r.getBuktiPelaksanaan().getStatusBuktiPelaksanaan().
                         getIdStatusBukti()
-                        == 2) {
+                        == 2 && (r.getBuktiPelaksanaan().getTanggalPersetujuan()
+                        .isBefore(r.getTenggatWaktu()) ||
+                        r.getBuktiPelaksanaan().getTanggalPersetujuan()
+                                .isEqual(r.getTenggatWaktu()))) {
                     impl.add(r);
                 }
             }
@@ -189,25 +195,36 @@ public class RekomendasiRestServiceImpl implements RekomendasiRestService {
         if (tanggalAwal != null) {
             for (Rekomendasi r : getAll(tanggalAwal, tanggalAkhir)) {
                 if (r.getTenggatWaktu() != null
-                        && r.getStatusRekomendasi().getIdStatusRekomendasi()
-                        == 6
                         && r.getTenggatWaktu().isBefore(LocalDate.now())) {
                     overdue.add(r);
                 } else if (r.getTenggatWaktu() != null
                         && r.getBuktiPelaksanaan() != null
                         && r.getBuktiPelaksanaan().
                         getTanggalPersetujuan() != null
-                        && r.getTenggatWaktu().isBefore(
+                        && (r.getTenggatWaktu().isBefore(
                         r.getBuktiPelaksanaan().
-                                getTanggalPersetujuan())) {
+                                getTanggalPersetujuan()) ||
+                        r.getTenggatWaktu().isEqual(
+                                r.getBuktiPelaksanaan().
+                                        getTanggalPersetujuan()))) {
                     overdue.add(r);
                 }
             }
         } else {
             for (Rekomendasi r : getAllByStatus()) {
-                if (r.getTenggatWaktu() != null && r.getStatusRekomendasi().
-                        getIdStatusRekomendasi() == 6
+                if (r.getTenggatWaktu() != null
                         && r.getTenggatWaktu().isBefore(LocalDate.now())) {
+                    overdue.add(r);
+                } else if (r.getTenggatWaktu() != null
+                        && r.getBuktiPelaksanaan() != null
+                        && r.getBuktiPelaksanaan().
+                        getTanggalPersetujuan() != null
+                        && (r.getTenggatWaktu().isBefore(
+                        r.getBuktiPelaksanaan().
+                                getTanggalPersetujuan()) ||
+                        r.getTenggatWaktu().isEqual(
+                                r.getBuktiPelaksanaan().
+                                        getTanggalPersetujuan()))) {
                     overdue.add(r);
                 }
             }
@@ -446,31 +463,19 @@ public class RekomendasiRestServiceImpl implements RekomendasiRestService {
         List<Rekomendasi> belumImpl = new ArrayList<>();
         if (tanggalAwal != null) {
             for (Rekomendasi r : getAll(tanggalAwal, tanggalAkhir)) {
-                if (r.getStatusRekomendasi().getIdStatusRekomendasi()
-                        == 6 && r.getBuktiPelaksanaan() == null
-                        && r.getTenggatWaktu().isAfter(LocalDate.now())) {
-                    belumImpl.add(r);
-                } else if (r.getStatusRekomendasi().getIdStatusRekomendasi()
-                        == 6 && r.getBuktiPelaksanaan() != null
-                        && r.getBuktiPelaksanaan().getStatusBuktiPelaksanaan().
-                        getIdStatusBukti() != 2 && r.getTenggatWaktu().
-                        isAfter(LocalDate.now())) {
+                if ((r.getBuktiPelaksanaan() == null ||
+                        r.getBuktiPelaksanaan().getStatusBuktiPelaksanaan().getIdStatusBukti() != 2)
+                        && (r.getTenggatWaktu().isAfter(LocalDate.now())
+                        || r.getTenggatWaktu().isEqual(LocalDate.now()))) {
                     belumImpl.add(r);
                 }
             }
         } else {
             for (Rekomendasi r : getAllByStatus()) {
-                if (r.getStatusRekomendasi().getIdStatusRekomendasi() == 6
-                        && r.getBuktiPelaksanaan() == null
-                        && r.getTenggatWaktu().isAfter(LocalDate.now())) {
-                    belumImpl.add(r);
-                } else if (r.getStatusRekomendasi().
-                        getIdStatusRekomendasi() == 6
-                        && r.getBuktiPelaksanaan() != null
-                        && r.getBuktiPelaksanaan().
-                        getStatusBuktiPelaksanaan().
-                        getIdStatusBukti() != 2 && r.getTenggatWaktu().
-                        isAfter(LocalDate.now())) {
+                if ((r.getBuktiPelaksanaan() == null ||
+                        r.getBuktiPelaksanaan().getStatusBuktiPelaksanaan().getIdStatusBukti() != 2)
+                        && (r.getTenggatWaktu().isAfter(LocalDate.now())
+                        || r.getTenggatWaktu().isEqual(LocalDate.now()))) {
                     belumImpl.add(r);
                 }
             }
