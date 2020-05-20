@@ -227,19 +227,22 @@ class DashboardStaff extends React.Component {
         var max = moment(this.state.tanggalAwal).add(2, 'y')
         max = max.subtract(1, 'd')
         max = max.format("YYYY-MM-DD")
-        if (this.state.role === "QA Officer Operational Risk") {
+        if (this.state.role === "QA Officer Operational Risk" ||
+        this.state.role === "QA Lead Operational Risk" ||
+        this.state.role === "Super QA Officer Operational Risk") {
             return (
-                <div>
-                    <div className="col-md-4 pl-0">
+                <div className="row">
+                    <div className="col-md-3 pl-0">
                         <SirioField
                                 type="date"
                                 handleChange={this.handleChange}
                                 classes="p-1"
                                 name="tanggalAwal"
                                 value={this.state.tanggalAwal}
+                                label="Range"
                             />
                     </div>
-                    <div className="col-md-4 pl-0">
+                    <div className="col-md-3 pl-0">
                         <SirioField
                                 type="date"
                                 handleChange={this.handleChange}
@@ -250,6 +253,7 @@ class DashboardStaff extends React.Component {
                                 required={this.state.tanggalAwal !== ""}
                                 name="tanggalAkhir"
                                 value={this.state.tanggalAkhir}
+                                label="hingga"
     
                             />
                     </div>
@@ -397,21 +401,7 @@ class DashboardStaff extends React.Component {
     //             .then(() => this.setRedirect());
     // }
 
-    render() {
-        if (this.state.role === "Administrator"
-        || this.state.role === "Manajer Operational Risk"
-        || this.state.role === "Branch Manager") {
-            return (
-                <Redirect to={{
-                    pathname: "/error",
-                    state: {
-                        detail: "Not Authorized",
-                        code: "401"
-                    }
-                }} />
-            )
-        }
-        const { preloader, contentLoading, loadingBody } = this.state;
+    getData() {
         const data = {
             labels: this.state.listMonth,
             datasets: [
@@ -481,6 +471,45 @@ class DashboardStaff extends React.Component {
             }
         ]
     
+        if ((this.state.jumlahRekomendasi === 0 && this.state.jumlahTemuan === 0) || 
+        (this.state.jumlahRekomendasi === "" && this.state.jumlahTemuan === "")) {
+            return (
+                <div className="text-center mt-5">
+                    <h3>Data tidak ditemukan!</h3>
+                </div>
+            )
+        } else {
+            return (
+                <>
+                <div>
+                    <SirioBarChart data={data} contentFinishLoading={this.contentFinishLoading} contentStartLoading={this.contentStartLoading} changeLoadingBody={this.changeLoadingBody}/>
+                    <h6 className="text-right pt-3">Data ini hanya data sementara</h6>
+                </div>
+
+                <div>
+                    <SirioDashboardBox data={boxData} contentFinishLoading={this.contentFinishLoading} contentStartLoading={this.contentStartLoading} changeLoadingBody={this.changeLoadingBody}/>
+                </div>
+                </>
+            )
+        }
+    }
+
+    render() {
+        if (this.state.role === "Administrator"
+        || this.state.role === "Manajer Operational Risk"
+        || this.state.role === "Branch Manager") {
+            return (
+                <Redirect to={{
+                    pathname: "/error",
+                    state: {
+                        detail: "Not Authorized",
+                        code: "401"
+                    }
+                }} />
+            )
+        }
+        const { preloader, contentLoading, loadingBody } = this.state;
+
         return (
             <SirioMainLayout preloader={preloader} contentLoading={contentLoading} loadingBody={loadingBody} active={!contentLoading}>
                 <h1 className="text-left">Dashboard Performa Staff Operational Risk {this.state.namaqa}</h1>
@@ -493,14 +522,7 @@ class DashboardStaff extends React.Component {
                     onSubmit={this.handleSubmit}
                     submitButton={this.submitButton()}
                 /> */}
-                <div>
-                    <SirioBarChart data={data} contentFinishLoading={this.contentFinishLoading} contentStartLoading={this.contentStartLoading} changeLoadingBody={this.changeLoadingBody}/>
-                    <h6 className="text-right pt-3">Data ini hanya data sementara</h6>
-                </div>
-
-                <div>
-                    <SirioDashboardBox data={boxData} contentFinishLoading={this.contentFinishLoading} contentStartLoading={this.contentStartLoading} changeLoadingBody={this.changeLoadingBody}/>
-                </div>
+                {this.getData()}
             </SirioMainLayout>
         )
     }

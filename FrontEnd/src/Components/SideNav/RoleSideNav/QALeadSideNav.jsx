@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import SideNavFramework from '../SideNavFramework';
 import { halamanUtama, hasilPemeriksaan } from '../../../Configuration/UrlConfig';
+import { dashboardStaff } from 'Configuration/UrlConfig';
 
 /**
  * Komponen SideNav untuk QA Lead
@@ -13,7 +14,8 @@ export default class QALeadSideNav extends Component {
                 links={
                     [
                         halamanUtama,
-                        hasilPemeriksaan
+                        hasilPemeriksaan,
+                        dashboardStaff
                     ]
                 }
             />
