@@ -21,11 +21,10 @@ public class ReminderTemplateRestServiceImpl implements ReminderTemplateRestServ
     @Override
     public void setGlobal(ReminderTemplate reminderTemplate) {
         ReminderTemplate currentGlobal = getGlobal();
-        reminderTemplateDB.delete(currentGlobal);
+        currentGlobal.setBody(reminderTemplate.getBody());
+        currentGlobal.setSubjects(reminderTemplate.getSubjects());
 
-        ReminderTemplate newGlobal = ambilAtauBuatTemplate(reminderTemplate);
-        newGlobal.setGlobal(true);
-        reminderTemplateDB.save(newGlobal);
+        reminderTemplateDB.save(currentGlobal);
     }
 
     @Override
