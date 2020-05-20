@@ -55,7 +55,7 @@ export default class FormTambahRencana extends React.Component {
     renderRedirect = () => {
         if (this.state.redirect) {
             return <Redirect to={{
-                pathname: "/rencanaPemeriksaan",
+                pathname: "/rencana-pemeriksaan",
                 state: {
                     addSuccess: true
                 }
@@ -414,7 +414,7 @@ export default class FormTambahRencana extends React.Component {
                 {tombolDraft}
                 <SirioButton purple
                     classes="mx-1"
-                    onClick={() => window.location.href = "/rencanaPemeriksaan"}>
+                    onClick={() => window.location.href = "/rencana-pemeriksaan"}>
                     Batal
                 </SirioButton>
             </div>

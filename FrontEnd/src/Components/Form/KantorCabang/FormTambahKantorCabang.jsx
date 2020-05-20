@@ -111,7 +111,7 @@ class FormTambahKantorCabang extends React.Component {
     renderRedirect = () => {
         if (this.state.redirect) {
             return <Redirect to={{
-                pathname: "/kantorCabang",
+                pathname: "/kantor-cabang",
                 state: {
                     addSuccess: true
                 }
@@ -308,7 +308,7 @@ class FormTambahKantorCabang extends React.Component {
                 {tombolSimpan}
                 <SirioButton purple
                     classes="mx-1"
-                    onClick={() => window.location.href = "/kantorCabang"}>
+                    onClick={() => window.location.href = "/kantor-cabang"}>
                     Batal
                 </SirioButton>
             </div>

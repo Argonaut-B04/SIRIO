@@ -83,20 +83,20 @@ class App extends React.Component {
             <Route exact path="/demo2" component={DemoFormPage2} />
             <Route exact path="/demo" component={DemoFormPage} />
             <Route exact path="/" component={MainPage} />
-            <Route exact path="/rencanaPemeriksaan" component={DaftarRencanaPemeriksaan} />
-            <Route exact path="/rencanaPemeriksaan/detail" component={DetailRencanaPemeriksaan} />
-            <Route exact path="/rencanaPemeriksaan/tambah" component={FormTambahRencanaPemeriksaan} />
-            <Route exact path="/rencanaPemeriksaan/ubah" component={FormUbahRencanaPemeriksaan} />
+            <Route exact path="/rencana-pemeriksaan" component={DaftarRencanaPemeriksaan} />
+            <Route exact path="/rencana-pemeriksaan/detail" component={DetailRencanaPemeriksaan} />
+            <Route exact path="/rencana-pemeriksaan/tambah" component={FormTambahRencanaPemeriksaan} />
+            <Route exact path="/rencana-pemeriksaan/ubah" component={FormUbahRencanaPemeriksaan} />
 
             <Route exact path="/sop" component={DaftarSOP} />
             <Route exact path="/sop/detail" component={DetailSOP} />
             <Route exact path="/sop/tambah" component={FormTambahSOP} />
             <Route exact path="/sop/ubah" component={FormUbahSOP} />
 
-            <Route exact path="/kantorCabang/ubah" component={FormUbahKantorCabang} />
-            <Route exact path="/kantorCabang/tambah" component={FormTambahKantorCabang} />
-            <Route exact path="/kantorCabang" component={DaftarKantorCabang} />
-            <Route exact path="/kantorCabang/detail" component={DetailKantorCabang} />
+            <Route exact path="/kantor-cabang/ubah" component={FormUbahKantorCabang} />
+            <Route exact path="/kantor-cabang/tambah" component={FormTambahKantorCabang} />
+            <Route exact path="/kantor-cabang" component={DaftarKantorCabang} />
+            <Route exact path="/kantor-cabang/detail" component={DetailKantorCabang} />
 
             <Route exact path="/hasil-pemeriksaan" component={DaftarHasilPemeriksaan} />
             <Route exact path="/hasil-pemeriksaan/detail" component={DetailHasilPemeriksaan} />

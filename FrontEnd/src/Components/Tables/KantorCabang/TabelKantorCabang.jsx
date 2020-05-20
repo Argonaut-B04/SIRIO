@@ -121,7 +121,7 @@ class TabelKantorCabang extends React.Component {
     headerButton() {
         return (
             <NavLink to={{
-                pathname: "/kantorCabang/tambah"
+                pathname: "/kantor-cabang/tambah"
             }}>
                 <SirioButton
                     purple recommended
@@ -135,7 +135,7 @@ class TabelKantorCabang extends React.Component {
     getButtonsFirst(cell, row) {
         return (
             <NavLink to={{
-                pathname: "/kantorCabang/detail",
+                pathname: "/kantor-cabang/detail",
                 state: {
                     id: row.idKantor
                 }

@@ -30,7 +30,7 @@ export const dashboard = {
 }
 
 export const rencanaPemeriksaan = {
-    link: "/rencanaPemeriksaan",
+    link: "/rencana-pemeriksaan",
     title: "Rencana Pemeriksaan",
 }
 
@@ -63,7 +63,7 @@ export const pengguna = {
 }
 
 export const kantorCabang = {
-    link: "/kantorCabang",
+    link: "/kantor-cabang",
     title: "Kantor Cabang",
 }
 

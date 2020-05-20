@@ -59,7 +59,7 @@ class FormUbahRencana extends React.Component {
     renderRedirect = () => {
         if (this.state.redirect) {
             return <Redirect to={{
-                pathname: "/rencanaPemeriksaan",
+                pathname: "/rencana-pemeriksaan",
                 state: {
                     editSuccess: true
                 }
@@ -422,7 +422,7 @@ class FormUbahRencana extends React.Component {
                 {tombolJalankan}
                 {tombolDraft}
                 <NavLink to={{
-                    pathname: "/rencanaPemeriksaan/detail",
+                    pathname: "/rencana-pemeriksaan/detail",
                     state: {
                         id: this.props.location.state.id
                     }

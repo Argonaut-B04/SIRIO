@@ -37,7 +37,7 @@ class DetailKantorCabang extends React.Component {
     renderRedirect = () => {
         if (this.state.redirect) {
             return <Redirect to={{
-                pathname: "/kantorCabang",
+                pathname: "/kantor-cabang",
                 state: {
                     deleteSuccess: true
                 }
@@ -95,7 +95,7 @@ class DetailKantorCabang extends React.Component {
             return (
                 <div>
                     <NavLink to={{
-                        pathname: "/kantorCabang/ubah",
+                        pathname: "/kantor-cabang/ubah",
                         state: {
                             id: this.state.kantorCabang.idKantor,
                         }
@@ -132,7 +132,7 @@ class DetailKantorCabang extends React.Component {
                     data={this.state.dataGeneral}
                     id='id'
                     subButton={this.subButton(this.state.kantorCabang.status)}
-                    link="kantorCabang"
+                    link="kantor-cabang"
                 />
             </>
         );

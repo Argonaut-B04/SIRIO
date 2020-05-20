@@ -38,14 +38,14 @@ class DetailRencanaPemeriksaan extends React.Component {
     renderRedirect = () => {
         if (this.state.redirect && this.state.rencanaPemeriksaan.status === 1) {
             return <Redirect to={{
-                pathname: "/rencanaPemeriksaan",
+                pathname: "/rencana-pemeriksaan",
                 state: {
                     deleteSuccess: true
                 }
             }} />
         }else if (this.state.redirect && this.state.rencanaPemeriksaan.status === 2) {
             return <Redirect to={{
-                pathname: "/rencanaPemeriksaan",
+                pathname: "/rencana-pemeriksaan",
                 state: {
                     endSuccess: true
                 }
@@ -154,7 +154,7 @@ class DetailRencanaPemeriksaan extends React.Component {
             return (
                 <div>
                     <NavLink to={{
-                        pathname: "/rencanaPemeriksaan/ubah",
+                        pathname: "/rencana-pemeriksaan/ubah",
                         state: {
                             id: this.state.rencanaPemeriksaan.id,
                         }
@@ -214,7 +214,7 @@ class DetailRencanaPemeriksaan extends React.Component {
                     data={this.state.dataGeneral}
                     id='id'
                     subButton={this.subButton(this.state.rencanaPemeriksaan.status)}
-                    link="rencanaPemeriksaan"
+                    link="rencana-pemeriksaan"
                 />
                 {this.state.daftarTugasPemeriksaan.map(tugas=>
                     <SirioSubdetailPage
