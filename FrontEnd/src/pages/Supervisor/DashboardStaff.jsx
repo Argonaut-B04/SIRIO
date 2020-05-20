@@ -381,7 +381,7 @@ class DashboardStaff extends React.Component {
     }
     async renderOption() {
         this.contentStartLoading();
-        this.changeLoadingBody("Mencoba untuk masuk");
+        this.changeLoadingBody("Mengambil data dari database");
         const response = await EmployeeService.getAllQAOfficerDD();
 
         const optionList = response.data.result.map(qa => {
