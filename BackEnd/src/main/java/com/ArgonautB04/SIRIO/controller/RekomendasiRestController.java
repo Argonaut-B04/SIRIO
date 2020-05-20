@@ -1,11 +1,31 @@
 package com.ArgonautB04.SIRIO.controller;
 
-import com.ArgonautB04.SIRIO.model.*;
+import com.ArgonautB04.SIRIO.model.BuktiPelaksanaan;
+import com.ArgonautB04.SIRIO.model.Employee;
+import com.ArgonautB04.SIRIO.model.HasilPemeriksaan;
+import com.ArgonautB04.SIRIO.model.KantorCabang;
+import com.ArgonautB04.SIRIO.model.KomponenPemeriksaan;
+import com.ArgonautB04.SIRIO.model.Rekomendasi;
+import com.ArgonautB04.SIRIO.model.Role;
+import com.ArgonautB04.SIRIO.model.TugasPemeriksaan;
 import com.ArgonautB04.SIRIO.rest.BaseResponse;
 import com.ArgonautB04.SIRIO.rest.RekomendasiDTO;
-import com.ArgonautB04.SIRIO.services.*;
+import com.ArgonautB04.SIRIO.services.BuktiPelaksanaanRestService;
+import com.ArgonautB04.SIRIO.services.EmployeeRestService;
+import com.ArgonautB04.SIRIO.services.HasilPemeriksaanRestService;
+import com.ArgonautB04.SIRIO.services.KantorCabangRestService;
+import com.ArgonautB04.SIRIO.services.KomponenPemeriksaanRestService;
+import com.ArgonautB04.SIRIO.services.RekomendasiRestService;
+import com.ArgonautB04.SIRIO.services.ReminderRestService;
+import com.ArgonautB04.SIRIO.services.TugasPemeriksaanRestService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
 import java.time.LocalDate;
@@ -18,41 +38,75 @@ import java.util.List;
 @RequestMapping("/api/v1/Rekomendasi")
 public class RekomendasiRestController {
 
+    /**
+     * Complete and success status code.
+     */
+    private final int complete = 200;
+
+    /**
+     * Bind Recommendation Rest Service.
+     */
     @Autowired
     private RekomendasiRestService rekomendasiRestService;
 
+    /**
+     * Bind Employee Rest Service.
+     */
     @Autowired
     private EmployeeRestService employeeRestService;
 
+    /**
+     * Bind to Tugas Pemeriksaan Rest Service.
+     */
     @Autowired
     private TugasPemeriksaanRestService tugasPemeriksaanRestService;
 
+    /**
+     * Bind to Hasil Pemeriksaan Rest Service.
+     */
     @Autowired
     private HasilPemeriksaanRestService hasilPemeriksaanRestService;
 
+    /**
+     * Bind to Komponen Pemeriksaan Rest Service.
+     */
     @Autowired
     private KomponenPemeriksaanRestService komponenPemeriksaanRestService;
 
+    /**
+     * Bind to Branch Manager Rest Service.
+     */
     @Autowired
     private KantorCabangRestService kantorCabangRestService;
 
+    /**
+     * Bind to Bukti Pelaksanaan Rest Service.
+     */
     @Autowired
     private BuktiPelaksanaanRestService buktiPelaksanaanRestService;
 
+    /**
+     * Bind to Reminder Rest Service.
+     */
     @Autowired
     private ReminderRestService reminderRestService;
 
     /**
-     * Mengambil seluruh rekomendasi yang terhubung dengan user yang sedang login
+     * Mengambil seluruh rekomendasi yang terhubung
+     * dengan user yang sedang login.
      *
+     * @param principal object from Spring Security
      * @return daftar rekomendasi yang terhubung dengan pembuat tersebut
      */
     @GetMapping("/getAll")
-    private BaseResponse<List<RekomendasiDTO>> getAllRekomendasiUntukLoggedInUser(
-            Principal principal
+    private BaseResponse<List<RekomendasiDTO>>
+    getAllRekomendasiUntukLoggedInUser(
+            final Principal principal
     ) {
-        Employee employee = employeeRestService.validateEmployeeExistByPrincipal(principal);
-        employeeRestService.validateRolePermission(employee, "tabel rekomendasi");
+        Employee employee = employeeRestService
+                .validateEmployeeExistByPrincipal(principal);
+        employeeRestService
+                .validateRolePermission(employee, "tabel rekomendasi");
 
         Role role = employee.getRole();
 
@@ -68,16 +122,23 @@ public class RekomendasiRestController {
 
             List<HasilPemeriksaan> daftarHasilPemeriksaan =
                     hasilPemeriksaanRestService
-                            .getByDaftarTugasPemeriksaan(daftarTugasPemeriksaan);
+                            .getByDaftarTugasPemeriksaan(
+                                    daftarTugasPemeriksaan
+                            );
 
             List<KomponenPemeriksaan> daftarKomponenPemeriksaan =
                     komponenPemeriksaanRestService
-                            .getByDaftarHasilPemeriksaan(daftarHasilPemeriksaan);
+                            .getByDaftarHasilPemeriksaan(
+                                    daftarHasilPemeriksaan
+                            );
 
-            daftarRekomendasi = rekomendasiRestService.getByDaftarKomponenPemeriksaan(daftarKomponenPemeriksaan);
+            daftarRekomendasi = rekomendasiRestService
+                    .getByDaftarKomponenPemeriksaan(daftarKomponenPemeriksaan);
 
-        } else if (role.getNamaRole().equals("Super QA Officer Operational Risk")
-                | role.getNamaRole().equals("Manajer Operational Risk")) {
+        } else if (
+                role.getNamaRole().equals("Super QA Officer Operational Risk")
+                        || role.getNamaRole().equals("Manajer Operational Risk")
+        ) {
             daftarRekomendasi = rekomendasiRestService.getAll();
 
         } else {
@@ -99,7 +160,9 @@ public class RekomendasiRestController {
 
             // Memasukan durasi hingga tenggat waktu
             if (tenggatWaktu != null) {
-                int durasi = (int) ChronoUnit.DAYS.between(waktuSaatIni, tenggatWaktu);
+                int durasi = (int) ChronoUnit.DAYS.between(
+                        waktuSaatIni, tenggatWaktu
+                );
                 if (durasi < 0) {
                     durasi = 0;
                 }
@@ -108,10 +171,14 @@ public class RekomendasiRestController {
             }
 
             // Memasukan status rekomendasi
-            rekomendasiDTO.setStatus(rekomendasi.getStatusRekomendasi().getNamaStatus());
+            rekomendasiDTO.setStatus(
+                    rekomendasi.getStatusRekomendasi().getNamaStatus()
+            );
 
             // Memasukan status bukti untuk rekomendasi
-            List<BuktiPelaksanaan> buktiList = buktiPelaksanaanRestService.getByDaftarRekomendasi(daftarRekomendasi);
+            List<BuktiPelaksanaan> buktiList =
+                    buktiPelaksanaanRestService
+                            .getByDaftarRekomendasi(daftarRekomendasi);
             for (BuktiPelaksanaan buktiPelaksanaan : buktiList) {
                 if (buktiPelaksanaan.getRekomendasi().equals(rekomendasi)) {
                     rekomendasiDTO.setStatusBukti(
@@ -143,49 +210,58 @@ public class RekomendasiRestController {
             resultDTO.add(rekomendasiDTO);
         }
 
-        return new BaseResponse<>(200, "success", resultDTO);
+        return new BaseResponse<>(complete, "success", resultDTO);
     }
 
     /**
-     * Mengambil suatu rekomendasi
+     * Mengambil suatu rekomendasi.
      *
+     * @param principal object from Spring Security
      * @param idRekomendasi identifier rekomendasi
      * @return detail rekomendasi
      */
     @GetMapping("/{idRekomendasi}")
     private BaseResponse<RekomendasiDTO> getDetailRekomendasi(
-            @PathVariable("idRekomendasi") int idRekomendasi, Principal principal
+            final @PathVariable("idRekomendasi") int idRekomendasi,
+            final Principal principal
     ) {
         BaseResponse<RekomendasiDTO> response = new BaseResponse<>();
-        Employee pengelola = employeeRestService.validateEmployeeExistByPrincipal(principal);
-        employeeRestService.validateRolePermission(pengelola, "tabel rekomendasi");
-        Rekomendasi rekomendasi = rekomendasiRestService.validateExistInById(idRekomendasi);
+        Employee pengelola = employeeRestService
+                .validateEmployeeExistByPrincipal(principal);
+        employeeRestService
+                .validateRolePermission(pengelola, "tabel rekomendasi");
+        Rekomendasi rekomendasi = rekomendasiRestService
+                .validateExistInById(idRekomendasi);
         RekomendasiDTO result = new RekomendasiDTO();
         result.setId(rekomendasi.getIdRekomendasi());
         result.setKeterangan(rekomendasi.getKeterangan());
         result.setStatus(rekomendasi.getStatusRekomendasi().getNamaStatus());
 
-        response.setStatus(200);
+        response.setStatus(complete);
         response.setMessage("success");
         response.setResult(result);
         return response;
     }
 
     /**
-     * Mengambil seluruh rekomendasi yang terhubung dengan suatu kantor cabang
+     * Mengambil seluruh rekomendasi yang terhubung dengan suatu kantor cabang.
      *
+     * @param principal object from Spring Security
      * @param idKantor identifier kantor cabang
      * @return daftar rekomendasi yang terhubung dengan kantor cabang
      */
     @GetMapping("/getAllByKantorCabang/{idKantor}")
     private BaseResponse<List<Rekomendasi>> getAllRekomendasiUntukKantorCabang(
-            @PathVariable("idKantor") int idKantor,
-            Principal principal
+            final @PathVariable("idKantor") int idKantor,
+            final Principal principal
     ) {
-        Employee employee = employeeRestService.validateEmployeeExistByPrincipal(principal);
-        employeeRestService.validateRolePermission(employee, "tabel rekomendasi");
+        Employee employee = employeeRestService
+                .validateEmployeeExistByPrincipal(principal);
+        employeeRestService
+                .validateRolePermission(employee, "tabel rekomendasi");
 
-        KantorCabang kantorCabang = kantorCabangRestService.validateExistById(idKantor);
+        KantorCabang kantorCabang = kantorCabangRestService
+                .validateExistById(idKantor);
 
         List<TugasPemeriksaan> daftarTugasPemeriksaan =
                 tugasPemeriksaanRestService.
@@ -201,28 +277,35 @@ public class RekomendasiRestController {
 
         List<Rekomendasi> result =
                 rekomendasiRestService
-                        .getByDaftarKomponenPemeriksaan(daftarKomponenPemeriksaan);
+                        .getByDaftarKomponenPemeriksaan(
+                                daftarKomponenPemeriksaan
+                        );
 
-        return new BaseResponse<>(200, "success", result);
+        return new BaseResponse<>(complete, "success", result);
     }
 
     /**
      * Mengubah tenggat waktu untuk rekomendasi spesifik.
      *
+     * @param rekomendasiDTO JSON object from frontend
+     * @param principal      object from Spring Security
      * @return objek rekomendasi yang telah diubah
      */
     @PostMapping("/tenggatWaktu")
     private BaseResponse<Rekomendasi> ubahTenggatWaktu(
-            @RequestBody RekomendasiDTO rekomendasiDTO,
-            Principal principal
+            final @RequestBody RekomendasiDTO rekomendasiDTO,
+            final Principal principal
     ) {
         // validasi employee ada dan punya akses tenggat waktu
-        Employee employee = employeeRestService.validateEmployeeExistByPrincipal(principal);
-        employeeRestService.validateRolePermission(employee, "tenggat waktu");
+        Employee employee = employeeRestService
+                .validateEmployeeExistByPrincipal(principal);
+        employeeRestService
+                .validateRolePermission(employee, "tenggat waktu");
 
         // validasi rekomendasi yang mau diset tenggat waktu ada di database
         Integer idRekomendasi = rekomendasiDTO.getId();
-        Rekomendasi rekomendasi = rekomendasiRestService.validateExistInById(idRekomendasi);
+        Rekomendasi rekomendasi = rekomendasiRestService
+                .validateExistInById(idRekomendasi);
 
         // validasi tenggat waktu yang dimasukan
         LocalDate tenggatWaktuBaru = rekomendasiDTO.getTenggatWaktuDate();
@@ -233,12 +316,18 @@ public class RekomendasiRestController {
 
         // mengatur tenggat waktu dan simpan perubahan
         rekomendasi.setTenggatWaktu(tenggatWaktuBaru);
-        Rekomendasi result = rekomendasiRestService.buatAtauSimpanPerubahanRekomendasi(rekomendasi, true);
+        Rekomendasi result = rekomendasiRestService
+                .buatAtauSimpanPerubahanRekomendasi(
+                        rekomendasi, true
+                );
 
-        // membuat 3 reminder: 1 hari sebelum, 3 hari sebelum, dan 1 minggu sebelum
+        // membuat 3 reminder:
+        // 1 hari sebelum,
+        // 3 hari sebelum,
+        // dan 1 minggu sebelum
         reminderRestService.generateDefaultReminder(employee, rekomendasi);
 
         // kirim response
-        return new BaseResponse<>(200, "success", result);
+        return new BaseResponse<>(complete, "success", result);
     }
 }

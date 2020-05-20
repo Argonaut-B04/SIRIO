@@ -1,35 +1,49 @@
 package com.ArgonautB04.SIRIO.rest;
 
 /**
- * Kelas ini digunakan sebagai objek utama yang akan dikirim sebagai JsonResponse
+ * Kelas ini digunakan sebagai objek utama
+ * yang akan dikirim sebagai JsonResponse.
  *
  * @param <T> Class bebas masukin apa saja yang bakal jadi konten response
  * @author windawijaya, nathanael
- * @since 2019
  * @version 1.1
+ * @since 2019
  */
 public class BaseResponse<T> {
+    /**
+     * Response status.
+     */
     private int status;
+
+    /**
+     * Response message.
+     */
     private String message;
+
+    /**
+     * Response object.
+     */
     private T result;
 
     /**
-     * Empty Constructor
+     * Empty Constructor.
      */
     public BaseResponse() {
     }
 
     /**
-     * Constructor to shorthand status, message, and result;
+     * Constructor to shorthand status, message, and result.
      *
-     * @param status  the status
-     * @param message the message
-     * @param result  the result
+     * @param statusCode    the status
+     * @param messageToPass the message
+     * @param resultObject  the result
      */
-    public BaseResponse(int status, String message, T result) {
-        this.status = status;
-        this.message = message;
-        this.result = result;
+    public BaseResponse(final int statusCode,
+                        final String messageToPass,
+                        final T resultObject) {
+        this.status = statusCode;
+        this.message = messageToPass;
+        this.result = resultObject;
     }
 
     /**
@@ -40,10 +54,10 @@ public class BaseResponse<T> {
     }
 
     /**
-     * @param status the status to set
+     * @param statusCode the status to set
      */
-    public void setStatus(int status) {
-        this.status = status;
+    public void setStatus(final int statusCode) {
+        this.status = statusCode;
     }
 
     /**
@@ -54,10 +68,10 @@ public class BaseResponse<T> {
     }
 
     /**
-     * @param message the message to set
+     * @param messageResponse the message to set
      */
-    public void setMessage(String message) {
-        this.message = message;
+    public void setMessage(final String messageResponse) {
+        this.message = messageResponse;
     }
 
     /**
@@ -68,9 +82,9 @@ public class BaseResponse<T> {
     }
 
     /**
-     * @param result the result to set
+     * @param resultObject the result to set
      */
-    public void setResult(T result) {
-        this.result = result;
+    public void setResult(final T resultObject) {
+        this.result = resultObject;
     }
 }
