@@ -239,6 +239,7 @@ class EmployeeFormUbah extends React.Component {
                     .then(() => this.props.contentFinishLoading(), () => this.props.contentFinishLoading())
                     .then(() => this.setRedirect());
             }
+            this.props.contentFinishLoading()
         }
     }
 
