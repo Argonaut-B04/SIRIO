@@ -17,7 +17,13 @@ import FormUbahRencanaPemeriksaan from "./pages/Manager/FormUbahRencanaPemeriksa
 import DaftarKantorCabang from './pages/Administrator/DaftarKantorCabang';
 import DetailKantorCabang from "./pages/Administrator/DetailKantorCabang";
 import FormTambahKantorCabang from "./pages/Administrator/FormTambahKantorCabang";
-import FormUbahKantorCabang from "./pages/Administrator/FormUbahKantorCabang.jsx";
+import FormUbahKantorCabang from "./pages/Administrator/FormUbahKantorCabang";
+import ProfilKantorCabang from "./pages/BranchManager/ProfilKantorCabang";
+
+import DaftarSOP from './pages/Manager/DaftarSOP';
+import DetailSOP from "./pages/Manager/DetailSOP";
+import FormTambahSOP from "./pages/Manager/FormTambahSOP";
+import FormUbahSOP from "./pages/Manager/FormUbahSOP";
 
 import DaftarHasilPemeriksaan from "./pages/QAOfficer/DaftarHasilPemeriksaan";
 import DaftarTugasPemeriksaan from "./pages/QAOfficer/DaftarTugasPemeriksaan";
@@ -56,7 +62,7 @@ import Error401 from './pages/Errors/Error401';
 import ErrorPage from './pages/Errors/Error';
 import Error404 from './pages/Errors/Error404';
 import TemplateReminder from './pages/QAOfficer/TemplateReminder';
-import DashboadStaff from './pages/Supervisor/DashboadStaff';
+import DashboardStaff from './pages/Supervisor/DashboardStaff';
 import DemoFormPage from './pages/DemoFormPage';
 import DemoFormPage2 from './pages/DemoFormPage2';
 import DemoFormPage3 from './pages/DemoFormPage3';
@@ -78,24 +84,32 @@ class App extends React.Component {
             <Route exact path="/demo3" component={DemoFormPage3} />
             <Route exact path="/demo2" component={DemoFormPage2} />
             <Route exact path="/demo" component={DemoFormPage} />
+
             <Route exact path="/" component={Login} />
             <Route exact path="/dashboard-kantor" component={DashboardKantorCabang} />
 
-            <Route exact path="/manager/rencanaPemeriksaan" component={DaftarRencanaPemeriksaan} />
-            <Route exact path="/manager/rencanaPemeriksaan/detail" component={DetailRencanaPemeriksaan} />
-            <Route exact path="/manager/rencanaPemeriksaan/tambah" component={FormTambahRencanaPemeriksaan} />
-            <Route exact path="/manager/rencanaPemeriksaan/ubah" component={FormUbahRencanaPemeriksaan} />
+            <Route exact path="/rencanaPemeriksaan" component={DaftarRencanaPemeriksaan} />
+            <Route exact path="/rencanaPemeriksaan/detail" component={DetailRencanaPemeriksaan} />
+            <Route exact path="/rencanaPemeriksaan/tambah" component={FormTambahRencanaPemeriksaan} />
+            <Route exact path="/rencanaPemeriksaan/ubah" component={FormUbahRencanaPemeriksaan} />
 
-            <Route exact path="/administrator/kantorCabang/ubah" component={FormUbahKantorCabang} />
-            <Route exact path="/administrator/kantorCabang/tambah" component={FormTambahKantorCabang} />
-            <Route exact path="/administrator/kantorCabang" component={DaftarKantorCabang} />
-            <Route exact path="/administrator/kantorCabang/detail" component={DetailKantorCabang} />
+            <Route exact path="/sop" component={DaftarSOP} />
+            <Route exact path="/sop/detail" component={DetailSOP} />
+            <Route exact path="/sop/tambah" component={FormTambahSOP} />
+            <Route exact path="/sop/ubah" component={FormUbahSOP} />
+
+            <Route exact path="/kantorCabang/ubah" component={FormUbahKantorCabang} />
+            <Route exact path="/kantorCabang/tambah" component={FormTambahKantorCabang} />
+            <Route exact path="/kantorCabang" component={DaftarKantorCabang} />
+            <Route exact path="/kantorCabang/detail" component={DetailKantorCabang} />
 
             <Route exact path="/hasil-pemeriksaan" component={DaftarHasilPemeriksaan} />
             <Route exact path="/hasil-pemeriksaan/detail" component={DetailHasilPemeriksaan} />
             <Route exact path="/hasil-pemeriksaan/tolak" component={FormTolakHasilPemeriksaan} />
             <Route exact path="/hasil-pemeriksaan/tambah" component={FormTambahHasilPemeriksaan} />
             <Route exact path="/hasil-pemeriksaan/ubah" component={FormUbahHasilPemeriksaan} />
+
+            <Route exact path="/profil-kantor" component={ProfilKantorCabang} />
 
             <Route exact path="/tugas-pemeriksaan" component={DaftarTugasPemeriksaan} />
 
@@ -124,7 +138,7 @@ class App extends React.Component {
             <AuthorizedRoute exact path="/registrasi-risiko/ubah" component={FormRisikoUbah} />
             <AuthorizedRoute exact path="/registrasi-risiko/ubah-hierarki" component={HierarkiRisiko} />
 
-            <AuthorizedRoute exact path="/dashboard-staff" component={DashboadStaff} />
+            <AuthorizedRoute exact path="/dashboard-staff" component={DashboardStaff} />
 
             <Route exact path="/login" component={Login} />
             <Route exact path="/logout" component={Logout} />

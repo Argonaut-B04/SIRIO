@@ -7,15 +7,15 @@ INSERT IGNORE INTO `role` (`id_role`, `nama_role`) VALUES
 (6, 'Branch Manager'),
 (7, 'Super QA Officer Operational Risk');
 
-INSERT IGNORE INTO `access_permissions` (`akses_bukti_pelaksanaan`, `akses_hapus_risiko`, `akses_persetujuan_bukti_pelaksanaan`, `akses_rekomendasi`, `akses_risiko`, `akses_risk_level`, `akses_risk_rating`, `akses_tabel_rekomendasi`, `akses_tabel_risiko`, `akses_tambah_bukti_pelaksanaan`, `akses_tambah_risiko`, `akses_ubah_bukti_pelaksanaan`, `akses_ubah_hierarki`, `akses_ubah_risiko`, `atur_tenggat_waktu`, `ubah_reminder`, `ubah_risk_level`, `ubah_risk_rating`, `role_id_role`)
+INSERT IGNORE INTO `access_permissions` (`akses_dashboard_staff`,`akses_bukti_pelaksanaan`, `akses_hapus_risiko`, `akses_persetujuan_bukti_pelaksanaan`, `akses_rekomendasi`, `akses_risiko`, `akses_risk_level`, `akses_risk_rating`, `akses_tabel_rekomendasi`, `akses_tabel_risiko`, `akses_tambah_bukti_pelaksanaan`, `akses_tambah_risiko`, `akses_ubah_bukti_pelaksanaan`, `akses_ubah_hierarki`, `akses_ubah_risiko`, `atur_tenggat_waktu`, `ubah_reminder`, `ubah_risk_level`, `ubah_risk_rating`, `role_id_role`)
 VALUES
-(b'0', b'0', b'0', b'0', b'0', b'1', b'1', b'0', b'0', b'0', b'0', b'0', b'0', b'0', b'0', b'0', b'0', b'0', '1'),
-(b'1', b'0', b'1', b'0', b'1', b'1', b'1', b'0', b'1', b'1', b'0', b'0', b'1', b'0', b'0', b'0', b'1', b'1', '2'),
-(b'1', b'0', b'1', b'0', b'1', b'1', b'1', b'0', b'1', b'0', b'0', b'0', b'1', b'0', b'0', b'0', b'1', b'1', '3'),
-(b'1', b'1', b'1', b'1', b'1', b'1', b'1', b'1', b'1', b'1', b'1', b'1', b'1', b'1', b'1', b'1', b'1', b'1', '4'),
-(b'1', b'1', b'1', b'0', b'1', b'1', b'1', b'1', b'1', b'1', b'1', b'1', b'0', b'1', b'1', b'1', b'0', b'0', '5'),
-(b'1', b'0', b'0', b'0', b'0', b'0', b'0', b'1', b'0', b'1', b'0', b'1', b'0', b'0', b'0', b'0', b'0', b'0', '6'),
-(b'1', b'1', b'1', b'1', b'1', b'1', b'1', b'1', b'1', b'1', b'1', b'1', b'1', b'1', b'1', b'1', b'1', b'1', '7');
+(b'0', b'0', b'0', b'0', b'0', b'0', b'1', b'1', b'0', b'0', b'0', b'0', b'0', b'0', b'0', b'0', b'0', b'0', b'0', '1'),
+(b'1', b'1', b'0', b'1', b'0', b'1', b'1', b'1', b'0', b'1', b'1', b'0', b'0', b'1', b'0', b'0', b'0', b'1', b'1', '2'),
+(b'0', b'1', b'1', b'1', b'0', b'1', b'1', b'1', b'0', b'1', b'0', b'1', b'0', b'1', b'1', b'0', b'0', b'1', b'1', '3'),
+(b'0', b'1', b'1', b'1', b'1', b'1', b'1', b'1', b'1', b'1', b'1', b'1', b'1', b'1', b'1', b'1', b'1', b'1', b'1', '4'),
+(b'0', b'1', b'1', b'1', b'0', b'1', b'1', b'1', b'1', b'1', b'1', b'1', b'1', b'0', b'1', b'1', b'1', b'0', b'0', '5'),
+(b'0', b'1', b'0', b'0', b'0', b'0', b'0', b'0', b'1', b'0', b'1', b'0', b'1', b'0', b'0', b'0', b'0', b'0', b'0', '6'),
+(b'0', b'1', b'1', b'1', b'1', b'1', b'1', b'1', b'1', b'1', b'1', b'1', b'1', b'1', b'1', b'1', b'1', b'1', b'1', '7');
 
 INSERT IGNORE INTO `reminder_template` (`id_reminder_template`, `body`, `global`, `subjects`) 
 VALUES ('1', 'The global template for your email', b'1', 'A Reminder for Recommendation Assignment');
@@ -62,7 +62,7 @@ VALUES
 ('7', 'superQA@sirio.com', 'Super QA', 'Aku SuperQA', '0123', '', 'AKTIF', 'superofficer', '1', '7');
 
 
-INSERT IGNORE INTO `sop` (`id_sop`, `judul`, `kategori`, `link_dokumen`, `pembuat`) VALUES ('1', 'test', 'test', 'test', '1');
+INSERT IGNORE INTO `sop` (`id_sop`, `judul`, `kategori`, `link_dokumen`, `status`, `pembuat`) VALUES ('1', 'test', 'test', 'https://test', 'AKTIF', '1');
 
 INSERT IGNORE INTO `risiko` (`id_risiko`, `deskripsi`, `detail_uraian`, `ketentuan_sampel`, `metodologi`, `nama_risiko`, `risiko_kategori`, `status`, `parent`, `sop`) 
 VALUES 

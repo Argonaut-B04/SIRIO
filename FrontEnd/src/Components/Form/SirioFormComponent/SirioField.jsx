@@ -65,6 +65,7 @@ export default class SirioField extends Component {
                     name={name}
                     value={value}
                     handleChange={handleChange}
+                    placeholder={placeholder}
                     options={optionList}
                     required={required}
                     className={[customClass, classes.sirioSelect].join(" ")}
@@ -134,6 +135,7 @@ export default class SirioField extends Component {
                     disabled={this.props.disabled}
 
                     min={min}
+                    max={max}
 
                     placeholder={placeholder}
                     className={[customClass, classes.input].join(" ")}

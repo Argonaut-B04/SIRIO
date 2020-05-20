@@ -13,6 +13,10 @@ import java.io.Serializable;
 @Table
 public class SOP implements Serializable {
 
+    public static enum Status {
+        AKTIF, NONAKTIF
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idSop;
@@ -21,6 +25,11 @@ public class SOP implements Serializable {
     @Size(max = 50)
     @Column(nullable = false, unique = true)
     private String judul;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 10)
+    private Status status = Status.AKTIF;
 
     @NotNull
     @Size(max = 25)
@@ -52,6 +61,14 @@ public class SOP implements Serializable {
 
     public void setJudul(String judul) {
         this.judul = judul;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
     }
 
     public String getKategori() {

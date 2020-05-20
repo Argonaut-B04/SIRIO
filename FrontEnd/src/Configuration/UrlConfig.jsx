@@ -30,7 +30,7 @@ export const dashboard = {
 }
 
 export const rencanaPemeriksaan = {
-    link: "/manager/rencanaPemeriksaan",
+    link: "/rencanaPemeriksaan",
     title: "Rencana Pemeriksaan",
 }
 
@@ -49,7 +49,7 @@ export const konfigurasi = {
             link: "/risk-level"
         }, {
             title: "SOP",
-            link: "#"
+            link: "/sop"
         }, {
             title: "Template Reminder",
             link: "/pengaturan-reminder"
@@ -63,7 +63,7 @@ export const pengguna = {
 }
 
 export const kantorCabang = {
-    link: "/administrator/kantorCabang",
+    link: "/kantorCabang",
     title: "Kantor Cabang",
 }
 

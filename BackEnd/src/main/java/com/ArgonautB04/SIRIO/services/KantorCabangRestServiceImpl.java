@@ -106,7 +106,17 @@ public class KantorCabangRestServiceImpl implements KantorCabangRestService {
         return kantorCabang;
     }
 
+//    @Override
+//    public List<KantorCabang> getByPembuat(Employee pembuat){
+//        return kantorCabangDB.findAllByPembuat(pembuat);
+//    }
+
+
+    //public KantorCabang validateExistInDatabase(int idKantorCabang) {}
+
+    @Override
     public KantorCabang validateExistById(int idKantorCabang) {
+
         Optional<KantorCabang> kantorCabang = kantorCabangDB.findById(idKantorCabang);
         if (kantorCabang.isPresent()) {
             return kantorCabang.get();
@@ -140,4 +150,5 @@ public class KantorCabangRestServiceImpl implements KantorCabangRestService {
 //        }
 //        kantorCabangDB.saveAll(calculated);
     }
+
 }

@@ -42,6 +42,10 @@ class TabelReminder extends React.Component {
     }
 
     handleSubmit() {
+
+        this.props.contentStartLoading();
+        this.props.changeLoadingBody("Mengirim data ke server");
+
         ReminderService.submitChanges(this.props.location.state.id, this.state.rowList)
             .then(() => {
                 this.renderRows()

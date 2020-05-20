@@ -32,10 +32,14 @@ class TabelRisiko extends React.Component {
     }
 
     async renderRows() {
+        // Mengubah isi dari loader
+        this.props.contentStartLoading();
+        this.props.changeLoadingBody("Mengambil data dari server");
+
         RegistrasiRisikoService.getAllRisiko().then(response => {
             this.setState({
                 rowList: response.data.result
-            })
+            }, this.props.contentFinishLoading())
         })
         .catch(error => {
             if (error.response.data.status === 401) {

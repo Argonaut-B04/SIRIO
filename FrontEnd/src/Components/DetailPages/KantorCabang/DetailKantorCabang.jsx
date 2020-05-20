@@ -6,6 +6,7 @@ import { NavLink } from 'react-router-dom';
 import { withRouter } from 'react-router-dom';
 import { Redirect } from 'react-router-dom';
 import SirioWarningButton from "../../Button/ActionButton/SirioWarningButton";
+import AuthenticationService from "../../../Services/AuthenticationService";
 
 class DetailKantorCabang extends React.Component {
 
@@ -14,6 +15,7 @@ class DetailKantorCabang extends React.Component {
 
         this.state = {
             kantorCabang: {},
+            role: AuthenticationService.getRole(),
             dataGeneral: {},
             redirect: false
         }
@@ -35,7 +37,7 @@ class DetailKantorCabang extends React.Component {
     renderRedirect = () => {
         if (this.state.redirect) {
             return <Redirect to={{
-                pathname: "/administrator/kantorCabang",
+                pathname: "/kantorCabang",
                 state: {
                     deleteSuccess: true
                 }
@@ -75,18 +77,21 @@ class DetailKantorCabang extends React.Component {
             .then(() => this.setRedirect());
     }
    
-    subButton(status) {
-        if (status === "AKTIF"){
+    subButton() {
+        const role = this.state.role;
+        const admin = role === "Administrator";
+        if (admin) {
             return (
                 <div>
                     <NavLink to={{
-                        pathname: "/administrator/kantorCabang/ubah",
+                        pathname: "/kantorCabang/ubah",
                         state: {
                             id: this.state.kantorCabang.idKantor,
                         }
                     }}>
                         <SirioButton
-                            purple
+                            purple recommended
+                            classes="mx-2"
                         >
                             Ubah
                         </SirioButton>
@@ -102,14 +107,6 @@ class DetailKantorCabang extends React.Component {
                         Hapus
                     </SirioWarningButton>
                 </div>
-                
-            )
-        }else{
-            return (
-                <div>
-                   
-                </div>
-                
             )
         }
         
@@ -124,7 +121,7 @@ class DetailKantorCabang extends React.Component {
                     data={this.state.dataGeneral}
                     id='id'
                     subButton={this.subButton(this.state.kantorCabang.status)}
-                    link="administrator/kantorCabang"
+                    link="kantorCabang"
                 />
             </>
         );

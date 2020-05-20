@@ -1,6 +1,13 @@
 import React, { Component } from 'react';
 import SideNavFramework from '../SideNavFramework';
-import { hasilPemeriksaan, tugasPemeriksaan, rekomendasi, buktiRekomendasi, dashboardKantorCabang } from '../../../Configuration/UrlConfig';
+import {
+    hasilPemeriksaan,
+    tugasPemeriksaan,
+    rekomendasi,
+    buktiRekomendasi,
+    dashboardKantorCabang,
+    dashboardStaff
+} from 'Configuration/UrlConfig';
 
 /**
  * Komponen SideNav untuk QA Officer
@@ -16,7 +23,8 @@ export default class QAOfficerSideNav extends Component {
                         tugasPemeriksaan,
                         rekomendasi,
                         buktiRekomendasi,
-                        dashboardKantorCabang
+                        dashboardKantorCabang,
+                        dashboardStaff
                     ]
                 }
             />

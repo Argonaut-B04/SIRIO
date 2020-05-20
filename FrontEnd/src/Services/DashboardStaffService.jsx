@@ -9,8 +9,14 @@ class DashboardStaffService {
         this.axiosInstance.defaults.headers.common['Authorization'] = AuthenticationService.getToken();
     }
 
-    async getAllData() {
-        return this.axiosInstance.get(SirioAxiosBase.BASEURL + '/DashboardStaff/getAllData');
+    async getAllData(tanggalAwal, tanggalAkhir) {
+        return this.axiosInstance.get(SirioAxiosBase.BASEURL + '/DashboardStaff/getAllData', {params:
+            {tanggalAwal: tanggalAwal, tanggalAkhir: tanggalAkhir}});
+    }
+
+    async getDashboardQA(id, tanggalAwal, tanggalAkhir) {
+        return this.axiosInstance.get(SirioAxiosBase.BASEURL + `/DashboardStaff/qa`, {params:
+        {id: id, tanggalAwal: tanggalAwal, tanggalAkhir: tanggalAkhir}});
     }
 }
 
