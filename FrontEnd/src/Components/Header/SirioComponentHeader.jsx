@@ -9,12 +9,14 @@ class SirioComponentHeader extends Component {
         return (
             <div className={headerWrapper}>
                 <div className="row">
-                    <div className="col-6">
+                    <div className="col-12">
                         {title &&
                             <h2 className={classes.title}>
                                 {title}
                             </h2>
                         }
+                    </div>
+                    <div className="col-6" style={{marginTop: "20px"}}>
                         {betweenTitleSubtitle}
                         {subtitle &&
                             <h5 className={classes.subtitle}>

@@ -149,7 +149,7 @@ class FormTambahBukti extends React.Component {
                 type: "textarea",
                 name: "keterangan",
                 value: this.state.keterangan,
-                placeholder: "Masukan keterangan bukti",
+                placeholder: "Keterangan bukti pelaksanaan",
                 errormessage: this.state.errorKeterangan
             }, {
                 label: "Lampiran",
@@ -158,7 +158,7 @@ class FormTambahBukti extends React.Component {
                 type: "textarea",
                 name: "lampiran",
                 value: this.state.lampiran,
-                placeholder: "Masukan lampiran bukti (berupa link url)",
+                placeholder: "https://drive.google.com",
                 errormessage: this.state.errorLampiran
             }
         ])

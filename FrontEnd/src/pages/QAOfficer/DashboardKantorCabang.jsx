@@ -11,6 +11,7 @@ import SirioField from "../../Components/Form/SirioFormComponent/SirioField";
 import SirioButton from '../../Components/Button/SirioButton';
 import SirioComponentHeader from "../../Components/Header/SirioComponentHeader";
 import AuthenticationService from "../../Services/AuthenticationService";
+import moment from 'moment';
 
 class DashboardKantorCabang extends React.Component {
 
@@ -116,7 +117,7 @@ class DashboardKantorCabang extends React.Component {
             namaKantorList: namaKantorCabang,
             areaKantorList: areaKantorCabang,
             regionalKantorList: regionalKantorCabang,
-        })
+        });
     }
 
     getUnique(arr, index) {
@@ -126,6 +127,23 @@ class DashboardKantorCabang extends React.Component {
             .map((e, i, final) => final.indexOf(e) === i && i)
             .filter(e => arr[e]).map(e => arr[e]); 
         return unique;
+    }
+
+    submitableFirst() {
+        if (this.state.tanggalPertama !== "") {
+            return this.state.tanggalKedua !== "";
+        } else {
+            return this.state.namaKantor !== "" 
+            || this.state.areaKantor !== "" 
+            || this.state.regionalKantor !== "" 
+            || this.state.tanggalKedua !== ""
+        }
+    }
+
+    submitableSecond() {
+        if (this.state.tanggalPertama !== "") {
+            return this.state.tanggalKedua !== "";
+        } 
     }
 
     handleSelectChange(name, event) {
@@ -156,6 +174,11 @@ class DashboardKantorCabang extends React.Component {
 
     handleChange(event) {
         const { name, value } = event.target;
+        if (name === "tanggalPertama") {
+            this.setState({
+                tanggalKedua: ""
+            })
+        }
         this.setState(
             {
                 [name]
@@ -226,7 +249,9 @@ class DashboardKantorCabang extends React.Component {
             }));
     }
 
-    getBetween() {
+    getBetweenFirst() {
+        var max = moment(this.state.tanggalPertama).add(2, 'y')
+        max = max.subtract(1, 'd')
         return (
             <>
                 <div>
@@ -279,7 +304,11 @@ class DashboardKantorCabang extends React.Component {
                     <SirioField
                         type="date"
                         handleChange={this.handleChange}
+                        disabled={this.state.tanggalPertama === ""}
                         classes="p-1"
+                        min={this.state.tanggalPertama}
+                        max={max}
+                        required={this.state.tanggalPertama !== ""}
                         name="tanggalKedua"
                         value={this.state.tanggalKedua}
                     />
@@ -288,7 +317,9 @@ class DashboardKantorCabang extends React.Component {
         )
     }
 
-    getSubtitle() {
+    getBetweenSecond() {
+        var max = moment(this.state.tanggalPertama).add(2, 'y')
+        max = max.subtract(1, 'd')
         return (
             <>
                 <div className="col-md-6 pl-0">
@@ -304,13 +335,63 @@ class DashboardKantorCabang extends React.Component {
                     <SirioField
                         type="date"
                         handleChange={this.handleChange}
+                        disabled={this.state.tanggalPertama === ""}
                         classes="p-1"
+                        min={this.state.tanggalPertama}
+                        max={max}
+                        required={this.state.tanggalPertama !== ""}
                         name="tanggalKedua"
                         value={this.state.tanggalKedua}
                     />
                 </div>
             </>
         )
+    }
+
+    getButtonFirst() {
+        var tombolCari =
+        <SirioButton
+            purple
+            recommended
+            classes="mx-2"
+        >
+            Cari
+        </SirioButton>
+        if (this.submitableFirst()) {
+            tombolCari = 
+            <SirioButton
+                purple
+                recommended
+                classes="mx-2"
+                onClick={(event) => this.handleSubmit(event)}
+            >
+                Cari
+            </SirioButton>
+        }
+        return tombolCari;
+    }
+
+    getButtonSecond() {
+        var tombolCari =
+        <SirioButton
+            purple
+            recommended
+            classes="mx-2"
+        >
+            Cari
+        </SirioButton>
+        if (this.submitableSecond()) {
+            tombolCari = 
+            <SirioButton
+                purple
+                recommended
+                classes="mx-2"
+                onClick={(event) => this.handleSubmit(event)}
+            >
+                Cari
+            </SirioButton>
+        }
+        return tombolCari;
     }
 
     getChart() {
@@ -460,18 +541,11 @@ class DashboardKantorCabang extends React.Component {
                     <div>
                         <SirioComponentHeader
                             title={this.getTitle()}
-                            betweenTitleSubtitle={this.getBetween()}
+                            betweenTitleSubtitle={this.getBetweenFirst()}
                         />
                     </div>
                     <div style={{padding: "5px"}}>
-                        <SirioButton
-                            purple
-                            recommended
-                            classes="mx-2"
-                            onClick={(event) => this.handleSubmit(event)}
-                        >
-                            Cari
-                        </SirioButton>
+                        {this.getButtonFirst()}
                         <SirioButton
                             purple
                             recommended
@@ -483,6 +557,7 @@ class DashboardKantorCabang extends React.Component {
                     </div>
                     <div style={{marginTop: "50px"}}>
                         <SirioBarChart data={this.getChart()} />
+                        <h6 className="text-right pt-3">Histori Data Temuan dan Rekomendasi untuk Tugas Pemeriksaan pada Suatu Bulan</h6>
                     </div>
                     <div>
                         {this.state.filterNama ? 
@@ -495,12 +570,29 @@ class DashboardKantorCabang extends React.Component {
         } else if (branchManager) {
             return (
                 <SirioMainLayout preloader={preloader} contentLoading={contentLoading} loadingBody={loadingBody} active={!contentLoading}>
-                    <div>
+                    {/* <div>
                         <h3 style={{margin: "15px"}}>Dashboard Performa Kantor Cabang</h3>
-                    </div>
+                    </div> */}
                     <div>
-                        <br></br>
+                        <SirioComponentHeader
+                            title="Dashboard Performa Kantor Cabang"
+                            betweenTitleSubtitle={this.getBetweenSecond()}
+                        />
+                    </div>
+                    <div style={{padding: "5px"}}>
+                        {this.getBetweenSecond()}
+                        <SirioButton
+                            purple
+                            recommended
+                            classes="mx-2"
+                            onClick={(event) => this.handleReset(event)}
+                        >
+                            Atur Ulang
+                        </SirioButton>
+                    </div>
+                    <div style={{marginTop: "50px"}}>
                         <SirioBarChart data={this.getChart()} />
+                        <h6 className="text-right pt-3">Histori Data Temuan dan Rekomendasi untuk Tugas Pemeriksaan pada Suatu Bulan</h6>
                     </div>
                     <div>
                         <SirioDashboardBox data={this.getBoxSecond()} />

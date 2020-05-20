@@ -21,9 +21,11 @@ public interface RekomendasiRestService {
 
     List<Integer> getAllByMonth();
 
-    List<Integer> getRekomendasiByMonth(List<Rekomendasi> rekomendasiList);
+    List<Integer> getRekomendasiByMonth(List<Rekomendasi> rekomendasiList, LocalDate awal, LocalDate akhir);
 
-    int countByDate(LocalDate batasBawah);
+    List<Integer> getRekomendasiPerMonth(List<Rekomendasi> rekomendasiList);
+
+    List<Integer> getRekomendasiPerMonthFiltered(List<Rekomendasi> rekomendasiList, LocalDate awal, LocalDate akhir);
 
     List<Rekomendasi> getRekomendasiDiimplementasi();
 
@@ -31,9 +33,7 @@ public interface RekomendasiRestService {
 
     List<Rekomendasi> getRekomendasiBelumDiimplementasi();
 
-    List<String> getListMonth();
-
-    List<String> getListMonthFiltered(LocalDate tanggalAwal, LocalDate tanggalAkhir);
+    List<String> getListMonth(LocalDate awal, LocalDate akhir);
 
     List<Rekomendasi> getByKomponenPemeriksaan(KomponenPemeriksaan komponenPemeriksaan);
   

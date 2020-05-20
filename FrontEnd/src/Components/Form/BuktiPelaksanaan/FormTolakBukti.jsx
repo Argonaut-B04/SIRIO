@@ -133,7 +133,7 @@ class FormTolakBukti extends React.Component {
                 type: "textarea",
                 name: "feedback",
                 value: this.state.feedback,
-                placeholder: "Masukan feedback penolakan",
+                placeholder: "Feedback penolakan bukti pelaksanaan",
                 errormessage: this.state.errorFeedback
             }
         ])

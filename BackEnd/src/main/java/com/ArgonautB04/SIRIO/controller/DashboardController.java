@@ -82,7 +82,7 @@ public class DashboardController {
         DashboardDTO result = new DashboardDTO();
         result.setJumlahPemeriksaan(daftarTugasPemeriksaan.size());
         result.setJumlahTemuan(daftarTemuanRisiko.size());
-        List<Integer> listTemuan = temuanRisikoRestService.getTemuanByMonth(daftarTemuanRisiko);
+        List<Integer> listTemuan = temuanRisikoRestService.getTemuanPerMonth(daftarTemuanRisiko);
         result.setJumlahTemuanPerBulan(listTemuan);
 
         List<Rekomendasi> rekomendasiOverdue = new ArrayList<>();
@@ -114,17 +114,17 @@ public class DashboardController {
         }
         result.setJumlahRekomendasi(rekomendasiTotal.size());
 
-        List<Integer> listRekomendasiOverdue = rekomendasiRestService.getRekomendasiByMonth(rekomendasiOverdue);
+        List<Integer> listRekomendasiOverdue = rekomendasiRestService.getRekomendasiPerMonth(rekomendasiOverdue);
         result.setJumlahRekomendasiOverduePerBulan(listRekomendasiOverdue);
         double jumlahRekomendasiOverdue = roundAvoid((double)rekomendasiOverdue.size()*100/(double)daftarRekomendasi.size(), 2);
         result.setJumlahRekomendasiOverdue(jumlahRekomendasiOverdue);
 
-        List<Integer> listRekomendasiImpl = rekomendasiRestService.getRekomendasiByMonth(rekomendasiImpl);
+        List<Integer> listRekomendasiImpl = rekomendasiRestService.getRekomendasiPerMonth(rekomendasiImpl);
         result.setJumlahRekomendasiImplementedPerBulan(listRekomendasiImpl);
         double jumlahRekomendasiImpl = roundAvoid((double)rekomendasiImpl.size()*100/(double)daftarRekomendasi.size(), 2);
         result.setJumlahRekomendasiImplemented(jumlahRekomendasiImpl);
 
-        List<Integer> listRekomendasiNotImpl = rekomendasiRestService.getRekomendasiByMonth(rekomendasiNotImpl);
+        List<Integer> listRekomendasiNotImpl = rekomendasiRestService.getRekomendasiPerMonth(rekomendasiNotImpl);
         result.setJumlahRekomendasiNotImplementedPerBulan(listRekomendasiNotImpl);
         double jumlahRekomendasiNotImpl = roundAvoid((double)rekomendasiNotImpl.size()*100/(double)daftarRekomendasi.size(), 2);
         result.setJumlahRekomendasiNotImplemented(jumlahRekomendasiNotImpl);
@@ -139,109 +139,6 @@ public class DashboardController {
 
         return new BaseResponse<>(200, "success", result);
     }
-
-//    @GetMapping("/getAllByFilter")
-//    private BaseResponse<DashboardDTO> getDashboardComponentByFilter(
-//            @RequestParam("namaKantor") String namaKantor,
-//            @RequestParam("areaKantor") String areaKantor,
-//            @RequestParam("regionalKantor") String regionalKantor,
-//            Principal principal) {
-//        Employee employee = employeeRestService.validateEmployeeExistByPrincipal(principal);
-////        employeeRestService.validateRolePermission(employee, "tabel rekomendasi");
-//        Role role = employee.getRole();
-//
-//        List<Rekomendasi> daftarRekomendasi;
-//        List<TemuanRisiko> daftarTemuanRisiko;
-//        List<TugasPemeriksaan> daftarTugasPemeriksaan;
-//        List<KomponenPemeriksaan> daftarKomponenPemeriksaan;
-//        if (!namaKantor.isEmpty()) {
-//            Optional<KantorCabang> kantorCabang =
-//                    kantorCabangRestService.getByNama(namaKantor);
-//            daftarTugasPemeriksaan =
-//                    tugasPemeriksaanRestService.getByKantorCabang(kantorCabang.get());
-//        } else if (!areaKantor.isEmpty() && !regionalKantor.isEmpty()) {
-//            List<KantorCabang> daftarKantorCabang =
-//                    kantorCabangRestService.getByAreaAndRegional(areaKantor, regionalKantor);
-//            daftarTugasPemeriksaan =
-//                    tugasPemeriksaanRestService.getByDaftarKantorCabang(daftarKantorCabang);
-//        } else if (!areaKantor.isEmpty()) {
-//            List<KantorCabang> daftarKantorCabang =
-//                    kantorCabangRestService.getByArea(areaKantor);
-//            daftarTugasPemeriksaan =
-//                    tugasPemeriksaanRestService.getByDaftarKantorCabang(daftarKantorCabang);
-//        } else {
-//            List<KantorCabang> daftarKantorCabang =
-//                    kantorCabangRestService.getByRegional(regionalKantor);
-//            daftarTugasPemeriksaan =
-//                    tugasPemeriksaanRestService.getByDaftarKantorCabang(daftarKantorCabang);
-//        }
-//        List<HasilPemeriksaan> daftarHasilPemeriksaan =
-//                hasilPemeriksaanRestService.getByDaftarTugasPemeriksaan(daftarTugasPemeriksaan);
-//        daftarKomponenPemeriksaan =
-//                komponenPemeriksaanRestService.getByDaftarHasilPemeriksaan(daftarHasilPemeriksaan);
-//        daftarRekomendasi = rekomendasiRestService.getByDaftarKomponenPemeriksaan(daftarKomponenPemeriksaan);
-//        daftarTemuanRisiko = temuanRisikoRestService.getByDaftarKomponenPemeriksaan(daftarKomponenPemeriksaan);
-//
-//        DashboardDTO result = new DashboardDTO();
-//        result.setJumlahPemeriksaan(daftarTugasPemeriksaan.size());
-//        result.setJumlahTemuan(daftarTemuanRisiko.size());
-//        List<Integer> listTemuan = temuanRisikoRestService.getTemuanByMonth(daftarTemuanRisiko);
-//        result.setJumlahTemuanPerBulan(listTemuan);
-//
-//        List<Rekomendasi> rekomendasiOverdue = new ArrayList<>();
-//        List<Rekomendasi> rekomendasiImpl = new ArrayList<>();
-//        List<Rekomendasi> rekomendasiNotImpl = new ArrayList<>();
-//        List<Rekomendasi> rekomendasiTotal = new ArrayList<>();
-//        for (Rekomendasi rekomendasi : daftarRekomendasi) {
-//            if (rekomendasi.getStatusRekomendasi().getNamaStatus().equals("Sedang Dilaksanakan")
-//                    || rekomendasi.getStatusRekomendasi().getNamaStatus().equals("Selesai")) {
-//                if (rekomendasi.getBuktiPelaksanaan() == null
-//                        || !(rekomendasi.getBuktiPelaksanaan().getStatusBuktiPelaksanaan().getNamaStatus().equals("Disetujui"))
-//                        || (rekomendasi.getBuktiPelaksanaan().getStatusBuktiPelaksanaan().getNamaStatus().equals("Menunggu Persetujuan")
-//                        && rekomendasi.getBuktiPelaksanaan().getStatusBuktiPelaksanaan().getNamaStatus().equals("Ditolak"))) {
-//                    if (rekomendasi.getTenggatWaktu().isBefore(LocalDate.now())) {
-//                        rekomendasiOverdue.add(rekomendasi);
-//                    } else {
-//                        rekomendasiNotImpl.add(rekomendasi);
-//                    }
-//                } else if (rekomendasi.getBuktiPelaksanaan() != null
-//                        && rekomendasi.getBuktiPelaksanaan().getStatusBuktiPelaksanaan().getNamaStatus().equals("Disetujui")) {
-//                    if (rekomendasi.getTenggatWaktu().isBefore(rekomendasi.getBuktiPelaksanaan().getTanggalPersetujuan())) {
-//                        rekomendasiOverdue.add(rekomendasi);
-//                    } else {
-//                        rekomendasiImpl.add(rekomendasi);
-//                    }
-//                }
-//                rekomendasiTotal.add(rekomendasi);
-//            }
-//        }
-//        result.setJumlahRekomendasi(rekomendasiTotal.size());
-//
-//        List<Integer> listRekomendasiOverdue = rekomendasiRestService.getRekomendasiByMonth(rekomendasiOverdue);
-//        result.setJumlahRekomendasiOverduePerBulan(listRekomendasiOverdue);
-//        double jumlahRekomendasiOverdue = roundAvoid((double)rekomendasiOverdue.size()*100/(double)daftarRekomendasi.size(), 2);
-//        result.setJumlahRekomendasiOverdue(jumlahRekomendasiOverdue);
-//
-//        List<Integer> listRekomendasiImpl = rekomendasiRestService.getRekomendasiByMonth(rekomendasiImpl);
-//        result.setJumlahRekomendasiImplementedPerBulan(listRekomendasiImpl);
-//        double jumlahRekomendasiImpl = roundAvoid((double)rekomendasiImpl.size()*100/(double)daftarRekomendasi.size(), 2);
-//        result.setJumlahRekomendasiImplemented(jumlahRekomendasiImpl);
-//
-//        List<Integer> listRekomendasiNotImpl = rekomendasiRestService.getRekomendasiByMonth(rekomendasiNotImpl);
-//        result.setJumlahRekomendasiNotImplementedPerBulan(listRekomendasiNotImpl);
-//        double jumlahRekomendasiNotImpl = roundAvoid((double)rekomendasiNotImpl.size()*100/(double)daftarRekomendasi.size(), 2);
-//        result.setJumlahRekomendasiNotImplemented(jumlahRekomendasiNotImpl);
-//
-//        int riskScore = 100;
-//        for (KomponenPemeriksaan komponen : daftarKomponenPemeriksaan) {
-//            riskScore += komponen.getRiskLevel().getBobotLevel();
-//        }
-//        result.setRiskScore(riskScore);
-//
-//        result.setDaftarBulan(rekomendasiRestService.getListMonth());
-//
-//        return new BaseResponse<>(200, "success", result);
-//    }
 
     @GetMapping("/getAllByFilter")
     private BaseResponse<DashboardDTO> getDashboardComponentByFilter(
@@ -264,27 +161,34 @@ public class DashboardController {
         LocalDate tanggalAwal = null;
         LocalDate tanggalAkhir = null;
         if (tanggalPertama.isEmpty() && tanggalKedua.isEmpty()) {
-            if (!namaKantor.isEmpty()) {
-                Optional<KantorCabang> kantorCabang =
-                        kantorCabangRestService.getByNama(namaKantor);
-                daftarTugasPemeriksaan =
-                        tugasPemeriksaanRestService.getByKantorCabang(kantorCabang.get());
-            } else if (!areaKantor.isEmpty() && !regionalKantor.isEmpty()) {
-                List<KantorCabang> daftarKantorCabang =
-                        kantorCabangRestService.getByAreaAndRegional(areaKantor, regionalKantor);
-                daftarTugasPemeriksaan =
-                        tugasPemeriksaanRestService.getByDaftarKantorCabang(daftarKantorCabang);
-            } else if (!areaKantor.isEmpty()) {
-                List<KantorCabang> daftarKantorCabang =
-                        kantorCabangRestService.getByArea(areaKantor);
-                daftarTugasPemeriksaan =
-                        tugasPemeriksaanRestService.getByDaftarKantorCabang(daftarKantorCabang);
-            } else {
-                List<KantorCabang> daftarKantorCabang =
-                        kantorCabangRestService.getByRegional(regionalKantor);
-                daftarTugasPemeriksaan =
-                        tugasPemeriksaanRestService.getByDaftarKantorCabang(daftarKantorCabang);
-            }
+//            if (role.getNamaRole().equals("Branch Manager")) {
+//                KantorCabang kantorCabang =
+//                        kantorCabangRestService.getByPemilik(employee);
+//                daftarTugasPemeriksaan =
+//                        tugasPemeriksaanRestService.getByKantorCabang(kantorCabang);
+//            } else {
+                if (!namaKantor.isEmpty()) {
+                    Optional<KantorCabang> kantorCabang =
+                            kantorCabangRestService.getByNama(namaKantor);
+                    daftarTugasPemeriksaan =
+                            tugasPemeriksaanRestService.getByKantorCabang(kantorCabang.get());
+                } else if (!areaKantor.isEmpty() && !regionalKantor.isEmpty()) {
+                    List<KantorCabang> daftarKantorCabang =
+                            kantorCabangRestService.getByAreaAndRegional(areaKantor, regionalKantor);
+                    daftarTugasPemeriksaan =
+                            tugasPemeriksaanRestService.getByDaftarKantorCabang(daftarKantorCabang);
+                } else if (!areaKantor.isEmpty()) {
+                    List<KantorCabang> daftarKantorCabang =
+                            kantorCabangRestService.getByArea(areaKantor);
+                    daftarTugasPemeriksaan =
+                            tugasPemeriksaanRestService.getByDaftarKantorCabang(daftarKantorCabang);
+                } else {
+                    List<KantorCabang> daftarKantorCabang =
+                            kantorCabangRestService.getByRegional(regionalKantor);
+                    daftarTugasPemeriksaan =
+                            tugasPemeriksaanRestService.getByDaftarKantorCabang(daftarKantorCabang);
+                }
+//            }
             daftarHasilPemeriksaan =
                     hasilPemeriksaanRestService.getByDaftarTugasPemeriksaan(daftarTugasPemeriksaan);
             daftarKomponenPemeriksaan =
@@ -292,37 +196,39 @@ public class DashboardController {
             daftarRekomendasi = rekomendasiRestService.getByDaftarKomponenPemeriksaan(daftarKomponenPemeriksaan);
             daftarTemuanRisiko = temuanRisikoRestService.getByDaftarKomponenPemeriksaan(daftarKomponenPemeriksaan);
         } else {
-            if (tanggalKedua.isEmpty()) {
-                tanggalKedua = (LocalDate.parse(tanggalPertama).plusMonths(5)).toString();
-            } else if (tanggalPertama.isEmpty()) {
-                tanggalPertama = (LocalDate.parse(tanggalKedua).minusMonths(5)).toString();
-            }
             tanggalAwal = LocalDate.parse(tanggalPertama);
             tanggalAkhir = LocalDate.parse(tanggalKedua);
-            if (namaKantor.isEmpty() && areaKantor.isEmpty() && regionalKantor.isEmpty()) {
-                List<KantorCabang> daftarKantorCabang = kantorCabangRestService.getAll();
+            if (role.getNamaRole().equals("Branch Manager")) {
+                KantorCabang kantorCabang =
+                        kantorCabangRestService.getByPemilik(employee);
                 daftarTugasPemeriksaan =
-                        tugasPemeriksaanRestService.getByDaftarKantorCabangAndTanggalSelesai(daftarKantorCabang, tanggalAwal, tanggalAkhir);
-            } else if (!namaKantor.isEmpty()) {
-                Optional<KantorCabang> kantorCabang =
-                        kantorCabangRestService.getByNama(namaKantor);
-                daftarTugasPemeriksaan =
-                        tugasPemeriksaanRestService.getByKantorCabangAndTanggalSelesai(kantorCabang.get(), tanggalAwal, tanggalAkhir);
-            } else if (!areaKantor.isEmpty() && !regionalKantor.isEmpty()) {
-                List<KantorCabang> daftarKantorCabang =
-                        kantorCabangRestService.getByAreaAndRegional(areaKantor, regionalKantor);
-                daftarTugasPemeriksaan =
-                        tugasPemeriksaanRestService.getByDaftarKantorCabangAndTanggalSelesai(daftarKantorCabang, tanggalAwal, tanggalAkhir);
-            } else if (!areaKantor.isEmpty()) {
-                List<KantorCabang> daftarKantorCabang =
-                        kantorCabangRestService.getByArea(areaKantor);
-                daftarTugasPemeriksaan =
-                        tugasPemeriksaanRestService.getByDaftarKantorCabangAndTanggalSelesai(daftarKantorCabang, tanggalAwal, tanggalAkhir);
+                        tugasPemeriksaanRestService.getByKantorCabangAndTanggalSelesai(kantorCabang, tanggalAwal, tanggalAkhir);
             } else {
-                List<KantorCabang> daftarKantorCabang =
-                        kantorCabangRestService.getByRegional(regionalKantor);
-                daftarTugasPemeriksaan =
-                        tugasPemeriksaanRestService.getByDaftarKantorCabangAndTanggalSelesai(daftarKantorCabang, tanggalAwal, tanggalAkhir);
+                if (namaKantor.isEmpty() && areaKantor.isEmpty() && regionalKantor.isEmpty()) {
+                    List<KantorCabang> daftarKantorCabang = kantorCabangRestService.getAll();
+                    daftarTugasPemeriksaan =
+                            tugasPemeriksaanRestService.getByDaftarKantorCabangAndTanggalSelesai(daftarKantorCabang, tanggalAwal, tanggalAkhir);
+                } else if (!namaKantor.isEmpty()) {
+                    Optional<KantorCabang> kantorCabang =
+                            kantorCabangRestService.getByNama(namaKantor);
+                    daftarTugasPemeriksaan =
+                            tugasPemeriksaanRestService.getByKantorCabangAndTanggalSelesai(kantorCabang.get(), tanggalAwal, tanggalAkhir);
+                } else if (!areaKantor.isEmpty() && !regionalKantor.isEmpty()) {
+                    List<KantorCabang> daftarKantorCabang =
+                            kantorCabangRestService.getByAreaAndRegional(areaKantor, regionalKantor);
+                    daftarTugasPemeriksaan =
+                            tugasPemeriksaanRestService.getByDaftarKantorCabangAndTanggalSelesai(daftarKantorCabang, tanggalAwal, tanggalAkhir);
+                } else if (!areaKantor.isEmpty()) {
+                    List<KantorCabang> daftarKantorCabang =
+                            kantorCabangRestService.getByArea(areaKantor);
+                    daftarTugasPemeriksaan =
+                            tugasPemeriksaanRestService.getByDaftarKantorCabangAndTanggalSelesai(daftarKantorCabang, tanggalAwal, tanggalAkhir);
+                } else {
+                    List<KantorCabang> daftarKantorCabang =
+                            kantorCabangRestService.getByRegional(regionalKantor);
+                    daftarTugasPemeriksaan =
+                            tugasPemeriksaanRestService.getByDaftarKantorCabangAndTanggalSelesai(daftarKantorCabang, tanggalAwal, tanggalAkhir);
+                }
             }
             daftarHasilPemeriksaan =
                     hasilPemeriksaanRestService.getByDaftarTugasPemeriksaan(daftarTugasPemeriksaan);
@@ -372,56 +278,25 @@ public class DashboardController {
         }
         result.setJumlahRekomendasi(rekomendasiTotal.size());
 
-        List<Integer> listRekomendasiOverdue = new ArrayList<>();
-        List<Integer> listRekomendasiImpl = new ArrayList<>();
-        List<Integer> listRekomendasiNotImpl = new ArrayList<>();
-        List<Integer> listTemuan = new ArrayList<>();
+        List<Integer> listRekomendasiOverdue;
+        List<Integer> listRekomendasiImpl;
+        List<Integer> listRekomendasiNotImpl;
+        List<Integer> listTemuan;
 
-        LocalDate awal = tanggalAwal;
         if (tanggalPertama.isEmpty() && tanggalKedua.isEmpty()) {
-            listRekomendasiOverdue = rekomendasiRestService.getRekomendasiByMonth(rekomendasiOverdue);
-            listRekomendasiImpl = rekomendasiRestService.getRekomendasiByMonth(rekomendasiImpl);
-            listRekomendasiNotImpl = rekomendasiRestService.getRekomendasiByMonth(rekomendasiNotImpl);
-            listTemuan = temuanRisikoRestService.getTemuanByMonth(daftarTemuanRisiko);
+            listRekomendasiOverdue = rekomendasiRestService.getRekomendasiPerMonth(rekomendasiOverdue);
+            listRekomendasiImpl = rekomendasiRestService.getRekomendasiPerMonth(rekomendasiImpl);
+            listRekomendasiNotImpl = rekomendasiRestService.getRekomendasiPerMonth(rekomendasiNotImpl);
+            listTemuan = temuanRisikoRestService.getTemuanPerMonth(daftarTemuanRisiko);
             result.setDaftarBulan(getListMonth());
         } else {
-//            if (awal.isEqual(tanggalAkhir.minusMonths(5))) {
-//                awal = awal.minusMonths(1);
-//            }
-            while (awal.isBefore(tanggalAkhir) || awal.isEqual(tanggalAkhir)) {
-                int counterOverdue = 0;
-                int counterImpl = 0;
-                int counterNotImpl = 0;
-                int counterTemuan = 0;
-                for (Rekomendasi r : rekomendasiOverdue) {
-                    if (!r.getTenggatWaktu().isBefore(awal) && !r.getTenggatWaktu().isAfter(awal.plusMonths(1))) {
-                        counterOverdue += 1;
-                    }
-                }
-                for (Rekomendasi r : rekomendasiImpl) {
-                    if (!r.getTenggatWaktu().isBefore(awal) && !r.getTenggatWaktu().isAfter(awal.plusMonths(1))) {
-                        counterImpl += 1;
-                    }
-                }
-                for (Rekomendasi r : rekomendasiNotImpl) {
-                    if (!r.getTenggatWaktu().isBefore(awal) && !r.getTenggatWaktu().isAfter(awal.plusMonths(1))) {
-                        counterNotImpl += 1;
-                    }
-                }
-                for (TemuanRisiko tr : daftarTemuanRisiko) {
-                    if (!tr.getKomponenPemeriksaan().getHasilPemeriksaan().getTugasPemeriksaan().getTanggalSelesai()
-                            .isBefore(awal)
-                            && !tr.getKomponenPemeriksaan().getHasilPemeriksaan().getTugasPemeriksaan().getTanggalSelesai()
-                            .isAfter(awal.plusMonths(1))) {
-                        counterTemuan += 1;
-                    }
-                }
-                listRekomendasiOverdue.add(counterOverdue);
-                listRekomendasiImpl.add(counterImpl);
-                listRekomendasiNotImpl.add(counterNotImpl);
-                listTemuan.add(counterTemuan);
-                awal = awal.plusMonths(1);
-            }
+            listRekomendasiOverdue =
+                    rekomendasiRestService.getRekomendasiPerMonthFiltered(rekomendasiOverdue, tanggalAwal, tanggalAkhir);
+            listRekomendasiImpl =
+                    rekomendasiRestService.getRekomendasiPerMonthFiltered(rekomendasiImpl, tanggalAwal, tanggalAkhir);
+            listRekomendasiNotImpl =
+                    rekomendasiRestService.getRekomendasiPerMonthFiltered(rekomendasiNotImpl, tanggalAwal, tanggalAkhir);
+            listTemuan = temuanRisikoRestService.getTemuanPerMonthFiltered(daftarTemuanRisiko, tanggalAwal, tanggalAkhir);
             result.setDaftarBulan(getListMonthFiltered(tanggalAwal, tanggalAkhir));
         }
 
@@ -453,23 +328,25 @@ public class DashboardController {
         return Math.round(value * scale) / scale;
     }
 
-    public static int sumNumbers(List<Integer> numbers){
-        return numbers.stream().mapToInt(n->n).sum();
-    }
-
     public List<String> getListMonth() {
-        List<String> months = new ArrayList<>(6);
-        for (int i=5;i>=0;i--) {
-            months.add(LocalDate.now().minusMonths(i).getMonth() + "\n" + LocalDate.now().minusMonths(i).getYear());
+        List<String> months = new ArrayList<>();
+        for (int i = 5; i >= 0; i--) {
+                months.add(LocalDate.now().minusMonths(i).getMonth()
+                        + " " + LocalDate.now().minusMonths(i).getYear());
         }
         return months;
     }
 
     public List<String> getListMonthFiltered(LocalDate tanggalAwal, LocalDate tanggalAkhir) {
-        int monthsBetween = (int) ChronoUnit.MONTHS.between(tanggalAwal, tanggalAkhir);
         List<String> months = new ArrayList<>();
-        for (int i = 0; i <= monthsBetween; i++) {
-            months.add(tanggalAwal.plusMonths(i).getDayOfMonth() + "\n" + tanggalAwal.plusMonths(i).getMonth() + "\n" + tanggalAwal.plusMonths(i).getYear());
+        if (tanggalAwal != null) {
+            int monthsBetween = (int) ChronoUnit.MONTHS.between(
+                    tanggalAwal.withDayOfMonth(1),
+                    tanggalAkhir.withDayOfMonth(1));
+            for (int i = monthsBetween; i >= 0; i--) {
+                months.add(tanggalAkhir.minusMonths(i).getMonth()
+                        + " " + tanggalAkhir.minusMonths(i).getYear());
+            }
         }
         return months;
     }

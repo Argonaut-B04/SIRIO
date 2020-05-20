@@ -14,10 +14,7 @@ import org.springframework.web.server.ResponseStatusException;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @Transactional
@@ -113,43 +110,212 @@ public class RekomendasiRestServiceImpl implements RekomendasiRestService {
     }
 
     @Override
-    public List<Integer> getRekomendasiByMonth(List<Rekomendasi> rekomendasiList) {
-        List<Integer> intOverdue = new ArrayList<>();
+    public List<Integer> getRekomendasiPerMonth(List<Rekomendasi> rekomendasiList) {
+        List<Integer> perMonth = new ArrayList<>();
         int count6 = 0;
         int count5 = 0;
         int count4 = 0;
         int count3 = 0;
         int count2 = 0;
         int count1 = 0;
-        for (int i=0;i<rekomendasiList.size();i++) {
-            if (rekomendasiList.get(i).getTenggatWaktu().getMonth().equals(LocalDate.now().getMonth())) {
-                count6++;
-                //tanggal mulai dari tugas
-            } else if (rekomendasiList.get(i).getTenggatWaktu().getMonth().equals(LocalDate.now().minusMonths(1).getMonth())) {
-                count5++;
-            } else if (rekomendasiList.get(i).getTenggatWaktu().getMonth().equals(LocalDate.now().minusMonths(2).getMonth())) {
-                count4++;
-            } else if (rekomendasiList.get(i).getTenggatWaktu().getMonth().equals(LocalDate.now().minusMonths(3).getMonth())) {
-                count3++;
-            } else if (rekomendasiList.get(i).getTenggatWaktu().getMonth().equals(LocalDate.now().minusMonths(4).getMonth())) {
-                count2++;
-            } else if (rekomendasiList.get(i).getTenggatWaktu().getMonth().equals(LocalDate.now().minusMonths(5).getMonth())) {
-                count1++;
+        for (int i = 0; i < rekomendasiList.size(); i++) {
+            try {
+                if (rekomendasiList.get(i).
+                        getKomponenPemeriksaan().getHasilPemeriksaan()
+                        .getTugasPemeriksaan().getTanggalMulai().getMonth()
+                        .equals(LocalDate.now().getMonth())) {
+                    count6++;
+                } else if (rekomendasiList.get(i).
+                        getKomponenPemeriksaan().getHasilPemeriksaan()
+                        .getTugasPemeriksaan().getTanggalMulai().getMonth()
+                        .equals(LocalDate.now().minusMonths(1).getMonth())) {
+                    count5++;
+                } else if (rekomendasiList.get(i).
+                        getKomponenPemeriksaan().getHasilPemeriksaan()
+                        .getTugasPemeriksaan().getTanggalMulai().getMonth()
+                        .equals(LocalDate.now().minusMonths(2).getMonth())) {
+                    count4++;
+                } else if (rekomendasiList.get(i).
+                        getKomponenPemeriksaan().getHasilPemeriksaan()
+                        .getTugasPemeriksaan().getTanggalMulai().getMonth()
+                        .equals(LocalDate.now().minusMonths(3).getMonth())) {
+                    count3++;
+                } else if (rekomendasiList.get(i).
+                        getKomponenPemeriksaan().getHasilPemeriksaan()
+                        .getTugasPemeriksaan().getTanggalMulai().getMonth()
+                        .equals(LocalDate.now().minusMonths(4).getMonth())) {
+                    count2++;
+                } else if (rekomendasiList.get(i).
+                        getKomponenPemeriksaan().getHasilPemeriksaan()
+                        .getTugasPemeriksaan().getTanggalMulai().getMonth()
+                        .equals(LocalDate.now().minusMonths(5).getMonth())) {
+                    count1++;
+                }
+            } catch (NullPointerException | NoSuchElementException e) {
+                throw new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Rekomendasi tidak memiliki komponen pemeriksaan!"
+                );
             }
         }
-        intOverdue.add(count1);
-        intOverdue.add(count2);
-        intOverdue.add(count3);
-        intOverdue.add(count4);
-        intOverdue.add(count5);
-        intOverdue.add(count6);
+        perMonth.add(count1);
+        perMonth.add(count2);
+        perMonth.add(count3);
+        perMonth.add(count4);
+        perMonth.add(count5);
+        perMonth.add(count6);
+        return perMonth;
+    }
+
+    @Override
+    public List<Integer> getRekomendasiPerMonthFiltered(
+            final List<Rekomendasi> rekomendasiList,
+            final LocalDate tanggalAwal,
+            final LocalDate tanggalAkhir) {
+        List<Integer> perMonth = new ArrayList<>();
+        List<String> months = getListMonth(tanggalAwal, tanggalAkhir);
+        if (tanggalAwal != null) {
+            int count = 0;
+            List<Integer> bulan = Arrays.asList(new Integer[months.size()]);
+            String bulan1;
+            String bulan2 = null;
+            String tahun1;
+            String tahun2 = null;
+            for (int i = 0; i < rekomendasiList.size(); i++) {
+                bulan1 = String.valueOf(rekomendasiList.get(i).
+                        getKomponenPemeriksaan().getHasilPemeriksaan()
+                        .getTugasPemeriksaan().getTanggalMulai().getMonth());
+                tahun1 = String.valueOf(rekomendasiList.get(i).
+                        getKomponenPemeriksaan().getHasilPemeriksaan()
+                        .getTugasPemeriksaan().getTanggalMulai().getYear());
+                for (int j = 0; j < months.size(); j++) {
+                    List<String> temp = Arrays.asList(months.get(j).
+                            split(" "));
+                    bulan2 = temp.get(0);
+                    tahun2 = temp.get(1);
+                    if (bulan1.equals(bulan2) && tahun1.equals(tahun2)) {
+                        bulan.set(j, ++count);
+                    } else {
+                        bulan.set(j, 0);
+                    }
+                }
+            }
+            perMonth = bulan;
+        }
+        return perMonth;
+    }
+
+    @Override
+    public List<Integer> getRekomendasiByMonth(
+            final List<Rekomendasi> rekomendasiList,
+            final LocalDate tanggalAwal,
+            final LocalDate tanggalAkhir) {
+        List<Integer> intOverdue = new ArrayList<>();
+        List<String> months = getListMonth(tanggalAwal, tanggalAkhir);
+        if (tanggalAwal != null) {
+            int count = 0;
+            List<Integer> bulan = Arrays.asList(new Integer[months.size()]);
+            String bulan1;
+            String bulan2 = null;
+            String tahun1;
+            String tahun2 = null;
+            for (int i = 0; i < rekomendasiList.size(); i++) {
+                bulan1 = String.valueOf(rekomendasiList.get(i).
+                        getKomponenPemeriksaan().getHasilPemeriksaan()
+                        .getTugasPemeriksaan().getTanggalMulai().getMonth());
+                tahun1 = String.valueOf(rekomendasiList.get(i).
+                        getKomponenPemeriksaan().getHasilPemeriksaan()
+                        .getTugasPemeriksaan().getTanggalMulai().getYear());
+                for (int j = 0; j < months.size(); j++) {
+                    List<String> temp = Arrays.asList(months.get(j).
+                            split(" "));
+                    bulan2 = temp.get(0);
+                    tahun2 = temp.get(1);
+                    if (bulan1.equals(bulan2) && tahun1.equals(tahun2)) {
+                        bulan.set(j, ++count);
+                    } else {
+                        bulan.set(j, 0);
+                    }
+                }
+            }
+            intOverdue = bulan;
+        } else {
+            int count6 = 0;
+            int count5 = 0;
+            int count4 = 0;
+            int count3 = 0;
+            int count2 = 0;
+            int count1 = 0;
+            for (int i = 0; i < rekomendasiList.size(); i++) {
+                try {
+                    if (rekomendasiList.get(i).getKomponenPemeriksaan().
+                            getHasilPemeriksaan().getTugasPemeriksaan().
+                            getTanggalMulai().getMonth().equals(
+                            LocalDate.now().getMonth())) {
+                        count6++;
+                    } else if (rekomendasiList.get(i).getKomponenPemeriksaan().
+                            getHasilPemeriksaan().getTugasPemeriksaan().
+                            getTanggalMulai().getMonth().equals(
+                            LocalDate.now().minusMonths(1).getMonth())) {
+                        count5++;
+                    } else if (rekomendasiList.get(i).getKomponenPemeriksaan().
+                            getHasilPemeriksaan().getTugasPemeriksaan().
+                            getTanggalMulai().getMonth().equals(
+                            LocalDate.now().minusMonths(2).getMonth())) {
+                        count4++;
+                    } else if (rekomendasiList.get(i).getKomponenPemeriksaan().
+                            getHasilPemeriksaan().getTugasPemeriksaan().
+                            getTanggalMulai().getMonth().equals(
+                            LocalDate.now().minusMonths(3).getMonth())) {
+                        count3++;
+                    } else if (rekomendasiList.get(i).getKomponenPemeriksaan().
+                            getHasilPemeriksaan().getTugasPemeriksaan().
+                            getTanggalMulai().getMonth().equals(
+                            LocalDate.now().minusMonths(4).getMonth())) {
+                        count2++;
+                    } else if (rekomendasiList.get(i).getKomponenPemeriksaan().
+                            getHasilPemeriksaan().getTugasPemeriksaan().
+                            getTanggalMulai().getMonth().equals(
+                            LocalDate.now().minusMonths(5).getMonth())) {
+                        count1++;
+                    }
+                } catch (NullPointerException | NoSuchElementException e) {
+                    throw new ResponseStatusException(
+                            HttpStatus.NOT_FOUND,
+                            "Rekomendasi tidak memiliki komponen pemeriksaan!"
+                    );
+                }
+            }
+            intOverdue.add(count1);
+            intOverdue.add(count2);
+            intOverdue.add(count3);
+            intOverdue.add(count4);
+            intOverdue.add(count5);
+            intOverdue.add(count6);
+        }
         return intOverdue;
     }
 
     @Override
-    public int countByDate(LocalDate batasBawah) {
-        LocalDate batasAtas = batasBawah.plusMonths(1);
-        return rekomendasiDB.countAllByTenggatWaktuGreaterThanEqualAndTenggatWaktuLessThan(batasBawah, batasAtas);
+    public List<String> getListMonth(
+            LocalDate tanggalAwal,
+            LocalDate tanggalAkhir) {
+        List<String> months = new ArrayList<>();
+        if (tanggalAwal != null) {
+            int monthsBetween = (int) ChronoUnit.MONTHS.between(
+                    tanggalAwal.withDayOfMonth(1),
+                    tanggalAkhir.withDayOfMonth(1));
+            for (int i = monthsBetween; i >= 0; i--) {
+                months.add(tanggalAkhir.minusMonths(i).getMonth()
+                        + " " + tanggalAkhir.minusMonths(i).getYear());
+            }
+        } else {
+            for (int i = 5; i >= 0; i--) {
+                months.add(LocalDate.now().minusMonths(i).getMonth()
+                        + " " + LocalDate.now().minusMonths(i).getYear());
+            }
+        }
+        return months;
     }
 
     @Override
@@ -167,25 +333,6 @@ public class RekomendasiRestServiceImpl implements RekomendasiRestService {
             }
         }
         return belumImpl;
-    }
-
-    @Override
-    public List<String> getListMonth() {
-        List<String> months = new ArrayList<>(6);
-        for (int i=5;i>=0;i--) {
-            months.add(LocalDate.now().minusMonths(i).getMonth() + "\n" + LocalDate.now().minusMonths(i).getYear());
-        }
-        return months;
-    }
-
-    @Override
-    public List<String> getListMonthFiltered(LocalDate tanggalAwal, LocalDate tanggalAkhir) {
-        int monthsBetween = (int) ChronoUnit.MONTHS.between(tanggalAwal, tanggalAkhir);
-        List<String> months = new ArrayList<>();
-        for (int i = (monthsBetween-1); i >= 0; i--) {
-            months.add(tanggalAkhir.minusMonths(i).getMonth() + "\n" + tanggalAkhir.minusMonths(i).getYear());
-        }
-        return months;
     }
 
     @Override

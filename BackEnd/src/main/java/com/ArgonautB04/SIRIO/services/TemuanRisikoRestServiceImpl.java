@@ -7,10 +7,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @Transactional
@@ -31,6 +28,9 @@ public class TemuanRisikoRestServiceImpl implements TemuanRisikoRestService {
     @Autowired
     private StatusHasilPemeriksaanDB statusHasilPemeriksaanDB;
 
+    @Autowired
+    private RekomendasiRestService rekomendasiRestService;
+
     @Override
     public TemuanRisiko buatTemuanRisiko(TemuanRisiko temuanRisiko) {
         return temuanRisikoDB.save(temuanRisiko);
@@ -49,8 +49,8 @@ public class TemuanRisikoRestServiceImpl implements TemuanRisikoRestService {
     }
 
     @Override
-    public List<Integer> getTemuanByMonth(List<TemuanRisiko> temuanRisikoList) {
-        List<Integer> intImpl = new ArrayList<>();
+    public List<Integer> getTemuanPerMonth(List<TemuanRisiko> temuanRisikoList) {
+        List<Integer> perMonth = new ArrayList<>();
         int count6 = 0;
         int count5 = 0;
         int count4 = 0;
@@ -78,13 +78,50 @@ public class TemuanRisikoRestServiceImpl implements TemuanRisikoRestService {
                 count1++;
             }
         }
-        intImpl.add(count1);
-        intImpl.add(count2);
-        intImpl.add(count3);
-        intImpl.add(count4);
-        intImpl.add(count5);
-        intImpl.add(count6);
-        return intImpl;
+        perMonth.add(count1);
+        perMonth.add(count2);
+        perMonth.add(count3);
+        perMonth.add(count4);
+        perMonth.add(count5);
+        perMonth.add(count6);
+        return perMonth;
+    }
+
+    @Override
+    public List<Integer> getTemuanPerMonthFiltered(List<TemuanRisiko> temuanRisikoList,
+                                                   LocalDate tanggalAwal, LocalDate tanggalAkhir) {
+        List<Integer> perMonth = new ArrayList<>();
+        List<String> months = rekomendasiRestService.
+                getListMonth(tanggalAwal, tanggalAkhir);
+        if (tanggalAwal != null) {
+            List<Integer> bulan = Arrays.asList(new Integer[months.size()]);
+            int count = 0;
+            String bulan1;
+            String bulan2 = null;
+            String tahun1;
+            String tahun2 = null;
+            for (int i = 0; i < temuanRisikoList.size(); i++) {
+                bulan1 = String.valueOf(temuanRisikoList.get(i).
+                        getKomponenPemeriksaan().getHasilPemeriksaan()
+                        .getTugasPemeriksaan().getTanggalMulai().getMonth());
+                tahun1 = String.valueOf(temuanRisikoList.get(i).getKomponenPemeriksaan().
+                        getHasilPemeriksaan()
+                        .getTugasPemeriksaan().getTanggalMulai().getYear());
+                for (int j = 0; j < months.size(); j++) {
+                    List<String> temp = Arrays.asList(months.get(j).
+                            split(" "));
+                    bulan2 = temp.get(0);
+                    tahun2 = temp.get(1);
+                    if (bulan1.equals(bulan2) && tahun1.equals(tahun2)) {
+                        bulan.set(j, ++count);
+                    } else {
+                        bulan.set(j, 0);
+                    }
+                }
+            }
+            perMonth = bulan;
+        }
+        return perMonth;
     }
 
     @Override
