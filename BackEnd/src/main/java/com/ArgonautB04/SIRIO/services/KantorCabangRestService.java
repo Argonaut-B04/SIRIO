@@ -11,9 +11,15 @@ public interface KantorCabangRestService {
 
     KantorCabang getById(int idKantorCabang);
 
-    Optional<KantorCabang> getByNama (String nama);
+    Optional<KantorCabang> getByNama(String nama);
 
     KantorCabang getByPemilik(Employee pemilik);
+
+    List<KantorCabang> getByArea(String area);
+
+    List<KantorCabang> getByRegional(String regional);
+
+    List<KantorCabang> getByAreaAndRegional(String area, String regional);
 
     KantorCabang nonaktifkanKantor(int idKantor);
 

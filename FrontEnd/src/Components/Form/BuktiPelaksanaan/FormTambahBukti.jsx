@@ -86,12 +86,19 @@ class FormTambahBukti extends React.Component {
     };
 
     async renderRekomendasi() {
+        // Mengubah isi dari loader
+        this.props.contentStartLoading();
+        this.props.changeLoadingBody("Mengambil data dari server");
+
         const response = await RekomendasiService.getRekomendasi(this.props.location.state.id);
         
+        // Mengubah isi dari loader
+        this.props.changeLoadingBody("Menampilkan data");
+
         this.setState({
             id: response.data.result.id,
             ketRekomendasi: response.data.result.keterangan
-        })
+        }, this.props.contentFinishLoading()) // Setelah jeda waktu, hentikan loader
     }
     
     handleChange(event) {
@@ -114,6 +121,9 @@ class FormTambahBukti extends React.Component {
     }
     
     handleSubmit(event) {
+        this.props.contentStartLoading();
+        this.props.changeLoadingBody("Mengirim data ke server");
+
         event.preventDefault();
         if (this.submitable()) {
             const buktiPelaksanaan = {
@@ -123,6 +133,8 @@ class FormTambahBukti extends React.Component {
             BuktiPelaksanaanService.addBukti(this.props.location.state.id, buktiPelaksanaan)
                 .then(() => this.setRedirect());
         }
+
+        this.props.contentFinishLoading();
     }
 
     inputDefinition() {
@@ -137,7 +149,7 @@ class FormTambahBukti extends React.Component {
                 type: "textarea",
                 name: "keterangan",
                 value: this.state.keterangan,
-                placeholder: "Masukan keterangan bukti",
+                placeholder: "Keterangan bukti pelaksanaan",
                 errormessage: this.state.errorKeterangan
             }, {
                 label: "Lampiran",
@@ -146,7 +158,7 @@ class FormTambahBukti extends React.Component {
                 type: "textarea",
                 name: "lampiran",
                 value: this.state.lampiran,
-                placeholder: "Masukan lampiran bukti (berupa link url)",
+                placeholder: "https://drive.google.com",
                 errormessage: this.state.errorLampiran
             }
         ])

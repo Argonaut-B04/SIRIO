@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -50,6 +51,21 @@ public class TugasPemeriksaanRestServiceImpl implements TugasPemeriksaanRestServ
     }
 
     @Override
+    public List<TugasPemeriksaan> getByDaftarKantorCabang(List<KantorCabang> kantorCabang) {
+        return tugasPemeriksaanDB.findAllByKantorCabangIn(kantorCabang);
+    }
+
+    @Override
+    public List<TugasPemeriksaan> getByDaftarKantorCabangAndTanggalSelesai(List<KantorCabang> kantorCabangList, LocalDate tanggalMulai, LocalDate tanggalSelesai) {
+        return tugasPemeriksaanDB.findAllByKantorCabangInAndTanggalSelesaiBetween(kantorCabangList, tanggalMulai, tanggalSelesai);
+    }
+
+    @Override
+    public List<TugasPemeriksaan> getByKantorCabangAndTanggalSelesai(KantorCabang kantorCabang, LocalDate tanggalMulai, LocalDate tanggalSelesai) {
+        return tugasPemeriksaanDB.findAllByKantorCabangAndTanggalSelesaiBetween(kantorCabang, tanggalMulai, tanggalSelesai);
+    }
+
+    @Override
     public List<TugasPemeriksaan> getByRencana(RencanaPemeriksaan rencanaPemeriksaan) {
         return tugasPemeriksaanDB.findAllByRencanaPemeriksaan(rencanaPemeriksaan);
     }
@@ -86,5 +102,10 @@ public class TugasPemeriksaanRestServiceImpl implements TugasPemeriksaanRestServ
                     "Tugas pemeriksaan dengan id " + idTugasPemeriksaan + "tidak dapat ditemukan"
             );
         }
+    }
+
+    @Override
+    public List<TugasPemeriksaan> getByDate(LocalDate startDate, LocalDate endDate) {
+        return tugasPemeriksaanDB.findByTanggalSelesaiIsGreaterThanAndTanggalMulaiIsLessThan(startDate, endDate);
     }
 }

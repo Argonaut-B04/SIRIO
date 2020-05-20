@@ -41,10 +41,12 @@ import Reminder from "./pages/QAOfficer/Reminder";
 
 import FormTambahBukti from "./pages/BranchManager/TambahBuktiForm";
 import FormUbahBukti from "./pages/BranchManager/UbahBuktiForm";
-import FormTolakBukti from "./pages/QAOfficer/TolakBuktiForm"
+import FormTolakBukti from "./pages/QAOfficer/TolakBuktiForm";
 import DetailBuktiPelaksanaan from "./pages/BranchManager/BuktiPelaksanaanDetail";
-
 import DaftarBuktiPelaksanaan from "./pages/QAOfficer/DaftarBuktiPelaksanaan";
+
+import DashboardKantorCabang from "./pages/QAOfficer/DashboardKantorCabang";
+
 import Login from "./pages/login";
 import Logout from "./pages/logout";
 import AuthorizedRoute from './Components/Route/AuthorizedRoute';
@@ -82,7 +84,10 @@ class App extends React.Component {
             <Route exact path="/demo3" component={DemoFormPage3} />
             <Route exact path="/demo2" component={DemoFormPage2} />
             <Route exact path="/demo" component={DemoFormPage} />
-            <Route exact path="/" component={MainPage} />
+
+            <Route exact path="/" component={Login} />
+            <Route exact path="/dashboard-kantor" component={DashboardKantorCabang} />
+
             <Route exact path="/rencanaPemeriksaan" component={DaftarRencanaPemeriksaan} />
             <Route exact path="/rencanaPemeriksaan/detail" component={DetailRencanaPemeriksaan} />
             <Route exact path="/rencanaPemeriksaan/tambah" component={FormTambahRencanaPemeriksaan} />

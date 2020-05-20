@@ -2,20 +2,31 @@ package com.ArgonautB04.SIRIO.controller;
 
 import com.ArgonautB04.SIRIO.model.Employee;
 import com.ArgonautB04.SIRIO.model.Rekomendasi;
-import com.ArgonautB04.SIRIO.model.TemuanRisiko;
 import com.ArgonautB04.SIRIO.rest.BaseResponse;
 import com.ArgonautB04.SIRIO.rest.DashboardDTO;
-import com.ArgonautB04.SIRIO.services.*;
+import com.ArgonautB04.SIRIO.services.EmployeeRestService;
+import com.ArgonautB04.SIRIO.services.HasilPemeriksaanRestService;
+import com.ArgonautB04.SIRIO.services.KomponenPemeriksaanRestService;
+import com.ArgonautB04.SIRIO.services.RekomendasiRestService;
+import com.ArgonautB04.SIRIO.services.RisikoRestService;
+import com.ArgonautB04.SIRIO.services.RiskLevelRestService;
+import com.ArgonautB04.SIRIO.services.RoleRestService;
+import com.ArgonautB04.SIRIO.services.StatusHasilPemeriksaanRestService;
+import com.ArgonautB04.SIRIO.services.StatusRekomendasiRestService;
+import com.ArgonautB04.SIRIO.services.TemuanRisikoRestService;
+import com.ArgonautB04.SIRIO.services.TugasPemeriksaanRestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -64,8 +75,8 @@ public class DashboardStaffController {
         employeeRestService.validateRolePermission(pengelola, "akses dashboard staff");
         BaseResponse<DashboardDTO> response = new BaseResponse<>();
         if (pengelola.getRole().getNamaRole().equals("QA Officer Operational Risk")
-        || pengelola.getRole().getNamaRole().equals("QA Lead Operational Risk")
-        || pengelola.getRole().getNamaRole().equals("Super QA Officer Operational Risk")) {
+                || pengelola.getRole().getNamaRole().equals("QA Lead Operational Risk")
+                || pengelola.getRole().getNamaRole().equals("Super QA Officer Operational Risk")) {
             response = getQAData(pengelola.getIdEmployee(), dateAwal, dateAkhir, principal);
 
         } else {
@@ -123,8 +134,8 @@ public class DashboardStaffController {
 
     @GetMapping(value = "/qa")
     private BaseResponse<DashboardDTO> getQAData(@RequestParam("id") int idQa,
-             @RequestParam("tanggalAwal") String dateAwal,
-             @RequestParam("tanggalAkhir") String dateAkhir, Principal principal) throws ParseException {
+                                                 @RequestParam("tanggalAwal") String dateAwal,
+                                                 @RequestParam("tanggalAkhir") String dateAkhir, Principal principal) throws ParseException {
         Employee pengelola = employeeRestService.validateEmployeeExistByPrincipal(principal);
         employeeRestService.validateRolePermission(pengelola, "akses dashboard staff");
         BaseResponse<DashboardDTO> response = new BaseResponse<>();
@@ -163,20 +174,20 @@ public class DashboardStaffController {
             jumlahTemuan = temuanRisikoRestService.getByPembuat(idQa).size();
         }
 
-        List<Integer> listTemuan = temuanRisikoRestService.getByPembuatByMonth(idQa, tanggalAwal,tanggalAkhir);
+        List<Integer> listTemuan = temuanRisikoRestService.getByPembuatByMonth(idQa, tanggalAwal, tanggalAkhir);
 
         List<Rekomendasi> rekomendasiOverdue = rekomendasiRestService.getRekomendasiOverdueByPembuat(idQa, tanggalAwal, tanggalAkhir);
         List<Integer> listRekomendasiOverdue = rekomendasiRestService.getRekomendasiByMonth(rekomendasiOverdue, tanggalAwal, tanggalAkhir);
-        Float jumlahRekomendasiOverdue = (float)rekomendasiOverdue.size()/(float)jumlahRekomendasi*(float)100;
+        Float jumlahRekomendasiOverdue = (float) rekomendasiOverdue.size() / (float) jumlahRekomendasi * (float) 100;
 
 
         List<Rekomendasi> rekomendasiDiimplementasi = rekomendasiRestService.getRekomendasiDiimplementasiByPembuat(idQa, tanggalAwal, tanggalAkhir);
         List<Integer> listRekomendasiDiimplementasi = rekomendasiRestService.getRekomendasiByMonth(rekomendasiDiimplementasi, tanggalAwal, tanggalAkhir);
-        Float jumlahRekomendasiDiimplementasi = (float)rekomendasiDiimplementasi.size()/(float)jumlahRekomendasi*(float)100;
+        Float jumlahRekomendasiDiimplementasi = (float) rekomendasiDiimplementasi.size() / (float) jumlahRekomendasi * (float) 100;
 
         List<Rekomendasi> rekomendasiBelumDiimplementasi = rekomendasiRestService.getRekomendasiBelumDiimplementasiByPembuat(idQa, tanggalAwal, tanggalAkhir);
         List<Integer> listRekomendasiBelumDiimplementasi = rekomendasiRestService.getRekomendasiByMonth(rekomendasiBelumDiimplementasi, tanggalAwal, tanggalAkhir);
-        Float jumlahRekomendasiBelumDiimplementasi = (float)rekomendasiBelumDiimplementasi.size()/(float)jumlahRekomendasi*(float)100;
+        Float jumlahRekomendasiBelumDiimplementasi = (float) rekomendasiBelumDiimplementasi.size() / (float) jumlahRekomendasi * (float) 100;
 
         result.setJumlahRekomendasiBelumDiimplementasi(jumlahRekomendasiBelumDiimplementasi);
         result.setListRekomendasiBelumDiimplementasi(listRekomendasiBelumDiimplementasi);

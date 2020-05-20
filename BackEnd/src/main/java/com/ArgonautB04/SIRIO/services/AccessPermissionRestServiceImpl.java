@@ -41,6 +41,8 @@ public class AccessPermissionRestServiceImpl implements AccessPermissionRestServ
                 return accessPermissions.getAksesUbahBuktiPelaksanaan();
             case "persetujuan bukti pelaksanaan":
                 return accessPermissions.getAksesPersetujuanBuktiPelaksanaan();
+            case "dashboard kantor cabang":
+                return  accessPermissions.getAksesDashboardKC();
             default:
                 return false;
         }

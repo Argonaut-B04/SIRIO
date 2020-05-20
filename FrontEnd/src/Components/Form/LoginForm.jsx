@@ -68,10 +68,25 @@ class LoginForm extends Component {
                     this.props.changeLoadingBody("Berhasil masuk, mengarahkan anda ke halaman selanjutnya");
                     this.props.contentFinishLoading();
 
+                    const peran = response.data.result.role.namaRole;
                     if (target) {
                         window.location.href = target;
                     } else {
-                        window.location.href = "/";
+                        if (peran === "Administrator") {
+                            window.location.href = "/employee";
+                        } else if (peran === "Supervisor") {
+                            window.location.href = "/dashboard-staff";
+                        } else if (peran === "Manajer Operational Risk") {
+                            window.location.href = "manager/rencanaPemeriksaan";
+                        } else if (peran === "QA Lead Operational Risk") {
+                            window.location.href = "/hasil-pemeriksaan";
+                        } else if (peran === "QA Officer Operational Risk") {
+                            window.location.href = "/hasil-pemeriksaan";
+                        } else if (peran === "Branch Manager") {
+                            window.location.href = "/bukti-pelaksanaan";
+                        } else if (peran === "Super QA Officer Operational Risk") {
+                            window.location.href = "/hasil-pemeriksaan";
+                        }
                     }
                 }
             )
