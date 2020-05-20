@@ -63,7 +63,9 @@ public class DashboardStaffController {
         Employee pengelola = employeeRestService.validateEmployeeExistByPrincipal(principal);
         employeeRestService.validateRolePermission(pengelola, "akses dashboard staff");
         BaseResponse<DashboardDTO> response = new BaseResponse<>();
-        if (pengelola.getRole().getNamaRole().equals("QA Officer Operational Risk")) {
+        if (pengelola.getRole().getNamaRole().equals("QA Officer Operational Risk")
+        || pengelola.getRole().getNamaRole().equals("QA Lead Operational Risk")
+        || pengelola.getRole().getNamaRole().equals("Super QA Officer Operational Risk")) {
             response = getQAData(pengelola.getIdEmployee(), dateAwal, dateAkhir, principal);
 
         } else {
