@@ -228,8 +228,7 @@ public class DashboardKantorController {
                     hasilPemeriksaanRestService.getByDaftarTugasPemeriksaan(daftarTugasPemeriksaan);
             daftarKomponenPemeriksaan =
                     komponenPemeriksaanRestService.getByDaftarHasilPemeriksaan(daftarHasilPemeriksaan);
-            daftarRekomendasi = rekomendasiRestService.getByDaftarKomponenPemeriksaanAndTenggatWaktu(
-                    daftarKomponenPemeriksaan, tanggalAwal, tanggalAkhir);
+            daftarRekomendasi = rekomendasiRestService.getByDaftarKomponenPemeriksaan(daftarKomponenPemeriksaan);
             daftarTemuanRisiko =
                     temuanRisikoRestService.getByDaftarKomponenPemeriksaan(daftarKomponenPemeriksaan);
         }

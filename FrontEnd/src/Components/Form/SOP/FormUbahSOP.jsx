@@ -67,6 +67,8 @@ class FormUbahSOP extends React.Component {
 
     validateLink(fokusLink) {
         var errorLink = "";
+        
+        // eslint-disable-next-line
         var link = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.%]+$/;
         if (fokusLink === null || fokusLink === "") {
             errorLink = "Link SOP  harus diisi";

@@ -144,9 +144,8 @@ class DetailHasilPemeriksaan extends React.Component {
         this.props.contentStartLoading();
         this.props.changeLoadingBody("Mengirim data ke server");
         HasilPemeriksaanService.deleteHasilPemeriksaan(hasilPemeriksaan)
+            .then(() => this.props.contentFinishLoading(), () => this.props.contentFinishLoading())
             .then(() => this.setRedirectHapus());
-
-        this.props.contentFinishLoading();
     }
 
     setuju(id) {
@@ -158,9 +157,8 @@ class DetailHasilPemeriksaan extends React.Component {
         this.props.contentStartLoading();
         this.props.changeLoadingBody("Mengirim data ke server");
         HasilPemeriksaanService.setujuiHasilPemeriksaan(persetujuan)
+            .then(() => this.props.contentFinishLoading(), () => this.props.contentFinishLoading())
             .then(() => this.setRedirectSetuju());
-
-        this.props.contentFinishLoading();
     }
 
     buttonUbah(id, idTugasPemeriksaan, status) {

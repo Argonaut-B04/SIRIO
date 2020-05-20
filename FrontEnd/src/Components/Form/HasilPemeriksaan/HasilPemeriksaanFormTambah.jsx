@@ -564,9 +564,8 @@ class HasilPemeriksaanFormTambah extends React.Component {
             this.props.contentStartLoading();
             this.props.changeLoadingBody("Mengirim data ke server");
             HasilPemeriksaanService.addHasilPemeriksaan(hasilPemeriksaan)
+                .then(() => this.props.contentFinishLoading(), () => this.props.contentFinishLoading())
                 .then(() => this.setRedirect());
-
-            this.props.contentFinishLoading();
         }
     }
 

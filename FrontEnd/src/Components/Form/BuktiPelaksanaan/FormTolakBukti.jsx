@@ -15,7 +15,6 @@ class FormTolakBukti extends React.Component {
         this.state = {
             buktiPelaksanaan: {},
             feedback: "",
-            submitable: false,
             redirect: false
         };
 
