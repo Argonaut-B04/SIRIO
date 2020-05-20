@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -32,20 +33,26 @@ public class Risiko implements Serializable {
     @Column(nullable = false)
     private Integer risikoKategori;
 
+    @Lob
+    @Type(type = "org.hibernate.type.TextType")
+    @Column(columnDefinition = "TEXT")
     @Size(max = 500)
-    @Column
     private String detailUraian;
 
+    @Lob
+    @Type(type = "org.hibernate.type.TextType")
+    @Column(columnDefinition = "TEXT")
     @Size(max = 500)
-    @Column
     private String deskripsi;
 
     @Size(max = 50)
     @Column
     private String metodologi;
 
+    @Lob
+    @Type(type = "org.hibernate.type.TextType")
+    @Column(columnDefinition = "TEXT")
     @Size(max = 500)
-    @Column
     private String ketentuanSampel;
 
     @NotNull

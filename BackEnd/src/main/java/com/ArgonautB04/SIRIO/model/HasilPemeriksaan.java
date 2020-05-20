@@ -8,6 +8,8 @@ import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 
+import org.hibernate.annotations.Type;
+
 @Entity
 @Table
 public class HasilPemeriksaan implements Serializable {
@@ -17,6 +19,7 @@ public class HasilPemeriksaan implements Serializable {
     private Integer idHasilPemeriksaan;
 
     @Lob
+    @Type(type = "org.hibernate.type.TextType")
     @Column(columnDefinition = "TEXT")
     private String feedback;
 

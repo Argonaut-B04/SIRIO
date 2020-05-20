@@ -11,6 +11,8 @@ import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.LocalDate;
 
+import org.hibernate.annotations.Type;
+
 @Entity
 @Table
 public class Rekomendasi implements Serializable {
@@ -21,6 +23,7 @@ public class Rekomendasi implements Serializable {
 
     @NotNull
     @Lob
+    @Type(type = "org.hibernate.type.TextType")
     @Column(columnDefinition = "TEXT", nullable = false)
     private String keterangan;
 

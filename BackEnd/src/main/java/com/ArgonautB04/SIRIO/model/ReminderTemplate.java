@@ -5,6 +5,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 
+import org.hibernate.annotations.Type;
+
 @Entity
 @Table
 public class ReminderTemplate implements Serializable {
@@ -19,6 +21,7 @@ public class ReminderTemplate implements Serializable {
     private String subjects;
 
     @Lob
+    @Type(type = "org.hibernate.type.TextType")
     @Column(columnDefinition = "TEXT")
     private String body;
 

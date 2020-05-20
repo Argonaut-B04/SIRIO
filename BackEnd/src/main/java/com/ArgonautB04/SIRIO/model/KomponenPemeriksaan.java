@@ -8,6 +8,8 @@ import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 
+import org.hibernate.annotations.Type;
+
 @Entity
 @Table
 public class KomponenPemeriksaan implements Serializable {
@@ -26,6 +28,7 @@ public class KomponenPemeriksaan implements Serializable {
     private Integer jumlahSampelError;
 
     @Lob
+    @Type(type = "org.hibernate.type.TextType")
     @Column(columnDefinition = "TEXT")
     private String keteranganSampel;
 

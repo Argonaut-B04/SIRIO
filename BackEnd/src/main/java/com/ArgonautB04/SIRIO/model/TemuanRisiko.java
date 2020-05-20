@@ -9,6 +9,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 
+import org.hibernate.annotations.Type;
+
 @Entity
 @Table
 public class TemuanRisiko implements Serializable {
@@ -19,6 +21,7 @@ public class TemuanRisiko implements Serializable {
 
     @NotNull
     @Lob
+    @Type(type = "org.hibernate.type.TextType")
     @Column(columnDefinition = "TEXT", nullable = false)
     private String keterangan;
 
