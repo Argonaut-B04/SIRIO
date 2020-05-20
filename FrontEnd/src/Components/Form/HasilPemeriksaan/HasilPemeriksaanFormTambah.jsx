@@ -67,9 +67,12 @@ class HasilPemeriksaanFormTambah extends React.Component {
     };
 
     async renderData() {
+        this.props.contentStartLoading();
+        this.props.changeLoadingBody("Mengambil data histori temuan dari server");
         const responseTemuanRisiko = await TemuanRisikoService.getHistoriTemuanRisikoKantorCabang(this.props.location.state.id);
         const daftarHistoriTemuan = responseTemuanRisiko.data.result;
 
+        this.props.changeLoadingBody("Mengambil data risk level dari server");
         const responseRiskLevel = await RiskLevelService.getAll();
         const riskLevelList = responseRiskLevel.data.result.map(riskLevel => {
             return (
@@ -80,6 +83,7 @@ class HasilPemeriksaanFormTambah extends React.Component {
             )
         });
 
+        this.props.changeLoadingBody("Mengambil data risiko dari server");
         const responseRisiko = await RisikoService.getAll();
         const risikoKategori1 = responseRisiko.data.result
             .filter(risiko => risiko.kategori === 1)
@@ -112,6 +116,7 @@ class HasilPemeriksaanFormTambah extends React.Component {
                 )
             });
 
+        this.props.changeLoadingBody("Mengambil data komponen pemeriksaan dari server");
         const responseKomponen = await RisikoService.getAllChild();
         const daftarKomponen = responseKomponen.data.result
             .map(risiko => {
@@ -159,7 +164,7 @@ class HasilPemeriksaanFormTambah extends React.Component {
             daftarRisikoKategori2: risikoKategori2,
             daftarRisikoKategori3: risikoKategori3,
             daftarKomponenPemeriksaan: daftarKomponen
-        })
+        }, this.props.contentFinishLoading())
     }
 
     getSOPButton(indexKomponen) {
@@ -225,6 +230,7 @@ class HasilPemeriksaanFormTambah extends React.Component {
                     handleChange: (event) => this.handleChangeKomponen(event, indexKomponen),
                     type: "number",
                     name: "jumlahPopulasi",
+                    required: true,
                     min: 0,
                     value: daftarKomponenPemeriksaan[indexKomponen].jumlahPopulasi,
                     errormessage: daftarKomponenPemeriksaan[indexKomponen].errorJumlahPopulasi,
@@ -234,6 +240,7 @@ class HasilPemeriksaanFormTambah extends React.Component {
                     handleChange: (event) => this.handleChangeKomponen(event, indexKomponen),
                     type: "number",
                     name: "jumlahSampel",
+                    required: true,
                     min: 0,
                     value: daftarKomponenPemeriksaan[indexKomponen].jumlahSampel,
                     errormessage: daftarKomponenPemeriksaan[indexKomponen].errorJumlahSampel,
@@ -243,6 +250,7 @@ class HasilPemeriksaanFormTambah extends React.Component {
                     handleChange: (event) => this.handleChangeKomponen(event, indexKomponen),
                     type: "number",
                     name: "jumlahSampelError",
+                    required: true,
                     min: 0,
                     value: daftarKomponenPemeriksaan[indexKomponen].jumlahSampelError,
                     errormessage: daftarKomponenPemeriksaan[indexKomponen].errorJumlahSampelError,
@@ -252,6 +260,7 @@ class HasilPemeriksaanFormTambah extends React.Component {
                     handleChange: (event) => this.handleChangeKomponen(event, indexKomponen),
                     type: "textarea",
                     name: "keteranganSampel",
+                    required: true,
                     value: daftarKomponenPemeriksaan[indexKomponen].keteranganSampel,
                     errormessage: daftarKomponenPemeriksaan[indexKomponen].errorKeteranganSampel,
                     placeholder: "Keterangan sampel"
@@ -260,6 +269,7 @@ class HasilPemeriksaanFormTambah extends React.Component {
                     handleChange: (name, event) => this.handleSelectChangeKomponen(name, event, indexKomponen),
                     type: "select",
                     name: "idRiskLevel",
+                    required: true,
                     value: daftarKomponenPemeriksaan[indexKomponen].idRiskLevel,
                     optionList: riskLevelOptionList
                 }, {
@@ -551,8 +561,12 @@ class HasilPemeriksaanFormTambah extends React.Component {
             })
         };
         if ((status === 1 && this.submitableDraft()) || (status === 2 && this.submitable())) {
+            this.props.contentStartLoading();
+            this.props.changeLoadingBody("Mengirim data ke server");
             HasilPemeriksaanService.addHasilPemeriksaan(hasilPemeriksaan)
                 .then(() => this.setRedirect());
+
+            this.props.contentFinishLoading();
         }
     }
 
@@ -657,43 +671,43 @@ class HasilPemeriksaanFormTambah extends React.Component {
         });
     }
 
-    validateRekomendasi(fokusRekomendasi, indexKomponen, indexRekomendasi) {
-        var errorRekomendasi = "";
-        const letter = /.*[a-zA-Z].*/;
-        const array = this.state.daftarKomponenPemeriksaan;
+    // validateRekomendasi(fokusRekomendasi, indexKomponen, indexRekomendasi) {
+    //     var errorRekomendasi = "";
+    //     const letter = /.*[a-zA-Z].*/;
+    //     const array = this.state.daftarKomponenPemeriksaan;
+    //
+    //     if (fokusRekomendasi === null || fokusRekomendasi === "") {
+    //         errorRekomendasi = "";
+    //     } else if (!fokusRekomendasi.match(letter)) {
+    //         errorRekomendasi = "Rekomendasi perlu mengandung huruf";
+    //     } else if (fokusRekomendasi.length > 500) {
+    //         errorRekomendasi = "Rekomendasi maksimal 500 karakter";
+    //     }
+    //
+    //     array[indexKomponen]["daftarErrorRekomendasi"][indexRekomendasi]["errorRekomendasi"] = errorRekomendasi;
+    //     this.setState({
+    //         daftarKomponenPemeriksaan: array
+    //     });
+    // }
 
-        if (fokusRekomendasi === null || fokusRekomendasi === "") {
-            errorRekomendasi = "";
-        } else if (!fokusRekomendasi.match(letter)) {
-            errorRekomendasi = "Rekomendasi perlu mengandung huruf";
-        } else if (fokusRekomendasi.length > 500) {
-            errorRekomendasi = "Rekomendasi maksimal 500 karakter";
-        }
-
-        array[indexKomponen]["daftarErrorRekomendasi"][indexRekomendasi]["errorRekomendasi"] = errorRekomendasi;
-        this.setState({
-            daftarKomponenPemeriksaan: array
-        });
-    }
-
-    validateTemuanRisiko(fokusTemuanRisiko, indexKomponen, indexTemuanRisiko) {
-        var errorTemuanRisiko = "";
-        const letter = /.*[a-zA-Z].*/;
-        const array = this.state.daftarKomponenPemeriksaan;
-
-        if (fokusTemuanRisiko === null || fokusTemuanRisiko === "") {
-            errorTemuanRisiko = "";
-        } else if (!fokusTemuanRisiko.match(letter)) {
-            errorTemuanRisiko = "Temuan Risiko perlu mengandung huruf";
-        } else if (fokusTemuanRisiko.length > 500) {
-            errorTemuanRisiko = "Temuan Risiko maksimal 500 karakter";
-        }
-
-        array[indexKomponen]["daftarErrorTemuanRisiko"][indexTemuanRisiko]["errorTemuanRisiko"] = errorTemuanRisiko;
-        this.setState({
-            daftarKomponenPemeriksaan: array
-        });
-    }
+    // validateTemuanRisiko(fokusTemuanRisiko, indexKomponen, indexTemuanRisiko) {
+    //     var errorTemuanRisiko = "";
+    //     const letter = /.*[a-zA-Z].*/;
+    //     const array = this.state.daftarKomponenPemeriksaan;
+    //
+    //     if (fokusTemuanRisiko === null || fokusTemuanRisiko === "") {
+    //         errorTemuanRisiko = "";
+    //     } else if (!fokusTemuanRisiko.match(letter)) {
+    //         errorTemuanRisiko = "Temuan Risiko perlu mengandung huruf";
+    //     } else if (fokusTemuanRisiko.length > 500) {
+    //         errorTemuanRisiko = "Temuan Risiko maksimal 500 karakter";
+    //     }
+    //
+    //     array[indexKomponen]["daftarErrorTemuanRisiko"][indexTemuanRisiko]["errorTemuanRisiko"] = errorTemuanRisiko;
+    //     this.setState({
+    //         daftarKomponenPemeriksaan: array
+    //     });
+    // }
 
     submitButton() {
         var tombolSimpan =
@@ -701,6 +715,7 @@ class HasilPemeriksaanFormTambah extends React.Component {
                 purple
                 disabled
                 classes="mx-1"
+                tooltip={"Isi semua kolom bertanda bintang pada setiap komponen pemeriksaan"}
             >
                 Simpan
             </SirioButton>;
@@ -727,7 +742,6 @@ class HasilPemeriksaanFormTambah extends React.Component {
             tombolDraft =
                 <SirioButton
                     purple
-                    recommended
                     classes="mx-1"
                     onClick={(event)  => this.handleSubmit(event, 1)}
                 >

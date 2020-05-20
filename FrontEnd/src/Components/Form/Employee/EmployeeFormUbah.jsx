@@ -235,8 +235,8 @@ class EmployeeFormUbah extends React.Component {
                 EmployeeService.editEmployee(employee)
                     .then(() => this.setRedirect());
             }
+            this.props.contentFinishLoading()
         }
-        this.props.contentFinishLoading()
     }
 
     // Fungsi yang akan mengembalikan definisi tiap field pada form

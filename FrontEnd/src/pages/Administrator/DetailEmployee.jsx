@@ -43,7 +43,7 @@ export default class DetailEmployee extends React.Component {
     }
 
     render() {
-        if (AuthenticationService.getRole() !== "Administrator") {
+        if (AuthenticationService.getRole() !== "Administrator" && AuthenticationService.getRole() !== "Super User") {
             return (
                 <Redirect to={{
                     pathname: "/error",

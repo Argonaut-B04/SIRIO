@@ -68,9 +68,12 @@ class HasilPemeriksaanFormUbah extends React.Component {
     };
 
     async renderData() {
+        this.props.contentStartLoading();
+        this.props.changeLoadingBody("Mengambil data histori temuan dari server");
         const responseTemuanRisiko = await TemuanRisikoService.getHistoriTemuanRisikoKantorCabang(this.props.location.state.id);
         const daftarHistoriTemuan = responseTemuanRisiko.data.result;
 
+        this.props.changeLoadingBody("Mengambil data risk level dari server");
         const responseRiskLevel = await RiskLevelService.getAll();
         const riskLevelList = responseRiskLevel.data.result.map(riskLevel => {
             return (
@@ -81,6 +84,7 @@ class HasilPemeriksaanFormUbah extends React.Component {
             )
         });
 
+        this.props.changeLoadingBody("Mengambil data risiko dari server");
         const responseRisiko = await RisikoService.getAll();
         const risikoKategori1 = responseRisiko.data.result
             .filter(risiko => risiko.kategori === 1)
@@ -113,6 +117,7 @@ class HasilPemeriksaanFormUbah extends React.Component {
                 )
             });
 
+        this.props.changeLoadingBody("Mengambil data komponen pemeriksaan dari server");
         const responseHasilPemeriksaan = await HasilPemeriksaanService.getHasilPemeriksaan(this.props.location.state.id);
         const idCurrentStatus = responseHasilPemeriksaan.data.result.idStatus;
         const daftarKomponen = responseHasilPemeriksaan.data.result.daftarKomponenPemeriksaan
@@ -154,7 +159,7 @@ class HasilPemeriksaanFormUbah extends React.Component {
             daftarRisikoKategori3: risikoKategori3,
             daftarKomponenPemeriksaan: daftarKomponen,
             idCurrentStatus: idCurrentStatus
-        })
+        }, this.props.contentFinishLoading())
     }
 
     getSOPButton(indexKomponen) {
@@ -220,6 +225,7 @@ class HasilPemeriksaanFormUbah extends React.Component {
                     handleChange: (event) => this.handleChangeKomponen(event, indexKomponen),
                     type: "number",
                     name: "jumlahPopulasi",
+                    required: true,
                     min: 0,
                     value: daftarKomponenPemeriksaan[indexKomponen].jumlahPopulasi,
                     errormessage: daftarKomponenPemeriksaan[indexKomponen].errorJumlahPopulasi,
@@ -229,6 +235,7 @@ class HasilPemeriksaanFormUbah extends React.Component {
                     handleChange: (event) => this.handleChangeKomponen(event, indexKomponen),
                     type: "number",
                     name: "jumlahSampel",
+                    required: true,
                     min: 0,
                     value: daftarKomponenPemeriksaan[indexKomponen].jumlahSampel,
                     errormessage: daftarKomponenPemeriksaan[indexKomponen].errorJumlahSampel,
@@ -238,6 +245,7 @@ class HasilPemeriksaanFormUbah extends React.Component {
                     handleChange: (event) => this.handleChangeKomponen(event, indexKomponen),
                     type: "number",
                     name: "jumlahSampelError",
+                    required: true,
                     min: 0,
                     value: daftarKomponenPemeriksaan[indexKomponen].jumlahSampelError,
                     errormessage: daftarKomponenPemeriksaan[indexKomponen].errorJumlahSampelError,
@@ -247,6 +255,7 @@ class HasilPemeriksaanFormUbah extends React.Component {
                     handleChange: (event) => this.handleChangeKomponen(event, indexKomponen),
                     type: "textarea",
                     name: "keteranganSampel",
+                    required: true,
                     value: daftarKomponenPemeriksaan[indexKomponen].keteranganSampel,
                     errormessage: daftarKomponenPemeriksaan[indexKomponen].errorKeteranganSampel,
                     placeholder: "Keterangan sampel"
@@ -255,6 +264,7 @@ class HasilPemeriksaanFormUbah extends React.Component {
                     handleChange: (name, event) => this.handleSelectChangeKomponen(name, event, indexKomponen),
                     type: "select",
                     name: "idRiskLevel",
+                    required: true,
                     value: daftarKomponenPemeriksaan[indexKomponen].idRiskLevel,
                     optionList: riskLevelOptionList,
                 }, {
@@ -567,8 +577,12 @@ class HasilPemeriksaanFormUbah extends React.Component {
             })
         };
         if ((status === 1 && this.submitableDraft()) || ((status === 2 || status === 3) && this.submitable())) {
+            this.props.contentStartLoading();
+            this.props.changeLoadingBody("Mengirim data ke server");
             HasilPemeriksaanService.editHasilPemeriksaan(hasilPemeriksaan)
                 .then(() => this.setRedirect());
+
+            this.props.contentFinishLoading();
         }
     }
 
@@ -612,6 +626,8 @@ class HasilPemeriksaanFormUbah extends React.Component {
             errorKeteranganSampel = "";
         } else if (!fokusKeteranganSampel.match(letter)) {
             errorKeteranganSampel = "Ketarangan perlu mengandung huruf";
+        } else if (fokusKeteranganSampel.length > 500) {
+            errorKeteranganSampel = "Ketarangan maksimal 500 karakter";
         }
 
         array[indexKomponen]["errorKeteranganSampel"] = errorKeteranganSampel;
@@ -677,6 +693,7 @@ class HasilPemeriksaanFormUbah extends React.Component {
                 purple
                 disabled
                 classes="mx-1"
+                tooltip={"Isi semua kolom bertanda bintang pada setiap komponen pemeriksaan"}
             >
                 Simpan
             </SirioButton>;
@@ -703,7 +720,6 @@ class HasilPemeriksaanFormUbah extends React.Component {
             tombolDraft =
                 <SirioButton
                     purple
-                    recommended
                     classes="mx-1"
                     onClick={(event)  => this.handleSubmit(event, this.state.idCurrentStatus)}
                 >
