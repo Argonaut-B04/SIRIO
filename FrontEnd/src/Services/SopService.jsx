@@ -26,8 +26,6 @@ class SopService {
     }
 
     async editSOP(data) {
-        console.log(data);
-        console.log(SirioAxiosBase.BASEURL + '/SOP/ubah');
         return this.axiosInstance.post(SirioAxiosBase.BASEURL + '/SOP/ubah', data)
     }
 

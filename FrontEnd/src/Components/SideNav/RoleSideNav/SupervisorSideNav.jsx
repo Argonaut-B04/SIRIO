@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import SideNavFramework from '../SideNavFramework';
-import { halamanUtama, dashboardStaff } from '../../../Configuration/UrlConfig';
+import { dashboardStaff } from '../../../Configuration/UrlConfig';
 
 /**
  * Komponen SideNav untuk Supervisor
@@ -12,7 +12,6 @@ export default class SupervisorSideNav extends Component {
                 {...this.props}
                 links={
                     [
-                        halamanUtama,
                         dashboardStaff
                     ]
                 }

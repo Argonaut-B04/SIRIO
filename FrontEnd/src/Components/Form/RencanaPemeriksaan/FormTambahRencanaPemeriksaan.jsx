@@ -55,7 +55,7 @@ export default class FormTambahRencana extends React.Component {
     renderRedirect = () => {
         if (this.state.redirect) {
             return <Redirect to={{
-                pathname: "rencanaPemeriksaan",
+                pathname: "/rencana-pemeriksaan",
                 state: {
                     addSuccess: true
                 }
@@ -67,6 +67,10 @@ export default class FormTambahRencana extends React.Component {
         const daftarTugasPemeriksaan = this.state.daftarTugasPemeriksaan
         daftarTugasPemeriksaan[index][event.target.name] = event.target.value;
 
+        if (event.target.name === "tanggalMulai") {
+            daftarTugasPemeriksaan[index].tanggalSelesai = ""
+        }
+    
         this.setState(
             {
                 daftarTugasPemeriksaan: daftarTugasPemeriksaan
@@ -77,7 +81,7 @@ export default class FormTambahRencana extends React.Component {
     // Fungsi untuk mengubah state ketika isi dropdown diubah
     // Fungsi ini wajib ada jika membuat field tipe select
     handleMultipleSelectChange(name, target, index) {
-        console.log(index);
+      
         const formList = this.state.daftarTugasPemeriksaan;
         formList[index][name] = target.value;
         this.setState(
@@ -85,6 +89,7 @@ export default class FormTambahRencana extends React.Component {
                 daftarTugasPemeriksaan: formList
             }
         )
+
     }
 
     validateNama(fokusNama) {
@@ -130,18 +135,24 @@ export default class FormTambahRencana extends React.Component {
 
     submitableSimpan() {
         var submitable = true;
-        this.state.daftarTugasPemeriksaan.map(tugas => {
-            submitable = submitable && 
-                (tugas.kantorCabang !== null && tugas.kantorCabang !== "") &&
-                (tugas.idQA !== null && tugas.idQA !== "") &&
-                (tugas.tanggalMulai !== null && tugas.tanggalMulai !== "") &&
-                (tugas.tanggalSelesai !== null && tugas.tanggalSelesai !== "");
-            return null
-        });
+        if(this.state.daftarTugasPemeriksaan.length > 0){
+            this.state.daftarTugasPemeriksaan.map(tugas => {
+                submitable = submitable && 
+                    (tugas.kantorCabang !== null && tugas.kantorCabang !== "" && tugas.kantorCabang !== undefined) &&
+                    (tugas.idQA !== null && tugas.idQA !== "" && tugas.idQA !== undefined) &&
+                    (tugas.tanggalMulai !== null && tugas.tanggalMulai !== ""  && tugas.tanggalMulai !== undefined) &&
+                    (tugas.tanggalSelesai !== null && tugas.tanggalSelesai !== ""  && tugas.tanggalSelesai !== undefined);
+                return null
+            });
+        }else {
+            submitable = false;
+        }
         return submitable;
     }
 
     async renderEmployeeOption() {
+        this.props.contentStartLoading();
+
         const response = await EmployeeService.getAllQAOfficer();
 
         const employeeOptionList = response.data.result.map(employee => {
@@ -155,10 +166,12 @@ export default class FormTambahRencana extends React.Component {
 
         this.setState({
             employeeOptionList: employeeOptionList
-        })
+        }, this.props.contentFinishLoading())
     }
 
     async renderKantorOption() {
+        this.props.contentStartLoading();
+
         const response = await KantorCabangService.getKantorCabangList();
 
         const kantorOptionList = response.data.result.map(kantorCabang => {
@@ -172,7 +185,8 @@ export default class FormTambahRencana extends React.Component {
 
         this.setState({
             kantorOptionList: kantorOptionList
-        })
+        }, this.props.contentFinishLoading())
+
     }
 
     // Fungsi untuk mengubah state ketika isi dari input diubah
@@ -199,6 +213,9 @@ export default class FormTambahRencana extends React.Component {
     // Fungsi yang akan dijalankan ketika user submit
     // Umumnya akan digunakan untuk memanggil service komunikasi ke backend
     async handleSubmit(event, nama) {
+        this.props.contentStartLoading();
+        this.props.changeLoadingBody("Mengirim data ke server");
+
         event.preventDefault();
         if(this.submitable()){
             RencanaPemeriksaanService.isExistRencana(this.state.namaRencana)
@@ -222,7 +239,7 @@ export default class FormTambahRencana extends React.Component {
                         const rencanaPemeriksaan = {
                             namaRencana: this.state.namaRencana,
                             linkMajelis: this.state.linkMajelis,
-                            status: this.state.status,
+                            status: 1,
                             daftarTugasPemeriksaan: this.state.daftarTugasPemeriksaan
                         }
                         RencanaPemeriksaanService.addRencanaPemeriksaan(rencanaPemeriksaan)
@@ -231,6 +248,8 @@ export default class FormTambahRencana extends React.Component {
                 }
             });
         }
+
+        this.props.contentFinishLoading()
 
     }
 
@@ -290,11 +309,11 @@ export default class FormTambahRencana extends React.Component {
 
     tambahTugasButton = (
         <SirioButton blue recommended
-            classes="mr-3"
+            classes="my-3"
             onClick={() => this.addForm()}
             type="button"
         >
-            Tambah Tugas
+            Tambah Tugas 
         </SirioButton>
     )
 
@@ -334,8 +353,7 @@ export default class FormTambahRencana extends React.Component {
                     index: index,
                     type: "date",
                     min: this.getMin(index),
-                    disable: this.state.daftarTugasPemeriksaan[index].tanggalMulai == "",
-                    required: true,
+                    required: this.state.daftarTugasPemeriksaan[index].tanggalMulai !== "",
                     name: "tanggalSelesai",
                     value: this.state.daftarTugasPemeriksaan[index].tanggalSelesai
                 }
@@ -396,7 +414,7 @@ export default class FormTambahRencana extends React.Component {
                 {tombolDraft}
                 <SirioButton purple
                     classes="mx-1"
-                    onClick={() => window.location.href = "/rencanaPemeriksaan"}>
+                    onClick={() => window.location.href = "/rencana-pemeriksaan"}>
                     Batal
                 </SirioButton>
             </div>
@@ -404,7 +422,6 @@ export default class FormTambahRencana extends React.Component {
     }
 
     deleteItem(array, index) {
-        console.log("hapus tugas 1")
         const toReturn = array.slice(0, index).concat(array.slice(index + 1, array.length));
 
         return toReturn;
@@ -412,7 +429,6 @@ export default class FormTambahRencana extends React.Component {
 
 
     deleteChildForm(index) {
-        console.log("hapus tugas")
         const daftarTugasPemeriksaan= this.state.daftarTugasPemeriksaan
         const newdaftarTugasPemeriksaan = this.deleteItem(daftarTugasPemeriksaan, index)
 

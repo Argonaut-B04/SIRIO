@@ -44,7 +44,15 @@ class DetailEmployee extends React.Component {
     };
 
     async renderDataEmployee() {
+
+        // Mengubah isi dari loader
+        this.props.contentStartLoading();
+        this.props.changeLoadingBody("Mengambil data dari server");
+
         const response = await EmployeeService.getEmployee(this.props.location.state.id);
+
+        // Mengubah isi dari loader
+        this.props.changeLoadingBody("Menampilkan data");
 
         this.setState({
             employee: response.data.result,
@@ -56,7 +64,7 @@ class DetailEmployee extends React.Component {
                 "Email": response.data.result.email,
                 "Nomor Telepon": this.nomorHpFormatter(response.data.result.noHp)
             }
-        })
+        }, this.props.contentFinishLoading())
     }
 
     nomorHpFormatter(noHp) {
@@ -71,8 +79,12 @@ class DetailEmployee extends React.Component {
         const employee = {
             id: id
         };
+
+        this.props.contentStartLoading();
+        this.props.changeLoadingBody("Mengirim data ke server");
         EmployeeService.deleteEmployee(employee)
             .then(() => this.setRedirect());
+        this.props.contentFinishLoading()
     }
 
     subButton() {
@@ -86,12 +98,15 @@ class DetailEmployee extends React.Component {
                 }}>
                     <SirioButton
                         purple
+                        recommended
+                        classes="mx-1"
                     >
                         Ubah
                     </SirioButton>
                 </NavLink>
                 <SirioWarningButton
                     red
+                    classes="mx-1"
                     modalTitle="Konfirmasi Penghapusan"
                     modalDesc="Apakah anda yakin untuk menghapus employee?"
                     onConfirm={() => this.hapus(this.state.employee.idEmployee)}

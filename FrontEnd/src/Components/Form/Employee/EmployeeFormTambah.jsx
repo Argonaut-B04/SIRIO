@@ -74,8 +74,8 @@ export default class EmployeeFormTambah extends React.Component {
             errorNoHp = "";
         } else if (!fokusNoHp.match(numberOnly)) {
             errorNoHp = "Nomor HP hanya boleh mengandung angka";
-        } else if (fokusNoHp.length > 20) {
-            errorNoHp = "Nomor HP maksimal 20 karakter";
+        } else if (fokusNoHp.length >= 15 || fokusNoHp.length <= 10) {
+            errorNoHp = "Nomor HP diantara 10-15 karakter";
         }
 
         this.setState({
@@ -85,11 +85,11 @@ export default class EmployeeFormTambah extends React.Component {
 
     validatePassword(fokusPassword) {
         var errorPassword = "";
-        var letterNumber = /[^\w\d]*(([0-9]+.*[A-Za-z]+.*)|[A-Za-z]+.*([0-9]+.*))/;
+        var letterNumber = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{0,}$/;
         if (fokusPassword === null || fokusPassword === "") {
             errorPassword = "";
         } else if (!fokusPassword.match(letterNumber)) {
-            errorPassword = "Password harus mengandung angka dan huruf";
+            errorPassword = "Password harus mengandung angka, 1 uppercase, dan 1 lowercase";
         } else if (fokusPassword.length < 8) {
             errorPassword = "Password minimal 8 karakter";
         } else if (fokusPassword.length > 70) {
@@ -107,7 +107,7 @@ export default class EmployeeFormTambah extends React.Component {
         if (fokusUsername === null || fokusUsername === "") {
             errorUsername = "";
         } else if (!fokusUsername.match(letterNumber)) {
-            errorUsername = "Username mengandung angka dan huruf";
+            errorUsername = "Username hanya dan harus mengandung angka dan huruf";
         } else if (fokusUsername.length > 20) {
             errorUsername = "Username maksimal 20 karakter";
         }
@@ -165,7 +165,14 @@ export default class EmployeeFormTambah extends React.Component {
     };
 
     async renderRoleOption() {
+        // Mengubah isi dari loader
+        this.props.contentStartLoading();
+        this.props.changeLoadingBody("Mengambil data dari server");
+
         const response = await RoleService.getRoleList();
+
+        // Mengubah isi dari loader
+        this.props.changeLoadingBody("Menampilkan data");
 
         const roleOptionList = response.data.result.map(role => {
             return (
@@ -178,7 +185,7 @@ export default class EmployeeFormTambah extends React.Component {
 
         this.setState({
             roleOptionList: roleOptionList
-        })
+        }, this.props.contentFinishLoading())
     }
 
     handleChange(event) {
@@ -224,6 +231,9 @@ export default class EmployeeFormTambah extends React.Component {
     async handleSubmit(event) {
         event.preventDefault();
         if (this.submitable()) {
+            this.props.contentStartLoading();
+            this.props.changeLoadingBody("Mengecek username di server");
+
             EmployeeService.checkEmployeeExist(this.state.username)
                 .then(response => {
                     if (response.data.result) {
@@ -231,6 +241,7 @@ export default class EmployeeFormTambah extends React.Component {
                             errorUsername: "Username sudah terdaftar"
                         })
                     } else {
+                        this.props.changeLoadingBody("Mengecek email di server");
                         EmployeeService.checkEmailExist({ email: this.state.email })
                             .then(response => {
                                 if (response.data.result) {
@@ -247,12 +258,14 @@ export default class EmployeeFormTambah extends React.Component {
                                         email: this.state.email,
                                         noHp: this.state.noHp
                                     };
+                                    this.props.changeLoadingBody("Mengirim data ke server");
                                     EmployeeService.addEmployee(employee)
                                         .then(() => this.setRedirect());
                                 }
                             })
                     }
                 });
+            this.props.contentFinishLoading()
         }
     }
 
@@ -267,6 +280,7 @@ export default class EmployeeFormTambah extends React.Component {
                     handleChange: this.handleChange,
                     type: "text",
                     name: "username",
+                    required: true,
                     value: this.state.username,
                     placeholder: "Username",
                     errormessage: this.state.errorUsername
@@ -275,6 +289,7 @@ export default class EmployeeFormTambah extends React.Component {
                     handleChange: this.handleChange,
                     type: "password",
                     name: "password",
+                    required: true,
                     value: this.state.password,
                     placeholder: "Password",
                     errormessage: this.state.errorPassword
@@ -283,6 +298,7 @@ export default class EmployeeFormTambah extends React.Component {
                     handleChange: this.handleSelectChange,
                     type: "select",
                     name: "idRole",
+                    required: true,
                     value: this.state.idRole,
                     optionList: this.state.roleOptionList
                 }, {
@@ -290,6 +306,7 @@ export default class EmployeeFormTambah extends React.Component {
                     handleChange: this.handleChange,
                     type: "text",
                     name: "nama",
+                    required: true,
                     value: this.state.nama,
                     placeholder: "Nama",
                     errormessage: this.state.errorName
@@ -298,6 +315,7 @@ export default class EmployeeFormTambah extends React.Component {
                     handleChange: this.handleChange,
                     type: "text",
                     name: "jabatan",
+                    required: true,
                     value: this.state.jabatan,
                     placeholder: "Jabatan",
                     errormessage: this.state.errorJabatan
@@ -306,6 +324,7 @@ export default class EmployeeFormTambah extends React.Component {
                     handleChange: this.handleChange,
                     type: "text",
                     name: "email",
+                    required: true,
                     value: this.state.email,
                     placeholder: "email@email.com",
                     errormessage: this.state.errorEmail

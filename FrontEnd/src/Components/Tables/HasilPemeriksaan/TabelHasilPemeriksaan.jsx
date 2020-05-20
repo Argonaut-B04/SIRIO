@@ -26,11 +26,14 @@ class TabelHasilPemeriksaan extends React.Component {
     }
 
     async renderRows() {
+        this.props.contentStartLoading();
+        this.props.changeLoadingBody("Mengambil data dari server");
         const response = await HasilPemeriksaanService.getHasilPemeriksaanByLoggedInUser();
 
+        this.props.changeLoadingBody("Menampilkan data");
         this.setState({
             rowList: response.data.result
-        })
+        }, this.props.contentFinishLoading())
     }
 
     endNotification() {
@@ -93,23 +96,24 @@ class TabelHasilPemeriksaan extends React.Component {
         )
     }
 
-    namaHasilPemeriksaanFormatter(cell, row) {
-        return 'Kantor Cabang ' + row.tugasPemeriksaan.namaKantorCabang +
-            ', Tugas Pemeriksaan #' + row.tugasPemeriksaan.id;
-    }
-
-
     columns = [
         {
-            dataField: '',
-            isDummyField: true,
+            dataField: 'tugasPemeriksaan.namaKantorCabang',
             text: 'HASIL PEMERIKSAAN',
             sort: true,
             classes: classes.rowItem,
-            formatter: this.namaHasilPemeriksaanFormatter,
             headerClasses: classes.colheader,
             headerStyle: (colum, colIndex) => {
                 return { width: "25%", textAlign: 'left' };
+            }
+        }, {
+            dataField: 'tugasPemeriksaan.id',
+            text: 'ID TUGAS',
+            sort: true,
+            classes: classes.rowItem,
+            headerClasses: classes.colheader,
+            headerStyle: (colum, colIndex) => {
+                return { width: "15%", textAlign: 'left' };
             }
         }, {
             dataField: 'namaStatus',

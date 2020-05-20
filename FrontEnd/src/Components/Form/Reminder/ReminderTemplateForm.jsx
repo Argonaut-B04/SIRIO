@@ -16,16 +16,15 @@ class ReminderTemplateForm extends Component {
             idReminder: "",
             subject: "",
             content: "",
-            submitableArray: [false, false],
             changeComplete: false,
             changed: false,
+            errorSubjek: "",
+            errorBody: ""
         }
 
         this.handleChange = this.handleChange.bind(this);
         this.inputDefinition = this.inputDefinition.bind(this);
         this.submitable = this.submitable.bind(this);
-        this.validateSubject = this.validateSubject.bind(this);
-        this.validateBody = this.validateBody.bind(this);
         this.endNotification = this.endNotification.bind(this);
     }
 
@@ -35,7 +34,26 @@ class ReminderTemplateForm extends Component {
                 idReminder: this.props.location.state.idReminder
             })
             this.renderKonten();
+        } else {
+            this.renderKontenGlobal();
         }
+    }
+
+    async renderKontenGlobal() {
+        // Mengubah isi dari loader
+        this.props.contentStartLoading();
+        this.props.changeLoadingBody("Mengambil data dari server");
+
+        const response = await ReminderService.getTemplateGlobal();
+
+        // Mengubah isi dari loader
+        this.props.changeLoadingBody("Menampilkan data");
+
+        this.setState({
+            subject: response.data.result.subjects,
+            content: response.data.result.body
+        }, this.props.contentFinishLoading())
+
     }
 
     async renderKonten() {
@@ -52,20 +70,45 @@ class ReminderTemplateForm extends Component {
             subject: response.data.result.subjects,
             content: response.data.result.body
         }, this.props.contentFinishLoading())
-        
+
     }
 
     handleChange(event) {
-        const name = event.target.name;
-        const value = event.target.value;
-        const changed = "changed" + name;
-        this.setState(
-            {
-                [name]: value,
-                [changed]: true,
-                changed: true
+        if (event.target.name === "subject") {
+
+            var errorSubjek = ""
+            if (event.target.value === "") {
+                errorSubjek = "Subjek tidak boleh kosong"
+            } else if (event.target.value.length < 10) {
+                errorSubjek = "Subjek harus setidaknya terdiri dari 10 karakter";
+            } else if (event.target.value.length > 74) {
+                errorSubjek = "Subjek tidak dapat lebih dari 75 karakter";
             }
-        )
+
+            this.setState({
+                [event.target.name]: event.target.value,
+                errorSubjek: errorSubjek,
+                changed: true
+            })
+
+        } else if (event.target.name === "content") {
+
+            var errorBody = "";
+            if (event.target.value === "") {
+                errorBody = "Body tidak boleh kosong"
+            } else if (event.target.value.length < 10) {
+                errorBody = "Body harus setidaknya terdiri dari 10 karakter";
+            } else if (event.target.value.length > 498) {
+                errorBody = "Subjek tidak dapat lebih dari 500 karakter";
+            }
+
+            // lalu kita simpan ke state, misal disini aku kasi nama error nya "errorField2"
+            this.setState({
+                [event.target.name]: event.target.value,
+                errorBody: errorBody,
+                changed: true
+            })
+        }
     }
 
     endNotification() {
@@ -97,66 +140,7 @@ class ReminderTemplateForm extends Component {
     }
 
     submitable() {
-        var submitable = true;
-        const fokus = this.state.submitableArray;
-        for (let i = 0; i < fokus.length; i++) {
-            submitable = (submitable && fokus[i])
-        }
-        return submitable;
-    }
-
-    validateSubject(fokus) {
-        var submitable = true;
-        var errorNama;
-        if (fokus === "") {
-            submitable = false;
-            if (this.state.changedsubject) {
-                submitable = false;
-                errorNama = "jangan kosong"
-            }
-        } else if (fokus.length < 10) {
-            submitable = false;
-            errorNama = "paling sedikit 10";
-        } else if (fokus.length > 74) {
-            submitable = false;
-            errorNama = "Batas nya 75 huruf, sekarang sudah " + fokus.length;
-        }
-
-        if (submitable !== this.state.submitableArray[0]) {
-            var stateToChange = this.state.submitableArray;
-            stateToChange[0] = submitable;
-            this.setState({
-                submitableArray: stateToChange
-            })
-        }
-        return errorNama;
-    }
-
-    validateBody(fokus) {
-        var submitable = true;
-        var errorNama;
-        if (fokus === "") {
-            submitable = false;
-            if (this.state.changedcontent) {
-                submitable = false;
-                errorNama = "jangan kosong"
-            }
-        } else if (fokus.length < 10) {
-            submitable = false;
-            errorNama = "paling sedikit 10";
-        } else if (fokus.length > 600) {
-            submitable = false;
-            errorNama = "Batas nya 600 huruf, sekarang sudah " + fokus.length;
-        }
-
-        if (submitable !== this.state.submitableArray[1]) {
-            var stateToChange = this.state.submitableArray;
-            stateToChange[1] = submitable;
-            this.setState({
-                submitableArray: stateToChange
-            })
-        }
-        return errorNama;
+        return this.state.errorBody === "" && this.state.errorSubjek === "";
     }
 
     inputDefinition() {
@@ -172,22 +156,26 @@ class ReminderTemplateForm extends Component {
                     </p>
                 }, {
                     label: "Subject",
-                    required: true,
-                    handleChange: this.handleChange,
-                    validationFunction: this.validateSubject,
                     type: "text",
+
                     name: "subject",
                     value: this.state.subject,
+                    errormessage: this.state.errorSubjek,
+
+                    required: true,
                     placeholder: "masukan subject",
+                    handleChange: this.handleChange,
                 }, {
                     label: "Message Body",
-                    handleChange: this.handleChange,
-                    validationFunction: this.validateBody,
                     type: "textarea",
+
                     name: "content",
                     value: this.state.content,
+                    errormessage: this.state.errorBody,
+
+                    required: true,
                     placeholder: "masukan isi pesan reminder",
-                    required: true
+                    handleChange: this.handleChange,
                 }
             ]
         )
@@ -196,7 +184,7 @@ class ReminderTemplateForm extends Component {
     submitButton() {
         const submitable = this.submitable();
         const role = AuthenticationService.getRole();
-        const canChangeGlobal = role === "dev" || role === "Administrator" || role === "Supervisor" || role === "QA Lead Operational Risk" || role === "Super QA Officer Operational Risk";
+        const canChangeGlobal = role === "Administrator" || role === "Supervisor" || role === "QA Lead Operational Risk" || role === "Super QA Officer Operational Risk" || role === "Manajer Operational Risk";
 
         return (
             <div className="d-flex align-items-center justify-content-end">

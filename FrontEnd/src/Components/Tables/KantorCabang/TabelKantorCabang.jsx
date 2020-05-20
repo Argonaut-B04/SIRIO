@@ -35,11 +35,16 @@ class TabelKantorCabang extends React.Component {
     }
 
     async renderRows() {
+        this.props.contentStartLoading();
+        this.props.changeLoadingBody("Mengambil data dari server");
+
         const response = await KantorCabangService.getKantorCabangList();
+
+        this.props.changeLoadingBody("Menampilkan data");
 
         this.setState({
             rowList: response.data.result
-        })
+        }, this.props.contentFinishLoading())
     }
 
     auditFormatter(kunjunganAudit){
@@ -116,7 +121,7 @@ class TabelKantorCabang extends React.Component {
     headerButton() {
         return (
             <NavLink to={{
-                pathname: "/kantorCabang/tambah"
+                pathname: "/kantor-cabang/tambah"
             }}>
                 <SirioButton
                     purple recommended
@@ -130,7 +135,7 @@ class TabelKantorCabang extends React.Component {
     getButtonsFirst(cell, row) {
         return (
             <NavLink to={{
-                pathname: "/kantorCabang/detail",
+                pathname: "/kantor-cabang/detail",
                 state: {
                     id: row.idKantor
                 }

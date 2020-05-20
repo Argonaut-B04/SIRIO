@@ -67,13 +67,20 @@ class FormTolakBukti extends React.Component {
     };
 
     async renderDataBuktiPelaksanaan() {
+        // Mengubah isi dari loader
+        this.props.contentStartLoading();
+        this.props.changeLoadingBody("Mengambil data dari server");
+
         const response = await BuktiPelaksanaanService.getBuktiPelaksanaan(this.props.location.state.id);
         
+        // Mengubah isi dari loader
+        this.props.changeLoadingBody("Menampilkan data");
+
         this.setState({
             id: response.data.result.id,
             keterangan: response.data.result.keterangan,
             lampiran: response.data.result.lampiran
-        })
+        }, this.props.contentFinishLoading()) // Setelah jeda waktu, hentikan loader
     }
 
     handleChange(event) {
@@ -93,6 +100,9 @@ class FormTolakBukti extends React.Component {
     }
 
     handleSubmit(event) {
+        this.props.contentStartLoading();
+        this.props.changeLoadingBody("Mengirim data ke server");
+
         event && event.preventDefault();
         if (this.submitable()) {
             const buktiPelaksanaan = {
@@ -103,9 +113,10 @@ class FormTolakBukti extends React.Component {
             BuktiPelaksanaanService.setStatusBukti(this.state.id, buktiPelaksanaan)
                 .then(() => this.setRedirect());
         }
+
+        this.props.contentFinishLoading();
     }
 
-    
 
     inputDefinition() {
         return ([
@@ -122,7 +133,7 @@ class FormTolakBukti extends React.Component {
                 type: "textarea",
                 name: "feedback",
                 value: this.state.feedback,
-                placeholder: "Masukan feedback penolakan",
+                placeholder: "Feedback penolakan bukti pelaksanaan",
                 errormessage: this.state.errorFeedback
             }
         ])

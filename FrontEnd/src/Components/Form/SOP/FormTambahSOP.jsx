@@ -129,7 +129,10 @@ class FormTambahSOP extends React.Component {
 
     // Fungsi yang akan dijalankan ketika user submit
     // Umumnya akan digunakan untuk memanggil service komunikasi ke backend
-    async handleSubmit(event) {
+    handleSubmit(event) {
+        this.props.contentStartLoading();
+        this.props.changeLoadingBody("Mengirim data ke server");
+
         event.preventDefault();
         if(this.submitable()){
             SopService.isExistSOP(this.state.judul)
@@ -146,9 +149,12 @@ class FormTambahSOP extends React.Component {
                     }
                     SopService.addSOP(sop)
                     .then(() => this.setRedirect());
+                    this.props.contentFinishLoading()
                 }
             })
         }
+
+       
     }
 
    
@@ -184,7 +190,7 @@ class FormTambahSOP extends React.Component {
                     name: "linkDokumen",
                     errormessage: this.state.errorLink,
                     value: this.state.linkDokumen,
-                    placeholder: "https://drive.google.com/drive/my-drive"
+                    placeholder: "https://drive.google.com/"
                 }
 
             ]

@@ -68,6 +68,10 @@ class DetailRisiko extends React.Component {
     }
 
     async renderDataRisiko() {
+        // Mengubah isi dari loader
+        this.props.contentStartLoading();
+        this.props.changeLoadingBody("Mengambil data dari server");
+
         const response = await RegistrasiRisikoService.getRisiko(this.props.location.state.id);
 
         this.setState({
@@ -81,7 +85,7 @@ class DetailRisiko extends React.Component {
             ketentuanSampel: response.data.result.ketentuanSampel,
             deskripsi: response.data.result.deskripsi
             // child: response.data.result.childList,
-        })
+        }, this.props.contentFinishLoading())
     }
 
     data() {
@@ -135,11 +139,14 @@ class DetailRisiko extends React.Component {
     };
 
     hapus(id) {
+        // Mengubah isi dari loader
+        this.props.contentStartLoading();
+        this.props.changeLoadingBody("Menghapus data dari server");
         const risiko = {
             id: id
         };
         RegistrasiRisikoService.hapusRisiko(risiko)
-            .then(() => this.setRedirect());
+            .then(() => this.setRedirect(), this.props.contentFinishLoading());
     }
 
     subButton() {
