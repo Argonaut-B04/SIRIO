@@ -224,7 +224,8 @@ class EmployeeFormUbah extends React.Component {
                         if (response.data.result) {
                             this.setState({
                                 errorEmail: "Email sudah terdaftar"
-                            }, this.props.contentFinishLoading())
+                            });
+                            this.props.contentFinishLoading();
                         } else {
                             this.props.changeLoadingBody("Mengirim data ke server");
                             EmployeeService.editEmployee(employee)
