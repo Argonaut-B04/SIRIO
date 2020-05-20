@@ -7,6 +7,7 @@ import { NavLink } from 'react-router-dom';
 import { withRouter } from 'react-router-dom';
 import { Redirect } from 'react-router-dom';
 import SirioWarningButton from "../../Button/ActionButton/SirioWarningButton";
+import SirioConfirmButton from "../../Button/ActionButton/SirioConfirmButton";
 
 class DetailRencanaPemeriksaan extends React.Component {
 
@@ -35,11 +36,18 @@ class DetailRencanaPemeriksaan extends React.Component {
     };
 
     renderRedirect = () => {
-        if (this.state.redirect) {
+        if (this.state.redirect && this.state.rencanaPemeriksaan.status === 1) {
             return <Redirect to={{
-                pathname: "/rencanaPemeriksaan",
+                pathname: "/rencana-pemeriksaan",
                 state: {
                     deleteSuccess: true
+                }
+            }} />
+        }else if (this.state.redirect && this.state.rencanaPemeriksaan.status === 2) {
+            return <Redirect to={{
+                pathname: "/rencana-pemeriksaan",
+                state: {
+                    endSuccess: true
                 }
             }} />
         }
@@ -65,7 +73,12 @@ class DetailRencanaPemeriksaan extends React.Component {
     }
 
     async renderDataRencana() {
+        this.props.contentStartLoading();
+        this.props.changeLoadingBody("Mengambil data dari server");
+
         const response = await RencanaPemeriksaanService.getRencanaPemeriksaanDetail(this.props.location.state.id);
+
+        this.props.changeLoadingBody("Menampilkan data");
 
         this.setState({
            rencanaPemeriksaan: response.data.result,
@@ -85,6 +98,8 @@ class DetailRencanaPemeriksaan extends React.Component {
                 )
             })
         })
+
+        this.props.contentFinishLoading()
     }
 
     getTanggalFormatter(tanggalString) {
@@ -104,15 +119,22 @@ class DetailRencanaPemeriksaan extends React.Component {
     }
 
     hapus(id) {
+        this.props.contentStartLoading();
+        this.props.changeLoadingBody("Mengirim data ke server");
         const rencanaPemeriksaan = {
             id: id
         };
-        console.log(rencanaPemeriksaan)
+       
         RencanaPemeriksaanService.deleteRencanaPemeriksaan(rencanaPemeriksaan)
             .then(() => this.setRedirect());
+
+        this.props.contentFinishLoading()
     }
 
     async ubahStatus() {
+        this.props.contentStartLoading();
+        this.props.changeLoadingBody("Mengirim data ke server");
+
         const response = await RencanaPemeriksaanService.getRencanaPemeriksaanDetail(this.props.location.state.id);
         const rencanaPemeriksaan = {
             id: response.data.result.id,
@@ -122,7 +144,9 @@ class DetailRencanaPemeriksaan extends React.Component {
             daftarTugasPemeriksaan: response.data.result.daftarTugasPemeriksaan
         }
         RencanaPemeriksaanService.editRencanaPemeriksaan(rencanaPemeriksaan)
-        .then(() => this.setRedirect1());
+            .then(() => this.setRedirect());
+
+        this.props.contentFinishLoading()
     }
 
     subButton(status) {
@@ -130,13 +154,13 @@ class DetailRencanaPemeriksaan extends React.Component {
             return (
                 <div>
                     <NavLink to={{
-                        pathname: "/rencanaPemeriksaan/ubah",
+                        pathname: "/rencana-pemeriksaan/ubah",
                         state: {
                             id: this.state.rencanaPemeriksaan.id,
                         }
                     }}>
                         <SirioButton
-                            purple
+                            purple recommended
                             classes="mx-2"
                         >
                             Ubah
@@ -158,7 +182,7 @@ class DetailRencanaPemeriksaan extends React.Component {
         }else if (status === 2){
             return (
                 <div>
-                    <SirioWarningButton
+                    <SirioConfirmButton
                         red
                         modalTitle="Konfirmasi Penyelesaian"
                         modalDesc="Apakah anda yakin untuk menyelesaikan rencana pemeriksaan?"
@@ -167,7 +191,7 @@ class DetailRencanaPemeriksaan extends React.Component {
                         customCancelText="Batal"
                     >
                         Selesai
-                    </SirioWarningButton>
+                    </SirioConfirmButton>
                 </div>
             )
         }else{
@@ -190,7 +214,7 @@ class DetailRencanaPemeriksaan extends React.Component {
                     data={this.state.dataGeneral}
                     id='id'
                     subButton={this.subButton(this.state.rencanaPemeriksaan.status)}
-                    link="rencanaPemeriksaan"
+                    link="rencana-pemeriksaan"
                 />
                 {this.state.daftarTugasPemeriksaan.map(tugas=>
                     <SirioSubdetailPage

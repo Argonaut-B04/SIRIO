@@ -25,11 +25,14 @@ export default class TabelTugasPemeriksaan extends React.Component {
     }
 
     async renderRows() {
+        this.props.contentStartLoading();
+        this.props.changeLoadingBody("Mengambil data dari server");
         const response = await TugasPemeriksaanService.getTugasPemeriksaanByLoggedInUser();
 
+        this.props.changeLoadingBody("Menampilkan data");
         this.setState({
             rowList: response.data.result
-        })
+        }, this.props.contentFinishLoading())
     }
 
     getButtonsFirst(cell, row) {
@@ -68,26 +71,14 @@ export default class TabelTugasPemeriksaan extends React.Component {
         }
     }
 
-    namaTugasPemeriksaanFormatter(cell, row) {
-        switch (this.state.role) {
-            case "QA Officer Operational Risk":
-                return 'Kantor Cabang ' + row.namaKantorCabang;
-            default:
-                return 'Kantor Cabang ' + row.namaKantorCabang +
-                    ', QA ' + row.namaQA;
-        }
-    }
-
-    columns = [
+    columnsQA = [
         {
             dataField: 'namaKantorCabang',
-            isDummyField: true,
             text: 'TUGAS PEMERIKSAAN',
             sort: true,
             classes: classes.rowItem,
-            formatter: (cell, row) => this.namaTugasPemeriksaanFormatter(cell, row),
             headerClasses: classes.colheader,
-            headerStyle: () => {
+            headerStyle: (colum, colIndex) => {
                 return { width: "25%", textAlign: 'left' };
             }
         }, {
@@ -121,6 +112,59 @@ export default class TabelTugasPemeriksaan extends React.Component {
             }
         }];
 
+    columns = [
+        {
+            dataField: 'namaKantorCabang',
+            text: 'TUGAS PEMERIKSAAN',
+            sort: true,
+            classes: classes.rowItem,
+            headerClasses: classes.colheader,
+            headerStyle: (colum, colIndex) => {
+                return { width: "20%", textAlign: 'left' };
+            }
+        }, {
+            dataField: 'namaQA',
+            text: 'QA DITUGASKAN',
+            sort: true,
+            classes: classes.rowItem,
+            headerClasses: classes.colheader,
+            headerStyle: (colum, colIndex) => {
+                return { width: "20%", textAlign: 'left' };
+            }
+        }, {
+            dataField: 'tanggalMulai',
+            text: 'TANGGAL MULAI',
+            sort: true,
+            classes: classes.rowItem,
+            headerClasses: classes.colheader,
+            headerStyle: () => {
+                return { width: "15%" };
+            },
+            formatter: SirioAxiosBase.formatDateFromSirioDatePicker
+        }, {
+            dataField: 'tanggalSelesai',
+            text: 'TANGGAL SELESAI',
+            sort: true,
+            classes: classes.rowItem,
+            headerClasses: classes.colheader,
+            headerStyle: () => {
+                return { width: "15%" };
+            },
+            formatter: SirioAxiosBase.formatDateFromSirioDatePicker
+        }, {
+            dataField: 'noData 1',
+            text: 'Aksi Hasil',
+            headerClasses: classes.colheader,
+            classes: classes.rowItem,
+            formatter: this.getButtonsFirst,
+            headerStyle: () => {
+                return { width: "15%" };
+            },
+            style: () => {
+                return { textAlign: 'center' }
+            }
+        }];
+
     defaultSorted = [{
         dataField: 'tanggalMulai',
         order: 'asc'
@@ -132,7 +176,7 @@ export default class TabelTugasPemeriksaan extends React.Component {
                 title="Daftar Tugas Pemeriksaan"
                 data={this.state.rowList}
                 id='id'
-                columnsDefinition={this.columns}
+                columnsDefinition={this.state.role === "QA Officer Operational Risk" ? this.columnsQA : this.columns}
                 includeSearchBar
             />
         );

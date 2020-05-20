@@ -35,11 +35,28 @@ class TabelBuktiPelaksanaan extends React.Component {
     }
 
     async renderRows() {
+        // Mengubah isi dari loader
+        this.props.contentStartLoading();
+        this.props.changeLoadingBody("Mengambil data dari server");
+
         const response = await RekomendasiService.getRekomendasiByLoggedInUser();
+
+        // Mengubah isi dari loader
+        this.props.changeLoadingBody("Menampilkan data");
 
         this.setState({
             rowList: response.data.result
-        })
+        }, this.props.contentFinishLoading()) // Setelah jeda waktu, hentikan loader
+    }
+
+    dataFormatter() {
+        const dataRekomendasi = []
+        for (var i in this.state.rowList) {
+            if (this.state.rowList[i].status === "Sedang Dilaksanakan" || this.state.rowList[i].status === "Selesai") {
+                dataRekomendasi.push(this.state.rowList[i]);
+            }
+        }
+        return dataRekomendasi;
     }
 
     statusFormatter(cell) {
@@ -201,7 +218,7 @@ class TabelBuktiPelaksanaan extends React.Component {
                     }
 
                 }, {
-                    dataField: 'status',
+                    dataField: 'statusBukti',
                     text: 'STATUS BUKTI',
                     sort: true,
                     classes: classes.rowItem,
@@ -234,7 +251,7 @@ class TabelBuktiPelaksanaan extends React.Component {
             <>
                 <SirioTable
                     title="Daftar Bukti Pelaksanaan Rekomendasi"
-                    data={this.state.rowList}
+                    data={this.dataFormatter()}
                     id='id'
                     columnsDefinition={this.getColumns()}
                     includeSearchBar

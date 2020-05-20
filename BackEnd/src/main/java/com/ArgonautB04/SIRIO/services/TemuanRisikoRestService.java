@@ -12,6 +12,10 @@ public interface TemuanRisikoRestService {
 
     List<TemuanRisiko> getAll();
 
+    List<Integer> getTemuanPerMonth(List<TemuanRisiko> temuanRisikoList);
+
+    List<Integer> getTemuanPerMonthFiltered(List<TemuanRisiko> temuanRisikoList, LocalDate awal, LocalDate akhir);
+    
     /**
      * fungsi untuk mengambil semua temuan risiko berdasarkan
      * range tanggal awal dan tanggal akhir
@@ -63,6 +67,8 @@ public interface TemuanRisikoRestService {
             int idQa, LocalDate tanggalAwal, LocalDate tanggalAkhir);
 
     List<TemuanRisiko> getByKomponenPemeriksaan(KomponenPemeriksaan komponenPemeriksaan);
+
+    List<TemuanRisiko> getByDaftarKomponenPemeriksaan(List<KomponenPemeriksaan> komponenPemeriksaanList);
 
     List<TemuanRisiko> getHistoriTemuanRisikoKantorCabang(TugasPemeriksaan tugasPemeriksaan, Risiko risiko);
 

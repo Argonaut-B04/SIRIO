@@ -182,19 +182,30 @@ public class ReminderRestController {
         return new BaseResponse<>(200, "success", reminder.getReminderTemplate());
     }
 
+    @GetMapping(value = "/get-template-reminder-global")
+    private BaseResponse<ReminderTemplate> getTemplateGlobal(
+            Principal principal
+    ) {
+        employeeRestService.validateEmployeeExistByPrincipal(principal);
+        ReminderTemplate reminderTemplate = reminderTemplateRestService.getGlobal();
+        return new BaseResponse<>(200, "success", reminderTemplate);
+    }
+
     @PostMapping(value = "/atur-template-reminder", consumes = {"application/json"})
     private BaseResponse<String> aturReminderTemplate(
             @RequestBody ReminderTemplateDTO reminderTemplateDTO,
             Principal principal
     ) {
         Employee employee = employeeRestService.validateEmployeeExistByPrincipal(principal);
-        employeeRestService.validateRolePermission(employee, "tabel rekomendasi");
-
-        Reminder reminder = reminderRestService.validateExistById(reminderTemplateDTO.getIdReminder());
 
         String effectArea = reminderTemplateDTO.getEffectArea();
         String subject = reminderTemplateDTO.getSubject();
         String content = reminderTemplateDTO.getContent();
+
+        Reminder reminder = null;
+        if (reminderTemplateDTO.getIdReminder() != null) {
+            reminder = reminderRestService.validateExistById(reminderTemplateDTO.getIdReminder());
+        }
 
         ReminderTemplate reminderTemplate = reminderTemplateRestService.ambilAtauBuatTemplate(
                 new ReminderTemplate(

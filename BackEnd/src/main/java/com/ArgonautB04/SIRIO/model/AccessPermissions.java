@@ -71,7 +71,11 @@ public class AccessPermissions implements Serializable {
     @Column
     private Boolean aturTenggatWaktu = false;
 
-    @Column Boolean aksesDashboardStaff = false;
+    @Column
+    private Boolean aksesDashboardStaff = false;
+
+    @Column
+    private Boolean aksesDashboardKC = false;
 
     public AccessPermissions() {
     }
@@ -102,6 +106,15 @@ public class AccessPermissions implements Serializable {
         this.aksesPersetujuanBuktiPelaksanaan = true;
         this.aturTenggatWaktu = true;
         this.aksesDashboardStaff = true;
+        this.aksesDashboardKC = true;
+    }
+
+    public Boolean getAksesDashboardKC() {
+        return aksesDashboardKC;
+    }
+
+    public void setAksesDashboardKC(Boolean aksesDashboardKC) {
+        this.aksesDashboardKC = aksesDashboardKC;
     }
 
     public Boolean getAksesDashboardStaff() {

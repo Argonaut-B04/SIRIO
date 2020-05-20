@@ -15,66 +15,29 @@ class HasilPemeriksaanFormTolak extends React.Component {
         this.state = {
             feedback: "",
             redirect: false,
-            submitable: false,
-            errorFeedback: "",
-            daftarKomponen: "",
+            errorFeedback: ""
         };
 
         this.handleChange = this.handleChange.bind(this);
         this.inputDefinition = this.inputDefinition.bind(this);
         this.setRedirect = this.setRedirect.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.renderDataHasilPemeriksaan = this.renderDataHasilPemeriksaan.bind(this);
         this.submitButton = this.submitButton.bind(this);
     }
 
     componentDidMount() {
-        this.renderDataHasilPemeriksaan();
+        this.props.contentFinishLoading()
     }
 
-    async renderDataHasilPemeriksaan() {
-        const response = await HasilPemeriksaanService.getHasilPemeriksaan(this.props.location.state.id);
-
-        var daftarKomponen = <p>
-                {response.data.result.daftarKomponenPemeriksaan.map((komponen, index) =>
-                    <p className="text-center p-0 m-0">{index+1}. {komponen.risiko.nama} </p>
-                )}
-            </p>;
-
-        // var daftarKomponen = "";
-        // response.data.result.daftarKomponenPemeriksaan.map((komponen, index) => {
-        //     const indexX = index + 1;
-        //     const kata = "(" + indexX + ") " + komponen.risiko.nama + "; ";
-        //     daftarKomponen += "\n\n" + kata;
-        // });
-
-        this.setState({
-            daftarKomponen: daftarKomponen
-        })
-    }
-
-    componentDidUpdate(prevProps, prevState) {
-        var submitable = this.state.feedback !== null && this.state.feedback !== "";
-
-        submitable = submitable && this.validateFeedback();
-
-        if (this.state.submitable !== submitable) {
-            this.setState({
-                submitable: submitable
-            })
-        }
-    }
-
-    validateFeedback() {
-        var submitable = true;
-        var fokusFeedback = this.state.feedback;
-        var errorFeedback;
+    validateFeedback(fokusFeedback) {
+        var errorFeedback = "";
         var containLetter = /.*[a-zA-Z].*/;
-        if (!fokusFeedback.match(containLetter)) {
-            submitable = false;
+
+        if (fokusFeedback === null || fokusFeedback === "") {
+            errorFeedback = "";
+        } else if (!fokusFeedback.match(containLetter)) {
             errorFeedback = "Feedback perlu mengandung huruf";
         } else if (fokusFeedback.length > 500) {
-            submitable = false;
             errorFeedback = "Feedback maksimal 500 karakter";
         }
 
@@ -83,7 +46,6 @@ class HasilPemeriksaanFormTolak extends React.Component {
                 errorFeedback: errorFeedback
             })
         }
-        return submitable;
     }
 
     setRedirect = () => {
@@ -104,12 +66,14 @@ class HasilPemeriksaanFormTolak extends React.Component {
     };
 
     handleChange(event) {
+        const { name, value } = event.target;
         this.setState(
             {
-                [event.target.name]
-                    : event.target.value
+                [name]: value
             }
-        )
+        );
+
+        this.validateFeedback(value);
     }
 
     handleSubmit(event) {
@@ -120,9 +84,13 @@ class HasilPemeriksaanFormTolak extends React.Component {
             feedback: this.state.feedback
         };
 
-        if (this.state.submitable) {
+        if (this.state.feedback !== null && this.state.feedback !== "" && this.state.errorFeedback === "") {
+            this.props.contentStartLoading();
+            this.props.changeLoadingBody("Mengirim data ke server");
             HasilPemeriksaanService.setujuiHasilPemeriksaan(persetujuan)
                 .then(() => this.setRedirect());
+
+            this.props.contentFinishLoading();
         }
     }
 
@@ -137,6 +105,7 @@ class HasilPemeriksaanFormTolak extends React.Component {
                     handleChange: this.handleChange,
                     type: "textarea",
                     name: "feedback",
+                    required: true,
                     value: this.state.feedback,
                     placeholder: "Feedback hasil pemeriksaan",
                     validation: this.state.errorFeedback
@@ -146,18 +115,20 @@ class HasilPemeriksaanFormTolak extends React.Component {
     }
 
     submitButton() {
-        return (
-            <div>
-                {/*<SirioButton purple*/}
-                {/*             recommended={this.state.submitable}*/}
-                {/*             disabled={!this.state.submitable}*/}
-                {/*             classes="mx-1"*/}
-                {/*             onClick={(event)  => this.handleSubmit(event)}>*/}
-                {/*    Simpan*/}
-                {/*</SirioButton>*/}
+        var tombolSimpan =
+            <SirioButton
+                purple
+                disabled
+                classes="mx-1"
+            >
+                Simpan
+            </SirioButton>;
+        if (this.state.feedback !== null && this.state.feedback !== "" && this.state.errorFeedback === "") {
+            tombolSimpan =
                 <SirioConfirmButton
                     purple
-                    classes="m-1"
+                    recommended
+                    classes="mx-1"
                     modalTitle="Apakah anda yakin untuk menolak hasil pemeriksaan?"
                     onConfirm={this.handleSubmit}
                     customConfirmText="Ya, Tolak"
@@ -166,6 +137,10 @@ class HasilPemeriksaanFormTolak extends React.Component {
                 >
                     Simpan
                 </SirioConfirmButton>
+        }
+        return (
+            <div>
+                {tombolSimpan}
                 <NavLink to={{
                     pathname: "/hasil-pemeriksaan/detail",
                     state: {

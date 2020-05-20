@@ -5,14 +5,28 @@ import classes from './SirioDetailPage.module.css';
 class SirioDetailPage extends Component {
 
     render() {
-        const { noBack, title, data, subButton } = this.props;
+        const { noBack, title, link, data, subButton } = this.props;
         const { headerWrapper, logoImage, rowItem, toolkitWrapper } = classes;
+
+        var backer;
+        if (link) {
+            backer =
+                <a href={'/' + link}>
+                    <img src={process.env.PUBLIC_URL + '/backLogo.png'} className={logoImage} alt="Back Logo" data-tip="Kembali" />
+                </a>
+                ;
+        } else {
+            backer =
+                <div onClick={() => window.history.back()}>
+                    <img src={process.env.PUBLIC_URL + '/backLogo.png'} className={logoImage} alt="Back Logo" data-tip="Kembali" />
+                </div>
+                ;
+        }
+
         return (
             <div>
                 <div className={headerWrapper}>
-                    {!noBack && <div onClick={() => window.history.back()}>
-                        <img src={process.env.PUBLIC_URL + '/backLogo.png'} className={logoImage} alt="Back Logo" data-tip="Kembali" />
-                    </div>}
+                    {!noBack && backer}
                     <h2 className={classes.title}>
                         {title}
                     </h2>
