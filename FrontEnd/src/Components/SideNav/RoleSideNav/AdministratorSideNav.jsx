@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import SideNavFramework from '../SideNavFramework';
-import { halamanUtama, pengguna, kantorCabang } from '../../../Configuration/UrlConfig';
+import { pengguna, kantorCabang } from '../../../Configuration/UrlConfig';
 
 /**
  * Komponen SideNav untuk Administrator
@@ -12,7 +12,6 @@ export default class AdministratorSideNav extends Component {
                 {...this.props}
                 links={
                     [
-                        halamanUtama,
                         pengguna,
                         kantorCabang
                     ]

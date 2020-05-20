@@ -43,7 +43,10 @@ export default class DaftarTugasPemeriksaan extends React.Component {
     }
 
     render() {
-        if (AuthenticationService.getRole() !== "QA Officer Operational Risk" || AuthenticationService.getRole() !== "Super QA Officer Operational Risk") {
+        if (AuthenticationService.getRole() !== "Super QA Officer Operational Risk" &&
+            AuthenticationService.getRole() !== "QA Officer Operational Risk" &&
+            AuthenticationService.getRole() !== "QA Lead Operational Risk" &&
+            AuthenticationService.getRole() !== "Super User") {
             return (
                 <Redirect to={{
                     pathname: "/error",

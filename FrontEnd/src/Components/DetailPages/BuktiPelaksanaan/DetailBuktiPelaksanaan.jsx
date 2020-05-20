@@ -45,18 +45,25 @@ class DetailBuktiPelaksanaan extends React.Component {
     };
 
     async renderDataBuktiPelaksanaan() {
+        // Mengubah isi dari loader
+        this.props.contentStartLoading();
+        this.props.changeLoadingBody("Mengambil data dari server");
+
         const response = await BuktiPelaksanaanService.getBuktiPelaksanaan(this.props.location.state.id);
+
+        // Mengubah isi dari loader
+        this.props.changeLoadingBody("Menampilkan data");
 
         this.setState({
             buktiPelaksanaan: response.data.result
-        })
+        }, this.props.contentFinishLoading()) // Setelah jeda waktu, hentikan loader
     }
 
     data() {
         return {
-            "Keterangan:": this.state.buktiPelaksanaan.keterangan,
-            "Lampiran:": this.lampiranFormater(this.state.buktiPelaksanaan.lampiran),
-            "Feedback:": this.feedbackFormatter(this.state.buktiPelaksanaan.feedback)
+            "Keterangan :": this.state.buktiPelaksanaan.keterangan,
+            "Lampiran :": this.lampiranFormater(this.state.buktiPelaksanaan.lampiran),
+            "Feedback :": this.feedbackFormatter(this.state.buktiPelaksanaan.feedback)
         }
     }
 
@@ -73,6 +80,9 @@ class DetailBuktiPelaksanaan extends React.Component {
     }
 
     setuju() {
+        this.props.contentStartLoading();
+        this.props.changeLoadingBody("Mengirim data ke server");
+
         const buktiPelaksanaan = {
             status: 2,
             statusRekomendasi: 7
@@ -80,6 +90,8 @@ class DetailBuktiPelaksanaan extends React.Component {
         console.log(buktiPelaksanaan);
         BuktiPelaksanaanService.setStatusBukti(this.state.buktiPelaksanaan.id, buktiPelaksanaan)
             .then(() => this.setRedirect());
+
+        this.props.contentFinishLoading();
     }
 
     buttonUbah(id) {
@@ -172,7 +184,7 @@ class DetailBuktiPelaksanaan extends React.Component {
                 );
             }
         }
-    }
+    };
 
     render() {
         return (

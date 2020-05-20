@@ -41,10 +41,12 @@ import Reminder from "./pages/QAOfficer/Reminder";
 
 import FormTambahBukti from "./pages/BranchManager/TambahBuktiForm";
 import FormUbahBukti from "./pages/BranchManager/UbahBuktiForm";
-import FormTolakBukti from "./pages/QAOfficer/TolakBuktiForm"
+import FormTolakBukti from "./pages/QAOfficer/TolakBuktiForm";
 import DetailBuktiPelaksanaan from "./pages/BranchManager/BuktiPelaksanaanDetail";
-
 import DaftarBuktiPelaksanaan from "./pages/QAOfficer/DaftarBuktiPelaksanaan";
+
+import DashboardKantorCabang from "./pages/QAOfficer/DashboardKantorCabang";
+
 import Login from "./pages/login";
 import Logout from "./pages/logout";
 import AuthorizedRoute from './Components/Route/AuthorizedRoute';
@@ -61,10 +63,6 @@ import ErrorPage from './pages/Errors/Error';
 import Error404 from './pages/Errors/Error404';
 import TemplateReminder from './pages/QAOfficer/TemplateReminder';
 import DashboardStaff from './pages/Supervisor/DashboardStaff';
-import DemoFormPage from './pages/DemoFormPage';
-import DemoFormPage2 from './pages/DemoFormPage2';
-import DemoFormPage3 from './pages/DemoFormPage3';
-import DemoFormPage4 from './pages/DemoFormPage4';
 
 /**
  * Router utama yang memetakan url ke controller
@@ -78,11 +76,9 @@ class App extends React.Component {
 
         <Router>
           <Switch>
-            <Route exact path="/demo4" component={DemoFormPage4} />
-            <Route exact path="/demo3" component={DemoFormPage3} />
-            <Route exact path="/demo2" component={DemoFormPage2} />
-            <Route exact path="/demo" component={DemoFormPage} />
-            <Route exact path="/" component={MainPage} />
+            <Route exact path="/" component={Login} />
+            <Route exact path="/dashboard-kantor" component={DashboardKantorCabang} />
+
             <Route exact path="/rencana-pemeriksaan" component={DaftarRencanaPemeriksaan} />
             <Route exact path="/rencana-pemeriksaan/detail" component={DetailRencanaPemeriksaan} />
             <Route exact path="/rencana-pemeriksaan/tambah" component={FormTambahRencanaPemeriksaan} />

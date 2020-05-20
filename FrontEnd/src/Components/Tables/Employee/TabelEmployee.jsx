@@ -32,11 +32,18 @@ class TabelEmployee extends React.Component {
     }
 
     async renderRows() {
+        // Mengubah isi dari loader
+        this.props.contentStartLoading();
+        this.props.changeLoadingBody("Mengambil data dari server");
+
         const response = await EmployeeService.getEmployeeList();
+
+        // Mengubah isi dari loader
+        this.props.changeLoadingBody("Menampilkan data");
 
         this.setState({
             rowList: response.data.result
-        })
+        }, this.props.contentFinishLoading())
     }
 
     getButtonsFirst(cell, row) {

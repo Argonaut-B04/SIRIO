@@ -67,9 +67,12 @@ class HasilPemeriksaanFormTambah extends React.Component {
     };
 
     async renderData() {
+        this.props.contentStartLoading();
+        this.props.changeLoadingBody("Mengambil data histori temuan dari server");
         const responseTemuanRisiko = await TemuanRisikoService.getHistoriTemuanRisikoKantorCabang(this.props.location.state.id);
         const daftarHistoriTemuan = responseTemuanRisiko.data.result;
 
+        this.props.changeLoadingBody("Mengambil data risk level dari server");
         const responseRiskLevel = await RiskLevelService.getAll();
         const riskLevelList = responseRiskLevel.data.result.map(riskLevel => {
             return (
@@ -80,6 +83,7 @@ class HasilPemeriksaanFormTambah extends React.Component {
             )
         });
 
+        this.props.changeLoadingBody("Mengambil data risiko dari server");
         const responseRisiko = await RisikoService.getAll();
         const risikoKategori1 = responseRisiko.data.result
             .filter(risiko => risiko.kategori === 1)
@@ -112,6 +116,7 @@ class HasilPemeriksaanFormTambah extends React.Component {
                 )
             });
 
+        this.props.changeLoadingBody("Mengambil data komponen pemeriksaan dari server");
         const responseKomponen = await RisikoService.getAllChild();
         const daftarKomponen = responseKomponen.data.result
             .map(risiko => {
@@ -133,9 +138,19 @@ class HasilPemeriksaanFormTambah extends React.Component {
                                 keterangan: ""
                             }
                         ],
+                        daftarErrorTemuanRisiko:[
+                            {
+                                errorTemuanRisiko: ""
+                            }
+                        ],
                         daftarRekomendasi:[
                             {
                                 keterangan: ""
+                            }
+                        ],
+                        daftarErrorRekomendasi:[
+                            {
+                                errorRekomendasi: ""
                             }
                         ]
                     }
@@ -149,7 +164,7 @@ class HasilPemeriksaanFormTambah extends React.Component {
             daftarRisikoKategori2: risikoKategori2,
             daftarRisikoKategori3: risikoKategori3,
             daftarKomponenPemeriksaan: daftarKomponen
-        })
+        }, this.props.contentFinishLoading())
     }
 
     getSOPButton(indexKomponen) {
@@ -215,6 +230,7 @@ class HasilPemeriksaanFormTambah extends React.Component {
                     handleChange: (event) => this.handleChangeKomponen(event, indexKomponen),
                     type: "number",
                     name: "jumlahPopulasi",
+                    required: true,
                     min: 0,
                     value: daftarKomponenPemeriksaan[indexKomponen].jumlahPopulasi,
                     errormessage: daftarKomponenPemeriksaan[indexKomponen].errorJumlahPopulasi,
@@ -224,6 +240,7 @@ class HasilPemeriksaanFormTambah extends React.Component {
                     handleChange: (event) => this.handleChangeKomponen(event, indexKomponen),
                     type: "number",
                     name: "jumlahSampel",
+                    required: true,
                     min: 0,
                     value: daftarKomponenPemeriksaan[indexKomponen].jumlahSampel,
                     errormessage: daftarKomponenPemeriksaan[indexKomponen].errorJumlahSampel,
@@ -233,6 +250,7 @@ class HasilPemeriksaanFormTambah extends React.Component {
                     handleChange: (event) => this.handleChangeKomponen(event, indexKomponen),
                     type: "number",
                     name: "jumlahSampelError",
+                    required: true,
                     min: 0,
                     value: daftarKomponenPemeriksaan[indexKomponen].jumlahSampelError,
                     errormessage: daftarKomponenPemeriksaan[indexKomponen].errorJumlahSampelError,
@@ -242,6 +260,7 @@ class HasilPemeriksaanFormTambah extends React.Component {
                     handleChange: (event) => this.handleChangeKomponen(event, indexKomponen),
                     type: "textarea",
                     name: "keteranganSampel",
+                    required: true,
                     value: daftarKomponenPemeriksaan[indexKomponen].keteranganSampel,
                     errormessage: daftarKomponenPemeriksaan[indexKomponen].errorKeteranganSampel,
                     placeholder: "Keterangan sampel"
@@ -250,6 +269,7 @@ class HasilPemeriksaanFormTambah extends React.Component {
                     handleChange: (name, event) => this.handleSelectChangeKomponen(name, event, indexKomponen),
                     type: "select",
                     name: "idRiskLevel",
+                    required: true,
                     value: daftarKomponenPemeriksaan[indexKomponen].idRiskLevel,
                     optionList: riskLevelOptionList
                 }, {
@@ -437,16 +457,19 @@ class HasilPemeriksaanFormTambah extends React.Component {
 
         switch (name) {
             case "jumlahSampel":
-                this.validateJumlahSampel(value, indexKomponen);
+                this.validateJumlah(value, array[indexKomponen].jumlahPopulasi,
+                    array[indexKomponen].jumlahSampelError, indexKomponen);
                 break;
             case "keteranganSampel":
                 this.validateKeteranganSampel(value, indexKomponen);
                 break;
             case "jumlahPopulasi":
-                this.validateJumlahPopulasi(value, indexKomponen);
+                this.validateJumlah(array[indexKomponen].jumlahSampel, value,
+                    array[indexKomponen].jumlahSampelError, indexKomponen);
                 break;
             case "jumlahSampelError":
-                this.validateJumlahSampelError(value, indexKomponen);
+                this.validateJumlah(array[indexKomponen].jumlahSampel,
+                    array[indexKomponen].jumlahPopulasi, value, indexKomponen);
                 break;
         }
     }
@@ -538,8 +561,12 @@ class HasilPemeriksaanFormTambah extends React.Component {
             })
         };
         if ((status === 1 && this.submitableDraft()) || (status === 2 && this.submitable())) {
+            this.props.contentStartLoading();
+            this.props.changeLoadingBody("Mengirim data ke server");
             HasilPemeriksaanService.addHasilPemeriksaan(hasilPemeriksaan)
                 .then(() => this.setRedirect());
+
+            this.props.contentFinishLoading();
         }
     }
 
@@ -583,6 +610,8 @@ class HasilPemeriksaanFormTambah extends React.Component {
             errorKeteranganSampel = "";
         } else if (!fokusKeteranganSampel.match(letter)) {
             errorKeteranganSampel = "Ketarangan perlu mengandung huruf";
+        } else if (fokusKeteranganSampel.length > 500) {
+            errorKeteranganSampel = "Ketarangan maksimal 500 karakter";
         }
 
         array[indexKomponen]["errorKeteranganSampel"] = errorKeteranganSampel;
@@ -591,56 +620,94 @@ class HasilPemeriksaanFormTambah extends React.Component {
         });
     }
 
-    validateJumlahPopulasi(fokusJumlahPopulasi, indexKomponen) {
-        var errorJumlahPopulasi = "";
+    validateJumlah(fokusJumlahSampel, fokusJumlahPopulasi, fokusJumlahSampelError, indexKomponen) {
         const number = /^[0-9]*$/;
         const array = this.state.daftarKomponenPemeriksaan;
-
-        if (fokusJumlahPopulasi === null || fokusJumlahPopulasi === "") {
-            errorJumlahPopulasi = "";
-        } else if (!fokusJumlahPopulasi.match(number) || parseInt(fokusJumlahPopulasi) < 0) {
-            errorJumlahPopulasi = "Jumlah Populasi berupa angka dan tidak boleh negatif";
-        }
-
-        array[indexKomponen]["errorJumlahPopulasi"] = errorJumlahPopulasi;
-        this.setState({
-            daftarKomponenPemeriksaan: array
-        });
-    }
-
-    validateJumlahSampel(fokusJumlahSampel, indexKomponen) {
-        var errorJumlahSampel = "";
-        const number = /^[0-9]*$/;
-        const array = this.state.daftarKomponenPemeriksaan;
+        var errorJumlahPopulasi = this.state.daftarKomponenPemeriksaan[indexKomponen].errorJumlahPopulasi;
+        var errorJumlahSampel = this.state.daftarKomponenPemeriksaan[indexKomponen].errorJumlahSampel;
+        var errorJumlahSampelError = this.state.daftarKomponenPemeriksaan[indexKomponen].errorJumlahSampelError;
 
         if (fokusJumlahSampel === null || fokusJumlahSampel === "") {
             errorJumlahSampel = "";
         } else if (!fokusJumlahSampel.match(number) || parseInt(fokusJumlahSampel) < 0) {
             errorJumlahSampel = "Jumlah Sampel berupa angka dan tidak boleh negatif";
+        } else if (parseInt(fokusJumlahSampel) > parseInt(fokusJumlahPopulasi)) {
+            errorJumlahSampel = "Jumlah Sampel tidak boleh lebih besar dari Jumlah Populasi";
+        } else if (parseInt(fokusJumlahSampel) < parseInt(fokusJumlahSampelError)) {
+            errorJumlahSampel = "Jumlah Sampel tidak boleh lebih kecil dari Jumlah Sampel Error";
+        } else {
+            errorJumlahSampel = "";
         }
 
-        array[indexKomponen]["errorJumlahSampel"] = errorJumlahSampel;
-        this.setState({
-            daftarKomponenPemeriksaan: array
-        });
-    }
-
-    validateJumlahSampelError(fokusJumlahSampelError, indexKomponen) {
-        var errorJumlahSampelError = "";
-        const number = /^[0-9]*$/;
-        const array = this.state.daftarKomponenPemeriksaan;
+        if (fokusJumlahPopulasi === null || fokusJumlahPopulasi === "") {
+            errorJumlahPopulasi = "";
+        } else if (!fokusJumlahPopulasi.match(number) || parseInt(fokusJumlahPopulasi) < 0) {
+            errorJumlahPopulasi = "Jumlah Populasi berupa angka dan tidak boleh negatif";
+        } else if (parseInt(fokusJumlahPopulasi) < parseInt(fokusJumlahSampel)) {
+            errorJumlahPopulasi = "Jumlah Populasi tidak boleh lebih kecil dari Jumlah Sampel";
+        } else if (parseInt(fokusJumlahPopulasi) < parseInt(fokusJumlahSampelError)) {
+            errorJumlahPopulasi = "Jumlah Populasi tidak boleh lebih kecil dari Jumlah Sampel Error";
+        } else {
+            errorJumlahPopulasi = "";
+        }
 
         if (fokusJumlahSampelError === null || fokusJumlahSampelError === "") {
             errorJumlahSampelError = "";
         } else if (!fokusJumlahSampelError.match(number) || parseInt(fokusJumlahSampelError) < 0) {
             errorJumlahSampelError = "Jumlah Sampel Error berupa angka dan tidak boleh negatif";
+        } else if (parseInt(fokusJumlahSampelError) > parseInt(fokusJumlahPopulasi)) {
+            errorJumlahSampelError = "Jumlah Sampel Error tidak boleh lebih besar dari Jumlah Populasi";
+        } else if (parseInt(fokusJumlahSampelError) > parseInt(fokusJumlahSampel)) {
+            errorJumlahSampelError = "Jumlah Sampel Error tidak boleh lebih besar dari Jumlah Sampel";
+        } else {
+            errorJumlahSampelError = "";
         }
 
+        array[indexKomponen]["errorJumlahSampel"] = errorJumlahSampel;
+        array[indexKomponen]["errorJumlahPopulasi"] = errorJumlahPopulasi;
         array[indexKomponen]["errorJumlahSampelError"] = errorJumlahSampelError;
         this.setState({
             daftarKomponenPemeriksaan: array
         });
     }
+
+    // validateRekomendasi(fokusRekomendasi, indexKomponen, indexRekomendasi) {
+    //     var errorRekomendasi = "";
+    //     const letter = /.*[a-zA-Z].*/;
+    //     const array = this.state.daftarKomponenPemeriksaan;
+    //
+    //     if (fokusRekomendasi === null || fokusRekomendasi === "") {
+    //         errorRekomendasi = "";
+    //     } else if (!fokusRekomendasi.match(letter)) {
+    //         errorRekomendasi = "Rekomendasi perlu mengandung huruf";
+    //     } else if (fokusRekomendasi.length > 500) {
+    //         errorRekomendasi = "Rekomendasi maksimal 500 karakter";
+    //     }
+    //
+    //     array[indexKomponen]["daftarErrorRekomendasi"][indexRekomendasi]["errorRekomendasi"] = errorRekomendasi;
+    //     this.setState({
+    //         daftarKomponenPemeriksaan: array
+    //     });
+    // }
+
+    // validateTemuanRisiko(fokusTemuanRisiko, indexKomponen, indexTemuanRisiko) {
+    //     var errorTemuanRisiko = "";
+    //     const letter = /.*[a-zA-Z].*/;
+    //     const array = this.state.daftarKomponenPemeriksaan;
+    //
+    //     if (fokusTemuanRisiko === null || fokusTemuanRisiko === "") {
+    //         errorTemuanRisiko = "";
+    //     } else if (!fokusTemuanRisiko.match(letter)) {
+    //         errorTemuanRisiko = "Temuan Risiko perlu mengandung huruf";
+    //     } else if (fokusTemuanRisiko.length > 500) {
+    //         errorTemuanRisiko = "Temuan Risiko maksimal 500 karakter";
+    //     }
+    //
+    //     array[indexKomponen]["daftarErrorTemuanRisiko"][indexTemuanRisiko]["errorTemuanRisiko"] = errorTemuanRisiko;
+    //     this.setState({
+    //         daftarKomponenPemeriksaan: array
+    //     });
+    // }
 
     submitButton() {
         var tombolSimpan =
@@ -648,6 +715,7 @@ class HasilPemeriksaanFormTambah extends React.Component {
                 purple
                 disabled
                 classes="mx-1"
+                tooltip={"Isi semua kolom bertanda bintang pada setiap komponen pemeriksaan"}
             >
                 Simpan
             </SirioButton>;
@@ -674,7 +742,6 @@ class HasilPemeriksaanFormTambah extends React.Component {
             tombolDraft =
                 <SirioButton
                     purple
-                    recommended
                     classes="mx-1"
                     onClick={(event)  => this.handleSubmit(event, 1)}
                 >

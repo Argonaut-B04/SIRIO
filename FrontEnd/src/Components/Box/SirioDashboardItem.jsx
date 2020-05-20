@@ -5,9 +5,9 @@ export class SirioDashboardItem extends Component {
     render() {
 
         return (
-            <div className={[classes.box, "col-6"].join(" ")}>
+            <div className={[classes.box, "col"].join(" ")}>
                 <h3 className={classes.value}>{this.props.data.value}</h3>
-                <h5>{this.props.data.title}</h5>
+                <h6>{this.props.data.title}</h6>
             </div>
         )
     }

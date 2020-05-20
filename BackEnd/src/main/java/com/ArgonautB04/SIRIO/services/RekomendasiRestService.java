@@ -5,7 +5,6 @@ import com.ArgonautB04.SIRIO.model.KomponenPemeriksaan;
 import com.ArgonautB04.SIRIO.model.Rekomendasi;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,10 +17,15 @@ public interface RekomendasiRestService {
 
     List<Rekomendasi> getAll();
 
+    List<Integer> getRekomendasiPerMonth(List<Rekomendasi> rekomendasiList);
+
+    List<Integer> getRekomendasiPerMonthFiltered(List<Rekomendasi> rekomendasiList, LocalDate awal, LocalDate akhir);
+
     /**
      * fungsi untuk mengambil semua rekomendasi
      * berdasarkan status sedang dijalankan
      * dan selesai
+     *
      * @return list rekomendasi dengan
      * status tertentu
      */
@@ -30,6 +34,7 @@ public interface RekomendasiRestService {
     /**
      * fungsi untuk mengambil semua rekomendasi berdasarkan
      * range tanggal awal dan tanggal akhir
+     *
      * @param tanggalAwal
      * @param tanggalAkhir
      * @return list rekomendasi
@@ -39,6 +44,7 @@ public interface RekomendasiRestService {
     /**
      * fungsi untuk mengambil list rekomendasi
      * berdasarkan pembuat
+     *
      * @param idQa
      * @return list rekomendasi dengan pembuat tertentu
      */
@@ -47,6 +53,7 @@ public interface RekomendasiRestService {
     /**
      * fungsi untuk mengambil list rekomendasi
      * berdasarkan pembuat dan range tanggal tertentu
+     *
      * @param idQa
      * @param tanggalAwal
      * @param tanggalAkhir
@@ -58,6 +65,7 @@ public interface RekomendasiRestService {
     /**
      * fungsi untuk mengelompokkan rekomendasi
      * per-bulannya berdasarkan range waktu tertentu
+     *
      * @param rekomendasiList
      * @param tanggalAwal
      * @param tanggalAkhir
@@ -70,6 +78,7 @@ public interface RekomendasiRestService {
     /**
      * fungsi untuk mengambil rekomendasi yang diimplementasi
      * baik pada range waktu tertentu ataupun semua
+     *
      * @param tanggalAwal
      * @param tanggalAkhir
      * @return list rekomendasi yang diimplementasi
@@ -80,6 +89,7 @@ public interface RekomendasiRestService {
     /**
      * fungsi untuk mengambil rekomendasi yang diimplementasi
      * berdasarkan pembuatnya
+     *
      * @param idQa
      * @param tanggalAwal
      * @param tanggalAkhir
@@ -92,6 +102,7 @@ public interface RekomendasiRestService {
     /**
      * fungsi untuk mengambil rekomendasi yang overdue
      * baik pada range waktu tertentu ataupun semua
+     *
      * @param tanggalAwal
      * @param tanggalAkhir
      * @return list rekomendasi yang overdue
@@ -102,6 +113,7 @@ public interface RekomendasiRestService {
     /**
      * fungsi untuk mengambil rekomendasi yang overdue
      * berdasarkan pembuatnya
+     *
      * @param idQa
      * @param tanggalAwal
      * @param tanggalAkhir
@@ -115,6 +127,7 @@ public interface RekomendasiRestService {
      * fungsi untuk mengambil rekomendasi yang
      * belum diimplementasi
      * baik pada range waktu tertentu ataupun semua
+     *
      * @param tanggalAwal
      * @param tanggalAkhir
      * @return list rekomendasi yang
@@ -127,6 +140,7 @@ public interface RekomendasiRestService {
      * fungsi untuk mengambil rekomendasi yang
      * belum diimplementasi
      * berdasarkan pembuatnya
+     *
      * @param idQa
      * @param tanggalAwal
      * @param tanggalAkhir
@@ -139,6 +153,7 @@ public interface RekomendasiRestService {
     /**
      * fungsi untuk mengambil list bulan
      * pada range tanggal tertentu
+     *
      * @param tanggalAwal
      * @param tanggalAkhir
      * @return list bulan pada range
@@ -147,8 +162,11 @@ public interface RekomendasiRestService {
     List<String> getListMonth(LocalDate tanggalAwal, LocalDate tanggalAkhir);
 
     List<Rekomendasi> getByKomponenPemeriksaan(KomponenPemeriksaan komponenPemeriksaan);
-  
+
     List<Rekomendasi> getByDaftarKomponenPemeriksaan(List<KomponenPemeriksaan> komponenPemeriksaanList);
+
+    List<Rekomendasi> getByDaftarKomponenPemeriksaanAndTenggatWaktu(
+            List<KomponenPemeriksaan> komponenPemeriksaanList, LocalDate tenggatWaktu, LocalDate tenggatWaktu2);
 
     void ubahRekomendasi(int idRekomendasi, Rekomendasi rekomendasi);
 
