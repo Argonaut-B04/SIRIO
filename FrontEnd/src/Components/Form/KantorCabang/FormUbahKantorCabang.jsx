@@ -41,6 +41,8 @@ class FormUbahKantorCabang extends React.Component {
 
     validateKantor(fokusNama) {
         var errorNama = "";
+
+        // eslint-disable-next-line
         var symbols = /[-!$%@#^&*()\\_+|~=`{}\[\]:";'<>?,.\/]/;
         if (fokusNama === null || fokusNama === "") {
             errorNama = "Nama kantor harus diisi";
@@ -58,6 +60,8 @@ class FormUbahKantorCabang extends React.Component {
 
     validateArea(fokusArea) {
         var errorArea = "";
+
+        // eslint-disable-next-line
         var symbols = /[-!$%@#^&*()\\_+|~=`{}\[\]:";'<>?,.\/]/;
         if(fokusArea === null || fokusArea === ""){
             errorArea = "Area harus diisi";
@@ -76,6 +80,8 @@ class FormUbahKantorCabang extends React.Component {
 
     validateRegional(fokusReg) {
         var errorReg = "";
+
+        // eslint-disable-next-line
         var symbols = /[-!$%@#^&*()\\_+|~=`{}\[\]:";'<>?,.\/]/;
         if(fokusReg === null || fokusReg === ""){
             errorReg= "Regional harus diisi";
