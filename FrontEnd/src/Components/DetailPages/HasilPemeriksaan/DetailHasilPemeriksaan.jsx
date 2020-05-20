@@ -72,8 +72,11 @@ class DetailHasilPemeriksaan extends React.Component {
     };
 
     async renderDataHasilPemeriksaan() {
+        this.props.contentStartLoading();
+        this.props.changeLoadingBody("Mengambil data dari server");
         const response = await HasilPemeriksaanService.getHasilPemeriksaan(this.props.location.state.id);
 
+        this.props.changeLoadingBody("Menampilkan data");
         this.setState({
             hasilPemeriksaan: response.data.result,
             dataGeneral: {
@@ -95,9 +98,9 @@ class DetailHasilPemeriksaan extends React.Component {
                         "Deskripsi": komponen.risiko.deskripsi,
                         "Metodologi": komponen.risiko.metodologi,
                         "Ketentuan Sampel": komponen.risiko.ketentuanSampel ? komponen.risiko.ketentuanSampel : "N/A",
-                        "Jumlah Populasi": komponen.jumlahPopulasi ? komponen.jumlahPopulasi : "Belum Diisi",
-                        "Jumlah Sampel": komponen.jumlahSampel ? komponen.jumlahSampel : "Belum Diisi",
-                        "Jumlah Sampel Error": komponen.jumlahSampelError ? komponen.jumlahSampelError : "Belum Diisi",
+                        "Jumlah Populasi": (komponen.jumlahPopulasi || komponen.jumlahPopulasi === 0) ? komponen.jumlahPopulasi : "Belum Diisi",
+                        "Jumlah Sampel": (komponen.jumlahPopulasi || komponen.jumlahPopulasi === 0) ? komponen.jumlahSampel : "Belum Diisi",
+                        "Jumlah Sampel Error": (komponen.jumlahPopulasi || komponen.jumlahPopulasi === 0) ? komponen.jumlahSampelError : "Belum Diisi",
                         "Keterangan Sampel": komponen.keteranganSampel ? komponen.keteranganSampel : "Belum Diisi",
                         "Risk Level": komponen.namaRiskLevel ? komponen.namaRiskLevel : "Belum Diisi",
                         "Hasil Temuan": !(komponen.daftarTemuanRisikoTerdaftar.length > 0) ? "-" :
@@ -115,7 +118,7 @@ class DetailHasilPemeriksaan extends React.Component {
                     }
                 )
             })
-        })
+        }, this.props.contentFinishLoading())
     }
 
     reduceRiskScore(deductionPoint) {
@@ -137,8 +140,13 @@ class DetailHasilPemeriksaan extends React.Component {
         const hasilPemeriksaan = {
             id: id
         };
+
+        this.props.contentStartLoading();
+        this.props.changeLoadingBody("Mengirim data ke server");
         HasilPemeriksaanService.deleteHasilPemeriksaan(hasilPemeriksaan)
             .then(() => this.setRedirectHapus());
+
+        this.props.contentFinishLoading();
     }
 
     setuju(id) {
@@ -146,8 +154,13 @@ class DetailHasilPemeriksaan extends React.Component {
             id: id,
             status: "4",
         };
+
+        this.props.contentStartLoading();
+        this.props.changeLoadingBody("Mengirim data ke server");
         HasilPemeriksaanService.setujuiHasilPemeriksaan(persetujuan)
             .then(() => this.setRedirectSetuju());
+
+        this.props.contentFinishLoading();
     }
 
     buttonUbah(id, idTugasPemeriksaan, status) {
@@ -162,6 +175,8 @@ class DetailHasilPemeriksaan extends React.Component {
                 }}>
                     <SirioButton
                         purple
+                        recommended
+                        classes = "mb-5 mx-1"
                     >
                         Ubah
                     </SirioButton>
@@ -177,6 +192,7 @@ class DetailHasilPemeriksaan extends React.Component {
             return (
                 <SirioWarningButton
                     red
+                    classes = "mb-5 mx-1"
                     modalTitle="Konfirmasi Penghapusan"
                     modalDesc="Apakah anda yakin untuk menghapus hasil pemeriksaan?"
                     onConfirm={() => this.hapus(id)}
@@ -196,7 +212,8 @@ class DetailHasilPemeriksaan extends React.Component {
             return (
                 <SirioConfirmButton
                     purple
-                    classes="m-1"
+                    recommended
+                    classes="mb-5 mx-1"
                     modalTitle="Apakah anda yakin untuk menyetujui hasil pemeriksaan?"
                     onConfirm={() => this.setuju(id)}
                     customConfirmText="Ya, Setujui"
@@ -221,6 +238,7 @@ class DetailHasilPemeriksaan extends React.Component {
                 }}>
                     <SirioButton
                         purple
+                        classes = "mb-5 mx-1"
                     >
                         Tolak
                     </SirioButton>
