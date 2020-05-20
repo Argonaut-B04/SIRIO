@@ -17,7 +17,6 @@ class FormTambahBukti extends React.Component {
             lampiran: "",
             id: "",
             ketRekomendasi: "",
-            submitable: false,
             redirect: false
         };
 
