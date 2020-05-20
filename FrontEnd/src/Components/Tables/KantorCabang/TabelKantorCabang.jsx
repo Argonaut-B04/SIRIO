@@ -35,11 +35,16 @@ class TabelKantorCabang extends React.Component {
     }
 
     async renderRows() {
+        this.props.contentStartLoading();
+        this.props.changeLoadingBody("Mengambil data dari server");
+
         const response = await KantorCabangService.getKantorCabangList();
+
+        this.props.changeLoadingBody("Menampilkan data");
 
         this.setState({
             rowList: response.data.result
-        })
+        }, this.props.contentFinishLoading())
     }
 
     auditFormatter(kunjunganAudit){

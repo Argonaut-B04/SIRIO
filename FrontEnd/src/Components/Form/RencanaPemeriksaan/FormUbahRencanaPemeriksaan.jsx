@@ -68,6 +68,9 @@ class FormUbahRencana extends React.Component {
     };
 
     async renderDataRencana() {
+        this.props.contentStartLoading();
+        this.props.changeLoadingBody("Mengambil data dari server");
+
         const responseEmployee = await EmployeeService.getAllQAOfficer();
 
         const employeeOptionList = responseEmployee.data.result.map(employee => {
@@ -100,6 +103,8 @@ class FormUbahRencana extends React.Component {
             result.daftarTugasPemeriksaan[i].tanggalSelesai = tanggalSelesai.split(" ")[0];
         }
         
+        this.props.changeLoadingBody("Menampilkan data");
+
         this.setState({
             employeeOptionList: employeeOptionList,
             kantorOptionList: kantorOptionList,
@@ -110,13 +115,18 @@ class FormUbahRencana extends React.Component {
             daftarTugasPemeriksaan: result.daftarTugasPemeriksaan,
             errorLink: "",
             errorNama: ""
-        })
+        }, this.props.contentFinishLoading())
+
     }
 
     handleSelectChange(event, index) {
         const daftarTugasPemeriksaan = this.state.daftarTugasPemeriksaan
         daftarTugasPemeriksaan[index][event.target.name] = event.target.value;
 
+        if (event.target.name === "tanggalMulai") {
+            daftarTugasPemeriksaan[index].tanggalSelesai = ""
+        }
+        
         this.setState(
             {
                 daftarTugasPemeriksaan: daftarTugasPemeriksaan
@@ -127,7 +137,6 @@ class FormUbahRencana extends React.Component {
     // Fungsi untuk mengubah state ketika isi dropdown diubah
     // Fungsi ini wajib ada jika membuat field tipe select
     handleMultipleSelectChange(name, target, index) {
-        console.log(index);
         const formList = this.state.daftarTugasPemeriksaan;
         formList[index][name] = target.value;
         this.setState(
@@ -136,7 +145,7 @@ class FormUbahRencana extends React.Component {
             }
         )
     }
-
+    
     validateNama(fokusNama) {
         var errorNama = "";
         var letterOnly = /^[a-zA-Z\s]*$/;
@@ -181,12 +190,13 @@ class FormUbahRencana extends React.Component {
     submitableSimpan() {
         var submitable = false;
         if(this.state.daftarTugasPemeriksaan.length > 0){
+
             this.state.daftarTugasPemeriksaan.map(tugas => {
                 submitable = 
-                    (tugas.kantorCabang !== null && tugas.kantorCabang !== "") &&
-                    (tugas.idQA !== null && tugas.idQA !== "") &&
-                    (tugas.tanggalMulai !== null && tugas.tanggalMulai !== "") &&
-                    (tugas.tanggalSelesai !== null && tugas.tanggalSelesai !== "");
+                (tugas.kantorCabang !== null && tugas.kantorCabang !== "" && tugas.kantorCabang !== undefined) &&
+                (tugas.idQA !== null && tugas.idQA !== "" && tugas.idQA !== undefined) &&
+                (tugas.tanggalMulai !== null && tugas.tanggalMulai !== ""  && tugas.tanggalMulai !== undefined) &&
+                (tugas.tanggalSelesai !== null && tugas.tanggalSelesai !== ""  && tugas.tanggalSelesai !== undefined);
                 return null
             });        
         }
@@ -217,6 +227,9 @@ class FormUbahRencana extends React.Component {
     // Fungsi yang akan dijalankan ketika user submit
     // Umumnya akan digunakan untuk memanggil service komunikasi ke backend
     async handleSubmit(event, nama) {
+        this.props.contentStartLoading();
+        this.props.changeLoadingBody("Mengirim data ke server");
+
         event.preventDefault();
         if(this.submitable()){
             if(nama === "simpan" && this.submitableSimpan()){
@@ -245,6 +258,7 @@ class FormUbahRencana extends React.Component {
             
         }
 
+        this.props.contentFinishLoading()
     }
 
     fullComponentInside() {
@@ -301,7 +315,7 @@ class FormUbahRencana extends React.Component {
 
     tambahTugasButton = (
         <SirioButton blue recommended
-            classes="mr-3"
+            classes="my-3"
             onClick={() => this.addForm()}
             type="button"
         >
@@ -347,6 +361,8 @@ class FormUbahRencana extends React.Component {
                     required: true,
                     validation: this.state.errorTM,
                     min: this.getMin(index),
+                    disabled: this.state.daftarTugasPemeriksaan[index].tanggalMulai === "",
+                    required: this.state.daftarTugasPemeriksaan[index].tanggalMulai !== "",
                     name: "tanggalSelesai",
                     value: this.state.daftarTugasPemeriksaan[index].tanggalSelesai
                 }
@@ -422,7 +438,6 @@ class FormUbahRencana extends React.Component {
     }
 
     deleteItem(array, index) {
-        console.log("hapus tugas 1")
         const toReturn = array.slice(0, index).concat(array.slice(index + 1, array.length));
         TugasPemeriksaanService.deleteTugas(array[index])
         return toReturn;

@@ -30,8 +30,6 @@ class KantorCabangService {
     }
 
     async editKantorCabang(data) {
-        console.log(data);
-        console.log(SirioAxiosBase.BASEURL + '/KantorCabang/ubah');
         return this.axiosInstance.post(SirioAxiosBase.BASEURL + '/KantorCabang/ubah', data)
     }
 

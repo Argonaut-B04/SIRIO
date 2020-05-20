@@ -54,7 +54,12 @@ class DetailKantorCabang extends React.Component {
     }
 
     async renderDataKantor() {
+        this.props.contentStartLoading();
+        this.props.changeLoadingBody("Mengambil data dari server");
+
         const response = await KantorCabangService.getKantorCabangDetail(this.props.location.state.id);
+
+        this.props.changeLoadingBody("Menampilkan data");
 
         this.setState({
            kantorCabang: response.data.result,
@@ -66,15 +71,21 @@ class DetailKantorCabang extends React.Component {
             "Status          :": response.data.result.status,
             "Kunjungan Audit :": this.auditFormatter(response.data.result.kunjunganAudit)
         }
-        })
+        }, this.props.contentFinishLoading())
     }
 
     hapus(id) {
+        this.props.contentStartLoading();
+        this.props.changeLoadingBody("Mengirim data ke server"); 
+
         const kantorCabang = {
             id: id
         };
+       
         KantorCabangService.deleteKantorCabang(kantorCabang)
             .then(() => this.setRedirect());
+
+        this.props.contentFinishLoading()
     }
    
     subButton() {

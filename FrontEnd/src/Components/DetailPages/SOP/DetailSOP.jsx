@@ -44,8 +44,13 @@ class DetailSOP extends React.Component {
     };
 
     async renderDataSOP() {
+        this.props.contentStartLoading();
+        this.props.changeLoadingBody("Mengambil data dari server");
+
         const response = await SopService.getSOPDetail(this.props.location.state.id);
         
+        this.props.changeLoadingBody("Menampilkan data");
+
         this.setState({
            sop: response.data.result,
            dataGeneral: {
@@ -53,15 +58,20 @@ class DetailSOP extends React.Component {
             "Kategori SOP    :": response.data.result.kategori,
             "Link SOP        :": response.data.result.linkDokumen,
          }
-        })
+        }, this.props.contentFinishLoading())
     }
 
     hapus(id) {
+        this.props.contentStartLoading();
+        this.props.changeLoadingBody("Mengirim data ke server");
+
         const sop = {
             id: id
         };
         SopService.deleteSOP(sop)
             .then(() => this.setRedirect());
+        
+        this.props.contentFinishLoading()
     }
    
     subButton(status) {

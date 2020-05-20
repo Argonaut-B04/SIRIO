@@ -6,6 +6,7 @@ import RencanaPemeriksaanService from '../../../Services/RencanaPemeriksaanServi
 import SirioMessageButton from "../../Button/ActionButton/SirioMessageButton";
 import { NavLink } from 'react-router-dom';
 import { withRouter } from 'react-router-dom';
+import AuthenticationService from '../../../Services/AuthenticationService';
 
 class TabelRencanaPemeriksaan extends React.Component {
 
@@ -18,18 +19,30 @@ class TabelRencanaPemeriksaan extends React.Component {
         }
 
         this.renderRows = this.renderRows.bind(this);
+        this.endNotification = this.endNotification.bind(this);
     }
 
     componentDidMount() {
         this.renderRows();
     }
 
+    endNotification() {
+        this.setState({
+            openNotification: false
+        })
+    }
+
     async renderRows() {
+        this.props.contentStartLoading();
+        this.props.changeLoadingBody("Mengambil data dari server");
+
         const response = await RencanaPemeriksaanService.getRencanaPemeriksaanList();
+        this.props.changeLoadingBody("Menampilkan data");
+
         this.setState({
             rowList: response.data.result
-        })
-        console.log(response.data.result)
+        }, this.props.contentFinishLoading())
+        
     }
 
     statusFormatter(cell) {
@@ -206,7 +219,7 @@ class TabelRencanaPemeriksaan extends React.Component {
             <SirioMessageButton
                 show
                 classes="d-none"
-                modalTitle="Rencana Pemeriksaan telah Selesai"
+                modalTitle="Rencana Pemeriksaan berhasil diselesaikan"
                 customConfirmText="Tutup"
                 onClick={this.endNotification}
             />

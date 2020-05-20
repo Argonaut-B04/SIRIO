@@ -120,6 +120,8 @@ class FormUbahKantorCabang extends React.Component {
     };
 
     async renderDataKantor() {
+        this.props.contentStartLoading();
+        this.props.changeLoadingBody("Mengambil data dari server");
 
         const responseEmployee = await EmployeeService.getAllBM();
 
@@ -134,6 +136,8 @@ class FormUbahKantorCabang extends React.Component {
         
         const response = await KantorCabangService.getKantorCabangDetail(this.props.location.state.id);
 
+        this.props.changeLoadingBody("Menampilkan data");
+        
         this.setState({
             employeeOptionList: employeeOptionList,
             id: response.data.result.idKantor,
@@ -146,7 +150,9 @@ class FormUbahKantorCabang extends React.Component {
             errorArea: "",
             errorReg: "",
 
-        });
+        }, this.props.contentFinishLoading());
+
+
     }
     
     // Fungsi untuk mengubah state ketika isi dari input diubah
