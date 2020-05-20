@@ -77,7 +77,7 @@ class LoginForm extends Component {
                         } else if (peran === "Supervisor") {
                             window.location.href = "/dashboard-staff";
                         } else if (peran === "Manajer Operational Risk") {
-                            window.location.href = "manager/rencanaPemeriksaan";
+                            window.location.href = "rencana-pemeriksaan";
                         } else if (peran === "QA Lead Operational Risk") {
                             window.location.href = "/hasil-pemeriksaan";
                         } else if (peran === "QA Officer Operational Risk") {
