@@ -7,8 +7,6 @@ import {
 } from "react-router-dom";
 import ReactTooltip from 'react-tooltip';
 
-import MainPage from "./pages";
-
 import DaftarRencanaPemeriksaan from './pages/Manager/DaftarRencanaPemeriksaan';
 import DetailRencanaPemeriksaan from "./pages/Manager/DetailRencanaPemeriksaan";
 import FormTambahRencanaPemeriksaan from "./pages/Manager/FormTambahRencanaPemeriksaan";

@@ -46,6 +46,8 @@ class FormTambahBukti extends React.Component {
 
     validateLampiran(fokusLampiran) {
         var errorLampiran = "";
+
+        // eslint-disable-next-line
         var linkOnly = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.%]+$/;
         if (fokusLampiran === null || fokusLampiran === "") {
             errorLampiran = "Lampiran bukti harus diisi";
