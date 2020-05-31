@@ -818,3 +818,13 @@ INSERT INTO "tugas_pemeriksaan" ("id_tugas", "tanggal_mulai", "tanggal_selesai",
 ('4', '2020-05-01', '2020-05-08', '4', '5', '2'),
 ('5', '2020-05-09', '2020-05-16', '5', '5', '3'),
 ('6', '2020-05-17', '2020-05-24', '3', '5', '4');
+
+SELECT setval('employee_id_employee_seq', max(id_employee)) FROM employee;
+SELECT setval('kantor_cabang_id_kantor_seq', max(id_kantor)) FROM kantor_cabang;
+SELECT setval('reminder_template_id_reminder_template_seq', max(id_reminder_template)) FROM reminder_template;
+SELECT setval('rencana_pemeriksaan_id_rencana_seq', max(id_rencana)) FROM rencana_pemeriksaan;
+SELECT setval('risiko_id_risiko_seq', max(id_risiko)) FROM risiko;
+SELECT setval('risk_level_id_level_seq', max(id_level)) FROM risk_level;
+SELECT setval('risk_rating_id_rating_seq', max(id_rating)) FROM risk_rating;
+SELECT setval('sop_id_sop_seq', max(id_sop)) FROM sop;
+SELECT setval('tugas_pemeriksaan_id_tugas_seq', max(id_tugas)) FROM tugas_pemeriksaan;
