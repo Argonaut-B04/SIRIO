@@ -89,7 +89,15 @@ public class RisikoRestServiceImpl implements RisikoRestService {
 
     @Override
     public void hapusRisiko(final int idRisiko) {
-        risikoDB.deleteById(idRisiko);
+        Risiko risk = getById(idRisiko);
+        if (risk.getChildList().isEmpty()) {
+            risikoDB.delete(risk);
+        } else {
+            for (Risiko risiko : risk.getChildList()) {
+                risiko.setParent(null);
+            }
+            risikoDB.delete(risk);
+        }
     }
 
     @Override
