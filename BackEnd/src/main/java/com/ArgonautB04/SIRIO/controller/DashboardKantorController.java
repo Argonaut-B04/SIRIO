@@ -109,19 +109,19 @@ public class DashboardKantorController {
         List<Integer> listRekomendasiOverdue = rekomendasiRestService.getRekomendasiPerMonth(rekomendasiOverdue);
         result.setJumlahRekomendasiOverduePerBulan(listRekomendasiOverdue);
         double jumlahRekomendasiOverdue =
-                roundAvoid((double)rekomendasiOverdue.size()*100/(double)daftarRekomendasi.size(), 2);
+                roundAvoid((double)rekomendasiOverdue.size()*100/(double)rekomendasiTotal.size(), 2);
         result.setJumlahRekomendasiOverdue(jumlahRekomendasiOverdue);
 
         List<Integer> listRekomendasiImpl = rekomendasiRestService.getRekomendasiPerMonth(rekomendasiImpl);
         result.setJumlahRekomendasiImplementedPerBulan(listRekomendasiImpl);
         double jumlahRekomendasiImpl =
-                roundAvoid((double)rekomendasiImpl.size()*100/(double)daftarRekomendasi.size(), 2);
+                roundAvoid((double)rekomendasiImpl.size()*100/(double)rekomendasiTotal.size(), 2);
         result.setJumlahRekomendasiImplemented(jumlahRekomendasiImpl);
 
         List<Integer> listRekomendasiNotImpl = rekomendasiRestService.getRekomendasiPerMonth(rekomendasiNotImpl);
         result.setJumlahRekomendasiNotImplementedPerBulan(listRekomendasiNotImpl);
         double jumlahRekomendasiNotImpl =
-                roundAvoid((double)rekomendasiNotImpl.size()*100/(double)daftarRekomendasi.size(), 2);
+                roundAvoid((double)rekomendasiNotImpl.size()*100/(double)rekomendasiTotal.size(), 2);
         result.setJumlahRekomendasiNotImplemented(jumlahRekomendasiNotImpl);
 
         int riskScore = 100;
@@ -293,17 +293,17 @@ public class DashboardKantorController {
 
         result.setJumlahRekomendasiOverduePerBulan(listRekomendasiOverdue);
         double jumlahRekomendasiOverdue =
-                roundAvoid((double)(rekomendasiOverdue.size()*100)/(double)daftarRekomendasi.size(), 2);
+                roundAvoid((double)(rekomendasiOverdue.size()*100)/(double)rekomendasiTotal.size(), 2);
         result.setJumlahRekomendasiOverdue(jumlahRekomendasiOverdue);
 
         result.setJumlahRekomendasiImplementedPerBulan(listRekomendasiImpl);
         double jumlahRekomendasiImpl =
-                roundAvoid((double)(rekomendasiImpl.size()*100)/(double)daftarRekomendasi.size(), 2);
+                roundAvoid((double)(rekomendasiImpl.size()*100)/(double)rekomendasiTotal.size(), 2);
         result.setJumlahRekomendasiImplemented(jumlahRekomendasiImpl);
 
         result.setJumlahRekomendasiNotImplementedPerBulan(listRekomendasiNotImpl);
         double jumlahRekomendasiNotImpl =
-                roundAvoid((double)(rekomendasiNotImpl.size()*100)/(double)daftarRekomendasi.size(), 2);
+                roundAvoid((double)(rekomendasiNotImpl.size()*100)/(double)rekomendasiTotal.size(), 2);
         result.setJumlahRekomendasiNotImplemented(jumlahRekomendasiNotImpl);
 
         result.setJumlahTemuanPerBulan(listTemuan);
