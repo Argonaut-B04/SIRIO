@@ -123,6 +123,7 @@ class FormTambahKantorCabang extends React.Component {
         this.props.contentStartLoading();
 
         const response = await EmployeeService.getAllBM();
+        //const response = await EmployeeService.getUnassignedBM();
 
         const employeeOptionList = response.data.result.map(employee => {
             return (
@@ -211,6 +212,7 @@ class FormTambahKantorCabang extends React.Component {
                     kunjunganAudit: this.state.kunjunganAudit
                 }
                 KantorCabangService.addKantorCabang(kantorCabang)
+                .then(() => this.props.contentFinishLoading(), () => this.props.contentFinishLoading())
                 .then(() => this.setRedirect());
             }
         }

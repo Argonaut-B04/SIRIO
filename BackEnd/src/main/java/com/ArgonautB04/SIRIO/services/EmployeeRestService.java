@@ -30,7 +30,6 @@ public interface EmployeeRestService {
 
     Employee validateEmployeeExistByUsername(String username);
 
-
     Employee validateEmployeeExistById(Integer id);
 
     void validateRolePermission(Employee employee, String requestedPermissions);
@@ -38,4 +37,6 @@ public interface EmployeeRestService {
     void simpanPerubahan(Employee employee);
 
     void changePassword(String username, String newPassword);
+
+    List<Employee> getUnassignedBM();
 }

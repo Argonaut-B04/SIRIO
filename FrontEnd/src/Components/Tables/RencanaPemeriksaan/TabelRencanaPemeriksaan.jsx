@@ -93,6 +93,15 @@ class TabelRencanaPemeriksaan extends React.Component {
         
     }
 
+    tugasFormatter(cell, row){
+        if (row.daftarTugasPemeriksaan[0] != null){
+            const tugas = row.daftarTugasPemeriksaan.length;
+            return tugas;
+        }else{
+            return "-"
+        }
+    }
+
     getBulanFormatter(cell, row) {
         if(row.daftarTugasPemeriksaan[0] != null){
             const tanggalString = row.daftarTugasPemeriksaan[0].tanggalSelesai;
@@ -113,13 +122,12 @@ class TabelRencanaPemeriksaan extends React.Component {
         classes: classes.rowItem,
         headerClasses: classes.colheader,
         headerStyle: (colum, colIndex) => {
-            return { width: "25%", textAlign: 'left' };
+            return { width: "20%", textAlign: 'left' };
         }
     }, {
         dataField: 'noData1',
         dummyField: true,
         text: 'TAHUN',
-        sort: true,
         classes: classes.rowItem,
         headerClasses: classes.colheader,
         headerStyle: (colum, colIndex) => {
@@ -130,7 +138,6 @@ class TabelRencanaPemeriksaan extends React.Component {
         dataField: 'noData2',
         text: 'BULAN',
         dummyField: true,
-        sort: true,
         classes: classes.rowItem,
         headerClasses: classes.colheader,
         headerStyle: (colum, colIndex) => {
@@ -142,12 +149,21 @@ class TabelRencanaPemeriksaan extends React.Component {
         text: 'STATUS',
         sort: true,
         classes: classes.rowItem,
-        formatter: this.statusFormatter,
+        formatter: (cell, row) => this.statusFormatter(cell, row),
         headerClasses: classes.colheader,
         headerStyle: (colum, colIndex) => {
-            return { width: "20%", textAlign: 'left' };
+            return { width: "15%", textAlign: 'left' };
         }
-    }, {
+    },{
+        dataField: 'noData',
+        text: 'JUMLAH TUGAS',
+        classes: classes.rowItem,
+        formatter: this.tugasFormatter,
+        headerClasses: classes.colheader,
+        headerStyle: (colum, colIndex) => {
+            return { width: "15%", textAlign: 'left' };
+        }
+    },{
         dataField: 'noData3',
         text: '',
         headerClasses: classes.colheader,

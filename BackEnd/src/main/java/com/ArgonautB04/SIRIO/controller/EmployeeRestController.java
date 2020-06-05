@@ -253,6 +253,27 @@ public class EmployeeRestController {
         return response;
     }
 
+//    /**
+//     * Mengambil seluruh branch manager yang belum memiliki kantor cabang
+//     *
+//     * @return daftar hasil employee
+//     */
+//    @GetMapping("/getUnassignedBM")
+//    private BaseResponse<List<Employee>> getUnassignedBM() {
+//        BaseResponse<List<Employee>> response = new BaseResponse<>();
+//        ArrayList<Employee> result = new ArrayList<>();
+//        List<Employee> emp = employeeRestService.getUnassignedBM();
+//        for (Employee e: emp){
+//            if (e.getRole().getIdRole() == 6){
+//                result.add(e);
+//            }
+//        }
+//        response.setStatus(200);
+//        response.setMessage("success");
+//        response.setResult(result);
+//        return response;
+//    }
+
     /**
      * Mengambil seluruh QA Officer
      *

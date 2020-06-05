@@ -272,4 +272,9 @@ public class EmployeeRestServiceImpl implements EmployeeRestService {
         );
         employeeDb.save(target);
     }
+
+    @Override
+    public List<Employee> getUnassignedBM(){
+        return employeeDb.findBM();
+    }
 }

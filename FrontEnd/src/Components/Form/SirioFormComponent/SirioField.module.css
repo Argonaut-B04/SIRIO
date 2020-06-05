@@ -43,6 +43,9 @@
 
 .label[type="checkbox"] {
     vertical-align: middle;
+    border: 1.5px solid #7F3F98;
+    color: #7F3F98;
+    background-color: #7F3F98;
 }
 
 .checkmark {

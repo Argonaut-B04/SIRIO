@@ -353,6 +353,7 @@ class DashboardKantorCabang extends React.Component {
                         <SirioButton
                             purple
                             recommended
+                            tooltip="Tekan"
                             classes="mx-1"
                             onClick={(event) => this.handleReset(event)}
                         >
@@ -637,6 +638,7 @@ class DashboardKantorCabang extends React.Component {
                                 purple
                                 recommended
                                 classes="mx-2"
+                                tooltip="Tekan ini"
                                 onClick={(event) => this.handleReset(event)}
                             >
                                 Atur Ulang
@@ -662,6 +664,7 @@ class DashboardKantorCabang extends React.Component {
                                 purple
                                 recommended
                                 classes="mx-2"
+                                tooltip="Tekan"
                                 onClick={(event) => this.handleReset(event)}
                             >
                                 Atur Ulang
