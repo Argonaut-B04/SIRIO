@@ -65,16 +65,25 @@ class TabelEmployee extends React.Component {
 
     getButtonsHeader() {
         return (
-            <NavLink to={{
-                pathname: "/employee/tambah"
-            }}>
+            <>
+                <NavLink to={{
+                    pathname: "/employee/tambah"
+                }}>
+                    <SirioButton
+                        purple
+                        recommended
+                    >
+                        Tambah Pengguna
+                    </SirioButton>
+                </NavLink>
                 <SirioButton
                     purple
-                    recommended
+                    classes="mx-1"
+                    onClick={() => EmployeeService.downloadEmployee()}
                 >
-                    Tambah Pengguna
+                    Download Excel
                 </SirioButton>
-            </NavLink>
+            </>
         )
     }
 

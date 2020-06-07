@@ -48,6 +48,14 @@ class EmployeeService {
     async deleteEmployee(data) {
         return this.axiosInstance.post(SirioAxiosBase.BASEURL + `/Employee/hapus`, data)
     }
+
+    async downloadEmployee() {
+        return window.location.href = SirioAxiosBase.BASEURL + '/export/employee';
+    }
+
+    async changePassword(data) {
+        return this.axiosInstance.post(SirioAxiosBase.BASEURL + `/Employee/ubahPassword`, data)
+    }
 }
 
 export default new EmployeeService();

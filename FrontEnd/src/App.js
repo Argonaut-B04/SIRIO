@@ -47,6 +47,7 @@ import DashboardKantorCabang from "./pages/QAOfficer/DashboardKantorCabang";
 
 import Login from "./pages/login";
 import Logout from "./pages/logout";
+import ChangePassword from "./pages/changePassword";
 import AuthorizedRoute from './Components/Route/AuthorizedRoute';
 import './App.css';
 import RegistrasiRisiko from './pages/ManagerOR/RegistrasiRisiko';
@@ -128,6 +129,8 @@ class App extends React.Component {
             <AuthorizedRoute exact path="/registrasi-risiko/ubah-hierarki" component={HierarkiRisiko} />
 
             <AuthorizedRoute exact path="/dashboard-staff" component={DashboardStaff} />
+
+            <AuthorizedRoute exact path="/change-password" component={ChangePassword} />
 
             <Route exact path="/login" component={Login} />
             <Route exact path="/logout" component={Logout} />
