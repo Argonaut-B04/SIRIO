@@ -400,6 +400,23 @@ public class EmployeeRestController {
         return response;
     }
 
+    /**
+     * Mengubah password employee
+     *
+     * @param employeeDTO data transfer object untuk employee yang akan diubah password nya
+     */
+    @PostMapping("/ubahPassword")
+    private BaseResponse<Boolean> ubahPasswordEmployee(
+            @RequestBody EmployeeDTO employeeDTO,
+            Principal principal
+    ) {
+        Employee targetEmployee = employeeRestService.validateEmployeeExistByPrincipal(principal);
+        Boolean changeSuccess = employeeRestService.changePassword(
+                targetEmployee.getUsername(), employeeDTO.getPassword(), employeeDTO.getNewPassword());
+
+        return new BaseResponse<>(200, "success", changeSuccess);
+    }
+
     @GetMapping("/login")
     public BaseResponse<Employee> authenticate(Principal principal) {
         Employee target = employeeRestService.validateEmployeeExistByPrincipal(principal);

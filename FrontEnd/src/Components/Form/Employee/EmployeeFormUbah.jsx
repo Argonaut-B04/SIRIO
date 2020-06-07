@@ -21,7 +21,11 @@ class EmployeeFormUbah extends React.Component {
             initialEmail:"",
             noHp: "",
             roleOptionList: [],
-            redirect: false
+            redirect: false,
+            errorName: "",
+            errorJabatan: "",
+            errorEmail: "",
+            errorNoHp: ""
         };
 
         this.handleChange = this.handleChange.bind(this);
@@ -75,7 +79,7 @@ class EmployeeFormUbah extends React.Component {
             errorNoHp = "";
         } else if (!fokusNoHp.match(numberOnly)) {
             errorNoHp = "Nomor HP hanya boleh mengandung angka";
-        } else if (fokusNoHp.length >= 15 || fokusNoHp.length <= 10) {
+        } else if (fokusNoHp.length > 15 || fokusNoHp.length < 10) {
             errorNoHp = "Nomor HP diantara 10-15 karakter";
         }
 

@@ -6,7 +6,7 @@ import SirioDropdown from "../Dropdown/SirioDropdown";
 import SirioDropdownItem from "../Dropdown/SirioDropdownItem";
 import AuthenticationService from "../../Services/AuthenticationService";
 import { NavLink } from "react-router-dom";
-import { logout, login } from "../../Configuration/UrlConfig";
+import { logout, login, changePassword } from "../../Configuration/UrlConfig";
 
 /**
  * Komponen Side Nav secara General
@@ -48,6 +48,7 @@ export default class SideNavFramework extends React.Component {
     // Fungsi untuk render SideNav
     render() {
         var logButton;
+        var changePasswordButton;
         if (AuthenticationService.isLoggedIn()) {
             logButton =
                 <SirioButton
@@ -58,6 +59,15 @@ export default class SideNavFramework extends React.Component {
                     onClick={() => window.location.href = logout.link}
                 >
                     {logout.title}
+                </SirioButton>;
+            changePasswordButton =
+                <SirioButton
+                    purple
+                    circular
+                    classes={classes.footerButton2}
+                    onClick={() => window.location.href = changePassword.link}
+                >
+                    {changePassword.title}
                 </SirioButton>
         } else {
             logButton =
@@ -117,6 +127,7 @@ export default class SideNavFramework extends React.Component {
                     </div>
                     <div className={classes.sideFooter}>
                         <div className={classes.footerButtonContainer}>
+                            {changePasswordButton}
                             {logButton}
                         </div>
                     </div>

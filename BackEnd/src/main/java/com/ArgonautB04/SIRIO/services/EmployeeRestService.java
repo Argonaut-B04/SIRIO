@@ -18,6 +18,8 @@ public interface EmployeeRestService {
 
     List<Employee> getAll();
 
+    List<Employee> getAllWithNonAktif();
+
     Employee ubahEmployee(int idEmployee, Employee employee);
 
     Employee nonaktifkanEmployee(int idEmployee);
@@ -30,12 +32,11 @@ public interface EmployeeRestService {
 
     Employee validateEmployeeExistByUsername(String username);
 
-
     Employee validateEmployeeExistById(Integer id);
 
     void validateRolePermission(Employee employee, String requestedPermissions);
 
     void simpanPerubahan(Employee employee);
 
-    void changePassword(String username, String newPassword);
+    boolean changePassword(String username, String oldPassword, String newPassword);
 }

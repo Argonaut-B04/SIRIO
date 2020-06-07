@@ -188,18 +188,28 @@ class HasilPemeriksaanFormTambah extends React.Component {
             )}
             </p>;
 
-        return (
-            <SirioConfirmButton
-                purple recommended
-                classes="m-1"
-                modalTitle= "Riwayat Temuan Risiko"
-                modalDesc={histori}
-                customConfirmText=" "
-                confirmDisable
+        var tombolRiwayat =
+            <SirioButton
+                purple
+                disabled
             >
                 Riwayat Temuan
-            </SirioConfirmButton>
-        )
+            </SirioButton>;
+
+        if (histori.props.children.length !== 0) {
+            tombolRiwayat =
+                <SirioConfirmButton
+                    purple recommended
+                    classes="m-1"
+                    modalTitle= "Riwayat Temuan Risiko"
+                    modalDesc={histori}
+                    customConfirmText=" "
+                    confirmDisable
+                >
+                    Riwayat Temuan
+                </SirioConfirmButton>;
+        }
+        return tombolRiwayat
     }
 
     getInputDefinition(indexKomponen) {

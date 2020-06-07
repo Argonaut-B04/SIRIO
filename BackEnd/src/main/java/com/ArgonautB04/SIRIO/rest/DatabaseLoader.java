@@ -30,12 +30,12 @@ public class DatabaseLoader implements CommandLineRunner {
     }
 
     private void resetEmployeesPasswords() {
-        employeeRestService.changePassword("administrator", "administrator123");
-        employeeRestService.changePassword("supervisor", "supervisor123");
-        employeeRestService.changePassword("manajer", "manajer123");
-        employeeRestService.changePassword("leadlead", "leadlead123");
-        employeeRestService.changePassword("qaofficer", "qaofficer123");
-        employeeRestService.changePassword("branchmanager", "branchmanager123");
-        employeeRestService.changePassword("superofficer", "superofficer123");
+        employeeRestService.changePassword("administrator", "administrator123", "administrator123");
+        employeeRestService.changePassword("supervisor", "supervisor123", "administrator123");
+        employeeRestService.changePassword("manajer", "manajer123", "administrator123");
+        employeeRestService.changePassword("leadlead", "leadlead123", "administrator123");
+        employeeRestService.changePassword("qaofficer", "qaofficer123", "administrator123");
+        employeeRestService.changePassword("branchmanager", "branchmanager123", "administrator123");
+        employeeRestService.changePassword("superofficer", "superofficer123", "administrator123");
     }
 }

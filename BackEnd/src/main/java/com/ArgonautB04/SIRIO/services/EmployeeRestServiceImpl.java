@@ -71,6 +71,11 @@ public class EmployeeRestServiceImpl implements EmployeeRestService {
     }
 
     @Override
+    public List<Employee> getAllWithNonAktif() {
+        return employeeDb.findAll();
+    }
+
+    @Override
     public Employee nonaktifkanEmployee(int idEmployee) {
         Employee employee = getById(idEmployee);
         employee.setStatus(Employee.Status.NONAKTIF);
@@ -265,11 +270,18 @@ public class EmployeeRestServiceImpl implements EmployeeRestService {
     }
 
     @Override
-    public void changePassword(String username, String newPassword) {
+    public boolean changePassword(String username, String oldPassword, String newPassword) {
         Employee target = validateEmployeeExistByUsername(username);
-        target.setPassword(
-            encrypt(newPassword)
-        );
-        employeeDb.save(target);
+
+        BCryptPasswordEncoder passwordMatcher = new BCryptPasswordEncoder();
+        if (passwordMatcher.matches(oldPassword, target.getPassword())) {
+            target.setPassword(
+                    encrypt(newPassword)
+            );
+            employeeDb.save(target);
+            return true;
+        } else {
+            return false;
+        }
     }
 }
