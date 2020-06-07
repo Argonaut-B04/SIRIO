@@ -67,7 +67,7 @@ export default class Login extends React.Component {
                     <SirioSideNav loginMode classes="d-md-block d-none" />
                     <div className="flex-grow-1 p-5 bg-light">
                         <div className="p-5">
-                            <LogoTag dark includeBack />
+                            <LogoTag dark />
                             <LoginForm history={this.props.history} changeLoadingBody={this.changeLoadingBody} contentStartLoading={this.contentStartLoading} contentFinishLoading={this.contentFinishLoading} />
                         </div>
                     </div>

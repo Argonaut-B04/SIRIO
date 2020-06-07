@@ -97,6 +97,10 @@ public class ReminderRestServiceImpl implements ReminderRestService {
 
     @Override
     public void generateDefaultReminder(Employee employee, Rekomendasi rekomendasi) {
+        // hapus reminder yang lama
+        List<Reminder> old_list = getByRekomendasi(rekomendasi);
+        reminderDB.deleteInBatch(old_list);
+
         LocalDate tenggatWaktu = rekomendasi.getTenggatWaktu();
         LocalDate today = LocalDate.now();
 

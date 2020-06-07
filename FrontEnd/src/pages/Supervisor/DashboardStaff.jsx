@@ -335,40 +335,9 @@ class DashboardStaff extends React.Component {
                 {tombolSimpan}
                 {tombolReset}
                 </div>
-                {/* <div className="col-md-12 mr-0 pl-0">
-                    <SirioField
-                            type="date"
-                            handleChange={this.handleChange}
-                            classes="p-1"
-                            name="tanggalAwal"
-                            value={this.state.tanggalAwal}
-                            label="Tanggal Awal"
-                        />
-                </div> */}
             </div>
-        )
-        // return (
-        //     [
-        //         {
-        //             handleChange: this.handleSelectChange,
-        //             type: "select",
-        //             name: "qa",
-        //             value: this.state.qa,
-        //             optionList: this.state.optionList
-        //         }, {
-        //             handleChange: this.handleSelectChange,
-        //             type: "date",
-        //             name: "tanggalAwal",
-        //             value: this.state.tanggalAwal
-        //         }, {
-        //             handleChange: this.handleSelectChange,
-        //             type: "date",
-        //             name: "tanggalAkhir",
-        //             value: this.state.tanggalAkhir
-        //         }
-        //     ]
-        // )
-            }
+            )
+        }
     }
 
     getButton() {
@@ -381,7 +350,7 @@ class DashboardStaff extends React.Component {
     }
     async renderOption() {
         this.contentStartLoading();
-        this.changeLoadingBody("Mencoba untuk masuk");
+        this.changeLoadingBody("Mengambil data dari database");
         const response = await EmployeeService.getAllQAOfficerDD();
 
         const optionList = response.data.result.map(qa => {
@@ -421,18 +390,6 @@ class DashboardStaff extends React.Component {
             }
         );
     }
-
-    // handleSubmit(event) {
-    //     // event.preventDefault wajib ada
-    //     event.preventDefault();
-    //         const dashboard = {
-    //             qa: this.state.qa,
-    //             tanggalAwal: this.state.tanggalAwal,
-    //             tanggalAkhir: this.state.tanggalAkhir
-    //         }
-    //         RegistrasiRisikoService.submitChanges(dashboard)
-    //             .then(() => this.setRedirect());
-    // }
 
     getData() {
         const data = {
@@ -531,7 +488,8 @@ class DashboardStaff extends React.Component {
     render() {
         if (this.state.role === "Administrator"
         || this.state.role === "Manajer Operational Risk"
-        || this.state.role === "Branch Manager") {
+        || this.state.role === "Branch Manager"
+        || this.state.role === "QA Lead Operational Risk") {
             return (
                 <Redirect to={{
                     pathname: "/error",
@@ -547,14 +505,9 @@ class DashboardStaff extends React.Component {
         return (
             <SirioMainLayout preloader={preloader} contentLoading={contentLoading} loadingBody={loadingBody} active={!contentLoading}>
                 <SirioComponentHeader
-                    title={"Dashboard Performa Staff Operational Risk" + this.state.namaqa}
+                    title={"Dashboard Performa Staff Operational Risk " + this.state.namaqa}
                     betweenTitleSubtitle={this.getBetween()}
                 />
-                {/* <SirioForm
-                    inputDefinition={this.getBetween()}
-                    onSubmit={this.handleSubmit}
-                    submitButton={this.submitButton()}
-                /> */}
                 {this.getData()}
             </SirioMainLayout>
         )
