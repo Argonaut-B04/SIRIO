@@ -228,17 +228,7 @@ class DashboardKantorCabang extends React.Component {
         };
         DashboardKantorService.getAllComponentByFilter(filter)
             .then((response) => {
-                if (this.state.namaKantor !== "" && this.state.tanggalPertama !== "" && this.state.tanggalKedua !== "") {
-                    this.setState({
-                        dashboardComponent: response.data.result,
-                        filterNamaTanggal: true
-                    }, this.contentFinishLoading());
-                } else if (this.state.tanggalPertama !== "" && this.state.tanggalKedua !== "") {
-                    this.setState({
-                        dashboardComponent: response.data.result,
-                        filterTanggal: true
-                    }, this.contentFinishLoading());
-                } else if (this.state.namaKantor !== "") {
+                if (this.state.namaKantor !== "") {
                     this.setState({
                         dashboardComponent: response.data.result,
                         filterNama: true
@@ -261,8 +251,6 @@ class DashboardKantorCabang extends React.Component {
                 } else {
                     this.setState({
                         dashboardComponent: response.data.result,
-                        filterNamaTanggal: false,
-                        filterTanggal: false,
                         filterNama: false,
                         filterAreaRegional: false,
                         filterArea: false,
@@ -287,8 +275,6 @@ class DashboardKantorCabang extends React.Component {
                 tanggalPertama: "",
                 tanggalKedua: "",
                 namaChanged: false,
-                filterNamaTanggal: false,
-                filterTanggal: false,
                 filterNama: false,
                 filterAreaRegional: false,
                 filterArea: false,
@@ -464,7 +450,6 @@ class DashboardKantorCabang extends React.Component {
             purple
             disabled
             classes="mx-1"
-            // tooltip="Tekan untuk kembali ke tampilan awal"
         >
             Atur Ulang
         </SirioButton>
@@ -474,7 +459,6 @@ class DashboardKantorCabang extends React.Component {
             <SirioButton
                 purple
                 classes="mx-1"
-                // tooltip="Tekan untuk kembali ke tampilan awal"
                 onClick={(event) => this.handleReset(event)}
             >
                 Atur Ulang
@@ -489,7 +473,6 @@ class DashboardKantorCabang extends React.Component {
             purple
             disabled
             classes="mx-1"
-            tooltip="Tekan untuk kembali ke tampilan awal"
         >
             Atur Ulang
         </SirioButton>
@@ -498,7 +481,6 @@ class DashboardKantorCabang extends React.Component {
             <SirioButton
                 purple
                 classes="mx-1"
-                tooltip="Tekan untuk kembali ke tampilan awal"
                 onClick={(event) => this.handleReset(event)}
             >
                 Atur Ulang
@@ -623,16 +605,8 @@ class DashboardKantorCabang extends React.Component {
             title = "Dashboard Performa Kantor Cabang " + this.state.areaKantor
         } else if (this.state.filterRegional) {
             title = "Dashboard Performa Kantor Cabang " + this.state.regionalKantor
-        } else if (this.state.filterTanggal) {
-            title = "Dashboard Performa Kantor Cabang " + this.tanggalFormatter(this.state.tanggalPertama) + " s/d " + this.tanggalFormatter(this.state.tanggalKedua)
-        } else if (this.state.filterNamaTanggal) {
-            title = "Dashboard Performa Kantor Cabang " + this.state.namaKantor + " - " + this.state.tanggalPertama + " s/d " + this.state.tanggalKedua
         } 
         return title;
-    }
-
-    tanggalFormatter(tanggal) {
-        return moment(tanggal).locale('id').format("D MMMM YYYY");
     }
 
     render() {

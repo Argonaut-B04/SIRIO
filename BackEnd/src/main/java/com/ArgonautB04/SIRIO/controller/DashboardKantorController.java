@@ -52,13 +52,14 @@ public class DashboardKantorController {
         List<Rekomendasi> daftarRekomendasi;
         List<TemuanRisiko> daftarTemuanRisiko;
         List<TugasPemeriksaan> daftarTugasPemeriksaan;
+        List<HasilPemeriksaan> daftarHasilPemeriksaan;
         List<KomponenPemeriksaan> daftarKomponenPemeriksaan;
         if (role.getNamaRole().equals("Branch Manager")) {
             KantorCabang kantorCabang =
                     kantorCabangRestService.getByPemilik(employee);
             daftarTugasPemeriksaan =
                     tugasPemeriksaanRestService.getByKantorCabang(kantorCabang);
-            List<HasilPemeriksaan> daftarHasilPemeriksaan =
+            daftarHasilPemeriksaan =
                     hasilPemeriksaanRestService.getByDaftarTugasPemeriksaan(daftarTugasPemeriksaan);
             daftarKomponenPemeriksaan =
                     komponenPemeriksaanRestService.getByDaftarHasilPemeriksaan(daftarHasilPemeriksaan);
@@ -68,11 +69,20 @@ public class DashboardKantorController {
             daftarRekomendasi = rekomendasiRestService.getAll();
             daftarTemuanRisiko = temuanRisikoRestService.getAll();
             daftarTugasPemeriksaan = tugasPemeriksaanRestService.getAll();
+            daftarHasilPemeriksaan = hasilPemeriksaanRestService.getAll();
             daftarKomponenPemeriksaan = komponenPemeriksaanRestService.getAll();
         }
 
         DashboardKantorDTO result = new DashboardKantorDTO();
-        result.setJumlahPemeriksaan(daftarTugasPemeriksaan.size());
+
+        List<HasilPemeriksaan> hasilSelesai = new ArrayList<>();
+        for (HasilPemeriksaan hasilPemeriksaan : daftarHasilPemeriksaan) {
+            if (hasilPemeriksaan.getStatusHasilPemeriksaan().getNamaStatus().equals("Selesai")) {
+                hasilSelesai.add(hasilPemeriksaan);
+            }
+        }
+        result.setJumlahPemeriksaan(hasilSelesai.size());
+
         result.setJumlahTemuan(daftarTemuanRisiko.size());
         List<Integer> listTemuan = temuanRisikoRestService.getTemuanPerMonth(daftarTemuanRisiko);
         result.setJumlahTemuanPerBulan(listTemuan);
@@ -126,7 +136,9 @@ public class DashboardKantorController {
 
         int riskScore = 100;
         for (KomponenPemeriksaan komponen : daftarKomponenPemeriksaan) {
-            riskScore += komponen.getRiskLevel().getBobotLevel();
+            if (komponen.getRiskLevel() != null) {
+                riskScore += komponen.getRiskLevel().getBobotLevel();
+            }
         }
         result.setRiskScore(riskScore);
 
@@ -234,8 +246,15 @@ public class DashboardKantorController {
         }
 
         DashboardKantorDTO result = new DashboardKantorDTO();
-        result.setJumlahPemeriksaan(daftarTugasPemeriksaan.size());
         result.setJumlahTemuan(daftarTemuanRisiko.size());
+
+        List<HasilPemeriksaan> hasilSelesai = new ArrayList<>();
+        for (HasilPemeriksaan hasilPemeriksaan : daftarHasilPemeriksaan) {
+            if (hasilPemeriksaan.getStatusHasilPemeriksaan().getNamaStatus().equals("Selesai")) {
+                hasilSelesai.add(hasilPemeriksaan);
+            }
+        }
+        result.setJumlahPemeriksaan(hasilSelesai.size());
 
         List<Rekomendasi> rekomendasiOverdue = new ArrayList<>();
         List<Rekomendasi> rekomendasiImpl = new ArrayList<>();
@@ -310,7 +329,9 @@ public class DashboardKantorController {
 
         int riskScore = 100;
         for (KomponenPemeriksaan komponen : daftarKomponenPemeriksaan) {
-            riskScore += komponen.getRiskLevel().getBobotLevel();
+            if (komponen.getRiskLevel() != null) {
+                riskScore += komponen.getRiskLevel().getBobotLevel();
+            }
         }
         result.setRiskScore(riskScore);
 
