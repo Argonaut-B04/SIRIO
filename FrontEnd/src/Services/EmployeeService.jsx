@@ -29,6 +29,10 @@ class EmployeeService {
         return this.axiosInstance.get(SirioAxiosBase.BASEURL + `/Employee/getAllBranchManager`);
     }
 
+    async getUnassignedBM() {
+        return this.axiosInstance.get(SirioAxiosBase.BASEURL + `/Employee/getUnassignedBM`);
+    }
+
     async getAllQAOfficer() {
         return this.axiosInstance.get(SirioAxiosBase.BASEURL + `/Employee/getAllQAOfficer`);
     }

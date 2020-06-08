@@ -284,4 +284,9 @@ public class EmployeeRestServiceImpl implements EmployeeRestService {
             return false;
         }
     }
+
+    @Override
+    public List<Employee> getUnassignedBM(){
+        return employeeDb.findBM();
+    }
 }

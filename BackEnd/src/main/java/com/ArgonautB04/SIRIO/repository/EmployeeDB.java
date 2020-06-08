@@ -2,6 +2,7 @@ package com.ArgonautB04.SIRIO.repository;
 
 import com.ArgonautB04.SIRIO.model.Employee;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -14,4 +15,11 @@ public interface EmployeeDB extends JpaRepository<Employee, Integer> {
     Optional<Employee> findByEmail(String email);
     Optional<Employee> findByIdEmployeeAndStatus(Integer id, Employee.Status status);
     List<Employee> findAllByStatus(Employee.Status status);
+
+    @Query(
+            value = "SELECT * FROM employee WHERE id_employee NOT IN (SELECT pemilik FROM kantor_cabang) AND role = 6",
+            nativeQuery = true
+    )
+    List<Employee> findBM();
+
 }

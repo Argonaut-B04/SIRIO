@@ -150,8 +150,8 @@ class FormTambahSOP extends React.Component {
                         linkDokumen: this.state.linkDokumen
                     }
                     SopService.addSOP(sop)
+                    .then(() => this.props.contentFinishLoading(), () => this.props.contentFinishLoading())
                     .then(() => this.setRedirect());
-                    this.props.contentFinishLoading()
                 }
             })
         }

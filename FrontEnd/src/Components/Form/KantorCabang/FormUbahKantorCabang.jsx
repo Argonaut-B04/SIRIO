@@ -129,7 +129,7 @@ class FormUbahKantorCabang extends React.Component {
         this.props.contentStartLoading();
         this.props.changeLoadingBody("Mengambil data dari server");
 
-        const responseEmployee = await EmployeeService.getAllBM();
+        const responseEmployee = await EmployeeService.getUnassignedBM();
 
         const employeeOptionList = responseEmployee.data.result.map(employee => {
             return (

@@ -245,14 +245,19 @@ export default class FormTambahRencana extends React.Component {
                             daftarTugasPemeriksaan: this.state.daftarTugasPemeriksaan
                         }
                         RencanaPemeriksaanService.addRencanaPemeriksaan(rencanaPemeriksaan)
+                        .then(() => this.props.contentFinishLoading(), () => this.props.contentFinishLoading())
                         .then(() => this.setRedirect());
                     }
                 }
             });
         }
 
-        this.props.contentFinishLoading()
 
+    }
+
+    getTitle(i){
+        var title = "Tugas Pemeriksaan " + i
+        return title
     }
 
     fullComponentInside() {
@@ -260,7 +265,7 @@ export default class FormTambahRencana extends React.Component {
         for (let i = 0; i < this.state.daftarTugasPemeriksaan.length; i++) {
             forms.push(
                 <SirioForm
-                    subtitle="Tugas Pemeriksaan"
+                    subtitle= {this.getTitle(i + 1)}
                     key={i}
                     childForm
                     id={i}
@@ -303,7 +308,7 @@ export default class FormTambahRencana extends React.Component {
                 }, {
                     fullComponent:
                         this.fullComponentInside()
-                } 
+                } //ini untuk menghapus form
 
             ]
         )
@@ -379,7 +384,7 @@ export default class FormTambahRencana extends React.Component {
                 classes="mx-1"
             >
                 Jalankan
-            </SirioButton>;
+            </SirioButton>
         if (this.submitableSimpan() && this.submitable()) {
             tombolJalankan =
                 <SirioButton
@@ -403,7 +408,6 @@ export default class FormTambahRencana extends React.Component {
             tombolDraft =
                 <SirioButton
                     purple
-                    recommended
                     classes="mx-1"
                     onClick={(event)  => this.handleSubmit(event, "draft")}
                 >

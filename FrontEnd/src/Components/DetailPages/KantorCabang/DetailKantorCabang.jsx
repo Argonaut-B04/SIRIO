@@ -123,12 +123,18 @@ class DetailKantorCabang extends React.Component {
         
     }
 
+    // getTitle() {
+    //     var title = "Detail Kantor Cabang " + this.state.kantorCabang.namaKantor
+    //     return title;
+    // }
+
     render() {
         return (
             <>
                 {this.renderRedirect()}
                 <SirioDetailPage
                     title="Detail Kantor Cabang"
+                    //title={this.getTitle()}
                     data={this.state.dataGeneral}
                     id='id'
                     subButton={this.subButton(this.state.kantorCabang.status)}

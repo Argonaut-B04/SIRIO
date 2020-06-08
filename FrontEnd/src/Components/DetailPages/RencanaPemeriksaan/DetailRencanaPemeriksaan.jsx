@@ -203,7 +203,6 @@ class DetailRencanaPemeriksaan extends React.Component {
             )
         }
     }
-    
 
     render() {
         return (
@@ -226,6 +225,7 @@ class DetailRencanaPemeriksaan extends React.Component {
             </>
             
         );
+        
     }
 } 
 

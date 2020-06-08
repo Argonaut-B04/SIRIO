@@ -97,7 +97,7 @@ export default class SirioField extends Component {
                         disabled={this.props.disabled}
 
                         checked
-
+                        
                         name={this.props.name}
                         defaultChecked={this.props.value}
                         value={this.defaultChecked ? true : false}

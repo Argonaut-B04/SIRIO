@@ -38,5 +38,8 @@ public interface EmployeeRestService {
 
     void simpanPerubahan(Employee employee);
 
+    List<Employee> getUnassignedBM();
+
     boolean changePassword(String username, String oldPassword, String newPassword);
+
 }

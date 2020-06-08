@@ -263,12 +263,17 @@ class FormUbahRencana extends React.Component {
         this.props.contentFinishLoading()
     }
 
+    getTitle(i){
+        var title = "Tugas Pemeriksaan " + i
+        return title
+    }
+
     fullComponentInside() {
         const forms = [];
         for (let i = 0; i < this.state.daftarTugasPemeriksaan.length; i++) {
             forms.push(
                 <SirioForm
-                    subtitle="Tugas Pemeriksaan"
+                    subtitle={this.getTitle(i + 1)}
                     key={i}
                     childForm
                     id={i}
