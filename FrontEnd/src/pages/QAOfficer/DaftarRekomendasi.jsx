@@ -1,6 +1,8 @@
 import React from "react";
 import TableRekomendasi from "../../Components/Tables/Rekomendasi/TabelRekomendasi";
 import SirioMainLayout from "../../Layout/SirioMainLayout";
+import AuthenticationService from "Services/AuthenticationService";
+import { Redirect } from "react-router-dom";
 
 /**
  * Controller yang menampilkan halaman daftar rekomendasi
@@ -44,6 +46,18 @@ export default class DaftarRekomendasi extends React.Component {
     }
 
     render() {
+        if (AuthenticationService.getRole() !== "QA Officer Operational Risk") {
+            return (
+                <Redirect to={{
+                    pathname: "/error",
+                    state: {
+                        detail: "Not Authorized",
+                        code: "401"
+                    }
+                }} />
+            )
+        }
+
         return (
             // Menggunakan contentLoading dan loadingBody untuk mengubah loader konten
             <SirioMainLayout contentLoading={this.state.contentLoading} loadingBody={this.state.loadingBody}>

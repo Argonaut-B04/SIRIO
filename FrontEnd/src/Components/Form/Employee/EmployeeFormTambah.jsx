@@ -239,7 +239,8 @@ export default class EmployeeFormTambah extends React.Component {
                     if (response.data.result) {
                         this.setState({
                             errorUsername: "Username sudah terdaftar"
-                        })
+                        });
+                        this.props.contentFinishLoading()
                     } else {
                         this.props.changeLoadingBody("Mengecek email di server");
                         EmployeeService.checkEmailExist({ email: this.state.email })
@@ -247,7 +248,8 @@ export default class EmployeeFormTambah extends React.Component {
                                 if (response.data.result) {
                                     this.setState({
                                         errorEmail: "Email sudah terdaftar"
-                                    })
+                                    });
+                                    this.props.contentFinishLoading()
                                 } else {
                                     const employee = {
                                         username: this.state.username,
@@ -260,12 +262,13 @@ export default class EmployeeFormTambah extends React.Component {
                                     };
                                     this.props.changeLoadingBody("Mengirim data ke server");
                                     EmployeeService.addEmployee(employee)
+                                        .then(() => this.props.contentFinishLoading(), () => this.props.contentFinishLoading())
                                         .then(() => this.setRedirect());
                                 }
                             })
                     }
-                });
-            this.props.contentFinishLoading()
+                }, () => this.props.contentFinishLoading());
+            this.props.contentFinishLoading();
         }
     }
 

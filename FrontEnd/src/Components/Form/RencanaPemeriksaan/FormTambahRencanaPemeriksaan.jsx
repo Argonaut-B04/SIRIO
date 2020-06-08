@@ -111,6 +111,8 @@ export default class FormTambahRencana extends React.Component {
 
     validateLink(fokusLink) {
         var errorLink = "";
+
+        // eslint-disable-next-line
         var link = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.%]+$/;
         if (fokusLink === null || fokusLink === "") {
             errorLink = "Lampiran wajib diisi";
@@ -263,7 +265,6 @@ export default class FormTambahRencana extends React.Component {
         for (let i = 0; i < this.state.daftarTugasPemeriksaan.length; i++) {
             forms.push(
                 <SirioForm
-                    //subtitle= "Tugas Pemeriksaan "
                     subtitle= {this.getTitle(i + 1)}
                     key={i}
                     childForm
@@ -383,7 +384,7 @@ export default class FormTambahRencana extends React.Component {
                 classes="mx-1"
             >
                 Jalankan
-            </SirioButton>;
+            </SirioButton>
         if (this.submitableSimpan() && this.submitable()) {
             tombolJalankan =
                 <SirioButton

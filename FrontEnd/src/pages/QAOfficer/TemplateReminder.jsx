@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import SirioMainLayout from "../../Layout/SirioMainLayout";
 import ReminderTemplateForm from '../../Components/Form/Reminder/ReminderTemplateForm';
+import AuthenticationService from "Services/AuthenticationService";
+import { Redirect } from "react-router-dom";
 
 export class TemplateReminder extends Component {
 
@@ -42,6 +44,22 @@ export class TemplateReminder extends Component {
     }
 
     render() {
+        if (AuthenticationService.getRole() === "Super QA Officer Operational Risk"
+            || AuthenticationService.getRole() === "QA Lead Operational Risk"
+            || AuthenticationService.getRole() === "Supervisor"
+            || AuthenticationService.getRole() === "Administrator"
+            || AuthenticationService.getRole() === "Branch Manager") {
+            return (
+                <Redirect to={{
+                    pathname: "/error",
+                    state: {
+                        detail: "Not Authorized",
+                        code: "401"
+                    }
+                }} />
+            )
+        } 
+        
         return (
             <SirioMainLayout contentLoading={this.state.contentLoading} loadingBody={this.state.loadingBody}>
                 <ReminderTemplateForm contentFinishLoading={this.contentFinishLoading} contentStartLoading={this.contentStartLoading} changeLoadingBody={this.changeLoadingBody} />

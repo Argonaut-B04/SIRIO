@@ -68,7 +68,7 @@ class TabelSOP extends React.Component {
         
     },{
         dataField: 'noData1',
-        text: 'AKSI',
+        text: '',
         headerClasses: classes.colheader,
         classes: classes.rowItem,
         style: () => {

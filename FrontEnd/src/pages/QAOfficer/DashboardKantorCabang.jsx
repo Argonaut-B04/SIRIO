@@ -286,8 +286,8 @@ class DashboardKantorCabang extends React.Component {
         max = max.subtract(1, 'd')
         return (
             <Row>
-                <Col lg={5} xs={12}>
-                    <div style={{marginLeft: "20px"}}>
+                <Col lg={4} xs={12}>
+                    <div>
                         <SirioField
                             type="select"
                             handleChange={this.handleSelectChangeNama}
@@ -296,9 +296,10 @@ class DashboardKantorCabang extends React.Component {
                             value={this.state.namaKantor}
                             optionList={this.state.namaKantorList}
                             placeholder="Semua Kantor Cabang"
+                            customClass="w-100"
                         />
                     </div>
-                    <div style={{marginLeft: "20px"}}>
+                    <div>
                         {this.state.namaChanged ? <h5>Area: {this.state.areaNamaKantor}</h5> :
                         <SirioField
                             type="select"
@@ -308,10 +309,11 @@ class DashboardKantorCabang extends React.Component {
                             value={this.state.areaKantor}
                             optionList={this.getUnique(this.state.areaKantorList, 'label')}
                             placeholder="Semua Area"
+                            customClass="w-100"
                         />
                         }
                     </div>
-                    <div style={{marginLeft: "20px"}}>
+                    <div>
                         {this.state.namaChanged ? <h5>Regional: {this.state.regionalNamaKantor}</h5> :
                         <SirioField
                             type="select"
@@ -321,11 +323,12 @@ class DashboardKantorCabang extends React.Component {
                             value={this.state.regionalKantor}
                             optionList={this.getUnique(this.state.regionalKantorList, 'label')}
                             placeholder="Semua Regional"
+                            customClass="w-100"
                         />
                         }
                     </div>
                 </Col>
-                <Col lg={4} xs={12}>
+                <Col lg={6} xs={12}>
                     <div className="pl-0">
                         <SirioField
                             type="date"
@@ -333,6 +336,7 @@ class DashboardKantorCabang extends React.Component {
                             classes="p-1"
                             name="tanggalPertama"
                             value={this.state.tanggalPertama}
+                            label="Tanggal Awal: "
                         />
                     </div>
                     <div className="pl-0">
@@ -346,19 +350,12 @@ class DashboardKantorCabang extends React.Component {
                             required={this.state.tanggalPertama !== ""}
                             name="tanggalKedua"
                             value={this.state.tanggalKedua}
+                            label="Tanggal Akhir: "
                         />
                     </div>
                     <div style={{marginTop: "20px"}}>
                         {this.getButtonFirst()}
-                        <SirioButton
-                            purple
-                            recommended
-                            tooltip="Tekan"
-                            classes="mx-1"
-                            onClick={(event) => this.handleReset(event)}
-                        >
-                            Atur Ulang
-                        </SirioButton>
+                        {this.getButtonThird()}
                     </div>
                 </Col>
             </Row>
@@ -370,27 +367,31 @@ class DashboardKantorCabang extends React.Component {
         max = max.subtract(1, 'd')
         return (
             <>
-                <div className="col-md-6 pl-0">
-                    <SirioField
-                        type="date"
-                        handleChange={this.handleChange}
-                        classes="p-1"
-                        name="tanggalPertama"
-                        value={this.state.tanggalPertama}
-                    />
-                </div>
-                <div className="col-md-6 pl-0">
-                    <SirioField
-                        type="date"
-                        handleChange={this.handleChange}
-                        disabled={this.state.tanggalPertama === ""}
-                        classes="p-1"
-                        min={this.state.tanggalPertama}
-                        max={max}
-                        required={this.state.tanggalPertama !== ""}
-                        name="tanggalKedua"
-                        value={this.state.tanggalKedua}
-                    />
+                <div style={{marginTop: "30px"}}>
+                    <div className="col-md-6 pl-0">
+                        <SirioField
+                            type="date"
+                            handleChange={this.handleChange}
+                            classes="p-1"
+                            name="tanggalPertama"
+                            value={this.state.tanggalPertama}
+                            label="Tanggal Awal: "
+                        />
+                    </div>
+                    <div className="col-md-6 pl-0">
+                        <SirioField
+                            type="date"
+                            handleChange={this.handleChange}
+                            disabled={this.state.tanggalPertama === ""}
+                            classes="p-1"
+                            min={this.state.tanggalPertama}
+                            max={max}
+                            required={this.state.tanggalPertama !== ""}
+                            name="tanggalKedua"
+                            value={this.state.tanggalKedua}
+                            label="Tanggal Akhir: "
+                        />
+                    </div>
                 </div>
             </>
         )
@@ -400,7 +401,7 @@ class DashboardKantorCabang extends React.Component {
         var tombolCari =
         <SirioButton
             purple
-            recommended
+            disabled
             classes="mx-1"
         >
             Cari
@@ -423,7 +424,7 @@ class DashboardKantorCabang extends React.Component {
         var tombolCari =
         <SirioButton
             purple
-            recommended
+            disabled
             classes="mx-2"
         >
             Cari
@@ -440,6 +441,51 @@ class DashboardKantorCabang extends React.Component {
             </SirioButton>
         }
         return tombolCari;
+    }
+
+    getButtonThird() {
+        var tombolAtur =
+        <SirioButton
+            purple
+            disabled
+            classes="mx-1"
+        >
+            Atur Ulang
+        </SirioButton>
+        if (this.state.tanggalPertama !== "" || this.state.namaKantor !== "" 
+            || this.state.areaKantor !== "" || this.state.regionalKantor !== "") {
+            tombolAtur = 
+            <SirioButton
+                purple
+                classes="mx-1"
+                onClick={(event) => this.handleReset(event)}
+            >
+                Atur Ulang
+            </SirioButton>
+        }
+        return tombolAtur;
+    }
+
+    getButtonFourth() {
+        var tombolAtur =
+        <SirioButton
+            purple
+            disabled
+            classes="mx-1"
+        >
+            Atur Ulang
+        </SirioButton>
+        if (this.state.tanggalPertama !== "") {
+            tombolAtur = 
+            <SirioButton
+                purple
+                classes="mx-1"
+                onClick={(event) => this.handleReset(event)}
+            >
+                Atur Ulang
+            </SirioButton>
+        }
+        return tombolAtur;
     }
 
     getChart() {
@@ -470,20 +516,20 @@ class DashboardKantorCabang extends React.Component {
                     label: 'Jumlah Rekomendasi Belum Diimplementasi',
                     stack: 'Stack 1',
                     borderWidth: 1,
-                    backgroundColor: '#6FCF97',
-                    borderColor: '#6FCF97',
-                    hoverBackgroundColor: '#a8e2c0',
-                    hoverBorderColor: '#6FCF97',
+                    backgroundColor: '#F2C94C',
+                    borderColor: '#F2C94C',
+                    hoverBackgroundColor: '#F2C94C',
+                    hoverBorderColor: '#F2C94C',
                     data: this.state.dashboardComponent.jumlahRekomendasiNotImplementedPerBulan
                 },
                 {
                     label: 'Jumlah Rekomendasi Overdue',
                     stack: 'Stack 1',
                     borderWidth: 1,
-                    backgroundColor: '#F2C94C',
-                    borderColor: '#F2C94C',
-                    hoverBackgroundColor: '#f7df93',
-                    hoverBorderColor: '#F2C94C',
+                    backgroundColor: 'rgba(255, 0, 0, 0.85)',
+                    borderColor: 'rgba(255, 0, 0, 0.85)',
+                    hoverBackgroundColor: 'rgba(255, 0, 0, 0.85)',
+                    hoverBorderColor: 'rgba(255, 0, 0, 0.85)',
                     data: this.state.dashboardComponent.jumlahRekomendasiOverduePerBulan
                 }
             ]
@@ -505,12 +551,12 @@ class DashboardKantorCabang extends React.Component {
                 value: <p>{this.state.dashboardComponent.jumlahRekomendasiOverdue}%</p>
             },
             {
-                title: "Jumlah Temuan",
-                value: <p>{this.state.dashboardComponent.jumlahTemuan}</p>
-            },
-            {
                 title: "Jumlah Rekomendasi",
                 value: <p>{this.state.dashboardComponent.jumlahRekomendasi}</p>
+            },
+            {
+                title: "Jumlah Temuan",
+                value: <p>{this.state.dashboardComponent.jumlahTemuan}</p>
             }
         ])
     }
@@ -530,12 +576,12 @@ class DashboardKantorCabang extends React.Component {
                 value: <p>{this.state.dashboardComponent.jumlahRekomendasiOverdue}%</p>
             },
             {
-                title: "Jumlah Temuan",
-                value: <p>{this.state.dashboardComponent.jumlahTemuan}</p>
-            },
-            {
                 title: "Jumlah Rekomendasi",
                 value: <p>{this.state.dashboardComponent.jumlahRekomendasi}</p>
+            },
+            {
+                title: "Jumlah Temuan",
+                value: <p>{this.state.dashboardComponent.jumlahTemuan}</p>
             },
             {
                 title: "Jumlah Pemeriksaan",
@@ -610,8 +656,9 @@ class DashboardKantorCabang extends React.Component {
                             {this.getBetweenFirst()}
                         </div>
                         <div style={{marginTop: "50px"}}>
+                            <h4 className="text-center mt-3 pt-3">Histori Data Temuan dan Rekomendasi untuk Tugas Pemeriksaan pada Suatu Bulan</h4>
+                            <br></br>
                             <SirioBarChart data={this.getChart()} />
-                            <h6 className="text-right pt-3">Histori Data Temuan dan Rekomendasi untuk Tugas Pemeriksaan pada Suatu Bulan</h6>
                         </div>
                         <div>
                             {this.state.filterNama ? 
@@ -632,17 +679,9 @@ class DashboardKantorCabang extends React.Component {
                                 betweenTitleSubtitle={this.getBetweenSecond()}
                             />
                         </div>
-                        <div style={{padding: "5px"}}>
+                        <div className="col-md-6 pl-0 mt-3">
                             {this.getButtonSecond()}
-                            <SirioButton
-                                purple
-                                recommended
-                                classes="mx-2"
-                                tooltip="Tekan ini"
-                                onClick={(event) => this.handleReset(event)}
-                            >
-                                Atur Ulang
-                            </SirioButton>
+                            {this.getButtonFourth()}
                         </div>
                         <div className="text-center mt-5">
                             <h3>Data tidak ditemukan!</h3>
@@ -658,21 +697,14 @@ class DashboardKantorCabang extends React.Component {
                                 betweenTitleSubtitle={this.getBetweenSecond()}
                             />
                         </div>
-                        <div style={{padding: "5px"}}>
+                        <div className="col-md-6 pl-0 mt-3">
                             {this.getButtonSecond()}
-                            <SirioButton
-                                purple
-                                recommended
-                                classes="mx-2"
-                                tooltip="Tekan"
-                                onClick={(event) => this.handleReset(event)}
-                            >
-                                Atur Ulang
-                            </SirioButton>
+                            {this.getButtonFourth()}
                         </div>
                         <div style={{marginTop: "50px"}}>
+                            <h4 className="text-center mt-3 pt-3">Histori Data Temuan dan Rekomendasi untuk Tugas Pemeriksaan pada Suatu Bulan</h4>
+                            <br></br>
                             <SirioBarChart data={this.getChart()} />
-                            <h6 className="text-right pt-3">Histori Data Temuan dan Rekomendasi untuk Tugas Pemeriksaan pada Suatu Bulan</h6>
                         </div>
                         <div>
                             <SirioDashboardBox data={this.getBoxSecond()} />

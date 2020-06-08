@@ -88,9 +88,8 @@ class HasilPemeriksaanFormTolak extends React.Component {
             this.props.contentStartLoading();
             this.props.changeLoadingBody("Mengirim data ke server");
             HasilPemeriksaanService.setujuiHasilPemeriksaan(persetujuan)
+                .then(() => this.props.contentFinishLoading(), () => this.props.contentFinishLoading())
                 .then(() => this.setRedirect());
-
-            this.props.contentFinishLoading();
         }
     }
 

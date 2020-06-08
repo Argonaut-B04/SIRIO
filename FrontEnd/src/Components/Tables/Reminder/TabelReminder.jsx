@@ -21,7 +21,8 @@ class TabelReminder extends React.Component {
         this.state = {
             rowList: [],
             changeComplete: false,
-            changed: false
+            changed: false,
+            generated: 0,
         }
 
         this.renderRows = this.renderRows.bind(this);
@@ -193,7 +194,8 @@ class TabelReminder extends React.Component {
 
         this.setState({
             rowList: changedRow,
-            changed: true
+            changed: true,
+            generated: 0
         })
     }
 
@@ -219,7 +221,8 @@ class TabelReminder extends React.Component {
 
         this.setState({
             rowList: changedRow,
-            changed: true
+            changed: true,
+            generated: 0
         })
     }
 
@@ -242,7 +245,8 @@ class TabelReminder extends React.Component {
 
         this.setState({
             rowList: changedRow,
-            changed: true
+            changed: true,
+            generated: 0
         })
     }
 
@@ -308,7 +312,8 @@ class TabelReminder extends React.Component {
         }
         this.setState({
             rowList: newDateList,
-            changed: true
+            changed: true,
+            generated: hari
         })
     }
 
@@ -343,7 +348,8 @@ class TabelReminder extends React.Component {
                 <div>
                     <SirioButton
                         purple
-                        hover
+                        recommended={this.state.generated == 1}
+                        hover={this.state.generated != 1}
                         square
                         onClick={() => this.generateHarian(1)}
                         classes={classes.sizeperpage}
@@ -352,7 +358,8 @@ class TabelReminder extends React.Component {
                         </SirioButton>
                     <SirioButton
                         purple
-                        hover
+                        recommended={this.state.generated == 2}
+                        hover={this.state.generated != 2}
                         square
                         onClick={() => this.generateHarian(2)}
                         classes={classes.sizeperpage}
@@ -361,7 +368,8 @@ class TabelReminder extends React.Component {
                         </SirioButton>
                     <SirioButton
                         purple
-                        hover
+                        recommended={this.state.generated == 3}
+                        hover={this.state.generated != 3}
                         square
                         onClick={() => this.generateHarian(3)}
                         classes={classes.sizeperpage}
