@@ -1,4 +1,4 @@
-package com.ArgonautB04.SIRIO.utility;
+package com.argonautb04.sirio.utility;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -21,8 +21,8 @@ public class ExcelGenerator {
      * Insert langsung dari array ke excel.
      *
      * @param sheetName nama sheet
-     * @param columns nama kolom yang akan ditulis di paling atas (header)
-     * @param contents konten dari setiap cell
+     * @param columns   nama kolom yang akan ditulis di paling atas (header)
+     * @param contents  konten dari setiap cell
      * @return ByteArrayInputStream, file dalam bentuk byte
      * @throws Exception formalitas
      */

@@ -1,8 +1,8 @@
-package com.ArgonautB04.SIRIO.services;
+package com.argonautb04.sirio.services;
 
-import com.ArgonautB04.SIRIO.model.Employee;
-import com.ArgonautB04.SIRIO.model.HasilPemeriksaan;
-import com.ArgonautB04.SIRIO.model.TugasPemeriksaan;
+import com.argonautb04.sirio.model.Employee;
+import com.argonautb04.sirio.model.HasilPemeriksaan;
+import com.argonautb04.sirio.model.TugasPemeriksaan;
 
 import java.util.List;
 import java.util.Optional;

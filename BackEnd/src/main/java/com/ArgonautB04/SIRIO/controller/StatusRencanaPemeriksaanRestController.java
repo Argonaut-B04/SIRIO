@@ -1,6 +1,6 @@
-package com.ArgonautB04.SIRIO.controller;
+package com.argonautb04.sirio.controller;
 
-import com.ArgonautB04.SIRIO.services.StatusRencanaPemeriksaanRestService;
+import com.argonautb04.sirio.services.StatusRencanaPemeriksaanRestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

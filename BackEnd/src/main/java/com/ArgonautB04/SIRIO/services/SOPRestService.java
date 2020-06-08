@@ -1,6 +1,6 @@
-package com.ArgonautB04.SIRIO.services;
+package com.argonautb04.sirio.services;
 
-import com.ArgonautB04.SIRIO.model.SOP;
+import com.argonautb04.sirio.model.SOP;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,7 +14,7 @@ public interface SOPRestService {
 
     SOP ubahSOP(int idSop, SOP sop);
 
-    Optional<SOP> getByJudul (String judul);
+    Optional<SOP> getByJudul(String judul);
 
     void hapusSOP(int idSop);
 

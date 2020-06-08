@@ -1,4 +1,4 @@
-package com.ArgonautB04.SIRIO.rest;
+package com.argonautb04.sirio.rest;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -20,7 +20,7 @@ public class RekomendasiDTO {
         return reminderDTO;
     }
 
-    public void setReminder(List<ReminderDTO> reminderDTO) {
+    public void setReminder(final List<ReminderDTO> reminderDTO) {
         this.reminderDTO = reminderDTO;
     }
 
@@ -28,7 +28,7 @@ public class RekomendasiDTO {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(final Integer id) {
         this.id = id;
     }
 
@@ -36,7 +36,7 @@ public class RekomendasiDTO {
         return idPembuat;
     }
 
-    public void setIdPembuat(Integer idPembuat) {
+    public void setIdPembuat(final Integer idPembuat) {
         this.idPembuat = idPembuat;
     }
 
@@ -44,7 +44,7 @@ public class RekomendasiDTO {
         return idHasilPemeriksaan;
     }
 
-    public void setIdHasilPemeriksaan(Integer idHasilPemeriksaan) {
+    public void setIdHasilPemeriksaan(final Integer idHasilPemeriksaan) {
         this.idHasilPemeriksaan = idHasilPemeriksaan;
     }
 
@@ -52,7 +52,7 @@ public class RekomendasiDTO {
         return keterangan;
     }
 
-    public void setKeterangan(String keterangan) {
+    public void setKeterangan(final String keterangan) {
         this.keterangan = keterangan;
     }
 
@@ -60,7 +60,7 @@ public class RekomendasiDTO {
         return tenggatWaktu;
     }
 
-    public void setTenggatWaktu(String tenggatWaktu) {
+    public void setTenggatWaktu(final String tenggatWaktu) {
         this.tenggatWaktu = tenggatWaktu;
     }
 
@@ -68,7 +68,7 @@ public class RekomendasiDTO {
         return durasi;
     }
 
-    public void setDurasi(String durasi) {
+    public void setDurasi(final String durasi) {
         this.durasi = durasi;
     }
 
@@ -76,7 +76,7 @@ public class RekomendasiDTO {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(final String status) {
         this.status = status;
     }
 
@@ -84,7 +84,7 @@ public class RekomendasiDTO {
         return statusBukti;
     }
 
-    public void setStatusBukti(String statusBukti) {
+    public void setStatusBukti(final String statusBukti) {
         this.statusBukti = statusBukti;
     }
 
@@ -92,7 +92,7 @@ public class RekomendasiDTO {
         return namaKantorCabang;
     }
 
-    public void setNamaKantorCabang(String namaKantorCabang) {
+    public void setNamaKantorCabang(final String namaKantorCabang) {
         this.namaKantorCabang = namaKantorCabang;
     }
 
@@ -100,7 +100,7 @@ public class RekomendasiDTO {
         return tenggatWaktuDate;
     }
 
-    public void setTenggatWaktuDate(LocalDate tenggatWaktuDate) {
+    public void setTenggatWaktuDate(final LocalDate tenggatWaktuDate) {
         this.tenggatWaktuDate = tenggatWaktuDate;
     }
 

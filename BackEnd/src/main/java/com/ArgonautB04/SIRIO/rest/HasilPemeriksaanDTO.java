@@ -1,8 +1,4 @@
-package com.ArgonautB04.SIRIO.rest;
-
-import com.ArgonautB04.SIRIO.model.HasilPemeriksaan;
-import com.ArgonautB04.SIRIO.model.Rekomendasi;
-import org.springframework.beans.factory.annotation.Autowired;
+package com.argonautb04.sirio.rest;
 
 import java.util.List;
 
@@ -22,7 +18,7 @@ public class HasilPemeriksaanDTO {
         return feedback;
     }
 
-    public void setFeedback(String feedback) {
+    public void setFeedback(final String feedback) {
         this.feedback = feedback;
     }
 
@@ -30,7 +26,7 @@ public class HasilPemeriksaanDTO {
         return tugasPemeriksaan;
     }
 
-    public void setTugasPemeriksaan(TugasPemeriksaanDTO tugasPemeriksaan) {
+    public void setTugasPemeriksaan(final TugasPemeriksaanDTO tugasPemeriksaan) {
         this.tugasPemeriksaan = tugasPemeriksaan;
     }
 
@@ -38,7 +34,7 @@ public class HasilPemeriksaanDTO {
         return usernamePembuat;
     }
 
-    public void setUsernamePembuat(String usernamePembuat) {
+    public void setUsernamePembuat(final String usernamePembuat) {
         this.usernamePembuat = usernamePembuat;
     }
 
@@ -46,7 +42,7 @@ public class HasilPemeriksaanDTO {
         return namaPemeriksa;
     }
 
-    public void setNamaPemeriksa(String namaPemeriksa) {
+    public void setNamaPemeriksa(final String namaPemeriksa) {
         this.namaPemeriksa = namaPemeriksa;
     }
 
@@ -54,7 +50,7 @@ public class HasilPemeriksaanDTO {
         return namaPembuat;
     }
 
-    public void setNamaPembuat(String namaPembuat) {
+    public void setNamaPembuat(final String namaPembuat) {
         this.namaPembuat = namaPembuat;
     }
 
@@ -62,7 +58,7 @@ public class HasilPemeriksaanDTO {
         return idStatus;
     }
 
-    public void setIdStatus(Integer idStatus) {
+    public void setIdStatus(final Integer idStatus) {
         this.idStatus = idStatus;
     }
 
@@ -70,7 +66,7 @@ public class HasilPemeriksaanDTO {
         return siapDijalankan;
     }
 
-    public void setSiapDijalankan(Boolean siapDijalankan) {
+    public void setSiapDijalankan(final Boolean siapDijalankan) {
         this.siapDijalankan = siapDijalankan;
     }
 
@@ -78,7 +74,7 @@ public class HasilPemeriksaanDTO {
         return namaStatus;
     }
 
-    public void setNamaStatus(String namaStatus) {
+    public void setNamaStatus(final String namaStatus) {
         this.namaStatus = namaStatus;
     }
 
@@ -86,7 +82,7 @@ public class HasilPemeriksaanDTO {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(final Integer id) {
         this.id = id;
     }
 
@@ -94,7 +90,7 @@ public class HasilPemeriksaanDTO {
         return daftarKomponenPemeriksaan;
     }
 
-    public void setDaftarKomponenPemeriksaan(List<KomponenPemeriksaanDTO> daftarKomponenPemeriksaan) {
+    public void setDaftarKomponenPemeriksaan(final List<KomponenPemeriksaanDTO> daftarKomponenPemeriksaan) {
         this.daftarKomponenPemeriksaan = daftarKomponenPemeriksaan;
     }
 }

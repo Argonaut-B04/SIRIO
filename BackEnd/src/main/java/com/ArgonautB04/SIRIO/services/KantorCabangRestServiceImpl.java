@@ -1,8 +1,8 @@
-package com.ArgonautB04.SIRIO.services;
+package com.argonautb04.sirio.services;
 
-import com.ArgonautB04.SIRIO.model.Employee;
-import com.ArgonautB04.SIRIO.model.KantorCabang;
-import com.ArgonautB04.SIRIO.repository.KantorCabangDB;
+import com.argonautb04.sirio.model.Employee;
+import com.argonautb04.sirio.model.KantorCabang;
+import com.argonautb04.sirio.repository.KantorCabangDB;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -27,21 +27,24 @@ public class KantorCabangRestServiceImpl implements KantorCabangRestService {
         return kantorCabangDB.save(kantorCabang);
     }
 
-//    @Override
-//    public boolean isExistInDatabase(KantorCabang kantorCabang) {
-//        return kantorCabangDB.findById(kantorCabang.getIdKantor()).isPresent();
-//    }
+    // @Override
+    // public boolean isExistInDatabase(KantorCabang kantorCabang) {
+    // return kantorCabangDB.findById(kantorCabang.getIdKantor()).isPresent();
+    // }
 
-    //    @Override
-//    public KantorCabang isExistInDatabase(String namaKantor) {
-//        return kantorCabangDB.findByNamaKantor(namaKantor);
-//    }
-//
+    // @Override
+    // public KantorCabang isExistInDatabase(String namaKantor) {
+    // return kantorCabangDB.findByNamaKantor(namaKantor);
+    // }
+    //
     @Override
     public KantorCabang getById(int idKantorCabang) {
-        Optional<KantorCabang> kantorCabang = kantorCabangDB.findByIdKantorAndStatus(idKantorCabang, KantorCabang.Status.AKTIF);
-        if (kantorCabang.isPresent()) return kantorCabang.get();
-        else throw new NoSuchElementException();
+        Optional<KantorCabang> kantorCabang = kantorCabangDB.findByIdKantorAndStatus(idKantorCabang,
+                KantorCabang.Status.AKTIF);
+        if (kantorCabang.isPresent())
+            return kantorCabang.get();
+        else
+            throw new NoSuchElementException();
     }
 
     @Override
@@ -106,13 +109,12 @@ public class KantorCabangRestServiceImpl implements KantorCabangRestService {
         return kantorCabang;
     }
 
-//    @Override
-//    public List<KantorCabang> getByPembuat(Employee pembuat){
-//        return kantorCabangDB.findAllByPembuat(pembuat);
-//    }
+    // @Override
+    // public List<KantorCabang> getByPembuat(Employee pembuat){
+    // return kantorCabangDB.findAllByPembuat(pembuat);
+    // }
 
-
-    //public KantorCabang validateExistInDatabase(int idKantorCabang) {}
+    // public KantorCabang validateExistInDatabase(int idKantorCabang) {}
 
     @Override
     public KantorCabang validateExistById(int idKantorCabang) {
@@ -121,10 +123,8 @@ public class KantorCabangRestServiceImpl implements KantorCabangRestService {
         if (kantorCabang.isPresent()) {
             return kantorCabang.get();
         } else {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND,
-                    "Kantor Cabang dengan ID " + idKantorCabang + " tidak ditemukan!"
-            );
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    "Kantor Cabang dengan ID " + idKantorCabang + " tidak ditemukan!");
         }
     }
 
@@ -141,14 +141,14 @@ public class KantorCabangRestServiceImpl implements KantorCabangRestService {
 
     @Override
     public void recalculateRiskRating() {
-//        List<KantorCabang> daftarKantorCabang = kantorCabangDB.findAll();
-//        List<KantorCabang> calculated = new ArrayList<>();
-//        for (KantorCabang kantorCabang : daftarKantorCabang) {
-//             nanti disini akan masukin perhitungan risk rating nya
-//             kantorCabang.setRiskRating(null);
-//             calculated.add(kantorCabang);
-//        }
-//        kantorCabangDB.saveAll(calculated);
+        // List<KantorCabang> daftarKantorCabang = kantorCabangDB.findAll();
+        // List<KantorCabang> calculated = new ArrayList<>();
+        // for (KantorCabang kantorCabang : daftarKantorCabang) {
+        // nanti disini akan masukin perhitungan risk rating nya
+        // kantorCabang.setRiskRating(null);
+        // calculated.add(kantorCabang);
+        // }
+        // kantorCabangDB.saveAll(calculated);
     }
 
 }

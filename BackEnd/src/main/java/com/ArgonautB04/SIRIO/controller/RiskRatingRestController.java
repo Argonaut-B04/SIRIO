@@ -1,11 +1,11 @@
-package com.ArgonautB04.SIRIO.controller;
+package com.argonautb04.sirio.controller;
 
-import com.ArgonautB04.SIRIO.model.Employee;
-import com.ArgonautB04.SIRIO.model.RiskRating;
-import com.ArgonautB04.SIRIO.rest.BaseResponse;
-import com.ArgonautB04.SIRIO.services.EmployeeRestService;
-import com.ArgonautB04.SIRIO.services.KantorCabangRestService;
-import com.ArgonautB04.SIRIO.services.RiskRatingRestService;
+import com.argonautb04.sirio.model.Employee;
+import com.argonautb04.sirio.model.RiskRating;
+import com.argonautb04.sirio.rest.BaseResponse;
+import com.argonautb04.sirio.services.EmployeeRestService;
+import com.argonautb04.sirio.services.KantorCabangRestService;
+import com.argonautb04.sirio.services.RiskRatingRestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -50,34 +50,24 @@ public class RiskRatingRestController {
      * @return List of active Risk Rating
      */
     @GetMapping("")
-    private BaseResponse<List<RiskRating>> getAllAktifRiskRating(
-            final Principal principal
-    ) {
-        Employee pengelola = employeeRestService
-                .validateEmployeeExistByPrincipal(principal);
-        employeeRestService
-                .validateRolePermission(pengelola, "akses risk rating");
-        return new BaseResponse<>(complete,
-                "success",
-                riskRatingRestService.getAll()
-        );
+    private BaseResponse<List<RiskRating>> getAllAktifRiskRating(final Principal principal) {
+        Employee pengelola = employeeRestService.validateEmployeeExistByPrincipal(principal);
+        employeeRestService.validateRolePermission(pengelola, "akses risk rating");
+        return new BaseResponse<>(complete, "success", riskRatingRestService.getAll());
     }
 
     /**
      * Change risk level configuration.
+     *
      * @param riskRatingList List of new Risk Rating
-     * @param principal object from Spring Security
+     * @param principal      object from Spring Security
      * @return List of new registered Risk Rating
      */
     @PostMapping("")
     private BaseResponse<List<RiskRating>> changeRiskLevelConfiguration(
-            final @RequestBody List<RiskRating> riskRatingList,
-            final Principal principal
-    ) {
-        Employee pengelola = employeeRestService
-                .validateEmployeeExistByPrincipal(principal);
-        employeeRestService
-                .validateRolePermission(pengelola, "ubah risk rating");
+            final @RequestBody List<RiskRating> riskRatingList, final Principal principal) {
+        Employee pengelola = employeeRestService.validateEmployeeExistByPrincipal(principal);
+        employeeRestService.validateRolePermission(pengelola, "ubah risk rating");
 
         kantorCabangRestService.nullifiedRiskRating();
         riskRatingRestService.clear();
@@ -89,10 +79,7 @@ public class RiskRatingRestController {
 
         kantorCabangRestService.recalculateRiskRating();
 
-        return new BaseResponse<>(
-                complete,
-                "success",
-                riskRatingRestService.getAll());
+        return new BaseResponse<>(complete, "success", riskRatingRestService.getAll());
 
     }
 }

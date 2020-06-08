@@ -1,7 +1,7 @@
-package com.ArgonautB04.SIRIO.services;
+package com.argonautb04.sirio.services;
 
-import com.ArgonautB04.SIRIO.model.RiskLevel;
-import com.ArgonautB04.SIRIO.repository.RiskLevelDB;
+import com.argonautb04.sirio.model.RiskLevel;
+import com.argonautb04.sirio.repository.RiskLevelDB;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,8 +26,10 @@ public class RiskLevelRestServiceImpl implements RiskLevelRestService {
     @Override
     public RiskLevel getById(int idRiskLevel) {
         Optional<RiskLevel> riskLevel = riskLevelDB.findById(idRiskLevel);
-        if (riskLevel.isPresent()) return riskLevel.get();
-        else throw new NoSuchElementException();
+        if (riskLevel.isPresent())
+            return riskLevel.get();
+        else
+            throw new NoSuchElementException();
     }
 
     @Override
@@ -66,9 +68,7 @@ public class RiskLevelRestServiceImpl implements RiskLevelRestService {
 
     @Override
     public void nonaktifkan(RiskLevel riskLevel) {
-        RiskLevel target = getById(
-                riskLevel.getIdLevel()
-        );
+        RiskLevel target = getById(riskLevel.getIdLevel());
         target.setStatus(RiskLevel.Status.NONAKTIF);
     }
 }

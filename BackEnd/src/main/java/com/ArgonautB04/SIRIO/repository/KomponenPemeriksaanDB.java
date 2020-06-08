@@ -1,8 +1,8 @@
-package com.ArgonautB04.SIRIO.repository;
+package com.argonautb04.sirio.repository;
 
-import com.ArgonautB04.SIRIO.model.HasilPemeriksaan;
-import com.ArgonautB04.SIRIO.model.KomponenPemeriksaan;
-import com.ArgonautB04.SIRIO.model.Risiko;
+import com.argonautb04.sirio.model.HasilPemeriksaan;
+import com.argonautb04.sirio.model.KomponenPemeriksaan;
+import com.argonautb04.sirio.model.Risiko;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -15,7 +15,8 @@ public interface KomponenPemeriksaanDB extends JpaRepository<KomponenPemeriksaan
 
     List<KomponenPemeriksaan> findAllByHasilPemeriksaanIn(Collection<HasilPemeriksaan> hasilPemeriksaan);
 
-    List<KomponenPemeriksaan> findAllByHasilPemeriksaanInAndRisiko(Collection<HasilPemeriksaan> hasilPemeriksaan, Risiko risiko);
+    List<KomponenPemeriksaan> findAllByHasilPemeriksaanInAndRisiko(Collection<HasilPemeriksaan> hasilPemeriksaan,
+                                                                   Risiko risiko);
 
     KomponenPemeriksaan findAllByRisiko(Risiko risiko);
 }

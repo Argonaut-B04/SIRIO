@@ -1,6 +1,6 @@
-package com.ArgonautB04.SIRIO.services;
+package com.argonautb04.sirio.services;
 
-import com.ArgonautB04.SIRIO.model.RiskLevel;
+import com.argonautb04.sirio.model.RiskLevel;
 
 import java.util.List;
 

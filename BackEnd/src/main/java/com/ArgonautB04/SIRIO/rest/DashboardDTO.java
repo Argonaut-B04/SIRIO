@@ -1,4 +1,4 @@
-package com.ArgonautB04.SIRIO.rest;
+package com.argonautb04.sirio.rest;
 
 import java.util.List;
 

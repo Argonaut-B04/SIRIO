@@ -1,4 +1,4 @@
-package com.ArgonautB04.SIRIO.rest;
+package com.argonautb04.sirio.rest;
 
 public class EmployeeDTO {
 
@@ -16,7 +16,7 @@ public class EmployeeDTO {
         return newPassword;
     }
 
-    public void setNewPassword(String newPassword) {
+    public void setNewPassword(final String newPassword) {
         this.newPassword = newPassword;
     }
 
@@ -24,7 +24,7 @@ public class EmployeeDTO {
         return jabatan;
     }
 
-    public void setJabatan(String jabatan) {
+    public void setJabatan(final String jabatan) {
         this.jabatan = jabatan;
     }
 
@@ -32,7 +32,7 @@ public class EmployeeDTO {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(final Integer id) {
         this.id = id;
     }
 
@@ -40,7 +40,7 @@ public class EmployeeDTO {
         return nama;
     }
 
-    public void setNama(String nama) {
+    public void setNama(final String nama) {
         this.nama = nama;
     }
 
@@ -48,7 +48,7 @@ public class EmployeeDTO {
         return username;
     }
 
-    public void setUsername(String username) {
+    public void setUsername(final String username) {
         this.username = username;
     }
 
@@ -56,7 +56,7 @@ public class EmployeeDTO {
         return password;
     }
 
-    public void setPassword(String password) {
+    public void setPassword(final String password) {
         this.password = password;
     }
 
@@ -64,7 +64,7 @@ public class EmployeeDTO {
         return noHp;
     }
 
-    public void setNoHp(String noHp) {
+    public void setNoHp(final String noHp) {
         this.noHp = noHp;
     }
 
@@ -72,7 +72,7 @@ public class EmployeeDTO {
         return email;
     }
 
-    public void setEmail(String email) {
+    public void setEmail(final String email) {
         this.email = email;
     }
 
@@ -80,7 +80,7 @@ public class EmployeeDTO {
         return idRole;
     }
 
-    public void setIdRole(Integer idRole) {
+    public void setIdRole(final Integer idRole) {
         this.idRole = idRole;
     }
 

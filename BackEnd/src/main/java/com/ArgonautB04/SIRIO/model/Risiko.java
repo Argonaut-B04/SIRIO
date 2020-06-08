@@ -1,11 +1,22 @@
-package com.ArgonautB04.SIRIO.model;
+package com.argonautb04.sirio.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
@@ -15,55 +26,41 @@ import java.util.List;
 @Table
 public class Risiko implements Serializable {
 
-    public static enum Status {
-        AKTIF, NONAKTIF
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idRisiko;
-
     @NotNull
     @Size(max = 50)
     @Column(nullable = false)
     private String namaRisiko;
-
     @NotNull
     @Column(nullable = false)
     private Integer risikoKategori;
-
     @Size(max = 500)
     @Column
     private String detailUraian;
-
     @Size(max = 500)
     @Column
     private String deskripsi;
-
     @Size(max = 50)
     @Column
     private String metodologi;
-
     @Size(max = 500)
     @Column
     private String ketentuanSampel;
-
     @NotNull
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 10)
     private Status status;
-
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "parent", referencedColumnName = "idRisiko")
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private Risiko parent;
-
     @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonProperty
     private List<Risiko> childList;
-
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "sop", referencedColumnName = "idSop")
     @OnDelete(action = OnDeleteAction.CASCADE)
@@ -155,5 +152,9 @@ public class Risiko implements Serializable {
 
     public void setSop(SOP sop) {
         this.sop = sop;
+    }
+
+    public enum Status {
+        AKTIF, NONAKTIF
     }
 }

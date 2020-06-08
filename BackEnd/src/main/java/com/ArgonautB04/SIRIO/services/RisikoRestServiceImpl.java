@@ -1,9 +1,9 @@
-package com.ArgonautB04.SIRIO.services;
+package com.argonautb04.sirio.services;
 
-import com.ArgonautB04.SIRIO.model.Risiko;
-import com.ArgonautB04.SIRIO.model.SOP;
-import com.ArgonautB04.SIRIO.repository.RisikoDB;
-import com.ArgonautB04.SIRIO.rest.RisikoDTO;
+import com.argonautb04.sirio.model.Risiko;
+import com.argonautb04.sirio.model.SOP;
+import com.argonautb04.sirio.repository.RisikoDB;
+import com.argonautb04.sirio.rest.RisikoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -47,12 +47,10 @@ public class RisikoRestServiceImpl implements RisikoRestService {
     }
 
     @Override
-    public Risiko ubahRisiko(final int idRisiko,
-                             final Risiko risiko) {
+    public Risiko ubahRisiko(final int idRisiko, final Risiko risiko) {
         Risiko target = getById(idRisiko);
         List<Risiko> empty = new ArrayList<>();
-        if (target.getRisikoKategori().
-                equals(risiko.getRisikoKategori())) {
+        if (target.getRisikoKategori().equals(risiko.getRisikoKategori())) {
             for (Risiko r : risiko.getChildList()) {
                 r.setParent(null);
             }
@@ -108,8 +106,7 @@ public class RisikoRestServiceImpl implements RisikoRestService {
     }
 
     @Override
-    public Risiko transformasidto(final Risiko risiko,
-                                  final RisikoDTO risikoDTO) {
+    public Risiko transformasidto(final Risiko risiko, final RisikoDTO risikoDTO) {
         if (risikoDTO.getKategori() == 3) {
             if (risikoDTO.getDetailUraian() != null) {
                 risiko.setDetailUraian(risikoDTO.getDetailUraian());
@@ -140,18 +137,15 @@ public class RisikoRestServiceImpl implements RisikoRestService {
             SOP sop = sopRestService.getById(risikoDTO.getSop());
             risiko.setSop(sop);
         } catch (NoSuchElementException e) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND,
-                    "SOP dengan ID " + risikoDTO.getSop() + " tidak ditemukan!"
-            );
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    "SOP dengan ID " + risikoDTO.getSop() + " tidak ditemukan!");
         }
         return risiko;
     }
 
     @Override
     public List<Risiko> getByKategori(final Integer kategori) {
-        return risikoDB.findAllByRisikoKategoriAndStatus(
-                kategori, Risiko.Status.AKTIF);
+        return risikoDB.findAllByRisikoKategoriAndStatus(kategori, Risiko.Status.AKTIF);
     }
 
     @Override
@@ -160,23 +154,22 @@ public class RisikoRestServiceImpl implements RisikoRestService {
     }
 
     @Override
-    public RisikoDTO ubahHierarki(final Risiko risikoAwal,
-                                  final RisikoDTO risikoBaru) {
+    public RisikoDTO ubahHierarki(final Risiko risikoAwal, final RisikoDTO risikoBaru) {
         risikoAwal.setParent(getById(risikoBaru.getParent()));
         risikoDB.save(risikoAwal);
         return risikoBaru;
     }
-//
-//    @Override
-//    public List<Risiko> getParentByKategori(Integer kategori) {
-//        if (kategori == 2) {
-//            return getByKategori(1);
-//        } else if (kategori == 3) {
-//            return getByKategori(2);
-//        } else {
-//            throw new NoSuchElementException("");
-//        }
-//    }
+    //
+    // @Override
+    // public List<Risiko> getParentByKategori(Integer kategori) {
+    // if (kategori == 2) {
+    // return getByKategori(1);
+    // } else if (kategori == 3) {
+    // return getByKategori(2);
+    // } else {
+    // throw new NoSuchElementException("");
+    // }
+    // }
 
     @Override
     public Risiko validateExistById(final int idRisiko) {
@@ -184,10 +177,7 @@ public class RisikoRestServiceImpl implements RisikoRestService {
         if (target.isPresent()) {
             return target.get();
         } else {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND,
-                    "ID Risiko " + idRisiko + " Tidak Ditemukan"
-            );
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "ID Risiko " + idRisiko + " Tidak Ditemukan");
         }
     }
 }

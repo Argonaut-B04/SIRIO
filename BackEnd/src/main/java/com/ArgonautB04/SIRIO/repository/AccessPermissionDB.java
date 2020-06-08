@@ -1,13 +1,12 @@
-package com.ArgonautB04.SIRIO.repository;
+package com.argonautb04.sirio.repository;
 
-import com.ArgonautB04.SIRIO.model.AccessPermissions;
-import com.ArgonautB04.SIRIO.model.Role;
+import com.argonautb04.sirio.model.AccessPermissions;
+import com.argonautb04.sirio.model.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface AccessPermissionDB
-        extends JpaRepository<AccessPermissions, Integer> {
+public interface AccessPermissionDB extends JpaRepository<AccessPermissions, Integer> {
 
     /**
      * Find Access Permission by Role.

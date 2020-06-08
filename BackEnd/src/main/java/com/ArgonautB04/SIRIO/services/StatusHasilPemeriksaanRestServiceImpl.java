@@ -1,7 +1,7 @@
-package com.ArgonautB04.SIRIO.services;
+package com.argonautb04.sirio.services;
 
-import com.ArgonautB04.SIRIO.model.StatusHasilPemeriksaan;
-import com.ArgonautB04.SIRIO.repository.StatusHasilPemeriksaanDB;
+import com.argonautb04.sirio.model.StatusHasilPemeriksaan;
+import com.argonautb04.sirio.repository.StatusHasilPemeriksaanDB;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,8 +25,10 @@ public class StatusHasilPemeriksaanRestServiceImpl implements StatusHasilPemerik
     @Override
     public StatusHasilPemeriksaan getById(int idStatus) {
         Optional<StatusHasilPemeriksaan> statusHasilPemeriksaan = statusHasilPemeriksaanDB.findById(idStatus);
-        if (statusHasilPemeriksaan.isPresent()) return statusHasilPemeriksaan.get();
-        else throw new NoSuchElementException();
+        if (statusHasilPemeriksaan.isPresent())
+            return statusHasilPemeriksaan.get();
+        else
+            throw new NoSuchElementException();
     }
 
     @Override

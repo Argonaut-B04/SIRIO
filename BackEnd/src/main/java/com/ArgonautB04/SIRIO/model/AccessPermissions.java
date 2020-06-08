@@ -1,4 +1,4 @@
-package com.ArgonautB04.SIRIO.model;
+package com.argonautb04.sirio.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -149,7 +149,6 @@ public class AccessPermissions implements Serializable {
     @Column
     private Boolean aksesDashboardKC = false;
 
-
     /**
      * Empty Constructor.
      */
@@ -162,8 +161,7 @@ public class AccessPermissions implements Serializable {
      * @param primaryRole Bind to this Role object
      * @param trueDefault Set all access permission to true.
      */
-    public AccessPermissions(final Role primaryRole,
-                             final boolean trueDefault) {
+    public AccessPermissions(final Role primaryRole, final boolean trueDefault) {
         this.role = primaryRole;
         if (trueDefault) {
             this.aksesRiskRating = true;

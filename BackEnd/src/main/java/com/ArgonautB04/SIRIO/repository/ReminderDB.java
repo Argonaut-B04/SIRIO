@@ -1,9 +1,9 @@
-package com.ArgonautB04.SIRIO.repository;
+package com.argonautb04.sirio.repository;
 
-import com.ArgonautB04.SIRIO.model.Employee;
-import com.ArgonautB04.SIRIO.model.Rekomendasi;
-import com.ArgonautB04.SIRIO.model.Reminder;
-import com.ArgonautB04.SIRIO.model.ReminderTemplate;
+import com.argonautb04.sirio.model.Employee;
+import com.argonautb04.sirio.model.Rekomendasi;
+import com.argonautb04.sirio.model.Reminder;
+import com.argonautb04.sirio.model.ReminderTemplate;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -14,12 +14,14 @@ import java.util.Optional;
 
 @Repository
 public interface ReminderDB extends JpaRepository<Reminder, Integer> {
-    List<Reminder> findAllByTanggalPengirimanBetween(@NotNull LocalDate tanggalPengiriman, @NotNull LocalDate tanggalPengiriman2);
+    List<Reminder> findAllByTanggalPengirimanBetween(@NotNull LocalDate tanggalPengiriman,
+                                                     @NotNull LocalDate tanggalPengiriman2);
 
     List<Reminder> findAllByReminderTemplate(ReminderTemplate reminderTemplate);
 
     List<Reminder> findAllByRekomendasi(Rekomendasi rekomendasi);
 
-    Optional<Reminder> findByIdReminderAndRekomendasiAndPembuat(int idReminder, Rekomendasi rekomendasi, Employee pembuat);
+    Optional<Reminder> findByIdReminderAndRekomendasiAndPembuat(int idReminder, Rekomendasi rekomendasi,
+                                                                Employee pembuat);
 
 }

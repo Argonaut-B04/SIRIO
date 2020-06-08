@@ -1,10 +1,10 @@
-package com.ArgonautB04.SIRIO.services;
+package com.argonautb04.sirio.services;
 
-import com.ArgonautB04.SIRIO.model.Employee;
-import com.ArgonautB04.SIRIO.model.HasilPemeriksaan;
-import com.ArgonautB04.SIRIO.model.TugasPemeriksaan;
-import com.ArgonautB04.SIRIO.repository.HasilPemeriksaanDB;
-import com.ArgonautB04.SIRIO.repository.StatusHasilPemeriksaanDB;
+import com.argonautb04.sirio.model.Employee;
+import com.argonautb04.sirio.model.HasilPemeriksaan;
+import com.argonautb04.sirio.model.TugasPemeriksaan;
+import com.argonautb04.sirio.repository.HasilPemeriksaanDB;
+import com.argonautb04.sirio.repository.StatusHasilPemeriksaanDB;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -33,8 +33,10 @@ public class HasilPemeriksaanRestServiceImpl implements HasilPemeriksaanRestServ
     @Override
     public HasilPemeriksaan getById(int idHasilPemeriksaan) {
         Optional<HasilPemeriksaan> hasilPemeriksaan = hasilPemeriksaanDB.findById(idHasilPemeriksaan);
-        if (hasilPemeriksaan.isPresent()) return hasilPemeriksaan.get();
-        else throw new NoSuchElementException();
+        if (hasilPemeriksaan.isPresent())
+            return hasilPemeriksaan.get();
+        else
+            throw new NoSuchElementException();
     }
 
     @Override
@@ -86,10 +88,8 @@ public class HasilPemeriksaanRestServiceImpl implements HasilPemeriksaanRestServ
         if (target.isPresent()) {
             return target.get();
         } else {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND,
-                    "Hasil pemeriksaan dengan id " + idHasilPemeriksaan + " tidak ditemukan"
-            );
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    "Hasil pemeriksaan dengan id " + idHasilPemeriksaan + " tidak ditemukan");
         }
     }
 }

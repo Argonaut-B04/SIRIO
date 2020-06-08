@@ -1,4 +1,4 @@
-package com.ArgonautB04.SIRIO.rest;
+package com.argonautb04.sirio.rest;
 
 public class PersetujuanHasilPemeriksaanDTO {
     private Integer idPemeriksa;
@@ -10,7 +10,7 @@ public class PersetujuanHasilPemeriksaanDTO {
         return idPemeriksa;
     }
 
-    public void setIdPemeriksa(Integer idPemeriksa) {
+    public void setIdPemeriksa(final Integer idPemeriksa) {
         this.idPemeriksa = idPemeriksa;
     }
 
@@ -18,7 +18,7 @@ public class PersetujuanHasilPemeriksaanDTO {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(final Integer id) {
         this.id = id;
     }
 
@@ -26,7 +26,7 @@ public class PersetujuanHasilPemeriksaanDTO {
         return status;
     }
 
-    public void setStatus(Integer status) {
+    public void setStatus(final Integer status) {
         this.status = status;
     }
 
@@ -34,7 +34,7 @@ public class PersetujuanHasilPemeriksaanDTO {
         return feedback;
     }
 
-    public void setFeedback(String feedback) {
+    public void setFeedback(final String feedback) {
         this.feedback = feedback;
     }
 }

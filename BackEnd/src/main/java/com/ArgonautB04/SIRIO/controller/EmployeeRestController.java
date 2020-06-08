@@ -1,23 +1,26 @@
-package com.ArgonautB04.SIRIO.controller;
+package com.argonautb04.sirio.controller;
 
-import com.ArgonautB04.SIRIO.model.Employee;
-import com.ArgonautB04.SIRIO.model.Role;
-import com.ArgonautB04.SIRIO.rest.BaseResponse;
-import com.ArgonautB04.SIRIO.rest.EmployeeDTO;
-import com.ArgonautB04.SIRIO.services.EmployeeRestService;
-import com.ArgonautB04.SIRIO.services.HasilPemeriksaanRestService;
-import com.ArgonautB04.SIRIO.services.RoleRestService;
-import com.ArgonautB04.SIRIO.services.TugasPemeriksaanRestService;
+import com.argonautb04.sirio.model.Employee;
+import com.argonautb04.sirio.model.Role;
+import com.argonautb04.sirio.rest.BaseResponse;
+import com.argonautb04.sirio.rest.EmployeeDTO;
+import com.argonautb04.sirio.services.EmployeeRestService;
+import com.argonautb04.sirio.services.HasilPemeriksaanRestService;
+import com.argonautb04.sirio.services.RoleRestService;
+import com.argonautb04.sirio.services.TugasPemeriksaanRestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -47,58 +50,44 @@ public class EmployeeRestController {
      * @return employee yang telah disimpan
      */
     @PostMapping(value = "/tambah", consumes = {"application/json"})
-    private BaseResponse<Employee> tambahEmployee(
-            @RequestBody EmployeeDTO employeeDTO
-    ) {
+    private BaseResponse<Employee> tambahEmployee(@RequestBody EmployeeDTO employeeDTO) {
         BaseResponse<Employee> response = new BaseResponse<>();
         Employee employee = new Employee();
 
         if (employeeDTO.getUsername() != null && !employeeDTO.getUsername().equals("")) {
             if (employeeRestService.getByUsername(employeeDTO.getUsername()).isPresent())
-                throw new ResponseStatusException(
-                        HttpStatus.CONFLICT, "Username " + employeeDTO.getUsername() + " sudah ada pada database!"
-                );
+                throw new ResponseStatusException(HttpStatus.CONFLICT,
+                        "Username " + employeeDTO.getUsername() + " sudah ada pada database!");
             employee.setUsername(employeeDTO.getUsername());
         } else {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Username tidak ditemukan!"
-                );
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Username tidak ditemukan!");
         }
 
         if (employeeDTO.getPassword() != null && !employeeDTO.getPassword().equals("")) {
             employee.setPassword(employeeDTO.getPassword());
         } else {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Password belum diisi!"
-            );
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Password belum diisi!");
         }
 
         if (employeeDTO.getNama() != null && !employeeDTO.getNama().equals("")) {
             employee.setNama(employeeDTO.getNama());
         } else {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Nama employee belum diisi!"
-            );
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Nama employee belum diisi!");
         }
 
         if (employeeDTO.getEmail() != null && !employeeDTO.getEmail().equals("")) {
             if (employeeRestService.getByEmail(employeeDTO.getEmail()).isPresent())
-                throw new ResponseStatusException(
-                        HttpStatus.CONFLICT, "Email " + employeeDTO.getEmail() + " sudah ada pada database!"
-                );
+                throw new ResponseStatusException(HttpStatus.CONFLICT,
+                        "Email " + employeeDTO.getEmail() + " sudah ada pada database!");
             employee.setEmail(employeeDTO.getEmail());
         } else {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Email employee belum diisi!"
-            );
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Email employee belum diisi!");
         }
 
         if (employeeDTO.getJabatan() != null && !employeeDTO.getJabatan().equals("")) {
             employee.setJabatan(employeeDTO.getJabatan());
         } else {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Jabatan employee belum diisi!"
-            );
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Jabatan employee belum diisi!");
         }
 
         employee.setNoHp(employeeDTO.getNoHp());
@@ -107,9 +96,8 @@ public class EmployeeRestController {
             Role role = roleRestService.getById(employeeDTO.getIdRole());
             employee.setRole(role);
         } catch (NoSuchElementException | NullPointerException e) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Role dengan ID " + employeeDTO.getIdRole() + " tidak ditemukan!"
-            );
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    "Role dengan ID " + employeeDTO.getIdRole() + " tidak ditemukan!");
         }
 
         response.setStatus(200);
@@ -125,52 +113,41 @@ public class EmployeeRestController {
      * @return employee yang telah diperbarui
      */
     @PostMapping(value = "/ubah", consumes = {"application/json"})
-    private BaseResponse<Employee> ubahEmployee(
-            @RequestBody EmployeeDTO employeeDTO
-    ) {
+    private BaseResponse<Employee> ubahEmployee(@RequestBody EmployeeDTO employeeDTO) {
         BaseResponse<Employee> response = new BaseResponse<>();
 
         Employee employee;
         try {
             employee = employeeRestService.getById(employeeDTO.getId());
         } catch (NoSuchElementException | NullPointerException e) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Employee dengan ID " + employeeDTO.getId() + " tidak ditemukan!"
-            );
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    "Employee dengan ID " + employeeDTO.getId() + " tidak ditemukan!");
         }
 
         if (employee.getStatus() == Employee.Status.NONAKTIF)
-            throw new ResponseStatusException(
-                    HttpStatus.FORBIDDEN, "Employee dengan ID " + employeeDTO.getId() + " sudah tidak aktif!"
-            );
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN,
+                    "Employee dengan ID " + employeeDTO.getId() + " sudah tidak aktif!");
 
         if (employeeDTO.getNama() != null && !employeeDTO.getNama().equals("")) {
             employee.setNama(employeeDTO.getNama());
         } else {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Nama employee belum diisi!"
-            );
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Nama employee belum diisi!");
         }
 
         if (employeeDTO.getEmail() != null && !employeeDTO.getEmail().equals("")) {
-            if (employeeRestService.getByEmail(employeeDTO.getEmail()).isPresent() &&
-                    !employeeDTO.getEmail().equals(employee.getEmail()))
-                throw new ResponseStatusException(
-                        HttpStatus.CONFLICT, "Email " + employeeDTO.getEmail() + " sudah ada pada database!"
-                );
+            if (employeeRestService.getByEmail(employeeDTO.getEmail()).isPresent()
+                    && !employeeDTO.getEmail().equals(employee.getEmail()))
+                throw new ResponseStatusException(HttpStatus.CONFLICT,
+                        "Email " + employeeDTO.getEmail() + " sudah ada pada database!");
             employee.setEmail(employeeDTO.getEmail());
         } else {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Email employee belum diisi!"
-            );
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Email employee belum diisi!");
         }
 
         if (employeeDTO.getJabatan() != null && !employeeDTO.getJabatan().equals("")) {
             employee.setJabatan(employeeDTO.getJabatan());
         } else {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Jabatan employee belum diisi!"
-            );
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Jabatan employee belum diisi!");
         }
 
         employee.setNoHp(employeeDTO.getNoHp());
@@ -179,9 +156,8 @@ public class EmployeeRestController {
             Role role = roleRestService.getById(employeeDTO.getIdRole());
             employee.setRole(role);
         } catch (NoSuchElementException | NullPointerException e) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Role dengan ID " + employeeDTO.getIdRole() + " tidak ditemukan!"
-            );
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    "Role dengan ID " + employeeDTO.getIdRole() + " tidak ditemukan!");
         }
 
         response.setStatus(200);
@@ -190,32 +166,34 @@ public class EmployeeRestController {
         return response;
     }
 
-//    /**
-//     * Nonaktivasi employee
-//     *
-//     * @param employeeDTO data transfer object untuk employee yang akan dinonaktifkan
-//     * @return employee yang telah dinonaktifkan
-//     */
-//    @PutMapping(value = "/nonaktif", consumes = {"application/json"})
-//    private BaseResponse<Employee> nonaktifEmployee(
-//            @RequestBody EmployeeDTO employeeDTO
-//    ) {
-//        BaseResponse<Employee> response = new BaseResponse<>();
-//
-//        Employee employee;
-//        try {
-//            employee = employeeRestService.getById(employeeDTO.getId());
-//        } catch (NoSuchElementException | NullPointerException e) {
-//            throw new ResponseStatusException(
-//                    HttpStatus.NOT_FOUND, "Employee dengan ID " + employeeDTO.getId() + " tidak ditemukan!"
-//            );
-//        }
-//
-//        response.setStatus(200);
-//        response.setMessage("success");
-//        response.setResult(employeeRestService.nonaktifkanEmployee(employee.getIdEmployee()));
-//        return response;
-//    }
+    // /**
+    // * Nonaktivasi employee
+    // *
+    // * @param employeeDTO data transfer object untuk employee yang akan
+    // dinonaktifkan
+    // * @return employee yang telah dinonaktifkan
+    // */
+    // @PutMapping(value = "/nonaktif", consumes = {"application/json"})
+    // private BaseResponse<Employee> nonaktifEmployee(
+    // @RequestBody EmployeeDTO employeeDTO
+    // ) {
+    // BaseResponse<Employee> response = new BaseResponse<>();
+    //
+    // Employee employee;
+    // try {
+    // employee = employeeRestService.getById(employeeDTO.getId());
+    // } catch (NoSuchElementException | NullPointerException e) {
+    // throw new ResponseStatusException(
+    // HttpStatus.NOT_FOUND, "Employee dengan ID " + employeeDTO.getId() + " tidak
+    // ditemukan!"
+    // );
+    // }
+    //
+    // response.setStatus(200);
+    // response.setMessage("success");
+    // response.setResult(employeeRestService.nonaktifkanEmployee(employee.getIdEmployee()));
+    // return response;
+    // }
 
     /**
      * Mengambil seluruh employee
@@ -242,8 +220,8 @@ public class EmployeeRestController {
         BaseResponse<List<Employee>> response = new BaseResponse<>();
         ArrayList<Employee> result = new ArrayList<>();
         List<Employee> emp = employeeRestService.getAll();
-        for (Employee e: emp){
-            if (e.getRole().getIdRole() == 6){
+        for (Employee e : emp) {
+            if (e.getRole().getIdRole() == 6) {
                 result.add(e);
             }
         }
@@ -263,8 +241,8 @@ public class EmployeeRestController {
         BaseResponse<List<Employee>> response = new BaseResponse<>();
         ArrayList<Employee> result = new ArrayList<>();
         List<Employee> emp = employeeRestService.getUnassignedBM();
-        for (Employee e: emp){
-            if (e.getRole().getIdRole() == 6){
+        for (Employee e : emp) {
+            if (e.getRole().getIdRole() == 6) {
                 result.add(e);
             }
         }
@@ -285,8 +263,8 @@ public class EmployeeRestController {
         ArrayList<Employee> result = new ArrayList<>();
         Employee allEmp = new Employee();
         List<Employee> emp = employeeRestService.getAll();
-        for (Employee e: emp){
-            if (e.getRole().getIdRole() == 5 || e.getRole().getIdRole() == 7){
+        for (Employee e : emp) {
+            if (e.getRole().getIdRole() == 5 || e.getRole().getIdRole() == 7) {
                 result.add(e);
             }
         }
@@ -310,8 +288,8 @@ public class EmployeeRestController {
         allEmp.setNama("Semua QA Officer");
         result.add(allEmp);
         List<Employee> emp = employeeRestService.getAll();
-        for (Employee e: emp){
-            if (e.getRole().getIdRole() == 5 || e.getRole().getIdRole() == 7){
+        for (Employee e : emp) {
+            if (e.getRole().getIdRole() == 5 || e.getRole().getIdRole() == 7) {
                 result.add(e);
             }
         }
@@ -321,7 +299,6 @@ public class EmployeeRestController {
         return response;
     }
 
-
     /**
      * Mengambil suatu employee
      *
@@ -329,9 +306,7 @@ public class EmployeeRestController {
      * @return detail employee
      */
     @GetMapping("/{idEmployee}")
-    private BaseResponse<Employee> getEmployee(
-            @PathVariable("idEmployee") int idEmployee
-    ) {
+    private BaseResponse<Employee> getEmployee(@PathVariable("idEmployee") int idEmployee) {
         BaseResponse<Employee> response = new BaseResponse<>();
         try {
             Employee result = employeeRestService.getById(idEmployee);
@@ -340,9 +315,8 @@ public class EmployeeRestController {
             response.setMessage("success");
             response.setResult(result);
         } catch (NoSuchElementException e) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Employee dengan ID " + idEmployee + " tidak ditemukan!"
-            );
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    "Employee dengan ID " + idEmployee + " tidak ditemukan!");
         }
         return response;
     }
@@ -354,9 +328,7 @@ public class EmployeeRestController {
      * @return Boolean checker
      */
     @GetMapping("/check/username/{username}")
-    private BaseResponse<Boolean> checkUsernameEmployee(
-            @PathVariable("username") String username
-    ) {
+    private BaseResponse<Boolean> checkUsernameEmployee(@PathVariable("username") String username) {
         Optional<Employee> employeeOptional = employeeRestService.getByUsername(username);
         return new BaseResponse<>(200, "success", employeeOptional.isPresent());
     }
@@ -367,9 +339,7 @@ public class EmployeeRestController {
      * @return Boolean checker
      */
     @PostMapping("/check/email")
-    private BaseResponse<Boolean> checkEmailEmployee(
-            @RequestBody EmployeeDTO employeeDTO
-    ) {
+    private BaseResponse<Boolean> checkEmailEmployee(@RequestBody EmployeeDTO employeeDTO) {
         Optional<Employee> employeeOptional = employeeRestService.getByEmail(employeeDTO.getEmail());
         return new BaseResponse<>(200, "success", employeeOptional.isPresent());
     }
@@ -392,18 +362,15 @@ public class EmployeeRestController {
      * @param employeeDTO data transfer object untuk employee yang akan dihapus
      */
     @PostMapping("/hapus")
-    private BaseResponse<String> hapusEmployee(
-            @RequestBody EmployeeDTO employeeDTO
-    ) {
+    private BaseResponse<String> hapusEmployee(@RequestBody EmployeeDTO employeeDTO) {
         BaseResponse<String> response = new BaseResponse<>();
 
         Employee employee;
         try {
             employee = employeeRestService.getById(employeeDTO.getId());
         } catch (NoSuchElementException | NullPointerException e) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Employee dengan ID " + employeeDTO.getId() + " tidak ditemukan!"
-            );
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    "Employee dengan ID " + employeeDTO.getId() + " tidak ditemukan!");
         }
 
         response.setStatus(200);
@@ -424,16 +391,14 @@ public class EmployeeRestController {
     /**
      * Mengubah password employee
      *
-     * @param employeeDTO data transfer object untuk employee yang akan diubah password nya
+     * @param employeeDTO data transfer object untuk employee yang akan diubah
+     *                    password nya
      */
     @PostMapping("/ubahPassword")
-    private BaseResponse<Boolean> ubahPasswordEmployee(
-            @RequestBody EmployeeDTO employeeDTO,
-            Principal principal
-    ) {
+    private BaseResponse<Boolean> ubahPasswordEmployee(@RequestBody EmployeeDTO employeeDTO, Principal principal) {
         Employee targetEmployee = employeeRestService.validateEmployeeExistByPrincipal(principal);
-        Boolean changeSuccess = employeeRestService.changePassword(
-                targetEmployee.getUsername(), employeeDTO.getPassword(), employeeDTO.getNewPassword());
+        Boolean changeSuccess = employeeRestService.changePassword(targetEmployee.getUsername(),
+                employeeDTO.getPassword(), employeeDTO.getNewPassword());
 
         return new BaseResponse<>(200, "success", changeSuccess);
     }

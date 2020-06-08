@@ -1,8 +1,8 @@
-package com.ArgonautB04.SIRIO.services;
+package com.argonautb04.sirio.services;
 
-import com.ArgonautB04.SIRIO.model.HasilPemeriksaan;
-import com.ArgonautB04.SIRIO.model.KomponenPemeriksaan;
-import com.ArgonautB04.SIRIO.model.Risiko;
+import com.argonautb04.sirio.model.HasilPemeriksaan;
+import com.argonautb04.sirio.model.KomponenPemeriksaan;
+import com.argonautb04.sirio.model.Risiko;
 
 import java.util.List;
 

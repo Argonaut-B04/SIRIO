@@ -1,4 +1,4 @@
-package com.ArgonautB04.SIRIO.rest;
+package com.argonautb04.sirio.rest;
 
 public class TabelHasilPemeriksaanDTO {
     private Integer id;
@@ -11,7 +11,7 @@ public class TabelHasilPemeriksaanDTO {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(final Integer id) {
         this.id = id;
     }
 
@@ -19,7 +19,7 @@ public class TabelHasilPemeriksaanDTO {
         return idTugasPemeriksaan;
     }
 
-    public void setIdTugasPemeriksaan(Integer idTugasPemeriksaan) {
+    public void setIdTugasPemeriksaan(final Integer idTugasPemeriksaan) {
         this.idTugasPemeriksaan = idTugasPemeriksaan;
     }
 
@@ -27,7 +27,7 @@ public class TabelHasilPemeriksaanDTO {
         return kantorCabang;
     }
 
-    public void setKantorCabang(String kantorCabang) {
+    public void setKantorCabang(final String kantorCabang) {
         this.kantorCabang = kantorCabang;
     }
 
@@ -35,7 +35,7 @@ public class TabelHasilPemeriksaanDTO {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(final String status) {
         this.status = status;
     }
 
@@ -43,7 +43,7 @@ public class TabelHasilPemeriksaanDTO {
         return siapDijalankan;
     }
 
-    public void setSiapDijalankan(Boolean siapDijalankan) {
+    public void setSiapDijalankan(final Boolean siapDijalankan) {
         this.siapDijalankan = siapDijalankan;
     }
 }

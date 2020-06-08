@@ -1,10 +1,10 @@
-package com.ArgonautB04.SIRIO.controller;
+package com.argonautb04.sirio.controller;
 
-import com.ArgonautB04.SIRIO.model.Employee;
-import com.ArgonautB04.SIRIO.model.RiskLevel;
-import com.ArgonautB04.SIRIO.rest.BaseResponse;
-import com.ArgonautB04.SIRIO.services.EmployeeRestService;
-import com.ArgonautB04.SIRIO.services.RiskLevelRestService;
+import com.argonautb04.sirio.model.Employee;
+import com.argonautb04.sirio.model.RiskLevel;
+import com.argonautb04.sirio.rest.BaseResponse;
+import com.argonautb04.sirio.services.EmployeeRestService;
+import com.argonautb04.sirio.services.RiskLevelRestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -45,19 +45,11 @@ public class RiskLevelRestController {
      * @return boolean in BaseResponse object
      */
     @PostMapping("/nama")
-    private BaseResponse<Boolean> isExistInDatabase(
-            final @RequestBody String namaRiskLevelBaru,
-            final Principal principal
-    ) {
-        Employee pengelola = employeeRestService
-                .validateEmployeeExistByPrincipal(principal);
-        employeeRestService
-                .validateRolePermission(pengelola, "akses risk level");
-        return new BaseResponse<>(
-                complete,
-                "success",
-                riskLevelRestService.isExistInDatabase(namaRiskLevelBaru)
-        );
+    private BaseResponse<Boolean> isExistInDatabase(final @RequestBody String namaRiskLevelBaru,
+                                                    final Principal principal) {
+        Employee pengelola = employeeRestService.validateEmployeeExistByPrincipal(principal);
+        employeeRestService.validateRolePermission(pengelola, "akses risk level");
+        return new BaseResponse<>(complete, "success", riskLevelRestService.isExistInDatabase(namaRiskLevelBaru));
     }
 
     /**
@@ -67,46 +59,27 @@ public class RiskLevelRestController {
      * @return List of active Risk Level
      */
     @GetMapping("/Aktif")
-    private BaseResponse<List<RiskLevel>> getAllAktifRiskLevel(
-            final Principal principal
-    ) {
-        Employee employee = employeeRestService
-                .validateEmployeeExistByPrincipal(principal);
-        employeeRestService
-                .validateRolePermission(employee, "akses risk level");
-        return new BaseResponse<>(
-                complete,
-                "success",
-                riskLevelRestService.getAktif());
+    private BaseResponse<List<RiskLevel>> getAllAktifRiskLevel(final Principal principal) {
+        Employee employee = employeeRestService.validateEmployeeExistByPrincipal(principal);
+        employeeRestService.validateRolePermission(employee, "akses risk level");
+        return new BaseResponse<>(complete, "success", riskLevelRestService.getAktif());
     }
 
     @PostMapping("")
-    private BaseResponse<List<RiskLevel>> changeRiskLevelConfiguration(
-            final @RequestBody List<RiskLevel> riskLevelList,
-            final Principal principal
-    ) {
-        Employee pengelola = employeeRestService
-                .validateEmployeeExistByPrincipal(principal);
-        employeeRestService
-                .validateRolePermission(pengelola, "ubah risk level");
+    private BaseResponse<List<RiskLevel>> changeRiskLevelConfiguration(final @RequestBody List<RiskLevel> riskLevelList,
+                                                                       final Principal principal) {
+        Employee pengelola = employeeRestService.validateEmployeeExistByPrincipal(principal);
+        employeeRestService.validateRolePermission(pengelola, "ubah risk level");
 
         List<RiskLevel> currentRiskLevel = riskLevelRestService.getAktif();
         List<RiskLevel> newRiskLevelList = new ArrayList<>();
 
         for (RiskLevel riskLevel : riskLevelList) {
             if (riskLevelRestService.isExistInDatabase(riskLevel)) {
-                newRiskLevelList.add(
-                        riskLevelRestService
-                                .ubahRiskLevel(
-                                        riskLevel.getIdLevel(),
-                                        riskLevel
-                                )
-                );
+                newRiskLevelList.add(riskLevelRestService.ubahRiskLevel(riskLevel.getIdLevel(), riskLevel));
             } else {
                 riskLevel.setPengelola(pengelola);
-                newRiskLevelList.add(
-                        riskLevelRestService.buatRiskLevel(riskLevel)
-                );
+                newRiskLevelList.add(riskLevelRestService.buatRiskLevel(riskLevel));
             }
         }
 

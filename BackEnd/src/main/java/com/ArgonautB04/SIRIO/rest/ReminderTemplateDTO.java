@@ -1,4 +1,4 @@
-package com.ArgonautB04.SIRIO.rest;
+package com.argonautb04.sirio.rest;
 
 public class ReminderTemplateDTO {
     private Integer id;
@@ -10,7 +10,8 @@ public class ReminderTemplateDTO {
     public ReminderTemplateDTO() {
     }
 
-    public ReminderTemplateDTO(Integer id, Integer idReminder, String subject, String content, String effectArea) {
+    public ReminderTemplateDTO(final Integer id, final Integer idReminder, final String subject, final String content,
+                               final String effectArea) {
         this.id = id;
         this.idReminder = idReminder;
         this.subject = subject;
@@ -22,7 +23,7 @@ public class ReminderTemplateDTO {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(final Integer id) {
         this.id = id;
     }
 
@@ -30,7 +31,7 @@ public class ReminderTemplateDTO {
         return subject;
     }
 
-    public void setSubject(String subject) {
+    public void setSubject(final String subject) {
         this.subject = subject;
     }
 
@@ -38,7 +39,7 @@ public class ReminderTemplateDTO {
         return content;
     }
 
-    public void setContent(String content) {
+    public void setContent(final String content) {
         this.content = content;
     }
 
@@ -46,7 +47,7 @@ public class ReminderTemplateDTO {
         return idReminder;
     }
 
-    public void setIdReminder(Integer idReminder) {
+    public void setIdReminder(final Integer idReminder) {
         this.idReminder = idReminder;
     }
 
@@ -54,7 +55,7 @@ public class ReminderTemplateDTO {
         return effectArea;
     }
 
-    public void setEffectArea(String effectArea) {
+    public void setEffectArea(final String effectArea) {
         this.effectArea = effectArea;
     }
 }

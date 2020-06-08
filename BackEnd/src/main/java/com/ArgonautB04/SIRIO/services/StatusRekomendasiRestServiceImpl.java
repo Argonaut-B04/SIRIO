@@ -1,7 +1,7 @@
-package com.ArgonautB04.SIRIO.services;
+package com.argonautb04.sirio.services;
 
-import com.ArgonautB04.SIRIO.model.StatusRekomendasi;
-import com.ArgonautB04.SIRIO.repository.StatusRekomendasiDB;
+import com.argonautb04.sirio.model.StatusRekomendasi;
+import com.argonautb04.sirio.repository.StatusRekomendasiDB;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,8 +25,10 @@ public class StatusRekomendasiRestServiceImpl implements StatusRekomendasiRestSe
     @Override
     public StatusRekomendasi getById(int idStatus) {
         Optional<StatusRekomendasi> statusRekomendasi = statusRekomendasiDB.findById(idStatus);
-        if (statusRekomendasi.isPresent()) return statusRekomendasi.get();
-        else throw new NoSuchElementException();
+        if (statusRekomendasi.isPresent())
+            return statusRekomendasi.get();
+        else
+            throw new NoSuchElementException();
     }
 
     @Override
@@ -37,7 +39,9 @@ public class StatusRekomendasiRestServiceImpl implements StatusRekomendasiRestSe
     @Override
     public StatusRekomendasi getByNamaStatus(String namaStatus) {
         Optional<StatusRekomendasi> target = statusRekomendasiDB.findByNamaStatus(namaStatus);
-        if (target.isPresent()) return target.get();
-        else throw new NoSuchElementException();
+        if (target.isPresent())
+            return target.get();
+        else
+            throw new NoSuchElementException();
     }
 }

@@ -1,20 +1,20 @@
-package com.ArgonautB04.SIRIO.controller;
+package com.argonautb04.sirio.controller;
 
-import com.ArgonautB04.SIRIO.model.Employee;
-import com.ArgonautB04.SIRIO.model.Rekomendasi;
-import com.ArgonautB04.SIRIO.rest.BaseResponse;
-import com.ArgonautB04.SIRIO.rest.DashboardDTO;
-import com.ArgonautB04.SIRIO.services.EmployeeRestService;
-import com.ArgonautB04.SIRIO.services.HasilPemeriksaanRestService;
-import com.ArgonautB04.SIRIO.services.KomponenPemeriksaanRestService;
-import com.ArgonautB04.SIRIO.services.RekomendasiRestService;
-import com.ArgonautB04.SIRIO.services.RisikoRestService;
-import com.ArgonautB04.SIRIO.services.RiskLevelRestService;
-import com.ArgonautB04.SIRIO.services.RoleRestService;
-import com.ArgonautB04.SIRIO.services.StatusHasilPemeriksaanRestService;
-import com.ArgonautB04.SIRIO.services.StatusRekomendasiRestService;
-import com.ArgonautB04.SIRIO.services.TemuanRisikoRestService;
-import com.ArgonautB04.SIRIO.services.TugasPemeriksaanRestService;
+import com.argonautb04.sirio.model.Employee;
+import com.argonautb04.sirio.model.Rekomendasi;
+import com.argonautb04.sirio.rest.BaseResponse;
+import com.argonautb04.sirio.rest.DashboardDTO;
+import com.argonautb04.sirio.services.EmployeeRestService;
+import com.argonautb04.sirio.services.HasilPemeriksaanRestService;
+import com.argonautb04.sirio.services.KomponenPemeriksaanRestService;
+import com.argonautb04.sirio.services.RekomendasiRestService;
+import com.argonautb04.sirio.services.RisikoRestService;
+import com.argonautb04.sirio.services.RiskLevelRestService;
+import com.argonautb04.sirio.services.RoleRestService;
+import com.argonautb04.sirio.services.StatusHasilPemeriksaanRestService;
+import com.argonautb04.sirio.services.StatusRekomendasiRestService;
+import com.argonautb04.sirio.services.TemuanRisikoRestService;
+import com.argonautb04.sirio.services.TugasPemeriksaanRestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -69,8 +69,7 @@ public class DashboardStaffController {
 
     @GetMapping("/getAllData")
     private BaseResponse<DashboardDTO> getAllData(@RequestParam("tanggalAwal") String dateAwal,
-                                                  @RequestParam("tanggalAkhir") String dateAkhir,
-                                                  Principal principal) throws ParseException {
+                                                  @RequestParam("tanggalAkhir") String dateAkhir, Principal principal) throws ParseException {
         Employee pengelola = employeeRestService.validateEmployeeExistByPrincipal(principal);
         employeeRestService.validateRolePermission(pengelola, "akses dashboard staff");
         BaseResponse<DashboardDTO> response = new BaseResponse<>();
@@ -104,17 +103,26 @@ public class DashboardStaffController {
 
             List<Integer> listTemuan = temuanRisikoRestService.getAllByMonth(tanggalAwal, tanggalAkhir);
 
-            List<Rekomendasi> rekomendasiOverdue = rekomendasiRestService.getRekomendasiOverdue(tanggalAwal, tanggalAkhir);
-            List<Integer> listRekomendasiOverdue = rekomendasiRestService.getRekomendasiByMonth(rekomendasiOverdue, tanggalAwal, tanggalAkhir);
-            Float jumlahRekomendasiOverdue = (float) rekomendasiOverdue.size() / (float) jumlahRekomendasi * (float) 100;
+            List<Rekomendasi> rekomendasiOverdue = rekomendasiRestService.getRekomendasiOverdue(tanggalAwal,
+                    tanggalAkhir);
+            List<Integer> listRekomendasiOverdue = rekomendasiRestService.getRekomendasiByMonth(rekomendasiOverdue,
+                    tanggalAwal, tanggalAkhir);
+            Float jumlahRekomendasiOverdue = (float) rekomendasiOverdue.size() / (float) jumlahRekomendasi
+                    * (float) 100;
 
-            List<Rekomendasi> rekomendasiDiimplementasi = rekomendasiRestService.getRekomendasiDiimplementasi(tanggalAwal, tanggalAkhir);
-            List<Integer> listRekomendasiDiimplementasi = rekomendasiRestService.getRekomendasiByMonth(rekomendasiDiimplementasi, tanggalAwal, tanggalAkhir);
-            Float jumlahRekomendasiDiimplementasi = (float) rekomendasiDiimplementasi.size() / (float) jumlahRekomendasi * (float) 100;
+            List<Rekomendasi> rekomendasiDiimplementasi = rekomendasiRestService
+                    .getRekomendasiDiimplementasi(tanggalAwal, tanggalAkhir);
+            List<Integer> listRekomendasiDiimplementasi = rekomendasiRestService
+                    .getRekomendasiByMonth(rekomendasiDiimplementasi, tanggalAwal, tanggalAkhir);
+            Float jumlahRekomendasiDiimplementasi = (float) rekomendasiDiimplementasi.size() / (float) jumlahRekomendasi
+                    * (float) 100;
 
-            List<Rekomendasi> rekomendasiBelumDiimplementasi = rekomendasiRestService.getRekomendasiBelumDiimplementasi(tanggalAwal, tanggalAkhir);
-            List<Integer> listRekomendasiBelumDiimplementasi = rekomendasiRestService.getRekomendasiByMonth(rekomendasiBelumDiimplementasi, tanggalAwal, tanggalAkhir);
-            Float jumlahRekomendasiBelumDiimplementasi = (float) rekomendasiBelumDiimplementasi.size() / (float) jumlahRekomendasi * (float) 100;
+            List<Rekomendasi> rekomendasiBelumDiimplementasi = rekomendasiRestService
+                    .getRekomendasiBelumDiimplementasi(tanggalAwal, tanggalAkhir);
+            List<Integer> listRekomendasiBelumDiimplementasi = rekomendasiRestService
+                    .getRekomendasiByMonth(rekomendasiBelumDiimplementasi, tanggalAwal, tanggalAkhir);
+            Float jumlahRekomendasiBelumDiimplementasi = (float) rekomendasiBelumDiimplementasi.size()
+                    / (float) jumlahRekomendasi * (float) 100;
 
             result.setJumlahRekomendasiBelumDiimplementasi(jumlahRekomendasiBelumDiimplementasi);
             result.setListRekomendasiBelumDiimplementasi(listRekomendasiBelumDiimplementasi);
@@ -134,8 +142,8 @@ public class DashboardStaffController {
 
     @GetMapping(value = "/qa")
     private BaseResponse<DashboardDTO> getQAData(@RequestParam("id") int idQa,
-                                                 @RequestParam("tanggalAwal") String dateAwal,
-                                                 @RequestParam("tanggalAkhir") String dateAkhir, Principal principal) throws ParseException {
+                                                 @RequestParam("tanggalAwal") String dateAwal, @RequestParam("tanggalAkhir") String dateAkhir,
+                                                 Principal principal) throws ParseException {
         Employee pengelola = employeeRestService.validateEmployeeExistByPrincipal(principal);
         employeeRestService.validateRolePermission(pengelola, "akses dashboard staff");
         BaseResponse<DashboardDTO> response = new BaseResponse<>();
@@ -158,9 +166,7 @@ public class DashboardStaffController {
             name = emp.getNama();
 
         } catch (NoSuchElementException | NullPointerException e) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "QA tidak ditemukan!"
-            );
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "QA tidak ditemukan!");
         }
 
         Integer jumlahRekomendasi = null;
@@ -176,18 +182,25 @@ public class DashboardStaffController {
 
         List<Integer> listTemuan = temuanRisikoRestService.getByPembuatByMonth(idQa, tanggalAwal, tanggalAkhir);
 
-        List<Rekomendasi> rekomendasiOverdue = rekomendasiRestService.getRekomendasiOverdueByPembuat(idQa, tanggalAwal, tanggalAkhir);
-        List<Integer> listRekomendasiOverdue = rekomendasiRestService.getRekomendasiByMonth(rekomendasiOverdue, tanggalAwal, tanggalAkhir);
+        List<Rekomendasi> rekomendasiOverdue = rekomendasiRestService.getRekomendasiOverdueByPembuat(idQa, tanggalAwal,
+                tanggalAkhir);
+        List<Integer> listRekomendasiOverdue = rekomendasiRestService.getRekomendasiByMonth(rekomendasiOverdue,
+                tanggalAwal, tanggalAkhir);
         Float jumlahRekomendasiOverdue = (float) rekomendasiOverdue.size() / (float) jumlahRekomendasi * (float) 100;
 
+        List<Rekomendasi> rekomendasiDiimplementasi = rekomendasiRestService.getRekomendasiDiimplementasiByPembuat(idQa,
+                tanggalAwal, tanggalAkhir);
+        List<Integer> listRekomendasiDiimplementasi = rekomendasiRestService
+                .getRekomendasiByMonth(rekomendasiDiimplementasi, tanggalAwal, tanggalAkhir);
+        Float jumlahRekomendasiDiimplementasi = (float) rekomendasiDiimplementasi.size() / (float) jumlahRekomendasi
+                * (float) 100;
 
-        List<Rekomendasi> rekomendasiDiimplementasi = rekomendasiRestService.getRekomendasiDiimplementasiByPembuat(idQa, tanggalAwal, tanggalAkhir);
-        List<Integer> listRekomendasiDiimplementasi = rekomendasiRestService.getRekomendasiByMonth(rekomendasiDiimplementasi, tanggalAwal, tanggalAkhir);
-        Float jumlahRekomendasiDiimplementasi = (float) rekomendasiDiimplementasi.size() / (float) jumlahRekomendasi * (float) 100;
-
-        List<Rekomendasi> rekomendasiBelumDiimplementasi = rekomendasiRestService.getRekomendasiBelumDiimplementasiByPembuat(idQa, tanggalAwal, tanggalAkhir);
-        List<Integer> listRekomendasiBelumDiimplementasi = rekomendasiRestService.getRekomendasiByMonth(rekomendasiBelumDiimplementasi, tanggalAwal, tanggalAkhir);
-        Float jumlahRekomendasiBelumDiimplementasi = (float) rekomendasiBelumDiimplementasi.size() / (float) jumlahRekomendasi * (float) 100;
+        List<Rekomendasi> rekomendasiBelumDiimplementasi = rekomendasiRestService
+                .getRekomendasiBelumDiimplementasiByPembuat(idQa, tanggalAwal, tanggalAkhir);
+        List<Integer> listRekomendasiBelumDiimplementasi = rekomendasiRestService
+                .getRekomendasiByMonth(rekomendasiBelumDiimplementasi, tanggalAwal, tanggalAkhir);
+        Float jumlahRekomendasiBelumDiimplementasi = (float) rekomendasiBelumDiimplementasi.size()
+                / (float) jumlahRekomendasi * (float) 100;
 
         result.setJumlahRekomendasiBelumDiimplementasi(jumlahRekomendasiBelumDiimplementasi);
         result.setListRekomendasiBelumDiimplementasi(listRekomendasiBelumDiimplementasi);

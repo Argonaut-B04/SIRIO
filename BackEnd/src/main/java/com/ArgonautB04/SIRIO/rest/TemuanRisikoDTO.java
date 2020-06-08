@@ -1,4 +1,4 @@
-package com.ArgonautB04.SIRIO.rest;
+package com.argonautb04.sirio.rest;
 
 public class TemuanRisikoDTO {
     private Integer id;
@@ -10,7 +10,7 @@ public class TemuanRisikoDTO {
         return idRisiko;
     }
 
-    public void setIdRisiko(Integer idRisiko) {
+    public void setIdRisiko(final Integer idRisiko) {
         this.idRisiko = idRisiko;
     }
 
@@ -18,7 +18,7 @@ public class TemuanRisikoDTO {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(final Integer id) {
         this.id = id;
     }
 
@@ -26,7 +26,7 @@ public class TemuanRisikoDTO {
         return idPembuat;
     }
 
-    public void setIdPembuat(Integer idPembuat) {
+    public void setIdPembuat(final Integer idPembuat) {
         this.idPembuat = idPembuat;
     }
 
@@ -34,7 +34,7 @@ public class TemuanRisikoDTO {
         return keterangan;
     }
 
-    public void setKeterangan(String keterangan) {
+    public void setKeterangan(final String keterangan) {
         this.keterangan = keterangan;
     }
 }

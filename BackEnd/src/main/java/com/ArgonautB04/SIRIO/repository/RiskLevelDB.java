@@ -1,7 +1,7 @@
-package com.ArgonautB04.SIRIO.repository;
+package com.argonautb04.sirio.repository;
 
-import com.ArgonautB04.SIRIO.model.RiskLevel;
-import com.ArgonautB04.SIRIO.model.RiskLevel.Status;
+import com.argonautb04.sirio.model.RiskLevel;
+import com.argonautb04.sirio.model.RiskLevel.Status;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

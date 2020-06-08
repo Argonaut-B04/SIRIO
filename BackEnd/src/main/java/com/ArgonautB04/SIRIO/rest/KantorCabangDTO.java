@@ -1,4 +1,4 @@
-package com.ArgonautB04.SIRIO.rest;
+package com.argonautb04.sirio.rest;
 
 public class KantorCabangDTO {
     private Integer id;
@@ -15,7 +15,7 @@ public class KantorCabangDTO {
         return idRiskRating;
     }
 
-    public void setIdRiskRating(Integer idRiskRating) {
+    public void setIdRiskRating(final Integer idRiskRating) {
         this.idRiskRating = idRiskRating;
     }
 
@@ -23,7 +23,7 @@ public class KantorCabangDTO {
         return kunjunganAudit;
     }
 
-    public void setKunjunganAudit(boolean kunjunganAudit) {
+    public void setKunjunganAudit(final boolean kunjunganAudit) {
         this.kunjunganAudit = kunjunganAudit;
     }
 
@@ -31,7 +31,7 @@ public class KantorCabangDTO {
         return idPemilik;
     }
 
-    public void setIdPemilik(Integer idPemilik) {
+    public void setIdPemilik(final Integer idPemilik) {
         this.idPemilik = idPemilik;
     }
 
@@ -39,7 +39,7 @@ public class KantorCabangDTO {
         return regional;
     }
 
-    public void setRegional(String regional) {
+    public void setRegional(final String regional) {
         this.regional = regional;
     }
 
@@ -47,7 +47,7 @@ public class KantorCabangDTO {
         return area;
     }
 
-    public void setArea(String area) {
+    public void setArea(final String area) {
         this.area = area;
     }
 
@@ -55,7 +55,7 @@ public class KantorCabangDTO {
         return idPembuat;
     }
 
-    public void setIdPembuat(Integer idPembuat) {
+    public void setIdPembuat(final Integer idPembuat) {
         this.idPembuat = idPembuat;
     }
 
@@ -63,7 +63,7 @@ public class KantorCabangDTO {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(final Integer id) {
         this.id = id;
     }
 
@@ -71,7 +71,7 @@ public class KantorCabangDTO {
         return namaKantorCabang;
     }
 
-    public void setNamaKantorCabang(String namaKantorCabang) {
+    public void setNamaKantorCabang(final String namaKantorCabang) {
         this.namaKantorCabang = namaKantorCabang;
     }
 

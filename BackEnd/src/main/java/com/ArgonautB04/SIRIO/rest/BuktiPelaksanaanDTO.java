@@ -1,6 +1,4 @@
-package com.ArgonautB04.SIRIO.rest;
-
-import java.time.LocalDate;
+package com.argonautb04.sirio.rest;
 
 public class BuktiPelaksanaanDTO {
     private Integer id;

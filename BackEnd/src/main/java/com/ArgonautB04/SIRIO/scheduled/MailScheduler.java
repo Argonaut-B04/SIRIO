@@ -1,9 +1,13 @@
-package com.ArgonautB04.SIRIO.scheduled;
+package com.argonautb04.sirio.scheduled;
 
-import com.ArgonautB04.SIRIO.model.Employee;
-import com.ArgonautB04.SIRIO.model.Reminder;
-import com.ArgonautB04.SIRIO.model.ReminderTemplate;
-import com.ArgonautB04.SIRIO.services.*;
+import com.argonautb04.sirio.model.Employee;
+import com.argonautb04.sirio.model.Reminder;
+import com.argonautb04.sirio.model.ReminderTemplate;
+import com.argonautb04.sirio.services.EmailRestService;
+import com.argonautb04.sirio.services.EmployeeRestService;
+import com.argonautb04.sirio.services.RekomendasiRestService;
+import com.argonautb04.sirio.services.ReminderRestService;
+import com.argonautb04.sirio.services.ReminderTemplateRestService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,42 +45,43 @@ public class MailScheduler {
 
     @Scheduled(fixedRate = 3600000)
     public void testSSchedule() {
-        if (!startService) return;
-        Calendar todayCalender = Calendar.getInstance();
+        if (!startService)
+            return;
+        final Calendar todayCalender = Calendar.getInstance();
         todayCalender.set(Calendar.HOUR_OF_DAY, 0);
         todayCalender.set(Calendar.MINUTE, 0);
         todayCalender.set(Calendar.SECOND, 0);
         todayCalender.add(Calendar.HOUR_OF_DAY, -1);
-        LocalDate today = LocalDateTime.ofInstant(todayCalender.toInstant(), todayCalender.getTimeZone().toZoneId()).toLocalDate();
+        final LocalDate today = LocalDateTime
+                .ofInstant(todayCalender.toInstant(), todayCalender.getTimeZone().toZoneId()).toLocalDate();
 
-        Calendar tommorowData = Calendar.getInstance();
+        final Calendar tommorowData = Calendar.getInstance();
         tommorowData.set(Calendar.HOUR_OF_DAY, 0);
         tommorowData.set(Calendar.MINUTE, 0);
         tommorowData.set(Calendar.SECOND, 0);
         tommorowData.add(Calendar.HOUR_OF_DAY, -1);
         tommorowData.add(Calendar.DATE, 1);
-        LocalDate tommorow = LocalDateTime.ofInstant(tommorowData.toInstant(), tommorowData.getTimeZone().toZoneId()).toLocalDate();
+        final LocalDate tommorow = LocalDateTime
+                .ofInstant(tommorowData.toInstant(), tommorowData.getTimeZone().toZoneId()).toLocalDate();
 
         logger.info("Mengirim reminders untuk tanggal " + today);
 
-        List<Reminder> reminders = reminderRestService.getByDay(today, tommorow);
-        if (reminders.size() == 0) logger.warn("Tidak ada reminder terdaftar untuk hari ini");
-        for (Reminder reminder : reminders) {
-            if (reminder.isTerkirim()) continue;
-            Employee penerima =
-                    reminder.getRekomendasi()
-                            .getKomponenPemeriksaan()
-                            .getHasilPemeriksaan()
-                            .getTugasPemeriksaan()
-                            .getKantorCabang()
-                            .getPemilik();
+        final List<Reminder> reminders = reminderRestService.getByDay(today, tommorow);
+        if (reminders.size() == 0)
+            logger.warn("Tidak ada reminder terdaftar untuk hari ini");
+        for (final Reminder reminder : reminders) {
+            if (reminder.isTerkirim())
+                continue;
+            final Employee penerima = reminder.getRekomendasi().getKomponenPemeriksaan().getHasilPemeriksaan()
+                    .getTugasPemeriksaan().getKantorCabang().getPemilik();
 
             ReminderTemplate reminderMailFormatSingleReminder = reminder.getReminderTemplate();
             if (reminderMailFormatSingleReminder == null) {
                 reminderMailFormatSingleReminder = reminderTemplateRestService.getGlobal();
             }
 
-            emailRestService.sendEmail(penerima.getEmail(), reminderMailFormatSingleReminder.getSubjects(), reminderMailFormatSingleReminder.getBody());
+            emailRestService.sendEmail(penerima.getEmail(), reminderMailFormatSingleReminder.getSubjects(),
+                    reminderMailFormatSingleReminder.getBody());
             reminderRestService.telahTerkirim(reminder);
             logger.info("Reminder terkirim kepada " + penerima.getNama());
         }

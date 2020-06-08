@@ -1,10 +1,5 @@
-package com.ArgonautB04.SIRIO.rest;
+package com.argonautb04.sirio.rest;
 
-import com.ArgonautB04.SIRIO.model.HasilPemeriksaan;
-import com.ArgonautB04.SIRIO.model.Rekomendasi;
-import com.ArgonautB04.SIRIO.model.TugasPemeriksaan;
-
-import java.time.LocalDate;
 import java.util.List;
 
 public class DashboardKantorDTO {
@@ -26,7 +21,7 @@ public class DashboardKantorDTO {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(final Integer id) {
         this.id = id;
     }
 
@@ -34,7 +29,7 @@ public class DashboardKantorDTO {
         return riskScore;
     }
 
-    public void setRiskScore(Integer riskScore) {
+    public void setRiskScore(final Integer riskScore) {
         this.riskScore = riskScore;
     }
 
@@ -42,7 +37,7 @@ public class DashboardKantorDTO {
         return jumlahTemuan;
     }
 
-    public void setJumlahTemuan(Integer jumlahTemuan) {
+    public void setJumlahTemuan(final Integer jumlahTemuan) {
         this.jumlahTemuan = jumlahTemuan;
     }
 
@@ -50,7 +45,7 @@ public class DashboardKantorDTO {
         return jumlahPemeriksaan;
     }
 
-    public void setJumlahPemeriksaan(Integer jumlahPemeriksaan) {
+    public void setJumlahPemeriksaan(final Integer jumlahPemeriksaan) {
         this.jumlahPemeriksaan = jumlahPemeriksaan;
     }
 
@@ -58,7 +53,7 @@ public class DashboardKantorDTO {
         return jumlahRekomendasi;
     }
 
-    public void setJumlahRekomendasi(Integer jumlahRekomendasi) {
+    public void setJumlahRekomendasi(final Integer jumlahRekomendasi) {
         this.jumlahRekomendasi = jumlahRekomendasi;
     }
 
@@ -66,7 +61,7 @@ public class DashboardKantorDTO {
         return jumlahRekomendasiOverdue;
     }
 
-    public void setJumlahRekomendasiOverdue(Double jumlahRekomendasiOverdue) {
+    public void setJumlahRekomendasiOverdue(final Double jumlahRekomendasiOverdue) {
         this.jumlahRekomendasiOverdue = jumlahRekomendasiOverdue;
     }
 
@@ -74,7 +69,7 @@ public class DashboardKantorDTO {
         return jumlahRekomendasiImplemented;
     }
 
-    public void setJumlahRekomendasiImplemented(Double jumlahRekomendasiImplemented) {
+    public void setJumlahRekomendasiImplemented(final Double jumlahRekomendasiImplemented) {
         this.jumlahRekomendasiImplemented = jumlahRekomendasiImplemented;
     }
 
@@ -82,7 +77,7 @@ public class DashboardKantorDTO {
         return jumlahRekomendasiNotImplemented;
     }
 
-    public void setJumlahRekomendasiNotImplemented(Double jumlahRekomendasiNotImplemented) {
+    public void setJumlahRekomendasiNotImplemented(final Double jumlahRekomendasiNotImplemented) {
         this.jumlahRekomendasiNotImplemented = jumlahRekomendasiNotImplemented;
     }
 
@@ -90,7 +85,7 @@ public class DashboardKantorDTO {
         return jumlahTemuanPerBulan;
     }
 
-    public void setJumlahTemuanPerBulan(List<Integer> jumlahTemuanPerBulan) {
+    public void setJumlahTemuanPerBulan(final List<Integer> jumlahTemuanPerBulan) {
         this.jumlahTemuanPerBulan = jumlahTemuanPerBulan;
     }
 
@@ -98,7 +93,7 @@ public class DashboardKantorDTO {
         return jumlahRekomendasiOverduePerBulan;
     }
 
-    public void setJumlahRekomendasiOverduePerBulan(List<Integer> jumlahRekomendasiOverduePerBulan) {
+    public void setJumlahRekomendasiOverduePerBulan(final List<Integer> jumlahRekomendasiOverduePerBulan) {
         this.jumlahRekomendasiOverduePerBulan = jumlahRekomendasiOverduePerBulan;
     }
 
@@ -106,7 +101,7 @@ public class DashboardKantorDTO {
         return jumlahRekomendasiImplementedPerBulan;
     }
 
-    public void setJumlahRekomendasiImplementedPerBulan(List<Integer> jumlahRekomendasiImplementedPerBulan) {
+    public void setJumlahRekomendasiImplementedPerBulan(final List<Integer> jumlahRekomendasiImplementedPerBulan) {
         this.jumlahRekomendasiImplementedPerBulan = jumlahRekomendasiImplementedPerBulan;
     }
 
@@ -114,7 +109,8 @@ public class DashboardKantorDTO {
         return jumlahRekomendasiNotImplementedPerBulan;
     }
 
-    public void setJumlahRekomendasiNotImplementedPerBulan(List<Integer> jumlahRekomendasiNotImplementedPerBulan) {
+    public void setJumlahRekomendasiNotImplementedPerBulan(
+            final List<Integer> jumlahRekomendasiNotImplementedPerBulan) {
         this.jumlahRekomendasiNotImplementedPerBulan = jumlahRekomendasiNotImplementedPerBulan;
     }
 
@@ -122,20 +118,20 @@ public class DashboardKantorDTO {
         return daftarBulan;
     }
 
-    public void setDaftarBulan(List<String> daftarBulan) {
+    public void setDaftarBulan(final List<String> daftarBulan) {
         this.daftarBulan = daftarBulan;
     }
 
-    //    private Integer id;
-//    private List<Integer> listTemuan;
-//    private Integer jumlahTemuan;
-//    private Integer jumlahRekomendasi;
-//    private List<Integer> listRekomendasiDiimplementasi;
-//    private Float jumlahRekomendasiDiimplementasi;
-//    private List<Integer> listRekomendasiBelumDiimplementasi;
-//    private Float jumlahRekomendasiBelumDiimplementasi;
-//    private List<Integer> listRekomendasiOverdue;
-//    private Float jumlahRekomendasiOverdue;
-//    private List<String> listMonth;
+    // private Integer id;
+    // private List<Integer> listTemuan;
+    // private Integer jumlahTemuan;
+    // private Integer jumlahRekomendasi;
+    // private List<Integer> listRekomendasiDiimplementasi;
+    // private Float jumlahRekomendasiDiimplementasi;
+    // private List<Integer> listRekomendasiBelumDiimplementasi;
+    // private Float jumlahRekomendasiBelumDiimplementasi;
+    // private List<Integer> listRekomendasiOverdue;
+    // private Float jumlahRekomendasiOverdue;
+    // private List<String> listMonth;
 
 }

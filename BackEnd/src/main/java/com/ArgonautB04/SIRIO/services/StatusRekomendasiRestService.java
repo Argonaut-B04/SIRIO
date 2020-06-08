@@ -1,6 +1,6 @@
-package com.ArgonautB04.SIRIO.services;
+package com.argonautb04.sirio.services;
 
-import com.ArgonautB04.SIRIO.model.StatusRekomendasi;
+import com.argonautb04.sirio.model.StatusRekomendasi;
 
 import java.util.List;
 

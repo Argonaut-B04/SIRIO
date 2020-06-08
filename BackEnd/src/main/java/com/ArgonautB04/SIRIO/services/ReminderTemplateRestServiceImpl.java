@@ -1,7 +1,7 @@
-package com.ArgonautB04.SIRIO.services;
+package com.argonautb04.sirio.services;
 
-import com.ArgonautB04.SIRIO.model.ReminderTemplate;
-import com.ArgonautB04.SIRIO.repository.ReminderTemplateDB;
+import com.argonautb04.sirio.model.ReminderTemplate;
+import com.argonautb04.sirio.repository.ReminderTemplateDB;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,10 +29,8 @@ public class ReminderTemplateRestServiceImpl implements ReminderTemplateRestServ
 
     @Override
     public ReminderTemplate ambilAtauBuatTemplate(ReminderTemplate reminderTemplate) {
-        Optional<ReminderTemplate> template = reminderTemplateDB.findBySubjectsAndBody(
-                reminderTemplate.getSubjects(),
-                reminderTemplate.getBody()
-        );
+        Optional<ReminderTemplate> template = reminderTemplateDB.findBySubjectsAndBody(reminderTemplate.getSubjects(),
+                reminderTemplate.getBody());
         return template.orElseGet(() -> reminderTemplateDB.save(reminderTemplate));
     }
 }
