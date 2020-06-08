@@ -9,6 +9,7 @@ import SirioConfirmButton from '../../Button/ActionButton/SirioConfirmButton';
 import SirioMessageButton from '../../Button/ActionButton/SirioMessageButton';
 import SirioWarningButton from '../../Button/ActionButton/SirioWarningButton';
 import SirioAxiosBase from '../../../Services/SirioAxiosBase';
+import moment from 'moment';
 
 /**
  * Kelas untuk membuat komponen tabel reminder
@@ -23,11 +24,13 @@ class TabelReminder extends React.Component {
             changeComplete: false,
             changed: false,
             generated: 0,
+            counterKey: 10000
         }
 
         this.renderRows = this.renderRows.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.endNotification = this.endNotification.bind(this);
+        this.filtered = this.filtered.bind(this);
     }
 
     componentDidMount() {
@@ -97,6 +100,28 @@ class TabelReminder extends React.Component {
             dataField: 'tanggalPengiriman',
             text: 'TANGGAL',
             sort: true,
+            sortFunc: (a, b, order, dataField, rowA, rowB) => {
+                if (order === 'asc') {
+                    if (a[0] === b[0]) {
+                        if (a[1] === b[1]) {
+                            return b[2] - a[2];
+                        } else {
+                            return b[1] - a[1];
+                        }
+                    } else {
+                        return b[0] - a[0];
+                    }
+                }
+                if (a[0] === b[0]) {
+                    if (a[1] === b[1]) {
+                        return a[2] - b[2];
+                    } else {
+                        return a[1] - b[1];
+                    }
+                } else {
+                    return a[0] - b[0];
+                }
+            },
             classes: classes.rowItem,
             headerClasses: classes.colheader,
             headerStyle: (colum, colIndex) => {
@@ -258,12 +283,13 @@ class TabelReminder extends React.Component {
         if (dateOld <= currentDate) {
             return "";
         }
-        const minDate = this.addDays(currentDate, 1);
+        const minDate = this.getNextDay(1);
         return (
             <SirioDatePickerButton
                 purple
                 hover
                 id={row.idReminder}
+                filter={this.filtered}
                 handleChange={(date, id) => this.ubah(date, id)}
                 minDate={minDate}
                 maxDate={this.state.deadline}
@@ -271,6 +297,24 @@ class TabelReminder extends React.Component {
                 Ubah
             </SirioDatePickerButton>
         )
+    }
+
+    filtered(date) {
+        const day = moment(date).toDate();
+        // console.log([(day.getFullYear()), (day.getMonth() + 1), day.getDate()]);
+        for (let i = 0; i < this.state.rowList.length; i++) {
+            const oldDate = this.state.rowList[i].tanggalPengiriman;
+            if (
+                day.getFullYear() === oldDate[0]
+                &&
+                (day.getMonth() + 1) === oldDate[1]
+                &&
+                day.getDate() === oldDate[2]
+            ) {
+                return false;
+            }
+        }
+        return true
     }
 
     // Formatter untuk render button kedua
@@ -299,27 +343,34 @@ class TabelReminder extends React.Component {
         return result;
     }
 
+    getNextDay(counter) {
+        return moment(new Date()).add(counter, "days").toDate();
+    }
+
     generateHarian(hari) {
+        let counterKey = this.state.counterKey;
         const deadline = this.state.deadline;
         const newDateList = [];
-        const nextday = this.addDays(new Date(), 1);
-        for (var hariIni = nextday; hariIni < deadline; hariIni = this.addDays(hariIni, hari)) {
+        let counterDay = hari;
+        for (var hariIni = this.getNextDay(hari); hariIni < deadline; hariIni = this.getNextDay(counterDay)) {
             const newDate = [(hariIni.getFullYear()), (hariIni.getMonth() + 1), hariIni.getDate()];
             newDateList.push({
-                idReminder: Math.floor(Math.random() * 1000) + 1,
+                idReminder: counterKey++,
                 tanggalPengiriman: newDate
             })
+            counterDay += hari;
         }
         this.setState({
             rowList: newDateList,
             changed: true,
-            generated: hari
+            generated: hari,
+            counterKey: counterKey
         })
     }
 
     // Fungsi untuk mendapatkan tombol di sisi kanan title
     headerButton() {
-        const minDate = this.addDays(new Date(), 1);
+        const minDate = this.getNextDay(1);
         return (
             <>
                 <div className="d-flex flex-row align-items-center">
@@ -331,6 +382,7 @@ class TabelReminder extends React.Component {
                             handleChange={(date, id) => this.tambah(date, id)}
                             minDate={minDate}
                             maxDate={this.state.deadline}
+                            filter={this.filtered}
                             popper="top-end"
                         >
                             Tambah
@@ -435,6 +487,11 @@ class TabelReminder extends React.Component {
             )
         }
 
+        const defaultSorted = [{
+            dataField: 'tanggalPengiriman', // if dataField is not match to any column you defined, it will be ignored.
+            order: 'asc' // desc or asc
+        }];
+
         const column = this.columns();
         return (
             <>
@@ -445,6 +502,7 @@ class TabelReminder extends React.Component {
                     id='idReminder'
                     columnsDefinition={column}
                     includeSearchBar
+                    defaultSorted={defaultSorted}
                     headerButton={this.headerButton()}
                     footerContent={this.footerContent()}
                 />
