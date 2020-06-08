@@ -101,7 +101,14 @@ public class RisikoRestServiceImpl implements RisikoRestService {
     @Override
     public Risiko nonaktifkanRisiko(final int idRisiko) {
         Risiko target = getById(idRisiko);
-        target.setStatus(Risiko.Status.NONAKTIF);
+        if (target.getChildList().isEmpty()) {
+            target.setStatus(Risiko.Status.NONAKTIF);
+        } else {
+            for (Risiko risiko : target.getChildList()) {
+                risiko.setParent(null);
+            }
+            target.setStatus(Risiko.Status.NONAKTIF);
+        }
         return risikoDB.save(target);
     }
 
