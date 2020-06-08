@@ -209,6 +209,8 @@ export default class FormTambahRencana extends React.Component {
             case "linkMajelis":
                 this.validateLink(value);
                 break;
+            default:
+                break;
         }
     }
 

@@ -36,16 +36,16 @@ class FormUbahSOP extends React.Component {
         var letterOnly = /^[a-zA-Z\s]*$/;
         if (fokusJudul === null || fokusJudul === "") {
             errorJudul = "Judul harus diisi";
-        } else if(!fokusJudul.match(letterOnly)){
+        } else if (!fokusJudul.match(letterOnly)) {
             errorJudul = "Hanya boleh mengandung huruf";
         } else if (fokusJudul.length > 25) {
             errorJudul = "Nama kantor tidak boleh lebih dari 25 karakter";
         }
-       
+
         this.setState({
             errorJudul: errorJudul
         })
-       
+
     }
 
     validateKategori(fokusKat) {
@@ -53,34 +53,34 @@ class FormUbahSOP extends React.Component {
         var letterOnly = /^[a-zA-Z\s]*$/;
         if (fokusKat === null || fokusKat === "") {
             errorKat = "Judul harus diisi";
-        } else if(!fokusKat.match(letterOnly)){
+        } else if (!fokusKat.match(letterOnly)) {
             errorKat = "Hanya boleh mengandung huruf";
         } else if (fokusKat.length > 125) {
             errorKat = "Kategori tidak boleh lebih dari 125 karakter";
         }
-        
+
         this.setState({
             errorKat: errorKat
         })
-       
+
     }
 
     validateLink(fokusLink) {
         var errorLink = "";
-        
+
         // eslint-disable-next-line
         var link = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.%]+$/;
         if (fokusLink === null || fokusLink === "") {
             errorLink = "Link SOP  harus diisi";
-        } else if(!fokusLink.match(link)){
-            errorLink= "Tidak sesuai dengan format link url";
+        } else if (!fokusLink.match(link)) {
+            errorLink = "Tidak sesuai dengan format link url";
         }
-        
-        
+
+
         this.setState({
             errorLink: errorLink
         })
-        
+
     }
 
     submitable() {
@@ -112,7 +112,7 @@ class FormUbahSOP extends React.Component {
     async renderDataSop() {
         this.props.contentStartLoading();
         this.props.changeLoadingBody("Mengambil data dari server");
-        
+
         const response = await SopService.getSOPDetail(this.props.location.state.id);
 
         this.props.changeLoadingBody("Menampilkan data");
@@ -150,21 +150,22 @@ class FormUbahSOP extends React.Component {
             case "linkDokumen":
                 this.validateLink(value);
                 break;
-            
+            default:
+                break;
         }
     }
 
-    
+
 
 
     // Fungsi yang akan dijalankan ketika user submit
     // Umumnya akan digunakan untuk memanggil service komunikasi ke backend
-   handleSubmit(event) {
+    handleSubmit(event) {
         this.props.contentStartLoading();
         this.props.changeLoadingBody("Mengirim data ke server");
 
         event.preventDefault();
-        if(this.submitable()){
+        if (this.submitable()) {
             const sop = {
                 id: this.state.id,
                 judul: this.state.judul,
@@ -172,14 +173,14 @@ class FormUbahSOP extends React.Component {
                 linkDokumen: this.state.linkDokumen
             }
             SopService.editSOP(sop)
-            .then(() => this.setRedirect());
+                .then(() => this.setRedirect());
             this.props.contentFinishLoading()
-            
+
         }
 
-        
+
     }
-    
+
     // Fungsi yang akan mengembalikan definisi tiap field pada form
     // Setiap objek {} pada List [] akan menjadi 1 field
     // untuk informasi lebih lengkap, cek SirioForm
@@ -204,7 +205,7 @@ class FormUbahSOP extends React.Component {
                     name: "kategori",
                     value: this.state.kategori,
                     placeholder: "Masukan kategori SOP"
-                },{
+                }, {
                     label: "Link SOP",
                     required: true,
                     handleChange: this.handleChange,
@@ -216,19 +217,19 @@ class FormUbahSOP extends React.Component {
                 }
 
             ]
-           
+
         )
 
     }
 
     submitButton() {
         var tombolSimpan =
-        <SirioButton
-            purple
-            disabled
-            classes="mx-1"
-        >
-            Simpan
+            <SirioButton
+                purple
+                disabled
+                classes="mx-1"
+            >
+                Simpan
         </SirioButton>;
         if (this.submitable()) {
             tombolSimpan =
@@ -236,7 +237,7 @@ class FormUbahSOP extends React.Component {
                     purple
                     recommended
                     classes="mx-1"
-                    onClick={(event)  => this.handleSubmit(event)}
+                    onClick={(event) => this.handleSubmit(event)}
                 >
                     Simpan
                 </SirioButton>
@@ -271,9 +272,9 @@ class FormUbahSOP extends React.Component {
                     onSubmit={this.handleSubmit}
                     submitButton={this.submitButton()}
                 />
-             </>
+            </>
         );
     }
 }
 
-export default withRouter (FormUbahSOP);
+export default withRouter(FormUbahSOP);

@@ -38,7 +38,7 @@ class FormTambahBukti extends React.Component {
         } else if (fokusKeterangan.length > 125) {
             errorKeterangan = "Keterangan tidak boleh lebih dari 125 karakter";
         }
-        
+
         this.setState({
             errorKeterangan: errorKeterangan
         })
@@ -56,7 +56,7 @@ class FormTambahBukti extends React.Component {
         } else if (fokusLampiran.length > 255) {
             errorLampiran = "Lampiran tidak boleh lebih dari 255 karakter";
         }
-        
+
         this.setState({
             errorLampiran: errorLampiran
         })
@@ -92,7 +92,7 @@ class FormTambahBukti extends React.Component {
         this.props.changeLoadingBody("Mengambil data dari server");
 
         const response = await RekomendasiService.getRekomendasi(this.props.location.state.id);
-        
+
         // Mengubah isi dari loader
         this.props.changeLoadingBody("Menampilkan data");
 
@@ -101,7 +101,7 @@ class FormTambahBukti extends React.Component {
             ketRekomendasi: response.data.result.keterangan
         }, this.props.contentFinishLoading()) // Setelah jeda waktu, hentikan loader
     }
-    
+
     handleChange(event) {
         const { name, value } = event.target;
         this.setState(
@@ -118,9 +118,11 @@ class FormTambahBukti extends React.Component {
             case "lampiran":
                 this.validateLampiran(value);
                 break;
+            default:
+                break;
         }
     }
-    
+
     handleSubmit(event) {
         this.props.contentStartLoading();
         this.props.changeLoadingBody("Mengirim data ke server");
@@ -189,9 +191,9 @@ class FormTambahBukti extends React.Component {
             <div>
                 {tombolSimpan}
                 <SirioButton purple
-                             type="button"
-                             classes="mx-1"
-                             onClick={() => window.location.href = "/bukti-pelaksanaan"}>
+                    type="button"
+                    classes="mx-1"
+                    onClick={() => window.location.href = "/bukti-pelaksanaan"}>
                     Batal
                 </SirioButton>
             </div>

@@ -5,7 +5,7 @@ import KantorCabangService from '../../../Services/KantorCabangService';
 import EmployeeService from '../../../Services/EmployeeService';
 import { NavLink, Redirect } from 'react-router-dom';
 import { withRouter } from 'react-router-dom';
-import {OverlayTrigger, Tooltip} from 'react-bootstrap'
+import { OverlayTrigger, Tooltip } from 'react-bootstrap'
 
 
 class FormUbahKantorCabang extends React.Component {
@@ -48,14 +48,14 @@ class FormUbahKantorCabang extends React.Component {
             errorNama = "Nama kantor harus diisi";
         } else if (fokusNama.match(symbols)) {
             errorNama = "Nama hanya boleh mengandung huruf dan angka";
-        }else if (fokusNama.length > 25) {
+        } else if (fokusNama.length > 25) {
             errorNama = "Nama kantor tidak boleh lebih dari 25 karakter";
         }
-       
+
         this.setState({
             errorNama: errorNama
         })
-        
+
     }
 
     validateArea(fokusArea) {
@@ -63,7 +63,7 @@ class FormUbahKantorCabang extends React.Component {
 
         // eslint-disable-next-line
         var symbols = /[-!$%@#^&*()\\_+|~=`{}\[\]:";'<>?,.\/]/;
-        if(fokusArea === null || fokusArea === ""){
+        if (fokusArea === null || fokusArea === "") {
             errorArea = "Area harus diisi";
         } else if (fokusArea.match(symbols)) {
             errorArea = "Area hanya boleh mengandung huruf dan angka";
@@ -71,11 +71,11 @@ class FormUbahKantorCabang extends React.Component {
         if (fokusArea.length > 125) {
             errorArea = "Area tidak boleh lebih dari 125 karakter";
         }
-        
+
         this.setState({
             errorArea: errorArea
         })
-        
+
     }
 
     validateRegional(fokusReg) {
@@ -83,19 +83,19 @@ class FormUbahKantorCabang extends React.Component {
 
         // eslint-disable-next-line
         var symbols = /[-!$%@#^&*()\\_+|~=`{}\[\]:";'<>?,.\/]/;
-        if(fokusReg === null || fokusReg === ""){
-            errorReg= "Regional harus diisi";
+        if (fokusReg === null || fokusReg === "") {
+            errorReg = "Regional harus diisi";
         } else if (fokusReg.match(symbols)) {
-            errorReg= "Regional hanya boleh mengandung huruf dan angka";
+            errorReg = "Regional hanya boleh mengandung huruf dan angka";
         }
         if (fokusReg.length > 125) {
             errorReg = "Regional tidak boleh lebih dari 125 karakter";
         }
-       
+
         this.setState({
             errorReg: errorReg
         })
-       
+
     }
 
     submitable() {
@@ -104,7 +104,7 @@ class FormUbahKantorCabang extends React.Component {
             this.state.errorReg === "" &&
             (this.state.namaKantorCabang !== null && this.state.namaKantorCabang !== "") &&
             (this.state.area !== null && this.state.area !== "") &&
-            (this.state.idPemilik!== null && this.state.idPemilik !== "") &&
+            (this.state.idPemilik !== null && this.state.idPemilik !== "") &&
             (this.state.regional !== null && this.state.regional !== "");
     }
 
@@ -139,11 +139,11 @@ class FormUbahKantorCabang extends React.Component {
                 }
             )
         });
-        
+
         const response = await KantorCabangService.getKantorCabangDetail(this.props.location.state.id);
 
         this.props.changeLoadingBody("Menampilkan data");
-        
+
         this.setState({
             employeeOptionList: employeeOptionList,
             id: response.data.result.idKantor,
@@ -160,7 +160,7 @@ class FormUbahKantorCabang extends React.Component {
 
 
     }
-    
+
     // Fungsi untuk mengubah state ketika isi dari input diubah
     // Fungsi ini wajib ada jika membuat form
     handleChange(event) {
@@ -182,6 +182,8 @@ class FormUbahKantorCabang extends React.Component {
             case "regional":
                 this.validateRegional(value);
                 break;
+            default:
+                break;
         }
     }
 
@@ -191,9 +193,9 @@ class FormUbahKantorCabang extends React.Component {
         const target = event.target;
         const value = target.name === 'kunjunganAudit' ? target.checked : target.value;
         const name = target.name;
-    
+
         this.setState({
-          [name]: value
+            [name]: value
         });
     }
 
@@ -230,75 +232,75 @@ class FormUbahKantorCabang extends React.Component {
     // Setiap objek {} pada List [] akan menjadi 1 field
     // untuk informasi lebih lengkap, cek SirioForm
     inputDefinition() {
-            return (
-                [
-                    {
-                        label: "Nama Point",
-                        handleChange: this.handleChange,
-                        required: true,
-                        type: "text",
-                        name: "namaKantorCabang",
-                        errormessage: this.state.errorNama,
-                        value: this.state.namaKantorCabang,
-                        placeholder: "Masukan nama point"
-                    }, {
-                        label: "Branch Manager",
-                        handleChange: this.handleSelectChange,
-                        required: true,
-                        type: "select",
-                        name: "idPemilik",
-                        value: this.state.idPemilik,
-                        errormessage: this.state.errorBM,
-                        optionList: this.state.employeeOptionList
-                    },{
-                        label: "Area",
-                        handleChange: this.handleChange,
-                        required: true,
-                        type: "text",
-                        name: "area",
-                        errormessage: this.state.errorArea,
-                        value: this.state.area,
-                        placeholder: "Masukan nama area"
-                    },{
-                        label: "Regional",
-                        handleChange: this.handleChange,
-                        required: true,
-                        type: "text",
-                        name: "regional",
-                        value: this.state.regional,
-                        errormessage: this.state.errorReg,
-                        placeholder: "Masukan nama regional"
-                    },{
-                        label: <OverlayTrigger
+        return (
+            [
+                {
+                    label: "Nama Point",
+                    handleChange: this.handleChange,
+                    required: true,
+                    type: "text",
+                    name: "namaKantorCabang",
+                    errormessage: this.state.errorNama,
+                    value: this.state.namaKantorCabang,
+                    placeholder: "Masukan nama point"
+                }, {
+                    label: "Branch Manager",
+                    handleChange: this.handleSelectChange,
+                    required: true,
+                    type: "select",
+                    name: "idPemilik",
+                    value: this.state.idPemilik,
+                    errormessage: this.state.errorBM,
+                    optionList: this.state.employeeOptionList
+                }, {
+                    label: "Area",
+                    handleChange: this.handleChange,
+                    required: true,
+                    type: "text",
+                    name: "area",
+                    errormessage: this.state.errorArea,
+                    value: this.state.area,
+                    placeholder: "Masukan nama area"
+                }, {
+                    label: "Regional",
+                    handleChange: this.handleChange,
+                    required: true,
+                    type: "text",
+                    name: "regional",
+                    value: this.state.regional,
+                    errormessage: this.state.errorReg,
+                    placeholder: "Masukan nama regional"
+                }, {
+                    label: <OverlayTrigger
                         placement="right"
                         overlay={<Tooltip id="button-tooltip">
-                        Sudah pernah atau belum pernah dikunjungi audit
+                            Sudah pernah atau belum pernah dikunjungi audit
                         </Tooltip>}
-                        >
+                    >
                         <p variant="success">Kunjungan Audit</p>
-                        </OverlayTrigger>,
-                        handleChange: this.handleInputChange,
-                        type: "checkbox",
-                        name: "kunjunganAudit",
-                        value: this.state.kunjunganAudit,
-                        checked: this.state.kunjunganAudit,
-                    }
-    
-    
-                ]
-            )
+                    </OverlayTrigger>,
+                    handleChange: this.handleInputChange,
+                    type: "checkbox",
+                    name: "kunjunganAudit",
+                    value: this.state.kunjunganAudit,
+                    checked: this.state.kunjunganAudit,
+                }
+
+
+            ]
+        )
         //}
-        
+
     }
 
     submitButton() {
         var tombolSimpan =
-        <SirioButton
-            purple
-            disabled
-            classes="mx-1"
-        >
-            Simpan
+            <SirioButton
+                purple
+                disabled
+                classes="mx-1"
+            >
+                Simpan
         </SirioButton>;
         if (this.submitable()) {
             tombolSimpan =
@@ -306,7 +308,7 @@ class FormUbahKantorCabang extends React.Component {
                     purple
                     recommended
                     classes="mx-1"
-                    onClick={(event)  => this.handleSubmit(event)}
+                    onClick={(event) => this.handleSubmit(event)}
                 >
                     Simpan
                 </SirioButton>
@@ -341,7 +343,7 @@ class FormUbahKantorCabang extends React.Component {
                     onSubmit={this.handleSubmit}
                     submitButton={this.submitButton()}
                 />
-             </>
+            </>
         );
     }
 }

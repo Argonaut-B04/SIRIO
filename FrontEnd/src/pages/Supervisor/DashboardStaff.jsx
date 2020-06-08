@@ -38,7 +38,6 @@ class DashboardStaff extends React.Component {
             namaqa: "",
             tanggalAwal: "",
             tanggalAkhir: "",
-            contentLoading: true,
             max: "",
             role: AuthenticationService.getRole(),
             preloader: true,

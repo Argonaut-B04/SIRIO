@@ -1,8 +1,6 @@
 import React from "react";
 import FormUbahPassword from "../Components/Form/Employee/EmployeeFormUbahPassword";
 import SirioMainLayout from "../Layout/SirioMainLayout";
-import AuthenticationService from "Services/AuthenticationService";
-import { Redirect } from "react-router-dom";
 
 export default class ChangePassword extends React.Component {
     constructor(props) {

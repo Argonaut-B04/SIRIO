@@ -481,6 +481,8 @@ class HasilPemeriksaanFormTambah extends React.Component {
                 this.validateJumlah(array[indexKomponen].jumlahSampel,
                     array[indexKomponen].jumlahPopulasi, value, indexKomponen);
                 break;
+            default:
+                break;
         }
     }
 

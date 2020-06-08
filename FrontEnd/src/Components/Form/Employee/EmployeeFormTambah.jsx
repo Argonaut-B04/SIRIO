@@ -222,6 +222,8 @@ export default class EmployeeFormTambah extends React.Component {
             case "noHp":
                 this.validateNomorHp(value);
                 break;
+            default:
+                break;
         }
     }
 

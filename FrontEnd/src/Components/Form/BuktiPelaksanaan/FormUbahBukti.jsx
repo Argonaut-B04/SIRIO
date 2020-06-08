@@ -38,7 +38,7 @@ class FormUbahBukti extends React.Component {
         } else if (fokusKeterangan.length > 125) {
             errorKeterangan = "Keterangan tidak boleh lebih dari 125 karakter";
         }
-        
+
         this.setState({
             errorKeterangan: errorKeterangan
         })
@@ -56,7 +56,7 @@ class FormUbahBukti extends React.Component {
         } else if (fokusLampiran.length > 255) {
             errorLampiran = "Lampiran tidak boleh lebih dari 255 karakter";
         }
-        
+
         this.setState({
             errorLampiran: errorLampiran
         })
@@ -92,7 +92,7 @@ class FormUbahBukti extends React.Component {
         this.props.changeLoadingBody("Mengambil data dari server");
 
         const response = await BuktiPelaksanaanService.getBuktiPelaksanaan(this.props.location.state.id);
-        
+
         // Mengubah isi dari loader
         this.props.changeLoadingBody("Menampilkan data");
 
@@ -121,6 +121,8 @@ class FormUbahBukti extends React.Component {
                 break;
             case "lampiran":
                 this.validateLampiran(value);
+                break;
+            default:
                 break;
         }
     }
