@@ -12,6 +12,7 @@ import SirioButton from '../../Components/Button/SirioButton';
 import SirioComponentHeader from "../../Components/Header/SirioComponentHeader";
 import AuthenticationService from "../../Services/AuthenticationService";
 import moment from 'moment';
+import 'moment/locale/id';
 import { Row, Col } from 'react-bootstrap';
 
 class DashboardKantorCabang extends React.Component {
@@ -539,6 +540,10 @@ class DashboardKantorCabang extends React.Component {
     getBoxFirst() {
         return([
             {
+                title: "Rekomendasi",
+                value: <p>{this.state.dashboardComponent.jumlahRekomendasi}</p>
+            },
+            {
                 title: "Rekomendasi Diimplementasi",
                 value: <p>{this.state.dashboardComponent.jumlahRekomendasiImplemented}%</p>
             },
@@ -551,11 +556,7 @@ class DashboardKantorCabang extends React.Component {
                 value: <p>{this.state.dashboardComponent.jumlahRekomendasiOverdue}%</p>
             },
             {
-                title: "Jumlah Rekomendasi",
-                value: <p>{this.state.dashboardComponent.jumlahRekomendasi}</p>
-            },
-            {
-                title: "Jumlah Temuan",
+                title: "Temuan",
                 value: <p>{this.state.dashboardComponent.jumlahTemuan}</p>
             }
         ])
@@ -564,6 +565,10 @@ class DashboardKantorCabang extends React.Component {
     getBoxSecond() {
         return([
             {
+                title: "Rekomendasi",
+                value: <p>{this.state.dashboardComponent.jumlahRekomendasi}</p>
+            },
+            {
                 title: "Rekomendasi Diimplementasi",
                 value: <p>{this.state.dashboardComponent.jumlahRekomendasiImplemented}%</p>
             },
@@ -576,15 +581,11 @@ class DashboardKantorCabang extends React.Component {
                 value: <p>{this.state.dashboardComponent.jumlahRekomendasiOverdue}%</p>
             },
             {
-                title: "Jumlah Rekomendasi",
-                value: <p>{this.state.dashboardComponent.jumlahRekomendasi}</p>
-            },
-            {
-                title: "Jumlah Temuan",
+                title: "Temuan",
                 value: <p>{this.state.dashboardComponent.jumlahTemuan}</p>
             },
             {
-                title: "Jumlah Pemeriksaan",
+                title: "Pemeriksaan",
                 value: <p>{this.state.dashboardComponent.jumlahPemeriksaan}</p>
             },
             {

@@ -6,7 +6,6 @@ import RencanaPemeriksaanService from '../../../Services/RencanaPemeriksaanServi
 import SirioMessageButton from "../../Button/ActionButton/SirioMessageButton";
 import { NavLink } from 'react-router-dom';
 import { withRouter } from 'react-router-dom';
-import AuthenticationService from '../../../Services/AuthenticationService';
 
 class TabelRencanaPemeriksaan extends React.Component {
 

@@ -91,3 +91,8 @@ export const logout = {
     link: "/logout",
     title: "Logout"
 }
+
+export const changePassword = {
+    link: "/change-password",
+    title: "Change Password"
+}

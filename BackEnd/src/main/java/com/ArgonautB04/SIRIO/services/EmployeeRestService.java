@@ -18,6 +18,8 @@ public interface EmployeeRestService {
 
     List<Employee> getAll();
 
+    List<Employee> getAllWithNonAktif();
+
     Employee ubahEmployee(int idEmployee, Employee employee);
 
     Employee nonaktifkanEmployee(int idEmployee);
@@ -36,7 +38,8 @@ public interface EmployeeRestService {
 
     void simpanPerubahan(Employee employee);
 
-    void changePassword(String username, String newPassword);
-
     List<Employee> getUnassignedBM();
+
+    boolean changePassword(String username, String oldPassword, String newPassword);
+
 }

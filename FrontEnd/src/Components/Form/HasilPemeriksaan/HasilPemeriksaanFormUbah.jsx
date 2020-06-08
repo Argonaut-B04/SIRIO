@@ -177,24 +177,34 @@ class HasilPemeriksaanFormUbah extends React.Component {
     getHistoriTemuanButton(idRisiko) {
         const histori = <p>
             {this.state.daftarHistoriTemuan
-                .filter(x => x.idRisiko === idRisiko)
+                .filter(temuan => temuan.idRisiko === idRisiko)
                 .map((temuan, index) =>
                     <p className="text-center p-0 m-0">{index+1}. {temuan.keterangan} </p>
                 )}
         </p>;
 
-        return (
-            <SirioConfirmButton
-                purple recommended
-                classes="m-1"
-                modalTitle= "Riwayat Temuan Risiko"
-                modalDesc={histori}
-                customConfirmText=" "
-                confirmDisable
+        var tombolRiwayat =
+            <SirioButton
+                purple
+                disabled
             >
                 Riwayat Temuan
-            </SirioConfirmButton>
-        )
+            </SirioButton>;
+
+        if (histori.props.children.length !== 0) {
+            tombolRiwayat =
+                <SirioConfirmButton
+                    purple recommended
+                    classes="m-1"
+                    modalTitle= "Riwayat Temuan Risiko"
+                    modalDesc={histori}
+                    customConfirmText=" "
+                    confirmDisable
+                >
+                    Riwayat Temuan
+                </SirioConfirmButton>;
+        }
+        return tombolRiwayat
     }
 
     getInputDefinition(indexKomponen) {

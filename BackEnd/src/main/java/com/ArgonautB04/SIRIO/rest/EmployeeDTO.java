@@ -5,11 +5,20 @@ public class EmployeeDTO {
     private Integer id;
     private String nama;
     private String password;
+    private String newPassword;
     private String noHp;
     private String email;
     private Integer idRole;
     private String username;
     private String jabatan;
+
+    public String getNewPassword() {
+        return newPassword;
+    }
+
+    public void setNewPassword(String newPassword) {
+        this.newPassword = newPassword;
+    }
 
     public String getJabatan() {
         return jabatan;
