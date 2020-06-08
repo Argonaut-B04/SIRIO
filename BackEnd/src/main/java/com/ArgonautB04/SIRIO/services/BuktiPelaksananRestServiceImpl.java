@@ -1,9 +1,9 @@
-package com.ArgonautB04.SIRIO.services;
+package com.argonautb04.sirio.services;
 
-import com.ArgonautB04.SIRIO.model.BuktiPelaksanaan;
-import com.ArgonautB04.SIRIO.model.Employee;
-import com.ArgonautB04.SIRIO.model.Rekomendasi;
-import com.ArgonautB04.SIRIO.repository.BuktiPelaksanaanDB;
+import com.argonautb04.sirio.model.BuktiPelaksanaan;
+import com.argonautb04.sirio.model.Employee;
+import com.argonautb04.sirio.model.Rekomendasi;
+import com.argonautb04.sirio.repository.BuktiPelaksanaanDB;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -29,8 +29,10 @@ public class BuktiPelaksananRestServiceImpl implements BuktiPelaksanaanRestServi
     @Override
     public BuktiPelaksanaan getById(int idBuktiPelaksanaan) {
         Optional<BuktiPelaksanaan> buktiPelaksanaan = buktiPelaksanaanDB.findById(idBuktiPelaksanaan);
-        if (buktiPelaksanaan.isPresent()) return buktiPelaksanaan.get();
-        else throw new NoSuchElementException();
+        if (buktiPelaksanaan.isPresent())
+            return buktiPelaksanaan.get();
+        else
+            throw new NoSuchElementException();
     }
 
     @Override
@@ -72,9 +74,8 @@ public class BuktiPelaksananRestServiceImpl implements BuktiPelaksanaanRestServi
         if (target.isPresent()) {
             return target.get();
         } else {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Bukti pelaksanaan dengan ID " + idBuktiPelaksanaan + " tidak ditemukan!"
-            );
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    "Bukti pelaksanaan dengan ID " + idBuktiPelaksanaan + " tidak ditemukan!");
         }
     }
 }

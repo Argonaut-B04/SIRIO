@@ -1,4 +1,4 @@
-package com.ArgonautB04.SIRIO.model;
+package com.argonautb04.sirio.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.OnDelete;
@@ -72,9 +72,7 @@ public class BuktiPelaksanaan implements Serializable {
      * Status.
      */
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "status",
-            referencedColumnName = "idStatusBukti",
-            nullable = false)
+    @JoinColumn(name = "status", referencedColumnName = "idStatusBukti", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private StatusBuktiPelaksanaan statusBuktiPelaksanaan;
@@ -100,9 +98,7 @@ public class BuktiPelaksanaan implements Serializable {
      * Person in charge Employee object.
      */
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "pembuat",
-            referencedColumnName = "idEmployee",
-            nullable = false)
+    @JoinColumn(name = "pembuat", referencedColumnName = "idEmployee", nullable = false)
     @OnDelete(action = OnDeleteAction.NO_ACTION)
     @JsonIgnore
     private Employee pembuat;
@@ -193,8 +189,7 @@ public class BuktiPelaksanaan implements Serializable {
      *
      * @param status
      */
-    public void setStatusBuktiPelaksanaan(
-            final StatusBuktiPelaksanaan status) {
+    public void setStatusBuktiPelaksanaan(final StatusBuktiPelaksanaan status) {
         this.statusBuktiPelaksanaan = status;
     }
 

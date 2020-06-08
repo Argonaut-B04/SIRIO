@@ -1,4 +1,4 @@
-package com.ArgonautB04.SIRIO.services;
+package com.argonautb04.sirio.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;

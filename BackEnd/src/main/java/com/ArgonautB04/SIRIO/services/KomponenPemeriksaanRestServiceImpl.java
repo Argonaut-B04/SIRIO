@@ -1,9 +1,9 @@
-package com.ArgonautB04.SIRIO.services;
+package com.argonautb04.sirio.services;
 
-import com.ArgonautB04.SIRIO.model.HasilPemeriksaan;
-import com.ArgonautB04.SIRIO.model.KomponenPemeriksaan;
-import com.ArgonautB04.SIRIO.model.Risiko;
-import com.ArgonautB04.SIRIO.repository.KomponenPemeriksaanDB;
+import com.argonautb04.sirio.model.HasilPemeriksaan;
+import com.argonautb04.sirio.model.KomponenPemeriksaan;
+import com.argonautb04.sirio.model.Risiko;
+import com.argonautb04.sirio.repository.KomponenPemeriksaanDB;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,8 +27,10 @@ public class KomponenPemeriksaanRestServiceImpl implements KomponenPemeriksaanRe
     @Override
     public KomponenPemeriksaan getById(int idKomponenPemeriksaan) {
         Optional<KomponenPemeriksaan> komponenPemeriksaan = komponenPemeriksaanDB.findById(idKomponenPemeriksaan);
-        if (komponenPemeriksaan.isPresent()) return komponenPemeriksaan.get();
-        else throw new NoSuchElementException();
+        if (komponenPemeriksaan.isPresent())
+            return komponenPemeriksaan.get();
+        else
+            throw new NoSuchElementException();
     }
 
     @Override
@@ -47,7 +49,8 @@ public class KomponenPemeriksaanRestServiceImpl implements KomponenPemeriksaanRe
     }
 
     @Override
-    public KomponenPemeriksaan ubahKomponenPemeriksaan(int idKomponenPemeriksaan, KomponenPemeriksaan komponenPemeriksaan) {
+    public KomponenPemeriksaan ubahKomponenPemeriksaan(int idKomponenPemeriksaan,
+                                                       KomponenPemeriksaan komponenPemeriksaan) {
         KomponenPemeriksaan target = getById(idKomponenPemeriksaan);
         target.setHasilPemeriksaan(komponenPemeriksaan.getHasilPemeriksaan());
         target.setRiskLevel(komponenPemeriksaan.getRiskLevel());

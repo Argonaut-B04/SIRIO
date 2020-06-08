@@ -1,7 +1,7 @@
-package com.ArgonautB04.SIRIO.rest;
+package com.argonautb04.sirio.rest;
 
-import com.ArgonautB04.SIRIO.scheduled.MailScheduler;
-import com.ArgonautB04.SIRIO.services.EmployeeRestService;
+import com.argonautb04.sirio.scheduled.MailScheduler;
+import com.argonautb04.sirio.services.EmployeeRestService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -30,12 +30,12 @@ public class DatabaseLoader implements CommandLineRunner {
     }
 
     private void resetEmployeesPasswords() {
-        employeeRestService.changePassword("administrator", "administrator123");
-        employeeRestService.changePassword("supervisor", "supervisor123");
-        employeeRestService.changePassword("manajer", "manajer123");
-        employeeRestService.changePassword("leadlead", "leadlead123");
-        employeeRestService.changePassword("qaofficer", "qaofficer123");
-        employeeRestService.changePassword("branchmanager", "branchmanager123");
-        employeeRestService.changePassword("superofficer", "superofficer123");
+        employeeRestService.setPassword("administrator", "administrator123");
+        employeeRestService.setPassword("supervisor", "supervisor123");
+        employeeRestService.setPassword("manajer", "manajer123");
+        employeeRestService.setPassword("leadlead", "leadlead123");
+        employeeRestService.setPassword("qaofficer", "qaofficer123");
+        employeeRestService.setPassword("branchmanager", "branchmanager123");
+        employeeRestService.setPassword("superofficer", "superofficer123");
     }
 }

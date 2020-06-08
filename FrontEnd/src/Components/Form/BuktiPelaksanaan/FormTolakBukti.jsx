@@ -95,6 +95,8 @@ class FormTolakBukti extends React.Component {
             case "feedback":
                 this.validateFeedback(value);
                 break;
+            default:
+                break;
         }
     }
 

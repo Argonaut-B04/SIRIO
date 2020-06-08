@@ -1,7 +1,4 @@
-package com.ArgonautB04.SIRIO.rest;
-
-import com.ArgonautB04.SIRIO.model.Rekomendasi;
-import com.ArgonautB04.SIRIO.model.TemuanRisiko;
+package com.argonautb04.sirio.rest;
 
 import java.util.List;
 
@@ -24,7 +21,7 @@ public class KomponenPemeriksaanDTO {
         return jumlahPopulasi;
     }
 
-    public void setJumlahPopulasi(Integer jumlahPopulasi) {
+    public void setJumlahPopulasi(final Integer jumlahPopulasi) {
         this.jumlahPopulasi = jumlahPopulasi;
     }
 
@@ -32,7 +29,7 @@ public class KomponenPemeriksaanDTO {
         return jumlahSampelError;
     }
 
-    public void setJumlahSampelError(Integer jumlahSampelError) {
+    public void setJumlahSampelError(final Integer jumlahSampelError) {
         this.jumlahSampelError = jumlahSampelError;
     }
 
@@ -40,7 +37,7 @@ public class KomponenPemeriksaanDTO {
         return bobotRiskLevel;
     }
 
-    public void setBobotRiskLevel(Float bobotRiskLevel) {
+    public void setBobotRiskLevel(final Float bobotRiskLevel) {
         this.bobotRiskLevel = bobotRiskLevel;
     }
 
@@ -48,7 +45,7 @@ public class KomponenPemeriksaanDTO {
         return namaRiskLevel;
     }
 
-    public void setNamaRiskLevel(String namaRiskLevel) {
+    public void setNamaRiskLevel(final String namaRiskLevel) {
         this.namaRiskLevel = namaRiskLevel;
     }
 
@@ -56,7 +53,7 @@ public class KomponenPemeriksaanDTO {
         return daftarTemuanRisikoTerdaftar;
     }
 
-    public void setDaftarTemuanRisikoTerdaftar(List<TemuanRisikoDTO> daftarTemuanRisikoTerdaftar) {
+    public void setDaftarTemuanRisikoTerdaftar(final List<TemuanRisikoDTO> daftarTemuanRisikoTerdaftar) {
         this.daftarTemuanRisikoTerdaftar = daftarTemuanRisikoTerdaftar;
     }
 
@@ -64,7 +61,7 @@ public class KomponenPemeriksaanDTO {
         return daftarRekomendasiTerdaftar;
     }
 
-    public void setDaftarRekomendasiTerdaftar(List<RekomendasiDTO> daftarRekomendasiTerdaftar) {
+    public void setDaftarRekomendasiTerdaftar(final List<RekomendasiDTO> daftarRekomendasiTerdaftar) {
         this.daftarRekomendasiTerdaftar = daftarRekomendasiTerdaftar;
     }
 
@@ -72,7 +69,7 @@ public class KomponenPemeriksaanDTO {
         return risiko;
     }
 
-    public void setRisiko(RisikoDTO risiko) {
+    public void setRisiko(final RisikoDTO risiko) {
         this.risiko = risiko;
     }
 
@@ -80,7 +77,7 @@ public class KomponenPemeriksaanDTO {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(final Integer id) {
         this.id = id;
     }
 
@@ -88,7 +85,7 @@ public class KomponenPemeriksaanDTO {
         return idRiskLevel;
     }
 
-    public void setIdRiskLevel(Integer idRiskLevel) {
+    public void setIdRiskLevel(final Integer idRiskLevel) {
         this.idRiskLevel = idRiskLevel;
     }
 
@@ -96,7 +93,7 @@ public class KomponenPemeriksaanDTO {
         return jumlahSampel;
     }
 
-    public void setJumlahSampel(Integer jumlahSampel) {
+    public void setJumlahSampel(final Integer jumlahSampel) {
         this.jumlahSampel = jumlahSampel;
     }
 
@@ -104,7 +101,7 @@ public class KomponenPemeriksaanDTO {
         return keteranganSampel;
     }
 
-    public void setKeteranganSampel(String keteranganSampel) {
+    public void setKeteranganSampel(final String keteranganSampel) {
         this.keteranganSampel = keteranganSampel;
     }
 
@@ -112,7 +109,7 @@ public class KomponenPemeriksaanDTO {
         return daftarTemuanRisiko;
     }
 
-    public void setDaftarTemuanRisiko(List<TemuanRisikoDTO> daftarTemuanRisiko) {
+    public void setDaftarTemuanRisiko(final List<TemuanRisikoDTO> daftarTemuanRisiko) {
         this.daftarTemuanRisiko = daftarTemuanRisiko;
     }
 
@@ -120,7 +117,7 @@ public class KomponenPemeriksaanDTO {
         return daftarRekomendasi;
     }
 
-    public void setDaftarRekomendasi(List<RekomendasiDTO> daftarRekomendasi) {
+    public void setDaftarRekomendasi(final List<RekomendasiDTO> daftarRekomendasi) {
         this.daftarRekomendasi = daftarRekomendasi;
     }
 }

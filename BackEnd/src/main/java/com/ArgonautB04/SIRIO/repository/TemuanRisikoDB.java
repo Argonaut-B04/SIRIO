@@ -1,8 +1,8 @@
-package com.ArgonautB04.SIRIO.repository;
+package com.argonautb04.sirio.repository;
 
-import com.ArgonautB04.SIRIO.model.Employee;
-import com.ArgonautB04.SIRIO.model.KomponenPemeriksaan;
-import com.ArgonautB04.SIRIO.model.TemuanRisiko;
+import com.argonautb04.sirio.model.Employee;
+import com.argonautb04.sirio.model.KomponenPemeriksaan;
+import com.argonautb04.sirio.model.TemuanRisiko;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

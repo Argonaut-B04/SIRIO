@@ -1,4 +1,4 @@
-package com.ArgonautB04.SIRIO.rest;
+package com.argonautb04.sirio.rest;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ public class RencanaPemeriksaanDTO {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(final Integer id) {
         this.id = id;
     }
 
@@ -22,7 +22,7 @@ public class RencanaPemeriksaanDTO {
         return namaRencana;
     }
 
-    public void setNamaRencana(String namaRencana) {
+    public void setNamaRencana(final String namaRencana) {
         this.namaRencana = namaRencana;
     }
 
@@ -30,7 +30,7 @@ public class RencanaPemeriksaanDTO {
         return linkMajelis;
     }
 
-    public void setLinkMajelis(String linkMajelis) {
+    public void setLinkMajelis(final String linkMajelis) {
         this.linkMajelis = linkMajelis;
     }
 
@@ -38,7 +38,7 @@ public class RencanaPemeriksaanDTO {
         return idPembuat;
     }
 
-    public void setIdPembuat(Integer idPembuat) {
+    public void setIdPembuat(final Integer idPembuat) {
         this.idPembuat = idPembuat;
     }
 
@@ -46,7 +46,7 @@ public class RencanaPemeriksaanDTO {
         return status;
     }
 
-    public void setStatus(Integer status) {
+    public void setStatus(final Integer status) {
         this.status = status;
     }
 
@@ -54,9 +54,8 @@ public class RencanaPemeriksaanDTO {
         return daftarTugasPemeriksaan;
     }
 
-    public void setDaftarTugasPemeriksaan(List<TugasPemeriksaanDTO> daftarTugasPemeriksaan) {
+    public void setDaftarTugasPemeriksaan(final List<TugasPemeriksaanDTO> daftarTugasPemeriksaan) {
         this.daftarTugasPemeriksaan = daftarTugasPemeriksaan;
     }
-
 
 }

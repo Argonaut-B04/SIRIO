@@ -1,7 +1,7 @@
-package com.ArgonautB04.SIRIO.services;
+package com.argonautb04.sirio.services;
 
-import com.ArgonautB04.SIRIO.model.Employee;
-import com.ArgonautB04.SIRIO.model.KantorCabang;
+import com.argonautb04.sirio.model.Employee;
+import com.argonautb04.sirio.model.KantorCabang;
 
 import java.util.List;
 import java.util.Optional;
@@ -31,9 +31,9 @@ public interface KantorCabangRestService {
 
     void hapusKantorCabang(int idKantorCabang);
 
-    //List<KantorCabang> getByPembuat(Employee pembuat);
+    // List<KantorCabang> getByPembuat(Employee pembuat);
 
-   // KantorCabang validateExistInDatabase(int idKantorCabang);
+    // KantorCabang validateExistInDatabase(int idKantorCabang);
 
     KantorCabang validateExistById(int idKantorCabang);
 

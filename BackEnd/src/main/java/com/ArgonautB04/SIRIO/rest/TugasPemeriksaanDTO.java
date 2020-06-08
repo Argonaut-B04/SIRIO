@@ -1,4 +1,4 @@
-package com.ArgonautB04.SIRIO.rest;
+package com.argonautb04.sirio.rest;
 
 public class TugasPemeriksaanDTO {
     private Integer id;
@@ -15,7 +15,7 @@ public class TugasPemeriksaanDTO {
         return usernameQA;
     }
 
-    public void setUsernameQA(String usernameQA) {
+    public void setUsernameQA(final String usernameQA) {
         this.usernameQA = usernameQA;
     }
 
@@ -23,7 +23,7 @@ public class TugasPemeriksaanDTO {
         return idHasilPemeriksaan;
     }
 
-    public void setIdHasilPemeriksaan(Integer idHasilPemeriksaan) {
+    public void setIdHasilPemeriksaan(final Integer idHasilPemeriksaan) {
         this.idHasilPemeriksaan = idHasilPemeriksaan;
     }
 
@@ -31,7 +31,7 @@ public class TugasPemeriksaanDTO {
         return namaQA;
     }
 
-    public void setNamaQA(String namaQA) {
+    public void setNamaQA(final String namaQA) {
         this.namaQA = namaQA;
     }
 
@@ -39,7 +39,7 @@ public class TugasPemeriksaanDTO {
         return namaKantorCabang;
     }
 
-    public void setNamaKantorCabang(String namaKantorCabang) {
+    public void setNamaKantorCabang(final String namaKantorCabang) {
         this.namaKantorCabang = namaKantorCabang;
     }
 
@@ -47,7 +47,7 @@ public class TugasPemeriksaanDTO {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(final Integer id) {
         this.id = id;
     }
 
@@ -55,7 +55,7 @@ public class TugasPemeriksaanDTO {
         return tanggalMulai;
     }
 
-    public void setTanggalMulai(String tanggalMulai) {
+    public void setTanggalMulai(final String tanggalMulai) {
         this.tanggalMulai = tanggalMulai;
     }
 
@@ -63,7 +63,7 @@ public class TugasPemeriksaanDTO {
         return tanggalSelesai;
     }
 
-    public void setTanggalSelesai(String tanggalSelesai) {
+    public void setTanggalSelesai(final String tanggalSelesai) {
         this.tanggalSelesai = tanggalSelesai;
     }
 
@@ -71,7 +71,7 @@ public class TugasPemeriksaanDTO {
         return idQA;
     }
 
-    public void setIdQA(Integer idQA) {
+    public void setIdQA(final Integer idQA) {
         this.idQA = idQA;
     }
 
@@ -79,7 +79,7 @@ public class TugasPemeriksaanDTO {
         return kantorCabang;
     }
 
-    public void setKantorCabang(Integer kantorCabang) {
+    public void setKantorCabang(final Integer kantorCabang) {
         this.kantorCabang = kantorCabang;
     }
 }

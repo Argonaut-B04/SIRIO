@@ -1,6 +1,4 @@
-package com.ArgonautB04.SIRIO.rest;
-
-import com.ArgonautB04.SIRIO.model.Risiko;
+package com.argonautb04.sirio.rest;
 
 import java.util.List;
 
@@ -24,7 +22,7 @@ public class RisikoDTO {
         return namaParent;
     }
 
-    public void setNamaParent(String namaParent) {
+    public void setNamaParent(final String namaParent) {
         this.namaParent = namaParent;
     }
 
@@ -32,7 +30,7 @@ public class RisikoDTO {
         return grantParent;
     }
 
-    public void setGrantParent(Integer grantParent) {
+    public void setGrantParent(final Integer grantParent) {
         this.grantParent = grantParent;
     }
 
@@ -40,7 +38,7 @@ public class RisikoDTO {
         return namaSop;
     }
 
-    public void setNamaSop(String namaSop) {
+    public void setNamaSop(final String namaSop) {
         this.namaSop = namaSop;
     }
 
@@ -48,7 +46,7 @@ public class RisikoDTO {
         return linkSop;
     }
 
-    public void setLinkSop(String linkSop) {
+    public void setLinkSop(final String linkSop) {
         this.linkSop = linkSop;
     }
 
@@ -56,7 +54,7 @@ public class RisikoDTO {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(final Integer id) {
         this.id = id;
     }
 
@@ -64,7 +62,7 @@ public class RisikoDTO {
         return nama;
     }
 
-    public void setNama(String nama) {
+    public void setNama(final String nama) {
         this.nama = nama;
     }
 
@@ -72,7 +70,7 @@ public class RisikoDTO {
         return kategori;
     }
 
-    public void setKategori(Integer kategori) {
+    public void setKategori(final Integer kategori) {
         this.kategori = kategori;
     }
 
@@ -80,7 +78,7 @@ public class RisikoDTO {
         return detailUraian;
     }
 
-    public void setDetailUraian(String detailUraian) {
+    public void setDetailUraian(final String detailUraian) {
         this.detailUraian = detailUraian;
     }
 
@@ -88,7 +86,7 @@ public class RisikoDTO {
         return deskripsi;
     }
 
-    public void setDeskripsi(String deskripsi) {
+    public void setDeskripsi(final String deskripsi) {
         this.deskripsi = deskripsi;
     }
 
@@ -96,7 +94,7 @@ public class RisikoDTO {
         return metodologi;
     }
 
-    public void setMetodologi(String metodologi) {
+    public void setMetodologi(final String metodologi) {
         this.metodologi = metodologi;
     }
 
@@ -104,7 +102,7 @@ public class RisikoDTO {
         return ketentuanSampel;
     }
 
-    public void setKetentuanSampel(String ketentuanSampel) {
+    public void setKetentuanSampel(final String ketentuanSampel) {
         this.ketentuanSampel = ketentuanSampel;
     }
 
@@ -112,7 +110,7 @@ public class RisikoDTO {
         return parent;
     }
 
-    public void setParent(Integer parent) {
+    public void setParent(final Integer parent) {
         this.parent = parent;
     }
 
@@ -120,7 +118,7 @@ public class RisikoDTO {
         return child;
     }
 
-    public void setChild(List<RisikoDTO> child) {
+    public void setChild(final List<RisikoDTO> child) {
         this.child = child;
     }
 
@@ -128,7 +126,7 @@ public class RisikoDTO {
         return sop;
     }
 
-    public void setSop(Integer sop) {
+    public void setSop(final Integer sop) {
         this.sop = sop;
     }
 }

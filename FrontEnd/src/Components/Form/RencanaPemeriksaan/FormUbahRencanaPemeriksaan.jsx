@@ -96,13 +96,13 @@ class FormUbahRencana extends React.Component {
         const response = await RencanaPemeriksaanService.getRencanaPemeriksaanDetail(this.props.location.state.id);
         const result = response.data.result;
 
-        for (var i = 0;i < result.daftarTugasPemeriksaan.length; i++) {
+        for (var i = 0; i < result.daftarTugasPemeriksaan.length; i++) {
             const tanggalMulai = result.daftarTugasPemeriksaan[i].tanggalMulai;
             const tanggalSelesai = result.daftarTugasPemeriksaan[i].tanggalSelesai;
             result.daftarTugasPemeriksaan[i].tanggalMulai = tanggalMulai.split(" ")[0];
             result.daftarTugasPemeriksaan[i].tanggalSelesai = tanggalSelesai.split(" ")[0];
         }
-        
+
         this.props.changeLoadingBody("Menampilkan data");
 
         this.setState({
@@ -126,7 +126,7 @@ class FormUbahRencana extends React.Component {
         if (event.target.name === "tanggalMulai") {
             daftarTugasPemeriksaan[index].tanggalSelesai = ""
         }
-        
+
         this.setState(
             {
                 daftarTugasPemeriksaan: daftarTugasPemeriksaan
@@ -145,7 +145,7 @@ class FormUbahRencana extends React.Component {
             }
         )
     }
-    
+
     validateNama(fokusNama) {
         var errorNama = "";
         var letterOnly = /^[a-zA-Z\s]*$/;
@@ -153,14 +153,14 @@ class FormUbahRencana extends React.Component {
             errorNama = "Nama rencana harus diisi";
         } else if (!fokusNama.match(letterOnly)) {
             errorNama = "Nama hanya boleh mengandung huruf";
-        }else if (fokusNama.length > 25) {
+        } else if (fokusNama.length > 25) {
             errorNama = "Nama rencana tidak boleh lebih dari 25 karakter";
         }
-       
+
         this.setState({
             errorNama: errorNama
         })
-        
+
     }
 
     validateLink(fokusLink) {
@@ -175,32 +175,32 @@ class FormUbahRencana extends React.Component {
         } else if (fokusLink.length > 255) {
             errorLink = "Link tidak boleh lebih dari 255 karakter";
         }
-        
+
         this.setState({
             errorLink: errorLink
         })
-       
+
     }
-    
+
     submitable() {
         return this.state.errorNama === "" &&
-        this.state.errorLink === "" &&
-        (this.state.namaRencana !== null && this.state.namaRencana !== "") &&
-        (this.state.linkMajelis !== null && this.state.linkMajelis !== "");
+            this.state.errorLink === "" &&
+            (this.state.namaRencana !== null && this.state.namaRencana !== "") &&
+            (this.state.linkMajelis !== null && this.state.linkMajelis !== "");
     }
 
     submitableSimpan() {
         var submitable = false;
-        if(this.state.daftarTugasPemeriksaan.length > 0){
+        if (this.state.daftarTugasPemeriksaan.length > 0) {
 
             this.state.daftarTugasPemeriksaan.map(tugas => {
-                submitable = 
-                (tugas.kantorCabang !== null && tugas.kantorCabang !== "" && tugas.kantorCabang !== undefined) &&
-                (tugas.idQA !== null && tugas.idQA !== "" && tugas.idQA !== undefined) &&
-                (tugas.tanggalMulai !== null && tugas.tanggalMulai !== ""  && tugas.tanggalMulai !== undefined) &&
-                (tugas.tanggalSelesai !== null && tugas.tanggalSelesai !== ""  && tugas.tanggalSelesai !== undefined);
+                submitable =
+                    (tugas.kantorCabang !== null && tugas.kantorCabang !== "" && tugas.kantorCabang !== undefined) &&
+                    (tugas.idQA !== null && tugas.idQA !== "" && tugas.idQA !== undefined) &&
+                    (tugas.tanggalMulai !== null && tugas.tanggalMulai !== "" && tugas.tanggalMulai !== undefined) &&
+                    (tugas.tanggalSelesai !== null && tugas.tanggalSelesai !== "" && tugas.tanggalSelesai !== undefined);
                 return null
-            });        
+            });
         }
         return submitable;
     }
@@ -223,6 +223,8 @@ class FormUbahRencana extends React.Component {
             case "linkMajelis":
                 this.validateLink(value);
                 break;
+            default:
+                break;
         }
     }
 
@@ -233,8 +235,8 @@ class FormUbahRencana extends React.Component {
         this.props.changeLoadingBody("Mengirim data ke server");
 
         event.preventDefault();
-        if(this.submitable()){
-            if(nama === "simpan" && this.submitableSimpan()){
+        if (this.submitable()) {
+            if (nama === "simpan" && this.submitableSimpan()) {
                 const rencanaPemeriksaan = {
                     id: this.state.id,
                     namaRencana: this.state.namaRencana,
@@ -243,9 +245,9 @@ class FormUbahRencana extends React.Component {
                     daftarTugasPemeriksaan: this.state.daftarTugasPemeriksaan
                 }
                 RencanaPemeriksaanService.editRencanaPemeriksaan(rencanaPemeriksaan)
-                .then(() => this.setRedirect());
-                
-            }   else if (nama === "draft"){
+                    .then(() => this.setRedirect());
+
+            } else if (nama === "draft") {
                 const rencanaPemeriksaan = {
                     id: this.state.id,
                     namaRencana: this.state.namaRencana,
@@ -254,13 +256,18 @@ class FormUbahRencana extends React.Component {
                     daftarTugasPemeriksaan: this.state.daftarTugasPemeriksaan
                 }
                 RencanaPemeriksaanService.editRencanaPemeriksaan(rencanaPemeriksaan)
-                .then(() => this.setRedirect());
+                    .then(() => this.setRedirect());
             }
-                
-            
+
+
         }
 
         this.props.contentFinishLoading()
+    }
+
+    getTitle(i) {
+        var title = "Tugas Pemeriksaan " + i
+        return title
     }
 
     fullComponentInside() {
@@ -268,7 +275,7 @@ class FormUbahRencana extends React.Component {
         for (let i = 0; i < this.state.daftarTugasPemeriksaan.length; i++) {
             forms.push(
                 <SirioForm
-                    subtitle="Tugas Pemeriksaan"
+                    subtitle={this.getTitle(i + 1)}
                     key={i}
                     childForm
                     id={i}
@@ -303,13 +310,13 @@ class FormUbahRencana extends React.Component {
                     errormessage: this.state.errorLink,
                     value: this.state.linkMajelis,
                     placeholder: "https://drive.google.com/"
-                },{
+                }, {
                     fullComponent:
                         this.tambahTugasButton
                 }, {
                     fullComponent:
                         this.fullComponentInside()
-                } 
+                }
 
             ]
         )
@@ -328,7 +335,7 @@ class FormUbahRencana extends React.Component {
     innerInputDefinition(index) {
         return (
             [
-                
+
                 {
                     label: "Kantor Cabang",
                     handleChange: this.handleMultipleSelectChange,
@@ -360,7 +367,6 @@ class FormUbahRencana extends React.Component {
                     handleChange: this.handleSelectChange,
                     index: index,
                     type: "date",
-                    required: true,
                     validation: this.state.errorTM,
                     min: this.getMin(index),
                     disabled: this.state.daftarTugasPemeriksaan[index].tanggalMulai === "",
@@ -395,7 +401,7 @@ class FormUbahRencana extends React.Component {
                     purple
                     recommended
                     classes="mx-1"
-                    onClick={(event)  => this.handleSubmit(event, "simpan")}
+                    onClick={(event) => this.handleSubmit(event, "simpan")}
                 >
                     Jalankan
                 </SirioButton>
@@ -414,7 +420,7 @@ class FormUbahRencana extends React.Component {
                     purple
                     recommended
                     classes="mx-1"
-                    onClick={(event)  => this.handleSubmit(event, "draft")}
+                    onClick={(event) => this.handleSubmit(event, "draft")}
                 >
                     Draft
                 </SirioButton>
@@ -460,16 +466,16 @@ class FormUbahRencana extends React.Component {
     childFooterButton(index) {
         return (
             <div>
-                 <SirioWarningButton
-                        red
-                        type="button"
-                        modalTitle="Konfirmasi Penghapusan"
-                        modalDesc="Apakah anda yakin untuk menghapus tugas pemeriksaan?"
-                        onConfirm={() => this.deleteChildForm(index)}
-                        customConfirmText="Ya, Hapus"
-                        customCancelText="Batal"
-                    >
-                        Hapus
+                <SirioWarningButton
+                    red
+                    type="button"
+                    modalTitle="Konfirmasi Penghapusan"
+                    modalDesc="Apakah anda yakin untuk menghapus tugas pemeriksaan?"
+                    onConfirm={() => this.deleteChildForm(index)}
+                    customConfirmText="Ya, Hapus"
+                    customCancelText="Batal"
+                >
+                    Hapus
                     </SirioWarningButton>
             </div>
         )

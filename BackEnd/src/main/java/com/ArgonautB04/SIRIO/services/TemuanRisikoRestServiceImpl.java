@@ -1,7 +1,17 @@
-package com.ArgonautB04.SIRIO.services;
+package com.argonautb04.sirio.services;
 
-import com.ArgonautB04.SIRIO.model.*;
-import com.ArgonautB04.SIRIO.repository.*;
+import com.argonautb04.sirio.model.Employee;
+import com.argonautb04.sirio.model.HasilPemeriksaan;
+import com.argonautb04.sirio.model.KomponenPemeriksaan;
+import com.argonautb04.sirio.model.Risiko;
+import com.argonautb04.sirio.model.StatusHasilPemeriksaan;
+import com.argonautb04.sirio.model.TemuanRisiko;
+import com.argonautb04.sirio.model.TugasPemeriksaan;
+import com.argonautb04.sirio.repository.HasilPemeriksaanDB;
+import com.argonautb04.sirio.repository.KomponenPemeriksaanDB;
+import com.argonautb04.sirio.repository.StatusHasilPemeriksaanDB;
+import com.argonautb04.sirio.repository.TemuanRisikoDB;
+import com.argonautb04.sirio.repository.TugasPemeriksaanDB;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -9,8 +19,11 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -97,7 +110,7 @@ public class TemuanRisikoRestServiceImpl implements TemuanRisikoRestService {
 
     @Override
     public List<Integer> getByPembuatByMonth(final int idQa, final LocalDate tanggalAwal,
-            final LocalDate tanggalAkhir) {
+                                             final LocalDate tanggalAkhir) {
         List<TemuanRisiko> impl = new ArrayList<>();
         List<Integer> intImpl = new ArrayList<>();
         List<String> months = rekomendasiRestService.getListMonth(tanggalAwal, tanggalAkhir);
@@ -173,17 +186,17 @@ public class TemuanRisikoRestServiceImpl implements TemuanRisikoRestService {
                 if ((r.getKomponenPemeriksaan().getHasilPemeriksaan().getTugasPemeriksaan().getTanggalMulai()
                         .isAfter(tanggalAwal)
                         && r.getKomponenPemeriksaan().getHasilPemeriksaan().getTugasPemeriksaan().getTanggalMulai()
-                                .isBefore(tanggalAkhir))
+                        .isBefore(tanggalAkhir))
                         || r.getKomponenPemeriksaan().getHasilPemeriksaan().getTugasPemeriksaan().getTanggalMulai()
-                                .isEqual(tanggalAwal)
+                        .isEqual(tanggalAwal)
                         || r.getKomponenPemeriksaan().getHasilPemeriksaan().getTugasPemeriksaan().getTanggalMulai()
-                                .isEqual(tanggalAkhir)
-                // || (r.getKomponenPemeriksaan().getHasilPemeriksaan().
-                // getTugasPemeriksaan()
-                // .getTanggalSelesai().isAfter(tanggalAwal) &&
-                // r.getKomponenPemeriksaan().getHasilPemeriksaan().
-                // getTugasPemeriksaan()
-                // .getTanggalSelesai().isBefore(tanggalAkhir))
+                        .isEqual(tanggalAkhir)
+                    // || (r.getKomponenPemeriksaan().getHasilPemeriksaan().
+                    // getTugasPemeriksaan()
+                    // .getTanggalSelesai().isAfter(tanggalAwal) &&
+                    // r.getKomponenPemeriksaan().getHasilPemeriksaan().
+                    // getTugasPemeriksaan()
+                    // .getTanggalSelesai().isBefore(tanggalAkhir))
                 ) {
                     getByTanggal.add(r);
                 }
@@ -266,7 +279,7 @@ public class TemuanRisikoRestServiceImpl implements TemuanRisikoRestService {
 
     @Override
     public List<Integer> getTemuanPerMonthFiltered(List<TemuanRisiko> temuanRisikoList, LocalDate tanggalAwal,
-            LocalDate tanggalAkhir) {
+                                                   LocalDate tanggalAkhir) {
         List<Integer> perMonth = new ArrayList<>();
         List<String> months = rekomendasiRestService.getListMonth(tanggalAwal, tanggalAkhir);
         if (tanggalAwal != null) {
@@ -305,17 +318,17 @@ public class TemuanRisikoRestServiceImpl implements TemuanRisikoRestService {
                 if ((r.getKomponenPemeriksaan().getHasilPemeriksaan().getTugasPemeriksaan().getTanggalMulai()
                         .isAfter(tanggalAwal)
                         && r.getKomponenPemeriksaan().getHasilPemeriksaan().getTugasPemeriksaan().getTanggalMulai()
-                                .isBefore(tanggalAkhir))
+                        .isBefore(tanggalAkhir))
                         || r.getKomponenPemeriksaan().getHasilPemeriksaan().getTugasPemeriksaan().getTanggalMulai()
-                                .isEqual(tanggalAwal)
+                        .isEqual(tanggalAwal)
                         || r.getKomponenPemeriksaan().getHasilPemeriksaan().getTugasPemeriksaan().getTanggalMulai()
-                                .isEqual(tanggalAkhir)
-                // || (r.getKomponenPemeriksaan().getHasilPemeriksaan().
-                // getTugasPemeriksaan()
-                // .getTanggalSelesai().isAfter(tanggalAwal) &&
-                // r.getKomponenPemeriksaan().getHasilPemeriksaan().
-                // getTugasPemeriksaan()
-                // .getTanggalSelesai().isBefore(tanggalAkhir))
+                        .isEqual(tanggalAkhir)
+                    // || (r.getKomponenPemeriksaan().getHasilPemeriksaan().
+                    // getTugasPemeriksaan()
+                    // .getTanggalSelesai().isAfter(tanggalAwal) &&
+                    // r.getKomponenPemeriksaan().getHasilPemeriksaan().
+                    // getTugasPemeriksaan()
+                    // .getTanggalSelesai().isBefore(tanggalAkhir))
                 ) {
                     getByTanggal.add(r);
                 }

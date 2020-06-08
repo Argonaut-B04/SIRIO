@@ -1,7 +1,7 @@
-package com.ArgonautB04.SIRIO.services;
+package com.argonautb04.sirio.services;
 
-import com.ArgonautB04.SIRIO.model.StatusBuktiPelaksanaan;
-import com.ArgonautB04.SIRIO.repository.StatusBuktiPelaksanaanDB;
+import com.argonautb04.sirio.model.StatusBuktiPelaksanaan;
+import com.argonautb04.sirio.repository.StatusBuktiPelaksanaanDB;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,8 +25,10 @@ public class StatusBuktiPelaksanaanRestServiceImpl implements StatusBuktiPelaksa
     @Override
     public StatusBuktiPelaksanaan getById(int idStatus) {
         Optional<StatusBuktiPelaksanaan> statusBuktiPelaksanaan = statusBuktiPelaksanaanDB.findById(idStatus);
-        if (statusBuktiPelaksanaan.isPresent()) return statusBuktiPelaksanaan.get();
-        else throw new NoSuchElementException();
+        if (statusBuktiPelaksanaan.isPresent())
+            return statusBuktiPelaksanaan.get();
+        else
+            throw new NoSuchElementException();
     }
 
     @Override

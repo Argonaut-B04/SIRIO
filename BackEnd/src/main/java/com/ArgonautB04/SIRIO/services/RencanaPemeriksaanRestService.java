@@ -1,7 +1,7 @@
-package com.ArgonautB04.SIRIO.services;
+package com.argonautb04.sirio.services;
 
-import com.ArgonautB04.SIRIO.model.RencanaPemeriksaan;
-import com.ArgonautB04.SIRIO.model.Employee;
+import com.argonautb04.sirio.model.Employee;
+import com.argonautb04.sirio.model.RencanaPemeriksaan;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,7 +19,7 @@ public interface RencanaPemeriksaanRestService {
 
     List<RencanaPemeriksaan> getByPembuat(Employee pembuat);
 
-    Optional<RencanaPemeriksaan> getByNama (String nama);
+    Optional<RencanaPemeriksaan> getByNama(String nama);
 
     RencanaPemeriksaan validateExistById(int idRencanaPemeriksaan);
 }

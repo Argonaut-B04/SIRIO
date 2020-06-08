@@ -1,17 +1,17 @@
-package com.ArgonautB04.SIRIO.rest;
+package com.argonautb04.sirio.rest;
 
 public class PersetujuanBuktiPelaksanaanDTO {
     private Integer idPemeriksa;
     private Integer idBuktiPelaksanaan;
     private Integer status;
     private String feedback;
-//    private Integer idRekomendasi;
+    // private Integer idRekomendasi;
 
     public Integer getIdPemeriksa() {
         return idPemeriksa;
     }
 
-    public void setIdPemeriksa(Integer idPemeriksa) {
+    public void setIdPemeriksa(final Integer idPemeriksa) {
         this.idPemeriksa = idPemeriksa;
     }
 
@@ -19,7 +19,7 @@ public class PersetujuanBuktiPelaksanaanDTO {
         return idBuktiPelaksanaan;
     }
 
-    public void setIdBuktiPelaksanaan(Integer idBuktiPelaksanaan) {
+    public void setIdBuktiPelaksanaan(final Integer idBuktiPelaksanaan) {
         this.idBuktiPelaksanaan = idBuktiPelaksanaan;
     }
 
@@ -27,7 +27,7 @@ public class PersetujuanBuktiPelaksanaanDTO {
         return status;
     }
 
-    public void setStatus(Integer status) {
+    public void setStatus(final Integer status) {
         this.status = status;
     }
 
@@ -35,15 +35,15 @@ public class PersetujuanBuktiPelaksanaanDTO {
         return feedback;
     }
 
-    public void setFeedback(String feedback) {
+    public void setFeedback(final String feedback) {
         this.feedback = feedback;
     }
 
-//    public Integer getIdRekomendasi() {
-//        return idRekomendasi;
-//    }
-//
-//    public void setIdRekomendasi(Integer idRekomendasi) {
-//        this.idRekomendasi = idRekomendasi;
-//    }
+    // public Integer getIdRekomendasi() {
+    // return idRekomendasi;
+    // }
+    //
+    // public void setIdRekomendasi(Integer idRekomendasi) {
+    // this.idRekomendasi = idRekomendasi;
+    // }
 }

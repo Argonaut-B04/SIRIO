@@ -1,9 +1,9 @@
-package com.ArgonautB04.SIRIO.repository;
+package com.argonautb04.sirio.repository;
 
-import com.ArgonautB04.SIRIO.model.Employee;
-import com.ArgonautB04.SIRIO.model.KantorCabang;
-import com.ArgonautB04.SIRIO.model.RencanaPemeriksaan;
-import com.ArgonautB04.SIRIO.model.TugasPemeriksaan;
+import com.argonautb04.sirio.model.Employee;
+import com.argonautb04.sirio.model.KantorCabang;
+import com.argonautb04.sirio.model.RencanaPemeriksaan;
+import com.argonautb04.sirio.model.TugasPemeriksaan;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -22,9 +22,12 @@ public interface TugasPemeriksaanDB extends JpaRepository<TugasPemeriksaan, Inte
 
     List<TugasPemeriksaan> findAllByRencanaPemeriksaan(RencanaPemeriksaan rencanaPemeriksaan);
 
-    List<TugasPemeriksaan> findByTanggalSelesaiIsGreaterThanAndTanggalMulaiIsLessThan(@NotNull LocalDate tanggalMulai, @NotNull LocalDate tanggalSelesai);
+    List<TugasPemeriksaan> findByTanggalSelesaiIsGreaterThanAndTanggalMulaiIsLessThan(@NotNull LocalDate tanggalMulai,
+                                                                                      @NotNull LocalDate tanggalSelesai);
 
-    List<TugasPemeriksaan> findAllByKantorCabangInAndTanggalSelesaiBetween(Collection<KantorCabang> kantorCabang, @NotNull LocalDate tanggalMulai, @NotNull LocalDate tanggalSelesai);
+    List<TugasPemeriksaan> findAllByKantorCabangInAndTanggalSelesaiBetween(Collection<KantorCabang> kantorCabang,
+                                                                           @NotNull LocalDate tanggalMulai, @NotNull LocalDate tanggalSelesai);
 
-    List<TugasPemeriksaan> findAllByKantorCabangAndTanggalSelesaiBetween(KantorCabang kantorCabang, @NotNull LocalDate tanggalMulai, @NotNull LocalDate tanggalSelesai);
+    List<TugasPemeriksaan> findAllByKantorCabangAndTanggalSelesaiBetween(KantorCabang kantorCabang,
+                                                                         @NotNull LocalDate tanggalMulai, @NotNull LocalDate tanggalSelesai);
 }

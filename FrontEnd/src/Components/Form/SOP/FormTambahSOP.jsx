@@ -30,16 +30,16 @@ class FormTambahSOP extends React.Component {
         var letterOnly = /^[a-zA-Z\s]*$/;
         if (fokusJudul === null || fokusJudul === "") {
             errorJudul = "Judul harus diisi";
-        } else if(!fokusJudul.match(letterOnly)){
+        } else if (!fokusJudul.match(letterOnly)) {
             errorJudul = "Hanya boleh mengandung huruf";
         } else if (fokusJudul.length > 25) {
             errorJudul = "Nama kantor tidak boleh lebih dari 25 karakter";
         }
-       
+
         this.setState({
             errorJudul: errorJudul
         })
-       
+
     }
 
     validateKategori(fokusKat) {
@@ -47,16 +47,16 @@ class FormTambahSOP extends React.Component {
         var letterOnly = /^[a-zA-Z\s]*$/;
         if (fokusKat === null || fokusKat === "") {
             errorKat = "Judul harus diisi";
-        } else if(!fokusKat.match(letterOnly)){
+        } else if (!fokusKat.match(letterOnly)) {
             errorKat = "Hanya boleh mengandung huruf";
         } else if (fokusKat.length > 125) {
             errorKat = "Kategori tidak boleh lebih dari 125 karakter";
         }
-        
+
         this.setState({
             errorKat: errorKat
         })
-       
+
     }
 
     validateLink(fokusLink) {
@@ -66,15 +66,15 @@ class FormTambahSOP extends React.Component {
         var link = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.%]+$/;
         if (fokusLink === null || fokusLink === "") {
             errorLink = "Link SOP  harus diisi";
-        } else if(!fokusLink.match(link)){
-            errorLink= "Tidak sesuai dengan format link url";
+        } else if (!fokusLink.match(link)) {
+            errorLink = "Tidak sesuai dengan format link url";
         }
-        
-        
+
+
         this.setState({
             errorLink: errorLink
         })
-        
+
     }
 
     submitable() {
@@ -125,7 +125,9 @@ class FormTambahSOP extends React.Component {
             case "linkDokumen":
                 this.validateLink(value);
                 break;
-            
+            default:
+                break;
+
         }
     }
 
@@ -136,30 +138,30 @@ class FormTambahSOP extends React.Component {
         this.props.changeLoadingBody("Mengirim data ke server");
 
         event.preventDefault();
-        if(this.submitable()){
+        if (this.submitable()) {
             SopService.isExistSOP(this.state.judul)
-            .then (response => {
-                if(response.data.result){
-                    this.setState({
-                        errorJudul: "Judul SOP sudah ada di database"
-                    })
-                } else {
-                    const sop = {
-                        judul: this.state.judul,
-                        kategori: this.state.kategori,
-                        linkDokumen: this.state.linkDokumen
+                .then(response => {
+                    if (response.data.result) {
+                        this.setState({
+                            errorJudul: "Judul SOP sudah ada di database"
+                        })
+                    } else {
+                        const sop = {
+                            judul: this.state.judul,
+                            kategori: this.state.kategori,
+                            linkDokumen: this.state.linkDokumen
+                        }
+                        SopService.addSOP(sop)
+                            .then(() => this.props.contentFinishLoading(), () => this.props.contentFinishLoading())
+                            .then(() => this.setRedirect());
                     }
-                    SopService.addSOP(sop)
-                    .then(() => this.setRedirect());
-                    this.props.contentFinishLoading()
-                }
-            })
+                })
         }
 
-       
+
     }
 
-   
+
     // Fungsi yang akan mengembalikan definisi tiap field pada form
     // Setiap objek {} pada List [] akan menjadi 1 field
     // untuk informasi lebih lengkap, cek SirioForm
@@ -184,7 +186,7 @@ class FormTambahSOP extends React.Component {
                     name: "kategori",
                     value: this.state.kategori,
                     placeholder: "Masukan kategori SOP"
-                },{
+                }, {
                     label: "Link SOP",
                     required: true,
                     handleChange: this.handleChange,
@@ -196,11 +198,11 @@ class FormTambahSOP extends React.Component {
                 }
 
             ]
-           
-            
+
+
         )
 
-        
+
     }
 
     submitButton() {
@@ -246,9 +248,9 @@ class FormTambahSOP extends React.Component {
                     onSubmit={this.handleSubmit}
                     submitButton={this.submitButton()}
                 />
-             </>
+            </>
         );
     }
 }
 
-export default withRouter (FormTambahSOP);
+export default withRouter(FormTambahSOP);

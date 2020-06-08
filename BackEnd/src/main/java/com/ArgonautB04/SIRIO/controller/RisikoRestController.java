@@ -1,15 +1,20 @@
-package com.ArgonautB04.SIRIO.controller;
+package com.argonautb04.sirio.controller;
 
-import com.ArgonautB04.SIRIO.model.Employee;
-import com.ArgonautB04.SIRIO.model.Risiko;
-import com.ArgonautB04.SIRIO.rest.BaseResponse;
-import com.ArgonautB04.SIRIO.rest.RisikoDTO;
-import com.ArgonautB04.SIRIO.services.EmployeeRestService;
-import com.ArgonautB04.SIRIO.services.KomponenPemeriksaanRestService;
-import com.ArgonautB04.SIRIO.services.RisikoRestService;
+import com.argonautb04.sirio.model.Employee;
+import com.argonautb04.sirio.model.Risiko;
+import com.argonautb04.sirio.rest.BaseResponse;
+import com.argonautb04.sirio.rest.RisikoDTO;
+import com.argonautb04.sirio.services.EmployeeRestService;
+import com.argonautb04.sirio.services.KomponenPemeriksaanRestService;
+import com.argonautb04.sirio.services.RisikoRestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
@@ -38,16 +43,10 @@ public class RisikoRestController {
      * @return menyimpan risiko baru ke db
      */
     @PostMapping(value = "/tambah", consumes = {"application/json"})
-    private BaseResponse<Risiko> tambahRisiko(
-            @RequestBody final RisikoDTO risikoDTO,
-            final Principal principal
-    ) {
-        Employee pengelola = employeeRestService.
-                validateEmployeeExistByPrincipal(principal);
-        employeeRestService.
-                validateRolePermission(pengelola, "tambah risiko");
-        Risiko risikoTemp = risikoRestService.
-                transformasidto(new Risiko(), risikoDTO);
+    private BaseResponse<Risiko> tambahRisiko(@RequestBody final RisikoDTO risikoDTO, final Principal principal) {
+        Employee pengelola = employeeRestService.validateEmployeeExistByPrincipal(principal);
+        employeeRestService.validateRolePermission(pengelola, "tambah risiko");
+        Risiko risikoTemp = risikoRestService.transformasidto(new Risiko(), risikoDTO);
 
         Risiko risiko = risikoRestService.buatRisiko(risikoTemp);
         return new BaseResponse<>(200, "success", risiko);
@@ -57,18 +56,12 @@ public class RisikoRestController {
      * Menampilkan satu risiko.
      *
      * @param idRisiko
-     * @return object risiko beserta atribut yang
-     * sesuai dengan idRisiko tersebut
+     * @return object risiko beserta atribut yang sesuai dengan idRisiko tersebut
      */
     @GetMapping(value = "/{idRisiko}")
-    private BaseResponse<Risiko> getRisiko(
-            @PathVariable("idRisiko") final int idRisiko,
-            final Principal principal
-    ) {
-        Employee pengelola = employeeRestService.
-                validateEmployeeExistByPrincipal(principal);
-        employeeRestService.
-                validateRolePermission(pengelola, "akses risiko");
+    private BaseResponse<Risiko> getRisiko(@PathVariable("idRisiko") final int idRisiko, final Principal principal) {
+        Employee pengelola = employeeRestService.validateEmployeeExistByPrincipal(principal);
+        employeeRestService.validateRolePermission(pengelola, "akses risiko");
         Risiko risiko = risikoRestService.validateExistById(idRisiko);
         return new BaseResponse<>(200, "success", risiko);
     }
@@ -80,27 +73,17 @@ public class RisikoRestController {
      * @return risiko dengan idRisiko tersebut dihapus dari db
      */
     @PostMapping(value = "/hapus")
-    private BaseResponse<String> hapusRisiko(
-            @RequestBody final RisikoDTO risikoDTO, final Principal principal
-    ) {
-        Employee pengelola = employeeRestService.
-                validateEmployeeExistByPrincipal(principal);
-        employeeRestService.
-                validateRolePermission(pengelola, "hapus risiko");
-        Risiko risiko = risikoRestService.
-                validateExistById(risikoDTO.getId());
+    private BaseResponse<String> hapusRisiko(@RequestBody final RisikoDTO risikoDTO, final Principal principal) {
+        Employee pengelola = employeeRestService.validateEmployeeExistByPrincipal(principal);
+        employeeRestService.validateRolePermission(pengelola, "hapus risiko");
+        Risiko risiko = risikoRestService.validateExistById(risikoDTO.getId());
         if (komponenPemeriksaanRestService.getByRisiko(risiko) != null) {
             risikoRestService.nonaktifkanRisiko(risiko.getIdRisiko());
-            return new BaseResponse<>(
-                    403, "failed",
-                    "Risiko dengan id "
-                            + risiko.getIdRisiko() + " dinonaktifkan!");
+            return new BaseResponse<>(403, "failed", "Risiko dengan id " + risiko.getIdRisiko() + " dinonaktifkan!");
         } else {
             risikoRestService.hapusRisiko(risiko.getIdRisiko());
         }
-        return new BaseResponse<>(
-                200, "success",
-                "RIsiko dengan id " + risikoDTO.getId() + " terhapus!");
+        return new BaseResponse<>(200, "success", "RIsiko dengan id " + risikoDTO.getId() + " terhapus!");
     }
 
     /**
@@ -110,21 +93,14 @@ public class RisikoRestController {
      * @return perubahan data akan disimpan di db
      */
     @PostMapping(value = "/ubah", consumes = {"application/json"})
-    private BaseResponse<Risiko> ubahRisiko(
-            @RequestBody final RisikoDTO risikoDTO, final Principal principal
-    ) {
-        Employee pengelola = employeeRestService.
-                validateEmployeeExistByPrincipal(principal);
-        employeeRestService.
-                validateRolePermission(pengelola, "ubah risiko");
+    private BaseResponse<Risiko> ubahRisiko(@RequestBody final RisikoDTO risikoDTO, final Principal principal) {
+        Employee pengelola = employeeRestService.validateEmployeeExistByPrincipal(principal);
+        employeeRestService.validateRolePermission(pengelola, "ubah risiko");
 
-        Risiko risikoTemp = risikoRestService.
-                validateExistById(risikoDTO.getId());
-        risikoTemp = risikoRestService.
-                transformasidto(risikoTemp, risikoDTO);
+        Risiko risikoTemp = risikoRestService.validateExistById(risikoDTO.getId());
+        risikoTemp = risikoRestService.transformasidto(risikoTemp, risikoDTO);
 
-        Risiko result = risikoRestService.
-                ubahRisiko(risikoTemp.getIdRisiko(), risikoTemp);
+        Risiko result = risikoRestService.ubahRisiko(risikoTemp.getIdRisiko(), risikoTemp);
         return new BaseResponse<>(200, "success", result);
     }
 
@@ -134,12 +110,9 @@ public class RisikoRestController {
      * @return daftar risiko berupa list.
      */
     @GetMapping("/getAll")
-    private BaseResponse<List<RisikoDTO>> getAllRisiko(
-            final Principal principal) {
-        Employee pengelola = employeeRestService.
-                validateEmployeeExistByPrincipal(principal);
-        employeeRestService.
-                validateRolePermission(pengelola, "tabel risiko");
+    private BaseResponse<List<RisikoDTO>> getAllRisiko(final Principal principal) {
+        Employee pengelola = employeeRestService.validateEmployeeExistByPrincipal(principal);
+        employeeRestService.validateRolePermission(pengelola, "tabel risiko");
 
         List<Risiko> daftarRisiko = risikoRestService.getAll();
         List<RisikoDTO> daftarRisikoDTO = new ArrayList<>();
@@ -150,26 +123,22 @@ public class RisikoRestController {
             risikoDTO.setNama(risiko.getNamaRisiko());
             risikoDTO.setKategori(risiko.getRisikoKategori());
             risikoDTO.setSop(risiko.getSop().getIdSop());
-            if (risiko.getDetailUraian() == null
-                    || risiko.getDetailUraian().equals("")) {
+            if (risiko.getDetailUraian() == null || risiko.getDetailUraian().equals("")) {
                 risikoDTO.setDetailUraian(null);
             } else {
                 risikoDTO.setDetailUraian(risiko.getDetailUraian());
             }
-            if (risiko.getDeskripsi() == null
-                    || risiko.getDeskripsi().equals("")) {
+            if (risiko.getDeskripsi() == null || risiko.getDeskripsi().equals("")) {
                 risikoDTO.setDeskripsi(null);
             } else {
                 risikoDTO.setDeskripsi(risiko.getDeskripsi());
             }
-            if (risiko.getKetentuanSampel() == null
-                    || risiko.getKetentuanSampel().equals("")) {
+            if (risiko.getKetentuanSampel() == null || risiko.getKetentuanSampel().equals("")) {
                 risikoDTO.setKetentuanSampel(null);
             } else {
                 risikoDTO.setKetentuanSampel(risiko.getKetentuanSampel());
             }
-            if (risiko.getMetodologi() == null
-                    || risiko.getMetodologi().equals("")) {
+            if (risiko.getMetodologi() == null || risiko.getMetodologi().equals("")) {
                 risikoDTO.setMetodologi(null);
             } else {
                 risikoDTO.setMetodologi(risiko.getMetodologi());
@@ -190,12 +159,9 @@ public class RisikoRestController {
      * @return daftar detail risiko di kategori 3
      */
     @GetMapping("/getAll/child")
-    private BaseResponse<List<RisikoDTO>> getAllRisikoChild(
-            final Principal principal) {
-        Employee employee = employeeRestService.
-                validateEmployeeExistByPrincipal(principal);
-        employeeRestService.
-                validateRolePermission(employee, "akses risiko");
+    private BaseResponse<List<RisikoDTO>> getAllRisikoChild(final Principal principal) {
+        Employee employee = employeeRestService.validateEmployeeExistByPrincipal(principal);
+        employeeRestService.validateRolePermission(employee, "akses risiko");
 
         List<RisikoDTO> result = new ArrayList<>();
 
@@ -204,26 +170,22 @@ public class RisikoRestController {
             RisikoDTO risikoDTO = new RisikoDTO();
             risikoDTO.setId(risiko.getIdRisiko());
             risikoDTO.setNama(risiko.getNamaRisiko());
-            if (risiko.getDetailUraian() == null
-                    || risiko.getDetailUraian().equals("")) {
+            if (risiko.getDetailUraian() == null || risiko.getDetailUraian().equals("")) {
                 risikoDTO.setDetailUraian(null);
             } else {
                 risikoDTO.setDetailUraian(risiko.getDetailUraian());
             }
-            if (risiko.getDeskripsi() == null
-                    || risiko.getDeskripsi().equals("")) {
+            if (risiko.getDeskripsi() == null || risiko.getDeskripsi().equals("")) {
                 risikoDTO.setDeskripsi(null);
             } else {
                 risikoDTO.setDeskripsi(risiko.getDeskripsi());
             }
-            if (risiko.getKetentuanSampel() == null
-                    || risiko.getKetentuanSampel().equals("")) {
+            if (risiko.getKetentuanSampel() == null || risiko.getKetentuanSampel().equals("")) {
                 risikoDTO.setKetentuanSampel(null);
             } else {
                 risikoDTO.setKetentuanSampel(risiko.getKetentuanSampel());
             }
-            if (risiko.getMetodologi() == null
-                    || risiko.getMetodologi().equals("")) {
+            if (risiko.getMetodologi() == null || risiko.getMetodologi().equals("")) {
                 risikoDTO.setMetodologi(null);
             } else {
                 risikoDTO.setMetodologi(risiko.getMetodologi());
@@ -231,8 +193,7 @@ public class RisikoRestController {
             if (risiko.getParent() != null) {
                 risikoDTO.setParent(risiko.getParent().getIdRisiko());
                 if (risiko.getParent().getParent() != null) {
-                    risikoDTO.setGrantParent(
-                            risiko.getParent().getParent().getIdRisiko());
+                    risikoDTO.setGrantParent(risiko.getParent().getParent().getIdRisiko());
                 }
             }
             risikoDTO.setLinkSop(risiko.getSop().getLinkDokumen());
@@ -244,31 +205,22 @@ public class RisikoRestController {
     }
 
     @PostMapping("/ubah-hierarki")
-    private BaseResponse<List<RisikoDTO>> ubahHierarkiRisiko(
-            @RequestBody final List<RisikoDTO> risikoList,
-            final Principal principal
-    ) {
+    private BaseResponse<List<RisikoDTO>> ubahHierarkiRisiko(@RequestBody final List<RisikoDTO> risikoList,
+                                                             final Principal principal) {
         BaseResponse<List<RisikoDTO>> response = new BaseResponse<>();
-        Optional<Employee> pengelolaOptional =
-                employeeRestService.getByUsername(principal.getName());
+        Optional<Employee> pengelolaOptional = employeeRestService.getByUsername(principal.getName());
         Employee pengelola;
         if (pengelolaOptional.isPresent()) {
             pengelola = pengelolaOptional.get();
-            if (pengelola.getRole().getAccessPermissions().
-                    getAksesUbahHierarki()) {
+            if (pengelola.getRole().getAccessPermissions().getAksesUbahHierarki()) {
                 try {
                     List<RisikoDTO> listRisikoBaru = new ArrayList<>();
                     for (RisikoDTO risk : risikoList) {
-                        Risiko risiko = risikoRestService.
-                                getById(risk.getId());
+                        Risiko risiko = risikoRestService.getById(risk.getId());
                         if (risk.getParent() != null) {
-                            if (risiko.getParent() == null
-                                    || risk.getParent() != risiko.getParent().
-                                    getIdRisiko()) {
-                                risiko = risikoRestService.
-                                        transformasidto(risiko, risk);
-                                risk = risikoRestService.
-                                        ubahHierarki(risiko, risk);
+                            if (risiko.getParent() == null || risk.getParent() != risiko.getParent().getIdRisiko()) {
+                                risiko = risikoRestService.transformasidto(risiko, risk);
+                                risk = risikoRestService.ubahHierarki(risiko, risk);
                                 risk.setId(risiko.getIdRisiko());
                                 risk.setSop(risiko.getSop().getIdSop());
                                 listRisikoBaru.add(risk);
@@ -283,39 +235,26 @@ public class RisikoRestController {
                         response.setResult(listRisikoBaru);
                     }
                 } catch (NoSuchElementException e) {
-                    throw new ResponseStatusException(
-                            HttpStatus.NOT_FOUND, "Ubah hierarki risiko gagal"
-                    );
+                    throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Ubah hierarki risiko gagal");
                 }
                 return response;
             } else {
-                throw new ResponseStatusException(
-                        HttpStatus.UNAUTHORIZED,
-                        "Akun anda tidak memiliki akses ke pengaturan ini"
-                );
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,
+                        "Akun anda tidak memiliki akses ke pengaturan ini");
             }
         } else {
-            throw new ResponseStatusException(
-                    HttpStatus.UNAUTHORIZED,
-                    "Akun anda tidak terdaftar dalam Sirio"
-            );
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Akun anda tidak terdaftar dalam Sirio");
         }
     }
 
     @GetMapping("/ubah-hierarki/kategori")
-    private BaseResponse<List<List<Risiko>>> getByKategori(
-            final Principal principal) {
-        Employee employee = employeeRestService.
-                validateEmployeeExistByPrincipal(principal);
+    private BaseResponse<List<List<Risiko>>> getByKategori(final Principal principal) {
+        Employee employee = employeeRestService.validateEmployeeExistByPrincipal(principal);
         employeeRestService.validateRolePermission(employee, "akses risiko");
 
         List<List<Risiko>> listOfOptionList = new ArrayList<>();
-        listOfOptionList.add(
-                risikoRestService.getByKategori(1)
-        );
-        listOfOptionList.add(
-                risikoRestService.getByKategori(2)
-        );
+        listOfOptionList.add(risikoRestService.getByKategori(1));
+        listOfOptionList.add(risikoRestService.getByKategori(2));
         return new BaseResponse<>(200, "success", listOfOptionList);
     }
 }

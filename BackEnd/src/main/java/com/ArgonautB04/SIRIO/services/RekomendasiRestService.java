@@ -1,8 +1,8 @@
-package com.ArgonautB04.SIRIO.services;
+package com.argonautb04.sirio.services;
 
-import com.ArgonautB04.SIRIO.model.Employee;
-import com.ArgonautB04.SIRIO.model.KomponenPemeriksaan;
-import com.ArgonautB04.SIRIO.model.Rekomendasi;
+import com.argonautb04.sirio.model.Employee;
+import com.argonautb04.sirio.model.KomponenPemeriksaan;
+import com.argonautb04.sirio.model.Rekomendasi;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -22,18 +22,16 @@ public interface RekomendasiRestService {
     List<Integer> getRekomendasiPerMonthFiltered(List<Rekomendasi> rekomendasiList, LocalDate awal, LocalDate akhir);
 
     /**
-     * fungsi untuk mengambil semua rekomendasi
-     * berdasarkan status sedang dijalankan
+     * fungsi untuk mengambil semua rekomendasi berdasarkan status sedang dijalankan
      * dan selesai
      *
-     * @return list rekomendasi dengan
-     * status tertentu
+     * @return list rekomendasi dengan status tertentu
      */
     List<Rekomendasi> getAllByStatus();
 
     /**
-     * fungsi untuk mengambil semua rekomendasi berdasarkan
-     * range tanggal awal dan tanggal akhir
+     * fungsi untuk mengambil semua rekomendasi berdasarkan range tanggal awal dan
+     * tanggal akhir
      *
      * @param tanggalAwal
      * @param tanggalAkhir
@@ -42,8 +40,7 @@ public interface RekomendasiRestService {
     List<Rekomendasi> getAll(LocalDate tanggalAwal, LocalDate tanggalAkhir);
 
     /**
-     * fungsi untuk mengambil list rekomendasi
-     * berdasarkan pembuat
+     * fungsi untuk mengambil list rekomendasi berdasarkan pembuat
      *
      * @param idQa
      * @return list rekomendasi dengan pembuat tertentu
@@ -51,113 +48,96 @@ public interface RekomendasiRestService {
     List<Rekomendasi> getByPembuat(int idQa);
 
     /**
-     * fungsi untuk mengambil list rekomendasi
-     * berdasarkan pembuat dan range tanggal tertentu
+     * fungsi untuk mengambil list rekomendasi berdasarkan pembuat dan range tanggal
+     * tertentu
      *
      * @param idQa
      * @param tanggalAwal
      * @param tanggalAkhir
      * @return list rekomendasi
      */
-    List<Rekomendasi> getByPembuat(
-            int idQa, LocalDate tanggalAwal, LocalDate tanggalAkhir);
+    List<Rekomendasi> getByPembuat(int idQa, LocalDate tanggalAwal, LocalDate tanggalAkhir);
 
     /**
-     * fungsi untuk mengelompokkan rekomendasi
-     * per-bulannya berdasarkan range waktu tertentu
+     * fungsi untuk mengelompokkan rekomendasi per-bulannya berdasarkan range waktu
+     * tertentu
      *
      * @param rekomendasiList
      * @param tanggalAwal
      * @param tanggalAkhir
      * @return list jumlah rekomendasi per-bulan
      */
-    List<Integer> getRekomendasiByMonth(
-            List<Rekomendasi> rekomendasiList, LocalDate tanggalAwal,
-            LocalDate tanggalAkhir);
+    List<Integer> getRekomendasiByMonth(List<Rekomendasi> rekomendasiList, LocalDate tanggalAwal,
+                                        LocalDate tanggalAkhir);
 
     /**
-     * fungsi untuk mengambil rekomendasi yang diimplementasi
-     * baik pada range waktu tertentu ataupun semua
+     * fungsi untuk mengambil rekomendasi yang diimplementasi baik pada range waktu
+     * tertentu ataupun semua
      *
      * @param tanggalAwal
      * @param tanggalAkhir
      * @return list rekomendasi yang diimplementasi
      */
-    List<Rekomendasi> getRekomendasiDiimplementasi(
-            LocalDate tanggalAwal, LocalDate tanggalAkhir);
+    List<Rekomendasi> getRekomendasiDiimplementasi(LocalDate tanggalAwal, LocalDate tanggalAkhir);
 
     /**
-     * fungsi untuk mengambil rekomendasi yang diimplementasi
-     * berdasarkan pembuatnya
+     * fungsi untuk mengambil rekomendasi yang diimplementasi berdasarkan pembuatnya
      *
      * @param idQa
      * @param tanggalAwal
      * @param tanggalAkhir
-     * @return list rekomendasi diimplementasi berdasarkan
-     * pembuat
+     * @return list rekomendasi diimplementasi berdasarkan pembuat
      */
-    List<Rekomendasi> getRekomendasiDiimplementasiByPembuat(
-            int idQa, LocalDate tanggalAwal, LocalDate tanggalAkhir);
+    List<Rekomendasi> getRekomendasiDiimplementasiByPembuat(int idQa, LocalDate tanggalAwal, LocalDate tanggalAkhir);
 
     /**
-     * fungsi untuk mengambil rekomendasi yang overdue
-     * baik pada range waktu tertentu ataupun semua
+     * fungsi untuk mengambil rekomendasi yang overdue baik pada range waktu
+     * tertentu ataupun semua
      *
      * @param tanggalAwal
      * @param tanggalAkhir
      * @return list rekomendasi yang overdue
      */
-    List<Rekomendasi> getRekomendasiOverdue(
-            LocalDate tanggalAwal, LocalDate tanggalAkhir);
+    List<Rekomendasi> getRekomendasiOverdue(LocalDate tanggalAwal, LocalDate tanggalAkhir);
 
     /**
-     * fungsi untuk mengambil rekomendasi yang overdue
-     * berdasarkan pembuatnya
+     * fungsi untuk mengambil rekomendasi yang overdue berdasarkan pembuatnya
      *
      * @param idQa
      * @param tanggalAwal
      * @param tanggalAkhir
-     * @return list rekomendasi overdue berdasarkan
-     * pembuat
+     * @return list rekomendasi overdue berdasarkan pembuat
      */
-    List<Rekomendasi> getRekomendasiOverdueByPembuat(
-            int idQa, LocalDate tanggalAwal, LocalDate tanggalAkhir);
+    List<Rekomendasi> getRekomendasiOverdueByPembuat(int idQa, LocalDate tanggalAwal, LocalDate tanggalAkhir);
 
     /**
-     * fungsi untuk mengambil rekomendasi yang
-     * belum diimplementasi
-     * baik pada range waktu tertentu ataupun semua
+     * fungsi untuk mengambil rekomendasi yang belum diimplementasi baik pada range
+     * waktu tertentu ataupun semua
      *
      * @param tanggalAwal
      * @param tanggalAkhir
-     * @return list rekomendasi yang
-     * belum diimplementasi
+     * @return list rekomendasi yang belum diimplementasi
      */
-    List<Rekomendasi> getRekomendasiBelumDiimplementasi(
-            LocalDate tanggalAwal, LocalDate tanggalAkhir);
+    List<Rekomendasi> getRekomendasiBelumDiimplementasi(LocalDate tanggalAwal, LocalDate tanggalAkhir);
 
     /**
-     * fungsi untuk mengambil rekomendasi yang
-     * belum diimplementasi
-     * berdasarkan pembuatnya
+     * fungsi untuk mengambil rekomendasi yang belum diimplementasi berdasarkan
+     * pembuatnya
      *
      * @param idQa
      * @param tanggalAwal
      * @param tanggalAkhir
-     * @return list rekomendasi belum diimplementasi
-     * berdasarkan pembuat
+     * @return list rekomendasi belum diimplementasi berdasarkan pembuat
      */
-    List<Rekomendasi> getRekomendasiBelumDiimplementasiByPembuat(
-            int idQa, LocalDate tanggalAwal, LocalDate tanggalAkhir);
+    List<Rekomendasi> getRekomendasiBelumDiimplementasiByPembuat(int idQa, LocalDate tanggalAwal,
+                                                                 LocalDate tanggalAkhir);
 
     /**
-     * fungsi untuk mengambil list bulan
-     * pada range tanggal tertentu
+     * fungsi untuk mengambil list bulan pada range tanggal tertentu
      *
      * @param tanggalAwal
      * @param tanggalAkhir
-     * @return list bulan pada range
-     * tanggal tertentu
+     * @return list bulan pada range tanggal tertentu
      */
     List<String> getListMonth(LocalDate tanggalAwal, LocalDate tanggalAkhir);
 
@@ -165,8 +145,8 @@ public interface RekomendasiRestService {
 
     List<Rekomendasi> getByDaftarKomponenPemeriksaan(List<KomponenPemeriksaan> komponenPemeriksaanList);
 
-    List<Rekomendasi> getByDaftarKomponenPemeriksaanAndTenggatWaktu(
-            List<KomponenPemeriksaan> komponenPemeriksaanList, LocalDate tenggatWaktu, LocalDate tenggatWaktu2);
+    List<Rekomendasi> getByDaftarKomponenPemeriksaanAndTenggatWaktu(List<KomponenPemeriksaan> komponenPemeriksaanList,
+                                                                    LocalDate tenggatWaktu, LocalDate tenggatWaktu2);
 
     void ubahRekomendasi(int idRekomendasi, Rekomendasi rekomendasi);
 

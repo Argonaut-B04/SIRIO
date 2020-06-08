@@ -1,8 +1,8 @@
-package com.ArgonautB04.SIRIO.controller;
+package com.argonautb04.sirio.controller;
 
-import com.ArgonautB04.SIRIO.model.Role;
-import com.ArgonautB04.SIRIO.rest.BaseResponse;
-import com.ArgonautB04.SIRIO.services.RoleRestService;
+import com.argonautb04.sirio.model.Role;
+import com.argonautb04.sirio.rest.BaseResponse;
+import com.argonautb04.sirio.services.RoleRestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,9 +32,6 @@ public class RoleRestController {
      */
     @GetMapping("/getAll")
     private BaseResponse<List<Role>> getAllRole() {
-        return new BaseResponse<>(
-                complete,
-                "success",
-                roleRestService.getAll());
+        return new BaseResponse<>(complete, "success", roleRestService.getAll());
     }
 }

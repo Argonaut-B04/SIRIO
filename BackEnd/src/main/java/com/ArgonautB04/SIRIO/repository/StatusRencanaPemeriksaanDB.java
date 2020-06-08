@@ -1,6 +1,6 @@
-package com.ArgonautB04.SIRIO.repository;
+package com.argonautb04.sirio.repository;
 
-import com.ArgonautB04.SIRIO.model.StatusRencanaPemeriksaan;
+import com.argonautb04.sirio.model.StatusRencanaPemeriksaan;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

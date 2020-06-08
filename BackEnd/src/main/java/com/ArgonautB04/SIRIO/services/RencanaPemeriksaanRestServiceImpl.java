@@ -1,8 +1,8 @@
-package com.ArgonautB04.SIRIO.services;
+package com.argonautb04.sirio.services;
 
-import com.ArgonautB04.SIRIO.model.RencanaPemeriksaan;
-import com.ArgonautB04.SIRIO.model.Employee;
-import com.ArgonautB04.SIRIO.repository.RencanaPemeriksaanDB;
+import com.argonautb04.sirio.model.Employee;
+import com.argonautb04.sirio.model.RencanaPemeriksaan;
+import com.argonautb04.sirio.repository.RencanaPemeriksaanDB;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -28,8 +28,10 @@ public class RencanaPemeriksaanRestServiceImpl implements RencanaPemeriksaanRest
     @Override
     public RencanaPemeriksaan getById(int idRencanaPemeriksaan) {
         Optional<RencanaPemeriksaan> rencanaPemeriksaan = rencanaPemeriksaanDB.findById(idRencanaPemeriksaan);
-        if (rencanaPemeriksaan.isPresent()) return rencanaPemeriksaan.get();
-        else throw new NoSuchElementException();
+        if (rencanaPemeriksaan.isPresent())
+            return rencanaPemeriksaan.get();
+        else
+            throw new NoSuchElementException();
     }
 
     @Override
@@ -38,7 +40,7 @@ public class RencanaPemeriksaanRestServiceImpl implements RencanaPemeriksaanRest
     }
 
     @Override
-    public Optional<RencanaPemeriksaan> getByNama (String nama){
+    public Optional<RencanaPemeriksaan> getByNama(String nama) {
         return rencanaPemeriksaanDB.findByNamaRencana(nama);
     }
 
@@ -48,10 +50,8 @@ public class RencanaPemeriksaanRestServiceImpl implements RencanaPemeriksaanRest
         if (target.isPresent()) {
             return target.get();
         } else {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND,
-                    "Rencana dengan ID " + idRencanaPemeriksaan + " tidak ditemukan!"
-            );
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    "Rencana dengan ID " + idRencanaPemeriksaan + " tidak ditemukan!");
         }
     }
 

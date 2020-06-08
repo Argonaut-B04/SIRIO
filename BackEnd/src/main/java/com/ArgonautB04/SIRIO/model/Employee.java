@@ -1,10 +1,20 @@
-package com.ArgonautB04.SIRIO.model;
+package com.argonautb04.sirio.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
@@ -13,54 +23,41 @@ import java.io.Serializable;
 @Table
 public class Employee implements Serializable {
 
-    public enum Status {
-        AKTIF, NONAKTIF
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idEmployee;
-
     @NotNull
     @Size(max = 50)
     @Column(nullable = false)
     private String nama;
-
     @NotNull
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 10)
     private Status status;
-
     @NotNull
     @Size(max = 20)
     @Column(nullable = false, unique = true)
     private String username;
-
     @NotNull
     @Size(max = 70)
     @Column(nullable = false)
     @JsonIgnore
     private String password;
-
     @Size(max = 20)
     @Column
     private String noHp;
-
     @NotNull
     @Size(max = 30)
     @Column(nullable = false, unique = true)
     private String email;
-
     @NotNull
     @Size(max = 30)
     @Column(nullable = false)
     private String jabatan;
-
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role", referencedColumnName = "idRole", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Role role;
-
     @ManyToOne
     @JoinColumn(name = "reminderTemplate", referencedColumnName = "idReminderTemplate")
     @JsonIgnore
@@ -69,7 +66,10 @@ public class Employee implements Serializable {
     public Employee() {
     }
 
-    public Employee(@NotNull @Size(max = 50) String nama, @NotNull Status status, @NotNull @Size(max = 20) String username, @NotNull @Size(max = 70) String password, @Size(max = 20) String noHp, @NotNull @Size(max = 30) String email, @NotNull @Size(max = 30) String jabatan, Role role) {
+    public Employee(@NotNull @Size(max = 50) String nama, @NotNull Status status,
+                    @NotNull @Size(max = 20) String username, @NotNull @Size(max = 70) String password,
+                    @Size(max = 20) String noHp, @NotNull @Size(max = 30) String email, @NotNull @Size(max = 30) String jabatan,
+                    Role role) {
         this.nama = nama;
         this.status = status;
         this.username = username;
@@ -158,5 +158,9 @@ public class Employee implements Serializable {
 
     public void setReminderTemplatePilihan(ReminderTemplate reminderTemplatePilihan) {
         this.reminderTemplatePilihan = reminderTemplatePilihan;
+    }
+
+    public enum Status {
+        AKTIF, NONAKTIF
     }
 }

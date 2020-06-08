@@ -6,7 +6,6 @@ import RencanaPemeriksaanService from '../../../Services/RencanaPemeriksaanServi
 import SirioMessageButton from "../../Button/ActionButton/SirioMessageButton";
 import { NavLink } from 'react-router-dom';
 import { withRouter } from 'react-router-dom';
-import AuthenticationService from '../../../Services/AuthenticationService';
 
 class TabelRencanaPemeriksaan extends React.Component {
 
@@ -119,7 +118,6 @@ class TabelRencanaPemeriksaan extends React.Component {
         dataField: 'noData1',
         dummyField: true,
         text: 'TAHUN',
-        sort: true,
         classes: classes.rowItem,
         headerClasses: classes.colheader,
         headerStyle: (colum, colIndex) => {
@@ -130,7 +128,6 @@ class TabelRencanaPemeriksaan extends React.Component {
         dataField: 'noData2',
         text: 'BULAN',
         dummyField: true,
-        sort: true,
         classes: classes.rowItem,
         headerClasses: classes.colheader,
         headerStyle: (colum, colIndex) => {
@@ -142,7 +139,7 @@ class TabelRencanaPemeriksaan extends React.Component {
         text: 'STATUS',
         sort: true,
         classes: classes.rowItem,
-        formatter: this.statusFormatter,
+        formatter: (cell, row) => this.statusFormatter(cell, row),
         headerClasses: classes.colheader,
         headerStyle: (colum, colIndex) => {
             return { width: "20%", textAlign: 'left' };

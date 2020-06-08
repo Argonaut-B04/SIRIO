@@ -101,6 +101,11 @@ class TableRiskLevel extends React.Component {
                     valid: false,
                     message: 'Bobot level harus berupa angka'
                 }
+            } else if (newValue > 0) {
+                return {
+                    valid: false,
+                    message: 'Bobot level harus dibawah nol'
+                }
             }
 
             const daftarBobotLevel = this.state.rowList.map(singleRow => singleRow.bobotLevel);
@@ -308,7 +313,7 @@ class TableRiskLevel extends React.Component {
                         red
                         modalTitle="Konfirmasi Pembatalan"
                         modalDesc="Seluruh perubahan konfigurasi Risk Level yang belum tersimpan akan dihapus. Konfirmasi?"
-                        onConfirm={() => window.location.href = "/"}
+                        onConfirm={() => window.location.reload(false)}
                         customConfirmText="Konfirmasi"
                         customCancelText="Kembali"
                     >
@@ -341,6 +346,12 @@ class TableRiskLevel extends React.Component {
 
     render() {
         const column = this.columns();
+
+        const defaultSorted = [{
+            dataField: 'bobotLevel', // if dataField is not match to any column you defined, it will be ignored.
+            order: 'asc' // desc or asc
+        }];
+
         return (
             <>
                 <SirioTable
@@ -352,6 +363,7 @@ class TableRiskLevel extends React.Component {
                     id='idLevel'
                     columnsDefinition={column}
                     includeSearchBar
+                    defaultSorted={defaultSorted}
                     headerButton={this.headerButton()}
                     cellEdit={this.cellEdit}
                     indication="Belum ada Risk Level aktif yang terdaftar"

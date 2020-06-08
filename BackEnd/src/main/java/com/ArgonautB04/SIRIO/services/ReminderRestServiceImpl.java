@@ -1,10 +1,10 @@
-package com.ArgonautB04.SIRIO.services;
+package com.argonautb04.sirio.services;
 
-import com.ArgonautB04.SIRIO.model.Employee;
-import com.ArgonautB04.SIRIO.model.Rekomendasi;
-import com.ArgonautB04.SIRIO.model.Reminder;
-import com.ArgonautB04.SIRIO.model.ReminderTemplate;
-import com.ArgonautB04.SIRIO.repository.ReminderDB;
+import com.argonautb04.sirio.model.Employee;
+import com.argonautb04.sirio.model.Rekomendasi;
+import com.argonautb04.sirio.model.Reminder;
+import com.argonautb04.sirio.model.ReminderTemplate;
+import com.argonautb04.sirio.repository.ReminderDB;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -20,7 +20,6 @@ import java.util.Optional;
 @Transactional
 public class ReminderRestServiceImpl implements ReminderRestService {
 
-
     @Autowired
     private ReminderDB reminderDB;
     @Autowired
@@ -34,8 +33,10 @@ public class ReminderRestServiceImpl implements ReminderRestService {
     @Override
     public Reminder getById(int idReminder) {
         Optional<Reminder> reminder = getOptionalById(idReminder);
-        if (reminder.isPresent()) return reminder.get();
-        else throw new NoSuchElementException();
+        if (reminder.isPresent())
+            return reminder.get();
+        else
+            throw new NoSuchElementException();
     }
 
     @Override
@@ -86,10 +87,8 @@ public class ReminderRestServiceImpl implements ReminderRestService {
     public Reminder validateExistById(int idReminder) {
         Optional<Reminder> target = reminderDB.findById(idReminder);
         if (target.isEmpty()) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND,
-                    "Reminder dengan ID " + idReminder + " tidak ditemukan!"
-            );
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    "Reminder dengan ID " + idReminder + " tidak ditemukan!");
         } else {
             return target.get();
         }
@@ -97,6 +96,10 @@ public class ReminderRestServiceImpl implements ReminderRestService {
 
     @Override
     public void generateDefaultReminder(Employee employee, Rekomendasi rekomendasi) {
+        // hapus reminder yang lama
+        List<Reminder> old_list = getByRekomendasi(rekomendasi);
+        reminderDB.deleteInBatch(old_list);
+
         LocalDate tenggatWaktu = rekomendasi.getTenggatWaktu();
         LocalDate today = LocalDate.now();
 
@@ -115,34 +118,13 @@ public class ReminderRestServiceImpl implements ReminderRestService {
         LocalDate hari1 = tenggatWaktu.minusDays(1);
 
         if (mingguAkhir.compareTo(today) > 0) {
-            buatReminder(
-                    new Reminder(
-                            mingguAkhir,
-                            employee,
-                            rekomendasi,
-                            reminderTemplate
-                    )
-            );
+            buatReminder(new Reminder(mingguAkhir, employee, rekomendasi, reminderTemplate));
         }
         if (hari3.compareTo(today) > 0) {
-            buatReminder(
-                    new Reminder(
-                            hari3,
-                            employee,
-                            rekomendasi,
-                            reminderTemplate
-                    )
-            );
+            buatReminder(new Reminder(hari3, employee, rekomendasi, reminderTemplate));
         }
         if (hari1.compareTo(today) > 0) {
-            buatReminder(
-                    new Reminder(
-                            hari1,
-                            employee,
-                            rekomendasi,
-                            reminderTemplate
-                    )
-            );
+            buatReminder(new Reminder(hari1, employee, rekomendasi, reminderTemplate));
         }
     }
 

@@ -1,7 +1,7 @@
-package com.ArgonautB04.SIRIO.services;
+package com.argonautb04.sirio.services;
 
-import com.ArgonautB04.SIRIO.model.Role;
-import com.ArgonautB04.SIRIO.repository.RoleDB;
+import com.argonautb04.sirio.model.Role;
+import com.argonautb04.sirio.repository.RoleDB;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,8 +25,10 @@ public class RoleRestServiceImpl implements RoleRestService {
     @Override
     public Role getById(int idRole) {
         Optional<Role> role = roleDB.findById(idRole);
-        if (role.isPresent()) return role.get();
-        else throw new NoSuchElementException();
+        if (role.isPresent())
+            return role.get();
+        else
+            throw new NoSuchElementException();
     }
 
     @Override

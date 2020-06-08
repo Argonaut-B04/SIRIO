@@ -29,6 +29,10 @@ class EmployeeService {
         return this.axiosInstance.get(SirioAxiosBase.BASEURL + `/Employee/getAllBranchManager`);
     }
 
+    async getUnassignedBM() {
+        return this.axiosInstance.get(SirioAxiosBase.BASEURL + `/Employee/getUnassignedBM`);
+    }
+
     async getAllQAOfficer() {
         return this.axiosInstance.get(SirioAxiosBase.BASEURL + `/Employee/getAllQAOfficer`);
     }
@@ -47,6 +51,14 @@ class EmployeeService {
 
     async deleteEmployee(data) {
         return this.axiosInstance.post(SirioAxiosBase.BASEURL + `/Employee/hapus`, data)
+    }
+
+    async downloadEmployee() {
+        return window.location.href = SirioAxiosBase.BASEURL + '/export/employee';
+    }
+
+    async changePassword(data) {
+        return this.axiosInstance.post(SirioAxiosBase.BASEURL + `/Employee/ubahPassword`, data)
     }
 }
 

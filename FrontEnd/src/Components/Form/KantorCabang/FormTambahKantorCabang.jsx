@@ -5,7 +5,7 @@ import KantorCabangService from '../../../Services/KantorCabangService';
 import EmployeeService from '../../../Services/EmployeeService';
 import { Redirect } from 'react-router-dom';
 import { withRouter } from 'react-router-dom';
-import {OverlayTrigger, Tooltip} from 'react-bootstrap';
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 
 class FormTambahKantorCabang extends React.Component {
@@ -47,14 +47,14 @@ class FormTambahKantorCabang extends React.Component {
             errorNama = "Nama kantor harus diisi";
         } else if (fokusNama.match(symbols)) {
             errorNama = "Nama hanya boleh mengandung huruf dan angka";
-        }else if (fokusNama.length > 25) {
+        } else if (fokusNama.length > 25) {
             errorNama = "Nama kantor tidak boleh lebih dari 25 karakter";
         }
-       
+
         this.setState({
             errorNama: errorNama
         })
-        
+
     }
 
     validateArea(fokusArea) {
@@ -62,7 +62,7 @@ class FormTambahKantorCabang extends React.Component {
 
         // eslint-disable-next-line
         var symbols = /[-!$%@#^&*()\\_+|~=`{}\[\]:";'<>?,.\/]/;
-        if(fokusArea === null || fokusArea === ""){
+        if (fokusArea === null || fokusArea === "") {
             errorArea = "Area harus diisi";
         } else if (fokusArea.match(symbols)) {
             errorArea = "Area hanya boleh mengandung huruf dan angka";
@@ -70,11 +70,11 @@ class FormTambahKantorCabang extends React.Component {
         if (fokusArea.length > 125) {
             errorArea = "Area tidak boleh lebih dari 125 karakter";
         }
-        
+
         this.setState({
             errorArea: errorArea
         })
-        
+
     }
 
     validateRegional(fokusReg) {
@@ -82,29 +82,29 @@ class FormTambahKantorCabang extends React.Component {
 
         // eslint-disable-next-line
         var symbols = /[-!$%@#^&*()\\_+|~=`{}\[\]:";'<>?,.\/]/;
-        if(fokusReg === null || fokusReg === ""){
-            errorReg= "Regional harus diisi";
+        if (fokusReg === null || fokusReg === "") {
+            errorReg = "Regional harus diisi";
         } else if (fokusReg.match(symbols)) {
-            errorReg= "Regional hanya boleh mengandung huruf dan angka";
+            errorReg = "Regional hanya boleh mengandung huruf dan angka";
         }
         if (fokusReg.length > 125) {
             errorReg = "Regional tidak boleh lebih dari 125 karakter";
         }
-       
+
         this.setState({
             errorReg: errorReg
         })
-       
+
     }
 
-    
+
     submitable() {
         return this.state.errorNama === "" &&
             this.state.errorArea === "" &&
             this.state.errorReg === "" &&
             (this.state.namaKantorCabang !== null && this.state.namaKantorCabang !== "") &&
             (this.state.area !== null && this.state.area !== "") &&
-            (this.state.idPemilik!== null && this.state.idPemilik !== "") &&
+            (this.state.idPemilik !== null && this.state.idPemilik !== "") &&
             (this.state.regional !== null && this.state.regional !== "");
     }
 
@@ -128,7 +128,7 @@ class FormTambahKantorCabang extends React.Component {
     async renderEmployeeOption() {
         this.props.contentStartLoading();
 
-        const response = await EmployeeService.getAllBM();
+        const response = await EmployeeService.getUnassignedBM();
 
         const employeeOptionList = response.data.result.map(employee => {
             return (
@@ -165,6 +165,8 @@ class FormTambahKantorCabang extends React.Component {
             case "regional":
                 this.validateRegional(value);
                 break;
+            default:
+                break;
         }
     }
 
@@ -185,9 +187,9 @@ class FormTambahKantorCabang extends React.Component {
         const target = event.target;
         const value = target.name === 'kunjunganAudit' ? target.checked : target.value;
         const name = target.name;
-    
+
         this.setState({
-          [name]: value
+            [name]: value
         });
     }
 
@@ -198,9 +200,9 @@ class FormTambahKantorCabang extends React.Component {
         this.props.changeLoadingBody("Mengirim data ke server");
 
         event.preventDefault();
-        if(this.submitable()){
+        if (this.submitable()) {
             const response = await KantorCabangService.isExistKantorCabang(this.state.namaKantorCabang);
-            if(response.data.result){
+            if (response.data.result) {
                 const errorNama = "Nama kantor sudah ada di database";
                 if (this.state.errorNama !== errorNama) {
                     this.setState({
@@ -208,7 +210,7 @@ class FormTambahKantorCabang extends React.Component {
                     })
                 }
             }
-            else{
+            else {
                 const kantorCabang = {
                     namaKantorCabang: this.state.namaKantorCabang,
                     idPemilik: this.state.idPemilik,
@@ -217,7 +219,8 @@ class FormTambahKantorCabang extends React.Component {
                     kunjunganAudit: this.state.kunjunganAudit
                 }
                 KantorCabangService.addKantorCabang(kantorCabang)
-                .then(() => this.setRedirect());
+                    .then(() => this.props.contentFinishLoading(), () => this.props.contentFinishLoading())
+                    .then(() => this.setRedirect());
             }
         }
 
@@ -247,7 +250,7 @@ class FormTambahKantorCabang extends React.Component {
                     name: "idPemilik",
                     value: this.state.idPemilik,
                     optionList: this.state.employeeOptionList
-                },{
+                }, {
                     label: "Area",
                     required: true,
                     handleChange: this.handleChange,
@@ -256,7 +259,7 @@ class FormTambahKantorCabang extends React.Component {
                     validation: this.state.errorArea,
                     value: this.state.area,
                     placeholder: "Masukan nama area"
-                },{
+                }, {
                     label: "Regional",
                     required: true,
                     handleChange: this.handleChange,
@@ -265,28 +268,28 @@ class FormTambahKantorCabang extends React.Component {
                     validation: this.state.errorReg,
                     value: this.state.regional,
                     placeholder: "Masukan nama regional"
-                },{
+                }, {
                     label: <OverlayTrigger
-                    placement="right"
-                    overlay={<Tooltip id="button-tooltip">
-                    Sudah pernah atau belum pernah dikunjungi audit
+                        placement="right"
+                        overlay={<Tooltip id="button-tooltip">
+                            Sudah pernah atau belum pernah dikunjungi audit
                     </Tooltip>}
                     >
-                    <p variant="success">Kunjungan Audit</p>
+                        <p variant="success">Kunjungan Audit</p>
                     </OverlayTrigger>,
                     handleChange: this.handleInputChange,
                     type: "checkbox",
                     name: "kunjunganAudit",
                     value: this.state.kunjunganAudit,
                     checked: this.state.kunjunganAudit
-                } 
+                }
 
             ]
-           
-            
+
+
         )
 
-        
+
     }
 
     submitButton() {
@@ -304,7 +307,7 @@ class FormTambahKantorCabang extends React.Component {
                     purple
                     recommended
                     classes="mx-1"
-                    onClick={(event)  => this.handleSubmit(event)}
+                    onClick={(event) => this.handleSubmit(event)}
                 >
                     Simpan
                 </SirioButton>
@@ -332,9 +335,9 @@ class FormTambahKantorCabang extends React.Component {
                     onSubmit={this.handleSubmit}
                     submitButton={this.submitButton()}
                 />
-             </>
+            </>
         );
     }
 }
 
-export default withRouter (FormTambahKantorCabang);
+export default withRouter(FormTambahKantorCabang);

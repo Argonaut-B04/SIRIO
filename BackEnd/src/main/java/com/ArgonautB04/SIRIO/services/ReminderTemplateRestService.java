@@ -1,11 +1,11 @@
-package com.ArgonautB04.SIRIO.services;
+package com.argonautb04.sirio.services;
 
-import com.ArgonautB04.SIRIO.model.ReminderTemplate;
+import com.argonautb04.sirio.model.ReminderTemplate;
 
 public interface ReminderTemplateRestService {
     ReminderTemplate getGlobal();
 
-    ReminderTemplate ambilAtauBuatTemplate(ReminderTemplate reminderTemplate);
-
     void setGlobal(ReminderTemplate reminderTemplate);
+
+    ReminderTemplate ambilAtauBuatTemplate(ReminderTemplate reminderTemplate);
 }

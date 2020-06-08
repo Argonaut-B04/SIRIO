@@ -1,10 +1,10 @@
-package com.ArgonautB04.SIRIO.services;
+package com.argonautb04.sirio.services;
 
-import com.ArgonautB04.SIRIO.model.Employee;
-import com.ArgonautB04.SIRIO.model.KantorCabang;
-import com.ArgonautB04.SIRIO.model.RencanaPemeriksaan;
-import com.ArgonautB04.SIRIO.model.TugasPemeriksaan;
-import com.ArgonautB04.SIRIO.repository.TugasPemeriksaanDB;
+import com.argonautb04.sirio.model.Employee;
+import com.argonautb04.sirio.model.KantorCabang;
+import com.argonautb04.sirio.model.RencanaPemeriksaan;
+import com.argonautb04.sirio.model.TugasPemeriksaan;
+import com.argonautb04.sirio.repository.TugasPemeriksaanDB;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -31,8 +31,10 @@ public class TugasPemeriksaanRestServiceImpl implements TugasPemeriksaanRestServ
     @Override
     public TugasPemeriksaan getById(int idTugasPemeriksaan) {
         Optional<TugasPemeriksaan> tugasPemeriksaan = tugasPemeriksaanDB.findById(idTugasPemeriksaan);
-        if (tugasPemeriksaan.isPresent()) return tugasPemeriksaan.get();
-        else throw new NoSuchElementException();
+        if (tugasPemeriksaan.isPresent())
+            return tugasPemeriksaan.get();
+        else
+            throw new NoSuchElementException();
     }
 
     @Override
@@ -56,13 +58,17 @@ public class TugasPemeriksaanRestServiceImpl implements TugasPemeriksaanRestServ
     }
 
     @Override
-    public List<TugasPemeriksaan> getByDaftarKantorCabangAndTanggalSelesai(List<KantorCabang> kantorCabangList, LocalDate tanggalMulai, LocalDate tanggalSelesai) {
-        return tugasPemeriksaanDB.findAllByKantorCabangInAndTanggalSelesaiBetween(kantorCabangList, tanggalMulai, tanggalSelesai);
+    public List<TugasPemeriksaan> getByDaftarKantorCabangAndTanggalSelesai(List<KantorCabang> kantorCabangList,
+                                                                           LocalDate tanggalMulai, LocalDate tanggalSelesai) {
+        return tugasPemeriksaanDB.findAllByKantorCabangInAndTanggalSelesaiBetween(kantorCabangList, tanggalMulai,
+                tanggalSelesai);
     }
 
     @Override
-    public List<TugasPemeriksaan> getByKantorCabangAndTanggalSelesai(KantorCabang kantorCabang, LocalDate tanggalMulai, LocalDate tanggalSelesai) {
-        return tugasPemeriksaanDB.findAllByKantorCabangAndTanggalSelesaiBetween(kantorCabang, tanggalMulai, tanggalSelesai);
+    public List<TugasPemeriksaan> getByKantorCabangAndTanggalSelesai(KantorCabang kantorCabang, LocalDate tanggalMulai,
+                                                                     LocalDate tanggalSelesai) {
+        return tugasPemeriksaanDB.findAllByKantorCabangAndTanggalSelesaiBetween(kantorCabang, tanggalMulai,
+                tanggalSelesai);
     }
 
     @Override
@@ -97,10 +103,8 @@ public class TugasPemeriksaanRestServiceImpl implements TugasPemeriksaanRestServ
         if (target.isPresent()) {
             return target.get();
         } else {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND,
-                    "Tugas pemeriksaan dengan id " + idTugasPemeriksaan + "tidak dapat ditemukan"
-            );
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    "Tugas pemeriksaan dengan id " + idTugasPemeriksaan + "tidak dapat ditemukan");
         }
     }
 

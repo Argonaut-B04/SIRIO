@@ -1,8 +1,8 @@
-package com.ArgonautB04.SIRIO.repository;
+package com.argonautb04.sirio.repository;
 
-import com.ArgonautB04.SIRIO.model.BuktiPelaksanaan;
-import com.ArgonautB04.SIRIO.model.Employee;
-import com.ArgonautB04.SIRIO.model.Rekomendasi;
+import com.argonautb04.sirio.model.BuktiPelaksanaan;
+import com.argonautb04.sirio.model.Employee;
+import com.argonautb04.sirio.model.Rekomendasi;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -10,8 +10,7 @@ import java.util.Collection;
 import java.util.List;
 
 @Repository
-public interface BuktiPelaksanaanDB
-        extends JpaRepository<BuktiPelaksanaan, Integer> {
+public interface BuktiPelaksanaanDB extends JpaRepository<BuktiPelaksanaan, Integer> {
 
     /**
      * Get all Bukti Pelaksanaan object by Person in Charge.
@@ -27,9 +26,7 @@ public interface BuktiPelaksanaanDB
      * @param rekomendasi Recommendation object
      * @return Bukti Pelaksanaan object
      */
-    List<BuktiPelaksanaan> findAllByRekomendasiIn(
-            Collection<Rekomendasi> rekomendasi
-    );
+    List<BuktiPelaksanaan> findAllByRekomendasiIn(Collection<Rekomendasi> rekomendasi);
 
     /**
      * Get Bukti Pelaksanaan bound to Recommendation.

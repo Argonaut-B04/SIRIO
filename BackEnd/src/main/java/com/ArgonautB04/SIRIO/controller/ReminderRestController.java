@@ -1,20 +1,25 @@
-package com.ArgonautB04.SIRIO.controller;
+package com.argonautb04.sirio.controller;
 
-import com.ArgonautB04.SIRIO.model.Employee;
-import com.ArgonautB04.SIRIO.model.Rekomendasi;
-import com.ArgonautB04.SIRIO.model.Reminder;
-import com.ArgonautB04.SIRIO.model.ReminderTemplate;
-import com.ArgonautB04.SIRIO.rest.BaseResponse;
-import com.ArgonautB04.SIRIO.rest.RekomendasiDTO;
-import com.ArgonautB04.SIRIO.rest.ReminderDTO;
-import com.ArgonautB04.SIRIO.rest.ReminderTemplateDTO;
-import com.ArgonautB04.SIRIO.services.EmployeeRestService;
-import com.ArgonautB04.SIRIO.services.RekomendasiRestService;
-import com.ArgonautB04.SIRIO.services.ReminderRestService;
-import com.ArgonautB04.SIRIO.services.ReminderTemplateRestService;
+import com.argonautb04.sirio.model.Employee;
+import com.argonautb04.sirio.model.Rekomendasi;
+import com.argonautb04.sirio.model.Reminder;
+import com.argonautb04.sirio.model.ReminderTemplate;
+import com.argonautb04.sirio.rest.BaseResponse;
+import com.argonautb04.sirio.rest.RekomendasiDTO;
+import com.argonautb04.sirio.rest.ReminderDTO;
+import com.argonautb04.sirio.rest.ReminderTemplateDTO;
+import com.argonautb04.sirio.services.EmployeeRestService;
+import com.argonautb04.sirio.services.RekomendasiRestService;
+import com.argonautb04.sirio.services.ReminderRestService;
+import com.argonautb04.sirio.services.ReminderTemplateRestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
@@ -45,19 +50,14 @@ public class ReminderRestController {
      * @return daftar reminder yang terhubung dengan rekomendasi tersebut
      */
     @PostMapping("/getByRekomendasi")
-    private BaseResponse<List<ReminderDTO>> getAllReminderUntukRekomendasi(
-            @RequestBody RekomendasiDTO rekomendasiDTO,
-            Principal principal
-    ) {
+    private BaseResponse<List<ReminderDTO>> getAllReminderUntukRekomendasi(@RequestBody RekomendasiDTO rekomendasiDTO,
+                                                                           Principal principal) {
         Optional<Employee> employeeOptional = employeeRestService.getByUsername(principal.getName());
         Employee employee;
 
         // Validasi : user berhasil login dengan valid
         if (employeeOptional.isEmpty()) {
-            throw new ResponseStatusException(
-                    HttpStatus.UNAUTHORIZED,
-                    "Akun anda tidak terdaftar dalam Sirio"
-            );
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Akun anda tidak terdaftar dalam Sirio");
         } else {
             employee = employeeOptional.get();
         }
@@ -65,10 +65,8 @@ public class ReminderRestController {
 
         // Validasi : role user memperbolehkan pengaturan tenggat waktu
         if (!employee.getRole().getAccessPermissions().getAksesTabelRekomendasi()) {
-            throw new ResponseStatusException(
-                    HttpStatus.UNAUTHORIZED,
-                    "Akun anda tidak memiliki akses ke pengaturan tenggat waktu"
-            );
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,
+                    "Akun anda tidak memiliki akses ke pengaturan tenggat waktu");
         }
         // Validasi selesai
 
@@ -78,10 +76,8 @@ public class ReminderRestController {
 
         // Validasi : rekomendasi harus ada dalam basis data
         if (rekomendasiOptional.isEmpty()) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND,
-                    "Rekomendasi dengan ID " + idRekomendasi + " tidak ditemukan!"
-            );
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    "Rekomendasi dengan ID " + idRekomendasi + " tidak ditemukan!");
         } else {
             rekomendasi = rekomendasiOptional.get();
         }
@@ -103,14 +99,13 @@ public class ReminderRestController {
     /**
      * Konfigurasi reminder secara batch untuk reminder terpilih
      *
-     * @param rekomendasiDTO data transfer object untuk rekomendasi yang memuat informasi reminderDTO
+     * @param rekomendasiDTO data transfer object untuk rekomendasi yang memuat
+     *                       informasi reminderDTO
      * @return reminder yang telah disimpan
      */
     @PostMapping(value = "/konfigurasi", consumes = {"application/json"})
-    private BaseResponse<List<Reminder>> tambahReminder(
-            @RequestBody RekomendasiDTO rekomendasiDTO,
-            Principal principal
-    ) {
+    private BaseResponse<List<Reminder>> tambahReminder(@RequestBody RekomendasiDTO rekomendasiDTO,
+                                                        Principal principal) {
         Employee employee = employeeRestService.validateEmployeeExistByPrincipal(principal);
         employeeRestService.validateRolePermission(employee, "tabel rekomendasi");
 
@@ -132,25 +127,18 @@ public class ReminderRestController {
         List<ReminderDTO> daftarReminderDTOBaru = rekomendasiDTO.getReminder();
 
         for (ReminderDTO calonReminderBaru : daftarReminderDTOBaru) {
-            Optional<Reminder> telahAda = reminderRestService.isExistByIdReminderDanPembuat(calonReminderBaru.getIdReminder(), rekomendasi, employee);
+            Optional<Reminder> telahAda = reminderRestService
+                    .isExistByIdReminderDanPembuat(calonReminderBaru.getIdReminder(), rekomendasi, employee);
             Reminder hasil;
             if (telahAda.isPresent()) {
                 // Reminder akan diperbarui
                 hasil = telahAda.get();
-                hasil.setTanggalPengiriman(
-                        calonReminderBaru.getTanggalPengiriman()
-                );
+                hasil.setTanggalPengiriman(calonReminderBaru.getTanggalPengiriman());
                 reminderRestService.simpanReminder(hasil);
             } else {
                 // Reminder akan dibuat baru
-                hasil = reminderRestService.buatReminder(
-                        new Reminder(
-                                calonReminderBaru.getTanggalPengiriman(),
-                                employee,
-                                rekomendasi,
-                                reminderTemplateToAssign
-                        )
-                );
+                hasil = reminderRestService.buatReminder(new Reminder(calonReminderBaru.getTanggalPengiriman(),
+                        employee, rekomendasi, reminderTemplateToAssign));
             }
             daftarReminderBaru.add(hasil);
         }
@@ -159,7 +147,7 @@ public class ReminderRestController {
         for (Reminder reminderLama : oldList) {
             boolean ada = false;
             for (Reminder reminderBaru : daftarReminderBaru) {
-                if (reminderLama.getIdReminder() == reminderBaru.getIdReminder() ) {
+                if (reminderLama.getIdReminder() == reminderBaru.getIdReminder()) {
                     ada = true;
                     break;
                 }
@@ -173,29 +161,23 @@ public class ReminderRestController {
     }
 
     @GetMapping(value = "/get-template-reminder/{idReminder}")
-    private BaseResponse<ReminderTemplate> getTemplateByIdReminder(
-            @PathVariable("idReminder") int idReminder,
-            Principal principal
-    ) {
+    private BaseResponse<ReminderTemplate> getTemplateByIdReminder(@PathVariable("idReminder") int idReminder,
+                                                                   Principal principal) {
         Employee employee = employeeRestService.validateEmployeeExistByPrincipal(principal);
         Reminder reminder = reminderRestService.validateExistById(idReminder);
         return new BaseResponse<>(200, "success", reminder.getReminderTemplate());
     }
 
     @GetMapping(value = "/get-template-reminder-global")
-    private BaseResponse<ReminderTemplate> getTemplateGlobal(
-            Principal principal
-    ) {
+    private BaseResponse<ReminderTemplate> getTemplateGlobal(Principal principal) {
         employeeRestService.validateEmployeeExistByPrincipal(principal);
         ReminderTemplate reminderTemplate = reminderTemplateRestService.getGlobal();
         return new BaseResponse<>(200, "success", reminderTemplate);
     }
 
     @PostMapping(value = "/atur-template-reminder", consumes = {"application/json"})
-    private BaseResponse<String> aturReminderTemplate(
-            @RequestBody ReminderTemplateDTO reminderTemplateDTO,
-            Principal principal
-    ) {
+    private BaseResponse<String> aturReminderTemplate(@RequestBody ReminderTemplateDTO reminderTemplateDTO,
+                                                      Principal principal) {
         Employee employee = employeeRestService.validateEmployeeExistByPrincipal(principal);
 
         String effectArea = reminderTemplateDTO.getEffectArea();
@@ -207,20 +189,14 @@ public class ReminderRestController {
             reminder = reminderRestService.validateExistById(reminderTemplateDTO.getIdReminder());
         }
 
-        ReminderTemplate reminderTemplate = reminderTemplateRestService.ambilAtauBuatTemplate(
-                new ReminderTemplate(
-                        subject,
-                        content
-                )
-        );
+        ReminderTemplate reminderTemplate = reminderTemplateRestService
+                .ambilAtauBuatTemplate(new ReminderTemplate(subject, content));
 
         switch (effectArea) {
             case "global":
                 if (reminder != null) {
                     reminder.setReminderTemplate(reminderTemplate);
-                    reminderRestService.ubahTemplateReminder(
-                            reminder
-                    );
+                    reminderRestService.ubahTemplateReminder(reminder);
                 }
                 reminderTemplateRestService.setGlobal(reminderTemplate);
                 break;
@@ -240,16 +216,12 @@ public class ReminderRestController {
             case "reminder":
                 assert reminder != null;
                 reminder.setReminderTemplate(reminderTemplate);
-                reminderRestService.ubahTemplateReminder(
-                        reminder
-                );
+                reminderRestService.ubahTemplateReminder(reminder);
                 break;
             case "akun":
                 if (reminder != null) {
                     reminder.setReminderTemplate(reminderTemplate);
-                    reminderRestService.ubahTemplateReminder(
-                            reminder
-                    );
+                    reminderRestService.ubahTemplateReminder(reminder);
                 }
                 employee.setReminderTemplatePilihan(reminderTemplate);
                 employeeRestService.simpanPerubahan(employee);

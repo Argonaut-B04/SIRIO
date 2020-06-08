@@ -1,8 +1,8 @@
-package com.ArgonautB04.SIRIO.rest;
+package com.argonautb04.sirio.rest;
 
 /**
- * Kelas ini digunakan sebagai objek utama
- * yang akan dikirim sebagai JsonResponse.
+ * Kelas ini digunakan sebagai objek utama yang akan dikirim sebagai
+ * JsonResponse.
  *
  * @param <T> Class bebas masukin apa saja yang bakal jadi konten response
  * @author windawijaya, nathanael
@@ -38,9 +38,7 @@ public class BaseResponse<T> {
      * @param messageToPass the message
      * @param resultObject  the result
      */
-    public BaseResponse(final int statusCode,
-                        final String messageToPass,
-                        final T resultObject) {
+    public BaseResponse(final int statusCode, final String messageToPass, final T resultObject) {
         this.status = statusCode;
         this.message = messageToPass;
         this.result = resultObject;

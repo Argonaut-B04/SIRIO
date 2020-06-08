@@ -41,6 +41,7 @@ export default class SirioDatePickerButton extends React.Component {
                 dateFormat="yyyy-MM-dd"
                 minDate={minDate ? minDate : new Date()}
                 maxDate={maxDate}
+                filterDate={this.props.filter}
                 dropdownMode="select"
                 customInput={<SirioDatePickerCustomInput {...this.props} />}
             />

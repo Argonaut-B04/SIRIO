@@ -1,7 +1,7 @@
-package com.ArgonautB04.SIRIO.services;
+package com.argonautb04.sirio.services;
 
-import com.ArgonautB04.SIRIO.model.StatusRencanaPemeriksaan;
-import com.ArgonautB04.SIRIO.repository.StatusRencanaPemeriksaanDB;
+import com.argonautb04.sirio.model.StatusRencanaPemeriksaan;
+import com.argonautb04.sirio.repository.StatusRencanaPemeriksaanDB;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,8 +25,10 @@ public class StatusRencanaPemeriksaanRestServiceImpl implements StatusRencanaPem
     @Override
     public StatusRencanaPemeriksaan getById(int idStatus) {
         Optional<StatusRencanaPemeriksaan> statusRencanaPemeriksaan = statusRencanaPemeriksaanDB.findById(idStatus);
-        if (statusRencanaPemeriksaan.isPresent()) return statusRencanaPemeriksaan.get();
-        else throw new NoSuchElementException();
+        if (statusRencanaPemeriksaan.isPresent())
+            return statusRencanaPemeriksaan.get();
+        else
+            throw new NoSuchElementException();
     }
 
     @Override

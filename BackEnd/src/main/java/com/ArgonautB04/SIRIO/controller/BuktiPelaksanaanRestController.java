@@ -1,17 +1,17 @@
-package com.ArgonautB04.SIRIO.controller;
+package com.argonautb04.sirio.controller;
 
-import com.ArgonautB04.SIRIO.model.BuktiPelaksanaan;
-import com.ArgonautB04.SIRIO.model.Employee;
-import com.ArgonautB04.SIRIO.model.Rekomendasi;
-import com.ArgonautB04.SIRIO.model.StatusBuktiPelaksanaan;
-import com.ArgonautB04.SIRIO.model.StatusRekomendasi;
-import com.ArgonautB04.SIRIO.rest.BaseResponse;
-import com.ArgonautB04.SIRIO.rest.BuktiPelaksanaanDTO;
-import com.ArgonautB04.SIRIO.services.BuktiPelaksanaanRestService;
-import com.ArgonautB04.SIRIO.services.EmployeeRestService;
-import com.ArgonautB04.SIRIO.services.RekomendasiRestService;
-import com.ArgonautB04.SIRIO.services.StatusBuktiPelaksanaanRestService;
-import com.ArgonautB04.SIRIO.services.StatusRekomendasiRestService;
+import com.argonautb04.sirio.model.BuktiPelaksanaan;
+import com.argonautb04.sirio.model.Employee;
+import com.argonautb04.sirio.model.Rekomendasi;
+import com.argonautb04.sirio.model.StatusBuktiPelaksanaan;
+import com.argonautb04.sirio.model.StatusRekomendasi;
+import com.argonautb04.sirio.rest.BaseResponse;
+import com.argonautb04.sirio.rest.BuktiPelaksanaanDTO;
+import com.argonautb04.sirio.services.BuktiPelaksanaanRestService;
+import com.argonautb04.sirio.services.EmployeeRestService;
+import com.argonautb04.sirio.services.RekomendasiRestService;
+import com.argonautb04.sirio.services.StatusBuktiPelaksanaanRestService;
+import com.argonautb04.sirio.services.StatusRekomendasiRestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -66,8 +66,7 @@ public class BuktiPelaksanaanRestController {
      */
     @GetMapping("/getAll/{idPembuat}")
     private BaseResponse<List<BuktiPelaksanaan>> getAllBuktiPelaksanaanUntukPembuat(
-            @PathVariable("idPembuat") int idPembuat
-    ) {
+            @PathVariable("idPembuat") int idPembuat) {
         Employee pembuat = employeeRestService.validateEmployeeExistById(idPembuat);
         List<BuktiPelaksanaan> result = buktiPelaksanaanRestService.getByPembuat(pembuat);
         return new BaseResponse<>(200, "success", result);
@@ -81,8 +80,7 @@ public class BuktiPelaksanaanRestController {
      */
     @GetMapping("/{idBuktiPelaksanaan}")
     private BaseResponse<BuktiPelaksanaanDTO> getDetailBuktiPelaksanaan(
-            @PathVariable("idBuktiPelaksanaan") int idBuktiPelaksanaan, Principal principal
-    ) {
+            @PathVariable("idBuktiPelaksanaan") int idBuktiPelaksanaan, Principal principal) {
         Employee pengelola = employeeRestService.validateEmployeeExistByPrincipal(principal);
         employeeRestService.validateRolePermission(pengelola, "bukti pelaksanaan");
 
@@ -105,14 +103,13 @@ public class BuktiPelaksanaanRestController {
     /**
      * Menambah bukti pelaksanaan baru untuk rekomendasi spesifik
      *
-     * @param buktiPelaksanaanDTO data transfer object untuk bukti pelaksanaan yang akan ditambah
+     * @param buktiPelaksanaanDTO data transfer object untuk bukti pelaksanaan yang
+     *                            akan ditambah
      * @return bukti pelaksanaan yang telah disimpan
      */
     @PostMapping(value = "/tambah", consumes = {"application/json"})
-    private BaseResponse<BuktiPelaksanaan> tambahBuktiPelaksanaan(
-            @RequestBody BuktiPelaksanaanDTO buktiPelaksanaanDTO,
-            Principal principal
-    ) {
+    private BaseResponse<BuktiPelaksanaan> tambahBuktiPelaksanaan(@RequestBody BuktiPelaksanaanDTO buktiPelaksanaanDTO,
+                                                                  Principal principal) {
         Employee pengelola = employeeRestService.validateEmployeeExistByPrincipal(principal);
         employeeRestService.validateRolePermission(pengelola, "tambah bukti pelaksanaan");
 
@@ -122,24 +119,19 @@ public class BuktiPelaksanaanRestController {
         if (buktiPelaksanaanDTO.getKeterangan() != null && !buktiPelaksanaanDTO.getKeterangan().equals("")) {
             buktiPelaksanaanTemp.setKeterangan(buktiPelaksanaanDTO.getKeterangan());
         } else {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Keterangan bukti pelaksanaan perlu diisi!"
-            );
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Keterangan bukti pelaksanaan perlu diisi!");
         }
         if (buktiPelaksanaanDTO.getLampiran() != null && !buktiPelaksanaanDTO.getLampiran().equals("")) {
-            if (buktiPelaksanaanDTO.getLampiran().contains("https://") |
-                    buktiPelaksanaanDTO.getLampiran().contains("http://") |
-                    buktiPelaksanaanDTO.getLampiran().contains("www")) {
+            if (buktiPelaksanaanDTO.getLampiran().contains("https://")
+                    | buktiPelaksanaanDTO.getLampiran().contains("http://")
+                    | buktiPelaksanaanDTO.getLampiran().contains("www")) {
                 buktiPelaksanaanTemp.setLampiran(buktiPelaksanaanDTO.getLampiran());
             } else {
-                throw new ResponseStatusException(
-                        HttpStatus.FORBIDDEN, "Lampiran bukti pelaksanaan harus berupa link url!"
-                );
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN,
+                        "Lampiran bukti pelaksanaan harus berupa link url!");
             }
         } else {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Lampiran bukti pelaksanaan perlu diisi!"
-            );
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Lampiran bukti pelaksanaan perlu diisi!");
         }
 
         buktiPelaksanaanTemp.setPembuat(pengelola);
@@ -155,46 +147,41 @@ public class BuktiPelaksanaanRestController {
     /**
      * Mengubah bukti pelaksanaan
      *
-     * @param buktiPelaksanaanDTO data transfer object untuk bukti pelaksanaan yang akan diubah
+     * @param buktiPelaksanaanDTO data transfer object untuk bukti pelaksanaan yang
+     *                            akan diubah
      * @return bukti pelaksanaan yang telah disimpan
      */
     @PostMapping(value = "/ubah", consumes = {"application/json"})
-    private BaseResponse<BuktiPelaksanaan> ubahBuktiPelaksanaan(
-            @RequestBody BuktiPelaksanaanDTO buktiPelaksanaanDTO, Principal principal
-    ) {
+    private BaseResponse<BuktiPelaksanaan> ubahBuktiPelaksanaan(@RequestBody BuktiPelaksanaanDTO buktiPelaksanaanDTO,
+                                                                Principal principal) {
         Employee pengelola = employeeRestService.validateEmployeeExistByPrincipal(principal);
         employeeRestService.validateRolePermission(pengelola, "ubah bukti pelaksanaan");
 
-        BuktiPelaksanaan buktiPelaksanaanTemp = buktiPelaksanaanRestService.validateExistById(buktiPelaksanaanDTO.getId());
-        buktiPelaksanaanTemp.setStatusBuktiPelaksanaan(
-                statusBuktiPelaksanaanRestService.getById(1));
+        BuktiPelaksanaan buktiPelaksanaanTemp = buktiPelaksanaanRestService
+                .validateExistById(buktiPelaksanaanDTO.getId());
+        buktiPelaksanaanTemp.setStatusBuktiPelaksanaan(statusBuktiPelaksanaanRestService.getById(1));
 
         if (buktiPelaksanaanDTO.getKeterangan() != null && !buktiPelaksanaanDTO.getKeterangan().equals("")) {
             buktiPelaksanaanTemp.setKeterangan(buktiPelaksanaanDTO.getKeterangan());
         } else {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Keterangan bukti pelaksanaan perlu diisi!"
-            );
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Keterangan bukti pelaksanaan perlu diisi!");
         }
 
         if (buktiPelaksanaanDTO.getLampiran() != null && !buktiPelaksanaanDTO.getLampiran().equals("")) {
-            if (buktiPelaksanaanDTO.getLampiran().contains("https://") |
-                    buktiPelaksanaanDTO.getLampiran().contains("http://") |
-                    buktiPelaksanaanDTO.getLampiran().contains("www")) {
+            if (buktiPelaksanaanDTO.getLampiran().contains("https://")
+                    | buktiPelaksanaanDTO.getLampiran().contains("http://")
+                    | buktiPelaksanaanDTO.getLampiran().contains("www")) {
                 buktiPelaksanaanTemp.setLampiran(buktiPelaksanaanDTO.getLampiran());
             } else {
-                throw new ResponseStatusException(
-                        HttpStatus.FORBIDDEN, "Lampiran bukti pelaksanaan harus berupa link url!"
-                );
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN,
+                        "Lampiran bukti pelaksanaan harus berupa link url!");
             }
         } else {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Lampiran bukti pelaksanaan perlu diisi!"
-            );
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Lampiran bukti pelaksanaan perlu diisi!");
         }
 
-        BuktiPelaksanaan buktiPelaksanaan =
-                buktiPelaksanaanRestService.ubahBuktiPelaksanaan(buktiPelaksanaanDTO.getId(), buktiPelaksanaanTemp);
+        BuktiPelaksanaan buktiPelaksanaan = buktiPelaksanaanRestService
+                .ubahBuktiPelaksanaan(buktiPelaksanaanDTO.getId(), buktiPelaksanaanTemp);
 
         return new BaseResponse<>(200, "success", buktiPelaksanaan);
     }
@@ -205,40 +192,35 @@ public class BuktiPelaksanaanRestController {
      * @param buktiPelaksanaanDTO data transfer object untuk bukti pelaksanaan
      */
     @PostMapping(value = "/persetujuan", consumes = {"application/json"})
-    private BaseResponse<String> persetujuanBuktiPelaksanaan(
-            @RequestBody BuktiPelaksanaanDTO buktiPelaksanaanDTO,
-            Principal principal
-    ) {
+    private BaseResponse<String> persetujuanBuktiPelaksanaan(@RequestBody BuktiPelaksanaanDTO buktiPelaksanaanDTO,
+                                                             Principal principal) {
         Employee pengelola = employeeRestService.validateEmployeeExistByPrincipal(principal);
         employeeRestService.validateRolePermission(pengelola, "persetujuan bukti pelaksanaan");
-        BuktiPelaksanaan buktiPelaksanaanTemp = buktiPelaksanaanRestService.validateExistById(buktiPelaksanaanDTO.getId());
+        BuktiPelaksanaan buktiPelaksanaanTemp = buktiPelaksanaanRestService
+                .validateExistById(buktiPelaksanaanDTO.getId());
         buktiPelaksanaanTemp.setPemeriksa(pengelola);
-        Rekomendasi rekomendasi = rekomendasiRestService.getById(buktiPelaksanaanTemp.getRekomendasi().getIdRekomendasi());
+        Rekomendasi rekomendasi = rekomendasiRestService
+                .getById(buktiPelaksanaanTemp.getRekomendasi().getIdRekomendasi());
 
         try {
-            StatusBuktiPelaksanaan statusBuktiPelaksanaan = statusBuktiPelaksanaanRestService.getById(
-                    buktiPelaksanaanDTO.getStatus());
-            if (buktiPelaksanaanTemp.getStatusBuktiPelaksanaan().getIdStatusBukti() != 1 ||
-                    (statusBuktiPelaksanaan != statusBuktiPelaksanaanRestService.getById(2) &&
-                            statusBuktiPelaksanaan != statusBuktiPelaksanaanRestService.getById(3)))
-                throw new ResponseStatusException(
-                        HttpStatus.FORBIDDEN, "Pengajuan persetujuan tidak diperbolehkan!"
-                );
+            StatusBuktiPelaksanaan statusBuktiPelaksanaan = statusBuktiPelaksanaanRestService
+                    .getById(buktiPelaksanaanDTO.getStatus());
+            if (buktiPelaksanaanTemp.getStatusBuktiPelaksanaan().getIdStatusBukti() != 1
+                    || (statusBuktiPelaksanaan != statusBuktiPelaksanaanRestService.getById(2)
+                    && statusBuktiPelaksanaan != statusBuktiPelaksanaanRestService.getById(3)))
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Pengajuan persetujuan tidak diperbolehkan!");
             buktiPelaksanaanTemp.setStatusBuktiPelaksanaan(statusBuktiPelaksanaan);
         } catch (NoSuchElementException e) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Status bukti pelaksanaan tidak ditemukan!"
-            );
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Status bukti pelaksanaan tidak ditemukan!");
         }
-        StatusRekomendasi statusRekomendasi = statusRekomendasiRestService.getById(
-                buktiPelaksanaanDTO.getStatusRekomendasi());
+        StatusRekomendasi statusRekomendasi = statusRekomendasiRestService
+                .getById(buktiPelaksanaanDTO.getStatusRekomendasi());
         rekomendasi.setStatusRekomendasi(statusRekomendasi);
 
-        if (buktiPelaksanaanDTO.getStatus() == 3 && (buktiPelaksanaanDTO.getFeedback() == null ||
-                buktiPelaksanaanDTO.getFeedback().equals("")))
-            throw new ResponseStatusException(
-                    HttpStatus.FORBIDDEN, "Feedback perlu diisi untuk penolakan bukti pelaksanaan!"
-            );
+        if (buktiPelaksanaanDTO.getStatus() == 3
+                && (buktiPelaksanaanDTO.getFeedback() == null || buktiPelaksanaanDTO.getFeedback().equals("")))
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN,
+                    "Feedback perlu diisi untuk penolakan bukti pelaksanaan!");
         buktiPelaksanaanTemp.setFeedback(buktiPelaksanaanDTO.getFeedback());
 
         buktiPelaksanaanTemp.setTanggalPersetujuan(LocalDate.now());

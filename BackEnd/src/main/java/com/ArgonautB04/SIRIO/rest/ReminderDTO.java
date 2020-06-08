@@ -1,4 +1,4 @@
-package com.ArgonautB04.SIRIO.rest;
+package com.argonautb04.sirio.rest;
 
 import java.time.LocalDate;
 
@@ -11,7 +11,7 @@ public class ReminderDTO {
         return tanggalPengiriman;
     }
 
-    public void setTanggalPengiriman(LocalDate tanggalPengiriman) {
+    public void setTanggalPengiriman(final LocalDate tanggalPengiriman) {
         this.tanggalPengiriman = tanggalPengiriman;
     }
 
@@ -19,7 +19,7 @@ public class ReminderDTO {
         return idReminder;
     }
 
-    public void setIdReminder(int idReminder) {
+    public void setIdReminder(final int idReminder) {
         this.idReminder = idReminder;
     }
 
@@ -27,7 +27,7 @@ public class ReminderDTO {
         return idPembuat;
     }
 
-    public void setIdPembuat(int idPembuat) {
+    public void setIdPembuat(final int idPembuat) {
         this.idPembuat = idPembuat;
     }
 }

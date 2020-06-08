@@ -20,7 +20,13 @@ export default class EmployeeFormTambah extends React.Component {
             email: "",
             noHp: "",
             roleOptionList: [],
-            redirect: false
+            redirect: false,
+            errorPassword: "",
+            errorName: "",
+            errorJabatan: "",
+            errorEmail: "",
+            errorNoHp: "",
+            errorUsername: ""
         };
 
         this.renderRoleOption = this.renderRoleOption.bind(this);
@@ -74,7 +80,7 @@ export default class EmployeeFormTambah extends React.Component {
             errorNoHp = "";
         } else if (!fokusNoHp.match(numberOnly)) {
             errorNoHp = "Nomor HP hanya boleh mengandung angka";
-        } else if (fokusNoHp.length >= 15 || fokusNoHp.length <= 10) {
+        } else if (fokusNoHp.length > 15 || fokusNoHp.length < 10) {
             errorNoHp = "Nomor HP diantara 10-15 karakter";
         }
 
@@ -215,6 +221,8 @@ export default class EmployeeFormTambah extends React.Component {
                 break;
             case "noHp":
                 this.validateNomorHp(value);
+                break;
+            default:
                 break;
         }
     }

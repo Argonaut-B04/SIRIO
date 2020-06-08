@@ -1,11 +1,11 @@
-package com.ArgonautB04.SIRIO.controller;
+package com.argonautb04.sirio.controller;
 
-import com.ArgonautB04.SIRIO.model.Employee;
-import com.ArgonautB04.SIRIO.model.SOP;
-import com.ArgonautB04.SIRIO.rest.BaseResponse;
-import com.ArgonautB04.SIRIO.rest.SOPDTO;
-import com.ArgonautB04.SIRIO.services.EmployeeRestService;
-import com.ArgonautB04.SIRIO.services.SOPRestService;
+import com.argonautb04.sirio.model.Employee;
+import com.argonautb04.sirio.model.SOP;
+import com.argonautb04.sirio.rest.BaseResponse;
+import com.argonautb04.sirio.rest.SOPDTO;
+import com.argonautb04.sirio.services.EmployeeRestService;
+import com.argonautb04.sirio.services.SOPRestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -61,9 +61,7 @@ public class SOPRestController {
      * @return true jika sudah ada
      */
     @GetMapping("/check/{judulSOP}")
-    private BaseResponse<Boolean> isExistInDatabase(
-            final @PathVariable("judulSOP") String judulSOP
-    ) {
+    private BaseResponse<Boolean> isExistInDatabase(final @PathVariable("judulSOP") String judulSOP) {
         Optional<SOP> sop = sopRestService.getByJudul(judulSOP);
         return new BaseResponse<>(complete, "success", sop.isPresent());
     }
@@ -75,9 +73,7 @@ public class SOPRestController {
      * @return detail sop
      */
     @GetMapping("/{idSOP}")
-    private BaseResponse<SOP> getSOP(
-            final @PathVariable("idSOP") int idSOP
-    ) {
+    private BaseResponse<SOP> getSOP(final @PathVariable("idSOP") int idSOP) {
         SOP result = sopRestService.validateExistById(idSOP);
         return new BaseResponse<>(complete, "success", result);
     }
@@ -90,29 +86,21 @@ public class SOPRestController {
      * @return sop yang telah disimpan
      */
     @PostMapping(value = "/tambah", consumes = {"application/json"})
-    private BaseResponse<SOP> tambahSOP(
-            final @RequestBody SOPDTO sopDTO,
-            final Principal principal
-    ) {
+    private BaseResponse<SOP> tambahSOP(final @RequestBody SOPDTO sopDTO, final Principal principal) {
         BaseResponse<SOP> response = new BaseResponse<>();
         SOP sopTemp = new SOP();
 
-        Employee employee = employeeRestService
-                .validateEmployeeExistByPrincipal(principal);
+        Employee employee = employeeRestService.validateEmployeeExistByPrincipal(principal);
         sopTemp.setPembuat(employee);
 
         if (sopDTO.getJudul() != null && !sopDTO.getJudul().equals("")) {
             if (sopRestService.getByJudul(sopDTO.getJudul()).isPresent()) {
-                throw new ResponseStatusException(
-                        HttpStatus.CONFLICT,
-                        "SOP " + sopDTO.getJudul() + " sudah ada pada database!"
-                );
+                throw new ResponseStatusException(HttpStatus.CONFLICT,
+                        "SOP " + sopDTO.getJudul() + " sudah ada pada database!");
             }
             sopTemp.setJudul(sopDTO.getJudul());
         } else {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Judul belum terisi!"
-            );
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Judul belum terisi!");
         }
 
         checkSOPDTO(sopDTO, sopTemp);
@@ -130,18 +118,13 @@ public class SOPRestController {
         if (sopDTO.getKategori() != null && !sopDTO.getKategori().equals("")) {
             sopTemp.setKategori(sopDTO.getKategori());
         } else {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Kategori belum diisi!"
-            );
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Kategori belum diisi!");
         }
 
-        if (sopDTO.getLinkDokumen() != null
-                && !sopDTO.getLinkDokumen().equals("")) {
+        if (sopDTO.getLinkDokumen() != null && !sopDTO.getLinkDokumen().equals("")) {
             sopTemp.setLinkDokumen(sopDTO.getLinkDokumen());
         } else {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Link dokumen belum terisi!"
-            );
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Link dokumen belum terisi!");
         }
     }
 
@@ -152,9 +135,7 @@ public class SOPRestController {
      * @return sop yang telah disimpan perubahannya
      */
     @PostMapping(value = "/ubah", consumes = {"application/json"})
-    private BaseResponse<SOP> ubahSOP(
-            final @RequestBody SOPDTO sopDTO
-    ) {
+    private BaseResponse<SOP> ubahSOP(final @RequestBody SOPDTO sopDTO) {
         BaseResponse<SOP> response = new BaseResponse<>();
 
         SOP sop = sopRestService.validateExistById(sopDTO.getId());
@@ -162,9 +143,7 @@ public class SOPRestController {
         if (sopDTO.getJudul() != null && !sopDTO.getJudul().equals("")) {
             sop.setJudul(sopDTO.getJudul());
         } else {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Judul belum diisi!"
-            );
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Judul belum diisi!");
         }
 
         checkSOPDTO(sopDTO, sop);
@@ -183,9 +162,7 @@ public class SOPRestController {
      * @return response string
      */
     @PostMapping("/hapus")
-    private BaseResponse<String> hapusSOP(
-            final @RequestBody SOPDTO sopDTO
-    ) {
+    private BaseResponse<String> hapusSOP(final @RequestBody SOPDTO sopDTO) {
         BaseResponse<String> response = new BaseResponse<>();
 
         SOP sop = sopRestService.validateExistById(sopDTO.getId());
@@ -197,9 +174,7 @@ public class SOPRestController {
             sopRestService.hapusSOP(sop.getIdSop());
         } catch (DataIntegrityViolationException e) {
             sopRestService.nonaktifkanSOP(sop.getIdSop());
-            response.setResult(
-                    "SOP dengan id " + sopDTO.getId() + " dinonaktifkan!"
-            );
+            response.setResult("SOP dengan id " + sopDTO.getId() + " dinonaktifkan!");
             return response;
         }
 

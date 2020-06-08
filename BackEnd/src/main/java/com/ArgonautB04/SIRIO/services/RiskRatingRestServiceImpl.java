@@ -1,7 +1,7 @@
-package com.ArgonautB04.SIRIO.services;
+package com.argonautb04.sirio.services;
 
-import com.ArgonautB04.SIRIO.model.RiskRating;
-import com.ArgonautB04.SIRIO.repository.RiskRatingDB;
+import com.argonautb04.sirio.model.RiskRating;
+import com.argonautb04.sirio.repository.RiskRatingDB;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,8 +25,10 @@ public class RiskRatingRestServiceImpl implements RiskRatingRestService {
     @Override
     public RiskRating getById(int idRiskRating) {
         Optional<RiskRating> riskRating = riskRatingDB.findById(idRiskRating);
-        if (riskRating.isPresent()) return riskRating.get();
-        else throw new NoSuchElementException();
+        if (riskRating.isPresent())
+            return riskRating.get();
+        else
+            throw new NoSuchElementException();
     }
 
     @Override

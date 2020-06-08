@@ -1,7 +1,7 @@
-package com.ArgonautB04.SIRIO.security;
+package com.argonautb04.sirio.security;
 
-import com.ArgonautB04.SIRIO.model.Employee;
-import com.ArgonautB04.SIRIO.repository.EmployeeDB;
+import com.argonautb04.sirio.model.Employee;
+import com.argonautb04.sirio.repository.EmployeeDB;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -21,10 +21,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private EmployeeDB employeeDB;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Employee employee = employeeDB.findByUsernameAndStatus(username, Employee.Status.AKTIF).get();
+    public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
+        final Employee employee = employeeDB.findByUsernameAndStatus(username, Employee.Status.AKTIF).get();
 
-        Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
+        final Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
         grantedAuthorities.add(new SimpleGrantedAuthority(employee.getRole().getNamaRole()));
 
         return new User(employee.getUsername(), employee.getPassword(), grantedAuthorities);

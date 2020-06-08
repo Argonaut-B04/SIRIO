@@ -1,4 +1,4 @@
-package com.ArgonautB04.SIRIO.rest;
+package com.argonautb04.sirio.rest;
 
 public class SOPDTO {
     private Integer id;
@@ -10,7 +10,7 @@ public class SOPDTO {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(final Integer id) {
         this.id = id;
     }
 
@@ -18,7 +18,7 @@ public class SOPDTO {
         return judul;
     }
 
-    public void setJudul(String judul) {
+    public void setJudul(final String judul) {
         this.judul = judul;
     }
 
@@ -26,7 +26,7 @@ public class SOPDTO {
         return kategori;
     }
 
-    public void setKategori(String kategori) {
+    public void setKategori(final String kategori) {
         this.kategori = kategori;
     }
 
@@ -34,10 +34,8 @@ public class SOPDTO {
         return linkDokumen;
     }
 
-    public void setLinkDokumen(String linkDokumen) {
+    public void setLinkDokumen(final String linkDokumen) {
         this.linkDokumen = linkDokumen;
     }
-
-
 
 }
