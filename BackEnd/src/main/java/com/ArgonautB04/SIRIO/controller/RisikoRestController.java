@@ -79,11 +79,11 @@ public class RisikoRestController {
         Risiko risiko = risikoRestService.validateExistById(risikoDTO.getId());
         if (komponenPemeriksaanRestService.getByRisiko(risiko) != null) {
             risikoRestService.nonaktifkanRisiko(risiko.getIdRisiko());
-            return new BaseResponse<>(403, "failed", "Risiko dengan id " + risiko.getIdRisiko() + " dinonaktifkan!");
+            return new BaseResponse<>(200, "success", "Risiko dengan id " + risiko.getIdRisiko() + " dinonaktifkan!");
         } else {
             risikoRestService.hapusRisiko(risiko.getIdRisiko());
         }
-        return new BaseResponse<>(200, "success", "RIsiko dengan id " + risikoDTO.getId() + " terhapus!");
+        return new BaseResponse<>(200, "success", "Risiko dengan id " + risikoDTO.getId() + " terhapus!");
     }
 
     /**

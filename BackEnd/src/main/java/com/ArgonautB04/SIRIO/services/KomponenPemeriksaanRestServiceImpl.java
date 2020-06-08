@@ -69,6 +69,6 @@ public class KomponenPemeriksaanRestServiceImpl implements KomponenPemeriksaanRe
 
     @Override
     public KomponenPemeriksaan getByRisiko(Risiko risiko) {
-        return komponenPemeriksaanDB.findAllByRisiko(risiko);
+        return komponenPemeriksaanDB.findByRisiko(risiko);
     }
 }
