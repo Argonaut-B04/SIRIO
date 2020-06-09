@@ -52,11 +52,6 @@ public class RiskLevelRestServiceImpl implements RiskLevelRestService {
     }
 
     @Override
-    public void hapusRiskLevel(int idRiskLevel) {
-        riskLevelDB.deleteById(idRiskLevel);
-    }
-
-    @Override
     public boolean isExistInDatabase(RiskLevel riskLevel) {
         return riskLevelDB.findById(riskLevel.getIdLevel()).isPresent();
     }

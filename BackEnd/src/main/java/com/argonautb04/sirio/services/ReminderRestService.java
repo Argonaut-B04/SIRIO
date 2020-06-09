@@ -20,17 +20,11 @@ public interface ReminderRestService {
 
     List<Reminder> getByDay(LocalDate date, LocalDate secondDate);
 
-    List<Reminder> getByReminderTemplate(ReminderTemplate reminderTemplate);
-
     List<Reminder> getByRekomendasi(Rekomendasi rekomendasi);
 
     void hapusReminder(int idReminder);
 
     void ubahTemplateReminder(Reminder reminder);
-
-    Boolean isExistById(int idReminder);
-
-    Reminder ubahReminder(int idReminder, LocalDate tanggalDate);
 
     void telahTerkirim(Reminder reminder);
 

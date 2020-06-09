@@ -55,18 +55,6 @@ public class ReminderRestServiceImpl implements ReminderRestService {
     }
 
     @Override
-    public List<Reminder> getByReminderTemplate(ReminderTemplate reminderTemplate) {
-        return reminderDB.findAllByReminderTemplate(reminderTemplate);
-    }
-
-    @Override
-    public Reminder ubahReminder(int idReminder, LocalDate tanggalReminder) {
-        Reminder target = getById(idReminder);
-        target.setTanggalPengiriman(tanggalReminder);
-        return reminderDB.save(target);
-    }
-
-    @Override
     public void telahTerkirim(Reminder reminder) {
         Reminder reminder1 = reminderDB.findById(reminder.getIdReminder()).get();
         reminder1.setTerkirim(true);
@@ -138,11 +126,6 @@ public class ReminderRestServiceImpl implements ReminderRestService {
         Reminder reminder1 = reminderDB.findById(reminder.getIdReminder()).get();
         reminder1.setReminderTemplate(reminder.getReminderTemplate());
         reminderDB.save(reminder1);
-    }
-
-    @Override
-    public Boolean isExistById(int idReminder) {
-        return reminderDB.findById(idReminder).isPresent();
     }
 
     @Override
