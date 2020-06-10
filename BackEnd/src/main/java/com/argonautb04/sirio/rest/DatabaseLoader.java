@@ -1,5 +1,6 @@
 package com.argonautb04.sirio.rest;
 
+import com.argonautb04.sirio.model.Employee;
 import com.argonautb04.sirio.scheduled.MailScheduler;
 import com.argonautb04.sirio.services.EmployeeRestService;
 import org.slf4j.Logger;
@@ -7,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.TimeZone;
 
 @Component
@@ -37,5 +39,10 @@ public class DatabaseLoader implements CommandLineRunner {
         employeeRestService.setPassword("qaofficer", "qaofficer123");
         employeeRestService.setPassword("branchmanager", "branchmanager123");
         employeeRestService.setPassword("superofficer", "superofficer123");
+
+        List<Employee> newempl = employeeRestService.getEmptyPassword();
+        for (Employee emp : newempl) {
+            employeeRestService.setPassword(emp.getUsername(), "Password123");
+        }
     }
 }

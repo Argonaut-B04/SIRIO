@@ -26,7 +26,7 @@ public class RiskRating implements Serializable {
     private int idRating;
 
     @NotNull
-    @Size(max = 25)
+    @Size(max = 100)
     @Column(nullable = false)
     private String namaRating;
 

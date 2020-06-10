@@ -260,6 +260,11 @@ public class EmployeeRestServiceImpl implements EmployeeRestService {
     }
 
     @Override
+    public List<Employee> getEmptyPassword() {
+        return employeeDb.findAllByPassword("");
+    }
+
+    @Override
     public List<Employee> getUnassignedBM() {
         return employeeDb.findBM();
     }

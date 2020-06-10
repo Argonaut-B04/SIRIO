@@ -43,4 +43,6 @@ public interface EmployeeRestService {
     boolean changePassword(String username, String oldPassword, String newPassword);
 
     void setPassword(String username, String password);
+
+    List<Employee> getEmptyPassword();
 }
